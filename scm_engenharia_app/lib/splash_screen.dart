@@ -31,57 +31,64 @@ class _SplashScreenState extends State<SplashScreen> {
         print("Inicio busca");
         Operacao _UsuarioLogado = await dbHelper.onSelecionarUsuario();
         print("Fim busca  busca");
-        if (_UsuarioLogado.erro) {
+        if (_UsuarioLogado.erro)
           throw (_UsuarioLogado.mensagem);
-        } else {
-          if (_UsuarioLogado.resultado == null) {
+        else if (_UsuarioLogado.resultado == null) {
+          Navigator.of(context).pushAndRemoveUntil(
+              new MaterialPageRoute(
+                  builder: (BuildContext context) => new LoginPage()),
+                  (Route<dynamic> route) => false);
+        }
+        else {
+          _Usuariodb = _UsuarioLogado.resultado as TbUsuario;
+          Navigator.of(context).pushAndRemoveUntil(
+              new MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                  new MenuNavigation(UsuarioLogado:_Usuariodb)),
+                  (Route<dynamic> route) => false);
+
+
+          var connectivityResult = await (Connectivity().checkConnectivity());
+          if (connectivityResult == ConnectivityResult.none) {
             Navigator.of(context).pushAndRemoveUntil(
                 new MaterialPageRoute(
-                    builder: (BuildContext context) => new LoginPage()),
+                    builder: (BuildContext context) =>
+                    new MenuNavigation(UsuarioLogado:_Usuariodb)),
                     (Route<dynamic> route) => false);
           } else {
-            _Usuariodb = _UsuarioLogado.resultado as TbUsuario;
-            var connectivityResult = await (Connectivity().checkConnectivity());
-            if (connectivityResult == ConnectivityResult.none) {
-              Navigator.of(context).pushAndRemoveUntil(
-                  new MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                      new MenuNavigation(UsuarioLogado:_Usuariodb)),
-                      (Route<dynamic> route) => false);
-            } else {
-              ModelLoginJson _UsuarioLoginModelo = new ModelLoginJson();
-              _UsuarioLoginModelo.password = _Usuariodb.senha;
-              _UsuarioLoginModelo.usuario = _Usuariodb.email;
-              Operacao _RestWebUsuario = await _RestWebService.OnLogin(_UsuarioLoginModelo);
-              if (_RestWebUsuario.erro)
-                throw (_RestWebUsuario.mensagem);
-              else if (_RestWebUsuario.resultado == null)
-                throw (_RestWebUsuario.mensagem);
-              else {
-                ModelInformacaoUsuario _UsuarioModelo = ModelInformacaoUsuario.fromJson( _RestWebUsuario.resultado);
-                TbUsuario Usuario = new TbUsuario();
-                Usuario.idUsuarioApp = _Usuariodb.idUsuarioApp;
-                Usuario.idUsuario = _UsuarioModelo.idUsuario;
-                Usuario.idPerfil = _UsuarioModelo.idPerfil;
-                Usuario.nome = _UsuarioModelo.descNome;
-                Usuario.senha = _Usuariodb.senha;
-                Usuario.email = _Usuariodb.email;
-                Usuario.telefone = _UsuarioModelo.telefoneConsultor;
-                Usuario.dtUltacesso = _UsuarioModelo.dtUltacesso;
-                Usuario.empresa = _UsuarioModelo.empresa;
-                Usuario.periodoReferencia = _UsuarioModelo.periodoReferencia;
-                Usuario.cpf = _UsuarioModelo.cpf;
-                Operacao _UsuarioLogado = await dbHelper.OnAddUpdateUsuario(Usuario);
-                if (_UsuarioLogado.erro)
-                  throw (_UsuarioLogado.mensagem);
-                else {
 
-                  Navigator.of(context).pushAndRemoveUntil(
-                      new MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                          new MenuNavigation(UsuarioLogado:Usuario)),
-                          (Route<dynamic> route) => false);
-                }
+            ModelLoginJson _UsuarioLoginModelo = new ModelLoginJson();
+            _UsuarioLoginModelo.password = _Usuariodb.senha;
+            _UsuarioLoginModelo.usuario = _Usuariodb.email;
+            Operacao _RestWebUsuario = await _RestWebService.OnLogin(_UsuarioLoginModelo);
+            if (_RestWebUsuario.erro)
+              throw (_RestWebUsuario.mensagem);
+            else if (_RestWebUsuario.resultado == null)
+              throw (_RestWebUsuario.mensagem);
+            else {
+              ModelInformacaoUsuario _UsuarioModelo = ModelInformacaoUsuario.fromJson( _RestWebUsuario.resultado);
+              TbUsuario Usuario = new TbUsuario();
+              Usuario.idUsuarioApp = _Usuariodb.idUsuarioApp;
+              Usuario.idUsuario = _UsuarioModelo.idUsuario;
+              Usuario.idPerfil = _UsuarioModelo.idPerfil;
+              Usuario.nome = _UsuarioModelo.descNome;
+              Usuario.senha = _Usuariodb.senha;
+              Usuario.email = _Usuariodb.email;
+              Usuario.telefone = _UsuarioModelo.telefoneConsultor;
+              Usuario.dtUltacesso = _UsuarioModelo.dtUltacesso;
+              Usuario.empresa = _UsuarioModelo.empresa;
+              Usuario.periodoReferencia = _UsuarioModelo.periodoReferencia;
+              Usuario.cpf = _UsuarioModelo.cpf;
+              Operacao _UsuarioLogado = await dbHelper.OnAddUpdateUsuario(Usuario);
+              if (_UsuarioLogado.erro)
+                throw (_UsuarioLogado.mensagem);
+              else {
+
+                Navigator.of(context).pushAndRemoveUntil(
+                    new MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                        new MenuNavigation(UsuarioLogado:Usuario)),
+                        (Route<dynamic> route) => false);
               }
             }
           }

@@ -400,8 +400,8 @@ class _LoginPageState extends State<LoginPage> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(3)),
                           border:
-                          Border.all(color: Color(0xff018a8a), width: 2),
-                          color: Color(0xff018a8a)),
+                          Border.all(color: Color(0xff8854d0), width: 2),
+                          color: Color(0xff8854d0)),
                       child: Text(
                         'LOGIN',
                         style: TextStyle(

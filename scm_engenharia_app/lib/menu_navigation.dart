@@ -77,7 +77,7 @@ class _MenuNavigationState extends State<MenuNavigation> {
               },
               labelType: NavigationRailLabelType.selected,
               selectedIconTheme: IconThemeData(
-                color: Color(0xff018a8a),
+                color: Color(0xff8854d0),
               ),
               destinations: [
 
@@ -139,7 +139,7 @@ class _MenuNavigationState extends State<MenuNavigation> {
         bottomNavigationBar: new Theme(
           data: Theme.of(context).copyWith(
               canvasColor: Colors.white,
-              primaryColor: Color(0xff018a8a),
+              primaryColor: Color(0xffa55eea),
               textTheme: Theme.of(context).textTheme.copyWith(caption: new TextStyle(color: Color(0xff6C757D),))
           ),
           child: new BottomNavigationBar(
@@ -152,7 +152,7 @@ class _MenuNavigationState extends State<MenuNavigation> {
                 title: new Text('Sici/Fust',
                     style: TextStyle(
                       fontFamily: 'Montserrat-Medium',
-                      color: _SelecionarPaginaWidgetIndex == 0 ? Color(0xff018a8a) :  Color(0xff6C757D),
+                      color: _SelecionarPaginaWidgetIndex == 0 ? Color(0xffa55eea) :  Color(0xff6C757D),
                       fontSize: 14.0,
                     )),
               ),
@@ -161,7 +161,7 @@ class _MenuNavigationState extends State<MenuNavigation> {
                 title: new Text("Configuração",
                     style: TextStyle(
                       fontFamily: 'Montserrat-Medium',
-                      color: _SelecionarPaginaWidgetIndex == 1 ? Color(0xff018a8a) :  Color(0xff6C757D),
+                      color: _SelecionarPaginaWidgetIndex == 1 ? Color(0xffa55eea) :  Color(0xff6C757D),
                       fontSize: 14.0,
                     )),
               ),
@@ -178,7 +178,7 @@ class _MenuNavigationState extends State<MenuNavigation> {
           child: FittedBox(
             child: FloatingActionButton(
               elevation: 10,
-              backgroundColor: Color(0xff018a8a),
+              backgroundColor: Color(0xffa55eea),
               child: new Icon(Icons.add, size: 25),
               onPressed: () {
                 Navigator.push(

@@ -58,8 +58,9 @@ flutter:
   assets:
     - assets/login_logo.png # logo negativa em branco
     - assets/ic_whatsapp.png
-
-
+    - assets/img_error.png
+    - assets/img_integracao.png
+    - assets/img_sem_sinal.png
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

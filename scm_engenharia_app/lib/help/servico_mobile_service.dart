@@ -123,17 +123,17 @@ class ServicoMobileService {
       response = new http.MultipartRequest(
           'POST', Uri.parse(Url + "/analise/lancamento_ws"));
       response.headers.addAll(headers);
-      response.fields['controllerPeriodoReferencia'] =  _Modelo.periodo_referencia;
-      response.fields['controllerRazaoSocial'] = _Modelo.razao_social;
-      response.fields['controllerResponsavelPreenchimento'] = _Modelo.nome_responsavel_preenchimento;
-      response.fields['controllerTelefoneFixo'] = _Modelo.telefone_fixo;
+      response.fields['controllerPeriodoReferencia'] =  _Modelo.periodoReferencia;
+      response.fields['controllerRazaoSocial'] = _Modelo.razaoSocial;
+      response.fields['controllerResponsavelPreenchimento'] = _Modelo.nomeConsultor;
+      response.fields['controllerTelefoneFixo'] = _Modelo.telefoneFixo;
       response.fields['controllerCNPJ'] = _Modelo.cnpj;
-      response.fields['controllerMesReferencia'] = _Modelo.mes_referencia;
-      response.fields['controllerTelefoneCelular'] = _Modelo.telefone_celular;
+      response.fields['controllerMesReferencia'] = _Modelo.mesReferencia;
+      response.fields['controllerTelefoneCelular'] = _Modelo.telefoneMovel;
 
-      response.fields['controllerEmailCliente'] = _Modelo.email_cliente;
-      response.fields['controllerEmailConsultor'] = _Modelo.email_consutor;
-      response.fields['controllerReceitaBruta'] = _Modelo.receita_bruta;
+      response.fields['controllerEmailCliente'] = _Modelo.emailCliente;
+      response.fields['controllerEmailConsultor'] = _Modelo.emailConsutor;
+      response.fields['controllerReceitaBruta'] = _Modelo.receitaBruta;
       response.fields['controllerAliqSimples'] = _Modelo.simples;
       response.fields['controllerAliqSimplesPorc'] = _Modelo.simplesPorc;
       response.fields['controllerICMS'] = _Modelo.icms;
@@ -142,7 +142,7 @@ class ServicoMobileService {
       response.fields['controllerPISPorc'] = _Modelo.pisPorc;
       response.fields['controllerCOFINS'] = _Modelo.cofins;
       response.fields['controllerCOFINSPorc'] = _Modelo.cofinsPorc;
-      response.fields['controllerReceitaLiquida'] = _Modelo.receita_liquida;
+      response.fields['controllerReceitaLiquida'] = _Modelo.receitaLiquida;
       response.fields['controllerObservacoes'] = _Modelo.observacoes;
       int index =  1;
       for (var item in _Modelo.distribuicaoFisicosServicoQuantitativo) {
@@ -238,7 +238,7 @@ class ServicoMobileService {
           if (!response.body.isNotEmpty)
             throw ("Houve um problema de comunicação com os servidores do SCM");
           Map<String, dynamic> map = jsonDecode(response.body);
-          VariaveisDeAmbiente _Resp = VariaveisDeAmbiente.fromJson(map);
+          OperacaoJson _Resp = OperacaoJson.fromJson(map);
           _Operacao.erro = !_Resp.status;
           _Operacao.mensagem = _Resp.mensagem;
           _Operacao.resultado = _Resp.resultado;

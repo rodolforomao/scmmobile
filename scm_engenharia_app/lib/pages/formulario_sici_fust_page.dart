@@ -20,12 +20,16 @@ class FormularioSiciFustPage extends StatefulWidget {
 }
 
 class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
+  final _ScaffoldKey = GlobalKey<ScaffoldState>();
   ServicoMobileService _RestWebService = new ServicoMobileService();
   BuildContext dialogContext;
   ModelFormularioSiciFustJson _ModelFormularioSiciFustJson = new ModelFormularioSiciFustJson();
   List<ModelDistribuicaoFisicosServicoQuantitativoJson>
   ListaModelDistribuicaoFisicosServicoQuantitativo =
   new List<ModelDistribuicaoFisicosServicoQuantitativoJson>();
+  StreamSubscription<ConnectivityResult> subscription;
+
+
 
   TextEditingController _TxtControllerCnpj = new MaskedTextController(mask: '00.000.000/0000-00');
   TextEditingController _TxtControllerRazaoSocial = TextEditingController();
@@ -54,9 +58,9 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
   List<String> Uf = new List<String>();
 
 
-  String UfTxt, errorTextControllerSenha, errorTextControllerEmail;
+  String UfTxt,_StatusTipoWidget = "renderizar_ficha_sici";
   bool _IsLogando = false, isVisualizarSenha = false;
-  Color _selectedColorUf = Color(0xFF90ffffff);
+
   TextEditingController _TxtControllerPeriodoDeReferencia =
       TextEditingController();
   DateTime _DataSelecionada = DateTime.now();
@@ -169,19 +173,19 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
       } else {
         if (_TxtControllerCnpj.text.isEmpty)
           throw ("O campo cnpj e obrigatório");
-        _ModelFormularioSiciFustJson.periodo_referencia = DateTime.now().toString(); //_TxtControllerPeriodoReferencia.text;
+        _ModelFormularioSiciFustJson.periodoReferencia = DateTime.now().toString(); //_TxtControllerPeriodoReferencia.text;
         _ModelFormularioSiciFustJson.cnpj = _TxtControllerCnpj.text;
-        _ModelFormularioSiciFustJson.razao_social = _TxtControllerRazaoSocial.text;
-        _ModelFormularioSiciFustJson.nome_responsavel_preenchimento= _TxtControllerNomeConsultor.text;
-        _ModelFormularioSiciFustJson.telefone_celular= _TxtControllerTelefoneMovel.text;
-        _ModelFormularioSiciFustJson.telefone_fixo= _TxtControllerTelefoneFixo.text;
-        _ModelFormularioSiciFustJson.email_consutor = _TxtControllerEmailConsutor.text;
-        _ModelFormularioSiciFustJson.email_cliente = _TxtControllerEmailCliente.text;
-        _ModelFormularioSiciFustJson.nome_cliente = _TxtControllerNomeCliente.text;
-        _ModelFormularioSiciFustJson.mes_referencia = _TxtControllerMesReferencia.text;
+        _ModelFormularioSiciFustJson.razaoSocial = _TxtControllerRazaoSocial.text;
+        _ModelFormularioSiciFustJson.nomeConsultor= _TxtControllerNomeConsultor.text;
+        _ModelFormularioSiciFustJson.telefoneMovel= _TxtControllerTelefoneMovel.text;
+        _ModelFormularioSiciFustJson.telefoneFixo= _TxtControllerTelefoneFixo.text;
+        _ModelFormularioSiciFustJson.emailConsutor = _TxtControllerEmailConsutor.text;
+        _ModelFormularioSiciFustJson.emailCliente = _TxtControllerEmailCliente.text;
+        _ModelFormularioSiciFustJson.nomeCliente = _TxtControllerNomeCliente.text;
+        _ModelFormularioSiciFustJson.mesReferencia = _TxtControllerMesReferencia.text;
 
-        _ModelFormularioSiciFustJson.receita_bruta= _TxtControllerReceitaBruta.text;
-        _ModelFormularioSiciFustJson.receita_liquida= _TxtControllerReceitaLiquida.text;
+        _ModelFormularioSiciFustJson.receitaBruta= _TxtControllerReceitaBruta.text;
+        _ModelFormularioSiciFustJson.receitaLiquida= _TxtControllerReceitaLiquida.text;
         _ModelFormularioSiciFustJson.simples= _TxtControllerSimples.text;
         _ModelFormularioSiciFustJson.simplesPorc = _TxtControllerSimplesPorc.text;
         _ModelFormularioSiciFustJson.icms= _TxtControllerIcms.text;
@@ -226,8 +230,28 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
   @override
   void initState() {
     super.initState();
-    Inc();
+    Future.delayed(Duration.zero, () async {
+      var connectivityResult = await (Connectivity().checkConnectivity());
+      if (connectivityResult == ConnectivityResult.none) {
+        setState(() {
+          _StatusTipoWidget = "sem_internet";
+        });
+      } else {
+        setState(() {
+          _StatusTipoWidget = "renderizar_ficha_sici";
+        });
+      }
+    });
+    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.none) {
 
+      } else {
+        setState(() {
+          _StatusTipoWidget = "renderizar_ficha_sici";
+        });
+      }
+    });
+    Inc();
   }
 
   int current_step = 0;
@@ -238,6 +262,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _ScaffoldKey,
       appBar: AppBar(
         flexibleSpace: Container(
           decoration: BoxDecoration(
@@ -280,530 +305,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
           ),
         ],
       ),
-      body: Container(
-        constraints: BoxConstraints(
-          maxWidth: MediaQuery.of(context).size.width,
-        ),
-        child: Stepper(
-          controlsBuilder: (BuildContext context,
-              {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
-            return Row(
-              children: <Widget>[
-                Visibility(
-                  visible: current_step == 2 ? false : true,
-                  child: FlatButton(
-                    color: Color(0xff018a8a),
-                    //`Icon` to display
-                    child: Text(
-                      'Próximo',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontFamily: 'avenir-lt-std-roman',
-                        fontSize: 15.0,
-                      ),
-                    ),
-                    //`Text` to display
-                    onPressed: () async {
-                      setState(() {
-                        switch (current_step) {
-                          case 0:
-                            current_step = 1;
-                            break;
-                          case 1:
-                            current_step = 2;
-                            break;
-                        }
-                      });
-                    },
-                    shape: new RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(5.0),
-                    ),
-                  ),
-                ),
-                new Padding(
-                  padding: new EdgeInsets.all(10),
-                ),
-                Visibility(
-                  visible: current_step > 0 ? true : false,
-                  child: FlatButton(
-                    onPressed: () async {
-                      setState(() {
-                        switch (current_step) {
-                          case 2:
-                            current_step = 1;
-                            break;
-                          case 1:
-                            current_step = 0;
-                            break;
-                        }
-                      });
-                    },
-                    child: Text(
-                      'Cancelar',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xff018a8a),
-                        fontFamily: 'avenir-lt-std-roman',
-                        fontSize: 15.0,
-                      ),
-                    ),
-                    textColor: Color(0xff018a8a),
-                    shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                            color: Color(0xff018a8a),
-                            width: 1,
-                            style: BorderStyle.solid),
-                        borderRadius: BorderRadius.circular(5.0)),
-                  ),
-                )
-              ],
-            );
-          },
-          steps: <Step>[
-            Step(
-              title: SizedBox(
-                width: MediaQuery.of(context).size.width - 90,
-                child: Text(
-                  "INFORMAÇÕES DA EMPRESA",
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  softWrap: false,
-                  style: TextStyle(
-                      fontSize: 14.0,
-                      color: Color(0xff000000),
-                      fontFamily: "open-sans-regular"),
-                ),
-              ),
-              content: Container(
-                child: Column(
-                  children: [
-                    SizedBox(height: 20.0),
-                    TextFormField(
-                      controller: _TxtControllerRazaoSocial,
-                      textAlign: TextAlign.start,
-                      keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.done,
-                      autofocus: false,
-                      maxLength: 100,
-                      style: TextStyle(
-                          fontSize: 17,
-                          fontFamily: 'nunito-regular',
-                          color: const Color(0xFF000000)),
-                      decoration: InputDecoration(
-                        labelText: 'Razão social:',
-                        hintText: 'Razão social LTDA - ME.',
-                      ),
-                    ),
-                    SizedBox(height: 20.0),
-                    TextFormField(
-                      controller: _TxtControllerNomeConsultor ,
-                      textAlign: TextAlign.start,
-                      keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.done,
-                      autofocus: false,
-                      maxLength: 100,
-                      decoration: InputDecoration(
-                        labelText: 'Responsável - Preenchimento SICI e Fust:',
-                        hintText: 'Nome consultor.',
-                      ),
-                    ),
-                    SizedBox(height: 20.0),
-                    TextFormField(
-                      controller: _TxtControllerNomeCliente,
-                      textAlign: TextAlign.start,
-                      keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.done,
-                      autofocus: false,
-                      maxLength: 100,
-                      decoration: InputDecoration(
-                        labelText: 'Cliente:',
-                        hintText: 'Nome cliente.',
-                      ),
-                    ),
-                    SizedBox(height: 20.0),
-                    TextFormField(
-                      controller: _TxtControllerTelefoneFixo,
-                      textAlign: TextAlign.start,
-                      keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.done,
-                      autofocus: false,
-                      maxLength: 100,
-                      decoration: InputDecoration(
-                        labelText: 'Telefone Fixo:',
-                        hintText: '',
-                      ),
-                    ),
-                    SizedBox(height: 20.0),
-                    TextFormField(
-                      controller: _TxtControllerCnpj ,
-                      textAlign: TextAlign.start,
-                      keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.done,
-                      autofocus: false,
-                      decoration: InputDecoration(
-                        labelText: 'CNPJ:',
-                        hintText: '',
-                      ),
-                    ),
-                    SizedBox(height: 20.0),
-                    TextFormField(
-                      controller: _TxtControllerMesReferencia  ,
-                      textAlign: TextAlign.start,
-                      keyboardType: TextInputType.datetime,
-                      textInputAction: TextInputAction.done,
-                      autofocus: false,
-                      decoration: InputDecoration(
-                        labelText: 'MÊS DE REFERÊNCIA:',
-                        hintText: '',
-                      ),
-                      maxLength: 20,
-                    ),
-                    SizedBox(height: 20.0),
-                    TextFormField(
-                      controller: _TxtControllerTelefoneMovel,
-                      textAlign: TextAlign.start,
-                      keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.done,
-                      autofocus: false,
-                      decoration: InputDecoration(
-                        labelText: 'TELEFONE CELULAR:',
-                        hintText: '',
-                      ),
-
-                      maxLength: 20,
-                    ),
-                    SizedBox(height: 20.0),
-                    TextFormField(
-                      controller: _TxtControllerEmailCliente ,
-                      textAlign: TextAlign.start,
-                      keyboardType: TextInputType.emailAddress,
-                      textInputAction: TextInputAction.done,
-                      autofocus: false,
-                      decoration: InputDecoration(
-                        labelText: 'E-MAIL CLIENTE:',
-                        hintText: 'cliente@empresa.com.br',
-                      ),
-                    ),
-                    SizedBox(height: 20.0),
-                    TextFormField(
-                      controller: _TxtControllerEmailConsutor,
-                      textAlign: TextAlign.start,
-                      keyboardType: TextInputType.emailAddress,
-                      textInputAction: TextInputAction.done,
-                      autofocus: false,
-                      decoration: InputDecoration(
-                        labelText: 'E-MAIL CONSULTOR:',
-                        hintText: 'consultor@scmengenharia.com.br',
-                      ),
-                    ),
-                    SizedBox(height: 20.0),
-                  ],
-                ),
-              ),
-              state: current_step > 0 ? StepState.complete : StepState.disabled,
-              isActive: true,
-            ),
-            Step(
-              title: SizedBox(
-                width: MediaQuery.of(context).size.width - 90,
-                child: Text(
-                  "INFORMAÇÕES FINANCEIRAS",
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  softWrap: false,
-                  style: TextStyle(
-                      fontSize: 14.0,
-                      color: Color(0xff000000),
-                      fontFamily: "open-sans-regular"),
-                ),
-              ),
-              content: Container(
-                child: Column(
-                  children: [
-                    TextFormField(
-                      controller: _TxtControllerReceitaBruta,
-                      textAlign: TextAlign.start,
-                      keyboardType: TextInputType.number,
-                      textInputAction: TextInputAction.done,
-                      autofocus: false,
-                      decoration: InputDecoration(
-                        labelText: 'Receita Bruta',
-                        hintText: '',
-                      ),
-                      maxLength: 12,
-                    ),
-                    SizedBox(height: 20.0),
-                    TextFormField(
-                      controller: _TxtControllerSimples,
-                      textAlign: TextAlign.start,
-                      keyboardType: TextInputType.number,
-                      textInputAction: TextInputAction.done,
-                      autofocus: false,
-                      decoration: InputDecoration(
-                        labelText: 'Aliquota Simples',
-                        hintText: '',
-                      ),
-                      maxLength: 12,
-                    ),
-                    SizedBox(height: 20.0),
-                    TextFormField(
-                      controller: _TxtControllerSimplesPorc,
-                      textAlign: TextAlign.start,
-                      keyboardType: TextInputType.number,
-                      textInputAction: TextInputAction.done,
-                      autofocus: false,
-                      decoration: InputDecoration(
-                        labelText: 'Aliquota Simples %',
-                        hintText: '',
-                      ),
-                      maxLength: 12,
-                    ),
-                    SizedBox(height: 20.0),
-                    TextFormField(
-                      controller: _TxtControllerIcms,
-                      textAlign: TextAlign.start,
-                      keyboardType: TextInputType.number,
-                      textInputAction: TextInputAction.done,
-                      autofocus: false,
-                      decoration: InputDecoration(
-                        labelText: 'ICMS',
-                        hintText: '',
-                      ),
-                      maxLength: 12,
-                    ),
-                    SizedBox(height: 20.0),
-                    TextFormField(
-                      controller: _TxtControllerIcmsPorc,
-                      textAlign: TextAlign.start,
-                      keyboardType: TextInputType.number,
-                      textInputAction: TextInputAction.done,
-                      autofocus: false,
-                      decoration: InputDecoration(
-                        labelText: 'ICMS (%)',
-                        hintText: '',
-                      ),
-                      maxLength: 12,
-                    ),
-                    SizedBox(height: 20.0),
-                    TextFormField(
-                      controller: _TxtControllerPis,
-                      textAlign: TextAlign.start,
-                      keyboardType: TextInputType.number,
-                      textInputAction: TextInputAction.done,
-                      autofocus: false,
-                      decoration: InputDecoration(
-                        labelText: 'PIS',
-                        hintText: '',
-                      ),
-                      maxLength: 12,
-                    ),
-                    SizedBox(height: 20.0),
-                    TextFormField(
-                      controller: _TxtControllerPisPorc,
-                      textAlign: TextAlign.start,
-                      keyboardType: TextInputType.number,
-                      textInputAction: TextInputAction.done,
-                      autofocus: false,
-                      decoration: InputDecoration(
-                        labelText: 'PIS (%)',
-                        hintText: '',
-                      ),
-                      maxLength: 12,
-                    ),
-                    SizedBox(height: 20.0),
-                    TextFormField(
-                      controller: _TxtControllerCofins,
-                      textAlign: TextAlign.start,
-                      keyboardType: TextInputType.number,
-                      textInputAction: TextInputAction.done,
-                      autofocus: false,
-                      decoration: InputDecoration(
-                        labelText: 'COFINS',
-                        hintText: '',
-                      ),
-                      maxLength: 12,
-                    ),
-                    SizedBox(height: 20.0),
-                    TextFormField(
-                      controller: _TxtControllerCofinsPorc,
-                      textAlign: TextAlign.start,
-                      keyboardType: TextInputType.number,
-                      textInputAction: TextInputAction.done,
-                      autofocus: false,
-                      decoration: InputDecoration(
-                        labelText: 'COFINS (%)',
-                        hintText: '',
-                      ),
-                      maxLength: 12,
-                    ),
-                    SizedBox(height: 20.0),
-                    TextFormField(
-                      controller: _TxtControllerReceitaLiquida,
-                      textAlign: TextAlign.start,
-                      keyboardType: TextInputType.number,
-                      textInputAction: TextInputAction.done,
-                      autofocus: false,
-                      decoration: InputDecoration(
-                        labelText: 'Receita Liquida',
-                        hintText: '',
-                      ),
-                      maxLength: 12,
-                    ),
-                    SizedBox(height: 20.0),
-                    TextFormField(
-                      controller: _TxtControllerObservacoes,
-                      textAlign: TextAlign.start,
-                      keyboardType: TextInputType.number,
-                      textInputAction: TextInputAction.done,
-                      autofocus: false,
-                      decoration: InputDecoration(
-                        labelText: 'Observações Gerais',
-                        hintText: '',
-                      ),
-                      maxLength: 1500,
-                    ),
-                    SizedBox(height: 20.0),
-                  ],
-                ),
-              ),
-              state: current_step > 1 ? StepState.complete : StepState.disabled,
-              isActive: true,
-            ),
-            Step(
-              title: SizedBox(
-                width: MediaQuery.of(context).size.width - 90,
-                child: Text(
-                  "DISTRIBUIÇÃO DO QUANTITATIVO DE ACESSOS FÍSICOS EM SERVIÇO",
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  softWrap: false,
-                  style: TextStyle(
-                      fontSize: 14.0,
-                      color: Color(0xff000000),
-                      fontFamily: "open-sans-regular"),
-                ),
-              ),
-              content: Container(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(height: 20.0),
-                    InkWell(
-                      onTap: () {
-                        FocusScope.of(context).requestFocus(new FocusNode());
-                        Navigator.of(context, rootNavigator: true)
-                            .push(
-                          new CupertinoPageRoute<ModelDistribuicaoFisicosServicoQuantitativoJson>(
-                            maintainState: false,
-                            fullscreenDialog: true,
-                            builder: (BuildContext context) =>
-                                new DistribuicaoFisicosServicoQuantitativoPage(),
-                          ),
-                        ).then((value) {
-                          if(value != null)
-                            {
-                              ListaModelDistribuicaoFisicosServicoQuantitativo.add(value);
-                            }
-                        });
-                      },
-                      child: Container(
-                        constraints: BoxConstraints(maxWidth: 300),
-                        width: MediaQuery.of(context).size.width,
-                        height: 45,
-                        padding: EdgeInsets.symmetric(vertical: 13),
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(3)),
-                            border:
-                                Border.all(color: Color(0xff018a8a), width: 2),
-                            color: Color(0xff018a8a)),
-                        child: Text(
-                          'Adicionar',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            fontFamily: 'avenir-lt-std-roman',
-                            fontSize: 15.0,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 20.0),
-                    Builder(
-                      builder: (BuildContext context) {
-                        return ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount:
-                          ListaModelDistribuicaoFisicosServicoQuantitativo.length,
-                          itemBuilder: DistribuicaoFisicosServicoQuantitativoCard,
-                        );
-                      },
-                    ),
-                    SizedBox(height: 20.0),
-                    InkWell(
-                      onTap: () {
-                        FocusScope.of(context).requestFocus(new FocusNode());
-                        OnSalvarFormulario();
-                      },
-                      child: Container(
-                        constraints: BoxConstraints(maxWidth: 300),
-                        width: MediaQuery.of(context).size.width,
-                        height: 45,
-                        padding: EdgeInsets.symmetric(vertical: 13),
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(3)),
-                            border:
-                            Border.all(color: Color(0xff018a8a), width: 2),
-                            color: Color(0xff018a8a)),
-                        child: Text(
-                          'Adicionar re',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            fontFamily: 'avenir-lt-std-roman',
-                            fontSize: 15.0,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              isActive: true,
-            ),
-          ],
-          type: StepperType.vertical,
-          currentStep: current_step,
-          onStepTapped: (step) {
-            setState(() {
-              current_step = step;
-            });
-          },
-          onStepContinue: () {
-            setState(() {
-              if (current_step < spr.length - 1) {
-                current_step = current_step + 1;
-              } else {
-                current_step = 0;
-              }
-            });
-          },
-          onStepCancel: () {
-            setState(() {
-              if (current_step > 0) {
-                current_step = current_step - 1;
-              } else {
-                current_step = 0;
-              }
-            });
-          },
-        ),
-      ),
+      body:_TipoWidget(context),
     );
   }
 
@@ -1256,4 +758,668 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
               ],
             )),
       );
+
+  _TipoWidget(BuildContext context) {
+    switch (_StatusTipoWidget) {
+      case "sem_internet":
+        {
+          return SingleChildScrollView(
+            child: Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+              constraints: BoxConstraints(
+                minHeight: MediaQuery.of(context).size.height,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Image.asset(
+                    "assets/imagens/img_sem_sinal.png",
+                    width: 150.0,
+                    height: 150.0,
+                    fit: BoxFit.fill,
+                  ),
+                  SizedBox(height: 30.0),
+                  Text(
+                    "Não há conexão com a internet",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      decoration: TextDecoration.none,
+                      fontFamily: "avenir-lt-std-roman",
+                      fontSize: 20.0,
+                      color: Colors.black,
+                    ),
+                  ),
+                  SizedBox(height: 10.0),
+                  Text(
+                    "Verifique sua conexão com a internet e tente novamente.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      decoration: TextDecoration.none,
+                      fontFamily: "avenir-lt-std-roman",
+                      fontSize: 15.0,
+                      color: Colors.black54,
+                    ),),
+                  SizedBox(height: 20.0),
+                  Center(
+                    child: InkWell(
+                      onTap: () async {
+                        var connectivityResult = await (Connectivity().checkConnectivity());
+                        if (connectivityResult == ConnectivityResult.none) {
+                          setState(() {
+                            _StatusTipoWidget = "sem_internet";
+                          });
+                          _ScaffoldKey.currentState.showSnackBar(SnackBar(
+                            onVisible: () {
+                              print('Visible');
+                            },
+                            elevation: 6.0,
+                            backgroundColor: Colors.black,
+                            behavior: SnackBarBehavior.floating,
+                            content: SizedBox(
+                              height: 30.0,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Text(
+                                    "Tentando reconectar a internet",
+                                    softWrap: true,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      decoration: TextDecoration.none,
+                                      fontFamily: "avenir-lt-std-roman",
+                                      fontSize: 16.0,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    child: CircularProgressIndicator(
+                                      valueColor:
+                                      AlwaysStoppedAnimation<Color>(Color(0xff2fdf84)),
+                                    ),
+                                    height: 30.0,
+                                    width: 30.0,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            duration: Duration(days: 365),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              side: BorderSide(
+                                color: Colors.black54,
+                                width: 2,
+                              ),
+                            ),
+                          ));
+                        } else {
+                          _ScaffoldKey.currentState.removeCurrentSnackBar();
+                          setState(() {
+                            _StatusTipoWidget = "renderizar_ficha_sici";
+                          });
+                        }
+                      },
+                      child: Container(
+                        padding: EdgeInsets.fromLTRB(0.0, 5.0, 20.0, 0.0),
+                        constraints: BoxConstraints(maxWidth: 300),
+                        width: MediaQuery.of(context).size.width,
+                        height: 45,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(3)),
+                            color: Color(0xff8854d0)),
+                        child: Text(
+                          'TENTE NOVAMENTE',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontFamily: 'avenir-lt-std-roman',
+                            fontSize: 12.0,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20.0),
+                ],
+              ), /* add child content here */
+            ),
+          );
+        }
+        break;
+      case "renderizar_ficha_sici":
+        {
+          return Container(
+            constraints: BoxConstraints(
+              maxWidth: MediaQuery.of(context).size.width,
+            ),
+            child: Stepper(
+              controlsBuilder: (BuildContext context,
+                  {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
+                return Row(
+                  children: <Widget>[
+                    Visibility(
+                      visible: current_step == 2 ? false : true,
+                      child: FlatButton(
+                        color: Color(0xff018a8a),
+                        //`Icon` to display
+                        child: Text(
+                          'Próximo',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontFamily: 'avenir-lt-std-roman',
+                            fontSize: 15.0,
+                          ),
+                        ),
+                        //`Text` to display
+                        onPressed: () async {
+                          setState(() {
+                            switch (current_step) {
+                              case 0:
+                                current_step = 1;
+                                break;
+                              case 1:
+                                current_step = 2;
+                                break;
+                            }
+                          });
+                        },
+                        shape: new RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(5.0),
+                        ),
+                      ),
+                    ),
+                    new Padding(
+                      padding: new EdgeInsets.all(10),
+                    ),
+                    Visibility(
+                      visible: current_step > 0 ? true : false,
+                      child: FlatButton(
+                        onPressed: () async {
+                          setState(() {
+                            switch (current_step) {
+                              case 2:
+                                current_step = 1;
+                                break;
+                              case 1:
+                                current_step = 0;
+                                break;
+                            }
+                          });
+                        },
+                        child: Text(
+                          'Cancelar',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xff018a8a),
+                            fontFamily: 'avenir-lt-std-roman',
+                            fontSize: 15.0,
+                          ),
+                        ),
+                        textColor: Color(0xff018a8a),
+                        shape: RoundedRectangleBorder(
+                            side: BorderSide(
+                                color: Color(0xff018a8a),
+                                width: 1,
+                                style: BorderStyle.solid),
+                            borderRadius: BorderRadius.circular(5.0)),
+                      ),
+                    )
+                  ],
+                );
+              },
+              steps: <Step>[
+                Step(
+                  title: SizedBox(
+                    width: MediaQuery.of(context).size.width - 90,
+                    child: Text(
+                      "INFORMAÇÕES DA EMPRESA",
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: false,
+                      style: TextStyle(
+                          fontSize: 14.0,
+                          color: Color(0xff000000),
+                          fontFamily: "open-sans-regular"),
+                    ),
+                  ),
+                  content: Container(
+                    child: Column(
+                      children: [
+                        SizedBox(height: 20.0),
+                        TextFormField(
+                          controller: _TxtControllerRazaoSocial,
+                          textAlign: TextAlign.start,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.done,
+                          autofocus: false,
+                          maxLength: 100,
+                          style: TextStyle(
+                              fontSize: 17,
+                              fontFamily: 'nunito-regular',
+                              color: const Color(0xFF000000)),
+                          decoration: InputDecoration(
+                            labelText: 'Razão social:',
+                            hintText: 'Razão social LTDA - ME.',
+                          ),
+                        ),
+                        SizedBox(height: 20.0),
+                        TextFormField(
+                          controller: _TxtControllerNomeConsultor ,
+                          textAlign: TextAlign.start,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.done,
+                          autofocus: false,
+                          maxLength: 100,
+                          decoration: InputDecoration(
+                            labelText: 'Responsável - Preenchimento SICI e Fust:',
+                            hintText: 'Nome consultor.',
+                          ),
+                        ),
+                        SizedBox(height: 20.0),
+                        TextFormField(
+                          controller: _TxtControllerNomeCliente,
+                          textAlign: TextAlign.start,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.done,
+                          autofocus: false,
+                          maxLength: 100,
+                          decoration: InputDecoration(
+                            labelText: 'Cliente:',
+                            hintText: 'Nome cliente.',
+                          ),
+                        ),
+                        SizedBox(height: 20.0),
+                        TextFormField(
+                          controller: _TxtControllerTelefoneFixo,
+                          textAlign: TextAlign.start,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.done,
+                          autofocus: false,
+                          maxLength: 100,
+                          decoration: InputDecoration(
+                            labelText: 'Telefone Fixo:',
+                            hintText: '',
+                          ),
+                        ),
+                        SizedBox(height: 20.0),
+                        TextFormField(
+                          controller: _TxtControllerCnpj ,
+                          textAlign: TextAlign.start,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.done,
+                          autofocus: false,
+                          decoration: InputDecoration(
+                            labelText: 'CNPJ:',
+                            hintText: '',
+                          ),
+                        ),
+                        SizedBox(height: 20.0),
+                        TextFormField(
+                          controller: _TxtControllerMesReferencia  ,
+                          textAlign: TextAlign.start,
+                          keyboardType: TextInputType.datetime,
+                          textInputAction: TextInputAction.done,
+                          autofocus: false,
+                          decoration: InputDecoration(
+                            labelText: 'MÊS DE REFERÊNCIA:',
+                            hintText: '',
+                          ),
+                          maxLength: 20,
+                        ),
+                        SizedBox(height: 20.0),
+                        TextFormField(
+                          controller: _TxtControllerTelefoneMovel,
+                          textAlign: TextAlign.start,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.done,
+                          autofocus: false,
+                          decoration: InputDecoration(
+                            labelText: 'TELEFONE CELULAR:',
+                            hintText: '',
+                          ),
+
+                          maxLength: 20,
+                        ),
+                        SizedBox(height: 20.0),
+                        TextFormField(
+                          controller: _TxtControllerEmailCliente ,
+                          textAlign: TextAlign.start,
+                          keyboardType: TextInputType.emailAddress,
+                          textInputAction: TextInputAction.done,
+                          autofocus: false,
+                          decoration: InputDecoration(
+                            labelText: 'E-MAIL CLIENTE:',
+                            hintText: 'cliente@empresa.com.br',
+                          ),
+                        ),
+                        SizedBox(height: 20.0),
+                        TextFormField(
+                          controller: _TxtControllerEmailConsutor,
+                          textAlign: TextAlign.start,
+                          keyboardType: TextInputType.emailAddress,
+                          textInputAction: TextInputAction.done,
+                          autofocus: false,
+                          decoration: InputDecoration(
+                            labelText: 'E-MAIL CONSULTOR:',
+                            hintText: 'consultor@scmengenharia.com.br',
+                          ),
+                        ),
+                        SizedBox(height: 20.0),
+                      ],
+                    ),
+                  ),
+                  state: current_step > 0 ? StepState.complete : StepState.disabled,
+                  isActive: true,
+                ),
+                Step(
+                  title: SizedBox(
+                    width: MediaQuery.of(context).size.width - 90,
+                    child: Text(
+                      "INFORMAÇÕES FINANCEIRAS",
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: false,
+                      style: TextStyle(
+                          fontSize: 14.0,
+                          color: Color(0xff000000),
+                          fontFamily: "open-sans-regular"),
+                    ),
+                  ),
+                  content: Container(
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          controller: _TxtControllerReceitaBruta,
+                          textAlign: TextAlign.start,
+                          keyboardType: TextInputType.number,
+                          textInputAction: TextInputAction.done,
+                          autofocus: false,
+                          decoration: InputDecoration(
+                            labelText: 'Receita Bruta',
+                            hintText: '',
+                          ),
+                          maxLength: 12,
+                        ),
+                        SizedBox(height: 20.0),
+                        TextFormField(
+                          controller: _TxtControllerSimples,
+                          textAlign: TextAlign.start,
+                          keyboardType: TextInputType.number,
+                          textInputAction: TextInputAction.done,
+                          autofocus: false,
+                          decoration: InputDecoration(
+                            labelText: 'Aliquota Simples',
+                            hintText: '',
+                          ),
+                          maxLength: 12,
+                        ),
+                        SizedBox(height: 20.0),
+                        TextFormField(
+                          controller: _TxtControllerSimplesPorc,
+                          textAlign: TextAlign.start,
+                          keyboardType: TextInputType.number,
+                          textInputAction: TextInputAction.done,
+                          autofocus: false,
+                          decoration: InputDecoration(
+                            labelText: 'Aliquota Simples %',
+                            hintText: '',
+                          ),
+                          maxLength: 12,
+                        ),
+                        SizedBox(height: 20.0),
+                        TextFormField(
+                          controller: _TxtControllerIcms,
+                          textAlign: TextAlign.start,
+                          keyboardType: TextInputType.number,
+                          textInputAction: TextInputAction.done,
+                          autofocus: false,
+                          decoration: InputDecoration(
+                            labelText: 'ICMS',
+                            hintText: '',
+                          ),
+                          maxLength: 12,
+                        ),
+                        SizedBox(height: 20.0),
+                        TextFormField(
+                          controller: _TxtControllerIcmsPorc,
+                          textAlign: TextAlign.start,
+                          keyboardType: TextInputType.number,
+                          textInputAction: TextInputAction.done,
+                          autofocus: false,
+                          decoration: InputDecoration(
+                            labelText: 'ICMS (%)',
+                            hintText: '',
+                          ),
+                          maxLength: 12,
+                        ),
+                        SizedBox(height: 20.0),
+                        TextFormField(
+                          controller: _TxtControllerPis,
+                          textAlign: TextAlign.start,
+                          keyboardType: TextInputType.number,
+                          textInputAction: TextInputAction.done,
+                          autofocus: false,
+                          decoration: InputDecoration(
+                            labelText: 'PIS',
+                            hintText: '',
+                          ),
+                          maxLength: 12,
+                        ),
+                        SizedBox(height: 20.0),
+                        TextFormField(
+                          controller: _TxtControllerPisPorc,
+                          textAlign: TextAlign.start,
+                          keyboardType: TextInputType.number,
+                          textInputAction: TextInputAction.done,
+                          autofocus: false,
+                          decoration: InputDecoration(
+                            labelText: 'PIS (%)',
+                            hintText: '',
+                          ),
+                          maxLength: 12,
+                        ),
+                        SizedBox(height: 20.0),
+                        TextFormField(
+                          controller: _TxtControllerCofins,
+                          textAlign: TextAlign.start,
+                          keyboardType: TextInputType.number,
+                          textInputAction: TextInputAction.done,
+                          autofocus: false,
+                          decoration: InputDecoration(
+                            labelText: 'COFINS',
+                            hintText: '',
+                          ),
+                          maxLength: 12,
+                        ),
+                        SizedBox(height: 20.0),
+                        TextFormField(
+                          controller: _TxtControllerCofinsPorc,
+                          textAlign: TextAlign.start,
+                          keyboardType: TextInputType.number,
+                          textInputAction: TextInputAction.done,
+                          autofocus: false,
+                          decoration: InputDecoration(
+                            labelText: 'COFINS (%)',
+                            hintText: '',
+                          ),
+                          maxLength: 12,
+                        ),
+                        SizedBox(height: 20.0),
+                        TextFormField(
+                          controller: _TxtControllerReceitaLiquida,
+                          textAlign: TextAlign.start,
+                          keyboardType: TextInputType.number,
+                          textInputAction: TextInputAction.done,
+                          autofocus: false,
+                          decoration: InputDecoration(
+                            labelText: 'Receita Liquida',
+                            hintText: '',
+                          ),
+                          maxLength: 12,
+                        ),
+                        SizedBox(height: 20.0),
+                        TextFormField(
+                          controller: _TxtControllerObservacoes,
+                          textAlign: TextAlign.start,
+                          keyboardType: TextInputType.number,
+                          textInputAction: TextInputAction.done,
+                          autofocus: false,
+                          decoration: InputDecoration(
+                            labelText: 'Observações Gerais',
+                            hintText: '',
+                          ),
+                          maxLength: 1500,
+                        ),
+                        SizedBox(height: 20.0),
+                      ],
+                    ),
+                  ),
+                  state: current_step > 1 ? StepState.complete : StepState.disabled,
+                  isActive: true,
+                ),
+                Step(
+                  title: SizedBox(
+                    width: MediaQuery.of(context).size.width - 90,
+                    child: Text(
+                      "DISTRIBUIÇÃO DO QUANTITATIVO DE ACESSOS FÍSICOS EM SERVIÇO",
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: false,
+                      style: TextStyle(
+                          fontSize: 14.0,
+                          color: Color(0xff000000),
+                          fontFamily: "open-sans-regular"),
+                    ),
+                  ),
+                  content: Container(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(height: 20.0),
+                        InkWell(
+                          onTap: () {
+                            FocusScope.of(context).requestFocus(new FocusNode());
+                            Navigator.of(context, rootNavigator: true)
+                                .push(
+                              new CupertinoPageRoute<ModelDistribuicaoFisicosServicoQuantitativoJson>(
+                                maintainState: false,
+                                fullscreenDialog: true,
+                                builder: (BuildContext context) =>
+                                new DistribuicaoFisicosServicoQuantitativoPage(),
+                              ),
+                            ).then((value) {
+                              if(value != null)
+                              {
+                                ListaModelDistribuicaoFisicosServicoQuantitativo.add(value);
+                              }
+                            });
+                          },
+                          child: Container(
+                            constraints: BoxConstraints(maxWidth: 300),
+                            width: MediaQuery.of(context).size.width,
+                            height: 45,
+                            padding: EdgeInsets.symmetric(vertical: 13),
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(Radius.circular(3)),
+                                border:
+                                Border.all(color: Color(0xff018a8a), width: 2),
+                                color: Color(0xff018a8a)),
+                            child: Text(
+                              'Adicionar',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontFamily: 'avenir-lt-std-roman',
+                                fontSize: 15.0,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 20.0),
+                        Builder(
+                          builder: (BuildContext context) {
+                            return ListView.builder(
+                              scrollDirection: Axis.vertical,
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount:
+                              ListaModelDistribuicaoFisicosServicoQuantitativo.length,
+                              itemBuilder: DistribuicaoFisicosServicoQuantitativoCard,
+                            );
+                          },
+                        ),
+                        SizedBox(height: 20.0),
+                        InkWell(
+                          onTap: () {
+                            FocusScope.of(context).requestFocus(new FocusNode());
+                            OnSalvarFormulario();
+                          },
+                          child: Container(
+                            constraints: BoxConstraints(maxWidth: 300),
+                            width: MediaQuery.of(context).size.width,
+                            height: 45,
+                            padding: EdgeInsets.symmetric(vertical: 13),
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(Radius.circular(3)),
+                                border:
+                                Border.all(color: Color(0xff018a8a), width: 2),
+                                color: Color(0xff018a8a)),
+                            child: Text(
+                              'Adicionar re',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontFamily: 'avenir-lt-std-roman',
+                                fontSize: 15.0,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  isActive: true,
+                ),
+              ],
+              type: StepperType.vertical,
+              currentStep: current_step,
+              onStepTapped: (step) {
+                setState(() {
+                  current_step = step;
+                });
+              },
+              onStepContinue: () {
+                setState(() {
+                  if (current_step < spr.length - 1) {
+                    current_step = current_step + 1;
+                  } else {
+                    current_step = 0;
+                  }
+                });
+              },
+              onStepCancel: () {
+                setState(() {
+                  if (current_step > 0) {
+                    current_step = current_step - 1;
+                  } else {
+                    current_step = 0;
+                  }
+                });
+              },
+            ),
+          );
+        }
+        break;
+    }
+  }
 }
