@@ -1,13 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'dart:ui' as ui;
-import 'dart:io';
 import 'dart:async';
-import 'dart:convert';
-
-import 'package:scm_engenharia_app/help/components.dart';
 import 'package:scm_engenharia_app/pages/alterar_senha_page.dart';
-import 'package:scm_engenharia_app/pages/formulario_sici_fust_page.dart';
 import 'package:scm_engenharia_app/pages/login_page.dart';
 import 'package:scm_engenharia_app/pages/perfil_page.dart';
 
@@ -23,8 +17,6 @@ class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
   @override
   void initState() {
     super.initState();
-
-
   }
 
   Future<void> OnSwitchNotificacoesAtivarDesativadaChanged(bool value) async {
@@ -74,7 +66,7 @@ class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
                             style: TextStyle(
                               fontSize: 17.0,
                               fontFamily: 'avenir-lt-std-roman',
-                              color: Color(0xff018a8a),
+                              color: Color(0xffa55eea),
                             ),
                           ),
                           onPressed: () async {
@@ -90,7 +82,7 @@ class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
                         ),
                         SizedBox(width: 15.0),
                         FlatButton(
-                          color: Color(0xff018a8a),
+                          color: Color(0xffa55eea),
                           //`Icon` to display
                           child: Text(
                             'Não',

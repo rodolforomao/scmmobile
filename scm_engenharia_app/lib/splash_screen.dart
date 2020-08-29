@@ -41,13 +41,6 @@ class _SplashScreenState extends State<SplashScreen> {
         }
         else {
           _Usuariodb = _UsuarioLogado.resultado as TbUsuario;
-          Navigator.of(context).pushAndRemoveUntil(
-              new MaterialPageRoute(
-                  builder: (BuildContext context) =>
-                  new MenuNavigation(UsuarioLogado:_Usuariodb)),
-                  (Route<dynamic> route) => false);
-
-
           var connectivityResult = await (Connectivity().checkConnectivity());
           if (connectivityResult == ConnectivityResult.none) {
             Navigator.of(context).pushAndRemoveUntil(
@@ -83,7 +76,6 @@ class _SplashScreenState extends State<SplashScreen> {
               if (_UsuarioLogado.erro)
                 throw (_UsuarioLogado.mensagem);
               else {
-
                 Navigator.of(context).pushAndRemoveUntil(
                     new MaterialPageRoute(
                         builder: (BuildContext context) =>

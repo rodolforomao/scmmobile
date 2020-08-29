@@ -19,9 +19,11 @@ class CriarNovaContaPageState extends StatefulWidget {
 }
 
 class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
+  final _ScaffoldKey = GlobalKey<ScaffoldState>();
   ServicoMobileService _RestWebService = new ServicoMobileService();
   BuildContext dialogContext;
-
+  StreamSubscription<ConnectivityResult> subscription;
+  String _StatusTipoWidget;
   TextEditingController _TxtControllerNome = TextEditingController();
   TextEditingController _TxtControllerCpf = new MaskedTextController(mask: '000.000.000-00');
   TextEditingController _TxtControllerEmail = TextEditingController();
@@ -29,11 +31,10 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
   TextEditingController _TxtControllerTelefoneWhatsapp = new MaskedTextController(mask: '(00) 0 0000-0000');
   TextEditingController _TxtControllerEmpresa = TextEditingController();
   TextEditingController _TxtControllerUf = TextEditingController();
+
   UF UfSelecionada;
   List<UF> ListaUf = new List<UF>();
 
-
-  bool _IsLogando = false, isVisualizarSenha = false;
 
   Future<Null> OnGetUfs() async {
     try {
@@ -250,7 +251,34 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
   @override
   void initState() {
     super.initState();
+    Future.delayed(Duration.zero, () async {
+      var connectivityResult = await (Connectivity().checkConnectivity());
+      if (connectivityResult == ConnectivityResult.none) {
+        setState(() {
+          _StatusTipoWidget = "sem_internet";
+        });
+      } else {
+        setState(() {
+          _StatusTipoWidget = "renderizar_tela";
+        });
+      }
+    });
+    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.none) {
+
+      } else {
+        _ScaffoldKey.currentState.removeCurrentSnackBar();
+        setState(() {
+          _StatusTipoWidget = "renderizar_tela";
+        });
+      }
+    });
     OnGetUfs();
+  }
+  @override
+  void dispose() {
+    super.dispose();
+    subscription?.cancel();
   }
 
   @override
@@ -273,6 +301,7 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
         minHeight: MediaQuery.of(context).size.height,
       ),
       child: Scaffold(
+        key: _ScaffoldKey,
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -288,494 +317,633 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
                 fontFamily: "open-sans-regular"),
           ),
         ),
-        body: Container(
-          alignment: Alignment.center,
-          child: SingleChildScrollView(
-            padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(
-                  height: 25.0,
-                ),
-                Text(
-                  "Nome completo",
-                  style: TextStyle(
-                    decoration: TextDecoration.none,
-                    fontFamily: "avenir-lt-std-roman",
-                    fontSize: 15.0,
-                    color: Colors.white,
-                  ),
-                ),
-                SizedBox(
-                  height: 5.0,
-                ),
-                TextFormField(
-                    autofocus: false,
-                    keyboardType: TextInputType.text,
-                    controller: _TxtControllerNome,
-                    textInputAction: TextInputAction.done,
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'avenir-lt-std-medium',
-                        color: const Color(0xFF000000)),
-                    decoration: InputDecoration(
-                        contentPadding:
-                            EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
-                        errorBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10.0)),
-                            ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(color: Colors.white, width: 0),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide:
-                              BorderSide(color: Colors.white, width: 0.3),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(color: Colors.white, width: 0),
-                        ),
-                        hintText: "Digite seu nome completo",
-                        border: InputBorder.none,
-                        hintStyle: TextStyle(
-                            fontSize: 16.0, color: const Color(0xFF90ffffff)),
-                        labelStyle: TextStyle(
-                            fontSize: 16,
-                            color: Color(0xFF90ffffff),
-                            fontFamily: 'open-sans-regular'),
-                        errorStyle: TextStyle(
-                            fontSize: 12,
-                            color: Colors.red,
-                            fontFamily: 'open-sans-regular'),
-                        fillColor: Color(0xff80ff9b7b),
-                        filled: true)),
-                SizedBox(
-                  height: 17.0,
-                ),
-                Text(
-                  "CPF",
-                  style: TextStyle(
-                    decoration: TextDecoration.none,
-                    fontFamily: "avenir-lt-std-roman",
-                    fontSize: 15.0,
-                    color: Colors.white,
-                  ),
-                ),
-                SizedBox(
-                  height: 5.0,
-                ),
-                TextFormField(
-                    autofocus: false,
-                    keyboardType: TextInputType.number,
-                    controller: _TxtControllerCpf,
-                    textInputAction: TextInputAction.done,
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'avenir-lt-std-medium',
-                        color: const Color(0xFF000000)),
-                    decoration: InputDecoration(
-                        contentPadding:
-                            EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
-                        errorBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10.0)),
-                           ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(color: Colors.white, width: 0),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide:
-                              BorderSide(color: Colors.white, width: 0.3),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(color: Colors.white, width: 0),
-                        ),
-                        hintText: "Digite seu CPF",
-                        border: InputBorder.none,
-                        hintStyle: TextStyle(
-                            fontSize: 16.0, color: const Color(0xFF90ffffff)),
-                        labelStyle: TextStyle(
-                            fontSize: 16,
-                            color: Color(0xFF90ffffff),
-                            fontFamily: 'open-sans-regular'),
-                        errorStyle: TextStyle(
-                            fontSize: 12,
-                            color: Colors.red,
-                            fontFamily: 'open-sans-regular'),
-                        fillColor: Color(0xff80ff9b7b),
-                        filled: true)),
-                SizedBox(
-                  height: 17.0,
-                ),
-                Text(
-                  "E-mail",
-                  style: TextStyle(
-                    decoration: TextDecoration.none,
-                    fontFamily: "avenir-lt-std-roman",
-                    fontSize: 15.0,
-                    color: Colors.white,
-                  ),
-                ),
-                SizedBox(
-                  height: 5.0,
-                ),
-                TextFormField(
-                    autofocus: false,
-                    keyboardType: TextInputType.emailAddress,
-                    controller: _TxtControllerEmail ,
-                    textInputAction: TextInputAction.done,
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'avenir-lt-std-medium',
-                        color: const Color(0xFF000000)),
-                    decoration: InputDecoration(
-                        contentPadding:
-                            EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
-                        errorBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10.0)),
-                           ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(color: Colors.white, width: 0),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide:
-                              BorderSide(color: Colors.white, width: 0.3),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(color: Colors.white, width: 0),
-                        ),
-                        hintText: "Digite seu e-mail",
-                        border: InputBorder.none,
-                        hintStyle: TextStyle(
-                            fontSize: 16.0, color: const Color(0xFF90ffffff)),
-                        labelStyle: TextStyle(
-                            fontSize: 16,
-                            color: Color(0xFF90ffffff),
-                            fontFamily: 'open-sans-regular'),
-                        errorStyle: TextStyle(
-                            fontSize: 12,
-                            color: Colors.red,
-                            fontFamily: 'open-sans-regular'),
-                        fillColor: Color(0xff80ff9b7b),
-                        filled: true)),
-                SizedBox(
-                  height: 17.0,
-                ),
-                Text(
-                  "Telefone fixo",
-                  style: TextStyle(
-                    decoration: TextDecoration.none,
-                    fontFamily: "avenir-lt-std-roman",
-                    fontSize: 15.0,
-                    color: Colors.white,
-                  ),
-                ),
-                SizedBox(
-                  height: 5.0,
-                ),
-                TextFormField(
-                    autofocus: false,
-                    keyboardType: TextInputType.number,
-                    controller: _TxtControllerTelefone,
-                    textInputAction: TextInputAction.done,
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'avenir-lt-std-medium',
-                        color: const Color(0xFF000000)),
-                    decoration: InputDecoration(
-                        contentPadding:
-                            EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
-                        errorBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10.0)),
-                            ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(color: Colors.white, width: 0),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide:
-                              BorderSide(color: Colors.white, width: 0.3),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(color: Colors.white, width: 0),
-                        ),
-                        hintText: "Digite telefone fixo",
-                        border: InputBorder.none,
-                        hintStyle: TextStyle(
-                            fontSize: 16.0, color: const Color(0xFF90ffffff)),
-                        labelStyle: TextStyle(
-                            fontSize: 16,
-                            color: Color(0xFF90ffffff),
-                            fontFamily: 'open-sans-regular'),
-                        errorStyle: TextStyle(
-                            fontSize: 12,
-                            color: Colors.red,
-                            fontFamily: 'open-sans-regular'),
-                        fillColor: Color(0xff80ff9b7b),
-                        filled: true)),
-                SizedBox(
-                  height: 17.0,
-                ),
-                Text(
-                  "Whatsapp",
-                  style: TextStyle(
-                    decoration: TextDecoration.none,
-                    fontFamily: "avenir-lt-std-roman",
-                    fontSize: 15.0,
-                    color: Colors.white,
-                  ),
-                ),
-                SizedBox(
-                  height: 5.0,
-                ),
-                TextFormField(
-                    autofocus: false,
-                    keyboardType: TextInputType.number,
-                    controller: _TxtControllerTelefoneWhatsapp,
-                    textInputAction: TextInputAction.done,
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'avenir-lt-std-medium',
-                        color: const Color(0xFF000000)),
-                    decoration: InputDecoration(
-                        contentPadding:
-                            EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
-                        errorBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10.0)),),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(color: Colors.white, width: 0),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide:
-                              BorderSide(color: Colors.white, width: 0.3),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(color: Colors.white, width: 0),
-                        ),
-                        hintText: "Digite Whatsapp",
-                        border: InputBorder.none,
-                        hintStyle: TextStyle(
-                            fontSize: 16.0, color: const Color(0xFF90ffffff)),
-                        labelStyle: TextStyle(
-                            fontSize: 16,
-                            color: Color(0xFF90ffffff),
-                            fontFamily: 'open-sans-regular'),
-                        errorStyle: TextStyle(
-                            fontSize: 12,
-                            color: Colors.red,
-                            fontFamily: 'open-sans-regular'),
-                        fillColor: Color(0xff80ff9b7b),
-                        filled: true)),
-                SizedBox(
-                  height: 17.0,
-                ),
-                Text(
-                  "Nome da empresa",
-                  style: TextStyle(
-                    decoration: TextDecoration.none,
-                    fontFamily: "avenir-lt-std-roman",
-                    fontSize: 15.0,
-                    color: Colors.white,
-                  ),
-                ),
-                SizedBox(
-                  height: 5.0,
-                ),
-                TextFormField(
-                    autofocus: false,
-                    keyboardType: TextInputType.text,
-                    controller: _TxtControllerEmpresa,
-                    textInputAction: TextInputAction.done,
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'avenir-lt-std-medium',
-                        color: const Color(0xFF000000)),
-                    decoration: InputDecoration(
-                        contentPadding:
-                            EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
-                        errorBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10.0)),
-                          ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(color: Colors.white, width: 0),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide:
-                              BorderSide(color: Colors.white, width: 0.3),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide:
-                              BorderSide(color: Colors.white, width: 0.3),
-                        ),
-                        hintText: "Digite o nome da empresa",
-                        border: InputBorder.none,
-                        hintStyle: TextStyle(
-                            fontSize: 16.0, color: const Color(0xFF90ffffff)),
-                        labelStyle: TextStyle(
-                            fontSize: 16,
-                            color: Color(0xFF90ffffff),
-                            fontFamily: 'open-sans-regular'),
-                        errorStyle: TextStyle(
-                            fontSize: 12,
-                            color: Colors.red,
-                            fontFamily: 'open-sans-regular'),
-                        fillColor: Color(0xff80ff9b7b),
-                        filled: true)),
-                SizedBox(height: 20.0),
-                Text(
-                  "Selecione a UF",
-                  style: TextStyle(
-                    decoration: TextDecoration.none,
-                    fontFamily: "avenir-lt-std-roman",
-                    fontSize: 15.0,
-                    color: Colors.white,
-                  ),
-                ),
-                SizedBox(
-                  height: 5.0,
-                ),
-                Container(
-                    height: 55.0,
-                    child: FormField<String>(
-                      builder: (FormFieldState<String> state) {
-                        return InputDecorator(
-                          decoration: InputDecoration(
-                              contentPadding:
-                                  EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
-                              errorBorder: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10.0)),
-                                  ),
-                              focusedErrorBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
-                                borderSide:
-                                    BorderSide(color: Colors.white, width: 0),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
-                                borderSide:
-                                    BorderSide(color: Colors.white, width: 0.3),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
-                                borderSide:
-                                    BorderSide(color: Colors.white, width: 0.3),
-                              ),
+        body: _TipoWidget(context),
+      ),
+    );
+  }
 
-                              border: InputBorder.none,
-                              hintStyle: TextStyle(
-                                  fontSize: 16.0,
-                                  color: const Color(0xFF90ffffff)),
-                              labelStyle: TextStyle(
-                                  fontSize: 16,
-                                  color: Color(0xFF90ffffff),
-                                  fontFamily: 'open-sans-regular'),
-                              fillColor: Color(0xff80ff9b7b),
-                              filled: true),
-                          child: Container(
-                            padding: EdgeInsets.fromLTRB(10.0, 0.0, 20.0, 0.0),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<UF>(
-                                hint: Text("Selecione ..", style: TextStyle(
-                                    fontSize: 16.0,
-                                    color: const Color(0xFF90ffffff)),),
-                                elevation: 16,
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    fontFamily: 'avenir-lt-std-medium',
-                                    color: Color(0xFF000000)),
-                                iconEnabledColor: Colors.white,
-                                iconDisabledColor: Colors.white,
-                                value: UfSelecionada != null ? UfSelecionada : null,
-                                isExpanded: true,
-                                iconSize: 35,
-                                items: ListaUf.map((UF value) {
-                                  return new DropdownMenuItem<UF>(
-                                    value: value,
-                                    child: Text(
-                                      value.uf,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 19.0,
-                                          color: Color(0xFF000000),
-                                          fontFamily:
-                                              "avenir-next-rounded-pro-regular"),
+  _TipoWidget(BuildContext context) {
+    switch (_StatusTipoWidget) {
+      case "sem_internet":
+        {
+          return Container(
+            alignment: Alignment.center,
+            child: SingleChildScrollView(
+              padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Image.asset(
+                    "assets/imagens/img_sem_sinal.png",
+                    width: 150.0,
+                    height: 150.0,
+                    fit: BoxFit.fill,
+                  ),
+                  SizedBox(height: 30.0),
+                  Text(
+                    "Não há conexão com a internet",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      decoration: TextDecoration.none,
+                      fontFamily: "avenir-lt-std-roman",
+                      fontSize: 20.0,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(height: 10.0),
+                  Text(
+                    "Verifique sua conexão com a internet e tente novamente.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      decoration: TextDecoration.none,
+                      fontFamily: "avenir-lt-std-roman",
+                      fontSize: 15.0,
+                      color: Colors.white,
+                    ),),
+                  SizedBox(height: 40.0),
+                  Center(
+                    child: InkWell(
+                      onTap: () async {
+                        var connectivityResult = await (Connectivity().checkConnectivity());
+                        if (connectivityResult == ConnectivityResult.none) {
+                          setState(() {
+                            _StatusTipoWidget = "sem_internet";
+                          });
+                          _ScaffoldKey.currentState.showSnackBar(SnackBar(
+                            onVisible: () {
+                              print('Visible');
+                            },
+                            elevation: 6.0,
+                            backgroundColor: Colors.black,
+                            behavior: SnackBarBehavior.floating,
+                            content: SizedBox(
+                              height: 30.0,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Text(
+                                    "Tentando reconectar a internet",
+                                    softWrap: true,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      decoration: TextDecoration.none,
+                                      fontFamily: "avenir-lt-std-roman",
+                                      fontSize: 16.0,
+                                      color: Colors.white,
                                     ),
-                                  );
-                                }).toList(),
-                                onChanged: (UF newValue) {
-                                  setState(() {
-                                    UfSelecionada = newValue;
-                                    _TxtControllerUf.text = newValue.uf;
-                                  });
-                                },
+                                  ),
+                                  SizedBox(
+                                    child: CircularProgressIndicator(
+                                      valueColor:
+                                      AlwaysStoppedAnimation<Color>(Color(0xff2fdf84)),
+                                    ),
+                                    height: 30.0,
+                                    width: 30.0,
+                                  ),
+                                ],
                               ),
                             ),
-                          ),
-                        );
+                            duration: Duration(days: 365),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              side: BorderSide(
+                                color: Colors.black54,
+                                width: 2,
+                              ),
+                            ),
+                          ));
+                        } else {
+                          _ScaffoldKey.currentState.removeCurrentSnackBar();
+                          setState(() {
+                            _StatusTipoWidget = "renderizar_tela";
+                          });
+                        }
                       },
-                    )),
-                SizedBox(height: 30.0),
-                InkWell(
-                  onTap: () {
-                    FocusManager.instance.primaryFocus.unfocus();
-                    OnSalvarConta();
-                  },
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 45,
-                    padding: EdgeInsets.symmetric(vertical: 13),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(3)),
-                        border: Border.all(color: Color(0xff018a8a), width: 2),
-                        color: Color(0xff018a8a)),
-                    child: Text(
-                      'REGISTRAR',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontFamily: 'avenir-lt-std-roman',
-                        fontSize: 15.0,
+                      child: Container(
+                        padding: EdgeInsets.fromLTRB(0.0, 5.0, 20.0, 0.0),
+                        constraints: BoxConstraints(maxWidth: 300),
+                        width: MediaQuery.of(context).size.width,
+                        height: 45,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(3)),
+                            color: Color(0xff8854d0)),
+                        child: Text(
+                          'TENTE NOVAMENTE',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontFamily: 'avenir-lt-std-roman',
+                            fontSize: 12.0,
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-              ],
+                  SizedBox(height: 20.0),
+                ],
+              ),
             ),
-          ),
-        ),
-      ),
-    );
+          );
+        }
+        break;
+      case "renderizar_tela":
+        {
+          return Container(
+            alignment: Alignment.topCenter,
+            child: SingleChildScrollView(
+              padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(
+                    height: 25.0,
+                  ),
+                  Text(
+                    "Nome completo",
+                    style: TextStyle(
+                      decoration: TextDecoration.none,
+                      fontFamily: "avenir-lt-std-roman",
+                      fontSize: 15.0,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                  TextFormField(
+                      autofocus: false,
+                      keyboardType: TextInputType.text,
+                      controller: _TxtControllerNome,
+                      textInputAction: TextInputAction.done,
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'avenir-lt-std-medium',
+                          color: const Color(0xFF000000)),
+                      decoration: InputDecoration(
+                          contentPadding:
+                          EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(10.0)),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(color: Colors.white, width: 0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderSide:
+                            BorderSide(color: Colors.white, width: 0.3),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(color: Colors.white, width: 0),
+                          ),
+                          hintText: "Digite seu nome completo",
+                          border: InputBorder.none,
+                          hintStyle: TextStyle(
+                              fontSize: 16.0, color: const Color(0xFF90ffffff)),
+                          labelStyle: TextStyle(
+                              fontSize: 16,
+                              color: Color(0xFF90ffffff),
+                              fontFamily: 'open-sans-regular'),
+                          errorStyle: TextStyle(
+                              fontSize: 12,
+                              color: Colors.red,
+                              fontFamily: 'open-sans-regular'),
+                          fillColor: Color(0xff80ff9b7b),
+                          filled: true)),
+                  SizedBox(
+                    height: 17.0,
+                  ),
+                  Text(
+                    "CPF",
+                    style: TextStyle(
+                      decoration: TextDecoration.none,
+                      fontFamily: "avenir-lt-std-roman",
+                      fontSize: 15.0,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                  TextFormField(
+                      autofocus: false,
+                      keyboardType: TextInputType.number,
+                      controller: _TxtControllerCpf,
+                      textInputAction: TextInputAction.done,
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'avenir-lt-std-medium',
+                          color: const Color(0xFF000000)),
+                      decoration: InputDecoration(
+                          contentPadding:
+                          EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(10.0)),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(color: Colors.white, width: 0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderSide:
+                            BorderSide(color: Colors.white, width: 0.3),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(color: Colors.white, width: 0),
+                          ),
+                          hintText: "Digite seu CPF",
+                          border: InputBorder.none,
+                          hintStyle: TextStyle(
+                              fontSize: 16.0, color: const Color(0xFF90ffffff)),
+                          labelStyle: TextStyle(
+                              fontSize: 16,
+                              color: Color(0xFF90ffffff),
+                              fontFamily: 'open-sans-regular'),
+                          errorStyle: TextStyle(
+                              fontSize: 12,
+                              color: Colors.red,
+                              fontFamily: 'open-sans-regular'),
+                          fillColor: Color(0xff80ff9b7b),
+                          filled: true)),
+                  SizedBox(
+                    height: 17.0,
+                  ),
+                  Text(
+                    "E-mail",
+                    style: TextStyle(
+                      decoration: TextDecoration.none,
+                      fontFamily: "avenir-lt-std-roman",
+                      fontSize: 15.0,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                  TextFormField(
+                      autofocus: false,
+                      keyboardType: TextInputType.emailAddress,
+                      controller: _TxtControllerEmail ,
+                      textInputAction: TextInputAction.done,
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'avenir-lt-std-medium',
+                          color: const Color(0xFF000000)),
+                      decoration: InputDecoration(
+                          contentPadding:
+                          EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(10.0)),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(color: Colors.white, width: 0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderSide:
+                            BorderSide(color: Colors.white, width: 0.3),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(color: Colors.white, width: 0),
+                          ),
+                          hintText: "Digite seu e-mail",
+                          border: InputBorder.none,
+                          hintStyle: TextStyle(
+                              fontSize: 16.0, color: const Color(0xFF90ffffff)),
+                          labelStyle: TextStyle(
+                              fontSize: 16,
+                              color: Color(0xFF90ffffff),
+                              fontFamily: 'open-sans-regular'),
+                          errorStyle: TextStyle(
+                              fontSize: 12,
+                              color: Colors.red,
+                              fontFamily: 'open-sans-regular'),
+                          fillColor: Color(0xff80ff9b7b),
+                          filled: true)),
+                  SizedBox(
+                    height: 17.0,
+                  ),
+                  Text(
+                    "Telefone fixo",
+                    style: TextStyle(
+                      decoration: TextDecoration.none,
+                      fontFamily: "avenir-lt-std-roman",
+                      fontSize: 15.0,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                  TextFormField(
+                      autofocus: false,
+                      keyboardType: TextInputType.number,
+                      controller: _TxtControllerTelefone,
+                      textInputAction: TextInputAction.done,
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'avenir-lt-std-medium',
+                          color: const Color(0xFF000000)),
+                      decoration: InputDecoration(
+                          contentPadding:
+                          EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(10.0)),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(color: Colors.white, width: 0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderSide:
+                            BorderSide(color: Colors.white, width: 0.3),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(color: Colors.white, width: 0),
+                          ),
+                          hintText: "Digite telefone fixo",
+                          border: InputBorder.none,
+                          hintStyle: TextStyle(
+                              fontSize: 16.0, color: const Color(0xFF90ffffff)),
+                          labelStyle: TextStyle(
+                              fontSize: 16,
+                              color: Color(0xFF90ffffff),
+                              fontFamily: 'open-sans-regular'),
+                          errorStyle: TextStyle(
+                              fontSize: 12,
+                              color: Colors.red,
+                              fontFamily: 'open-sans-regular'),
+                          fillColor: Color(0xff80ff9b7b),
+                          filled: true)),
+                  SizedBox(
+                    height: 17.0,
+                  ),
+                  Text(
+                    "Whatsapp",
+                    style: TextStyle(
+                      decoration: TextDecoration.none,
+                      fontFamily: "avenir-lt-std-roman",
+                      fontSize: 15.0,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                  TextFormField(
+                      autofocus: false,
+                      keyboardType: TextInputType.number,
+                      controller: _TxtControllerTelefoneWhatsapp,
+                      textInputAction: TextInputAction.done,
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'avenir-lt-std-medium',
+                          color: const Color(0xFF000000)),
+                      decoration: InputDecoration(
+                          contentPadding:
+                          EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(10.0)),),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(color: Colors.white, width: 0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderSide:
+                            BorderSide(color: Colors.white, width: 0.3),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(color: Colors.white, width: 0),
+                          ),
+                          hintText: "Digite Whatsapp",
+                          border: InputBorder.none,
+                          hintStyle: TextStyle(
+                              fontSize: 16.0, color: const Color(0xFF90ffffff)),
+                          labelStyle: TextStyle(
+                              fontSize: 16,
+                              color: Color(0xFF90ffffff),
+                              fontFamily: 'open-sans-regular'),
+                          errorStyle: TextStyle(
+                              fontSize: 12,
+                              color: Colors.red,
+                              fontFamily: 'open-sans-regular'),
+                          fillColor: Color(0xff80ff9b7b),
+                          filled: true)),
+                  SizedBox(
+                    height: 17.0,
+                  ),
+                  Text(
+                    "Nome da empresa",
+                    style: TextStyle(
+                      decoration: TextDecoration.none,
+                      fontFamily: "avenir-lt-std-roman",
+                      fontSize: 15.0,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                  TextFormField(
+                      autofocus: false,
+                      keyboardType: TextInputType.text,
+                      controller: _TxtControllerEmpresa,
+                      textInputAction: TextInputAction.done,
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'avenir-lt-std-medium',
+                          color: const Color(0xFF000000)),
+                      decoration: InputDecoration(
+                          contentPadding:
+                          EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(10.0)),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(color: Colors.white, width: 0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderSide:
+                            BorderSide(color: Colors.white, width: 0.3),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderSide:
+                            BorderSide(color: Colors.white, width: 0.3),
+                          ),
+                          hintText: "Digite o nome da empresa",
+                          border: InputBorder.none,
+                          hintStyle: TextStyle(
+                              fontSize: 16.0, color: const Color(0xFF90ffffff)),
+                          labelStyle: TextStyle(
+                              fontSize: 16,
+                              color: Color(0xFF90ffffff),
+                              fontFamily: 'open-sans-regular'),
+                          errorStyle: TextStyle(
+                              fontSize: 12,
+                              color: Colors.red,
+                              fontFamily: 'open-sans-regular'),
+                          fillColor: Color(0xff80ff9b7b),
+                          filled: true)),
+                  SizedBox(height: 20.0),
+                  Text(
+                    "Selecione a UF",
+                    style: TextStyle(
+                      decoration: TextDecoration.none,
+                      fontFamily: "avenir-lt-std-roman",
+                      fontSize: 15.0,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                  Container(
+                      height: 55.0,
+                      child: FormField<String>(
+                        builder: (FormFieldState<String> state) {
+                          return InputDecorator(
+                            decoration: InputDecoration(
+                                contentPadding:
+                                EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
+                                errorBorder: OutlineInputBorder(
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
+                                ),
+                                focusedErrorBorder: OutlineInputBorder(
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
+                                  borderSide:
+                                  BorderSide(color: Colors.white, width: 0),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
+                                  borderSide:
+                                  BorderSide(color: Colors.white, width: 0.3),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
+                                  borderSide:
+                                  BorderSide(color: Colors.white, width: 0.3),
+                                ),
+
+                                border: InputBorder.none,
+                                hintStyle: TextStyle(
+                                    fontSize: 16.0,
+                                    color: const Color(0xFF90ffffff)),
+                                labelStyle: TextStyle(
+                                    fontSize: 16,
+                                    color: Color(0xFF90ffffff),
+                                    fontFamily: 'open-sans-regular'),
+                                fillColor: Color(0xff80ff9b7b),
+                                filled: true),
+                            child: Container(
+                              padding: EdgeInsets.fromLTRB(10.0, 0.0, 20.0, 0.0),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<UF>(
+                                  hint: Text("Selecione ..", style: TextStyle(
+                                      fontSize: 16.0,
+                                      color: const Color(0xFF90ffffff)),),
+                                  elevation: 16,
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      fontFamily: 'avenir-lt-std-medium',
+                                      color: Color(0xFF000000)),
+                                  iconEnabledColor: Colors.white,
+                                  iconDisabledColor: Colors.white,
+                                  value: UfSelecionada != null ? UfSelecionada : null,
+                                  isExpanded: true,
+                                  iconSize: 35,
+                                  items: ListaUf.map((UF value) {
+                                    return new DropdownMenuItem<UF>(
+                                      value: value,
+                                      child: Text(
+                                        value.uf,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 19.0,
+                                            color: Color(0xFF000000),
+                                            fontFamily:
+                                            "avenir-next-rounded-pro-regular"),
+                                      ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (UF newValue) {
+                                    setState(() {
+                                      UfSelecionada = newValue;
+                                      _TxtControllerUf.text = newValue.uf;
+                                    });
+                                  },
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      )),
+                  SizedBox(height: 40.0),
+                  Center(
+                    child: InkWell(
+                      onTap: () async {
+                        FocusManager.instance.primaryFocus.unfocus();
+                        OnSalvarConta();
+                      },
+                      child: Container(
+                        padding: EdgeInsets.fromLTRB(0.0, 5.0, 20.0, 0.0),
+                        constraints: BoxConstraints(maxWidth: 300),
+                        width: MediaQuery.of(context).size.width,
+                        height: 45,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(3)),
+                            color: Color(0xff8854d0)),
+                        child: Text(
+                          'REGISTRAR',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontFamily: 'avenir-lt-std-roman',
+                            fontSize: 12.0,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20.0),
+                ],
+              ),
+            ),
+          );
+        }
+        break;
+    }
   }
 }

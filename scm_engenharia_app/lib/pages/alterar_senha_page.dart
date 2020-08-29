@@ -17,86 +17,132 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
   TextEditingController _TxtControllerNova = TextEditingController();
   TextEditingController _TxtControllerConfirmarSenha = TextEditingController();
   String _StatusTipoWidget;
-  bool _IsCarregandoButton = false;
-
-
-  Future<Null> onIncApp(BuildContext context) async {
-    try {
-
-    } catch (error) {
-
-    }
-  }
 
   Future<Null> OnCadastroAtualizarSenha(BuildContext context) async {
     try {
       var connectivityResult = await (Connectivity().checkConnectivity());
       if (connectivityResult == ConnectivityResult.none)
-        OnToastInformacao("Verifique sua conexão com a internet e tente novamente.", 0xFFffbb33);
+        OnAlertaInformacao("Verifique sua conexão com a internet e tente novamente.");
       else {
 
       }
     } catch (error) {
-      setState(() {
-        _IsCarregandoButton = false;
-      });
+
       print(error);
-      OnToastInformacao(error.toString(), 0xFFCC0000);
+      OnAlertaInformacao(error.toString());
     }
   }
 
-  void OnToastInformacao(String Mensagem, int CorInformacao) {
-    final snackBar = SnackBar(
-      elevation: 2.0,
-      behavior: SnackBarBehavior.floating,
-      content: Text(
-        Mensagem,
-        overflow: TextOverflow.ellipsis,
-        maxLines: 2,
-        softWrap: false,
-        style: TextStyle(
-            fontSize: 15.0,
-            color: Color(0xffFFFFFF),
-            fontFamily: "avenir-lt-medium"),
-      ),
-      duration: Duration(seconds: 4),
-      backgroundColor: Color(CorInformacao),
+  OnAlertaInformacao(String Mensagem) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8.0))),
+          child:  Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(height: 15.0),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "Informação",
+                    style: TextStyle(
+                        fontSize: 20.0,
+                        color: Color(0xff212529),
+                        fontFamily: "avenir-lt-std-roman"),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Divider(
+                    color: Colors.black12,
+                  ),
+                  Padding(padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                    child:  Text(
+                      Mensagem,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 4,
+                      softWrap: false,
+                      style: TextStyle(
+                          fontSize: 17.0,
+                          color: Color(0xff212529),
+                          fontFamily: "avenir-lt-std-roman"),
+                    ),
+                  ),
+                ],
+              ),
+              Divider(
+                color: Colors.black12,
+              ),
+              Container(
+                margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
+                child: new Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    FlatButton(
+                      color: Color(0xff018a8a),
+                      //`Icon` to display
+                      child: Text(
+                        '           OK           ',
+                        style: TextStyle(
+                            fontSize: 17.0,
+                            color: Color(0xffFFFFFF),
+                            fontFamily: "avenir-lt-std-roman"),
+                      ),
+                      //`Text` to display
+                      onPressed: () {
+                        Navigator.pop(context);
+                        FocusManager.instance.primaryFocus.unfocus();
+                      },
+                      shape: new RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(5.0),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
-    _ScaffoldKey.currentState.showSnackBar(snackBar);
   }
 
-  IncOnConexaoComInternet() async {
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.none) {
-      setState(() {
-        _StatusTipoWidget = "sem_internet";
-      });
-    } else {
-      onIncApp(context);
-      setState(() {
-        _StatusTipoWidget = "alterar_senha";
-      });
-    }
-  }
-
-  OnStatusDaConexaoInternet() async {
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult != ConnectivityResult.none) {
-      onIncApp(context);
-      setState(() {
-        _StatusTipoWidget = "alterar_senha";
-      });
-    }
-  }
 
   @override
   void initState() {
     super.initState();
-    Future(() {
-      IncOnConexaoComInternet();
+    Future.delayed(Duration.zero, () async {
+      var connectivityResult = await (Connectivity().checkConnectivity());
+      if (connectivityResult == ConnectivityResult.none) {
+        setState(() {
+          _StatusTipoWidget = "sem_internet";
+        });
+      } else {
+        setState(() {
+          _StatusTipoWidget = "renderizar_tela";
+        });
+      }
     });
     subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      OnStatusDaConexaoInternet();
+      if (result == ConnectivityResult.none) {
+
+      } else {
+        _ScaffoldKey.currentState.removeCurrentSnackBar();
+        setState(() {
+          _StatusTipoWidget = "renderizar_tela";
+        });
+      }
     });
   }
 
@@ -106,101 +152,177 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
     subscription?.cancel();
   }
 
+
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      key: _ScaffoldKey,
+      appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: <Color>[
+                Color(0xFFF65100),
+                Color(0xFFf5821f),
+                Color(0xFFff8c49),
+              ],
+            ),
+          ),
+        ),
+        automaticallyImplyLeading: true,
+        centerTitle: true,
+        elevation: 0.0,
+        title: Text(
+          "Alterar senha",
+          textAlign: TextAlign.start,
+          style: TextStyle(
+              fontSize: 19.0,
+              color: Color(0xffFFFFFF),
+              fontFamily: "open-sans-regular"),
+        ),
+        actions: <Widget>[
+
+        ],
+      ),
+      body: _TipoWidget(context),
+    );
+  }
+
   _TipoWidget(BuildContext context) {
     switch (_StatusTipoWidget) {
       case "sem_internet":
         {
-          return Container(
-            alignment: Alignment.center,
-            constraints: BoxConstraints(
-              minHeight: MediaQuery.of(context).size.height,
-            ),
-            child: SingleChildScrollView(
-              child: Container(
-                padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Image.asset(
-                      "assets/imagens/img_no_rede.png",
-                      width: 150.0,
-                      height: 150.0,
-                      fit: BoxFit.fill,
+          return SingleChildScrollView(
+            child: Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+              constraints: BoxConstraints(
+                minHeight: MediaQuery.of(context).size.height,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Image.asset(
+                    "assets/imagens/img_sem_sinal.png",
+                    width: 150.0,
+                    height: 150.0,
+                    fit: BoxFit.fill,
+                  ),
+                  SizedBox(height: 30.0),
+                  Text(
+                    "Não há conexão com a internet",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      decoration: TextDecoration.none,
+                      fontFamily: "avenir-lt-std-roman",
+                      fontSize: 20.0,
+                      color: Colors.black,
                     ),
-                    SizedBox(height: 30.0),
-                    Text(
-                      "Não há conexão com a internet",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontFamily: 'Lato-Regular',
-                          fontSize: 20.0,
-                          color: Color(0xFF000000)),
-                    ),
-                    SizedBox(height: 10.0),
-                    Text(
-                      "Verifique sua conexão com a internet e tente novamente.",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontFamily: 'Lato-Regular',
-                          fontSize: 17.0,
-                          color: Color(0xFF545454)),
-                    ),
-                    SizedBox(height: 25.0),
-                    InkWell(
+                  ),
+                  SizedBox(height: 10.0),
+                  Text(
+                    "Verifique sua conexão com a internet e tente novamente.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      decoration: TextDecoration.none,
+                      fontFamily: "avenir-lt-std-roman",
+                      fontSize: 15.0,
+                      color: Colors.black54,
+                    ),),
+                  SizedBox(height: 20.0),
+                  Center(
+                    child: InkWell(
                       onTap: () async {
-                        try {
-                          OnToastInformacao("Tentando conectar a internet.",0xFFffbb33);
-                          IncOnConexaoComInternet();
-                        } catch (error) {
-                          print(error);
-                          OnToastInformacao(error.toString(), 0xFFCC0000);
+                        var connectivityResult = await (Connectivity().checkConnectivity());
+                        if (connectivityResult == ConnectivityResult.none) {
+                          setState(() {
+                            _StatusTipoWidget = "sem_internet";
+                          });
+                          _ScaffoldKey.currentState.showSnackBar(SnackBar(
+                            onVisible: () {
+                              print('Visible');
+                            },
+                            elevation: 6.0,
+                            backgroundColor: Colors.black,
+                            behavior: SnackBarBehavior.floating,
+                            content: SizedBox(
+                              height: 30.0,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Text(
+                                    "Tentando reconectar a internet",
+                                    softWrap: true,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      decoration: TextDecoration.none,
+                                      fontFamily: "avenir-lt-std-roman",
+                                      fontSize: 16.0,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    child: CircularProgressIndicator(
+                                      valueColor:
+                                      AlwaysStoppedAnimation<Color>(Color(0xff2fdf84)),
+                                    ),
+                                    height: 30.0,
+                                    width: 30.0,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            duration: Duration(days: 365),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              side: BorderSide(
+                                color: Colors.black54,
+                                width: 2,
+                              ),
+                            ),
+                          ));
+                        } else {
+                          _ScaffoldKey.currentState.removeCurrentSnackBar();
+                          setState(() {
+                            _StatusTipoWidget = "renderizar_tela";
+                          });
                         }
                       },
                       child: Container(
+                        padding: EdgeInsets.fromLTRB(0.0, 5.0, 20.0, 0.0),
+                        constraints: BoxConstraints(maxWidth: 300),
+                        width: MediaQuery.of(context).size.width,
                         height: 45,
+                        alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          border: new Border.all(color: Colors.transparent, width: 0.0),
-                          borderRadius: new BorderRadius.circular(50.0),
-                          gradient: LinearGradient(
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                            colors: <Color>[
-                              Color(0xfff89d05),
-                              Color(0xffe74c1b),
-                            ],
-                          ),
-                        ),
-                        child: Center(
-                          child: _IsCarregandoButton == false
-                              ? Text(
-                            'TENTE NOVAMENTE',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'avenir-lt-medium',
-                              fontSize: 14.0,
-                            ),
-                          )
-                              : Center(
-                            child: Theme(
-                              data: Theme.of(context)
-                                  .copyWith(accentColor: Colors.white),
-                              child: new CircularProgressIndicator(),
-                            ),
+                            borderRadius: BorderRadius.all(Radius.circular(3)),
+                            color: Color(0xff8854d0)),
+                        child: Text(
+                          'TENTE NOVAMENTE',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontFamily: 'avenir-lt-std-roman',
+                            fontSize: 12.0,
                           ),
                         ),
                       ),
                     ),
-                    SizedBox(height: 20.0),
-                  ],
-                ),
-              ),
-            ), /* add child content here */
+                  ),
+                  SizedBox(height: 20.0),
+                ],
+              ), /* add child content here */
+            ),
           );
         }
         break;
-      case "alterar_senha":
+      case "renderizar_tela":
         {
           return Container(
             alignment: Alignment.topCenter,
@@ -275,28 +397,29 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
                     ),
                   ),
                   SizedBox(height: 25.0),
-                  InkWell(
-                    onTap: () {
+                  Center(
+                    child: InkWell(
+                      onTap: () async {
 
-                    },
-                    child: Container(
-                      constraints: BoxConstraints(maxWidth: 300),
-                      width: MediaQuery.of(context).size.width,
-                      height: 45,
-                      padding: EdgeInsets.symmetric(vertical: 13),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(3)),
-                          border:
-                          Border.all(color: Color(0xff018a8a), width: 2),
-                          color: Color(0xff018a8a)),
-                      child: Text(
-                        'ENVIAR',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontFamily: 'avenir-lt-std-roman',
-                          fontSize: 15.0,
+                      },
+                      child: Container(
+                        padding: EdgeInsets.fromLTRB(0.0, 5.0, 20.0, 0.0),
+                        constraints: BoxConstraints(maxWidth: 300),
+                        width: MediaQuery.of(context).size.width,
+                        height: 45,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(3)),
+                            color: Color(0xff8854d0)),
+                        child: Text(
+                          'ENVIAR',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontFamily: 'avenir-lt-std-roman',
+                            fontSize: 12.0,
+                          ),
                         ),
                       ),
                     ),
@@ -309,41 +432,5 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
         }
         break;
     }
-  }
-
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      key: _ScaffoldKey,
-      appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: <Color>[
-                Color(0xFFF65100),
-                Color(0xFFf5821f),
-                Color(0xFFff8c49),
-              ],
-            ),
-          ),
-        ),
-        automaticallyImplyLeading: true,
-        centerTitle: true,
-        elevation: 0.0,
-        title: Text(
-          "Alterar senha",
-          textAlign: TextAlign.start,
-          style: TextStyle(
-              fontSize: 19.0,
-              color: Color(0xffFFFFFF),
-              fontFamily: "open-sans-regular"),
-        ),
-        actions: <Widget>[
-
-        ],
-      ),
-      body: _TipoWidget(context),
-    );
   }
 }

@@ -47,100 +47,99 @@ class _ErroInformacaoPage extends State<ErroInformacaoPage> {
     _ScaffoldKey.currentState.showSnackBar(snackBar);
   }
 
-  Future<Null> onSairApp() async {
+  Future<Null> onSairApp(BuildContext context) async {
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
-            child: new Container(
-          color: Colors.white,
-          padding: EdgeInsets.all(25.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
-                height: 60.0,
-                child: new Text(
-                  "Deseja realmente sair do aplicativo ?",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 19.0,
-                      color: Color(0xffFFFFFF),
-                      fontFamily: "open-sans-regular"),
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
-                child: new Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    OutlineButton(
-                      color: Color(0xff428dff),
-                      //`Icon` to display
-                      child: Text(
-                        'Sim',
+            child: new Padding(
+              padding: EdgeInsets.all(25.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
+                    height: 50.0,
+                    child: new Text("Deseja realmente sair do aplicativo ?",
                         style: TextStyle(
-                            fontSize: 19.0,
-                            color: Color(0xffFFFFFF),
-                            fontFamily: "open-sans-regular"),
-                      ),
-                      onPressed: () async {
-                        try {
-                          Operacao _UsuarioLogado =
-                              await dbHelper.OnDeletarUsuario();
-                          if (_UsuarioLogado.erro) {
-                            throw (_UsuarioLogado.mensagem);
-                          } else {
-                            Navigator.of(context).pushAndRemoveUntil(
-                                new MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                    new SplashScreen()),
-                                    (Route<dynamic> route) => false);
-                          }
-                        } catch (error) {
-                          setState(() {
-                            widget.informacao = error;
-                          });
-                          OnToastInformacao(error);
-                        }
-                      },
-                      //callback when button is clicked
-                      borderSide: BorderSide(
-                        color: Color(0xFFf2f2f2), //Color of the border
-                        style: BorderStyle.solid, //Style of the border
-                        width: 1.0, //width of the border
-                      ),
+                            fontFamily: 'open-sans-regular',
+                            fontSize: 17.0,
+                            color: Color(0xFF000000))),
+                  ),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
+                    child: new Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        OutlineButton(
+                          color: Color(0xFFf2f2f2),
+                          //`Icon` to display
+                          child: Text(
+                            'Sim',
+                            style: TextStyle(
+                              fontSize: 17.0,
+                              fontFamily: 'avenir-lt-std-roman',
+                              color: Color(0xffa55eea),
+                            ),
+                          ),
+                          onPressed: () async {
+                            try {
+                              FocusScope.of(context).requestFocus(new FocusNode());
+                              Operacao _UsuarioLogado = await dbHelper.OnDeletarUsuario();
+                              if (_UsuarioLogado.erro) {
+                                throw (_UsuarioLogado.mensagem);
+                              } else {
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    new MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                        new SplashScreen()),
+                                        (Route<dynamic> route) => false);
+                              }
+                            } catch (error) {
+                              setState(() {
+                                widget.informacao = error;
+                              });
+                              OnToastInformacao(error);
+                            }
+                          },
+                          //callback when button is clicked
+                          borderSide: BorderSide(
+                            color: Color(0xFFf2f2f2), //Color of the border
+                            style: BorderStyle.solid, //Style of the border
+                            width: 1.0, //width of the border
+                          ),
+                        ),
+                        SizedBox(width: 15.0),
+                        FlatButton(
+                          color: Color(0xffa55eea),
+                          //`Icon` to display
+                          child: Text(
+                            'Não',
+                            style: TextStyle(
+                              fontSize: 17.0,
+                              fontFamily: 'avenir-lt-std-roman',
+                              color: Colors.white,
+                            ),
+                          ),
+                          //`Text` to display
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          shape: new RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(5.0),
+                          ),
+                        ),
+                      ],
                     ),
-                    SizedBox(width: 15.0),
-                    FlatButton(
-                      color: Color(0xff428dff),
-                      //`Icon` to display
-                      child: Text(
-                        'Não',
-                        style: TextStyle(
-                            fontSize: 19.0,
-                            color: Color(0xffFFFFFF),
-                            fontFamily: "open-sans-regular"),
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(5.0),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ));
+            ));
       },
     );
   }
@@ -182,7 +181,7 @@ class _ErroInformacaoPage extends State<ErroInformacaoPage> {
                 size: 22,
               ),
               onPressed: () {
-                onSairApp();
+                onSairApp(context);
               },
             )
           ],

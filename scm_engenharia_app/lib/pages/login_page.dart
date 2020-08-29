@@ -383,40 +383,35 @@ class _LoginPageState extends State<LoginPage> {
                             fontFamily: 'open-sans-regular'),
                         fillColor: Color(0xff80ff9b7b),
                         filled: true)),
-                SizedBox(
-                  height: 40.0,
-                ),
+                SizedBox(height: 40.0),
                 Center(
                   child: InkWell(
-                    onTap: () {
+                    onTap: () async {
                       RealizandoLogin(context);
                     },
                     child: Container(
+                      padding: EdgeInsets.fromLTRB(0.0, 5.0, 20.0, 0.0),
                       constraints: BoxConstraints(maxWidth: 300),
                       width: MediaQuery.of(context).size.width,
                       height: 45,
-                      padding: EdgeInsets.symmetric(vertical: 13),
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(3)),
-                          border:
-                          Border.all(color: Color(0xff8854d0), width: 2),
                           color: Color(0xff8854d0)),
                       child: Text(
                         'LOGIN',
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                           fontFamily: 'avenir-lt-std-roman',
-                          fontSize: 15.0,
+                          fontSize: 12.0,
                         ),
                       ),
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 20,
-                ),
+                SizedBox(height: 30.0),
                 Center(
                   child: GestureDetector(
                     onTap: () {
