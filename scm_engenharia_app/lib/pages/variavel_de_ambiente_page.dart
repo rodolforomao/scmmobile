@@ -1,39 +1,128 @@
-import 'dart:async';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:scm_engenharia_app/data/db_helper.dart';
+import 'package:scm_engenharia_app/data/tb_usuario.dart';
+import 'dart:async';
+import 'package:scm_engenharia_app/help/masked_text_controller.dart';
+import 'package:scm_engenharia_app/help/servico_mobile_service.dart';
+import 'package:scm_engenharia_app/models/model_usuario.dart';
+import 'package:scm_engenharia_app/models/operacao.dart';
+import 'package:scm_engenharia_app/models/variaveis_de_ambiente.dart';
+import 'package:scm_engenharia_app/pages/login_page.dart';
 
-class AlterarSenhaPage extends StatefulWidget {
+class VariavelDeAmbientePage  extends StatefulWidget {
   @override
-  _AlterarSenhaPageState createState() => _AlterarSenhaPageState();
+  _VariavelDeAmbientePageState createState() => _VariavelDeAmbientePageState();
 }
 
-class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
+class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
   final _ScaffoldKey = GlobalKey<ScaffoldState>();
-
-  StreamSubscription<ConnectivityResult> subscription;
-  TextEditingController _TxtControlleraSenha = TextEditingController();
-  TextEditingController _TxtControllerNova = TextEditingController();
-  TextEditingController _TxtControllerConfirmarSenha = TextEditingController();
+  TbUsuario _Usuariodb = new TbUsuario();
+  ServicoMobileService _RestWebService = new ServicoMobileService();
+  BuildContext dialogContext;
+  DBHelper dbHelper;
   String _StatusTipoWidget;
+  StreamSubscription<ConnectivityResult> subscription;
 
-  Future<Null> OnCadastroAtualizarSenha(BuildContext context) async {
+  UF UfSelecionada;
+  List<UF> ListaUf = new List<UF>();
+
+
+  Future<Null> OnGetUfs() async {
     try {
       var connectivityResult = await (Connectivity().checkConnectivity());
-      if (connectivityResult == ConnectivityResult.none)
-        OnAlertaInformacao("Verifique sua conexão com a internet e tente novamente.");
-      else {
-
+      if (connectivityResult == ConnectivityResult.none) {
+      } else {
+        OnRealizandoOperacao("Realizando operação");
+        Operacao _RestWeb = await _RestWebService.OnVariaveisDeAmbiente();
+        if (_RestWeb.erro)
+          throw (_RestWeb.mensagem);
+        else if (_RestWeb.resultado == null)
+          throw (_RestWeb.mensagem);
+        else
+        {
+          VariaveisDeAmbienteResultado  _Resultado = _RestWeb.resultado as VariaveisDeAmbienteResultado;
+          setState(() {
+            ListaUf = _Resultado.uF;
+          });
+          Navigator.pop(dialogContext);
+        }
       }
     } catch (error) {
-
-      print(error);
-      OnAlertaInformacao(error.toString());
+      Navigator.pop(dialogContext);
+      OnToastInformacao(error);
     }
   }
 
-  OnAlertaInformacao(String Mensagem) {
+  Inc() async {
+    try {
+      Operacao _UsuarioLogado = await dbHelper.onSelecionarUsuario();
+      if (_UsuarioLogado.erro)
+        throw (_UsuarioLogado.mensagem);
+      else if (_UsuarioLogado.resultado == null) {
+        Navigator.of(context).pushAndRemoveUntil(
+            new MaterialPageRoute(
+                builder: (BuildContext context) => new LoginPage()),
+                (Route<dynamic> route) => false);
+      }
+      else {
+        _Usuariodb = _UsuarioLogado.resultado as TbUsuario;
+
+      }
+      setState(() {
+        // UfTxt = Uf.first;
+      });
+    } catch (error) {
+      //Navigator.of(context, rootNavigator: true).pop();
+    }
+  }
+
+  OnRealizandoOperacao(String txtInformacao) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        dialogContext = context;
+        return Dialog(
+          child: new Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Container(
+                margin: const EdgeInsets.only(
+                    left: 10.0, top: 20.0, bottom: 20.0, right: 10.0),
+                child: Theme(
+                  data: Theme.of(context).copyWith(
+                    accentColor: Color(0xff018a8a),
+                  ),
+                  child: new CircularProgressIndicator(),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(left: 10.0, top: 20.0, bottom: 20.0, right: 5.0),
+                  child: Text(
+                    txtInformacao,
+                    softWrap: true,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                        fontSize: 17.0,
+                        color: Color(0xff212529),
+                        fontFamily: "open-sans-regular"),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void OnToastInformacao(String Mensagem) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -151,9 +240,9 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
     subscription?.cancel();
   }
 
-
+  @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       key: _ScaffoldKey,
       appBar: AppBar(
         flexibleSpace: Container(
@@ -173,7 +262,7 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
         centerTitle: true,
         elevation: 0.0,
         title: Text(
-          "Alterar senha",
+          "Variável de ambiente",
           textAlign: TextAlign.start,
           style: TextStyle(
               fontSize: 19.0,
@@ -187,6 +276,7 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
       body: _TipoWidget(context),
     );
   }
+
 
   _TipoWidget(BuildContext context) {
     switch (_StatusTipoWidget) {
@@ -323,83 +413,49 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
         break;
       case "renderizar_tela":
         {
-          return Container(
-            alignment: Alignment.topCenter,
-            decoration: BoxDecoration(
-              color: Colors.white,
-            ),
-            constraints: BoxConstraints(
-              minHeight: MediaQuery.of(context).size.height,
-            ),
-            child: SingleChildScrollView(
-              padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+          return SingleChildScrollView(
+            child: Container(
+              alignment: Alignment.center,
+              constraints: BoxConstraints(
+                minHeight: MediaQuery.of(context).size.height,
+              ),
+              padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  SizedBox(
-                    height: 30.0,
+                  Image.asset(
+                    "assets/imagens/img_integracao.png",
+                    width: 150.0,
+                    height: 150.0,
+                    fit: BoxFit.fill,
                   ),
-                  StreamBuilder<String>(
-                    builder: (context, snapshot) => TextFormField(
-                      autofocus: false,
-                      obscureText: true,
-                      keyboardType: TextInputType.text,
-                      controller: _TxtControlleraSenha,
-                      textInputAction: TextInputAction.next,
-                      style: TextStyle(
-                          fontSize: 17,
-                          fontFamily: 'nunito-regular',
-                          color: const Color(0xFF000000)),
-                      decoration: InputDecoration(
-                        hintText: "Digite sua senha ",
-                        labelText: "Senha",
-                      ),
+                  SizedBox(height: 30.0),
+                  Text(
+                    "variáveis de ambiente",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      decoration: TextDecoration.none,
+                      fontFamily: "avenir-lt-std-roman",
+                      fontSize: 20.0,
+                      color: Colors.black,
                     ),
                   ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                  StreamBuilder<String>(
-                    builder: (context, snapshot) => TextFormField(
-                      autofocus: false,
-                      obscureText: true,
-                      keyboardType: TextInputType.text,
-                      controller: _TxtControllerNova,
-                      textInputAction: TextInputAction.next,
-                      style: TextStyle(
-                          fontSize: 17,
-                          fontFamily: 'nunito-regular',
-                          color: const Color(0xFF000000)),
-                      decoration: InputDecoration(
-                        hintText: "Digite sua nova senha",
-                        labelText: "Nova senha",
-                      ),
-                    ),
-                  ),
+                  SizedBox(height: 10.0),
+                  Text(
+                    "Vamos atualizar as variáveis de ambiente para que o aplicativo funcione corretamente.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      decoration: TextDecoration.none,
+                      fontFamily: "avenir-lt-std-roman",
+                      fontSize: 15.0,
+                      color: Colors.black54,
+                    ),),
                   SizedBox(height: 20.0),
-                  StreamBuilder<String>(
-                    builder: (context, snapshot) => TextFormField(
-                      autofocus: false,
-                      obscureText: true,
-                      keyboardType: TextInputType.text,
-                      controller: _TxtControllerConfirmarSenha,
-                      textInputAction: TextInputAction.done,
-                      style: TextStyle(
-                          fontSize: 17,
-                          fontFamily: 'nunito-regular',
-                          color: const Color(0xFF000000)),
-                      decoration: InputDecoration(
-                        hintText: "Confirmar senha",
-                        labelText: "Confirmar senha",
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 25.0),
                   Center(
                     child: InkWell(
-                      onTap: () async {
-
+                      onTap: () {
+                        OnGetUfs();
                       },
                       child: Container(
                         padding: EdgeInsets.fromLTRB(0.0, 5.0, 20.0, 0.0),
@@ -411,7 +467,7 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
                             borderRadius: BorderRadius.all(Radius.circular(3)),
                             color: Color(0xff8854d0)),
                         child: Text(
-                          'ENVIAR',
+                          'ATUALIZAR',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,

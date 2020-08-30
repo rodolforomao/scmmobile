@@ -40,6 +40,12 @@ class _SplashScreenState extends State<SplashScreen> {
                   (Route<dynamic> route) => false);
         }
         else {
+          Navigator.of(context).pushAndRemoveUntil(
+              new MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                  new MenuNavigation(UsuarioLogado:_Usuariodb)),
+                  (Route<dynamic> route) => false);
+
           _Usuariodb = _UsuarioLogado.resultado as TbUsuario;
           var connectivityResult = await (Connectivity().checkConnectivity());
           if (connectivityResult == ConnectivityResult.none) {
@@ -97,7 +103,8 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   @override
-  void initState() {
+  void initState()
+  {
     super.initState();
     dbHelper = DBHelper();
     Future(() {
@@ -127,6 +134,7 @@ class _SplashScreenState extends State<SplashScreen> {
           key: _ScaffoldKey,
           backgroundColor: Colors.transparent,
           appBar: AppBar(
+            backgroundColor: Colors.transparent,
             automaticallyImplyLeading: true,
             centerTitle: true,
             elevation: 0.0,

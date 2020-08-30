@@ -23,7 +23,7 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
   ServicoMobileService _RestWebService = new ServicoMobileService();
   BuildContext dialogContext;
   StreamSubscription<ConnectivityResult> subscription;
-  String _StatusTipoWidget;
+  String _StatusTipoWidget, ErroInformacao = "";
   TextEditingController _TxtControllerNome = TextEditingController();
   TextEditingController _TxtControllerCpf = new MaskedTextController(mask: '000.000.000-00');
   TextEditingController _TxtControllerEmail = TextEditingController();
@@ -59,6 +59,10 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
     } catch (error) {
       Navigator.pop(dialogContext);
       OnToastInformacao(error);
+      setState(() {
+        _StatusTipoWidget = "widget_informacao";
+        ErroInformacao = error;
+      });
     }
   }
 
@@ -109,13 +113,31 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
 
   Inc() async {
     try {
-      OnGetUfs();
-      //Uf = await Components.OnlistaEstados() as List<String>;
-      setState(() {
-       // UfTxt = Uf.first;
+      Future.delayed(Duration.zero, () async {
+        var connectivityResult = await (Connectivity().checkConnectivity());
+        if (connectivityResult == ConnectivityResult.none) {
+          setState(() {
+            _StatusTipoWidget = "sem_internet";
+          });
+        } else {
+          setState(() {
+            _StatusTipoWidget = "renderizar_tela";
+          });
+        }
       });
+      subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+        if (result == ConnectivityResult.none) {
+
+        } else {
+          _ScaffoldKey.currentState.removeCurrentSnackBar();
+          setState(() {
+            _StatusTipoWidget = "renderizar_tela";
+          });
+        }
+      });
+      OnGetUfs();
     } catch (error) {
-      //Navigator.of(context, rootNavigator: true).pop();
+      OnToastInformacao(error);
     }
   }
 
@@ -251,30 +273,9 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () async {
-      var connectivityResult = await (Connectivity().checkConnectivity());
-      if (connectivityResult == ConnectivityResult.none) {
-        setState(() {
-          _StatusTipoWidget = "sem_internet";
-        });
-      } else {
-        setState(() {
-          _StatusTipoWidget = "renderizar_tela";
-        });
-      }
-    });
-    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      if (result == ConnectivityResult.none) {
-
-      } else {
-        _ScaffoldKey.currentState.removeCurrentSnackBar();
-        setState(() {
-          _StatusTipoWidget = "renderizar_tela";
-        });
-      }
-    });
-    OnGetUfs();
+    Inc();
   }
+
   @override
   void dispose() {
     super.dispose();
@@ -422,6 +423,78 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
                             _StatusTipoWidget = "renderizar_tela";
                           });
                         }
+                      },
+                      child: Container(
+                        padding: EdgeInsets.fromLTRB(0.0, 5.0, 20.0, 0.0),
+                        constraints: BoxConstraints(maxWidth: 300),
+                        width: MediaQuery.of(context).size.width,
+                        height: 45,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(3)),
+                            color: Color(0xff8854d0)),
+                        child: Text(
+                          'TENTE NOVAMENTE',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontFamily: 'avenir-lt-std-roman',
+                            fontSize: 12.0,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20.0),
+                ],
+              ),
+            ),
+          );
+        }
+        break;
+      case "widget_informacao":
+        {
+          return Container(
+            alignment: Alignment.center,
+            child: SingleChildScrollView(
+              padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Image.asset(
+                    "assets/imagens/img_informacao.png",
+                    width: 150.0,
+                    height: 150.0,
+                    fit: BoxFit.fill,
+                  ),
+                  SizedBox(height: 30.0),
+                  Text(
+                    "Problema não identificado",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      decoration: TextDecoration.none,
+                      fontFamily: "avenir-lt-std-roman",
+                      fontSize: 20.0,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(height: 10.0),
+                  Text(
+                    ErroInformacao,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      decoration: TextDecoration.none,
+                      fontFamily: "avenir-lt-std-roman",
+                      fontSize: 15.0,
+                      color: Colors.white,
+                    ),),
+                  SizedBox(height: 40.0),
+                  Center(
+                    child: InkWell(
+                      onTap: () async {
+                        Inc();
                       },
                       child: Container(
                         padding: EdgeInsets.fromLTRB(0.0, 5.0, 20.0, 0.0),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:scm_engenharia_app/pages/login_page.dart';
 import 'package:scm_engenharia_app/help/themas.dart';
 import 'package:scm_engenharia_app/splash_screen.dart';
 void main() {

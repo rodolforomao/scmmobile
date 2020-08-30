@@ -53,6 +53,10 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
           var data = _RestWeb.resultado as List;
           setState(() {
             ListaModelFormularioSiciFustModelo = data.map<ModelFormularioSiciFustJson>((json) => ModelFormularioSiciFustJson.fromJson(json)).toList();
+            if (ListaModelFormularioSiciFustModelo.length > 0)
+              _StatusTipoWidget = "renderizar_sici";
+            else
+              _StatusTipoWidget = "nao_existe_sici_cadastrado";
             var s = ListaModelFormularioSiciFustModelo;
           });
           Navigator.pop(dialogContext);
@@ -274,6 +278,12 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
 
     });
      IncRestWeb();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    subscription?.cancel();
   }
 
   @override

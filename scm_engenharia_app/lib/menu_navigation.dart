@@ -10,8 +10,6 @@ import 'help/screen_size.dart';
 class MenuNavigation extends StatefulWidget {
   final TbUsuario UsuarioLogado;
   MenuNavigation({Key key, @required this.UsuarioLogado}) : super(key: key);
-
-
   @override
   _MenuNavigationState createState() => _MenuNavigationState();
 }

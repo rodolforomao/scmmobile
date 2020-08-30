@@ -64,14 +64,14 @@ class _LoginPageState extends State<LoginPage> {
           if (_UsuarioLogado.erro)
             throw (_UsuarioLogado.mensagem);
           else {
-           // Navigator.pop(dialogContext);
-            Navigator.of(context).pushAndRemoveUntil(
-                new MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                    new MenuNavigation()),
-                    (Route<dynamic> route) => false);
-             // Navigator.pop(dialogContext);
-          }
+             Navigator.pop(dialogContext);
+            Future.delayed(Duration.zero, () {
+              Navigator.of(context).pushAndRemoveUntil(
+                  new MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                      new MenuNavigation()),
+                      (Route<dynamic> route) => false);
+            });}
           Navigator.pop(dialogContext);
         }
       }

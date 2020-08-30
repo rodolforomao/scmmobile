@@ -343,7 +343,7 @@ class _PerfilPageState extends State<PerfilPage > {
               ),
               SizedBox(height: 20.0),
               TextFormField(
-                enabled: true,
+                enabled: false,
                 decoration: InputDecoration(
                   labelText: 'E-mail',
                   hintText: 'Digite seu e-mail',
