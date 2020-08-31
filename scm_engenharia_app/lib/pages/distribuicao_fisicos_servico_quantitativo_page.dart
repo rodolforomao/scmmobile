@@ -20,12 +20,15 @@ class _DistribuicaoFisicosServicoQuantitativoPageState extends State<Distribuica
   List<TbTecnologia> ListTecnologiadb = new List<TbTecnologia>();
   List<TbUf> ListUfdb = new List<TbUf>();
   List<TbUfMunicipio> ListUfMunicipiodb = new List<TbUfMunicipio>();
-
-
-
+  TbUfMunicipio tbUfMunicipio = TbUfMunicipio();
+  TbUf tbUf = TbUf();
+  TbTecnologia tbTecnologia = TbTecnologia();
   String id_uf = "0",txt_uf = "";
   String id_municipio = "0" ,txt_municipio = "";
   String id_tecnologia = "0",txt_tecnologia = "";
+
+
+
   TextEditingController _TxtControllerCod_ibge  = TextEditingController();
   TextEditingController _TxtControllerPf_0 = TextEditingController();
   TextEditingController _TxtControllerPf_512 = TextEditingController();
@@ -177,17 +180,17 @@ class _DistribuicaoFisicosServicoQuantitativoPageState extends State<Distribuica
 
   Inc() async {
     try {
-      TbUfMunicipio tbUfMunicipio = TbUfMunicipio();
+
       tbUfMunicipio.idMunicipioApp = 0;
       tbUfMunicipio.ufId = "0";
       tbUfMunicipio.uf = "0";
       tbUfMunicipio.id  = "0";
       tbUfMunicipio.municipio  = "Selecione...";
-      TbUf tbUf = TbUf();
+
       tbUf.idUfApp = 0;
       tbUf.id = "0";
       tbUf.uf = "Selecione...";
-      TbTecnologia tbTecnologia = TbTecnologia();
+
       tbTecnologia.idTecnologiaApp = 0;
       tbTecnologia.id = "0";
       tbTecnologia.tecnologia = "Selecione...";
@@ -203,9 +206,9 @@ class _DistribuicaoFisicosServicoQuantitativoPageState extends State<Distribuica
       if (_Tecnologia.erro)
         throw (_Tecnologia.mensagem);
       else if (_Tecnologia.resultado == null) {
-        ListTecnologiadb = _Tecnologia.resultado as List;
-        ListUfdb = _Uf.resultado as List;
-        ListUfMunicipiodb = _UfMunicipio.resultado as List;
+        //ListTecnologiadb = _Tecnologia.resultado as List;
+       // ListUfdb = _Uf.resultado as List;
+       // ListUfMunicipiodb = _UfMunicipio.resultado as List;
         setState(() {
           //txt_uf = ListUfdb.first.uf;
           //txt_municipio = ListUfMunicipiodb.first.municipio;
@@ -282,25 +285,26 @@ class _DistribuicaoFisicosServicoQuantitativoPageState extends State<Distribuica
                           child: Container(
                             padding: EdgeInsets.fromLTRB(10.0, 0.0, 20.0, 0.0),
                             child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
+                              child: DropdownButton<TbUf>(
                                 elevation: 16,
                                 style: TextStyle(
                                   fontSize: 12,
                                   fontFamily: 'avenir-lt-std-medium',
                                   color: Color(0xFF000000),),
                                 iconEnabledColor: Colors.white,
-                                value: txt_uf,
+                                value: tbUf,
                                 isExpanded: true,
                                 iconSize: 35,
                                 items: ListUfdb.map((TbUf value) {
-                                  return new DropdownMenuItem<String>(
+                                  return new DropdownMenuItem<TbUf>(
                                     onTap: () {
                                       setState(() {
+                                        tbUf = value;
                                         txt_uf = value.uf;
                                         id_uf = value.id;
                                       });
                                     },
-                                    value: value.uf,
+                                    value: tbUf,
                                     child: Text(
                                       value.uf,
                                       textAlign: TextAlign.center,
@@ -334,25 +338,26 @@ class _DistribuicaoFisicosServicoQuantitativoPageState extends State<Distribuica
                           child: Container(
                             padding: EdgeInsets.fromLTRB(10.0, 0.0, 20.0, 0.0),
                             child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
+                              child: DropdownButton<TbUfMunicipio>(
                                 elevation: 16,
                                 style: TextStyle(
                                   fontSize: 12,
                                   fontFamily: 'avenir-lt-std-medium',
                                   color: Color(0xFF000000),),
                                 iconEnabledColor: Colors.white,
-                                value: txt_municipio,
+                                value: tbUfMunicipio,
                                 isExpanded: true,
                                 iconSize: 35,
                                 items: ListUfMunicipiodb.map((TbUfMunicipio value) {
-                                  return new DropdownMenuItem<String>(
+                                  return new DropdownMenuItem<TbUfMunicipio>(
                                     onTap: () {
                                       setState(() {
+                                        tbUfMunicipio = value;
                                         txt_municipio = value.municipio;
                                         id_municipio = value.id;
                                       });
                                     },
-                                    value: value.municipio,
+                                    value: value,
                                     child: Text(
                                       value.municipio,
                                       textAlign: TextAlign.center,
@@ -386,25 +391,26 @@ class _DistribuicaoFisicosServicoQuantitativoPageState extends State<Distribuica
                           child: Container(
                             padding: EdgeInsets.fromLTRB(10.0, 0.0, 20.0, 0.0),
                             child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
+                              child: DropdownButton<TbTecnologia>(
                                 elevation: 16,
                                 style: TextStyle(
                                   fontSize: 12,
                                   fontFamily: 'avenir-lt-std-medium',
                                   color: Color(0xFF000000),),
                                 iconEnabledColor: Colors.white,
-                                value: txt_tecnologia,
+                                value: tbTecnologia,
                                 isExpanded: true,
                                 iconSize: 35,
                                 items: ListTecnologiadb.map((TbTecnologia value) {
-                                  return new DropdownMenuItem<String>(
+                                  return new DropdownMenuItem<TbTecnologia>(
                                     onTap: () {
                                       setState(() {
+                                        tbTecnologia = value;
                                         id_tecnologia = value.id;
                                         txt_tecnologia= value.tecnologia;
                                       });
                                     },
-                                    value: value.tecnologia,
+                                    value: tbTecnologia,
                                     child: Text(
                                       value.tecnologia,
                                       textAlign: TextAlign.center,
