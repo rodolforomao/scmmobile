@@ -9,7 +9,7 @@ class TbUfMunicipio {
 
   TbUfMunicipio.fromJson(Map<String, dynamic> json) {
     idMunicipioApp = json['idMunicipioApp'];
-    ufId = json['uf_id'];
+    ufId = json['ufId'];
     uf = json['uf'];
     id = json['id'];
     municipio = json['municipio'];
@@ -18,7 +18,7 @@ class TbUfMunicipio {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['idMunicipioApp'] = this.idMunicipioApp;
-    data['uf_id'] = this.ufId;
+    data['ufId'] = this.ufId;
     data['uf'] = this.uf;
     data['id'] = this.id;
     data['municipio'] = this.municipio;

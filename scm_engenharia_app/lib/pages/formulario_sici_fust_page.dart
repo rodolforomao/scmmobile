@@ -2,11 +2,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'dart:ui' as ui;
-import 'dart:io';
 import 'dart:async';
-import 'dart:convert';
-
 import 'package:scm_engenharia_app/help/components.dart';
 import 'package:scm_engenharia_app/help/masked_text_controller.dart';
 import 'package:scm_engenharia_app/help/servico_mobile_service.dart';
@@ -15,6 +11,9 @@ import 'package:scm_engenharia_app/models/operacao.dart';
 import 'package:scm_engenharia_app/pages/distribuicao_fisicos_servico_quantitativo_page.dart';
 
 class FormularioSiciFustPage extends StatefulWidget {
+
+  final ModelFormularioSiciFustJson ModelFormularioSiciFust;
+  FormularioSiciFustPage({Key key, @required this.ModelFormularioSiciFust}) : super(key: key);
   @override
   _FormularioSiciFustPageState createState() => _FormularioSiciFustPageState();
 }
@@ -25,8 +24,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
   BuildContext dialogContext;
   ModelFormularioSiciFustJson _ModelFormularioSiciFustJson = new ModelFormularioSiciFustJson();
   List<ModelDistribuicaoFisicosServicoQuantitativoJson>
-  ListaModelDistribuicaoFisicosServicoQuantitativo =
-  new List<ModelDistribuicaoFisicosServicoQuantitativoJson>();
+  ListaModelDistribuicaoFisicosServicoQuantitativo = new List<ModelDistribuicaoFisicosServicoQuantitativoJson>();
   StreamSubscription<ConnectivityResult> subscription;
 
 
@@ -56,13 +54,10 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
   TextEditingController _TxtControllerObservacoes = TextEditingController();
 
   List<String> Uf = new List<String>();
-
-
   String UfTxt,_StatusTipoWidget = "renderizar_ficha_sici";
-  bool _IsLogando = false, isVisualizarSenha = false;
 
-  TextEditingController _TxtControllerPeriodoDeReferencia =
-      TextEditingController();
+
+  TextEditingController _TxtControllerPeriodoDeReferencia = TextEditingController();
   DateTime _DataSelecionada = DateTime.now();
 
   OnSelecionarPeriodoDeReferencia(BuildContext context) async {
@@ -222,6 +217,38 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
       setState(() {
         UfTxt = Uf.first;
       });
+      if(widget.ModelFormularioSiciFust != null)
+        {
+          _TxtControllerPeriodoDeReferencia.text = widget.ModelFormularioSiciFust.periodoReferencia;
+          _TxtControllerCnpj.text = widget.ModelFormularioSiciFust.cnpj;
+           _TxtControllerRazaoSocial.text = widget.ModelFormularioSiciFust.razaoSocial;
+           _TxtControllerNomeConsultor.text = widget.ModelFormularioSiciFust.nomeConsultor;
+           _TxtControllerTelefoneMovel.text = widget.ModelFormularioSiciFust.telefoneMovel;
+           _TxtControllerTelefoneFixo.text = widget.ModelFormularioSiciFust.telefoneFixo;
+
+           _TxtControllerEmailConsutor.text = widget.ModelFormularioSiciFust.emailConsutor;
+           _TxtControllerEmailCliente.text = widget.ModelFormularioSiciFust.emailCliente;
+           _TxtControllerNomeCliente.text = widget.ModelFormularioSiciFust.nomeCliente;
+           _TxtControllerMesReferencia.text = widget.ModelFormularioSiciFust.mesReferencia;
+
+           _TxtControllerReceitaBruta.text = widget.ModelFormularioSiciFust.receitaBruta;
+           _TxtControllerReceitaLiquida.text = widget.ModelFormularioSiciFust.receitaLiquida;
+           _TxtControllerSimples.text = widget.ModelFormularioSiciFust.simples;
+           _TxtControllerSimplesPorc.text = widget.ModelFormularioSiciFust.simplesPorc;
+           _TxtControllerIcms.text = widget.ModelFormularioSiciFust.icms;
+           _TxtControllerIcmsPorc.text = widget.ModelFormularioSiciFust.icmsPorc;
+           _TxtControllerPis.text = widget.ModelFormularioSiciFust.pis;
+           _TxtControllerPisPorc.text = widget.ModelFormularioSiciFust.pisPorc;
+           _TxtControllerCofins.text = widget.ModelFormularioSiciFust.cofins;
+           _TxtControllerCofinsPorc.text = widget.ModelFormularioSiciFust.cofinsPorc;
+           _TxtControllerObservacoes.text = widget.ModelFormularioSiciFust.observacoes;
+           if(widget.ModelFormularioSiciFust.distribuicaoFisicosServicoQuantitativo != null)
+             {
+               for (var prop in  widget.ModelFormularioSiciFust.distribuicaoFisicosServicoQuantitativo) {
+                 ListaModelDistribuicaoFisicosServicoQuantitativo.add(prop);
+               }
+             }
+        }
     } catch (error) {
       //Navigator.of(context, rootNavigator: true).pop();
     }
@@ -256,8 +283,6 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
 
   int current_step = 0;
   List<Step> spr = <Step>[];
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -911,7 +936,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                         child: Text(
                           'Próximo',
                           style: TextStyle(
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
                             color: Colors.white,
                             fontFamily: 'avenir-lt-std-roman',
                             fontSize: 15.0,
@@ -956,7 +981,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                         child: Text(
                           'Cancelar',
                           style: TextStyle(
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
                             color: Color(0xff018a8a),
                             fontFamily: 'avenir-lt-std-roman',
                             fontSize: 15.0,
@@ -1062,7 +1087,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                         ),
                         SizedBox(height: 20.0),
                         TextFormField(
-                          controller: _TxtControllerMesReferencia  ,
+                          controller: _TxtControllerMesReferencia,
                           textAlign: TextAlign.start,
                           keyboardType: TextInputType.datetime,
                           textInputAction: TextInputAction.done,
@@ -1089,7 +1114,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                         ),
                         SizedBox(height: 20.0),
                         TextFormField(
-                          controller: _TxtControllerEmailCliente ,
+                          controller: _TxtControllerEmailCliente,
                           textAlign: TextAlign.start,
                           keyboardType: TextInputType.emailAddress,
                           textInputAction: TextInputAction.done,
@@ -1303,48 +1328,49 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(height: 20.0),
-                        InkWell(
-                          onTap: () {
-                            FocusScope.of(context).requestFocus(new FocusNode());
-                            Navigator.of(context, rootNavigator: true)
-                                .push(
-                              new CupertinoPageRoute<ModelDistribuicaoFisicosServicoQuantitativoJson>(
-                                maintainState: false,
-                                fullscreenDialog: true,
-                                builder: (BuildContext context) =>
-                                new DistribuicaoFisicosServicoQuantitativoPage(),
-                              ),
-                            ).then((value) {
-                              if(value != null)
-                              {
-                                ListaModelDistribuicaoFisicosServicoQuantitativo.add(value);
-                              }
-                            });
-                          },
-                          child: Container(
-                            constraints: BoxConstraints(maxWidth: 300),
-                            width: MediaQuery.of(context).size.width,
-                            height: 45,
-                            padding: EdgeInsets.symmetric(vertical: 13),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(Radius.circular(3)),
-                                border:
-                                Border.all(color: Color(0xff018a8a), width: 2),
-                                color: Color(0xff018a8a)),
-                            child: Text(
-                              'Adicionar',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontFamily: 'avenir-lt-std-roman',
-                                fontSize: 15.0,
+                        SizedBox(height: 30.0),
+                        Center(
+                          child: InkWell(
+                            onTap: () async {
+                              FocusScope.of(context).requestFocus(new FocusNode());
+                              Navigator.of(context, rootNavigator: true)
+                                  .push(
+                                new CupertinoPageRoute<ModelDistribuicaoFisicosServicoQuantitativoJson>(
+                                  maintainState: false,
+                                  fullscreenDialog: true,
+                                  builder: (BuildContext context) =>
+                                  new DistribuicaoFisicosServicoQuantitativoPage(),
+                                ),
+                              ).then((value) {
+                                if(value != null)
+                                {
+                                  ListaModelDistribuicaoFisicosServicoQuantitativo.add(value);
+                                }
+                              });
+                            },
+                            child: Container(
+                              padding: EdgeInsets.fromLTRB(0.0, 5.0, 20.0, 0.0),
+                              constraints: BoxConstraints(maxWidth: 300),
+                              width: MediaQuery.of(context).size.width,
+                              height: 45,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(Radius.circular(3)),
+                                  color: Color(0xff8854d0)),
+                              child: Text(
+                                'Adicionar',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
+                                  fontFamily: 'avenir-lt-std-roman',
+                                  fontSize: 18.0,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                        SizedBox(height: 20.0),
+                        SizedBox(height: 30.0),
                         Builder(
                           builder: (BuildContext context) {
                             return ListView.builder(
@@ -1358,33 +1384,6 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           },
                         ),
                         SizedBox(height: 20.0),
-                        InkWell(
-                          onTap: () {
-                            FocusScope.of(context).requestFocus(new FocusNode());
-                            OnSalvarFormulario();
-                          },
-                          child: Container(
-                            constraints: BoxConstraints(maxWidth: 300),
-                            width: MediaQuery.of(context).size.width,
-                            height: 45,
-                            padding: EdgeInsets.symmetric(vertical: 13),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(Radius.circular(3)),
-                                border:
-                                Border.all(color: Color(0xff018a8a), width: 2),
-                                color: Color(0xff018a8a)),
-                            child: Text(
-                              'Adicionar re',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontFamily: 'avenir-lt-std-roman',
-                                fontSize: 15.0,
-                              ),
-                            ),
-                          ),
-                        ),
                       ],
                     ),
                   ),

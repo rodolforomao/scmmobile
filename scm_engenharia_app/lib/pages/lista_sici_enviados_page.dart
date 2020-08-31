@@ -642,49 +642,199 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
 
   Container ListaSiciCard(BuildContext context, int index) => Container(
     margin: EdgeInsets.all(0.0),
-    padding: EdgeInsets.all(0.0),
-    height: 278,
-    color: Color(0xffedecf1),
+    padding: EdgeInsets.fromLTRB(5.0,0.0,5.0,0.0),
+    height: 210,
+    color: Color(0xffFFFFFF),
     width: MediaQuery.of(context).size.width,
-    child: Container(
-        margin: EdgeInsets.all(0.0),
-        padding: EdgeInsets.all(0.0),
-        height: 278,
-        color: Color(0xffedecf1),
-        width: MediaQuery.of(context).size.width,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Divider(
-              color: Color(0xffCCCCCC),
-            ),
-            ListTile(
-                onTap: () {
-                  FocusScope.of(context).requestFocus(new FocusNode());
-                  Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                        builder: (context) => FormularioSiciFustPage(),
-                      ));
-                },
-                contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
-                title: Text(
-                  "Razão socia 1 ",
-                  style: TextStyle(
-                      fontSize: 18.0,
-                      color: Color(0xff333333),
-                      fontFamily: "avenir-lt-std-medium"),
+    child:Card(
+      elevation: 7.0,
+      color: Color(0xffedecf1),
+      child: Container(
+          color: Color(0xffedecf1),
+          margin: EdgeInsets.all(0.0),
+          padding: EdgeInsets.all(0.0),
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              SizedBox(
+                height: 10.0,
+              ),
+              SizedBox(
+                height: 110.0,
+                child: ListTile(
+                  onTap: () {
+                    FocusScope.of(context).requestFocus(new FocusNode());
+                    Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) => FormularioSiciFustPage(ModelFormularioSiciFust:ListaModelFormularioSiciFustModelo[0]),
+                        ));
+                  },
+                  contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+                  title: Flexible(
+                    child: RichText(
+                        textAlign: TextAlign.start,
+                        softWrap: false,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        text: TextSpan(children: [
+                          TextSpan(
+                            text: 'Período referencia :  ',
+                            style: TextStyle(
+                                fontSize: 18.0,
+                                color: Color(0xff333333),
+                                fontFamily: "avenir-lt-std-medium"),
+                          ),
+                          TextSpan(
+                            text: ListaModelFormularioSiciFustModelo[0].periodoReferencia,
+                            style: TextStyle(
+                                fontSize: 20.0,
+                                color: Color(0xff333333),
+                                fontFamily: "avenir-lt-std-medium"),
+                          ),
+
+                        ])),
+                  ),
+                  subtitle: Container(
+                      height: 70,
+                      child: FittedBox(
+                          fit: BoxFit.none,
+                          alignment: Alignment.centerLeft,
+                          child : Container(
+                            padding: EdgeInsets.fromLTRB(0.0 ,5.0,0.0,5.0),
+                            child: Column(
+                                children: <Widget>[
+                                  SizedBox(
+                                    height: 10.0,
+                                  ),
+                                  Text(
+                                      ListaModelFormularioSiciFustModelo[0].razaoSocial,
+                                    style: TextStyle(
+                                        fontSize: 17.0,
+                                        color: Color(0xff333333),
+                                        fontFamily: "avenir-lt-std-medium-oblique"),
+                                  ),
+                                  SizedBox(
+                                    height: 5.0,
+                                  ),
+                                  Text(
+                                    ListaModelFormularioSiciFustModelo[0].observacoes,
+                                    style: TextStyle(
+                                        fontSize: 15.0,
+                                        color: Color(0xff333333),
+                                        fontFamily: "avenir-lt-std-medium-oblique"),
+                                  ),
+                                  SizedBox(
+                                    height: 5.0,
+                                  ),
+                                ]
+                            ),
+                          )
+                      )),),
+              ),
+              Expanded(
+                child: Container(
+                  color: Color(0xffFFFFFF),
+                  width: MediaQuery.of(context).size.width,
+                  padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      Container(
+                        color: Color(0xffFFFFFF),
+                        //width: MediaQuery.of(context).size.width / 3,
+                        child: InkWell(
+                          onTap: () {
+
+                          },
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Icon(Icons.file_upload,
+                                  size: 25, color: Color(0xFF000000)),
+                              SizedBox(height: 10.0),
+                              Text(
+                                "Upload",
+                                style: TextStyle(
+                                    fontSize: 15.0,
+                                    color: Color(0xff333333),
+                                    fontFamily: "avenir-lt-std-roman"),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      VerticalDivider(
+                        color: Color(0xFF000000),
+                      ),
+                      Container(
+                        color: Color(0xffFFFFFF),
+                        //width: MediaQuery.of(context).size.width / 3,
+                        child: InkWell(
+                          onTap: () {
+
+                          },
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Icon(Icons.delete_outline,
+                                  size: 25, color: Color(0xFF000000)),
+                              SizedBox(height: 10.0),
+                              Text(
+                                "Remover",
+                                style: TextStyle(
+                                    fontSize: 15.0,
+                                    color: Color(0xff333333),
+                                    fontFamily: "avenir-lt-std-roman"),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      VerticalDivider(
+                        color: Color(0xFF000000),
+                      ),
+                      Container(
+                        color: Color(0xffFFFFFF),
+                        //width: MediaQuery.of(context).size.width / 3,
+                        child: InkWell(
+                          onTap: () {
+                            FocusScope.of(context).requestFocus(new FocusNode());
+                            Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                  builder: (context) => FormularioSiciFustPage(ModelFormularioSiciFust:ListaModelFormularioSiciFustModelo[0]),
+                                ));
+                          },
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Icon(Icons.visibility,
+                                  size: 25, color: Color(0xFF000000)),
+                              SizedBox(height: 10.0),
+                              Text(
+                                "Visualizar",
+                                style: TextStyle(
+                                    fontSize: 15.0,
+                                    color: Color(0xff333333),
+                                    fontFamily: "avenir-lt-std-roman"),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                subtitle: Text(
-                  "04/08/2020",
-                  style: TextStyle(
-                      fontSize: 15.0,
-                      color: Color(0xff333333),
-                      fontFamily: "avenir-lt-std-medium"),
-                ),
-                trailing: Icon(Icons.keyboard_arrow_right, color: Color(0xff6C757D), size: 30.0)),
-          ],
-        )),
+              ),
+            ],
+          )),
+    ),
   );
 }

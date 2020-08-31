@@ -78,7 +78,6 @@ class _MenuNavigationState extends State<MenuNavigation> {
                 color: Color(0xff8854d0),
               ),
               destinations: [
-
                 NavigationRailDestination(
                   icon: new Icon(Icons.format_list_bulleted, size: 26),
                   label: new Text('Sici/Fust',
@@ -182,7 +181,7 @@ class _MenuNavigationState extends State<MenuNavigation> {
                 Navigator.push(
                     context,
                     CupertinoPageRoute(
-                      builder: (context) => FormularioSiciFustPage(),
+                      builder: (context) => FormularioSiciFustPage(ModelFormularioSiciFust:null),
                     ));
               },
             ),

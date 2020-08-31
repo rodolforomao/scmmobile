@@ -40,12 +40,6 @@ class _SplashScreenState extends State<SplashScreen> {
                   (Route<dynamic> route) => false);
         }
         else {
-          Navigator.of(context).pushAndRemoveUntil(
-              new MaterialPageRoute(
-                  builder: (BuildContext context) =>
-                  new MenuNavigation(UsuarioLogado:_Usuariodb)),
-                  (Route<dynamic> route) => false);
-
           _Usuariodb = _UsuarioLogado.resultado as TbUsuario;
           var connectivityResult = await (Connectivity().checkConnectivity());
           if (connectivityResult == ConnectivityResult.none) {

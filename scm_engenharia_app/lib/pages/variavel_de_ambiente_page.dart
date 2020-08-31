@@ -2,6 +2,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scm_engenharia_app/data/db_helper.dart';
+import 'package:scm_engenharia_app/data/tb_uf.dart';
 import 'package:scm_engenharia_app/data/tb_usuario.dart';
 import 'dart:async';
 import 'package:scm_engenharia_app/help/masked_text_controller.dart';
@@ -22,11 +23,10 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
   ServicoMobileService _RestWebService = new ServicoMobileService();
   BuildContext dialogContext;
   DBHelper dbHelper;
-  String _StatusTipoWidget;
+  String _StatusTipoWidget,ErroInformacao="";
   StreamSubscription<ConnectivityResult> subscription;
 
-  UF UfSelecionada;
-  List<UF> ListaUf = new List<UF>();
+
 
 
   Future<Null> OnGetUfs() async {
@@ -43,15 +43,34 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
         else
         {
           VariaveisDeAmbienteResultado  _Resultado = _RestWeb.resultado as VariaveisDeAmbienteResultado;
+          List<UF> ListaUf = new List<UF>();
           setState(() {
             ListaUf = _Resultado.uF;
           });
+          if(ListaUf != null)
+          {
+            for (var prop in  ListaUf) {
+              TbUf Uf = new TbUf();
+              Uf.idUfApp =  null;
+              Uf.id = prop.id;
+              Uf.uf = prop.uf;
+              Operacao _respLocalUf = await dbHelper.OnAddUpdateUf(Uf);
+              if (_respLocalUf.erro)
+                throw (_respLocalUf.mensagem);
+              else {
+
+              }
+            }
+          }
           Navigator.pop(dialogContext);
         }
       }
     } catch (error) {
       Navigator.pop(dialogContext);
       OnToastInformacao(error);
+      setState(() {
+        ErroInformacao = error;
+      });
     }
   }
 
@@ -210,6 +229,7 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
   @override
   void initState() {
     super.initState();
+    dbHelper = DBHelper();
     Future.delayed(Duration.zero, () async {
       var connectivityResult = await (Connectivity().checkConnectivity());
       if (connectivityResult == ConnectivityResult.none) {
@@ -276,7 +296,6 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
       body: _TipoWidget(context),
     );
   }
-
 
   _TipoWidget(BuildContext context) {
     switch (_StatusTipoWidget) {
@@ -488,4 +507,5 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
         break;
     }
   }
+
 }
