@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:scm_engenharia_app/data/JWTTokenDbLocal.dart';
 import 'package:scm_engenharia_app/data/tb_usuario.dart';
 import 'package:scm_engenharia_app/help/components.dart';
 import 'package:scm_engenharia_app/models/model_formulario_sici_fust.dart';
@@ -18,10 +19,11 @@ class ServicoMobileService {
     Operacao _Operacao = new Operacao();
     try {
       print(json.encode(_Modelo.toJson()));
+     // String tokesn await ComponentsJWTToken.JWTTokenPadrao();
       final response = await http.post(Url + "/login_ws",
           headers: {
             "Content-type": "multipart/form-data",
-            "token": Components.JWTToken(_Modelo.usuario,_Modelo.password),
+            "token": Components.JWTTokenPadrao(),
           },
           encoding: Encoding.getByName("utf-8")).timeout(const Duration(seconds: 10));
       _Operacao.erro = false;

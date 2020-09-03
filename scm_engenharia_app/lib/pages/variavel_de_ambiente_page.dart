@@ -2,7 +2,9 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scm_engenharia_app/data/db_helper.dart';
+import 'package:scm_engenharia_app/data/tb_tecnologia.dart';
 import 'package:scm_engenharia_app/data/tb_uf.dart';
+import 'package:scm_engenharia_app/data/tb_uf_municipio.dart';
 import 'package:scm_engenharia_app/data/tb_usuario.dart';
 import 'dart:async';
 import 'package:scm_engenharia_app/help/masked_text_controller.dart';
@@ -43,10 +45,15 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
         else
         {
           VariaveisDeAmbienteResultado  _Resultado = _RestWeb.resultado as VariaveisDeAmbienteResultado;
-          List<UF> ListaUf = new List<UF>();
+          List<UF> ListaUf =  List<UF>();
+          List<UFMunicipios> ListaUFMunicipios =  List<UFMunicipios>();
+          List<Tecnologias> ListaTecnologias =  List<Tecnologias>();
           setState(() {
             ListaUf = _Resultado.uF;
+            ListaUFMunicipios= _Resultado.uFMunicipios;
+            ListaTecnologias= _Resultado.tecnologias;
           });
+
           if(ListaUf != null)
           {
             for (var prop in  ListaUf) {
@@ -55,6 +62,38 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
               Uf.id = prop.id;
               Uf.uf = prop.uf;
               Operacao _respLocalUf = await dbHelper.OnAddUpdateUf(Uf);
+              if (_respLocalUf.erro)
+                throw (_respLocalUf.mensagem);
+              else {
+
+              }
+            }
+          }
+          if(ListaUFMunicipios != null)
+          {
+            for (var prop in  ListaUFMunicipios) {
+              TbUfMunicipio tbUfMunicipio = new TbUfMunicipio();
+              tbUfMunicipio.idMunicipioApp =  null;
+              tbUfMunicipio.ufId = prop.ufId;
+              tbUfMunicipio.uf = prop.uf;
+              tbUfMunicipio.id = prop.id;
+              tbUfMunicipio.municipio = prop.municipio;
+              Operacao _respLocalUf = await dbHelper.OnAddUpdateUfMunicipio(tbUfMunicipio);
+              if (_respLocalUf.erro)
+                throw (_respLocalUf.mensagem);
+              else {
+
+              }
+            }
+          }
+          if(ListaUFMunicipios != null)
+          {
+            for (var prop in  ListaTecnologias) {
+              TbTecnologia tbTecnologia = new TbTecnologia();
+              tbTecnologia.idTecnologiaApp = null;
+              tbTecnologia.id = prop.id;
+              tbTecnologia.tecnologia = prop.tecnologia;
+              Operacao _respLocalUf = await dbHelper.OnAddUpdateTecnologia(tbTecnologia);
               if (_respLocalUf.erro)
                 throw (_respLocalUf.mensagem);
               else {

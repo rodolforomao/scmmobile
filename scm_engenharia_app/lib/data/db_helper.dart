@@ -436,6 +436,33 @@ class DBHelper {
     return _Operacao;
   }
 
+  Future<Operacao> onSelecionarMunicipioByIdUf(String Id) async {
+    Operacao _Operacao = new Operacao();
+    try {
+      _Operacao.erro = false;
+      _Operacao.mensagem = "";
+      _Operacao.resultado = null;
+      final dbClient = await db;
+      String Query = 'SELECT * FROM tbUfMunicipio WHERE ufId = ' + Id;
+      var results = await dbClient.rawQuery(Query);
+      List<TbUfMunicipio> listUfMunicipio = [];
+      if (results.length > 0) {
+        for (int i = 0; i < results.length; i++) {
+          listUfMunicipio.add(TbUfMunicipio.fromJson(results[i]));
+        }
+        _Operacao.resultado = listUfMunicipio;
+      }
+      else
+        _Operacao.resultado = null;
+      _Operacao.erro = false;
+      _Operacao.mensagem = "Usuário obtido com sucesso.";
+    } catch (e) {
+      _Operacao.erro = true;
+      _Operacao.mensagem = e.toString();
+    }
+    return _Operacao;
+  }
+
   Future<Operacao> OnDeletarUfMunicipios() async {
     Operacao _Operacao = new Operacao();
     try {

@@ -55,9 +55,9 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
 
   List<String> Uf = new List<String>();
   String UfTxt,_StatusTipoWidget = "renderizar_ficha_sici";
-
-
   TextEditingController _TxtControllerPeriodoDeReferencia = TextEditingController();
+
+
   DateTime _DataSelecionada = DateTime.now();
 
   OnSelecionarPeriodoDeReferencia(BuildContext context) async {
@@ -257,27 +257,6 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () async {
-      var connectivityResult = await (Connectivity().checkConnectivity());
-      if (connectivityResult == ConnectivityResult.none) {
-        setState(() {
-          _StatusTipoWidget = "sem_internet";
-        });
-      } else {
-        setState(() {
-          _StatusTipoWidget = "renderizar_ficha_sici";
-        });
-      }
-    });
-    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      if (result == ConnectivityResult.none) {
-
-      } else {
-        setState(() {
-          _StatusTipoWidget = "renderizar_ficha_sici";
-        });
-      }
-    });
     Inc();
   }
 

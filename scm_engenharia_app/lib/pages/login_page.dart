@@ -47,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
         else if (_RestWebUsuario.resultado == null)
           throw (_RestWebUsuario.mensagem);
         else {
-          ModelInformacaoUsuario _UsuarioModelo = ModelInformacaoUsuario.fromJson( _RestWebUsuario.resultado);
+          ModelInformacaoUsuario _UsuarioModelo = ModelInformacaoUsuario.fromJson(_RestWebUsuario.resultado);
           TbUsuario Usuario = new TbUsuario();
           Usuario.idUsuarioApp = null;
           Usuario.idUsuario = _UsuarioModelo.idUsuario;

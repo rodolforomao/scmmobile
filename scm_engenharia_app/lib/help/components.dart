@@ -22,8 +22,7 @@ class Components {
 
   static String JWTToken(String User, String password) {
     try {
-      String key =
-          "bc47f175a831996b652146d47e159349f75e6c4665570ef35606678a18054d13";
+      String key = "bc47f175a831996b652146d47e159349f75e6c4665570ef35606678a18054d13";
       final claimSet = new JwtClaim(otherClaims: <String, Object>{
         "user": "" + User + "",
         "pass": "" + password + "",
@@ -31,7 +30,9 @@ class Components {
       // Generate a JWT from the claim set
       final token = issueJwtHS256(claimSet, key);
       return token;
-    } catch (error) {}
+    } catch (error) {
+
+    }
   }
 
   static String JWTTokenPadrao() {
