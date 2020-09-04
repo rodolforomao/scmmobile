@@ -1,19 +1,17 @@
+import 'package:flutter/cupertino.dart';
 import 'package:jaguar_jwt/jaguar_jwt.dart';
 import 'package:scm_engenharia_app/data/db_helper.dart';
 import 'package:scm_engenharia_app/data/tb_usuario.dart';
 import 'package:scm_engenharia_app/help/components.dart';
 import 'package:scm_engenharia_app/models/operacao.dart';
+import 'package:scm_engenharia_app/pages/erro_informacao_page.dart';
 
 class ComponentsJWTToken {
 
-
-
   static Future<String> JWTTokenPadrao() async {
     try {
-
       DBHelper  dbHelper = DBHelper();
       Operacao _UsuarioLogado = await dbHelper.onSelecionarUsuario();
-
       if (_UsuarioLogado.erro)
         throw (_UsuarioLogado.mensagem);
       else if (_UsuarioLogado.resultado == null) {
@@ -31,12 +29,10 @@ class ComponentsJWTToken {
         final token = issueJwtHS256(claimSet, key);
         return token;
       }
-      return "";
+      return null;
     } catch (error) {
 
     }
   }
-
-
 
 }

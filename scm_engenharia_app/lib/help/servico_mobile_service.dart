@@ -18,12 +18,11 @@ class ServicoMobileService {
   Future<Operacao> OnLogin(ModelLoginJson _Modelo) async {
     Operacao _Operacao = new Operacao();
     try {
-      print(json.encode(_Modelo.toJson()));
-     // String tokesn await ComponentsJWTToken.JWTTokenPadrao();
+       String token = await ComponentsJWTToken.JWTTokenPadrao();
       final response = await http.post(Url + "/login_ws",
           headers: {
             "Content-type": "multipart/form-data",
-            "token": Components.JWTTokenPadrao(),
+            "token": token,
           },
           encoding: Encoding.getByName("utf-8")).timeout(const Duration(seconds: 10));
       _Operacao.erro = false;
@@ -71,11 +70,12 @@ class ServicoMobileService {
   Future<Operacao> OnVariaveisDeAmbiente() async {
     Operacao _Operacao = new Operacao();
     try {
+      String token = await ComponentsJWTToken.JWTTokenPadrao();
       final response = await http.post(Url + "/analise/Analise/recuperarVariaveisAmbiente_ws",
           body: null,
           headers: {
             "Content-type": "multipart/form-data",
-            "token": Components.JWTTokenPadrao(),
+            "token": token,
           },
           encoding: Encoding.getByName("utf-8")).timeout(const Duration(seconds: 10));
       _Operacao.erro = false;
@@ -120,9 +120,10 @@ class ServicoMobileService {
   Future<Operacao> OnRealizarLancamentosSici (ModelFormularioSiciFustJson _Modelo) async {
     Operacao _Operacao = new Operacao();
     try {
+      String token = await ComponentsJWTToken.JWTTokenPadrao();
       Map<String, String> headers = {
         'Content-Type': 'application/json; charset=utf-8',
-        "token": Components.JWTTokenPadrao(),
+        "token": token,
       };
       http.MultipartRequest response;
       response = new http.MultipartRequest(
@@ -215,11 +216,12 @@ class ServicoMobileService {
   Future<Operacao> OnRecuperaLancamentosSici(TbUsuario UsuarioLogado) async {
     Operacao _Operacao = new Operacao();
     try {
+      String token = await ComponentsJWTToken.JWTTokenPadrao();
       final response = await http.post(Url + "/analise/recuperar_ws",
           body: null,
           headers: {
             "Content-type": "multipart/form-data",
-            "token": Components.JWTTokenPadrao(),
+            "token": token,
           },
           encoding: Encoding.getByName("utf-8")).timeout(const Duration(seconds: 10));
       _Operacao.erro = false;
@@ -265,9 +267,10 @@ class ServicoMobileService {
   Future<Operacao> OnCadastraUsuario(ModelDadosUsuarioJson _Modelo) async {
     Operacao _Operacao = new Operacao();
     try {
+      String token = await ComponentsJWTToken.JWTTokenPadrao();
       Map<String, String> headers = {
         'Content-Type': 'application/json; charset=utf-8',
-        "token": Components.JWTTokenPadrao(),
+        "token": token,
       };
       http.MultipartRequest response;
       response = new http.MultipartRequest(

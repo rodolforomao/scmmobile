@@ -669,7 +669,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                     Navigator.push(
                         context,
                         CupertinoPageRoute(
-                          builder: (context) => FormularioSiciFustPage(ModelFormularioSiciFust:ListaModelFormularioSiciFustModelo[0]),
+                          builder: (context) => FormularioSiciFustPage(ModelFormularioSiciFust:ListaModelFormularioSiciFustModelo[index]),
                         ));
                   },
                   contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
@@ -688,7 +688,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                 fontFamily: "avenir-lt-std-medium"),
                           ),
                           TextSpan(
-                            text: ListaModelFormularioSiciFustModelo[0].periodoReferencia,
+                            text: ListaModelFormularioSiciFustModelo[index].periodoReferencia,
                             style: TextStyle(
                                 fontSize: 20.0,
                                 color: Color(0xff333333),
@@ -710,7 +710,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                     height: 10.0,
                                   ),
                                   Text(
-                                      ListaModelFormularioSiciFustModelo[0].razaoSocial,
+                                      ListaModelFormularioSiciFustModelo[index].razaoSocial,
                                     style: TextStyle(
                                         fontSize: 17.0,
                                         color: Color(0xff333333),
@@ -720,7 +720,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                     height: 5.0,
                                   ),
                                   Text(
-                                    ListaModelFormularioSiciFustModelo[0].observacoes,
+                                    ListaModelFormularioSiciFustModelo[index].observacoes,
                                     style: TextStyle(
                                         fontSize: 15.0,
                                         color: Color(0xff333333),

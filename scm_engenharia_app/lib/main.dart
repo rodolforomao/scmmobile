@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:scm_engenharia_app/help/themas.dart';
 import 'package:scm_engenharia_app/splash_screen.dart';
 void main() {
@@ -14,6 +15,14 @@ class MyApp extends StatelessWidget {
       theme: themas.lightTheme,
       darkTheme: themas.lightTheme,
       home: SplashScreen(),
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const  Locale('pt', 'BR'),
+      ],
     );
   }
 }

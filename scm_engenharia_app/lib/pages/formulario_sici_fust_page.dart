@@ -26,7 +26,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
   List<ModelDistribuicaoFisicosServicoQuantitativoJson>
   ListaModelDistribuicaoFisicosServicoQuantitativo = new List<ModelDistribuicaoFisicosServicoQuantitativoJson>();
   StreamSubscription<ConnectivityResult> subscription;
-
+  DateTime _DataSelecionadaConsulta = DateTime.now();
 
 
   TextEditingController _TxtControllerCnpj = new MaskedTextController(mask: '00.000.000/0000-00');
@@ -208,6 +208,46 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
     } catch (error) {
       Navigator.pop(dialogContext);
       OnAlertaInformacao(error);
+    }
+  }
+
+  void handleReadOnlyInputClick(context) {
+    showBottomSheet(
+        context: context,
+        builder: (BuildContext context) => Container(
+          width: MediaQuery.of(context).size.width,
+          child: YearPicker(
+            selectedDate: DateTime(1997),
+            firstDate: DateTime(1995),
+            lastDate: DateTime.now(),
+            onChanged: (val) {
+              print(val);
+              Navigator.pop(context);
+            },
+          ),
+        ));
+  }
+
+  OnSelecionarData(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+      context: context,
+      initialEntryMode: DatePickerEntryMode.calendar,
+      initialDate: _DataSelecionada,
+      firstDate: DateTime(2015, 8),
+      lastDate: DateTime.now(),
+      errorFormatText: 'Insira uma data válida',
+      errorInvalidText: 'Insira a data em um intervalo válido',
+      fieldLabelText: 'Período referência ',
+      fieldHintText: 'Dia/Mês/Ano',
+      helpText: 'Selecione o período referência',
+    );
+    if (picked != null && picked != _DataSelecionada) {
+      setState(() {
+        _DataSelecionada = picked;
+        _TxtControllerPeriodoReferencia.text = DateFormat('dd/MM/yyyy').format(picked.toLocal());
+
+      });
+
     }
   }
 
@@ -996,6 +1036,24 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                   content: Container(
                     child: Column(
                       children: [
+                        SizedBox(height: 20.0),
+                        TextFormField(
+                          onTap: () {
+                            FocusScope.of(context).requestFocus(new FocusNode());
+                            OnSelecionarData(context);
+
+                          },
+                          controller: _TxtControllerPeriodoReferencia,
+                          textAlign: TextAlign.start,
+                          keyboardType: TextInputType.datetime,
+                          textInputAction: TextInputAction.done,
+                          autofocus: false,
+                          decoration: InputDecoration(
+                            labelText: 'Período referência:',
+                            hintText: '',
+                          ),
+                          maxLength: 20,
+                        ),
                         SizedBox(height: 20.0),
                         TextFormField(
                           controller: _TxtControllerRazaoSocial,
