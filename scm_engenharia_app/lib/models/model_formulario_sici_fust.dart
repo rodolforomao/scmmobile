@@ -56,7 +56,7 @@ class ModelFormularioSiciFustJson {
   List<ModelDistribuicaoFisicosServicoQuantitativoJson> distribuicaoFisicosServicoQuantitativo;
 
   ModelFormularioSiciFustJson(
-      {this.id,
+      { this.id,
         this.idEmpresa,
         this.idUsuarioCliente,
         this.idUsuarioConsultor,
@@ -162,8 +162,6 @@ class ModelFormularioSiciFustJson {
     emailConsutor = json['mes_referencia'];
     emailCliente = json['email_cliente'];
     mesReferencia = json['mes_referencia'];
-
-
 
     if (json['dadosEmServicos'] != null) {
       distribuicaoFisicosServicoQuantitativo = new List<ModelDistribuicaoFisicosServicoQuantitativoJson>();

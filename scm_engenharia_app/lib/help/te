@@ -1,0 +1,12 @@
+{
+   "status":true,
+   "mensagem":"Transa\u00e7\u00e3o realizada com sucesso",
+   "resultado":{
+      "idEmpresa":"510",
+      "idLancamento":"1071",
+      "idFinanceiro":"9",
+      "idDadosServicos":{
+         "id":"21"
+      }
+   }
+}

@@ -201,7 +201,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
           throw (_RestWeb.mensagem);
         else
         {
-          Navigator.pop(dialogContext);
+         // Navigator.pop(dialogContext);
           OnAlertaInformacao(_RestWeb.mensagem);
         }
       }
@@ -769,6 +769,46 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
+                      FlatButton.icon(
+                        color: Color(0xffa55eea),
+                        icon: Icon(
+                          Icons.visibility,
+                          color: Colors.white,
+                        ),
+                        //`Icon` to display
+                        label: Text(
+                          'Visualizar',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          softWrap: false,
+                          style: TextStyle(
+                            fontWeight: FontWeight.normal,
+                            color: Colors.white,
+                            fontFamily: 'avenir-lt-std-roman',
+                            fontSize: 15.0,
+                          ),
+                        ),
+                        //`Text` to display
+                        onPressed: () {
+                          FocusScope.of(context).requestFocus(new FocusNode());
+                          Navigator.of(context, rootNavigator: true).push(
+                            new CupertinoPageRoute<ModelDistribuicaoFisicosServicoQuantitativoJson>(
+                              maintainState: false,
+                              fullscreenDialog: true,
+                              builder: (BuildContext context) =>
+                              new DistribuicaoFisicosServicoQuantitativoPage(sDistribuicaoFisicosServicoQuantitativo:ListaModelDistribuicaoFisicosServicoQuantitativo[index]),
+                            ),
+                          ).then((value) {
+                            if(value != null)
+                            {
+                              ListaModelDistribuicaoFisicosServicoQuantitativo.add(value);
+                            }
+                          });
+                        },
+                        shape: new RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(5.0),
+                        ),
+                      ),
                       SizedBox(width: 10.0),
                       FlatButton.icon(
                         color: Colors.red,
@@ -1370,13 +1410,12 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           child: InkWell(
                             onTap: () async {
                               FocusScope.of(context).requestFocus(new FocusNode());
-                              Navigator.of(context, rootNavigator: true)
-                                  .push(
+                              Navigator.of(context, rootNavigator: true).push(
                                 new CupertinoPageRoute<ModelDistribuicaoFisicosServicoQuantitativoJson>(
                                   maintainState: false,
                                   fullscreenDialog: true,
                                   builder: (BuildContext context) =>
-                                  new DistribuicaoFisicosServicoQuantitativoPage(),
+                                  new DistribuicaoFisicosServicoQuantitativoPage(sDistribuicaoFisicosServicoQuantitativo:null),
                                 ),
                               ).then((value) {
                                 if(value != null)
