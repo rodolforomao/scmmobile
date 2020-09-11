@@ -11,6 +11,7 @@ import 'package:scm_engenharia_app/models/model_usuario.dart';
 import 'package:scm_engenharia_app/models/operacao.dart';
 import 'package:scm_engenharia_app/pages/erro_informacao_page.dart';
 import 'package:scm_engenharia_app/pages/login_page.dart';
+import 'package:scm_engenharia_app/pages/variavel_de_ambiente_page.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -27,6 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
   OnInc() async {
     try {
       if (kIsWeb) {
+
       } else {
         print("Inicio busca");
         Operacao _UsuarioLogado = await dbHelper.onSelecionarUsuario();
@@ -40,47 +42,62 @@ class _SplashScreenState extends State<SplashScreen> {
                   (Route<dynamic> route) => false);
         }
         else {
-          _Usuariodb = _UsuarioLogado.resultado as TbUsuario;
-          var connectivityResult = await (Connectivity().checkConnectivity());
-          if (connectivityResult == ConnectivityResult.none) {
-            Navigator.of(context).pushAndRemoveUntil(
-                new MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                    new MenuNavigation(UsuarioLogado:_Usuariodb)),
-                    (Route<dynamic> route) => false);
+          Operacao _ExisteVariavelDeAmbiente = await dbHelper.OnExisteVariavelDeAmbiente();
+          if (_ExisteVariavelDeAmbiente.erro)
+            throw (_ExisteVariavelDeAmbiente.mensagem);
+          else if (_ExisteVariavelDeAmbiente.resultado == true) {
+            Navigator.of(context, rootNavigator: true).push(
+              new CupertinoPageRoute<bool>(
+                maintainState: false,
+                fullscreenDialog: true,
+                builder: (BuildContext context) => new VariavelDeAmbientePage(),
+              ),
+            ).then((value) {
+              OnInc();
+            });
           } else {
+            _Usuariodb = _UsuarioLogado.resultado as TbUsuario;
+            var connectivityResult = await (Connectivity().checkConnectivity());
+            if (connectivityResult == ConnectivityResult.none) {
+              Navigator.of(context).pushAndRemoveUntil(
+                  new MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                      new MenuNavigation(UsuarioLogado:_Usuariodb)),
+                      (Route<dynamic> route) => false);
+            } else {
 
-            ModelLoginJson _UsuarioLoginModelo = new ModelLoginJson();
-            _UsuarioLoginModelo.password = _Usuariodb.senha;
-            _UsuarioLoginModelo.usuario = _Usuariodb.email;
-            Operacao _RestWebUsuario = await _RestWebService.OnLogin(_UsuarioLoginModelo);
-            if (_RestWebUsuario.erro)
-              throw (_RestWebUsuario.mensagem);
-            else if (_RestWebUsuario.resultado == null)
-              throw (_RestWebUsuario.mensagem);
-            else {
-              ModelInformacaoUsuario _UsuarioModelo = ModelInformacaoUsuario.fromJson( _RestWebUsuario.resultado);
-              TbUsuario Usuario = new TbUsuario();
-              Usuario.idUsuarioApp = _Usuariodb.idUsuarioApp;
-              Usuario.idUsuario = _UsuarioModelo.idUsuario;
-              Usuario.idPerfil = _UsuarioModelo.idPerfil;
-              Usuario.nome = _UsuarioModelo.descNome;
-              Usuario.senha = _Usuariodb.senha;
-              Usuario.email = _Usuariodb.email;
-              Usuario.telefone = _UsuarioModelo.telefoneConsultor;
-              Usuario.dtUltacesso = _UsuarioModelo.dtUltacesso;
-              Usuario.empresa = _UsuarioModelo.empresa;
-              Usuario.periodoReferencia = _UsuarioModelo.periodoReferencia;
-              Usuario.cpf = _UsuarioModelo.cpf;
-              Operacao _UsuarioLogado = await dbHelper.OnAddUpdateUsuario(Usuario);
-              if (_UsuarioLogado.erro)
-                throw (_UsuarioLogado.mensagem);
+              ModelLoginJson _UsuarioLoginModelo = new ModelLoginJson();
+              _UsuarioLoginModelo.password = _Usuariodb.senha;
+              _UsuarioLoginModelo.usuario = _Usuariodb.email;
+              Operacao _RestWebUsuario = await _RestWebService.OnLogin(_UsuarioLoginModelo);
+              if (_RestWebUsuario.erro)
+                throw (_RestWebUsuario.mensagem);
+              else if (_RestWebUsuario.resultado == null)
+                throw (_RestWebUsuario.mensagem);
               else {
-                Navigator.of(context).pushAndRemoveUntil(
-                    new MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                        new MenuNavigation(UsuarioLogado:Usuario)),
-                        (Route<dynamic> route) => false);
+                ModelInformacaoUsuario _UsuarioModelo = ModelInformacaoUsuario.fromJson( _RestWebUsuario.resultado);
+                TbUsuario Usuario = new TbUsuario();
+                Usuario.idUsuarioApp = _Usuariodb.idUsuarioApp;
+                Usuario.idUsuario = _UsuarioModelo.idUsuario;
+                Usuario.idPerfil = _UsuarioModelo.idPerfil;
+                Usuario.nome = _UsuarioModelo.descNome;
+                Usuario.senha = _Usuariodb.senha;
+                Usuario.email = _Usuariodb.email;
+                Usuario.telefone = _UsuarioModelo.telefoneConsultor;
+                Usuario.dtUltacesso = _UsuarioModelo.dtUltacesso;
+                Usuario.empresa = _UsuarioModelo.empresa;
+                Usuario.periodoReferencia = _UsuarioModelo.periodoReferencia;
+                Usuario.cpf = _UsuarioModelo.cpf;
+                Operacao _UsuarioLogado = await dbHelper.OnAddUpdateUsuario(Usuario);
+                if (_UsuarioLogado.erro)
+                  throw (_UsuarioLogado.mensagem);
+                else {
+                  Navigator.of(context).pushAndRemoveUntil(
+                      new MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                          new MenuNavigation(UsuarioLogado:Usuario)),
+                          (Route<dynamic> route) => false);
+                }
               }
             }
           }

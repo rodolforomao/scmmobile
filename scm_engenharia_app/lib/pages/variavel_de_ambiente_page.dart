@@ -102,6 +102,7 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
             }
           }
           Navigator.pop(dialogContext);
+          OnToastInformacao("Variáveis de ambiente atualizadas com sucesso");
         }
       }
     } catch (error) {
@@ -126,7 +127,6 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
       }
       else {
         _Usuariodb = _UsuarioLogado.resultado as TbUsuario;
-
       }
       setState(() {
         // UfTxt = Uf.first;

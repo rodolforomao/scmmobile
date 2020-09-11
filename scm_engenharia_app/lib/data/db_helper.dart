@@ -59,6 +59,39 @@ class DBHelper {
     return _Operacao;
   }
 
+  Future<Operacao> OnExisteVariavelDeAmbiente() async {
+    Operacao _Operacao = new Operacao();
+    try {
+      _Operacao.erro = false;
+      _Operacao.resultado = false;
+      _Operacao.mensagem = "";
+
+
+      Operacao _Uf = await onSelecionarUf();
+      if (_Uf.erro)
+        throw (_Uf.mensagem);
+      else if (_Uf.resultado == null) {
+        _Operacao.resultado = true;
+      }
+      Operacao _Tecnologia = await onSelecionarTecnologia();
+      if (_Tecnologia.erro)
+        throw (_Tecnologia.mensagem);
+      else if (_Tecnologia.resultado == null) {
+        _Operacao.resultado = true;
+      }
+      Operacao _SelecionarUf = await onSelecionarUfMunicipio();
+      if (_SelecionarUf.erro)
+        throw (_SelecionarUf.mensagem);
+      else if (_SelecionarUf.resultado == null) {
+        _Operacao.resultado = true;
+      }
+    } catch (e) {
+      _Operacao.erro = true;
+      _Operacao.mensagem = e.toString();
+    }
+    return _Operacao;
+  }
+
 
   // Usuário ------------------------------------------------------------------------------
 

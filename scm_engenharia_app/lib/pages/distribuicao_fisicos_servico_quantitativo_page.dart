@@ -191,115 +191,138 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
 
   Inc() async {
     try {
-      tbUfMunicipio.idMunicipioApp = 0;
-      tbUfMunicipio.ufId = "0";
-      tbUfMunicipio.uf = "0";
-      tbUfMunicipio.id = "0";
-      tbUfMunicipio.municipio = "Selecione...";
-
-      tbUf.idUfApp = 0;
-      tbUf.id = "0";
-      tbUf.uf = "Selecione...";
-
-      tbTecnologia.idTecnologiaApp = 0;
-      tbTecnologia.id = "0";
-      tbTecnologia.tecnologia = "Selecione...";
-
-      ListTecnologiadb.add(tbTecnologia);
-      ListUfdb.add(tbUf);
-      ListUfMunicipiodb.add(tbUfMunicipio);
-
-      Operacao _Uf = await dbHelper.onSelecionarUf();
-      if (_Uf.erro)
-        throw (_Uf.mensagem);
-      else if (_Uf.resultado == null) {
+      Operacao _ExisteVariavelDeAmbiente = await dbHelper.OnExisteVariavelDeAmbiente();
+      if (_ExisteVariavelDeAmbiente.erro)
+        throw (_ExisteVariavelDeAmbiente.mensagem);
+      else if (_ExisteVariavelDeAmbiente.resultado == true) {
         Navigator.of(context, rootNavigator: true).push(
           new CupertinoPageRoute<bool>(
             maintainState: false,
             fullscreenDialog: true,
             builder: (BuildContext context) => new VariavelDeAmbientePage(),
           ),
-        );
+        ).then((value) {
+          Inc();
+        });
       } else {
-        for (var prop in _Uf.resultado as List<TbUf>) {
-          setState(() {
-            ListUfdb.add(prop);
-          });
+        tbUfMunicipio.idMunicipioApp = 0;
+        tbUfMunicipio.ufId = "0";
+        tbUfMunicipio.uf = "0";
+        tbUfMunicipio.id = "0";
+        tbUfMunicipio.municipio = "Selecione...";
+
+        tbUf.idUfApp = 0;
+        tbUf.id = "0";
+        tbUf.uf = "Selecione...";
+
+        tbTecnologia.idTecnologiaApp = 0;
+        tbTecnologia.id = "0";
+        tbTecnologia.tecnologia = "Selecione...";
+
+        ListTecnologiadb.add(tbTecnologia);
+        ListUfdb.add(tbUf);
+        ListUfMunicipiodb.add(tbUfMunicipio);
+
+        Operacao _Uf = await dbHelper.onSelecionarUf();
+        if (_Uf.erro)
+          throw (_Uf.mensagem);
+        else if (_Uf.resultado == null) {
+          throw (_Uf.mensagem);
+        } else {
+          for (var prop in _Uf.resultado as List<TbUf>) {
+            setState(() {
+              ListUfdb.add(prop);
+            });
+          }
         }
-      }
-      Operacao _Tecnologia = await dbHelper.onSelecionarTecnologia();
-      if (_Tecnologia.erro)
-        throw (_Tecnologia.mensagem);
-      else if (_Tecnologia.resultado == null) {
-        Navigator.of(context, rootNavigator: true).push(
-          new CupertinoPageRoute<bool>(
-            maintainState: false,
-            fullscreenDialog: true,
-            builder: (BuildContext context) => new VariavelDeAmbientePage(),
-          ),
-        );
-      } else {
-        for (var prop in _Tecnologia.resultado as List<TbTecnologia>) {
-          setState(() {
-            ListTecnologiadb.add(prop);
-          });
+        Operacao _Tecnologia = await dbHelper.onSelecionarTecnologia();
+        if (_Tecnologia.erro)
+          throw (_Tecnologia.mensagem);
+        else if (_Tecnologia.resultado == null) {
+          throw (_Tecnologia.mensagem);
+        } else {
+          for (var prop in _Tecnologia.resultado as List<TbTecnologia>) {
+            setState(() {
+              ListTecnologiadb.add(prop);
+            });
+          }
         }
-      }
 
-      if (widget.sDistribuicaoFisicosServicoQuantitativo == null) {
+        if (widget.sDistribuicaoFisicosServicoQuantitativo == null) {
 
-      } else {
-        TbUfMunicipio resMunicipio = ListUfMunicipiodb.where((i) =>
-            i.id ==
-            widget.sDistribuicaoFisicosServicoQuantitativo.idMunicipio).first;
-        tbUfMunicipio.idMunicipioApp = resMunicipio.idMunicipioApp;
-        tbUfMunicipio.ufId = resMunicipio.ufId;
-        tbUfMunicipio.uf = resMunicipio.uf;
-        tbUfMunicipio.id = resMunicipio.id;
-        tbUfMunicipio.municipio = resMunicipio.municipio;
+        } else {
+          _DistribuicaoFisicosServicoQuantitativo = widget.sDistribuicaoFisicosServicoQuantitativo;
 
-        TbUf resUf = ListUfdb.where((i) =>
-            i.id == widget.sDistribuicaoFisicosServicoQuantitativo.idUf).first;
-        tbUf.idUfApp = resUf.idUfApp;
-        tbUf.id = resUf.id;
-        tbUf.uf = resUf.uf;
+          TbUf resUf = ListUfdb.where((i) => i.id == widget.sDistribuicaoFisicosServicoQuantitativo.idUf).first;
+          tbUf.idUfApp = resUf.idUfApp;
+          tbUf.id = resUf.id;
+          tbUf.uf = resUf.uf;
+           id_uf = resUf.id;
 
-        TbTecnologia resTecnologia = ListTecnologiadb.where((i) =>
-            i.id ==
-            widget.sDistribuicaoFisicosServicoQuantitativo.idTecnologia).first;
-        tbTecnologia.idTecnologiaApp = resTecnologia.idTecnologiaApp;
-        tbTecnologia.id = resTecnologia.id;
-        tbTecnologia.tecnologia = resTecnologia.tecnologia;
 
-        _TxtControllerCod_ibge.text =
-            widget.sDistribuicaoFisicosServicoQuantitativo.codIbge;
-        _TxtControllerPf_0.text =
-            widget.sDistribuicaoFisicosServicoQuantitativo.pf0;
-        _TxtControllerPf_512.text =
-            widget.sDistribuicaoFisicosServicoQuantitativo.pf512;
-        _TxtControllerPf_2.text =
-            widget.sDistribuicaoFisicosServicoQuantitativo.pf2;
-        _TxtControllerPf_12.text =
-            widget.sDistribuicaoFisicosServicoQuantitativo.pf12;
-        _TxtControllerPf_34.text =
-            widget.sDistribuicaoFisicosServicoQuantitativo.pf34;
-        _TxtControllerPj_0.text =
-            widget.sDistribuicaoFisicosServicoQuantitativo.pj0;
-        _TxtControllerPj_512.text =
-            widget.sDistribuicaoFisicosServicoQuantitativo.pj512;
-        _TxtControllerPj_2.text =
-            widget.sDistribuicaoFisicosServicoQuantitativo.pj2;
-        _TxtControllerPj_12.text =
-            widget.sDistribuicaoFisicosServicoQuantitativo.pj12;
-        _TxtControllerPj_34.text =
-            widget.sDistribuicaoFisicosServicoQuantitativo.pj34;
+
+          Operacao _UfMunicipio = await dbHelper
+              .onSelecionarMunicipioByIdUf(
+              tbUf.id);
+          if (_UfMunicipio.erro)
+            throw (_UfMunicipio.mensagem);
+          else if (_UfMunicipio.resultado == null) {
+            OnAlertaInformacao("Para o estado " +
+                tbUf.uf +
+                " não a município cadastrado");
+          } else {
+            for (var prop in _UfMunicipio.resultado
+            as List<TbUfMunicipio>) {
+              setState(() {
+                ListUfMunicipiodb.add(prop);
+              });
+            }
+            TbUfMunicipio resMunicipio = ListUfMunicipiodb.where((i) => i.id == widget.sDistribuicaoFisicosServicoQuantitativo.idMunicipio).first;
+            tbUfMunicipio.idMunicipioApp = resMunicipio.idMunicipioApp;
+            tbUfMunicipio.ufId = resMunicipio.ufId;
+            tbUfMunicipio.uf = resMunicipio.uf;
+            tbUfMunicipio.id = resMunicipio.id;
+            tbUfMunicipio.municipio = resMunicipio.municipio;
+             id_municipio = resMunicipio.id;
+
+          }
+
+          TbTecnologia resTecnologia = ListTecnologiadb.where((i) =>
+          i.id == widget.sDistribuicaoFisicosServicoQuantitativo.idTecnologia).first;
+          tbTecnologia.idTecnologiaApp = resTecnologia.idTecnologiaApp;
+          tbTecnologia.id = resTecnologia.id;
+          tbTecnologia.tecnologia = resTecnologia.tecnologia;
+          id_tecnologia = resTecnologia.id;
+          _TxtControllerCod_ibge.text =
+              widget.sDistribuicaoFisicosServicoQuantitativo.codIbge;
+          _TxtControllerPf_0.text =
+              widget.sDistribuicaoFisicosServicoQuantitativo.pf0;
+          _TxtControllerPf_512.text =
+              widget.sDistribuicaoFisicosServicoQuantitativo.pf512;
+          _TxtControllerPf_2.text =
+              widget.sDistribuicaoFisicosServicoQuantitativo.pf2;
+          _TxtControllerPf_12.text =
+              widget.sDistribuicaoFisicosServicoQuantitativo.pf12;
+          _TxtControllerPf_34.text =
+              widget.sDistribuicaoFisicosServicoQuantitativo.pf34;
+          _TxtControllerPj_0.text =
+              widget.sDistribuicaoFisicosServicoQuantitativo.pj0;
+          _TxtControllerPj_512.text =
+              widget.sDistribuicaoFisicosServicoQuantitativo.pj512;
+          _TxtControllerPj_2.text =
+              widget.sDistribuicaoFisicosServicoQuantitativo.pj2;
+          _TxtControllerPj_12.text =
+              widget.sDistribuicaoFisicosServicoQuantitativo.pj12;
+          _TxtControllerPj_34.text =
+              widget.sDistribuicaoFisicosServicoQuantitativo.pj34;
+        }
       }
     } catch (error) {
       Navigator.push(
           context,
           CupertinoPageRoute(
               builder: (context) =>
-                  new ErroInformacaoPage(informacao: error))).then((value) {
+                  new ErroInformacaoPage(informacao: error.toString()))).then((value) {
         Inc();
       });
     }
@@ -419,6 +442,7 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
                                       tbUfMunicipio.uf = "0";
                                       tbUfMunicipio.id = "0";
                                       tbUfMunicipio.municipio = "Selecione...";
+                                      _DistribuicaoFisicosServicoQuantitativo.uf =  newValue.uf;
                                       ListUfMunicipiodb.add(tbUfMunicipio);
                                       for (var prop in _UfMunicipio.resultado
                                           as List<TbUfMunicipio>) {
@@ -483,6 +507,7 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
                                       setState(() {
                                         tbUfMunicipio = value;
                                         id_municipio = value.id;
+                                        _DistribuicaoFisicosServicoQuantitativo.municipio = value.municipio;
                                       });
                                     },
                                     child: Text(
@@ -554,6 +579,7 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
                                   setState(() {
                                     tbTecnologia = newValue;
                                     id_tecnologia = newValue.id;
+                                    _DistribuicaoFisicosServicoQuantitativo.tecnologia = newValue.tecnologia;
                                   });
                                 },
                               ),

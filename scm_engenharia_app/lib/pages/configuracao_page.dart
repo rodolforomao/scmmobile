@@ -67,7 +67,7 @@ class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
                             style: TextStyle(
                               fontSize: 17.0,
                               fontFamily: 'avenir-lt-std-roman',
-                              color: Color(0xffa55eea),
+                              color: Color(0xff018a8a),
                             ),
                           ),
                           onPressed: () async {
@@ -83,7 +83,7 @@ class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
                         ),
                         SizedBox(width: 15.0),
                         FlatButton(
-                          color: Color(0xffa55eea),
+                          color: Color(0xff018a8a),
                           //`Icon` to display
                           child: Text(
                             'Não',

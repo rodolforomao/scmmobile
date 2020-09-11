@@ -285,6 +285,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
            if(widget.ModelFormularioSiciFust.distribuicaoFisicosServicoQuantitativo != null)
              {
                for (var prop in  widget.ModelFormularioSiciFust.distribuicaoFisicosServicoQuantitativo) {
+                 prop.index = ListaModelDistribuicaoFisicosServicoQuantitativo.length++;
                  ListaModelDistribuicaoFisicosServicoQuantitativo.add(prop);
                }
              }
@@ -801,7 +802,11 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ).then((value) {
                             if(value != null)
                             {
-                              ListaModelDistribuicaoFisicosServicoQuantitativo.add(value);
+                              int Index = ListaModelDistribuicaoFisicosServicoQuantitativo.indexWhere((item) =>
+                              item.index == value.index);
+                              setState(() {
+                                ListaModelDistribuicaoFisicosServicoQuantitativo[Index] = value;
+                              });
                             }
                           });
                         },
@@ -830,7 +835,95 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         //`Text` to display
-                        onPressed: () {},
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (BuildContext context) {
+                              return Dialog(
+                                  child: new Padding(
+                                    padding: EdgeInsets.all(25.0),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Container(
+                                          margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
+                                          height: 50.0,
+                                          child: new Text("Deseja realmente remover ?",
+                                            textAlign: TextAlign.start,
+                                            softWrap: false,
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                fontFamily: 'open-sans-regular',
+                                                fontSize: 17.0,
+                                                color: Color(0xFF000000)),
+                                          ),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
+                                          child: new Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: <Widget>[
+                                              OutlineButton(
+                                                color: Color(0xFFf2f2f2),
+                                                //`Icon` to display
+                                                child: Text(
+                                                    'Sim',
+                                                    style: TextStyle(
+                                                      fontWeight: FontWeight.w500,
+                                                      fontFamily: 'avenir-lt-std-roman',
+                                                      color: Color(0xff018a8a),
+                                                      fontSize: 16.0,
+                                                    )
+                                                ),
+                                                onPressed: () async {
+                                                  FocusScope.of(context).requestFocus(new FocusNode());
+                                                  setState(() {
+                                                    ListaModelDistribuicaoFisicosServicoQuantitativo.remove(ListaModelDistribuicaoFisicosServicoQuantitativo[index]);
+                                                  });
+                                                },
+                                                //callback when button is clicked
+                                                borderSide: BorderSide(
+                                                  color: Color(0xFFf2f2f2), //Color of the border
+                                                  style: BorderStyle.solid, //Style of the border
+                                                  width: 1.0, //width of the border
+                                                ),
+                                              ),
+                                              SizedBox(width: 15.0),
+                                              FlatButton(
+                                                color: Color(0xff018a8a),
+                                                //`Icon` to display
+                                                child: Text(
+                                                    'Não',
+                                                    style: TextStyle(
+                                                      fontWeight: FontWeight.w500,
+                                                      fontFamily: 'avenir-lt-std-roman',
+                                                      color: Color(0xffFFFFFF),
+                                                      fontSize: 16.0,
+                                                    )
+                                                ),
+                                                //`Text` to display
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                shape: new RoundedRectangleBorder(
+                                                  borderRadius: new BorderRadius.circular(5.0),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ));
+                            },
+                          );
+                        },
                         shape: new RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(5.0),
                         ),
@@ -1420,6 +1513,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                               ).then((value) {
                                 if(value != null)
                                 {
+                                  value.index = ListaModelDistribuicaoFisicosServicoQuantitativo.length + 1;
                                   ListaModelDistribuicaoFisicosServicoQuantitativo.add(value);
                                 }
                               });

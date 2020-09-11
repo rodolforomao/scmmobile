@@ -237,6 +237,7 @@ class ModelFormularioSiciFustJson {
 
 
 class ModelDistribuicaoFisicosServicoQuantitativoJson {
+  int index;
   String id;
   String codIbge;
   String idUf;
@@ -260,7 +261,8 @@ class ModelDistribuicaoFisicosServicoQuantitativoJson {
   String tecnologia;
 
   ModelDistribuicaoFisicosServicoQuantitativoJson(
-      {this.id,
+      {  this.index,
+        this.id,
         this.codIbge,
         this.idUf,
         this.idMunicipio,
@@ -284,6 +286,7 @@ class ModelDistribuicaoFisicosServicoQuantitativoJson {
 
   ModelDistribuicaoFisicosServicoQuantitativoJson.fromJson(
       Map<String, dynamic> json) {
+    index = json['index'];
     id = json['id'];
     codIbge = json['cod_ibge'];
     idUf = json['id_uf'];
@@ -309,6 +312,7 @@ class ModelDistribuicaoFisicosServicoQuantitativoJson {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['index'] = this.index;
     data['id'] = this.id;
     data['cod_ibge'] = this.codIbge;
     data['id_uf'] = this.idUf;

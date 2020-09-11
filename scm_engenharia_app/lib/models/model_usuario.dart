@@ -46,7 +46,7 @@ class ModelDadosUsuarioJson {
     telefoneWhatsapp = json['telefoneWhatsapp'];
     empresa = json['empresa'];
     uf = json['uf'];
-    
+
   }
 
   Map<String, dynamic> toJson() {
@@ -69,8 +69,8 @@ class ModelInformacaoUsuario {
   String idUsuario;
   String dtUltacesso;
   String empresa;
-  Null periodoReferencia;
-  Null idContrato;
+  String periodoReferencia;
+  String idContrato;
   String telefoneConsultor;
   String cpf;
 
