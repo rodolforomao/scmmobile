@@ -1,3 +1,5 @@
+import 'package:scm_engenharia_app/data/tb_distribuicao_quantitativo_acessos_fisicos_servico.dart';
+import 'package:scm_engenharia_app/data/tb_ficha_sici.dart';
 import 'package:scm_engenharia_app/data/tb_tecnologia.dart';
 import 'package:scm_engenharia_app/data/tb_uf.dart';
 import 'package:scm_engenharia_app/data/tb_uf_municipio.dart';
@@ -33,6 +35,8 @@ class DBHelper {
     await db.execute('CREATE TABLE tbTecnologia (idTecnologiaApp INTEGER PRIMARY KEY AUTOINCREMENT, id TEXT , tecnologia TEXT)');
     await db.execute('CREATE TABLE tbUf (idUfApp INTEGER PRIMARY KEY AUTOINCREMENT,id TEXT,uf TEXT)');
     await db.execute('CREATE TABLE tbUfMunicipio (idMunicipioApp INTEGER PRIMARY KEY AUTOINCREMENT,ufId TEXT , uf TEXT,id TEXT,municipio TEXT)');
+    await db.execute('CREATE TABLE tbDistribuicaoQuantitativoAcessosFisicosServico (idDistribuicaoQuantitativoAcessosFisicosServicoApp INTEGER PRIMARY KEY AUTOINCREMENT,idFichaSiciApp TEXT,id TEXT ,cod_ibge TEXT,id_uf TEXT,id_municipio TEXT,id_tecnologia TEXT,pf_0 TEXT,pf_512 TEXT,pf_2 TEXT,pf_12 TEXT,pf_34 TEXT,pj_0 TEXT,pj_512 TEXT,pj_2 TEXT,pj_12 TEXT,pj_34 TEXT,id_lancamento TEXT,ultima_alteracao TEXT,id_usuario_ultima_alteracao TEXT,municipio TEXT,uf TEXT,tecnologia TEXT)');
+    await db.execute('CREATE TABLE tbFichaSici (idFichaSiciApp INTEGER PRIMARY KEY AUTOINCREMENT,idEmpresa TEXT,idLancamento TEXT ,periodoReferencia TEXT,razaoSocial TEXT,nomeCliente TEXT,nomeConsultor TEXT,telefoneFixo TEXT,cnpj TEXT,mesReferencia TEXT,telefoneMovel TEXT,emailCliente TEXT,emailConsutor TEXT,receitaBruta TEXT,idFinanceiro TEXT,simples TEXT,simplesPorc TEXT,icms TEXT,icmsPorc TEXT,pis TEXT,pisPorc TEXT,cofins TEXT,cofinsPorc TEXT,receitaLiquida TEXT,observacoes TEXT)');
   }
 
   Future<Operacao> limparTabelas(int idUsuario) async {
@@ -413,7 +417,6 @@ class DBHelper {
 
   // uf município -------------------------------------------------------------------------
 
-
   Future<Operacao> OnAddUpdateUfMunicipio(TbUfMunicipio UfMunicipio) async {
     Operacao _Operacao = new Operacao();
     try {
@@ -546,6 +549,202 @@ class DBHelper {
   }
 
   //---------------------------------------------------------------------------------------
+
+
+  // Formulário Sici - Fust ---------------------------------------------------------------------------
+
+  Future<Operacao> OnAddFichaSici(TbFichaSici _Modelo , List<TbDistribuicaoQuantitativoAcessosFisicosServico> distribuicaoFisicosServicoQuantitativo ) async {
+    Operacao _Operacao = new Operacao();
+    try {
+      var dbClient = await db;
+      if (_Modelo.idFichaSiciApp == 0 || _Modelo.idFichaSiciApp == null)
+      {
+        _Modelo.idFichaSiciApp = null;
+        _Modelo.idFichaSiciApp = await dbClient.insert('tbFichaSici', _Modelo.toJson());
+      }
+      else {
+        int id = await dbClient.update(
+          'tbFichaSici',
+          _Modelo.toJson(),
+          where: 'idFichaSiciApp = ?',
+          whereArgs: [_Modelo.idFichaSiciApp],
+        );
+        _Modelo.idFichaSiciApp = id;
+      }
+      for (var prop in distribuicaoFisicosServicoQuantitativo) {
+        prop.idFichaSiciApp = _Modelo.idFichaSiciApp;
+        Operacao _respLocal = await OnAddDistribuicaoQuantitativoAcessosFisicosServico(prop);
+        if (_respLocal.erro)
+          throw (_respLocal.mensagem);
+        else {
+
+        }
+      }
+      _Operacao.erro = false;
+      _Operacao.mensagem = "Usuário adicionado com sucesso.";
+      _Operacao.resultado = _Modelo;
+    } catch (e) {
+      _Operacao.erro = true;
+      _Operacao.mensagem = e.toString();
+    }
+    return _Operacao;
+  }
+
+  Future<Operacao> onSelecionarFichaSiciId(String Id) async {
+    Operacao _Operacao = new Operacao();
+    try {
+      _Operacao.erro = false;
+      _Operacao.mensagem = "";
+      _Operacao.resultado = null;
+      final dbClient = await db;
+      String Query = 'SELECT * FROM tbFichaSici WHERE idFichaSiciApp = ' + Id;
+      var results = await dbClient.rawQuery(Query);
+      List<TbUfMunicipio> listUfMunicipio = [];
+      if (results.length > 0) {
+        for (int i = 0; i < results.length; i++) {
+          listUfMunicipio.add(TbUfMunicipio.fromJson(results[i]));
+        }
+        _Operacao.resultado = listUfMunicipio;
+      }
+      else
+        _Operacao.resultado = null;
+      _Operacao.erro = false;
+      _Operacao.mensagem = "Usuário obtido com sucesso.";
+    } catch (e) {
+      _Operacao.erro = true;
+      _Operacao.mensagem = e.toString();
+    }
+    return _Operacao;
+  }
+
+  Future<Operacao> onSelecionarFichaSici() async {
+    Operacao _Operacao = new Operacao();
+    try {
+      _Operacao.erro = false;
+      _Operacao.mensagem = "";
+      _Operacao.resultado = null;
+      final dbClient = await db;
+      String Query = 'SELECT * FROM tbFichaSici';
+      var results = await dbClient.rawQuery(Query);
+      List<TbUfMunicipio> listUfMunicipio = [];
+      if (results.length > 0) {
+        for (int i = 0; i < results.length; i++) {
+          listUfMunicipio.add(TbUfMunicipio.fromJson(results[i]));
+        }
+        _Operacao.resultado = listUfMunicipio;
+      }
+      else
+        _Operacao.resultado = null;
+      _Operacao.erro = false;
+      _Operacao.mensagem = "Usuário obtido com sucesso.";
+    } catch (e) {
+      _Operacao.erro = true;
+      _Operacao.mensagem = e.toString();
+    }
+    return _Operacao;
+  }
+
+  Future<Operacao> OnDeletarFichaSici(int idFichaSiciApp) async {
+    Operacao _Operacao = new Operacao();
+    try {
+      final dbClient = await db;
+      var resp = await dbClient.delete(
+        'tbFichaSici',
+        where: 'idFichaSiciApp = ?',
+        whereArgs: [idFichaSiciApp],
+      );
+      _Operacao.erro = false;
+      _Operacao.mensagem = "Usuário foi removido com sucesso";
+      _Operacao.resultado = "Usuário foi removido com sucesso";
+    } catch (e) {
+      _Operacao.erro = true;
+      _Operacao.mensagem = e.toString();
+    }
+    return _Operacao;
+  }
+
+  //---------------------------------------------------------------------------------------
+
+
+  // DISTRIBUIÇÃO DO QUANTITATIVO DE ACESSOS FÍSICOS EM SERVIÇO ---------------------------------------------------------------------------
+
+  Future<Operacao> OnAddDistribuicaoQuantitativoAcessosFisicosServico(TbDistribuicaoQuantitativoAcessosFisicosServico _Modelo) async {
+    Operacao _Operacao = new Operacao();
+    try {
+
+      var dbClient = await db;
+      if (_Modelo.idDistribuicaoQuantitativoAcessosFisicosServicoApp == 0 || _Modelo.idDistribuicaoQuantitativoAcessosFisicosServicoApp == null)
+      {
+        _Modelo.idDistribuicaoQuantitativoAcessosFisicosServicoApp = null;
+        _Modelo.idDistribuicaoQuantitativoAcessosFisicosServicoApp = await dbClient.insert('tbDistribuicaoQuantitativoAcessosFisicosServico', _Modelo.toJson());
+      }
+      else {
+        int id = await dbClient.update(
+          'tbDistribuicaoQuantitativoAcessosFisicosServico',
+          _Modelo.toJson(),
+          where: 'idDistribuicaoQuantitativoAcessosFisicosServicoApp = ?',
+          whereArgs: [_Modelo.idDistribuicaoQuantitativoAcessosFisicosServicoApp],
+        );
+        _Modelo.idDistribuicaoQuantitativoAcessosFisicosServicoApp = id;
+      }
+      _Operacao.erro = false;
+      _Operacao.mensagem = "Usuário adicionado com sucesso.";
+      _Operacao.resultado = _Modelo;
+    } catch (e) {
+      _Operacao.erro = true;
+      _Operacao.mensagem = e.toString();
+    }
+    return _Operacao;
+  }
+
+  Future<Operacao> onSelecionarDistribuicaoQuantitativoAcessosFisicosServicoByIdFichaSiciApp(String Id) async {
+    Operacao _Operacao = new Operacao();
+    try {
+      _Operacao.erro = false;
+      _Operacao.mensagem = "";
+      _Operacao.resultado = null;
+      final dbClient = await db;
+      String Query = 'SELECT * FROM tbDistribuicaoQuantitativoAcessosFisicosServico WHERE idFichaSiciApp = ' + Id;
+      var results = await dbClient.rawQuery(Query);
+      List<TbUfMunicipio> listUfMunicipio = [];
+      if (results.length > 0) {
+        for (int i = 0; i < results.length; i++) {
+          listUfMunicipio.add(TbUfMunicipio.fromJson(results[i]));
+        }
+        _Operacao.resultado = listUfMunicipio;
+      }
+      else
+        _Operacao.resultado = null;
+      _Operacao.erro = false;
+      _Operacao.mensagem = "Usuário obtido com sucesso.";
+    } catch (e) {
+      _Operacao.erro = true;
+      _Operacao.mensagem = e.toString();
+    }
+    return _Operacao;
+  }
+
+  Future<Operacao> OnDeletarDistribuicaoQuantitativoAcessosFisicosServico(int idDistribuicaoQuantitativoAcessosFisicosServicoApp) async {
+    Operacao _Operacao = new Operacao();
+    try {
+      final dbClient = await db;
+      var resp = await dbClient.delete(
+        'tbDistribuicaoQuantitativoAcessosFisicosServico',
+        where: 'idDistribuicaoQuantitativoAcessosFisicosServicoApp = ?',
+        whereArgs: [idDistribuicaoQuantitativoAcessosFisicosServicoApp],
+      );
+      _Operacao.erro = false;
+      _Operacao.mensagem = "Usuário foi removido com sucesso";
+      _Operacao.resultado = "Usuário foi removido com sucesso";
+    } catch (e) {
+      _Operacao.erro = true;
+      _Operacao.mensagem = e.toString();
+    }
+    return _Operacao;
+  }
+
+  //---------------------------------------------------------------------------------------
+
 
   Future close() async {
     var dbClient = await db;

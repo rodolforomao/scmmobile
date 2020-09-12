@@ -1,3 +1,5 @@
+import 'package:scm_engenharia_app/data/tb_distribuicao_quantitativo_acessos_fisicos_servico.dart';
+
 class ModelFormularioSiciFustJson {
   String id;
   String idEmpresa;
@@ -53,7 +55,7 @@ class ModelFormularioSiciFustJson {
   String mesReferencia;
 
   String envioLancamento;
-  List<ModelDistribuicaoFisicosServicoQuantitativoJson> distribuicaoFisicosServicoQuantitativo;
+  List<TbDistribuicaoQuantitativoAcessosFisicosServico> distribuicaoFisicosServicoQuantitativo;
 
   ModelFormularioSiciFustJson(
       { this.id,
@@ -164,9 +166,9 @@ class ModelFormularioSiciFustJson {
     mesReferencia = json['mes_referencia'];
 
     if (json['dadosEmServicos'] != null) {
-      distribuicaoFisicosServicoQuantitativo = new List<ModelDistribuicaoFisicosServicoQuantitativoJson>();
+      distribuicaoFisicosServicoQuantitativo = new List<TbDistribuicaoQuantitativoAcessosFisicosServico>();
       json['dadosEmServicos'].forEach((v) {
-        distribuicaoFisicosServicoQuantitativo.add(new ModelDistribuicaoFisicosServicoQuantitativoJson.fromJson(v));
+        distribuicaoFisicosServicoQuantitativo.add(new TbDistribuicaoQuantitativoAcessosFisicosServico.fromJson(v));
       });
     }
   }
@@ -236,107 +238,7 @@ class ModelFormularioSiciFustJson {
 }
 
 
-class ModelDistribuicaoFisicosServicoQuantitativoJson {
-  int index;
-  String id;
-  String codIbge;
-  String idUf;
-  String idMunicipio;
-  String idTecnologia;
-  String pf0;
-  String pf512;
-  String pf2;
-  String pf12;
-  String pf34;
-  String pj0;
-  String pj512;
-  String pj2;
-  String pj12;
-  String pj34;
-  String idLancamento;
-  String ultimaAlteracao;
-  String idUsuarioUltimaAlteracao;
-  String municipio;
-  String uf;
-  String tecnologia;
 
-  ModelDistribuicaoFisicosServicoQuantitativoJson(
-      {  this.index,
-        this.id,
-        this.codIbge,
-        this.idUf,
-        this.idMunicipio,
-        this.idTecnologia,
-        this.pf0,
-        this.pf512,
-        this.pf2,
-        this.pf12,
-        this.pf34,
-        this.pj0,
-        this.pj512,
-        this.pj2,
-        this.pj12,
-        this.pj34,
-        this.idLancamento,
-        this.ultimaAlteracao,
-        this.idUsuarioUltimaAlteracao,
-        this.municipio,
-        this.uf,
-        this.tecnologia});
-
-  ModelDistribuicaoFisicosServicoQuantitativoJson.fromJson(
-      Map<String, dynamic> json) {
-    index = json['index'];
-    id = json['id'];
-    codIbge = json['cod_ibge'];
-    idUf = json['id_uf'];
-    idMunicipio = json['id_municipio'];
-    idTecnologia = json['id_tecnologia'];
-    pf0 = json['pf_0'];
-    pf512 = json['pf_512'];
-    pf2 = json['pf_2'];
-    pf12 = json['pf_12'];
-    pf34 = json['pf_34'];
-    pj0 = json['pj_0'];
-    pj512 = json['pj_512'];
-    pj2 = json['pj_2'];
-    pj12 = json['pj_12'];
-    pj34 = json['pj_34'];
-    idLancamento = json['id_lancamento'];
-    ultimaAlteracao = json['ultima_alteracao'];
-    idUsuarioUltimaAlteracao = json['id_usuario_ultima_alteracao'];
-    municipio = json['municipio'];
-    uf = json['uf'];
-    tecnologia = json['tecnologia'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['index'] = this.index;
-    data['id'] = this.id;
-    data['cod_ibge'] = this.codIbge;
-    data['id_uf'] = this.idUf;
-    data['id_municipio'] = this.idMunicipio;
-    data['id_tecnologia'] = this.idTecnologia;
-    data['pf_0'] = this.pf0;
-    data['pf_512'] = this.pf512;
-    data['pf_2'] = this.pf2;
-    data['pf_12'] = this.pf12;
-    data['pf_34'] = this.pf34;
-    data['pj_0'] = this.pj0;
-    data['pj_512'] = this.pj512;
-    data['pj_2'] = this.pj2;
-    data['pj_12'] = this.pj12;
-    data['pj_34'] = this.pj34;
-    data['id_lancamento'] = this.idLancamento;
-    data['ultima_alteracao'] = this.ultimaAlteracao;
-    data['id_usuario_ultima_alteracao'] = this.idUsuarioUltimaAlteracao;
-    data['municipio'] = this.municipio;
-    data['uf'] = this.uf;
-    data['tecnologia'] = this.tecnologia;
-    return data;
-  }
-}
 
 
 

@@ -2,6 +2,9 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:scm_engenharia_app/data/db_helper.dart';
+import 'package:scm_engenharia_app/data/tb_distribuicao_quantitativo_acessos_fisicos_servico.dart';
+import 'package:scm_engenharia_app/data/tb_ficha_sici.dart';
 import 'dart:async';
 import 'package:scm_engenharia_app/help/components.dart';
 import 'package:scm_engenharia_app/help/masked_text_controller.dart';
@@ -22,9 +25,17 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
   final _ScaffoldKey = GlobalKey<ScaffoldState>();
   ServicoMobileService _RestWebService = new ServicoMobileService();
   BuildContext dialogContext;
+  DBHelper dbHelper;
+  TbFichaSici _FichaSici = new TbFichaSici();
+  List<String> Uf = new List<String>();
+  String UfTxt,_StatusTipoWidget = "renderizar_ficha_sici";
+  TextEditingController _TxtControllerPeriodoDeReferencia = TextEditingController();
+  DateTime _DataSelecionada = DateTime.now();
+
+
+
   ModelFormularioSiciFustJson _ModelFormularioSiciFustJson = new ModelFormularioSiciFustJson();
-  List<ModelDistribuicaoFisicosServicoQuantitativoJson>
-  ListaModelDistribuicaoFisicosServicoQuantitativo = new List<ModelDistribuicaoFisicosServicoQuantitativoJson>();
+  List<TbDistribuicaoQuantitativoAcessosFisicosServico> ListaModelDistribuicaoFisicosServicoQuantitativo = new List<TbDistribuicaoQuantitativoAcessosFisicosServico>();
   StreamSubscription<ConnectivityResult> subscription;
   DateTime _DataSelecionadaConsulta = DateTime.now();
 
@@ -53,12 +64,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
   TextEditingController _TxtControllerCofinsPorc = TextEditingController();
   TextEditingController _TxtControllerObservacoes = TextEditingController();
 
-  List<String> Uf = new List<String>();
-  String UfTxt,_StatusTipoWidget = "renderizar_ficha_sici";
-  TextEditingController _TxtControllerPeriodoDeReferencia = TextEditingController();
 
-
-  DateTime _DataSelecionada = DateTime.now();
 
   OnSelecionarPeriodoDeReferencia(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -193,7 +199,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
 
         if(ListaModelDistribuicaoFisicosServicoQuantitativo.length == 0)
           throw ("Distribuição do quantitativo de acessos físicos em serviço e obrigatório,favor adicionar.");
-        _ModelFormularioSiciFustJson.distribuicaoFisicosServicoQuantitativo = ListaModelDistribuicaoFisicosServicoQuantitativo;
+       // _ModelFormularioSiciFustJson.distribuicaoFisicosServicoQuantitativo = ListaModelDistribuicaoFisicosServicoQuantitativo;
         Operacao _RestWeb = await _RestWebService.OnRealizarLancamentosSici(_ModelFormularioSiciFustJson);
         if (_RestWeb.erro)
           throw (_RestWeb.mensagem);
@@ -204,6 +210,53 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
          // Navigator.pop(dialogContext);
           OnAlertaInformacao(_RestWeb.mensagem);
         }
+      }
+    } catch (error) {
+      Navigator.pop(dialogContext);
+      OnAlertaInformacao(error);
+    }
+  }
+
+  Future<Null> OnSalvarFormularioDbLocal() async {
+    try {
+      var connectivityResult = await (Connectivity().checkConnectivity());
+      if (connectivityResult == ConnectivityResult.none) {
+      } else {
+        if (_TxtControllerCnpj.text.isEmpty)
+          throw ("O campo cnpj e obrigatório");
+        _FichaSici.periodoReferencia = DateTime.now().toString(); //_TxtControllerPeriodoReferencia.text;
+        _FichaSici.cnpj = _TxtControllerCnpj.text;
+        _FichaSici.razaoSocial = _TxtControllerRazaoSocial.text;
+        _FichaSici.nomeConsultor= _TxtControllerNomeConsultor.text;
+        _FichaSici.telefoneMovel= _TxtControllerTelefoneMovel.text;
+        _FichaSici.telefoneFixo= _TxtControllerTelefoneFixo.text;
+        _FichaSici.emailConsutor = _TxtControllerEmailConsutor.text;
+        _FichaSici.emailCliente = _TxtControllerEmailCliente.text;
+        _FichaSici.nomeCliente = _TxtControllerNomeCliente.text;
+        _FichaSici.mesReferencia = _TxtControllerMesReferencia.text;
+
+        _FichaSici.receitaBruta= _TxtControllerReceitaBruta.text;
+        _FichaSici.receitaLiquida= _TxtControllerReceitaLiquida.text;
+        _FichaSici.simples= _TxtControllerSimples.text;
+        _FichaSici.simplesPorc = _TxtControllerSimplesPorc.text;
+        _FichaSici.icms= _TxtControllerIcms.text;
+        _FichaSici.icmsPorc= _TxtControllerIcmsPorc.text;
+        _FichaSici.pis= _TxtControllerPis.text;
+        _FichaSici.pisPorc= _TxtControllerPisPorc.text;
+        _FichaSici.cofins= _TxtControllerCofins.text;
+        _FichaSici.cofinsPorc= _TxtControllerCofinsPorc.text;
+        _FichaSici.observacoes= _TxtControllerObservacoes.text;
+        if(ListaModelDistribuicaoFisicosServicoQuantitativo.length == 0)
+          throw ("Distribuição do quantitativo de acessos físicos em serviço e obrigatório,favor adicionar.");
+        else
+          {
+            Operacao _respLocal = await dbHelper.OnAddFichaSici(_FichaSici,ListaModelDistribuicaoFisicosServicoQuantitativo);
+            if (_respLocal.erro)
+              throw (_respLocal.mensagem);
+            else {
+              OnAlertaInformacao(_respLocal.mensagem);
+            }
+          }
       }
     } catch (error) {
       Navigator.pop(dialogContext);
@@ -286,7 +339,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
              {
                for (var prop in  widget.ModelFormularioSiciFust.distribuicaoFisicosServicoQuantitativo) {
                  prop.index = ListaModelDistribuicaoFisicosServicoQuantitativo.length++;
-                 ListaModelDistribuicaoFisicosServicoQuantitativo.add(prop);
+                // ListaModelDistribuicaoFisicosServicoQuantitativo.add(prop);
                }
              }
         }
@@ -297,6 +350,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
 
   @override
   void initState() {
+    dbHelper = DBHelper();
     super.initState();
     Inc();
   }
@@ -336,7 +390,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
           InkWell(
             onTap: () {
               FocusScope.of(context).requestFocus(new FocusNode());
-              OnSalvarFormulario();
+              OnSalvarFormularioDbLocal();
             },
             child: Center(child: Text(
               'Salvar   ',
@@ -471,7 +525,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text: ListaModelDistribuicaoFisicosServicoQuantitativo[index].codIbge,
+                          text: ListaModelDistribuicaoFisicosServicoQuantitativo[index].cod_ibge,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -499,7 +553,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text: ListaModelDistribuicaoFisicosServicoQuantitativo[index].pf0,
+                          text: ListaModelDistribuicaoFisicosServicoQuantitativo[index].pf_0,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -527,7 +581,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text: ListaModelDistribuicaoFisicosServicoQuantitativo[index].pf512,
+                          text: ListaModelDistribuicaoFisicosServicoQuantitativo[index].pf_512,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -555,7 +609,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text: ListaModelDistribuicaoFisicosServicoQuantitativo[index].pf2,
+                          text: ListaModelDistribuicaoFisicosServicoQuantitativo[index].pf_2,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -583,7 +637,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text: ListaModelDistribuicaoFisicosServicoQuantitativo[index].pf12,
+                          text: ListaModelDistribuicaoFisicosServicoQuantitativo[index].pf_12,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -611,7 +665,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text: ListaModelDistribuicaoFisicosServicoQuantitativo[index].pf34,
+                          text: ListaModelDistribuicaoFisicosServicoQuantitativo[index].pf_34,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -639,7 +693,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text: ListaModelDistribuicaoFisicosServicoQuantitativo[index].pj0,
+                          text: ListaModelDistribuicaoFisicosServicoQuantitativo[index].pj_0,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -667,7 +721,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text: ListaModelDistribuicaoFisicosServicoQuantitativo[index].pj512,
+                          text: ListaModelDistribuicaoFisicosServicoQuantitativo[index].pj_512,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -695,7 +749,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text: ListaModelDistribuicaoFisicosServicoQuantitativo[index].pj2,
+                          text: ListaModelDistribuicaoFisicosServicoQuantitativo[index].pj_2,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -723,7 +777,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text: ListaModelDistribuicaoFisicosServicoQuantitativo[index].pj12,
+                          text: ListaModelDistribuicaoFisicosServicoQuantitativo[index].pj_12,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -751,7 +805,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text: ListaModelDistribuicaoFisicosServicoQuantitativo[index].pj34,
+                          text: ListaModelDistribuicaoFisicosServicoQuantitativo[index].pj_34,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -793,7 +847,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                         onPressed: () {
                           FocusScope.of(context).requestFocus(new FocusNode());
                           Navigator.of(context, rootNavigator: true).push(
-                            new CupertinoPageRoute<ModelDistribuicaoFisicosServicoQuantitativoJson>(
+                            new CupertinoPageRoute<TbDistribuicaoQuantitativoAcessosFisicosServico>(
                               maintainState: false,
                               fullscreenDialog: true,
                               builder: (BuildContext context) =>
@@ -1234,7 +1288,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                         TextFormField(
                           controller: _TxtControllerTelefoneFixo,
                           textAlign: TextAlign.start,
-                          keyboardType: TextInputType.text,
+                          keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.done,
                           autofocus: false,
                           maxLength: 100,
@@ -1247,7 +1301,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                         TextFormField(
                           controller: _TxtControllerCnpj ,
                           textAlign: TextAlign.start,
-                          keyboardType: TextInputType.text,
+                          keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.done,
                           autofocus: false,
                           decoration: InputDecoration(
@@ -1272,7 +1326,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                         TextFormField(
                           controller: _TxtControllerTelefoneMovel,
                           textAlign: TextAlign.start,
-                          keyboardType: TextInputType.text,
+                          keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.done,
                           autofocus: false,
                           decoration: InputDecoration(
@@ -1504,7 +1558,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                             onTap: () async {
                               FocusScope.of(context).requestFocus(new FocusNode());
                               Navigator.of(context, rootNavigator: true).push(
-                                new CupertinoPageRoute<ModelDistribuicaoFisicosServicoQuantitativoJson>(
+                                new CupertinoPageRoute<TbDistribuicaoQuantitativoAcessosFisicosServico>(
                                   maintainState: false,
                                   fullscreenDialog: true,
                                   builder: (BuildContext context) =>

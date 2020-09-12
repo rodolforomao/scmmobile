@@ -1,16 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scm_engenharia_app/data/db_helper.dart';
+import 'package:scm_engenharia_app/data/tb_distribuicao_quantitativo_acessos_fisicos_servico.dart';
 import 'package:scm_engenharia_app/data/tb_tecnologia.dart';
 import 'package:scm_engenharia_app/data/tb_uf.dart';
 import 'package:scm_engenharia_app/data/tb_uf_municipio.dart';
-import 'package:scm_engenharia_app/models/model_formulario_sici_fust.dart';
 import 'package:scm_engenharia_app/models/operacao.dart';
 import 'package:scm_engenharia_app/pages/erro_informacao_page.dart';
 import 'package:scm_engenharia_app/pages/variavel_de_ambiente_page.dart';
 
 class DistribuicaoFisicosServicoQuantitativoPage extends StatefulWidget {
-  final ModelDistribuicaoFisicosServicoQuantitativoJson
+  final TbDistribuicaoQuantitativoAcessosFisicosServico
       sDistribuicaoFisicosServicoQuantitativo;
 
   DistribuicaoFisicosServicoQuantitativoPage(
@@ -24,9 +24,9 @@ class DistribuicaoFisicosServicoQuantitativoPage extends StatefulWidget {
 
 class _DistribuicaoFisicosServicoQuantitativoPageState
     extends State<DistribuicaoFisicosServicoQuantitativoPage> {
-  ModelDistribuicaoFisicosServicoQuantitativoJson
+  TbDistribuicaoQuantitativoAcessosFisicosServico
       _DistribuicaoFisicosServicoQuantitativo =
-      new ModelDistribuicaoFisicosServicoQuantitativoJson();
+      new TbDistribuicaoQuantitativoAcessosFisicosServico();
   DBHelper dbHelper;
   List<TbTecnologia> ListTecnologiadb = new List<TbTecnologia>();
   List<TbUf> ListUfdb = new List<TbUf>();
@@ -81,22 +81,22 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
         throw ("UF deve ser selecionada");
       else if (_TxtControllerPj_34.text.isEmpty)
         throw ("UF deve ser selecionada");
-      _DistribuicaoFisicosServicoQuantitativo.idUf = id_uf;
-      _DistribuicaoFisicosServicoQuantitativo.idMunicipio = id_municipio;
-      _DistribuicaoFisicosServicoQuantitativo.idTecnologia = id_tecnologia;
+      _DistribuicaoFisicosServicoQuantitativo.id_uf = id_uf;
+      _DistribuicaoFisicosServicoQuantitativo.id_municipio = id_municipio;
+      _DistribuicaoFisicosServicoQuantitativo.id_tecnologia = id_tecnologia;
 
-      _DistribuicaoFisicosServicoQuantitativo.codIbge =
+      _DistribuicaoFisicosServicoQuantitativo.cod_ibge =
           _TxtControllerCod_ibge.text;
-      _DistribuicaoFisicosServicoQuantitativo.pf0 = _TxtControllerPf_0.text;
-      _DistribuicaoFisicosServicoQuantitativo.pf512 = _TxtControllerPf_512.text;
-      _DistribuicaoFisicosServicoQuantitativo.pf2 = _TxtControllerPf_2.text;
-      _DistribuicaoFisicosServicoQuantitativo.pf12 = _TxtControllerPf_12.text;
-      _DistribuicaoFisicosServicoQuantitativo.pf34 = _TxtControllerPf_34.text;
-      _DistribuicaoFisicosServicoQuantitativo.pj0 = _TxtControllerPj_0.text;
-      _DistribuicaoFisicosServicoQuantitativo.pj512 = _TxtControllerPj_512.text;
-      _DistribuicaoFisicosServicoQuantitativo.pj2 = _TxtControllerPj_2.text;
-      _DistribuicaoFisicosServicoQuantitativo.pj12 = _TxtControllerPj_12.text;
-      _DistribuicaoFisicosServicoQuantitativo.pj34 = _TxtControllerPj_34.text;
+      _DistribuicaoFisicosServicoQuantitativo.pf_0 = _TxtControllerPf_0.text;
+      _DistribuicaoFisicosServicoQuantitativo.pf_512 = _TxtControllerPf_512.text;
+      _DistribuicaoFisicosServicoQuantitativo.pf_2 = _TxtControllerPf_2.text;
+      _DistribuicaoFisicosServicoQuantitativo.pf_12 = _TxtControllerPf_12.text;
+      _DistribuicaoFisicosServicoQuantitativo.pf_34 = _TxtControllerPf_34.text;
+      _DistribuicaoFisicosServicoQuantitativo.pj_0 = _TxtControllerPj_0.text;
+      _DistribuicaoFisicosServicoQuantitativo.pj_512 = _TxtControllerPj_512.text;
+      _DistribuicaoFisicosServicoQuantitativo.pj_2 = _TxtControllerPj_2.text;
+      _DistribuicaoFisicosServicoQuantitativo.pj_12 = _TxtControllerPj_12.text;
+      _DistribuicaoFisicosServicoQuantitativo.pj_34 = _TxtControllerPj_34.text;
       Navigator.pop(context, _DistribuicaoFisicosServicoQuantitativo);
     } catch (error) {
       OnAlertaInformacao(error);
@@ -253,7 +253,7 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
         } else {
           _DistribuicaoFisicosServicoQuantitativo = widget.sDistribuicaoFisicosServicoQuantitativo;
 
-          TbUf resUf = ListUfdb.where((i) => i.id == widget.sDistribuicaoFisicosServicoQuantitativo.idUf).first;
+          TbUf resUf = ListUfdb.where((i) => i.id == widget.sDistribuicaoFisicosServicoQuantitativo.id_uf).first;
           tbUf.idUfApp = resUf.idUfApp;
           tbUf.id = resUf.id;
           tbUf.uf = resUf.uf;
@@ -277,7 +277,7 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
                 ListUfMunicipiodb.add(prop);
               });
             }
-            TbUfMunicipio resMunicipio = ListUfMunicipiodb.where((i) => i.id == widget.sDistribuicaoFisicosServicoQuantitativo.idMunicipio).first;
+            TbUfMunicipio resMunicipio = ListUfMunicipiodb.where((i) => i.id == widget.sDistribuicaoFisicosServicoQuantitativo.id_municipio).first;
             tbUfMunicipio.idMunicipioApp = resMunicipio.idMunicipioApp;
             tbUfMunicipio.ufId = resMunicipio.ufId;
             tbUfMunicipio.uf = resMunicipio.uf;
@@ -288,33 +288,33 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
           }
 
           TbTecnologia resTecnologia = ListTecnologiadb.where((i) =>
-          i.id == widget.sDistribuicaoFisicosServicoQuantitativo.idTecnologia).first;
+          i.id == widget.sDistribuicaoFisicosServicoQuantitativo.id_tecnologia).first;
           tbTecnologia.idTecnologiaApp = resTecnologia.idTecnologiaApp;
           tbTecnologia.id = resTecnologia.id;
           tbTecnologia.tecnologia = resTecnologia.tecnologia;
           id_tecnologia = resTecnologia.id;
           _TxtControllerCod_ibge.text =
-              widget.sDistribuicaoFisicosServicoQuantitativo.codIbge;
+              widget.sDistribuicaoFisicosServicoQuantitativo.cod_ibge;
           _TxtControllerPf_0.text =
-              widget.sDistribuicaoFisicosServicoQuantitativo.pf0;
+              widget.sDistribuicaoFisicosServicoQuantitativo.pf_0;
           _TxtControllerPf_512.text =
-              widget.sDistribuicaoFisicosServicoQuantitativo.pf512;
+              widget.sDistribuicaoFisicosServicoQuantitativo.pf_512;
           _TxtControllerPf_2.text =
-              widget.sDistribuicaoFisicosServicoQuantitativo.pf2;
+              widget.sDistribuicaoFisicosServicoQuantitativo.pf_2;
           _TxtControllerPf_12.text =
-              widget.sDistribuicaoFisicosServicoQuantitativo.pf12;
+              widget.sDistribuicaoFisicosServicoQuantitativo.pf_12;
           _TxtControllerPf_34.text =
-              widget.sDistribuicaoFisicosServicoQuantitativo.pf34;
+              widget.sDistribuicaoFisicosServicoQuantitativo.pf_34;
           _TxtControllerPj_0.text =
-              widget.sDistribuicaoFisicosServicoQuantitativo.pj0;
+              widget.sDistribuicaoFisicosServicoQuantitativo.pj_0;
           _TxtControllerPj_512.text =
-              widget.sDistribuicaoFisicosServicoQuantitativo.pj512;
+              widget.sDistribuicaoFisicosServicoQuantitativo.pj_512;
           _TxtControllerPj_2.text =
-              widget.sDistribuicaoFisicosServicoQuantitativo.pj2;
+              widget.sDistribuicaoFisicosServicoQuantitativo.pj_2;
           _TxtControllerPj_12.text =
-              widget.sDistribuicaoFisicosServicoQuantitativo.pj12;
+              widget.sDistribuicaoFisicosServicoQuantitativo.pj_12;
           _TxtControllerPj_34.text =
-              widget.sDistribuicaoFisicosServicoQuantitativo.pj34;
+              widget.sDistribuicaoFisicosServicoQuantitativo.pj_34;
         }
       }
     } catch (error) {
