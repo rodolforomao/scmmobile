@@ -4,7 +4,6 @@ import 'package:scm_engenharia_app/data/tb_tecnologia.dart';
 import 'package:scm_engenharia_app/data/tb_uf.dart';
 import 'package:scm_engenharia_app/data/tb_uf_municipio.dart';
 import 'package:scm_engenharia_app/data/tb_usuario.dart';
-import 'package:scm_engenharia_app/models/model_usuario.dart';
 import 'package:scm_engenharia_app/models/operacao.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:io' as io;
@@ -35,8 +34,8 @@ class DBHelper {
     await db.execute('CREATE TABLE tbTecnologia (idTecnologiaApp INTEGER PRIMARY KEY AUTOINCREMENT, id TEXT , tecnologia TEXT)');
     await db.execute('CREATE TABLE tbUf (idUfApp INTEGER PRIMARY KEY AUTOINCREMENT,id TEXT,uf TEXT)');
     await db.execute('CREATE TABLE tbUfMunicipio (idMunicipioApp INTEGER PRIMARY KEY AUTOINCREMENT,ufId TEXT , uf TEXT,id TEXT,municipio TEXT)');
-    await db.execute('CREATE TABLE tbDistribuicaoQuantitativoAcessosFisicosServico (idDistribuicaoQuantitativoAcessosFisicosServicoApp INTEGER PRIMARY KEY AUTOINCREMENT,idFichaSiciApp TEXT,id TEXT ,cod_ibge TEXT,id_uf TEXT,id_municipio TEXT,id_tecnologia TEXT,pf_0 TEXT,pf_512 TEXT,pf_2 TEXT,pf_12 TEXT,pf_34 TEXT,pj_0 TEXT,pj_512 TEXT,pj_2 TEXT,pj_12 TEXT,pj_34 TEXT,id_lancamento TEXT,ultima_alteracao TEXT,id_usuario_ultima_alteracao TEXT,municipio TEXT,uf TEXT,tecnologia TEXT)');
-    await db.execute('CREATE TABLE tbFichaSici (idFichaSiciApp INTEGER PRIMARY KEY AUTOINCREMENT,idEmpresa TEXT,idLancamento TEXT ,periodoReferencia TEXT,razaoSocial TEXT,nomeCliente TEXT,nomeConsultor TEXT,telefoneFixo TEXT,cnpj TEXT,mesReferencia TEXT,telefoneMovel TEXT,emailCliente TEXT,emailConsutor TEXT,receitaBruta TEXT,idFinanceiro TEXT,simples TEXT,simplesPorc TEXT,icms TEXT,icmsPorc TEXT,pis TEXT,pisPorc TEXT,cofins TEXT,cofinsPorc TEXT,receitaLiquida TEXT,observacoes TEXT)');
+    await db.execute('CREATE TABLE tbDistribuicaoQuantitativoAcessosFisicosServico (idDistribuicaoQuantitativoAcessosFisicosServicoApp INTEGER PRIMARY KEY AUTOINCREMENT,idFichaSiciApp NUMERIC,id TEXT ,cod_ibge TEXT,id_uf TEXT,id_municipio TEXT,id_tecnologia TEXT,pf_0 TEXT,pf_512 TEXT,pf_2 TEXT,pf_12 TEXT,pf_34 TEXT,pj_0 TEXT,pj_512 TEXT,pj_2 TEXT,pj_12 TEXT,pj_34 TEXT,id_lancamento TEXT,ultima_alteracao TEXT,id_usuario_ultima_alteracao TEXT,municipio TEXT,uf TEXT,tecnologia TEXT)');
+    await db.execute('CREATE TABLE tbFichaSici (idFichaSiciApp INTEGER PRIMARY KEY AUTOINCREMENT,isSincronizar TEXT, idEmpresa TEXT,idLancamento TEXT ,periodoReferencia TEXT,razaoSocial TEXT,nomeCliente TEXT,nomeConsultor TEXT,telefoneFixo TEXT,cnpj TEXT,mesReferencia TEXT,telefoneMovel TEXT,emailCliente TEXT,emailConsutor TEXT,receitaBruta TEXT,idFinanceiro TEXT,simples TEXT,simplesPorc TEXT,icms TEXT,icmsPorc TEXT,pis TEXT,pisPorc TEXT,cofins TEXT,cofinsPorc TEXT,receitaLiquida TEXT,observacoes TEXT)');
   }
 
   Future<Operacao> limparTabelas(int idUsuario) async {
@@ -553,7 +552,7 @@ class DBHelper {
 
   // Formulário Sici - Fust ---------------------------------------------------------------------------
 
-  Future<Operacao> OnAddFichaSici(TbFichaSici _Modelo , List<TbDistribuicaoQuantitativoAcessosFisicosServico> distribuicaoFisicosServicoQuantitativo ) async {
+  Future<Operacao> OnAddFichaSici(TbFichaSici _Modelo) async {
     Operacao _Operacao = new Operacao();
     try {
       var dbClient = await db;
@@ -571,7 +570,7 @@ class DBHelper {
         );
         _Modelo.idFichaSiciApp = id;
       }
-      for (var prop in distribuicaoFisicosServicoQuantitativo) {
+      for (var prop in _Modelo.distribuicaoFisicosServicoQuantitativo) {
         prop.idFichaSiciApp = _Modelo.idFichaSiciApp;
         Operacao _respLocal = await OnAddDistribuicaoQuantitativoAcessosFisicosServico(prop);
         if (_respLocal.erro)
@@ -626,12 +625,20 @@ class DBHelper {
       final dbClient = await db;
       String Query = 'SELECT * FROM tbFichaSici';
       var results = await dbClient.rawQuery(Query);
-      List<TbUfMunicipio> listUfMunicipio = [];
+      List<TbFichaSici> listFichaSici = [];
       if (results.length > 0) {
         for (int i = 0; i < results.length; i++) {
-          listUfMunicipio.add(TbUfMunicipio.fromJson(results[i]));
+          listFichaSici.add(TbFichaSici.fromJson(results[i]));
+          Operacao _FichaSiciLocal = await onSelecionarDistribuicaoQuantitativoAcessosFisicosServicoByIdFichaSiciApp(listFichaSici[i].idFichaSiciApp);
+          if (_FichaSiciLocal.erro)
+            throw (_FichaSiciLocal.mensagem);
+          else if (_FichaSiciLocal.resultado != null) {
+            List<TbDistribuicaoQuantitativoAcessosFisicosServico>resp = _FichaSiciLocal.resultado;
+            listFichaSici[i].distribuicaoFisicosServicoQuantitativo = resp;
+          }
+
         }
-        _Operacao.resultado = listUfMunicipio;
+        _Operacao.resultado = listFichaSici;
       }
       else
         _Operacao.resultado = null;
@@ -697,21 +704,21 @@ class DBHelper {
     return _Operacao;
   }
 
-  Future<Operacao> onSelecionarDistribuicaoQuantitativoAcessosFisicosServicoByIdFichaSiciApp(String Id) async {
+  Future<Operacao> onSelecionarDistribuicaoQuantitativoAcessosFisicosServicoByIdFichaSiciApp(int Id) async {
     Operacao _Operacao = new Operacao();
     try {
       _Operacao.erro = false;
       _Operacao.mensagem = "";
       _Operacao.resultado = null;
       final dbClient = await db;
-      String Query = 'SELECT * FROM tbDistribuicaoQuantitativoAcessosFisicosServico WHERE idFichaSiciApp = ' + Id;
+      String Query = 'SELECT * FROM tbDistribuicaoQuantitativoAcessosFisicosServico WHERE idFichaSiciApp = ' + Id.toString();
       var results = await dbClient.rawQuery(Query);
-      List<TbUfMunicipio> listUfMunicipio = [];
+      List<TbDistribuicaoQuantitativoAcessosFisicosServico> listDistribuicaoQuantitativoAcessosFisicosServico = [];
       if (results.length > 0) {
         for (int i = 0; i < results.length; i++) {
-          listUfMunicipio.add(TbUfMunicipio.fromJson(results[i]));
+          listDistribuicaoQuantitativoAcessosFisicosServico.add(TbDistribuicaoQuantitativoAcessosFisicosServico.fromJson(results[i]));
         }
-        _Operacao.resultado = listUfMunicipio;
+        _Operacao.resultado = listDistribuicaoQuantitativoAcessosFisicosServico;
       }
       else
         _Operacao.resultado = null;

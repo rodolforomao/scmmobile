@@ -30,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
       var connectivityResult = await (Connectivity().checkConnectivity());
       if (connectivityResult == ConnectivityResult.none)
        {
-
+         OnAlertaInformacao("Não há conexão com a Internet");
        }
       else
       {

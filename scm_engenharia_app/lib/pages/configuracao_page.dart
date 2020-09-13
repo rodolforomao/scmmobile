@@ -165,7 +165,7 @@ class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
                   style: TextStyle(
                       fontSize: 18.0,
                       color: Color(0xff333333),
-                      fontFamily: "lato-regular"),
+                      fontFamily: "avenir-lt-std-roman"),
                 ),
                 leading: Container(
                   padding: EdgeInsets.only(right: 12.0),
@@ -214,7 +214,7 @@ class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
                     style: TextStyle(
                         fontSize: 18.0,
                         color: Color(0xff333333),
-                        fontFamily: "Lato-Regular"),
+                        fontFamily: "avenir-lt-std-roman"),
                   ),
                   // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
                   trailing: Icon(Icons.keyboard_arrow_right,
@@ -250,7 +250,7 @@ class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
                     style: TextStyle(
                         fontSize: 18.0,
                         color: Color(0xff333333),
-                        fontFamily: "Lato-Regular"),
+                        fontFamily: "avenir-lt-std-roman"),
                   ),
                   // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
                   trailing: Icon(Icons.keyboard_arrow_right,
@@ -286,7 +286,7 @@ class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
                     style: TextStyle(
                         fontSize: 18.0,
                         color: Color(0xff333333),
-                        fontFamily: "Lato-Regular"),
+                        fontFamily: "avenir-lt-std-roman"),
                   ),
                   // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
                   trailing: Icon(Icons.keyboard_arrow_right,
@@ -315,7 +315,7 @@ class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
                     style: TextStyle(
                         fontSize: 18.0,
                         color: Color(0xff212529),
-                        fontFamily: "Lato-Regular"),
+                        fontFamily: "avenir-lt-std-roman"),
                   ),
                   // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
                   trailing: Icon(Icons.keyboard_arrow_right,

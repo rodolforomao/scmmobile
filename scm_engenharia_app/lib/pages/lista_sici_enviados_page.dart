@@ -1,6 +1,8 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:scm_engenharia_app/data/db_helper.dart';
+import 'package:scm_engenharia_app/data/tb_ficha_sici.dart';
 import 'package:scm_engenharia_app/data/tb_usuario.dart';
 import 'dart:async';
 import 'package:scm_engenharia_app/help/servico_mobile_service.dart';
@@ -10,8 +12,10 @@ import 'package:scm_engenharia_app/pages/formulario_sici_fust_page.dart';
 
 class ListaSiciEnviadosPage extends StatefulWidget {
   final TbUsuario UsuarioLogado;
-  ListaSiciEnviadosPage({Key key, @required this.UsuarioLogado}) : super(key: key);
-  
+
+  ListaSiciEnviadosPage({Key key, @required this.UsuarioLogado})
+      : super(key: key);
+
   @override
   _ListaSiciEnviadosPageState createState() => _ListaSiciEnviadosPageState();
 }
@@ -19,107 +23,117 @@ class ListaSiciEnviadosPage extends StatefulWidget {
 class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
   final _ScaffoldKey = GlobalKey<ScaffoldState>();
   ServicoMobileService _RestWebService = new ServicoMobileService();
-  List<ModelFormularioSiciFustJson> ListaModelFormularioSiciFustModelo = new List<ModelFormularioSiciFustJson>();
-
+  List<TbFichaSici> ListaFichaSici = new List<TbFichaSici>();
+  DBHelper dbHelper;
   String _StatusTipoWidget = "nao_existe_sici_cadastrado", ErroInformacao = "";
   BuildContext dialogContext;
   StreamSubscription<ConnectivityResult> subscription;
-
 
   Future<Null> IncRestWeb() async {
     try {
       var connectivityResult = await (Connectivity().checkConnectivity());
       if (connectivityResult == ConnectivityResult.none) {
-        if (ListaModelFormularioSiciFustModelo.length > 0) {
+        if (ListaFichaSici.length > 0) {
           setState(() {
             _StatusTipoWidget = "renderizar_sici";
           });
           OnAlertaInformacao("Não há conexão com a internet");
-        } else
-        {
+        } else {
           setState(() {
             _StatusTipoWidget = "sem_internet";
           });
         }
       } else {
         OnRealizandoOperacao("Realizando busca de fichas sici");
-        Operacao _RestWeb = await _RestWebService.OnRecuperaLancamentosSici(widget.UsuarioLogado);
+        Operacao _RestWeb = await _RestWebService.OnRecuperaLancamentosSici(
+            widget.UsuarioLogado);
         if (_RestWeb.erro)
           throw (_RestWeb.mensagem);
         else if (_RestWeb.resultado == null)
           throw (_RestWeb.mensagem);
-        else
-        {
+        else {
           var data = _RestWeb.resultado as List;
           setState(() {
-            ListaModelFormularioSiciFustModelo = data.map<ModelFormularioSiciFustJson>((json) => ModelFormularioSiciFustJson.fromJson(json)).toList();
-            if (ListaModelFormularioSiciFustModelo.length > 0)
+            List<ModelFormularioSiciFustJson>
+                ListaModelFormularioSiciFustModelo = data
+                    .map<ModelFormularioSiciFustJson>(
+                        (json) => ModelFormularioSiciFustJson.fromJson(json))
+                    .toList();
+            if (ListaModelFormularioSiciFustModelo.length > 0) {
+              for (var prop in ListaModelFormularioSiciFustModelo) {
+                TbFichaSici ModelFichaSici = new TbFichaSici();
+                ModelFichaSici.idFichaSiciApp = null;
+                ModelFichaSici.idEmpresa = prop.idEmpresa;
+                ModelFichaSici.isSincronizar = "N";
+                ModelFichaSici.idLancamento = prop.idLancamento;
+                ModelFichaSici.periodoReferencia = prop.periodoReferencia;
+                ModelFichaSici.razaoSocial = prop.razaoSocial;
+                ModelFichaSici.nomeCliente = prop.nomeCliente;
+                ModelFichaSici.nomeConsultor = prop.nomeConsultor;
+                ModelFichaSici.telefoneFixo = prop.telefoneFixo;
+                ModelFichaSici.cnpj = prop.cnpj;
+                ModelFichaSici.mesReferencia = prop.mesReferencia;
+                ModelFichaSici.telefoneMovel = prop.telefoneMovel;
+                ModelFichaSici.emailCliente = prop.emailCliente;
+                ModelFichaSici.emailConsutor = prop.emailConsutor;
+                ModelFichaSici.receitaBruta = prop.receitaBruta;
+                //ModelFichaSici.idFinanceiro  = prop.idFinanceiro; Não tem
+                ModelFichaSici.simples = prop.simples;
+                ModelFichaSici.simplesPorc = prop.simplesPorc;
+                ModelFichaSici.icms = prop.icms;
+                ModelFichaSici.icmsPorc = prop.icmsPorc;
+                ModelFichaSici.pis = prop.pis;
+                ModelFichaSici.pisPorc = prop.pisPorc;
+                ModelFichaSici.cofins = prop.cofins;
+                ModelFichaSici.cofinsPorc = prop.cofinsPorc;
+                ModelFichaSici.receitaLiquida = prop.receitaLiquida;
+                ModelFichaSici.observacoes = prop.observacoes;
+                ModelFichaSici.distribuicaoFisicosServicoQuantitativo = prop.distribuicaoFisicosServicoQuantitativo;
+                ListaFichaSici.add(ModelFichaSici);
+              }
               _StatusTipoWidget = "renderizar_sici";
-            else
+            } else
               _StatusTipoWidget = "nao_existe_sici_cadastrado";
-            var s = ListaModelFormularioSiciFustModelo;
           });
           Navigator.pop(dialogContext);
         }
       }
     } catch (error) {
       Navigator.pop(dialogContext);
-      if (ListaModelFormularioSiciFustModelo.length > 0) {
+      if (ListaFichaSici.length > 0) {
         setState(() {
           _StatusTipoWidget = "renderizar_sici";
         });
         OnAlertaInformacao(error);
-      } else
-       {
-         setState(() {
-           _StatusTipoWidget = "erro_informacao";
-           ErroInformacao = error.toString();
-         });
-       }
+      } else {
+        setState(() {
+          _StatusTipoWidget = "erro_informacao";
+          ErroInformacao = error.toString();
+        });
+      }
     }
   }
 
-  Future<Null> IncLocal() async {
+  Future<Null> Inc() async {
     try {
-      var connectivityResult = await (Connectivity().checkConnectivity());
-      if (connectivityResult == ConnectivityResult.none) {
-        if (ListaModelFormularioSiciFustModelo.length > 0) {
-          setState(() {
-            _StatusTipoWidget = "renderizar_sici";
-          });
-          OnAlertaInformacao("Não há conexão com a internet");
-        } else
-        {
-          setState(() {
-            _StatusTipoWidget = "sem_internet";
-          });
-        }
-      } else {
-        OnRealizandoOperacao("Realizando busca de Feichas sici");
-        Operacao _RestWeb = await _RestWebService.OnRecuperaLancamentosSici(widget.UsuarioLogado);
-        if (_RestWeb.erro)
-          throw (_RestWeb.mensagem);
-        else if (_RestWeb.resultado == null)
-          throw (_RestWeb.mensagem);
-        else
-        {
-          var data = _RestWeb.resultado as List;
-          setState(() {
-            ListaModelFormularioSiciFustModelo = data.map<ModelFormularioSiciFustJson>((json) => ModelFormularioSiciFustJson.fromJson(json)).toList();
-            var s = ListaModelFormularioSiciFustModelo;
-          });
-          Navigator.pop(dialogContext);
-        }
-      }
+      Operacao _FichaSiciLocal = await dbHelper.onSelecionarFichaSici();
+      if (_FichaSiciLocal.erro)
+        throw (_FichaSiciLocal.mensagem);
+      else if (_FichaSiciLocal.resultado != null) {
+        var data = _FichaSiciLocal.resultado;
+        setState(() {
+          ListaFichaSici = _FichaSiciLocal.resultado;
+          _StatusTipoWidget = "renderizar_sici";
+        });
+      } else {}
     } catch (error) {
       Navigator.pop(dialogContext);
-      if (ListaModelFormularioSiciFustModelo.length > 0) {
+      if (ListaFichaSici.length > 0) {
         setState(() {
           _StatusTipoWidget = "renderizar_sici";
         });
         OnAlertaInformacao(error);
-      } else
-      {
+      } else {
         setState(() {
           _StatusTipoWidget = "erro_informacao";
           ErroInformacao = error.toString();
@@ -136,7 +150,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
         return Dialog(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(8.0))),
-          child:  Column(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
@@ -160,8 +174,9 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                   Divider(
                     color: Colors.black12,
                   ),
-                  Padding(padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-                    child:  Text(
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                    child: Text(
                       Mensagem,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 4,
@@ -237,7 +252,8 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
               ),
               Expanded(
                 child: Container(
-                  margin: EdgeInsets.only(left: 10.0, top: 20.0, bottom: 20.0, right: 5.0),
+                  margin: EdgeInsets.only(
+                      left: 10.0, top: 20.0, bottom: 20.0, right: 5.0),
                   child: Text(
                     txtInformacao,
                     softWrap: true,
@@ -260,24 +276,24 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
   @override
   void initState() {
     super.initState();
-    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+    dbHelper = DBHelper();
+    Inc();
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
       if (result == ConnectivityResult.none) {
-        if (ListaModelFormularioSiciFustModelo.length > 0) {
+        if (ListaFichaSici.length > 0) {
           setState(() {
             _StatusTipoWidget = "renderizar_sici";
           });
-        } else
-        {
+        } else {
           setState(() {
             _StatusTipoWidget = "sem_internet";
           });
         }
-      } else {
-
-      }
-
+      } else {}
     });
-     IncRestWeb();
+    IncRestWeb();
   }
 
   @override
@@ -315,9 +331,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
               color: Color(0xffFFFFFF),
               fontFamily: "open-sans-regular"),
         ),
-        actions: <Widget>[
-
-        ],
+        actions: <Widget>[],
       ),
       body: _TipoWidget(context),
     );
@@ -364,12 +378,14 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                       fontFamily: "avenir-lt-std-roman",
                       fontSize: 15.0,
                       color: Colors.black54,
-                    ),),
+                    ),
+                  ),
                   SizedBox(height: 20.0),
                   Center(
                     child: InkWell(
                       onTap: () async {
-                        var connectivityResult = await (Connectivity().checkConnectivity());
+                        var connectivityResult =
+                            await (Connectivity().checkConnectivity());
                         if (connectivityResult == ConnectivityResult.none) {
                           setState(() {
                             _StatusTipoWidget = "sem_internet";
@@ -384,7 +400,8 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                             content: SizedBox(
                               height: 30.0,
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
@@ -402,8 +419,8 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                   ),
                                   SizedBox(
                                     child: CircularProgressIndicator(
-                                      valueColor:
-                                      AlwaysStoppedAnimation<Color>(Color(0xff2fdf84)),
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          Color(0xff2fdf84)),
                                     ),
                                     height: 30.0,
                                     width: 30.0,
@@ -473,7 +490,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                       return ListView.builder(
                         scrollDirection: Axis.vertical,
                         shrinkWrap: true,
-                        itemCount: ListaModelFormularioSiciFustModelo.length,
+                        itemCount: ListaFichaSici.length,
                         itemBuilder: ListaSiciCard,
                       );
                     },
@@ -523,7 +540,8 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                       fontFamily: "avenir-lt-std-roman",
                       fontSize: 15.0,
                       color: Colors.black54,
-                    ),),
+                    ),
+                  ),
                   SizedBox(height: 20.0),
                   Center(
                     child: InkWell(
@@ -601,7 +619,8 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                       fontFamily: "avenir-lt-std-roman",
                       fontSize: 15.0,
                       color: Colors.black54,
-                    ),),
+                    ),
+                  ),
                   SizedBox(height: 20.0),
                   Center(
                     child: InkWell(
@@ -641,200 +660,413 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
   }
 
   Container ListaSiciCard(BuildContext context, int index) => Container(
-    margin: EdgeInsets.all(0.0),
-    padding: EdgeInsets.fromLTRB(5.0,0.0,5.0,0.0),
-    height: 210,
-    color: Color(0xffFFFFFF),
-    width: MediaQuery.of(context).size.width,
-    child:Card(
-      elevation: 7.0,
-      color: Color(0xffedecf1),
-      child: Container(
+        margin: EdgeInsets.all(0.0),
+        padding: EdgeInsets.fromLTRB(5.0, 0.0, 5.0, 0.0),
+        height: 210,
+        color: Color(0xffFFFFFF),
+        width: MediaQuery.of(context).size.width,
+        child: Card(
+          elevation: 7.0,
           color: Color(0xffedecf1),
-          margin: EdgeInsets.all(0.0),
-          padding: EdgeInsets.all(0.0),
-          width: MediaQuery.of(context).size.width,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(
-                height: 10.0,
-              ),
-              SizedBox(
-                height: 110.0,
-                child: ListTile(
-                  onTap: () {
-                    FocusScope.of(context).requestFocus(new FocusNode());
-                    Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                          builder: (context) => FormularioSiciFustPage(ModelFormularioSiciFust:ListaModelFormularioSiciFustModelo[index]),
-                        ));
-                  },
-                  contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
-                  title: Flexible(
-                    child: RichText(
-                        textAlign: TextAlign.start,
-                        softWrap: false,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        text: TextSpan(children: [
-                          TextSpan(
-                            text: 'Período referencia :  ',
-                            style: TextStyle(
-                                fontSize: 18.0,
-                                color: Color(0xff333333),
-                                fontFamily: "avenir-lt-std-medium"),
-                          ),
-                          TextSpan(
-                            text: ListaModelFormularioSiciFustModelo[index].periodoReferencia,
-                            style: TextStyle(
-                                fontSize: 20.0,
-                                color: Color(0xff333333),
-                                fontFamily: "avenir-lt-std-medium"),
-                          ),
-
-                        ])),
+          child: Container(
+              color: Color(0xffedecf1),
+              margin: EdgeInsets.all(0.0),
+              padding: EdgeInsets.all(0.0),
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(
+                    height: 10.0,
                   ),
-                  subtitle: Container(
-                      height: 70,
-                      child: FittedBox(
-                          fit: BoxFit.none,
-                          alignment: Alignment.centerLeft,
-                          child : Container(
-                            padding: EdgeInsets.fromLTRB(0.0 ,5.0,0.0,5.0),
-                            child: Column(
-                                children: <Widget>[
+                  SizedBox(
+                    height: 110.0,
+                    child: ListTile(
+                      onTap: () {
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                      },
+                      contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+                      title: Flexible(
+                        child: RichText(
+                            textAlign: TextAlign.start,
+                            softWrap: false,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            text: TextSpan(children: [
+                              TextSpan(
+                                text: 'Período referencia :  ',
+                                style: TextStyle(
+                                    fontSize: 18.0,
+                                    color: Color(0xff333333),
+                                    fontFamily: "avenir-lt-std-medium"),
+                              ),
+                              TextSpan(
+                                text: ListaFichaSici[index].periodoReferencia,
+                                style: TextStyle(
+                                    fontSize: 20.0,
+                                    color: Color(0xff333333),
+                                    fontFamily: "avenir-lt-std-medium"),
+                              ),
+                            ])),
+                      ),
+                      subtitle: Container(
+                          height: 70,
+                          child: FittedBox(
+                              fit: BoxFit.none,
+                              alignment: Alignment.centerLeft,
+                              child: Container(
+                                padding:
+                                    EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
+                                child: Column(children: <Widget>[
                                   SizedBox(
                                     height: 10.0,
                                   ),
                                   Text(
-                                      ListaModelFormularioSiciFustModelo[index].razaoSocial,
+                                    ListaFichaSici[index].razaoSocial,
                                     style: TextStyle(
                                         fontSize: 17.0,
                                         color: Color(0xff333333),
-                                        fontFamily: "avenir-lt-std-medium-oblique"),
+                                        fontFamily:
+                                            "avenir-lt-std-medium-oblique"),
                                   ),
                                   SizedBox(
                                     height: 5.0,
                                   ),
                                   Text(
-                                    ListaModelFormularioSiciFustModelo[index].observacoes,
+                                    ListaFichaSici[index].observacoes,
                                     style: TextStyle(
                                         fontSize: 15.0,
                                         color: Color(0xff333333),
-                                        fontFamily: "avenir-lt-std-medium-oblique"),
+                                        fontFamily:
+                                            "avenir-lt-std-medium-oblique"),
                                   ),
                                   SizedBox(
                                     height: 5.0,
                                   ),
-                                ]
-                            ),
-                          )
-                      )),),
-              ),
-              Expanded(
-                child: Container(
-                  color: Color(0xffFFFFFF),
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      Container(
-                        color: Color(0xffFFFFFF),
-                        //width: MediaQuery.of(context).size.width / 3,
-                        child: InkWell(
-                          onTap: () {
-
-                          },
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Icon(Icons.file_upload,
-                                  size: 25, color: Color(0xFF000000)),
-                              SizedBox(height: 10.0),
-                              Text(
-                                "Upload",
-                                style: TextStyle(
-                                    fontSize: 15.0,
-                                    color: Color(0xff333333),
-                                    fontFamily: "avenir-lt-std-roman"),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      VerticalDivider(
-                        color: Color(0xFF000000),
-                      ),
-                      Container(
-                        color: Color(0xffFFFFFF),
-                        //width: MediaQuery.of(context).size.width / 3,
-                        child: InkWell(
-                          onTap: () {
-
-                          },
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Icon(Icons.delete_outline,
-                                  size: 25, color: Color(0xFF000000)),
-                              SizedBox(height: 10.0),
-                              Text(
-                                "Remover",
-                                style: TextStyle(
-                                    fontSize: 15.0,
-                                    color: Color(0xff333333),
-                                    fontFamily: "avenir-lt-std-roman"),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      VerticalDivider(
-                        color: Color(0xFF000000),
-                      ),
-                      Container(
-                        color: Color(0xffFFFFFF),
-                        //width: MediaQuery.of(context).size.width / 3,
-                        child: InkWell(
-                          onTap: () {
-                            FocusScope.of(context).requestFocus(new FocusNode());
-                            Navigator.push(
-                                context,
-                                CupertinoPageRoute(
-                                  builder: (context) => FormularioSiciFustPage(ModelFormularioSiciFust:ListaModelFormularioSiciFustModelo[0]),
-                                ));
-                          },
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Icon(Icons.visibility,
-                                  size: 25, color: Color(0xFF000000)),
-                              SizedBox(height: 10.0),
-                              Text(
-                                "Visualizar",
-                                style: TextStyle(
-                                    fontSize: 15.0,
-                                    color: Color(0xff333333),
-                                    fontFamily: "avenir-lt-std-roman"),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
+                                ]),
+                              ))),
+                    ),
                   ),
-                ),
-              ),
-            ],
-          )),
-    ),
-  );
+                  ListaFichaSici[index].isSincronizar == "S"
+                      ? Expanded(
+                          child: Container(
+                            color: Color(0xffFFFFFF),
+                            width: MediaQuery.of(context).size.width,
+                            padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
+                                Container(
+                                  color: Color(0xffFFFFFF),
+                                  //width: MediaQuery.of(context).size.width / 3,
+                                  child: InkWell(
+                                    onTap: () async {
+                                      try {
+                                        var connectivityResult = await (Connectivity().checkConnectivity());
+                                        if (connectivityResult == ConnectivityResult.none) {
+                                          OnAlertaInformacao("Por favor conecte-se à internet.");
+                                        } else {
+                                          OnRealizandoOperacao("Realizando cadastro.");
+                                          Operacao _RestWeb = await _RestWebService.OnRealizarLancamentosSici(ListaFichaSici[index]);
+                                          if (_RestWeb.erro)
+                                            throw (_RestWeb.mensagem);
+                                          else if (_RestWeb.resultado == null)
+                                            throw (_RestWeb.mensagem);
+                                          else {
+                                            Operacao _respLocal = await dbHelper.OnDeletarFichaSici(ListaFichaSici[index].idFichaSiciApp);
+                                            if (_respLocal.erro)
+                                              throw (_respLocal.mensagem);
+                                            else {
+                                              setState(() {
+                                                ListaFichaSici.remove([index]);
+                                              });
+                                              IncRestWeb();
+                                            }
+                                            OnAlertaInformacao(_RestWeb.mensagem);
+                                          }
+                                        }
+                                      } catch (error) {
+                                        if(dialogContext != null)
+                                        Navigator.pop(dialogContext);
+                                        OnAlertaInformacao(error);
+                                      }
+
+
+                                    },
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Icon(Icons.file_upload,
+                                            size: 25, color: Color(0xFF000000)),
+                                        SizedBox(height: 10.0),
+                                        Text(
+                                          "Upload",
+                                          style: TextStyle(
+                                              fontSize: 15.0,
+                                              color: Color(0xff333333),
+                                              fontFamily:
+                                                  "avenir-lt-std-roman"),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                VerticalDivider(
+                                  color: Color(0xFF000000),
+                                ),
+                                Container(
+                                  color: Color(0xffFFFFFF),
+                                  //width: MediaQuery.of(context).size.width / 3,
+                                  child: InkWell(
+                                    onTap: () {
+                                      showDialog(
+                                        context: context,
+                                        barrierDismissible: false,
+                                        builder: (BuildContext context) {
+                                          return Dialog(
+                                              child: new Padding(
+                                                padding: EdgeInsets.all(25.0),
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    Container(
+                                                      margin: EdgeInsets.fromLTRB(
+                                                          0.0, 10.0, 0.0, 15.0),
+                                                      height: 50.0,
+                                                      child: new Text(
+                                                        "Deseja realmente remover ?",
+                                                        textAlign: TextAlign.start,
+                                                        softWrap: false,
+                                                        maxLines: 2,
+                                                        overflow: TextOverflow.ellipsis,
+                                                        style: TextStyle(
+                                                            fontFamily: 'open-sans-regular',
+                                                            fontSize: 17.0,
+                                                            color: Color(0xFF000000)),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      margin: EdgeInsets.fromLTRB(
+                                                          0.0, 10.0, 0.0, 15.0),
+                                                      child: new Row(
+                                                        mainAxisAlignment:
+                                                        MainAxisAlignment.center,
+                                                        crossAxisAlignment:
+                                                        CrossAxisAlignment.center,
+                                                        mainAxisSize: MainAxisSize.max,
+                                                        children: <Widget>[
+                                                          OutlineButton(
+                                                            color: Color(0xFFf2f2f2),
+                                                            //`Icon` to display
+                                                            child: Text('Sim',
+                                                                style: TextStyle(
+                                                                  fontWeight: FontWeight.w500,
+                                                                  fontFamily:
+                                                                  'avenir-lt-std-roman',
+                                                                  color: Color(0xff018a8a),
+                                                                  fontSize: 16.0,
+                                                                )),
+                                                            onPressed: () async {
+                                                              FocusScope.of(context).requestFocus(new FocusNode());
+                                                              Operacao _respLoca = await dbHelper.OnDeletarFichaSici(ListaFichaSici[index].idFichaSiciApp);
+                                                              if (_respLoca.erro)
+                                                                throw (_respLoca.mensagem);
+                                                              else {
+                                                                setState(() {
+                                                                  ListaFichaSici.remove([index]);
+                                                                });
+                                                                Navigator.pop(context);
+                                                                OnAlertaInformacao("Ficha removida com sucesso");
+                                                              }
+                                                            },
+                                                            //callback when button is clicked
+                                                            borderSide: BorderSide(
+                                                              color: Color(0xFFf2f2f2),
+                                                              //Color of the border
+                                                              style: BorderStyle.solid,
+                                                              //Style of the border
+                                                              width: 1.0, //width of the border
+                                                            ),
+                                                          ),
+                                                          SizedBox(width: 15.0),
+                                                          FlatButton(
+                                                            color: Color(0xff018a8a),
+                                                            //`Icon` to display
+                                                            child: Text('Não',
+                                                                style: TextStyle(
+                                                                  fontWeight: FontWeight.w500,
+                                                                  fontFamily:
+                                                                  'avenir-lt-std-roman',
+                                                                  color: Color(0xffFFFFFF),
+                                                                  fontSize: 16.0,
+                                                                )),
+                                                            //`Text` to display
+                                                            onPressed: () {
+                                                              Navigator.pop(context);
+                                                            },
+                                                            shape: new RoundedRectangleBorder(
+                                                              borderRadius:
+                                                              new BorderRadius.circular(
+                                                                  5.0),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ));
+                                        },
+                                      );
+                                    },
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Icon(Icons.delete_outline,
+                                            size: 25, color: Color(0xFF000000)),
+                                        SizedBox(height: 10.0),
+                                        Text(
+                                          "Remover",
+                                          style: TextStyle(
+                                              fontSize: 15.0,
+                                              color: Color(0xff333333),
+                                              fontFamily:
+                                                  "avenir-lt-std-roman"),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                VerticalDivider(
+                                  color: Color(0xFF000000),
+                                ),
+                                Container(
+                                  color: Color(0xffFFFFFF),
+                                  //width: MediaQuery.of(context).size.width / 3,
+                                  child: InkWell(
+                                    onTap: () {
+                                      FocusScope.of(context)
+                                          .requestFocus(new FocusNode());
+                                      Navigator.push(
+                                          context,
+                                          CupertinoPageRoute(
+                                            builder: (context) =>
+                                                FormularioSiciFustPage(
+                                                    FichaSiciModel:
+                                                        ListaFichaSici[index]),
+                                          ));
+                                    },
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Icon(Icons.visibility,
+                                            size: 25, color: Color(0xFF000000)),
+                                        SizedBox(height: 10.0),
+                                        Text(
+                                          "Visualizar",
+                                          style: TextStyle(
+                                              fontSize: 15.0,
+                                              color: Color(0xff333333),
+                                              fontFamily:
+                                                  "avenir-lt-std-roman"),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      : Expanded(
+                          child: Container(
+                            color: Color(0xffFFFFFF),
+                            width: MediaQuery.of(context).size.width,
+                            padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
+                                Container(
+                                  color: Color(0xffFFFFFF),
+                                  //width: MediaQuery.of(context).size.width / 3,
+                                  child: InkWell(
+                                    onTap: () {},
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Icon(Icons.file_download,
+                                            size: 25, color: Color(0xFF000000)),
+                                        SizedBox(height: 10.0),
+                                        Text(
+                                          "Upload",
+                                          style: TextStyle(
+                                              fontSize: 15.0,
+                                              color: Color(0xff333333),
+                                              fontFamily:
+                                                  "avenir-lt-std-roman"),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                VerticalDivider(
+                                  color: Color(0xFF000000),
+                                ),
+                                Container(
+                                  color: Color(0xffFFFFFF),
+                                  //width: MediaQuery.of(context).size.width / 3,
+                                  child: InkWell(
+                                    onTap: () {
+                                      FocusScope.of(context)
+                                          .requestFocus(new FocusNode());
+                                      Navigator.push(
+                                          context,
+                                          CupertinoPageRoute(
+                                            builder: (context) =>
+                                                FormularioSiciFustPage(
+                                                    FichaSiciModel:
+                                                        ListaFichaSici[index]),
+                                          ));
+                                    },
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Icon(Icons.visibility,
+                                            size: 25, color: Color(0xFF000000)),
+                                        SizedBox(height: 10.0),
+                                        Text(
+                                          "Visualizar",
+                                          style: TextStyle(
+                                              fontSize: 15.0,
+                                              color: Color(0xff333333),
+                                              fontFamily:
+                                                  "avenir-lt-std-roman"),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                ],
+              )),
+        ),
+      );
 }

@@ -148,7 +148,7 @@ class _MenuNavigationState extends State<MenuNavigation> {
                 icon: new Icon(Icons.format_list_bulleted, size: 26),
                 title: new Text('Sici/Fust',
                     style: TextStyle(
-                      fontFamily: 'Montserrat-Medium',
+                      fontFamily: 'avenir-lt-std-roman',
                       color: _SelecionarPaginaWidgetIndex == 0 ? Color(0xffa55eea) :  Color(0xff6C757D),
                       fontSize: 14.0,
                     )),
@@ -157,7 +157,7 @@ class _MenuNavigationState extends State<MenuNavigation> {
                 icon: new Icon(Icons.settings, size: 24),
                 title: new Text("Configuração",
                     style: TextStyle(
-                      fontFamily: 'Montserrat-Medium',
+                      fontFamily: 'avenir-lt-std-roman',
                       color: _SelecionarPaginaWidgetIndex == 1 ? Color(0xffa55eea) :  Color(0xff6C757D),
                       fontSize: 14.0,
                     )),
@@ -181,7 +181,7 @@ class _MenuNavigationState extends State<MenuNavigation> {
                 Navigator.push(
                     context,
                     CupertinoPageRoute(
-                      builder: (context) => FormularioSiciFustPage(ModelFormularioSiciFust:null),
+                      builder: (context) => FormularioSiciFustPage(FichaSiciModel:null),
                     ));
               },
             ),

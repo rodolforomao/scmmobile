@@ -55,6 +55,7 @@ class ModelFormularioSiciFustJson {
   String mesReferencia;
 
   String envioLancamento;
+
   List<TbDistribuicaoQuantitativoAcessosFisicosServico> distribuicaoFisicosServicoQuantitativo;
 
   ModelFormularioSiciFustJson(
@@ -237,6 +238,58 @@ class ModelFormularioSiciFustJson {
   }
 }
 
+
+
+class ResultadoFormularioSiciFust {
+  String idEmpresa;
+  String idLancamento;
+  String idFinanceiro;
+  IdDadosServicos idDadosServicos;
+
+  ResultadoFormularioSiciFust(
+      {this.idEmpresa,
+        this.idLancamento,
+        this.idFinanceiro,
+        this.idDadosServicos});
+
+  ResultadoFormularioSiciFust.fromJson(Map<String, dynamic> json) {
+    idEmpresa = json['idEmpresa'];
+    idLancamento = json['idLancamento'];
+    idFinanceiro = json['idFinanceiro'];
+    idDadosServicos = json['idDadosServicos'] != null
+        ? new IdDadosServicos.fromJson(json['idDadosServicos'])
+        : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['idEmpresa'] = this.idEmpresa;
+    data['idLancamento'] = this.idLancamento;
+    data['idFinanceiro'] = this.idFinanceiro;
+    if (this.idDadosServicos != null) {
+      data['idDadosServicos'] = this.idDadosServicos.toJson();
+    }
+    return data;
+  }
+}
+
+
+
+class IdDadosServicos {
+  String id;
+
+  IdDadosServicos({this.id});
+
+  IdDadosServicos.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    return data;
+  }
+}
 
 
 

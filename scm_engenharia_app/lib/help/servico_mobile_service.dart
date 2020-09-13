@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:scm_engenharia_app/data/JWTTokenDbLocal.dart';
+import 'package:scm_engenharia_app/data/tb_ficha_sici.dart';
 import 'package:scm_engenharia_app/data/tb_usuario.dart';
 import 'package:scm_engenharia_app/help/components.dart';
 import 'package:scm_engenharia_app/models/model_formulario_sici_fust.dart';
@@ -117,7 +118,7 @@ class ServicoMobileService {
     return _Operacao;
   }
 
-  Future<Operacao> OnRealizarLancamentosSici (ModelFormularioSiciFustJson _Modelo) async {
+  Future<Operacao> OnRealizarLancamentosSici (TbFichaSici _Modelo) async {
     Operacao _Operacao = new Operacao();
     try {
       String token = await ComponentsJWTToken.JWTTokenPadrao();

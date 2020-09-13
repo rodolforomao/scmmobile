@@ -1,6 +1,9 @@
+import 'package:scm_engenharia_app/data/tb_distribuicao_quantitativo_acessos_fisicos_servico.dart';
+
 class TbFichaSici {
   int idFichaSiciApp;
   String idEmpresa;
+  String isSincronizar;
   String idLancamento;
   String periodoReferencia;
   String razaoSocial;
@@ -24,14 +27,11 @@ class TbFichaSici {
   String cofinsPorc;
   String receitaLiquida;
   String observacoes;
-  String id;
-  String cod_ibge;
-  String id_uf;
-
-
+  List<TbDistribuicaoQuantitativoAcessosFisicosServico> distribuicaoFisicosServicoQuantitativo;
   TbFichaSici({
     this.idFichaSiciApp,
     this.idEmpresa,
+    this.isSincronizar,
     this.idLancamento,
     this.periodoReferencia,
     this.razaoSocial,
@@ -55,15 +55,13 @@ class TbFichaSici {
     this.cofinsPorc,
     this.receitaLiquida,
     this.observacoes,
-    this.id,
-    this.cod_ibge,
-    this.id_uf,
-
+    this.distribuicaoFisicosServicoQuantitativo,
   });
 
   TbFichaSici.fromJson(Map<String, dynamic> json) {
     idFichaSiciApp= json['idFichaSiciApp'];
     idEmpresa= json['idEmpresa'];
+    isSincronizar = json['isSincronizar'];
     idLancamento= json['idLancamento'];
     periodoReferencia= json['periodoReferencia'];
     razaoSocial= json['razaoSocial'];
@@ -87,15 +85,13 @@ class TbFichaSici {
     cofinsPorc= json['cofinsPorc'];
     receitaLiquida= json['receitaLiquida'];
     observacoes= json['observacoes'];
-    id = json['id'];
-    cod_ibge= json['cod_ibge'];
-    id_uf= json['id_uf'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['idFichaSiciApp'] = this.idFichaSiciApp;
     data['idEmpresa'] = this.idEmpresa;
+    data['isSincronizar'] = this.isSincronizar;
     data['idLancamento'] = this.idLancamento;
     data['periodoReferencia'] = this.periodoReferencia;
     data['razaoSocial'] = this.razaoSocial;
@@ -119,10 +115,6 @@ class TbFichaSici {
     data['cofinsPorc'] = this.cofinsPorc;
     data['receitaLiquida'] = this.receitaLiquida;
     data['observacoes'] = this.observacoes;
-    data['id'] = this.id;
-    data['cod_ibge'] = this.cod_ibge;
-    data['id_uf'] = this.id_uf;
-
     return data;
   }
 }

@@ -9,14 +9,15 @@ import 'dart:async';
 import 'package:scm_engenharia_app/help/components.dart';
 import 'package:scm_engenharia_app/help/masked_text_controller.dart';
 import 'package:scm_engenharia_app/help/servico_mobile_service.dart';
-import 'package:scm_engenharia_app/models/model_formulario_sici_fust.dart';
 import 'package:scm_engenharia_app/models/operacao.dart';
 import 'package:scm_engenharia_app/pages/distribuicao_fisicos_servico_quantitativo_page.dart';
 
 class FormularioSiciFustPage extends StatefulWidget {
+  final TbFichaSici FichaSiciModel;
 
-  final ModelFormularioSiciFustJson ModelFormularioSiciFust;
-  FormularioSiciFustPage({Key key, @required this.ModelFormularioSiciFust}) : super(key: key);
+  FormularioSiciFustPage({Key key, @required this.FichaSiciModel})
+      : super(key: key);
+
   @override
   _FormularioSiciFustPageState createState() => _FormularioSiciFustPageState();
 }
@@ -27,24 +28,27 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
   BuildContext dialogContext;
   DBHelper dbHelper;
   TbFichaSici _FichaSici = new TbFichaSici();
+
   List<String> Uf = new List<String>();
-  String UfTxt,_StatusTipoWidget = "renderizar_ficha_sici";
-  TextEditingController _TxtControllerPeriodoDeReferencia = TextEditingController();
+  String UfTxt, _StatusTipoWidget = "renderizar_ficha_sici";
+
   DateTime _DataSelecionada = DateTime.now();
 
 
 
-  ModelFormularioSiciFustJson _ModelFormularioSiciFustJson = new ModelFormularioSiciFustJson();
-  List<TbDistribuicaoQuantitativoAcessosFisicosServico> ListaModelDistribuicaoFisicosServicoQuantitativo = new List<TbDistribuicaoQuantitativoAcessosFisicosServico>();
   StreamSubscription<ConnectivityResult> subscription;
   DateTime _DataSelecionadaConsulta = DateTime.now();
 
-
-  TextEditingController _TxtControllerCnpj = new MaskedTextController(mask: '00.000.000/0000-00');
+  TextEditingController _TxtControllerPeriodoDeReferencia =
+      TextEditingController();
+  TextEditingController _TxtControllerCnpj =
+      new MaskedTextController(mask: '00.000.000/0000-00');
   TextEditingController _TxtControllerRazaoSocial = TextEditingController();
   TextEditingController _TxtControllerNomeConsultor = TextEditingController();
-  TextEditingController _TxtControllerTelefoneMovel = new MaskedTextController(mask: '(00) 0 0000-0000');
-  TextEditingController _TxtControllerTelefoneFixo = new MaskedTextController(mask: '(00) 0 0000-0000');
+  TextEditingController _TxtControllerTelefoneMovel =
+      new MaskedTextController(mask: '(00) 0 0000-0000');
+  TextEditingController _TxtControllerTelefoneFixo =
+      new MaskedTextController(mask: '(00) 0 0000-0000');
 
   TextEditingController _TxtControllerEmailConsutor = TextEditingController();
   TextEditingController _TxtControllerEmailCliente = TextEditingController();
@@ -64,24 +68,6 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
   TextEditingController _TxtControllerCofinsPorc = TextEditingController();
   TextEditingController _TxtControllerObservacoes = TextEditingController();
 
-
-
-  OnSelecionarPeriodoDeReferencia(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-      context: context,
-      initialDate: _DataSelecionada,
-      firstDate: DateTime(1920),
-      lastDate: DateTime.now(),
-    );
-    if (picked != null) {
-      setState(() {
-        _DataSelecionada = picked;
-        _TxtControllerPeriodoDeReferencia.text =
-            DateFormat('dd/MM/yyyy').format(picked.toLocal());
-      });
-    }
-  }
-
   OnAlertaInformacao(String Mensagem) {
     showDialog(
       context: context,
@@ -90,7 +76,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
         return Dialog(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(8.0))),
-          child:  Column(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
@@ -114,8 +100,9 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                   Divider(
                     color: Colors.black12,
                   ),
-                  Padding(padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-                    child:  Text(
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                    child: Text(
                       Mensagem,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 4,
@@ -172,44 +159,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
       var connectivityResult = await (Connectivity().checkConnectivity());
       if (connectivityResult == ConnectivityResult.none) {
       } else {
-        if (_TxtControllerCnpj.text.isEmpty)
-          throw ("O campo cnpj e obrigatório");
-        _ModelFormularioSiciFustJson.periodoReferencia = DateTime.now().toString(); //_TxtControllerPeriodoReferencia.text;
-        _ModelFormularioSiciFustJson.cnpj = _TxtControllerCnpj.text;
-        _ModelFormularioSiciFustJson.razaoSocial = _TxtControllerRazaoSocial.text;
-        _ModelFormularioSiciFustJson.nomeConsultor= _TxtControllerNomeConsultor.text;
-        _ModelFormularioSiciFustJson.telefoneMovel= _TxtControllerTelefoneMovel.text;
-        _ModelFormularioSiciFustJson.telefoneFixo= _TxtControllerTelefoneFixo.text;
-        _ModelFormularioSiciFustJson.emailConsutor = _TxtControllerEmailConsutor.text;
-        _ModelFormularioSiciFustJson.emailCliente = _TxtControllerEmailCliente.text;
-        _ModelFormularioSiciFustJson.nomeCliente = _TxtControllerNomeCliente.text;
-        _ModelFormularioSiciFustJson.mesReferencia = _TxtControllerMesReferencia.text;
 
-        _ModelFormularioSiciFustJson.receitaBruta= _TxtControllerReceitaBruta.text;
-        _ModelFormularioSiciFustJson.receitaLiquida= _TxtControllerReceitaLiquida.text;
-        _ModelFormularioSiciFustJson.simples= _TxtControllerSimples.text;
-        _ModelFormularioSiciFustJson.simplesPorc = _TxtControllerSimplesPorc.text;
-        _ModelFormularioSiciFustJson.icms= _TxtControllerIcms.text;
-        _ModelFormularioSiciFustJson.icmsPorc= _TxtControllerIcmsPorc.text;
-        _ModelFormularioSiciFustJson.pis= _TxtControllerPis.text;
-        _ModelFormularioSiciFustJson.pisPorc= _TxtControllerPisPorc.text;
-        _ModelFormularioSiciFustJson.cofins= _TxtControllerCofins.text;
-        _ModelFormularioSiciFustJson.cofinsPorc= _TxtControllerCofinsPorc.text;
-        _ModelFormularioSiciFustJson.observacoes= _TxtControllerObservacoes.text;
-
-        if(ListaModelDistribuicaoFisicosServicoQuantitativo.length == 0)
-          throw ("Distribuição do quantitativo de acessos físicos em serviço e obrigatório,favor adicionar.");
-       // _ModelFormularioSiciFustJson.distribuicaoFisicosServicoQuantitativo = ListaModelDistribuicaoFisicosServicoQuantitativo;
-        Operacao _RestWeb = await _RestWebService.OnRealizarLancamentosSici(_ModelFormularioSiciFustJson);
-        if (_RestWeb.erro)
-          throw (_RestWeb.mensagem);
-        else if (_RestWeb.resultado == null)
-          throw (_RestWeb.mensagem);
-        else
-        {
-         // Navigator.pop(dialogContext);
-          OnAlertaInformacao(_RestWeb.mensagem);
-        }
       }
     } catch (error) {
       Navigator.pop(dialogContext);
@@ -219,47 +169,43 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
 
   Future<Null> OnSalvarFormularioDbLocal() async {
     try {
-      var connectivityResult = await (Connectivity().checkConnectivity());
-      if (connectivityResult == ConnectivityResult.none) {
-      } else {
-        if (_TxtControllerCnpj.text.isEmpty)
-          throw ("O campo cnpj e obrigatório");
-        _FichaSici.periodoReferencia = DateTime.now().toString(); //_TxtControllerPeriodoReferencia.text;
-        _FichaSici.cnpj = _TxtControllerCnpj.text;
-        _FichaSici.razaoSocial = _TxtControllerRazaoSocial.text;
-        _FichaSici.nomeConsultor= _TxtControllerNomeConsultor.text;
-        _FichaSici.telefoneMovel= _TxtControllerTelefoneMovel.text;
-        _FichaSici.telefoneFixo= _TxtControllerTelefoneFixo.text;
-        _FichaSici.emailConsutor = _TxtControllerEmailConsutor.text;
-        _FichaSici.emailCliente = _TxtControllerEmailCliente.text;
-        _FichaSici.nomeCliente = _TxtControllerNomeCliente.text;
-        _FichaSici.mesReferencia = _TxtControllerMesReferencia.text;
+      if (_TxtControllerCnpj.text.isEmpty) throw ("O campo cnpj e obrigatório");
+      _FichaSici.periodoReferencia = _TxtControllerPeriodoReferencia.text;
+      _FichaSici.isSincronizar = "S";
+      _FichaSici.cnpj = _TxtControllerCnpj.text;
+      _FichaSici.razaoSocial = _TxtControllerRazaoSocial.text;
+      _FichaSici.nomeConsultor = _TxtControllerNomeConsultor.text;
+      _FichaSici.telefoneMovel = _TxtControllerTelefoneMovel.text;
+      _FichaSici.telefoneFixo = _TxtControllerTelefoneFixo.text;
+      _FichaSici.emailConsutor = _TxtControllerEmailConsutor.text;
+      _FichaSici.emailCliente = _TxtControllerEmailCliente.text;
+      _FichaSici.nomeCliente = _TxtControllerNomeCliente.text;
+      _FichaSici.mesReferencia = _TxtControllerMesReferencia.text;
 
-        _FichaSici.receitaBruta= _TxtControllerReceitaBruta.text;
-        _FichaSici.receitaLiquida= _TxtControllerReceitaLiquida.text;
-        _FichaSici.simples= _TxtControllerSimples.text;
-        _FichaSici.simplesPorc = _TxtControllerSimplesPorc.text;
-        _FichaSici.icms= _TxtControllerIcms.text;
-        _FichaSici.icmsPorc= _TxtControllerIcmsPorc.text;
-        _FichaSici.pis= _TxtControllerPis.text;
-        _FichaSici.pisPorc= _TxtControllerPisPorc.text;
-        _FichaSici.cofins= _TxtControllerCofins.text;
-        _FichaSici.cofinsPorc= _TxtControllerCofinsPorc.text;
-        _FichaSici.observacoes= _TxtControllerObservacoes.text;
-        if(ListaModelDistribuicaoFisicosServicoQuantitativo.length == 0)
-          throw ("Distribuição do quantitativo de acessos físicos em serviço e obrigatório,favor adicionar.");
-        else
-          {
-            Operacao _respLocal = await dbHelper.OnAddFichaSici(_FichaSici,ListaModelDistribuicaoFisicosServicoQuantitativo);
-            if (_respLocal.erro)
-              throw (_respLocal.mensagem);
-            else {
-              OnAlertaInformacao(_respLocal.mensagem);
-            }
-          }
+      _FichaSici.receitaBruta = _TxtControllerReceitaBruta.text;
+      _FichaSici.receitaLiquida = _TxtControllerReceitaLiquida.text;
+      _FichaSici.simples = _TxtControllerSimples.text;
+      _FichaSici.simplesPorc = _TxtControllerSimplesPorc.text;
+      _FichaSici.icms = _TxtControllerIcms.text;
+      _FichaSici.icmsPorc = _TxtControllerIcmsPorc.text;
+      _FichaSici.pis = _TxtControllerPis.text;
+      _FichaSici.pisPorc = _TxtControllerPisPorc.text;
+      _FichaSici.cofins = _TxtControllerCofins.text;
+      _FichaSici.cofinsPorc = _TxtControllerCofinsPorc.text;
+      _FichaSici.observacoes = _TxtControllerObservacoes.text;
+      if (_FichaSici.distribuicaoFisicosServicoQuantitativo.length == 0)
+        throw ("Distribuição do quantitativo de acessos físicos em serviço e obrigatório,favor adicionar.");
+      else {
+        Operacao _respLocal = await dbHelper.OnAddFichaSici(_FichaSici);
+        if (_respLocal.erro)
+          throw (_respLocal.mensagem);
+        else {
+          OnAlertaInformacao(_respLocal.mensagem);
+          Navigator.pop(context);
+        }
       }
     } catch (error) {
-      Navigator.pop(dialogContext);
+      if (dialogContext != null) Navigator.pop(dialogContext);
       OnAlertaInformacao(error);
     }
   }
@@ -268,17 +214,17 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
     showBottomSheet(
         context: context,
         builder: (BuildContext context) => Container(
-          width: MediaQuery.of(context).size.width,
-          child: YearPicker(
-            selectedDate: DateTime(1997),
-            firstDate: DateTime(1995),
-            lastDate: DateTime.now(),
-            onChanged: (val) {
-              print(val);
-              Navigator.pop(context);
-            },
-          ),
-        ));
+              width: MediaQuery.of(context).size.width,
+              child: YearPicker(
+                selectedDate: DateTime(1997),
+                firstDate: DateTime(1995),
+                lastDate: DateTime.now(),
+                onChanged: (val) {
+                  print(val);
+                  Navigator.pop(context);
+                },
+              ),
+            ));
   }
 
   OnSelecionarData(BuildContext context) async {
@@ -297,10 +243,9 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
     if (picked != null && picked != _DataSelecionada) {
       setState(() {
         _DataSelecionada = picked;
-        _TxtControllerPeriodoReferencia.text = DateFormat('dd/MM/yyyy').format(picked.toLocal());
-
+        _TxtControllerPeriodoReferencia.text =
+            DateFormat('dd/MM/yyyy').format(picked.toLocal());
       });
-
     }
   }
 
@@ -310,38 +255,46 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
       setState(() {
         UfTxt = Uf.first;
       });
-      if(widget.ModelFormularioSiciFust != null)
+      if (widget.FichaSiciModel != null) {
+        _FichaSici = widget.FichaSiciModel;
+        _TxtControllerPeriodoDeReferencia.text = widget.FichaSiciModel.periodoReferencia;
+        _TxtControllerCnpj.text = widget.FichaSiciModel.cnpj;
+        _TxtControllerRazaoSocial.text =
+            widget.FichaSiciModel.razaoSocial;
+        _TxtControllerNomeConsultor.text =
+            widget.FichaSiciModel.nomeConsultor;
+        _TxtControllerTelefoneMovel.text =
+            widget.FichaSiciModel.telefoneMovel;
+        _TxtControllerTelefoneFixo.text =
+            widget.FichaSiciModel.telefoneFixo;
+
+        _TxtControllerEmailConsutor.text =
+            widget.FichaSiciModel.emailConsutor;
+        _TxtControllerEmailCliente.text =
+            widget.FichaSiciModel.emailCliente;
+        _TxtControllerNomeCliente.text =
+            widget.FichaSiciModel.nomeCliente;
+        _TxtControllerMesReferencia.text =
+            widget.FichaSiciModel.mesReferencia;
+
+        _TxtControllerReceitaBruta.text =
+            widget.FichaSiciModel.receitaBruta;
+        _TxtControllerReceitaLiquida.text =
+            widget.FichaSiciModel.receitaLiquida;
+        _TxtControllerSimples.text = widget.FichaSiciModel.simples;
+        _TxtControllerSimplesPorc.text =
+            widget.FichaSiciModel.simplesPorc;
+        _TxtControllerIcms.text = widget.FichaSiciModel.icms;
+        _TxtControllerIcmsPorc.text = widget.FichaSiciModel.icmsPorc;
+        _TxtControllerPis.text = widget.FichaSiciModel.pis;
+        _TxtControllerPisPorc.text = widget.FichaSiciModel.pisPorc;
+        _TxtControllerCofins.text = widget.FichaSiciModel.cofins;
+        _TxtControllerCofinsPorc.text = widget.FichaSiciModel.cofinsPorc;
+        _TxtControllerObservacoes.text = widget.FichaSiciModel.observacoes;
+      }
+      else
         {
-          _TxtControllerPeriodoDeReferencia.text = widget.ModelFormularioSiciFust.periodoReferencia;
-          _TxtControllerCnpj.text = widget.ModelFormularioSiciFust.cnpj;
-           _TxtControllerRazaoSocial.text = widget.ModelFormularioSiciFust.razaoSocial;
-           _TxtControllerNomeConsultor.text = widget.ModelFormularioSiciFust.nomeConsultor;
-           _TxtControllerTelefoneMovel.text = widget.ModelFormularioSiciFust.telefoneMovel;
-           _TxtControllerTelefoneFixo.text = widget.ModelFormularioSiciFust.telefoneFixo;
-
-           _TxtControllerEmailConsutor.text = widget.ModelFormularioSiciFust.emailConsutor;
-           _TxtControllerEmailCliente.text = widget.ModelFormularioSiciFust.emailCliente;
-           _TxtControllerNomeCliente.text = widget.ModelFormularioSiciFust.nomeCliente;
-           _TxtControllerMesReferencia.text = widget.ModelFormularioSiciFust.mesReferencia;
-
-           _TxtControllerReceitaBruta.text = widget.ModelFormularioSiciFust.receitaBruta;
-           _TxtControllerReceitaLiquida.text = widget.ModelFormularioSiciFust.receitaLiquida;
-           _TxtControllerSimples.text = widget.ModelFormularioSiciFust.simples;
-           _TxtControllerSimplesPorc.text = widget.ModelFormularioSiciFust.simplesPorc;
-           _TxtControllerIcms.text = widget.ModelFormularioSiciFust.icms;
-           _TxtControllerIcmsPorc.text = widget.ModelFormularioSiciFust.icmsPorc;
-           _TxtControllerPis.text = widget.ModelFormularioSiciFust.pis;
-           _TxtControllerPisPorc.text = widget.ModelFormularioSiciFust.pisPorc;
-           _TxtControllerCofins.text = widget.ModelFormularioSiciFust.cofins;
-           _TxtControllerCofinsPorc.text = widget.ModelFormularioSiciFust.cofinsPorc;
-           _TxtControllerObservacoes.text = widget.ModelFormularioSiciFust.observacoes;
-           if(widget.ModelFormularioSiciFust.distribuicaoFisicosServicoQuantitativo != null)
-             {
-               for (var prop in  widget.ModelFormularioSiciFust.distribuicaoFisicosServicoQuantitativo) {
-                 prop.index = ListaModelDistribuicaoFisicosServicoQuantitativo.length++;
-                // ListaModelDistribuicaoFisicosServicoQuantitativo.add(prop);
-               }
-             }
+          _FichaSici.distribuicaoFisicosServicoQuantitativo = new List<TbDistribuicaoQuantitativoAcessosFisicosServico>();
         }
     } catch (error) {
       //Navigator.of(context, rootNavigator: true).pop();
@@ -388,23 +341,23 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
         ),
         actions: <Widget>[
           InkWell(
-            onTap: () {
-              FocusScope.of(context).requestFocus(new FocusNode());
-              OnSalvarFormularioDbLocal();
-            },
-            child: Center(child: Text(
-              'Salvar   ',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                fontFamily: 'avenir-lt-std-roman',
-                fontSize: 15.0,
-              ),
-            ),)
-          ),
+              onTap: () {
+                OnSalvarFormularioDbLocal();
+              },
+              child: Center(
+                child: Text(
+                  'Salvar   ',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontFamily: 'avenir-lt-std-roman',
+                    fontSize: 15.0,
+                  ),
+                ),
+              )),
         ],
       ),
-      body:_TipoWidget(context),
+      body: _TipoWidget(context),
     );
   }
 
@@ -441,7 +394,8 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text: ListaModelDistribuicaoFisicosServicoQuantitativo[index].uf,
+                          text:
+                          _FichaSici.distribuicaoFisicosServicoQuantitativo[index].uf,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -469,7 +423,10 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text: ListaModelDistribuicaoFisicosServicoQuantitativo[index].municipio,
+                          text:
+                          _FichaSici.distribuicaoFisicosServicoQuantitativo[
+                                      index]
+                                  .municipio,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -497,7 +454,10 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text: ListaModelDistribuicaoFisicosServicoQuantitativo[index].tecnologia,
+                          text:
+                          _FichaSici.distribuicaoFisicosServicoQuantitativo[
+                                      index]
+                                  .tecnologia,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -525,7 +485,10 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text: ListaModelDistribuicaoFisicosServicoQuantitativo[index].cod_ibge,
+                          text:
+                          _FichaSici.distribuicaoFisicosServicoQuantitativo[
+                                      index]
+                                  .cod_ibge,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -553,7 +516,10 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text: ListaModelDistribuicaoFisicosServicoQuantitativo[index].pf_0,
+                          text:
+                          _FichaSici.distribuicaoFisicosServicoQuantitativo[
+                                      index]
+                                  .pf_0,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -581,7 +547,10 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text: ListaModelDistribuicaoFisicosServicoQuantitativo[index].pf_512,
+                          text:
+                          _FichaSici.distribuicaoFisicosServicoQuantitativo[
+                                      index]
+                                  .pf_512,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -609,7 +578,10 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text: ListaModelDistribuicaoFisicosServicoQuantitativo[index].pf_2,
+                          text:
+                          _FichaSici.distribuicaoFisicosServicoQuantitativo[
+                                      index]
+                                  .pf_2,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -637,7 +609,10 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text: ListaModelDistribuicaoFisicosServicoQuantitativo[index].pf_12,
+                          text:
+                          _FichaSici.distribuicaoFisicosServicoQuantitativo[
+                                      index]
+                                  .pf_12,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -665,7 +640,10 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text: ListaModelDistribuicaoFisicosServicoQuantitativo[index].pf_34,
+                          text:
+                          _FichaSici.distribuicaoFisicosServicoQuantitativo[
+                                      index]
+                                  .pf_34,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -693,7 +671,10 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text: ListaModelDistribuicaoFisicosServicoQuantitativo[index].pj_0,
+                          text:
+                          _FichaSici.distribuicaoFisicosServicoQuantitativo[
+                                      index]
+                                  .pj_0,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -721,7 +702,10 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text: ListaModelDistribuicaoFisicosServicoQuantitativo[index].pj_512,
+                          text:
+                          _FichaSici.distribuicaoFisicosServicoQuantitativo[
+                                      index]
+                                  .pj_512,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -749,7 +733,10 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text: ListaModelDistribuicaoFisicosServicoQuantitativo[index].pj_2,
+                          text:
+                          _FichaSici.distribuicaoFisicosServicoQuantitativo[
+                                      index]
+                                  .pj_2,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -777,7 +764,10 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text: ListaModelDistribuicaoFisicosServicoQuantitativo[index].pj_12,
+                          text:
+                          _FichaSici.distribuicaoFisicosServicoQuantitativo[
+                                      index]
+                                  .pj_12,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -805,7 +795,10 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text: ListaModelDistribuicaoFisicosServicoQuantitativo[index].pj_34,
+                          text:
+                          _FichaSici.distribuicaoFisicosServicoQuantitativo[
+                                      index]
+                                  .pj_34,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -846,20 +839,26 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                         //`Text` to display
                         onPressed: () {
                           FocusScope.of(context).requestFocus(new FocusNode());
-                          Navigator.of(context, rootNavigator: true).push(
-                            new CupertinoPageRoute<TbDistribuicaoQuantitativoAcessosFisicosServico>(
+                          Navigator.of(context, rootNavigator: true)
+                              .push(
+                            new CupertinoPageRoute<
+                                TbDistribuicaoQuantitativoAcessosFisicosServico>(
                               maintainState: false,
                               fullscreenDialog: true,
                               builder: (BuildContext context) =>
-                              new DistribuicaoFisicosServicoQuantitativoPage(sDistribuicaoFisicosServicoQuantitativo:ListaModelDistribuicaoFisicosServicoQuantitativo[index]),
-                            ),
-                          ).then((value) {
-                            if(value != null)
-                            {
-                              int Index = ListaModelDistribuicaoFisicosServicoQuantitativo.indexWhere((item) =>
-                              item.index == value.index);
+                                  new DistribuicaoFisicosServicoQuantitativoPage(
+                                      sDistribuicaoFisicosServicoQuantitativo:
+                                      _FichaSici.distribuicaoFisicosServicoQuantitativo[
+                                              index]),
+                            ),).then((value) {
+                            if (value != null) {
+                              int Index =
+                              _FichaSici.distribuicaoFisicosServicoQuantitativo
+                                      .indexWhere(
+                                          (item) => item.index == value.index);
                               setState(() {
-                                ListaModelDistribuicaoFisicosServicoQuantitativo[Index] = value;
+                                _FichaSici.distribuicaoFisicosServicoQuantitativo[
+                                    Index] = value;
                               });
                             }
                           });
@@ -896,85 +895,107 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                             builder: (BuildContext context) {
                               return Dialog(
                                   child: new Padding(
-                                    padding: EdgeInsets.all(25.0),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Container(
-                                          margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
-                                          height: 50.0,
-                                          child: new Text("Deseja realmente remover ?",
-                                            textAlign: TextAlign.start,
-                                            softWrap: false,
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                                fontFamily: 'open-sans-regular',
-                                                fontSize: 17.0,
-                                                color: Color(0xFF000000)),
-                                          ),
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
-                                          child: new Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: <Widget>[
-                                              OutlineButton(
-                                                color: Color(0xFFf2f2f2),
-                                                //`Icon` to display
-                                                child: Text(
-                                                    'Sim',
-                                                    style: TextStyle(
-                                                      fontWeight: FontWeight.w500,
-                                                      fontFamily: 'avenir-lt-std-roman',
-                                                      color: Color(0xff018a8a),
-                                                      fontSize: 16.0,
-                                                    )
-                                                ),
-                                                onPressed: () async {
-                                                  FocusScope.of(context).requestFocus(new FocusNode());
-                                                  setState(() {
-                                                    ListaModelDistribuicaoFisicosServicoQuantitativo.remove(ListaModelDistribuicaoFisicosServicoQuantitativo[index]);
-                                                  });
-                                                },
-                                                //callback when button is clicked
-                                                borderSide: BorderSide(
-                                                  color: Color(0xFFf2f2f2), //Color of the border
-                                                  style: BorderStyle.solid, //Style of the border
-                                                  width: 1.0, //width of the border
-                                                ),
-                                              ),
-                                              SizedBox(width: 15.0),
-                                              FlatButton(
-                                                color: Color(0xff018a8a),
-                                                //`Icon` to display
-                                                child: Text(
-                                                    'Não',
-                                                    style: TextStyle(
-                                                      fontWeight: FontWeight.w500,
-                                                      fontFamily: 'avenir-lt-std-roman',
-                                                      color: Color(0xffFFFFFF),
-                                                      fontSize: 16.0,
-                                                    )
-                                                ),
-                                                //`Text` to display
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                },
-                                                shape: new RoundedRectangleBorder(
-                                                  borderRadius: new BorderRadius.circular(5.0),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
+                                padding: EdgeInsets.all(25.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                      margin: EdgeInsets.fromLTRB(
+                                          0.0, 10.0, 0.0, 15.0),
+                                      height: 50.0,
+                                      child: new Text(
+                                        "Deseja realmente remover ?",
+                                        textAlign: TextAlign.start,
+                                        softWrap: false,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            fontFamily: 'open-sans-regular',
+                                            fontSize: 17.0,
+                                            color: Color(0xFF000000)),
+                                      ),
                                     ),
-                                  ));
+                                    Container(
+                                      margin: EdgeInsets.fromLTRB(
+                                          0.0, 10.0, 0.0, 15.0),
+                                      child: new Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: <Widget>[
+                                          OutlineButton(
+                                            color: Color(0xFFf2f2f2),
+                                            //`Icon` to display
+                                            child: Text('Sim',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontFamily:
+                                                      'avenir-lt-std-roman',
+                                                  color: Color(0xff018a8a),
+                                                  fontSize: 16.0,
+                                                )),
+                                            onPressed: () async {
+                                              FocusScope.of(context).requestFocus(new FocusNode());
+                                              if(_FichaSici.distribuicaoFisicosServicoQuantitativo[index].idDistribuicaoQuantitativoAcessosFisicosServicoApp == null)
+                                                {
+                                                  setState(() {
+                                                    _FichaSici.distribuicaoFisicosServicoQuantitativo.remove(_FichaSici.distribuicaoFisicosServicoQuantitativo[index]);
+                                                  });
+                                                }
+                                                else
+                                                  {
+                                                    Operacao _respLocal = await dbHelper.OnDeletarDistribuicaoQuantitativoAcessosFisicosServico(_FichaSici.distribuicaoFisicosServicoQuantitativo[index].idDistribuicaoQuantitativoAcessosFisicosServicoApp);
+                                                    if (_respLocal.erro)
+                                                      throw (_respLocal.mensagem);
+                                                    else {
+                                                      OnAlertaInformacao(_respLocal.mensagem);
+                                                      setState(() {
+                                                        _FichaSici.distribuicaoFisicosServicoQuantitativo.remove(_FichaSici.distribuicaoFisicosServicoQuantitativo[index]);
+                                                      });
+                                                    }
+                                                  }
+                                              Navigator.pop(context);
+                                            },
+                                            borderSide: BorderSide(
+                                              color: Color(0xFFf2f2f2),
+                                              //Color of the border
+                                              style: BorderStyle.solid,
+                                              //Style of the border
+                                              width: 1.0, //width of the border
+                                            ),
+                                          ),
+                                          SizedBox(width: 15.0),
+                                          FlatButton(
+                                            color: Color(0xff018a8a),
+                                            //`Icon` to display
+                                            child: Text('Não',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontFamily:
+                                                      'avenir-lt-std-roman',
+                                                  color: Color(0xffFFFFFF),
+                                                  fontSize: 16.0,
+                                                )),
+                                            //`Text` to display
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            shape: new RoundedRectangleBorder(
+                                              borderRadius:
+                                                  new BorderRadius.circular(
+                                                      5.0),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ));
                             },
                           );
                         },
@@ -1031,12 +1052,14 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                       fontFamily: "avenir-lt-std-roman",
                       fontSize: 15.0,
                       color: Colors.black54,
-                    ),),
+                    ),
+                  ),
                   SizedBox(height: 20.0),
                   Center(
                     child: InkWell(
                       onTap: () async {
-                        var connectivityResult = await (Connectivity().checkConnectivity());
+                        var connectivityResult =
+                            await (Connectivity().checkConnectivity());
                         if (connectivityResult == ConnectivityResult.none) {
                           setState(() {
                             _StatusTipoWidget = "sem_internet";
@@ -1051,7 +1074,8 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                             content: SizedBox(
                               height: 30.0,
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
@@ -1069,8 +1093,8 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                                   ),
                                   SizedBox(
                                     child: CircularProgressIndicator(
-                                      valueColor:
-                                      AlwaysStoppedAnimation<Color>(Color(0xff2fdf84)),
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          Color(0xff2fdf84)),
                                     ),
                                     height: 30.0,
                                     width: 30.0,
@@ -1226,9 +1250,9 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                         SizedBox(height: 20.0),
                         TextFormField(
                           onTap: () {
-                            FocusScope.of(context).requestFocus(new FocusNode());
+                            FocusScope.of(context)
+                                .requestFocus(new FocusNode());
                             OnSelecionarData(context);
-
                           },
                           controller: _TxtControllerPeriodoReferencia,
                           textAlign: TextAlign.start,
@@ -1260,14 +1284,15 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                         ),
                         SizedBox(height: 20.0),
                         TextFormField(
-                          controller: _TxtControllerNomeConsultor ,
+                          controller: _TxtControllerNomeConsultor,
                           textAlign: TextAlign.start,
                           keyboardType: TextInputType.text,
                           textInputAction: TextInputAction.done,
                           autofocus: false,
                           maxLength: 100,
                           decoration: InputDecoration(
-                            labelText: 'Responsável - Preenchimento SICI e Fust:',
+                            labelText:
+                                'Responsável - Preenchimento SICI e Fust:',
                             hintText: 'Nome consultor.',
                           ),
                         ),
@@ -1299,7 +1324,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                         ),
                         SizedBox(height: 20.0),
                         TextFormField(
-                          controller: _TxtControllerCnpj ,
+                          controller: _TxtControllerCnpj,
                           textAlign: TextAlign.start,
                           keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.done,
@@ -1333,7 +1358,6 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                             labelText: 'TELEFONE CELULAR:',
                             hintText: '',
                           ),
-
                           maxLength: 20,
                         ),
                         SizedBox(height: 20.0),
@@ -1364,7 +1388,9 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                       ],
                     ),
                   ),
-                  state: current_step > 0 ? StepState.complete : StepState.disabled,
+                  state: current_step > 0
+                      ? StepState.complete
+                      : StepState.disabled,
                   isActive: true,
                 ),
                 Step(
@@ -1530,7 +1556,9 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                       ],
                     ),
                   ),
-                  state: current_step > 1 ? StepState.complete : StepState.disabled,
+                  state: current_step > 1
+                      ? StepState.complete
+                      : StepState.disabled,
                   isActive: true,
                 ),
                 Step(
@@ -1556,19 +1584,25 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                         Center(
                           child: InkWell(
                             onTap: () async {
-                              FocusScope.of(context).requestFocus(new FocusNode());
-                              Navigator.of(context, rootNavigator: true).push(
-                                new CupertinoPageRoute<TbDistribuicaoQuantitativoAcessosFisicosServico>(
+                              FocusScope.of(context)
+                                  .requestFocus(new FocusNode());
+                              Navigator.of(context, rootNavigator: true)
+                                  .push(
+                                new CupertinoPageRoute<
+                                    TbDistribuicaoQuantitativoAcessosFisicosServico>(
                                   maintainState: false,
                                   fullscreenDialog: true,
                                   builder: (BuildContext context) =>
-                                  new DistribuicaoFisicosServicoQuantitativoPage(sDistribuicaoFisicosServicoQuantitativo:null),
+                                      new DistribuicaoFisicosServicoQuantitativoPage(
+                                          sDistribuicaoFisicosServicoQuantitativo:
+                                              null),
                                 ),
-                              ).then((value) {
-                                if(value != null)
-                                {
-                                  value.index = ListaModelDistribuicaoFisicosServicoQuantitativo.length + 1;
-                                  ListaModelDistribuicaoFisicosServicoQuantitativo.add(value);
+                              )
+                                  .then((value) {
+                                if (value != null) {
+                                  value.index = _FichaSici.distribuicaoFisicosServicoQuantitativo.length + 1;
+                                  _FichaSici.distribuicaoFisicosServicoQuantitativo.add(value);
+
                                 }
                               });
                             },
@@ -1579,7 +1613,8 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                               height: 45,
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(Radius.circular(3)),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(3)),
                                   color: Color(0xff8854d0)),
                               child: Text(
                                 'Adicionar',
@@ -1601,8 +1636,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                               scrollDirection: Axis.vertical,
                               physics: NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
-                              itemCount:
-                              ListaModelDistribuicaoFisicosServicoQuantitativo.length,
+                              itemCount: _FichaSici.distribuicaoFisicosServicoQuantitativo == null ? 0 : _FichaSici.distribuicaoFisicosServicoQuantitativo.length,
                               itemBuilder: DistribuicaoFisicosServicoQuantitativoCard,
                             );
                           },
@@ -1645,4 +1679,5 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
         break;
     }
   }
+
 }

@@ -56,7 +56,6 @@ class TbDistribuicaoQuantitativoAcessosFisicosServico {
         json['idDistribuicaoQuantitativoAcessosFisicosServicoApp'];
     idFichaSiciApp = json['idFichaSiciApp'];
     id = json['id'];
-    index = json['index'];
     cod_ibge = json['cod_ibge'];
     id_uf = json['id_uf'];
     id_municipio = json['id_municipio'];
@@ -84,7 +83,6 @@ class TbDistribuicaoQuantitativoAcessosFisicosServico {
     data['idDistribuicaoQuantitativoAcessosFisicosServicoApp'] =
         this.idDistribuicaoQuantitativoAcessosFisicosServicoApp;
     data['cod_ibge'] = this.cod_ibge;
-    data['index'] = this.index;
     data['idFichaSiciApp'] = this.idFichaSiciApp;
     data['id_uf'] = this.id_uf;
     data['id_municipio'] = this.id_municipio;
