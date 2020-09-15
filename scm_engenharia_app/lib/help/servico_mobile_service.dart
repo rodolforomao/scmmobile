@@ -214,7 +214,7 @@ class ServicoMobileService {
     return _Operacao;
   }
 
-  Future<Operacao> OnRecuperaLancamentosSici(TbUsuario UsuarioLogado) async {
+  Future<Operacao> OnRecuperaLancamentosSici() async {
     Operacao _Operacao = new Operacao();
     try {
       String token = await ComponentsJWTToken.JWTTokenPadrao();

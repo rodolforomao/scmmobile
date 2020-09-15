@@ -9,6 +9,7 @@ import 'dart:async';
 import 'package:scm_engenharia_app/help/components.dart';
 import 'package:scm_engenharia_app/help/masked_text_controller.dart';
 import 'package:scm_engenharia_app/help/servico_mobile_service.dart';
+import 'package:scm_engenharia_app/menu_navigation.dart';
 import 'package:scm_engenharia_app/models/operacao.dart';
 import 'package:scm_engenharia_app/pages/distribuicao_fisicos_servico_quantitativo_page.dart';
 
@@ -45,10 +46,8 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
       new MaskedTextController(mask: '00.000.000/0000-00');
   TextEditingController _TxtControllerRazaoSocial = TextEditingController();
   TextEditingController _TxtControllerNomeConsultor = TextEditingController();
-  TextEditingController _TxtControllerTelefoneMovel =
-      new MaskedTextController(mask: '(00) 0 0000-0000');
-  TextEditingController _TxtControllerTelefoneFixo =
-      new MaskedTextController(mask: '(00) 0 0000-0000');
+  TextEditingController _TxtControllerTelefoneMovel = new MaskedTextController(mask: '(00) 0 0000-0000');
+  TextEditingController _TxtControllerTelefoneFixo = new MaskedTextController(mask: '(00) 0 0000-0000');
 
   TextEditingController _TxtControllerEmailConsutor = TextEditingController();
   TextEditingController _TxtControllerEmailCliente = TextEditingController();
@@ -200,8 +199,93 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
         if (_respLocal.erro)
           throw (_respLocal.mensagem);
         else {
-          OnAlertaInformacao(_respLocal.mensagem);
-          Navigator.pop(context);
+          if (dialogContext != null) Navigator.pop(dialogContext);
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(height: 15.0),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          "Informação",
+                          style: TextStyle(
+                              fontSize: 20.0,
+                              color: Color(0xff212529),
+                              fontFamily: "avenir-lt-std-roman"),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Divider(
+                          color: Colors.black12,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                          child: Text(
+                            _respLocal.mensagem,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 4,
+                            softWrap: false,
+                            style: TextStyle(
+                                fontSize: 17.0,
+                                color: Color(0xff212529),
+                                fontFamily: "avenir-lt-std-roman"),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Divider(
+                      color: Colors.black12,
+                    ),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
+                      child: new Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          FlatButton(
+                            color: Color(0xff018a8a),
+                            //`Icon` to display
+                            child: Text(
+                              '           OK           ',
+                              style: TextStyle(
+                                  fontSize: 17.0,
+                                  color: Color(0xffFFFFFF),
+                                  fontFamily: "avenir-lt-std-roman"),
+                            ),
+                            //`Text` to display
+                            onPressed: () {
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  new MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                      new MenuNavigation()),
+                                      (Route<dynamic> route) => false);
+                            },
+                            shape: new RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(5.0),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
         }
       }
     } catch (error) {

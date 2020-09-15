@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scm_engenharia_app/data/db_helper.dart';
 import 'package:scm_engenharia_app/data/tb_ficha_sici.dart';
-import 'package:scm_engenharia_app/data/tb_usuario.dart';
 import 'dart:async';
 import 'package:scm_engenharia_app/help/servico_mobile_service.dart';
 import 'package:scm_engenharia_app/models/model_formulario_sici_fust.dart';
@@ -11,10 +10,6 @@ import 'package:scm_engenharia_app/models/operacao.dart';
 import 'package:scm_engenharia_app/pages/formulario_sici_fust_page.dart';
 
 class ListaSiciEnviadosPage extends StatefulWidget {
-  final TbUsuario UsuarioLogado;
-
-  ListaSiciEnviadosPage({Key key, @required this.UsuarioLogado})
-      : super(key: key);
 
   @override
   _ListaSiciEnviadosPageState createState() => _ListaSiciEnviadosPageState();
@@ -45,8 +40,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
         }
       } else {
         OnRealizandoOperacao("Realizando busca de fichas sici");
-        Operacao _RestWeb = await _RestWebService.OnRecuperaLancamentosSici(
-            widget.UsuarioLogado);
+        Operacao _RestWeb = await _RestWebService.OnRecuperaLancamentosSici();
         if (_RestWeb.erro)
           throw (_RestWeb.mensagem);
         else if (_RestWeb.resultado == null)

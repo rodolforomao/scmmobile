@@ -8,8 +8,7 @@ import 'package:scm_engenharia_app/pages/lista_sici_enviados_page.dart';
 import 'help/screen_size.dart';
 
 class MenuNavigation extends StatefulWidget {
-  final TbUsuario UsuarioLogado;
-  MenuNavigation({Key key, @required this.UsuarioLogado}) : super(key: key);
+
   @override
   _MenuNavigationState createState() => _MenuNavigationState();
 }
@@ -32,7 +31,7 @@ class _MenuNavigationState extends State<MenuNavigation> {
   OnSelecionarPaginaWidget(int pos) {
     switch (pos) {
       case 0:
-        return new ListaSiciEnviadosPage(UsuarioLogado:widget.UsuarioLogado);
+        return new ListaSiciEnviadosPage();
       case 1:
         return new ConfiguracaoPage();
       case 2:
