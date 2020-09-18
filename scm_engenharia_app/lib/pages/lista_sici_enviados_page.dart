@@ -39,61 +39,62 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
           });
         }
       } else {
-        OnRealizandoOperacao("Realizando busca de fichas sici");
+        OnRealizandoOperacao("Realizando busca de fichas sici Web");
         Operacao _RestWeb = await _RestWebService.OnRecuperaLancamentosSici();
-        if (_RestWeb.erro)
-          throw (_RestWeb.mensagem);
-        else if (_RestWeb.resultado == null)
+        if (_RestWeb.erro || _RestWeb.resultado == null)
           throw (_RestWeb.mensagem);
         else {
           var data = _RestWeb.resultado as List;
           setState(() {
-            List<ModelFormularioSiciFustJson>
-                ListaModelFormularioSiciFustModelo = data
-                    .map<ModelFormularioSiciFustJson>(
-                        (json) => ModelFormularioSiciFustJson.fromJson(json))
-                    .toList();
+            List<ModelFormularioSiciFustJson>ListaModelFormularioSiciFustModelo = data.map<ModelFormularioSiciFustJson>((json) => ModelFormularioSiciFustJson.fromJson(json)).toList();
             if (ListaModelFormularioSiciFustModelo.length > 0) {
               for (var prop in ListaModelFormularioSiciFustModelo) {
-                TbFichaSici ModelFichaSici = new TbFichaSici();
-                ModelFichaSici.idFichaSiciApp = null;
-                ModelFichaSici.idEmpresa = prop.idEmpresa;
-                ModelFichaSici.isSincronizar = "N";
-                ModelFichaSici.idLancamento = prop.idLancamento;
-                ModelFichaSici.periodoReferencia = prop.periodoReferencia;
-                ModelFichaSici.razaoSocial = prop.razaoSocial;
-                ModelFichaSici.nomeCliente = prop.nomeCliente;
-                ModelFichaSici.nomeConsultor = prop.nomeConsultor;
-                ModelFichaSici.telefoneFixo = prop.telefoneFixo;
-                ModelFichaSici.cnpj = prop.cnpj;
-                ModelFichaSici.mesReferencia = prop.mesReferencia;
-                ModelFichaSici.telefoneMovel = prop.telefoneMovel;
-                ModelFichaSici.emailCliente = prop.emailCliente;
-                ModelFichaSici.emailConsutor = prop.emailConsutor;
-                ModelFichaSici.receitaBruta = prop.receitaBruta;
-                //ModelFichaSici.idFinanceiro  = prop.idFinanceiro; Não tem
-                ModelFichaSici.simples = prop.simples;
-                ModelFichaSici.simplesPorc = prop.simplesPorc;
-                ModelFichaSici.icms = prop.icms;
-                ModelFichaSici.icmsPorc = prop.icmsPorc;
-                ModelFichaSici.pis = prop.pis;
-                ModelFichaSici.pisPorc = prop.pisPorc;
-                ModelFichaSici.cofins = prop.cofins;
-                ModelFichaSici.cofinsPorc = prop.cofinsPorc;
-                ModelFichaSici.receitaLiquida = prop.receitaLiquida;
-                ModelFichaSici.observacoes = prop.observacoes;
-                ModelFichaSici.distribuicaoFisicosServicoQuantitativo = prop.distribuicaoFisicosServicoQuantitativo;
-                ListaFichaSici.add(ModelFichaSici);
+              //  if(ListaFichaSici.where((f) => f.idLancamento.startsWith(prop.idLancamento)).length >= 1)
+                //  {
+
+              ///  else
+                 // {
+                    TbFichaSici ModelFichaSici = new TbFichaSici();
+                    ModelFichaSici.idFichaSiciApp = 0;
+                    ModelFichaSici.idEmpresa = prop.idEmpresa;
+                    ModelFichaSici.isSincronizar = "N";
+                    ModelFichaSici.idLancamento = prop.idLancamento;
+                    ModelFichaSici.periodoReferencia = prop.periodoReferencia;
+                    ModelFichaSici.razaoSocial = prop.razaoSocial;
+                    ModelFichaSici.nomeCliente = prop.nomeCliente;
+                    ModelFichaSici.nomeConsultor = prop.nomeConsultor;
+                    ModelFichaSici.telefoneFixo = prop.telefoneFixo;
+                    ModelFichaSici.cnpj = prop.cnpj;
+                    ModelFichaSici.mesReferencia = prop.mesReferencia;
+                    ModelFichaSici.telefoneMovel = prop.telefoneMovel;
+                    ModelFichaSici.emailCliente = prop.emailCliente;
+                    ModelFichaSici.emailConsutor = prop.emailConsutor;
+                    ModelFichaSici.receitaBruta = prop.receitaBruta;
+                    //ModelFichaSici.idFinanceiro  = prop.idFinanceiro; Não tem
+                    ModelFichaSici.simples = prop.simples;
+                    ModelFichaSici.simplesPorc = prop.simplesPorc;
+                    ModelFichaSici.icms = prop.icms;
+                    ModelFichaSici.icmsPorc = prop.icmsPorc;
+                    ModelFichaSici.pis = prop.pis;
+                    ModelFichaSici.pisPorc = prop.pisPorc;
+                    ModelFichaSici.cofins = prop.cofins;
+                    ModelFichaSici.cofinsPorc = prop.cofinsPorc;
+                    ModelFichaSici.receitaLiquida = prop.receitaLiquida;
+                    ModelFichaSici.observacoes = prop.observacoes;
+                    ModelFichaSici.distribuicaoFisicosServicoQuantitativo = prop.distribuicaoFisicosServicoQuantitativo;
+                    ListaFichaSici.add(ModelFichaSici);
+                 // }
               }
               _StatusTipoWidget = "renderizar_sici";
             } else
               _StatusTipoWidget = "nao_existe_sici_cadastrado";
           });
-          Navigator.pop(dialogContext);
+          if(dialogContext != null) Navigator.pop(dialogContext);
         }
       }
     } catch (error) {
-      Navigator.pop(dialogContext);
+      if(dialogContext != null)
+        Navigator.pop(dialogContext);
       if (ListaFichaSici.length > 0) {
         setState(() {
           _StatusTipoWidget = "renderizar_sici";
@@ -110,8 +111,9 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
 
   Future<Null> Inc() async {
     try {
+      OnRealizandoOperacao("Realizando busca de fichas sici local");
       Operacao _FichaSiciLocal = await dbHelper.onSelecionarFichaSici();
-      if (_FichaSiciLocal.erro)
+      if (_FichaSiciLocal.erro || _FichaSiciLocal.resultado == null)
         throw (_FichaSiciLocal.mensagem);
       else if (_FichaSiciLocal.resultado != null) {
         var data = _FichaSiciLocal.resultado;
@@ -119,20 +121,24 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
           ListaFichaSici = _FichaSiciLocal.resultado;
           _StatusTipoWidget = "renderizar_sici";
         });
-      } else {}
+        if(dialogContext != null)
+          Navigator.pop(dialogContext);
+        IncRestWeb();
+      }
     } catch (error) {
-      Navigator.pop(dialogContext);
+      if(dialogContext != null) Navigator.pop(dialogContext);
       if (ListaFichaSici.length > 0) {
         setState(() {
           _StatusTipoWidget = "renderizar_sici";
         });
-        OnAlertaInformacao(error);
       } else {
         setState(() {
           _StatusTipoWidget = "erro_informacao";
           ErroInformacao = error.toString();
         });
       }
+      OnAlertaInformacao(error);
+      IncRestWeb();
     }
   }
 
@@ -271,10 +277,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
   void initState() {
     super.initState();
     dbHelper = DBHelper();
-    Inc();
-    subscription = Connectivity()
-        .onConnectivityChanged
-        .listen((ConnectivityResult result) {
+    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
       if (result == ConnectivityResult.none) {
         if (ListaFichaSici.length > 0) {
           setState(() {
@@ -287,7 +290,9 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
         }
       } else {}
     });
-    IncRestWeb();
+    Future.delayed(Duration.zero, () async {
+      Inc();
+    });
   }
 
   @override
@@ -776,7 +781,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                               setState(() {
                                                 ListaFichaSici.remove([index]);
                                               });
-                                              IncRestWeb();
+                                              Inc();
                                             }
                                             OnAlertaInformacao(_RestWeb.mensagem);
                                           }
@@ -786,8 +791,6 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                         Navigator.pop(dialogContext);
                                         OnAlertaInformacao(error);
                                       }
-
-
                                     },
                                     child: Column(
                                       mainAxisSize: MainAxisSize.max,
@@ -795,13 +798,14 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                           MainAxisAlignment.center,
                                       children: <Widget>[
                                         Icon(Icons.file_upload,
-                                            size: 25, color: Color(0xFF000000)),
+                                            size: 25, color: Color(0xFF4caf50)),
                                         SizedBox(height: 10.0),
                                         Text(
                                           "Upload",
                                           style: TextStyle(
+                                              fontWeight: FontWeight.w500,
                                               fontSize: 15.0,
-                                              color: Color(0xff333333),
+                                              color: Color(0xFF4caf50),
                                               fontFamily:
                                                   "avenir-lt-std-roman"),
                                         ),
@@ -925,13 +929,14 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                           MainAxisAlignment.center,
                                       children: <Widget>[
                                         Icon(Icons.delete_outline,
-                                            size: 25, color: Color(0xFF000000)),
+                                            size: 25, color: Color(0xfff44336)),
                                         SizedBox(height: 10.0),
                                         Text(
                                           "Remover",
                                           style: TextStyle(
+                                              fontWeight: FontWeight.w500,
                                               fontSize: 15.0,
-                                              color: Color(0xff333333),
+                                              color: Color(0xfff44336),
                                               fontFamily:
                                                   "avenir-lt-std-roman"),
                                         ),
@@ -964,13 +969,14 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                           MainAxisAlignment.center,
                                       children: <Widget>[
                                         Icon(Icons.visibility,
-                                            size: 25, color: Color(0xFF000000)),
+                                            size: 25, color: Color(0xFFffc107)),
                                         SizedBox(height: 10.0),
                                         Text(
                                           "Visualizar",
                                           style: TextStyle(
+                                              fontWeight: FontWeight.w500,
                                               fontSize: 15.0,
-                                              color: Color(0xff333333),
+                                              color: Color(0xFFffc107),
                                               fontFamily:
                                                   "avenir-lt-std-roman"),
                                         ),
@@ -995,20 +1001,114 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                   color: Color(0xffFFFFFF),
                                   //width: MediaQuery.of(context).size.width / 3,
                                   child: InkWell(
-                                    onTap: () {},
+                                    onTap: () async {
+                                      OnRealizandoOperacao("Realizando cadastro.");
+                                      ListaFichaSici[index].isSincronizar = "S";
+                                      Operacao _respLocal = await dbHelper.OnAddFichaSici(ListaFichaSici[index]);
+                                      if (_respLocal.erro)
+                                        throw (_respLocal.mensagem);
+                                      else {
+                                        if (dialogContext != null)
+                                          Navigator.pop(dialogContext);
+                                        showDialog(
+                                          context: context,
+                                          barrierDismissible: false,
+                                          builder: (BuildContext context) {
+                                            return Dialog(
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  SizedBox(height: 15.0),
+                                                  Column(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: [
+                                                      Text(
+                                                        "Informação",
+                                                        style: TextStyle(
+                                                            fontSize: 20.0,
+                                                            color: Color(0xff212529),
+                                                            fontFamily: "avenir-lt-std-roman"),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      Divider(
+                                                        color: Colors.black12,
+                                                      ),
+                                                      Padding(
+                                                        padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                                                        child: Text(
+                                                          _respLocal.mensagem,
+                                                          overflow: TextOverflow.ellipsis,
+                                                          maxLines: 4,
+                                                          softWrap: false,
+                                                          style: TextStyle(
+                                                              fontSize: 17.0,
+                                                              color: Color(0xff212529),
+                                                              fontFamily: "avenir-lt-std-roman"),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Divider(
+                                                    color: Colors.black12,
+                                                  ),
+                                                  Container(
+                                                    margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
+                                                    child: new Row(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                                      mainAxisSize: MainAxisSize.max,
+                                                      children: <Widget>[
+                                                        FlatButton(
+                                                          color: Color(0xff018a8a),
+                                                          //`Icon` to display
+                                                          child: Text(
+                                                            '           OK           ',
+                                                            style: TextStyle(
+                                                                fontSize: 17.0,
+                                                                color: Color(0xffFFFFFF),
+                                                                fontFamily: "avenir-lt-std-roman"),
+                                                          ),
+                                                          //`Text` to display
+                                                          onPressed: () {
+                                                            Inc();
+                                                            Navigator.pop(context);
+                                                          },
+                                                          shape: new RoundedRectangleBorder(
+                                                            borderRadius: new BorderRadius.circular(5.0),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      }
+                                    },
                                     child: Column(
                                       mainAxisSize: MainAxisSize.max,
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: <Widget>[
                                         Icon(Icons.file_download,
-                                            size: 25, color: Color(0xFF000000)),
+                                            size: 25, color: Color(0xFF4caf50)),
                                         SizedBox(height: 10.0),
                                         Text(
                                           "Upload",
                                           style: TextStyle(
+                                              fontWeight: FontWeight.w500,
                                               fontSize: 15.0,
-                                              color: Color(0xff333333),
+                                              color: Color(0xFF4caf50),
                                               fontFamily:
                                                   "avenir-lt-std-roman"),
                                         ),
@@ -1041,13 +1141,14 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                           MainAxisAlignment.center,
                                       children: <Widget>[
                                         Icon(Icons.visibility,
-                                            size: 25, color: Color(0xFF000000)),
+                                            size: 25, color: Color(0xFFffc107 )),
                                         SizedBox(height: 10.0),
                                         Text(
                                           "Visualizar",
                                           style: TextStyle(
+                                              fontWeight: FontWeight.w500,
                                               fontSize: 15.0,
-                                              color: Color(0xff333333),
+                                              color: Color(0xFFffc107),
                                               fontFamily:
                                                   "avenir-lt-std-roman"),
                                         ),

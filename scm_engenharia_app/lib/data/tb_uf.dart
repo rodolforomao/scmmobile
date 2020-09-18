@@ -3,7 +3,7 @@ class TbUf {
   String id;
   String uf;
 
-  TbUf({this.id, this.uf});
+  TbUf({this.idUfApp = 0, this.id, this.uf});
 
   TbUf.fromJson(Map<String, dynamic> json) {
     idUfApp = json['idUfApp'];

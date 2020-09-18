@@ -150,8 +150,6 @@ class DBHelper {
       } else if (listUsuario.length == 0) {
         _Operacao.resultado = null;
       } else {
-        //_Operacao.resultado = null;
-        //_Operacao.erro = true;
         _Operacao.resultado = listUsuario.first;
       }
       _Operacao.erro = false;
@@ -201,24 +199,33 @@ class DBHelper {
   Future<Operacao> OnAddUpdateTecnologia(TbTecnologia Tecnologia) async {
     Operacao _Operacao = new Operacao();
     try {
-
       var dbClient = await db;
-      if (Tecnologia.idTecnologiaApp == 0 || Tecnologia.idTecnologiaApp == null)
-       {
-         Tecnologia.idTecnologiaApp = null;
-         Tecnologia.idTecnologiaApp = await dbClient.insert('tbTecnologia', Tecnologia.toJson());
-       }
-      else {
-        int id = await dbClient.update(
-          'tbUsuario',
-          Tecnologia.toJson(),
-          where: 'idTecnologiaApp = ?',
-          whereArgs: [Tecnologia.idTecnologiaApp],
-        );
-        Tecnologia.idTecnologiaApp = id;
+      Operacao _Tecnologia = await onSelecionarTecnologiaBayId(Tecnologia.id);
+      if (_Tecnologia.erro)
+        throw (_Tecnologia.mensagem);
+      else if (_Tecnologia.resultado == null)
+      {
+        if (Tecnologia.idTecnologiaApp == 0)
+        {
+          Tecnologia.idTecnologiaApp = null;
+          Tecnologia.idTecnologiaApp = await dbClient.insert('tbTecnologia', Tecnologia.toJson());
+        }
       }
+      else
+        {
+          int idTecnologiaApp = Tecnologia.idTecnologiaApp;
+          Tecnologia = _Tecnologia.resultado as TbTecnologia;
+          Tecnologia.idTecnologiaApp = idTecnologiaApp;
+          int id = await dbClient.update(
+            'tbTecnologia',
+            Tecnologia.toJson(),
+            where: 'idTecnologiaApp = ?',
+            whereArgs: [Tecnologia.idTecnologiaApp],
+          );
+          Tecnologia.idTecnologiaApp = id;
+        }
       _Operacao.erro = false;
-      _Operacao.mensagem = "Usuário adicionado com sucesso.";
+      _Operacao.mensagem = "Tecnologia adicionada com sucesso.";
       _Operacao.resultado = Tecnologia;
     } catch (e) {
       _Operacao.erro = true;
@@ -245,7 +252,7 @@ class DBHelper {
       else
         _Operacao.resultado = null;
       _Operacao.erro = false;
-      _Operacao.mensagem = "Usuário obtido com sucesso.";
+      _Operacao.mensagem = "Lista de tecnologias obtida com sucesso .";
     } catch (e) {
       _Operacao.erro = true;
       _Operacao.mensagem = e.toString();
@@ -253,7 +260,45 @@ class DBHelper {
     return _Operacao;
   }
 
-  Future<Operacao> OnDeletarTecnologia() async {
+  Future<Operacao> onSelecionarTecnologiaBayId(String Id) async {
+    Operacao _Operacao = new Operacao();
+    try {
+      _Operacao.erro = false;
+      _Operacao.mensagem = "";
+      _Operacao.resultado = null;
+      final dbClient = await db;
+      String Query = 'SELECT * FROM tbTecnologia WHERE id = ' + Id;
+      var results = await dbClient.rawQuery(Query);
+      List<TbTecnologia> listTecnologia = [];
+      if (results.length > 0) {
+        for (int i = 0; i < results.length; i++) {
+          listTecnologia.add(TbTecnologia.fromJson(results[i]));
+        }
+      }
+      else if (listTecnologia.length > 1) {
+        for (final i in listTecnologia) {
+          var resp = await dbClient.delete(
+            'tbTecnologia',
+            where: 'idTecnologiaApp = ?',
+            whereArgs: [i.idTecnologiaApp],
+          );
+        }
+        throw ("Houve inconsistência .");
+      } else if (listTecnologia.length == 0) {
+        _Operacao.resultado = null;
+      } else {
+        _Operacao.resultado = listTecnologia.first;
+      }
+      _Operacao.erro = false;
+      _Operacao.mensagem = "Operação realizada com sucesso.";
+    } catch (e) {
+      _Operacao.erro = true;
+      _Operacao.mensagem = e.toString();
+    }
+    return _Operacao;
+  }
+
+  Future<Operacao> OnLimparTbTecnologia() async {
     Operacao _Operacao = new Operacao();
     try {
       final dbClient = await db;
@@ -274,8 +319,8 @@ class DBHelper {
         }
       }
       _Operacao.erro = false;
-      _Operacao.mensagem = "Usuário foi removido com sucesso";
-      _Operacao.resultado = "Usuário foi removido com sucesso";
+      _Operacao.mensagem = "Todas as tecnologias foram removidos com sucesso";
+      _Operacao.resultado = "Todas as tecnologias foram removidos com sucesso";
     } catch (e) {
       _Operacao.erro = true;
       _Operacao.mensagem = e.toString();
@@ -293,8 +338,8 @@ class DBHelper {
         whereArgs: [idTecnologiaApp],
       );
       _Operacao.erro = false;
-      _Operacao.mensagem = "Usuário foi removido com sucesso";
-      _Operacao.resultado = "Usuário foi removido com sucesso";
+      _Operacao.mensagem = "Operação realizada com sucesso.";
+      _Operacao.resultado = "Operação realizada com sucesso.";
     } catch (e) {
       _Operacao.erro = true;
       _Operacao.mensagem = e.toString();
@@ -310,24 +355,33 @@ class DBHelper {
   Future<Operacao> OnAddUpdateUf(TbUf Uf) async {
     Operacao _Operacao = new Operacao();
     try {
-
       var dbClient = await db;
-      if (Uf.idUfApp == 0 || Uf.idUfApp == null)
-      {
-        Uf.idUfApp = null;
-        Uf.idUfApp = await dbClient.insert('tbUf', Uf.toJson());
-      }
-      else {
-        int id = await dbClient.update(
-          'tbUf',
-          Uf.toJson(),
-          where: 'tbUf = ?',
-          whereArgs: [Uf.idUfApp],
-        );
-        Uf.idUfApp = id;
-      }
+      Operacao _Uf = await onSelecionarUfBayId(Uf.id);
+      if (_Uf.erro)
+        throw (_Uf.mensagem);
+      else if (_Uf.resultado == null)
+        {
+          if (Uf.idUfApp == 0)
+          {
+            Uf.idUfApp = null;
+            Uf.idUfApp = await dbClient.insert('tbUf', Uf.toJson());
+          }
+        }
+      else
+        {
+          int idUfApp = Uf.idUfApp;
+          Uf = _Uf.resultado as TbUf;
+          Uf.idUfApp = idUfApp;
+          int id = await dbClient.update(
+            'tbUf',
+            Uf.toJson(),
+            where: 'idUfApp = ?',
+            whereArgs: [Uf.idUfApp],
+          );
+          Uf.idUfApp = id;
+        }
       _Operacao.erro = false;
-      _Operacao.mensagem = "Usuário adicionado com sucesso.";
+      _Operacao.mensagem = "Operação realizada com sucesso.";
       _Operacao.resultado = Uf;
     } catch (e) {
       _Operacao.erro = true;
@@ -354,7 +408,7 @@ class DBHelper {
       else
         _Operacao.resultado = null;
       _Operacao.erro = false;
-      _Operacao.mensagem = "Usuário obtido com sucesso.";
+      _Operacao.mensagem = "Operação realizada com sucesso..";
     } catch (e) {
       _Operacao.erro = true;
       _Operacao.mensagem = e.toString();
@@ -362,7 +416,45 @@ class DBHelper {
     return _Operacao;
   }
 
-  Future<Operacao> OnDeletarUfs() async {
+  Future<Operacao> onSelecionarUfBayId(String Id) async {
+    Operacao _Operacao = new Operacao();
+    try {
+      _Operacao.erro = false;
+      _Operacao.mensagem = "";
+      _Operacao.resultado = null;
+      final dbClient = await db;
+      String Query = 'SELECT * FROM tbUf WHERE id = ' + Id;
+      var results = await dbClient.rawQuery(Query);
+      List<TbUf> listUfs = [];
+      if (results.length > 0) {
+        for (int i = 0; i < results.length; i++) {
+          listUfs.add(TbUf.fromJson(results[i]));
+        }
+      }
+      else if (listUfs.length > 1) {
+        for (final i in listUfs) {
+          var resp = await dbClient.delete(
+            'tbUf',
+            where: 'idUfApp = ?',
+            whereArgs: [i.idUfApp],
+          );
+        }
+        throw ("Houve inconsistência .");
+      } else if (listUfs.length == 0) {
+        _Operacao.resultado = null;
+      } else {
+        _Operacao.resultado = listUfs.first;
+      }
+      _Operacao.erro = false;
+      _Operacao.mensagem = "Operação realizada com sucesso.";
+    } catch (e) {
+      _Operacao.erro = true;
+      _Operacao.mensagem = e.toString();
+    }
+    return _Operacao;
+  }
+
+  Future<Operacao> OnLimparTbUfs() async {
     Operacao _Operacao = new Operacao();
     try {
       final dbClient = await db;
@@ -383,8 +475,8 @@ class DBHelper {
         }
       }
       _Operacao.erro = false;
-      _Operacao.mensagem = "Usuário foi removido com sucesso";
-      _Operacao.resultado = "Usuário foi removido com sucesso";
+      _Operacao.mensagem = "Operação realizada com sucesso.";
+      _Operacao.resultado = "Operação realizada com sucesso.";
     } catch (e) {
       _Operacao.erro = true;
       _Operacao.mensagem = e.toString();
@@ -402,8 +494,8 @@ class DBHelper {
         whereArgs: [idUfApp],
       );
       _Operacao.erro = false;
-      _Operacao.mensagem = "Usuário foi removido com sucesso";
-      _Operacao.resultado = "Usuário foi removido com sucesso";
+      _Operacao.mensagem = "Operação realizada com sucesso.";
+      _Operacao.resultado = "Operação realizada com sucesso.";
     } catch (e) {
       _Operacao.erro = true;
       _Operacao.mensagem = e.toString();
@@ -419,24 +511,33 @@ class DBHelper {
   Future<Operacao> OnAddUpdateUfMunicipio(TbUfMunicipio UfMunicipio) async {
     Operacao _Operacao = new Operacao();
     try {
-
       var dbClient = await db;
-      if (UfMunicipio.idMunicipioApp == 0 || UfMunicipio.idMunicipioApp == null)
-      {
-        UfMunicipio.idMunicipioApp = null;
-        UfMunicipio.idMunicipioApp = await dbClient.insert('tbUfMunicipio', UfMunicipio.toJson());
+      Operacao _UfMunicipio = await onSelecionarMunicipioById(UfMunicipio.id);
+      if (_UfMunicipio.erro)
+        throw (_UfMunicipio.mensagem);
+      else if (_UfMunicipio.resultado == null)
+        {
+          if (UfMunicipio.idMunicipioApp == 0)
+          {
+            UfMunicipio.idMunicipioApp = null;
+            UfMunicipio.idMunicipioApp = await dbClient.insert('tbUfMunicipio', UfMunicipio.toJson());
+          }
       }
-      else {
-        int id = await dbClient.update(
-          'tbUfMunicipio',
-          UfMunicipio.toJson(),
-          where: 'idMunicipioApp = ?',
-          whereArgs: [UfMunicipio.idMunicipioApp],
-        );
-        UfMunicipio.idMunicipioApp = id;
-      }
+      else
+        {
+          int idMunicipioApp = UfMunicipio.idMunicipioApp;
+          UfMunicipio = _UfMunicipio.resultado as TbUfMunicipio;
+          UfMunicipio.idMunicipioApp = idMunicipioApp;
+          int id = await dbClient.update(
+            'tbUfMunicipio',
+            UfMunicipio.toJson(),
+            where: 'idMunicipioApp = ?',
+            whereArgs: [UfMunicipio.idMunicipioApp],
+          );
+          UfMunicipio.idMunicipioApp = id;
+        }
       _Operacao.erro = false;
-      _Operacao.mensagem = "Usuário adicionado com sucesso.";
+      _Operacao.mensagem = "Operação realizada com sucesso.";
       _Operacao.resultado = UfMunicipio;
     } catch (e) {
       _Operacao.erro = true;
@@ -463,7 +564,7 @@ class DBHelper {
       else
         _Operacao.resultado = null;
       _Operacao.erro = false;
-      _Operacao.mensagem = "Usuário obtido com sucesso.";
+      _Operacao.mensagem = "Operação realizada com sucesso.";
     } catch (e) {
       _Operacao.erro = true;
       _Operacao.mensagem = e.toString();
@@ -471,14 +572,52 @@ class DBHelper {
     return _Operacao;
   }
 
-  Future<Operacao> onSelecionarMunicipioByIdUf(String Id) async {
+  Future<Operacao> onSelecionarMunicipioById(String Id) async {
     Operacao _Operacao = new Operacao();
     try {
       _Operacao.erro = false;
       _Operacao.mensagem = "";
       _Operacao.resultado = null;
       final dbClient = await db;
-      String Query = 'SELECT * FROM tbUfMunicipio WHERE ufId = ' + Id;
+      String Query = 'SELECT * FROM tbUfMunicipio WHERE id = ' + Id;
+      var results = await dbClient.rawQuery(Query);
+      List<TbUfMunicipio> listMunicipio = [];
+      if (results.length > 0) {
+        for (int i = 0; i < results.length; i++) {
+          listMunicipio.add(TbUfMunicipio.fromJson(results[i]));
+        }
+      }
+      else if (listMunicipio.length > 1) {
+        for (final i in listMunicipio) {
+          var resp = await dbClient.delete(
+            'tbUfMunicipio',
+            where: 'idMunicipioApp = ?',
+            whereArgs: [i.idMunicipioApp],
+          );
+        }
+        throw ("Houve inconsistência .");
+      } else if (listMunicipio.length == 0) {
+        _Operacao.resultado = null;
+      } else {
+        _Operacao.resultado = listMunicipio.first;
+      }
+      _Operacao.erro = false;
+      _Operacao.mensagem = "Operação realizada com sucesso.";
+    } catch (e) {
+      _Operacao.erro = true;
+      _Operacao.mensagem = e.toString();
+    }
+    return _Operacao;
+  }
+
+  Future<Operacao> onSelecionarMunicipioByIdUf(String ufId) async {
+    Operacao _Operacao = new Operacao();
+    try {
+      _Operacao.erro = false;
+      _Operacao.mensagem = "";
+      _Operacao.resultado = null;
+      final dbClient = await db;
+      String Query = 'SELECT * FROM tbUfMunicipio WHERE ufId = ' + ufId;
       var results = await dbClient.rawQuery(Query);
       List<TbUfMunicipio> listUfMunicipio = [];
       if (results.length > 0) {
@@ -490,7 +629,7 @@ class DBHelper {
       else
         _Operacao.resultado = null;
       _Operacao.erro = false;
-      _Operacao.mensagem = "Usuário obtido com sucesso.";
+      _Operacao.mensagem = "Operação realizada com sucesso.";
     } catch (e) {
       _Operacao.erro = true;
       _Operacao.mensagem = e.toString();
@@ -498,7 +637,7 @@ class DBHelper {
     return _Operacao;
   }
 
-  Future<Operacao> OnDeletarUfMunicipios() async {
+  Future<Operacao> OnLimparTbUfMunicipios() async {
     Operacao _Operacao = new Operacao();
     try {
       final dbClient = await db;
@@ -519,8 +658,8 @@ class DBHelper {
         }
       }
       _Operacao.erro = false;
-      _Operacao.mensagem = "Usuário foi removido com sucesso";
-      _Operacao.resultado = "Usuário foi removido com sucesso";
+      _Operacao.mensagem = "Operação realizada com sucesso.";
+      _Operacao.resultado = "Operação realizada com sucesso.";
     } catch (e) {
       _Operacao.erro = true;
       _Operacao.mensagem = e.toString();
@@ -538,8 +677,8 @@ class DBHelper {
         whereArgs: [idMunicipioApp],
       );
       _Operacao.erro = false;
-      _Operacao.mensagem = "Usuário foi removido com sucesso";
-      _Operacao.resultado = "Usuário foi removido com sucesso";
+      _Operacao.mensagem = "Operação realizada com sucesso.";
+      _Operacao.resultado = "Operação realizada com sucesso.";
     } catch (e) {
       _Operacao.erro = true;
       _Operacao.mensagem = e.toString();
@@ -580,7 +719,7 @@ class DBHelper {
         }
       }
       _Operacao.erro = false;
-      _Operacao.mensagem = "Usuário adicionado com sucesso.";
+      _Operacao.mensagem = "Operação realizada com sucesso.";
       _Operacao.resultado = _Modelo;
     } catch (e) {
       _Operacao.erro = true;
@@ -608,7 +747,7 @@ class DBHelper {
       else
         _Operacao.resultado = null;
       _Operacao.erro = false;
-      _Operacao.mensagem = "Usuário obtido com sucesso.";
+      _Operacao.mensagem = "Operação realizada com sucesso.";
     } catch (e) {
       _Operacao.erro = true;
       _Operacao.mensagem = e.toString();
@@ -643,7 +782,7 @@ class DBHelper {
       else
         _Operacao.resultado = null;
       _Operacao.erro = false;
-      _Operacao.mensagem = "Usuário obtido com sucesso.";
+      _Operacao.mensagem = "Operação realizada com sucesso.";
     } catch (e) {
       _Operacao.erro = true;
       _Operacao.mensagem = e.toString();
@@ -661,8 +800,8 @@ class DBHelper {
         whereArgs: [idFichaSiciApp],
       );
       _Operacao.erro = false;
-      _Operacao.mensagem = "Usuário foi removido com sucesso";
-      _Operacao.resultado = "Usuário foi removido com sucesso";
+      _Operacao.mensagem = "Operação realizada com sucesso.";
+      _Operacao.resultado = "Operação realizada com sucesso.";
     } catch (e) {
       _Operacao.erro = true;
       _Operacao.mensagem = e.toString();
@@ -695,7 +834,7 @@ class DBHelper {
         _Modelo.idDistribuicaoQuantitativoAcessosFisicosServicoApp = id;
       }
       _Operacao.erro = false;
-      _Operacao.mensagem = "Usuário adicionado com sucesso.";
+      _Operacao.mensagem = "Operação realizada com sucesso.";
       _Operacao.resultado = _Modelo;
     } catch (e) {
       _Operacao.erro = true;
@@ -723,7 +862,7 @@ class DBHelper {
       else
         _Operacao.resultado = null;
       _Operacao.erro = false;
-      _Operacao.mensagem = "Usuário obtido com sucesso.";
+      _Operacao.mensagem = "Operação realizada com sucesso.";
     } catch (e) {
       _Operacao.erro = true;
       _Operacao.mensagem = e.toString();
@@ -741,8 +880,8 @@ class DBHelper {
         whereArgs: [idDistribuicaoQuantitativoAcessosFisicosServicoApp],
       );
       _Operacao.erro = false;
-      _Operacao.mensagem = "Usuário foi removido com sucesso";
-      _Operacao.resultado = "Usuário foi removido com sucesso";
+      _Operacao.mensagem = "Operação realizada com sucesso.";
+      _Operacao.resultado = "Operação realizada com sucesso.";
     } catch (e) {
       _Operacao.erro = true;
       _Operacao.mensagem = e.toString();

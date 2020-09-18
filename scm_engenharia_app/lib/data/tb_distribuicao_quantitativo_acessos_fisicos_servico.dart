@@ -25,7 +25,7 @@ class TbDistribuicaoQuantitativoAcessosFisicosServico {
   String tecnologia;
 
   TbDistribuicaoQuantitativoAcessosFisicosServico(
-      {this.idDistribuicaoQuantitativoAcessosFisicosServicoApp,
+      {this.idDistribuicaoQuantitativoAcessosFisicosServicoApp =0,
         this.idFichaSiciApp,
         this.index,
       this.id,

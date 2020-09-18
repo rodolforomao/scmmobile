@@ -35,8 +35,6 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
 
   DateTime _DataSelecionada = DateTime.now();
 
-
-
   StreamSubscription<ConnectivityResult> subscription;
   DateTime _DataSelecionadaConsulta = DateTime.now();
 
@@ -46,14 +44,17 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
       new MaskedTextController(mask: '00.000.000/0000-00');
   TextEditingController _TxtControllerRazaoSocial = TextEditingController();
   TextEditingController _TxtControllerNomeConsultor = TextEditingController();
-  TextEditingController _TxtControllerTelefoneMovel = new MaskedTextController(mask: '(00) 0 0000-0000');
-  TextEditingController _TxtControllerTelefoneFixo = new MaskedTextController(mask: '(00) 0 0000-0000');
+  TextEditingController _TxtControllerTelefoneMovel =
+      new MaskedTextController(mask: '(00) 0 0000-0000');
+  TextEditingController _TxtControllerTelefoneFixo =
+      new MaskedTextController(mask: '(00) 0 0000-0000');
 
   TextEditingController _TxtControllerEmailConsutor = TextEditingController();
   TextEditingController _TxtControllerEmailCliente = TextEditingController();
   TextEditingController _TxtControllerNomeCliente = TextEditingController();
   TextEditingController _TxtControllerMesReferencia = TextEditingController();
-  TextEditingController _TxtControllerPeriodoReferencia = TextEditingController();
+  TextEditingController _TxtControllerPeriodoReferencia =
+      TextEditingController();
 
   TextEditingController _TxtControllerReceitaBruta = TextEditingController();
   TextEditingController _TxtControllerReceitaLiquida = TextEditingController();
@@ -151,19 +152,6 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
         );
       },
     );
-  }
-
-  Future<Null> OnSalvarFormulario() async {
-    try {
-      var connectivityResult = await (Connectivity().checkConnectivity());
-      if (connectivityResult == ConnectivityResult.none) {
-      } else {
-
-      }
-    } catch (error) {
-      Navigator.pop(dialogContext);
-      OnAlertaInformacao(error);
-    }
   }
 
   Future<Null> OnSalvarFormularioDbLocal() async {
@@ -271,8 +259,8 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                               Navigator.of(context).pushAndRemoveUntil(
                                   new MaterialPageRoute(
                                       builder: (BuildContext context) =>
-                                      new MenuNavigation()),
-                                      (Route<dynamic> route) => false);
+                                          new MenuNavigation()),
+                                  (Route<dynamic> route) => false);
                             },
                             shape: new RoundedRectangleBorder(
                               borderRadius: new BorderRadius.circular(5.0),
@@ -299,14 +287,11 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
         context: context,
         builder: (BuildContext context) => Container(
               width: MediaQuery.of(context).size.width,
-              child: YearPicker(
-                selectedDate: DateTime(1997),
+              child: CalendarDatePicker(
+
                 firstDate: DateTime(1995),
                 lastDate: DateTime.now(),
-                onChanged: (val) {
-                  print(val);
-                  Navigator.pop(context);
-                },
+
               ),
             ));
   }
@@ -314,7 +299,10 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
   OnSelecionarData(BuildContext context) async {
     final DateTime picked = await showDatePicker(
       context: context,
-      initialEntryMode: DatePickerEntryMode.calendar,
+
+
+      initialDatePickerMode: DatePickerMode.year,
+      initialEntryMode: DatePickerEntryMode.input,
       initialDate: _DataSelecionada,
       firstDate: DateTime(2015, 8),
       lastDate: DateTime.now(),
@@ -327,11 +315,13 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
     if (picked != null && picked != _DataSelecionada) {
       setState(() {
         _DataSelecionada = picked;
-        _TxtControllerPeriodoReferencia.text =
-            DateFormat('dd/MM/yyyy').format(picked.toLocal());
+        _TxtControllerPeriodoReferencia.text = DateFormat('dd/MM/yyyy').format(picked.toLocal());
       });
     }
   }
+
+
+
 
   Inc() async {
     try {
@@ -341,33 +331,24 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
       });
       if (widget.FichaSiciModel != null) {
         _FichaSici = widget.FichaSiciModel;
-        _TxtControllerPeriodoDeReferencia.text = widget.FichaSiciModel.periodoReferencia;
+        _TxtControllerPeriodoDeReferencia.text =
+            widget.FichaSiciModel.periodoReferencia;
         _TxtControllerCnpj.text = widget.FichaSiciModel.cnpj;
-        _TxtControllerRazaoSocial.text =
-            widget.FichaSiciModel.razaoSocial;
-        _TxtControllerNomeConsultor.text =
-            widget.FichaSiciModel.nomeConsultor;
-        _TxtControllerTelefoneMovel.text =
-            widget.FichaSiciModel.telefoneMovel;
-        _TxtControllerTelefoneFixo.text =
-            widget.FichaSiciModel.telefoneFixo;
+        _TxtControllerRazaoSocial.text = widget.FichaSiciModel.razaoSocial;
+        _TxtControllerNomeConsultor.text = widget.FichaSiciModel.nomeConsultor;
+        _TxtControllerTelefoneMovel.text = widget.FichaSiciModel.telefoneMovel;
+        _TxtControllerTelefoneFixo.text = widget.FichaSiciModel.telefoneFixo;
 
-        _TxtControllerEmailConsutor.text =
-            widget.FichaSiciModel.emailConsutor;
-        _TxtControllerEmailCliente.text =
-            widget.FichaSiciModel.emailCliente;
-        _TxtControllerNomeCliente.text =
-            widget.FichaSiciModel.nomeCliente;
-        _TxtControllerMesReferencia.text =
-            widget.FichaSiciModel.mesReferencia;
+        _TxtControllerEmailConsutor.text = widget.FichaSiciModel.emailConsutor;
+        _TxtControllerEmailCliente.text = widget.FichaSiciModel.emailCliente;
+        _TxtControllerNomeCliente.text = widget.FichaSiciModel.nomeCliente;
+        _TxtControllerMesReferencia.text = widget.FichaSiciModel.mesReferencia;
 
-        _TxtControllerReceitaBruta.text =
-            widget.FichaSiciModel.receitaBruta;
+        _TxtControllerReceitaBruta.text = widget.FichaSiciModel.receitaBruta;
         _TxtControllerReceitaLiquida.text =
             widget.FichaSiciModel.receitaLiquida;
         _TxtControllerSimples.text = widget.FichaSiciModel.simples;
-        _TxtControllerSimplesPorc.text =
-            widget.FichaSiciModel.simplesPorc;
+        _TxtControllerSimplesPorc.text = widget.FichaSiciModel.simplesPorc;
         _TxtControllerIcms.text = widget.FichaSiciModel.icms;
         _TxtControllerIcmsPorc.text = widget.FichaSiciModel.icmsPorc;
         _TxtControllerPis.text = widget.FichaSiciModel.pis;
@@ -375,11 +356,10 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
         _TxtControllerCofins.text = widget.FichaSiciModel.cofins;
         _TxtControllerCofinsPorc.text = widget.FichaSiciModel.cofinsPorc;
         _TxtControllerObservacoes.text = widget.FichaSiciModel.observacoes;
+      } else {
+        _FichaSici.distribuicaoFisicosServicoQuantitativo =
+            new List<TbDistribuicaoQuantitativoAcessosFisicosServico>();
       }
-      else
-        {
-          _FichaSici.distribuicaoFisicosServicoQuantitativo = new List<TbDistribuicaoQuantitativoAcessosFisicosServico>();
-        }
     } catch (error) {
       //Navigator.of(context, rootNavigator: true).pop();
     }
@@ -445,7 +425,9 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
     );
   }
 
-  Card DistribuicaoFisicosServicoQuantitativoCard(BuildContext context, int index) => Card(
+  Card DistribuicaoFisicosServicoQuantitativoCard(
+          BuildContext context, int index) =>
+      Card(
         elevation: 0.9,
         color: Color(0xffFFFFFF),
         child: Container(
@@ -478,8 +460,8 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text:
-                          _FichaSici.distribuicaoFisicosServicoQuantitativo[index].uf,
+                          text: _FichaSici
+                              .distribuicaoFisicosServicoQuantitativo[index].uf,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -507,10 +489,9 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text:
-                          _FichaSici.distribuicaoFisicosServicoQuantitativo[
-                                      index]
-                                  .municipio,
+                          text: _FichaSici
+                              .distribuicaoFisicosServicoQuantitativo[index]
+                              .municipio,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -538,10 +519,9 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text:
-                          _FichaSici.distribuicaoFisicosServicoQuantitativo[
-                                      index]
-                                  .tecnologia,
+                          text: _FichaSici
+                              .distribuicaoFisicosServicoQuantitativo[index]
+                              .tecnologia,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -569,10 +549,9 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text:
-                          _FichaSici.distribuicaoFisicosServicoQuantitativo[
-                                      index]
-                                  .cod_ibge,
+                          text: _FichaSici
+                              .distribuicaoFisicosServicoQuantitativo[index]
+                              .cod_ibge,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -600,10 +579,9 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text:
-                          _FichaSici.distribuicaoFisicosServicoQuantitativo[
-                                      index]
-                                  .pf_0,
+                          text: _FichaSici
+                              .distribuicaoFisicosServicoQuantitativo[index]
+                              .pf_0,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -631,10 +609,9 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text:
-                          _FichaSici.distribuicaoFisicosServicoQuantitativo[
-                                      index]
-                                  .pf_512,
+                          text: _FichaSici
+                              .distribuicaoFisicosServicoQuantitativo[index]
+                              .pf_512,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -662,10 +639,9 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text:
-                          _FichaSici.distribuicaoFisicosServicoQuantitativo[
-                                      index]
-                                  .pf_2,
+                          text: _FichaSici
+                              .distribuicaoFisicosServicoQuantitativo[index]
+                              .pf_2,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -693,10 +669,9 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text:
-                          _FichaSici.distribuicaoFisicosServicoQuantitativo[
-                                      index]
-                                  .pf_12,
+                          text: _FichaSici
+                              .distribuicaoFisicosServicoQuantitativo[index]
+                              .pf_12,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -724,10 +699,9 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text:
-                          _FichaSici.distribuicaoFisicosServicoQuantitativo[
-                                      index]
-                                  .pf_34,
+                          text: _FichaSici
+                              .distribuicaoFisicosServicoQuantitativo[index]
+                              .pf_34,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -755,10 +729,9 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text:
-                          _FichaSici.distribuicaoFisicosServicoQuantitativo[
-                                      index]
-                                  .pj_0,
+                          text: _FichaSici
+                              .distribuicaoFisicosServicoQuantitativo[index]
+                              .pj_0,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -786,10 +759,9 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text:
-                          _FichaSici.distribuicaoFisicosServicoQuantitativo[
-                                      index]
-                                  .pj_512,
+                          text: _FichaSici
+                              .distribuicaoFisicosServicoQuantitativo[index]
+                              .pj_512,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -817,10 +789,9 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text:
-                          _FichaSici.distribuicaoFisicosServicoQuantitativo[
-                                      index]
-                                  .pj_2,
+                          text: _FichaSici
+                              .distribuicaoFisicosServicoQuantitativo[index]
+                              .pj_2,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -848,10 +819,9 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text:
-                          _FichaSici.distribuicaoFisicosServicoQuantitativo[
-                                      index]
-                                  .pj_12,
+                          text: _FichaSici
+                              .distribuicaoFisicosServicoQuantitativo[index]
+                              .pj_12,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -879,10 +849,9 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           ),
                         ),
                         TextSpan(
-                          text:
-                          _FichaSici.distribuicaoFisicosServicoQuantitativo[
-                                      index]
-                                  .pj_34,
+                          text: _FichaSici
+                              .distribuicaoFisicosServicoQuantitativo[index]
+                              .pj_34,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -932,16 +901,20 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                               builder: (BuildContext context) =>
                                   new DistribuicaoFisicosServicoQuantitativoPage(
                                       sDistribuicaoFisicosServicoQuantitativo:
-                                      _FichaSici.distribuicaoFisicosServicoQuantitativo[
+                                          _FichaSici
+                                                  .distribuicaoFisicosServicoQuantitativo[
                                               index]),
-                            ),).then((value) {
+                            ),
+                          )
+                              .then((value) {
                             if (value != null) {
-                              int Index =
-                              _FichaSici.distribuicaoFisicosServicoQuantitativo
-                                      .indexWhere(
-                                          (item) => item.index == value.index);
+                              int Index = _FichaSici
+                                  .distribuicaoFisicosServicoQuantitativo
+                                  .indexWhere(
+                                      (item) => item.index == value.index);
                               setState(() {
-                                _FichaSici.distribuicaoFisicosServicoQuantitativo[
+                                _FichaSici
+                                        .distribuicaoFisicosServicoQuantitativo[
                                     Index] = value;
                               });
                             }
@@ -1023,25 +996,42 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                                                   fontSize: 16.0,
                                                 )),
                                             onPressed: () async {
-                                              FocusScope.of(context).requestFocus(new FocusNode());
-                                              if(_FichaSici.distribuicaoFisicosServicoQuantitativo[index].idDistribuicaoQuantitativoAcessosFisicosServicoApp == null)
-                                                {
+                                              FocusScope.of(context)
+                                                  .requestFocus(
+                                                      new FocusNode());
+                                              if (_FichaSici
+                                                      .distribuicaoFisicosServicoQuantitativo[
+                                                          index]
+                                                      .idDistribuicaoQuantitativoAcessosFisicosServicoApp ==
+                                                  null) {
+                                                setState(() {
+                                                  _FichaSici
+                                                      .distribuicaoFisicosServicoQuantitativo
+                                                      .remove(_FichaSici
+                                                              .distribuicaoFisicosServicoQuantitativo[
+                                                          index]);
+                                                });
+                                              } else {
+                                                Operacao _respLocal = await dbHelper
+                                                    .OnDeletarDistribuicaoQuantitativoAcessosFisicosServico(
+                                                        _FichaSici
+                                                            .distribuicaoFisicosServicoQuantitativo[
+                                                                index]
+                                                            .idDistribuicaoQuantitativoAcessosFisicosServicoApp);
+                                                if (_respLocal.erro)
+                                                  throw (_respLocal.mensagem);
+                                                else {
+                                                  OnAlertaInformacao(
+                                                      _respLocal.mensagem);
                                                   setState(() {
-                                                    _FichaSici.distribuicaoFisicosServicoQuantitativo.remove(_FichaSici.distribuicaoFisicosServicoQuantitativo[index]);
+                                                    _FichaSici
+                                                        .distribuicaoFisicosServicoQuantitativo
+                                                        .remove(_FichaSici
+                                                                .distribuicaoFisicosServicoQuantitativo[
+                                                            index]);
                                                   });
                                                 }
-                                                else
-                                                  {
-                                                    Operacao _respLocal = await dbHelper.OnDeletarDistribuicaoQuantitativoAcessosFisicosServico(_FichaSici.distribuicaoFisicosServicoQuantitativo[index].idDistribuicaoQuantitativoAcessosFisicosServicoApp);
-                                                    if (_respLocal.erro)
-                                                      throw (_respLocal.mensagem);
-                                                    else {
-                                                      OnAlertaInformacao(_respLocal.mensagem);
-                                                      setState(() {
-                                                        _FichaSici.distribuicaoFisicosServicoQuantitativo.remove(_FichaSici.distribuicaoFisicosServicoQuantitativo[index]);
-                                                      });
-                                                    }
-                                                  }
+                                              }
                                               Navigator.pop(context);
                                             },
                                             borderSide: BorderSide(
@@ -1331,6 +1321,16 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                   content: Container(
                     child: Column(
                       children: [
+                        Container(
+                          height: 200,
+                          child: CupertinoDatePicker(
+                            mode: CupertinoDatePickerMode.dateAndTime,
+                            initialDateTime: DateTime(1969, 1, 1),
+                            onDateTimeChanged: (DateTime newDateTime) {
+                              // Do something
+                            },
+                          ),
+                        ),
                         SizedBox(height: 20.0),
                         TextFormField(
                           onTap: () {
@@ -1684,9 +1684,13 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                               )
                                   .then((value) {
                                 if (value != null) {
-                                  value.index = _FichaSici.distribuicaoFisicosServicoQuantitativo.length + 1;
-                                  _FichaSici.distribuicaoFisicosServicoQuantitativo.add(value);
-
+                                  value.index = _FichaSici
+                                          .distribuicaoFisicosServicoQuantitativo
+                                          .length +
+                                      1;
+                                  _FichaSici
+                                      .distribuicaoFisicosServicoQuantitativo
+                                      .add(value);
                                 }
                               });
                             },
@@ -1720,8 +1724,15 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                               scrollDirection: Axis.vertical,
                               physics: NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
-                              itemCount: _FichaSici.distribuicaoFisicosServicoQuantitativo == null ? 0 : _FichaSici.distribuicaoFisicosServicoQuantitativo.length,
-                              itemBuilder: DistribuicaoFisicosServicoQuantitativoCard,
+                              itemCount: _FichaSici
+                                          .distribuicaoFisicosServicoQuantitativo ==
+                                      null
+                                  ? 0
+                                  : _FichaSici
+                                      .distribuicaoFisicosServicoQuantitativo
+                                      .length,
+                              itemBuilder:
+                                  DistribuicaoFisicosServicoQuantitativoCard,
                             );
                           },
                         ),
@@ -1763,5 +1774,4 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
         break;
     }
   }
-
 }

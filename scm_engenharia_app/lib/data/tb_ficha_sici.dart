@@ -29,7 +29,7 @@ class TbFichaSici {
   String observacoes;
   List<TbDistribuicaoQuantitativoAcessosFisicosServico> distribuicaoFisicosServicoQuantitativo;
   TbFichaSici({
-    this.idFichaSiciApp,
+    this.idFichaSiciApp = 0,
     this.idEmpresa,
     this.isSincronizar,
     this.idLancamento,

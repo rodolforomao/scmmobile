@@ -29,8 +29,6 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
   StreamSubscription<ConnectivityResult> subscription;
 
 
-
-
   Future<Null> OnGetUfs() async {
     try {
       var connectivityResult = await (Connectivity().checkConnectivity());
@@ -58,7 +56,6 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
           {
             for (var prop in  ListaUf) {
               TbUf Uf = new TbUf();
-              Uf.idUfApp =  null;
               Uf.id = prop.id;
               Uf.uf = prop.uf;
               Operacao _respLocalUf = await dbHelper.OnAddUpdateUf(Uf);
@@ -73,7 +70,6 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
           {
             for (var prop in  ListaUFMunicipios) {
               TbUfMunicipio tbUfMunicipio = new TbUfMunicipio();
-              tbUfMunicipio.idMunicipioApp =  null;
               tbUfMunicipio.ufId = prop.ufId;
               tbUfMunicipio.uf = prop.uf;
               tbUfMunicipio.id = prop.id;
@@ -90,7 +86,6 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
           {
             for (var prop in  ListaTecnologias) {
               TbTecnologia tbTecnologia = new TbTecnologia();
-              tbTecnologia.idTecnologiaApp = null;
               tbTecnologia.id = prop.id;
               tbTecnologia.tecnologia = prop.tecnologia;
               Operacao _respLocalUf = await dbHelper.OnAddUpdateTecnologia(tbTecnologia);

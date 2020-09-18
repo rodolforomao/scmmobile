@@ -99,11 +99,11 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
       _DistribuicaoFisicosServicoQuantitativo.pj_34 = _TxtControllerPj_34.text;
       Navigator.pop(context, _DistribuicaoFisicosServicoQuantitativo);
     } catch (error) {
-      OnAlertaInformacao(error);
+      OnToastInformacao(error);
     }
   }
 
-  OnAlertaInformacao(String Mensagem) {
+  void OnToastInformacao(String Mensagem) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -111,7 +111,7 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
         return Dialog(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(8.0))),
-          child: Column(
+          child:  Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
@@ -135,9 +135,8 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
                   Divider(
                     color: Colors.black12,
                   ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-                    child: Text(
+                  Padding(padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                    child:  Text(
                       Mensagem,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 4,
@@ -267,7 +266,7 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
           if (_UfMunicipio.erro)
             throw (_UfMunicipio.mensagem);
           else if (_UfMunicipio.resultado == null) {
-            OnAlertaInformacao("Para o estado " +
+            OnToastInformacao("Para o estado " +
                 tbUf.uf +
                 " não a município cadastrado");
           } else {
@@ -318,13 +317,7 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
         }
       }
     } catch (error) {
-      Navigator.push(
-          context,
-          CupertinoPageRoute(
-              builder: (context) =>
-                  new ErroInformacaoPage(informacao: error.toString()))).then((value) {
-        Inc();
-      });
+      OnToastInformacao(error);
     }
   }
 
@@ -432,7 +425,7 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
                                     if (_UfMunicipio.erro)
                                       throw (_UfMunicipio.mensagem);
                                     else if (_UfMunicipio.resultado == null) {
-                                      OnAlertaInformacao("Para o estado " +
+                                      OnToastInformacao("Para o estado " +
                                           newValue.uf +
                                           " não a município cadastrado");
                                     } else {

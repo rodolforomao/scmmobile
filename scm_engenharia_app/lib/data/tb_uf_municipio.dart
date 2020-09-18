@@ -5,7 +5,7 @@ class TbUfMunicipio {
   String id;
   String municipio;
 
-  TbUfMunicipio({this.idMunicipioApp,this.ufId, this.uf, this.id, this.municipio});
+  TbUfMunicipio({this.idMunicipioApp = 0,this.ufId, this.uf, this.id, this.municipio});
 
   TbUfMunicipio.fromJson(Map<String, dynamic> json) {
     idMunicipioApp = json['idMunicipioApp'];
