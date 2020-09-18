@@ -89,7 +89,8 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
             } else
               _StatusTipoWidget = "nao_existe_sici_cadastrado";
           });
-          if(dialogContext != null) Navigator.pop(dialogContext);
+          if(dialogContext != null)
+            Navigator.pop(dialogContext);
         }
       }
     } catch (error) {
@@ -113,10 +114,14 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
     try {
       OnRealizandoOperacao("Realizando busca de fichas sici local");
       Operacao _FichaSiciLocal = await dbHelper.onSelecionarFichaSici();
-      if (_FichaSiciLocal.erro || _FichaSiciLocal.resultado == null)
+      if (_FichaSiciLocal.erro)
         throw (_FichaSiciLocal.mensagem);
+      else if (_FichaSiciLocal.resultado == null) {
+        if(dialogContext != null)
+          Navigator.pop(dialogContext);
+        IncRestWeb();
+      }
       else if (_FichaSiciLocal.resultado != null) {
-        var data = _FichaSiciLocal.resultado;
         setState(() {
           ListaFichaSici = _FichaSiciLocal.resultado;
           _StatusTipoWidget = "renderizar_sici";
@@ -880,7 +885,8 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                                                   ListaFichaSici.remove([index]);
                                                                 });
                                                                 Navigator.pop(context);
-                                                                OnAlertaInformacao("Ficha removida com sucesso");
+                                                                OnAlertaInformacao(_respLoca.mensagem);
+                                                                Inc();
                                                               }
                                                             },
                                                             //callback when button is clicked
@@ -1078,8 +1084,8 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                                           ),
                                                           //`Text` to display
                                                           onPressed: () {
-                                                            Inc();
                                                             Navigator.pop(context);
+                                                            Inc();
                                                           },
                                                           shape: new RoundedRectangleBorder(
                                                             borderRadius: new BorderRadius.circular(5.0),
@@ -1104,7 +1110,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                             size: 25, color: Color(0xFF4caf50)),
                                         SizedBox(height: 10.0),
                                         Text(
-                                          "Upload",
+                                          "Download",
                                           style: TextStyle(
                                               fontWeight: FontWeight.w500,
                                               fontSize: 15.0,
