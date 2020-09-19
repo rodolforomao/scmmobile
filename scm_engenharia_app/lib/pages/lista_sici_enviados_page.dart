@@ -10,7 +10,6 @@ import 'package:scm_engenharia_app/models/operacao.dart';
 import 'package:scm_engenharia_app/pages/formulario_sici_fust_page.dart';
 
 class ListaSiciEnviadosPage extends StatefulWidget {
-
   @override
   _ListaSiciEnviadosPageState createState() => _ListaSiciEnviadosPageState();
 }
@@ -25,35 +24,37 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
   StreamSubscription<ConnectivityResult> subscription;
 
   Future<Null> IncRestWeb() async {
-    try {
-      var connectivityResult = await (Connectivity().checkConnectivity());
-      if (connectivityResult == ConnectivityResult.none) {
-        if (ListaFichaSici.length > 0) {
-          setState(() {
-            _StatusTipoWidget = "renderizar_sici";
-          });
-          OnAlertaInformacao("Não há conexão com a internet");
+    Future.delayed(Duration.zero, () async {
+      try {
+        var connectivityResult = await (Connectivity().checkConnectivity());
+        if (connectivityResult == ConnectivityResult.none) {
+          if (ListaFichaSici.length > 0) {
+            setState(() {
+              _StatusTipoWidget = "renderizar_sici";
+            });
+          } else {
+            setState(() {
+              _StatusTipoWidget = "sem_internet";
+            });
+          }
         } else {
-          setState(() {
-            _StatusTipoWidget = "sem_internet";
-          });
-        }
-      } else {
-        OnRealizandoOperacao("Realizando busca de fichas sici Web");
-        Operacao _RestWeb = await _RestWebService.OnRecuperaLancamentosSici();
-        if (_RestWeb.erro || _RestWeb.resultado == null)
-          throw (_RestWeb.mensagem);
-        else {
-          var data = _RestWeb.resultado as List;
-          setState(() {
-            List<ModelFormularioSiciFustJson>ListaModelFormularioSiciFustModelo = data.map<ModelFormularioSiciFustJson>((json) => ModelFormularioSiciFustJson.fromJson(json)).toList();
-            if (ListaModelFormularioSiciFustModelo.length > 0) {
-              for (var prop in ListaModelFormularioSiciFustModelo) {
-              //  if(ListaFichaSici.where((f) => f.idLancamento.startsWith(prop.idLancamento)).length >= 1)
-                //  {
-
-              ///  else
-                 // {
+          OnRealizandoOperacao("Realizando busca de fichas sici Web");
+          Operacao _RestWeb = await _RestWebService.OnRecuperaLancamentosSici();
+          if (_RestWeb.erro || _RestWeb.resultado == null)
+            throw (_RestWeb.mensagem);
+          else {
+            var data = _RestWeb.resultado as List;
+            setState(() {
+              List<ModelFormularioSiciFustJson>
+              ListaModelFormularioSiciFustModelo = data
+                  .map<ModelFormularioSiciFustJson>(
+                      (json) => ModelFormularioSiciFustJson.fromJson(json))
+                  .toList();
+              if (ListaModelFormularioSiciFustModelo.length > 0) {
+                for (var prop in ListaModelFormularioSiciFustModelo) {
+                  if (ListaFichaSici.where((f) => f.idLancamento.startsWith(prop.idLancamento)).length >= 1) {
+                    // A ficha  ja esta salva no dispositivo
+                  } else {
                     TbFichaSici ModelFichaSici = new TbFichaSici();
                     ModelFichaSici.idFichaSiciApp = 0;
                     ModelFichaSici.idEmpresa = prop.idEmpresa;
@@ -81,70 +82,73 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                     ModelFichaSici.cofinsPorc = prop.cofinsPorc;
                     ModelFichaSici.receitaLiquida = prop.receitaLiquida;
                     ModelFichaSici.observacoes = prop.observacoes;
-                    ModelFichaSici.distribuicaoFisicosServicoQuantitativo = prop.distribuicaoFisicosServicoQuantitativo;
+                    ModelFichaSici.distribuicaoFisicosServicoQuantitativo =
+                        prop.distribuicaoFisicosServicoQuantitativo;
                     ListaFichaSici.add(ModelFichaSici);
-                 // }
-              }
-              _StatusTipoWidget = "renderizar_sici";
-            } else
-              _StatusTipoWidget = "nao_existe_sici_cadastrado";
+                  }
+
+                }
+                _StatusTipoWidget = "renderizar_sici";
+              } else
+                _StatusTipoWidget = "nao_existe_sici_cadastrado";
+            });
+            if (dialogContext != null)
+              Navigator.pop(dialogContext);
+          }
+        }
+      } catch (error) {
+        if (dialogContext != null) Navigator.pop(dialogContext);
+        if (ListaFichaSici.length > 0) {
+          setState(() {
+            _StatusTipoWidget = "renderizar_sici";
           });
-          if(dialogContext != null)
-            Navigator.pop(dialogContext);
+          OnAlertaInformacao(error);
+        } else {
+          setState(() {
+            _StatusTipoWidget = "erro_informacao";
+            ErroInformacao = error.toString();
+          });
         }
       }
-    } catch (error) {
-      if(dialogContext != null)
-        Navigator.pop(dialogContext);
-      if (ListaFichaSici.length > 0) {
-        setState(() {
-          _StatusTipoWidget = "renderizar_sici";
-        });
-        OnAlertaInformacao(error);
-      } else {
-        setState(() {
-          _StatusTipoWidget = "erro_informacao";
-          ErroInformacao = error.toString();
-        });
-      }
-    }
+    });
   }
 
   Future<Null> Inc() async {
-    try {
-      OnRealizandoOperacao("Realizando busca de fichas sici local");
-      Operacao _FichaSiciLocal = await dbHelper.onSelecionarFichaSici();
-      if (_FichaSiciLocal.erro)
-        throw (_FichaSiciLocal.mensagem);
-      else if (_FichaSiciLocal.resultado == null) {
-        if(dialogContext != null)
-          Navigator.pop(dialogContext);
+    Future.delayed(Duration.zero, () async {
+      try {
+        OnRealizandoOperacao("Realizando busca de fichas sici local");
+        Operacao _FichaSiciLocal = await dbHelper.onSelecionarFichaSici();
+        if (_FichaSiciLocal.erro)
+          throw (_FichaSiciLocal.mensagem);
+        else if (_FichaSiciLocal.resultado == null) {
+          if (dialogContext != null) Navigator.pop(dialogContext);
+          IncRestWeb();
+        } else if (_FichaSiciLocal.resultado != null) {
+          setState(() {
+            ListaFichaSici = new List<TbFichaSici>();
+            ListaFichaSici = _FichaSiciLocal.resultado;
+            _StatusTipoWidget = "renderizar_sici";
+          });
+          if (dialogContext != null)
+            Navigator.pop(dialogContext);
+          IncRestWeb();
+        }
+      } catch (error) {
+        if (dialogContext != null) Navigator.pop(dialogContext);
+        if (ListaFichaSici.length > 0) {
+          setState(() {
+            _StatusTipoWidget = "renderizar_sici";
+          });
+        } else {
+          setState(() {
+            _StatusTipoWidget = "erro_informacao";
+            ErroInformacao = error.toString();
+          });
+        }
+        OnAlertaInformacao(error);
         IncRestWeb();
       }
-      else if (_FichaSiciLocal.resultado != null) {
-        setState(() {
-          ListaFichaSici = _FichaSiciLocal.resultado;
-          _StatusTipoWidget = "renderizar_sici";
-        });
-        if(dialogContext != null)
-          Navigator.pop(dialogContext);
-        IncRestWeb();
-      }
-    } catch (error) {
-      if(dialogContext != null) Navigator.pop(dialogContext);
-      if (ListaFichaSici.length > 0) {
-        setState(() {
-          _StatusTipoWidget = "renderizar_sici";
-        });
-      } else {
-        setState(() {
-          _StatusTipoWidget = "erro_informacao";
-          ErroInformacao = error.toString();
-        });
-      }
-      OnAlertaInformacao(error);
-      IncRestWeb();
-    }
+    });
   }
 
   OnAlertaInformacao(String Mensagem) {
@@ -295,9 +299,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
         }
       } else {}
     });
-    Future.delayed(Duration.zero, () async {
-      Inc();
-    });
+    Inc();
   }
 
   @override
@@ -767,35 +769,40 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                   //width: MediaQuery.of(context).size.width / 3,
                                   child: InkWell(
                                     onTap: () async {
-                                      try {
-                                        var connectivityResult = await (Connectivity().checkConnectivity());
-                                        if (connectivityResult == ConnectivityResult.none) {
-                                          OnAlertaInformacao("Por favor conecte-se à internet.");
-                                        } else {
-                                          OnRealizandoOperacao("Realizando cadastro.");
-                                          Operacao _RestWeb = await _RestWebService.OnRealizarLancamentosSici(ListaFichaSici[index]);
-                                          if (_RestWeb.erro)
-                                            throw (_RestWeb.mensagem);
-                                          else if (_RestWeb.resultado == null)
-                                            throw (_RestWeb.mensagem);
-                                          else {
-                                            Operacao _respLocal = await dbHelper.OnDeletarFichaSici(ListaFichaSici[index].idFichaSiciApp);
-                                            if (_respLocal.erro)
-                                              throw (_respLocal.mensagem);
+                                      Future.delayed(Duration.zero, () async {
+                                        try {
+                                          var connectivityResult = await (Connectivity().checkConnectivity());
+                                          if (connectivityResult == ConnectivityResult.none) {
+                                            OnAlertaInformacao(
+                                                "Por favor conecte-se à internet.");
+                                          } else {
+                                            OnRealizandoOperacao("Realizando cadastro.");
+                                            Operacao _RestWeb = await _RestWebService.OnRealizarLancamentosSici(ListaFichaSici[index]);
+                                            if (_RestWeb.erro)
+                                              throw (_RestWeb.mensagem);
+                                            else if (_RestWeb.resultado == null)
+                                              throw (_RestWeb.mensagem);
                                             else {
-                                              setState(() {
-                                                ListaFichaSici.remove([index]);
-                                              });
-                                              Inc();
+                                              Operacao _respLocal = await dbHelper.OnDeletarFichaSici(ListaFichaSici[index].idFichaSiciApp);
+                                              if (_respLocal.erro)
+                                                throw (_respLocal.mensagem);
+                                              else {
+                                                setState(() {
+                                                  ListaFichaSici.remove([index]);
+                                                });
+                                                Inc();
+                                              }
+                                              if (dialogContext != null)
+                                                Navigator.pop(dialogContext);
+                                              OnAlertaInformacao(_RestWeb.mensagem);
                                             }
-                                            OnAlertaInformacao(_RestWeb.mensagem);
                                           }
+                                        } catch (error) {
+                                          if (dialogContext != null)
+                                            Navigator.pop(dialogContext);
+                                          OnAlertaInformacao(error);
                                         }
-                                      } catch (error) {
-                                        if(dialogContext != null)
-                                        Navigator.pop(dialogContext);
-                                        OnAlertaInformacao(error);
-                                      }
+                                      });
                                     },
                                     child: Column(
                                       mainAxisSize: MainAxisSize.max,
@@ -832,100 +839,134 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                         builder: (BuildContext context) {
                                           return Dialog(
                                               child: new Padding(
-                                                padding: EdgeInsets.all(25.0),
-                                                child: Column(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  children: [
-                                                    Container(
-                                                      margin: EdgeInsets.fromLTRB(
-                                                          0.0, 10.0, 0.0, 15.0),
-                                                      height: 50.0,
-                                                      child: new Text(
-                                                        "Deseja realmente remover ?",
-                                                        textAlign: TextAlign.start,
-                                                        softWrap: false,
-                                                        maxLines: 2,
-                                                        overflow: TextOverflow.ellipsis,
-                                                        style: TextStyle(
-                                                            fontFamily: 'open-sans-regular',
-                                                            fontSize: 17.0,
-                                                            color: Color(0xFF000000)),
-                                                      ),
-                                                    ),
-                                                    Container(
-                                                      margin: EdgeInsets.fromLTRB(
-                                                          0.0, 10.0, 0.0, 15.0),
-                                                      child: new Row(
-                                                        mainAxisAlignment:
-                                                        MainAxisAlignment.center,
-                                                        crossAxisAlignment:
-                                                        CrossAxisAlignment.center,
-                                                        mainAxisSize: MainAxisSize.max,
-                                                        children: <Widget>[
-                                                          OutlineButton(
-                                                            color: Color(0xFFf2f2f2),
-                                                            //`Icon` to display
-                                                            child: Text('Sim',
-                                                                style: TextStyle(
-                                                                  fontWeight: FontWeight.w500,
-                                                                  fontFamily:
-                                                                  'avenir-lt-std-roman',
-                                                                  color: Color(0xff018a8a),
-                                                                  fontSize: 16.0,
-                                                                )),
-                                                            onPressed: () async {
-                                                              FocusScope.of(context).requestFocus(new FocusNode());
-                                                              Operacao _respLoca = await dbHelper.OnDeletarFichaSici(ListaFichaSici[index].idFichaSiciApp);
-                                                              if (_respLoca.erro)
-                                                                throw (_respLoca.mensagem);
-                                                              else {
-                                                                setState(() {
-                                                                  ListaFichaSici.remove([index]);
-                                                                });
-                                                                Navigator.pop(context);
-                                                                OnAlertaInformacao(_respLoca.mensagem);
-                                                                Inc();
-                                                              }
-                                                            },
-                                                            //callback when button is clicked
-                                                            borderSide: BorderSide(
-                                                              color: Color(0xFFf2f2f2),
-                                                              //Color of the border
-                                                              style: BorderStyle.solid,
-                                                              //Style of the border
-                                                              width: 1.0, //width of the border
-                                                            ),
-                                                          ),
-                                                          SizedBox(width: 15.0),
-                                                          FlatButton(
-                                                            color: Color(0xff018a8a),
-                                                            //`Icon` to display
-                                                            child: Text('Não',
-                                                                style: TextStyle(
-                                                                  fontWeight: FontWeight.w500,
-                                                                  fontFamily:
-                                                                  'avenir-lt-std-roman',
-                                                                  color: Color(0xffFFFFFF),
-                                                                  fontSize: 16.0,
-                                                                )),
-                                                            //`Text` to display
-                                                            onPressed: () {
-                                                              Navigator.pop(context);
-                                                            },
-                                                            shape: new RoundedRectangleBorder(
-                                                              borderRadius:
-                                                              new BorderRadius.circular(
-                                                                  5.0),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
+                                            padding: EdgeInsets.all(25.0),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Container(
+                                                  margin: EdgeInsets.fromLTRB(
+                                                      0.0, 10.0, 0.0, 15.0),
+                                                  height: 50.0,
+                                                  child: new Text(
+                                                    "Deseja realmente remover ?",
+                                                    textAlign: TextAlign.start,
+                                                    softWrap: false,
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                        fontFamily:
+                                                            'open-sans-regular',
+                                                        fontSize: 17.0,
+                                                        color:
+                                                            Color(0xFF000000)),
+                                                  ),
                                                 ),
-                                              ));
+                                                Container(
+                                                  margin: EdgeInsets.fromLTRB(
+                                                      0.0, 10.0, 0.0, 15.0),
+                                                  child: new Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    children: <Widget>[
+                                                      OutlineButton(
+                                                        color:
+                                                            Color(0xFFf2f2f2),
+                                                        //`Icon` to display
+                                                        child: Text('Sim',
+                                                            style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                              fontFamily:
+                                                                  'avenir-lt-std-roman',
+                                                              color: Color(
+                                                                  0xff018a8a),
+                                                              fontSize: 16.0,
+                                                            )),
+                                                        onPressed: () async {
+                                                          FocusScope.of(context)
+                                                              .requestFocus(
+                                                                  new FocusNode());
+                                                          Operacao _respLoca = await dbHelper
+                                                              .OnDeletarFichaSici(
+                                                                  ListaFichaSici[
+                                                                          index]
+                                                                      .idFichaSiciApp);
+                                                          if (_respLoca.erro)
+                                                            throw (_respLoca
+                                                                .mensagem);
+                                                          else {
+                                                            setState(() {
+                                                              ListaFichaSici
+                                                                  .remove(
+                                                                      [index]);
+                                                            });
+                                                            Navigator.pop(
+                                                                context);
+                                                            OnAlertaInformacao(
+                                                                _respLoca
+                                                                    .mensagem);
+                                                            Inc();
+                                                          }
+                                                        },
+                                                        //callback when button is clicked
+                                                        borderSide: BorderSide(
+                                                          color:
+                                                              Color(0xFFf2f2f2),
+                                                          //Color of the border
+                                                          style:
+                                                              BorderStyle.solid,
+                                                          //Style of the border
+                                                          width:
+                                                              1.0, //width of the border
+                                                        ),
+                                                      ),
+                                                      SizedBox(width: 15.0),
+                                                      FlatButton(
+                                                        color:
+                                                            Color(0xff018a8a),
+                                                        //`Icon` to display
+                                                        child: Text('Não',
+                                                            style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                              fontFamily:
+                                                                  'avenir-lt-std-roman',
+                                                              color: Color(
+                                                                  0xffFFFFFF),
+                                                              fontSize: 16.0,
+                                                            )),
+                                                        //`Text` to display
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        shape:
+                                                            new RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              new BorderRadius
+                                                                      .circular(
+                                                                  5.0),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ));
                                         },
                                       );
                                     },
@@ -1008,99 +1049,140 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                   //width: MediaQuery.of(context).size.width / 3,
                                   child: InkWell(
                                     onTap: () async {
-                                      OnRealizandoOperacao("Realizando cadastro.");
-                                      ListaFichaSici[index].isSincronizar = "S";
-                                      Operacao _respLocal = await dbHelper.OnAddFichaSici(ListaFichaSici[index]);
-                                      if (_respLocal.erro)
-                                        throw (_respLocal.mensagem);
-                                      else {
-                                        if (dialogContext != null)
-                                          Navigator.pop(dialogContext);
-                                        showDialog(
-                                          context: context,
-                                          barrierDismissible: false,
-                                          builder: (BuildContext context) {
-                                            return Dialog(
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.all(Radius.circular(8.0))),
-                                              child: Column(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  SizedBox(height: 15.0),
-                                                  Column(
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                      Future.delayed(Duration.zero, () async {
+                                        try {
+                                          OnRealizandoOperacao("Realizando cadastro.");
+                                          Operacao _respLocal = await dbHelper.OnAddFichaSici(ListaFichaSici[index]);
+                                          if (_respLocal.erro)
+                                            throw (_respLocal.mensagem);
+                                          else {
+                                            if (dialogContext != null)
+                                              Navigator.pop(dialogContext);
+                                            showDialog(
+                                              context: context,
+                                              barrierDismissible: false,
+                                              builder: (BuildContext context) {
+                                                return Dialog(
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(
+                                                              8.0))),
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                    crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
                                                     mainAxisSize: MainAxisSize.min,
                                                     children: [
-                                                      Text(
-                                                        "Informação",
-                                                        style: TextStyle(
-                                                            fontSize: 20.0,
-                                                            color: Color(0xff212529),
-                                                            fontFamily: "avenir-lt-std-roman"),
-                                                      ),
-                                                      SizedBox(
-                                                        height: 10,
+                                                      SizedBox(height: 15.0),
+                                                      Column(
+                                                        mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                        crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                        mainAxisSize:
+                                                        MainAxisSize.min,
+                                                        children: [
+                                                          Text(
+                                                            "Informação",
+                                                            style: TextStyle(
+                                                                fontSize: 20.0,
+                                                                color: Color(
+                                                                    0xff212529),
+                                                                fontFamily:
+                                                                "avenir-lt-std-roman"),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 10,
+                                                          ),
+                                                          Divider(
+                                                            color: Colors.black12,
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                            EdgeInsets.fromLTRB(
+                                                                15.0,
+                                                                10.0,
+                                                                15.0,
+                                                                10.0),
+                                                            child: Text(
+                                                              _respLocal.mensagem,
+                                                              overflow: TextOverflow
+                                                                  .ellipsis,
+                                                              maxLines: 4,
+                                                              softWrap: false,
+                                                              style: TextStyle(
+                                                                  fontSize: 17.0,
+                                                                  color: Color(
+                                                                      0xff212529),
+                                                                  fontFamily:
+                                                                  "avenir-lt-std-roman"),
+                                                            ),
+                                                          ),
+                                                        ],
                                                       ),
                                                       Divider(
                                                         color: Colors.black12,
                                                       ),
-                                                      Padding(
-                                                        padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-                                                        child: Text(
-                                                          _respLocal.mensagem,
-                                                          overflow: TextOverflow.ellipsis,
-                                                          maxLines: 4,
-                                                          softWrap: false,
-                                                          style: TextStyle(
-                                                              fontSize: 17.0,
-                                                              color: Color(0xff212529),
-                                                              fontFamily: "avenir-lt-std-roman"),
+                                                      Container(
+                                                        margin: EdgeInsets.fromLTRB(
+                                                            0.0, 10.0, 0.0, 15.0),
+                                                        child: new Row(
+                                                          mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                          crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                          mainAxisSize:
+                                                          MainAxisSize.max,
+                                                          children: <Widget>[
+                                                            FlatButton(
+                                                              color:
+                                                              Color(0xff018a8a),
+                                                              //`Icon` to display
+                                                              child: Text(
+                                                                '           OK           ',
+                                                                style: TextStyle(
+                                                                    fontSize: 17.0,
+                                                                    color: Color(
+                                                                        0xffFFFFFF),
+                                                                    fontFamily:
+                                                                    "avenir-lt-std-roman"),
+                                                              ),
+                                                              //`Text` to display
+                                                              onPressed: () {
+                                                                Navigator.pop(
+                                                                    context);
+                                                                Inc();
+                                                              },
+                                                              shape:
+                                                              new RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                new BorderRadius
+                                                                    .circular(
+                                                                    5.0),
+                                                              ),
+                                                            ),
+                                                          ],
                                                         ),
                                                       ),
                                                     ],
                                                   ),
-                                                  Divider(
-                                                    color: Colors.black12,
-                                                  ),
-                                                  Container(
-                                                    margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
-                                                    child: new Row(
-                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                                      mainAxisSize: MainAxisSize.max,
-                                                      children: <Widget>[
-                                                        FlatButton(
-                                                          color: Color(0xff018a8a),
-                                                          //`Icon` to display
-                                                          child: Text(
-                                                            '           OK           ',
-                                                            style: TextStyle(
-                                                                fontSize: 17.0,
-                                                                color: Color(0xffFFFFFF),
-                                                                fontFamily: "avenir-lt-std-roman"),
-                                                          ),
-                                                          //`Text` to display
-                                                          onPressed: () {
-                                                            Navigator.pop(context);
-                                                            Inc();
-                                                          },
-                                                          shape: new RoundedRectangleBorder(
-                                                            borderRadius: new BorderRadius.circular(5.0),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
+                                                );
+                                              },
                                             );
-                                          },
-                                        );
-                                      }
-                                    },
+                                          }
+                                        } catch (error) {
+                                          if (dialogContext != null)
+                                            Navigator.pop(dialogContext);
+                                          OnAlertaInformacao(error);
+                                        }
+                                      });
+                                      },
                                     child: Column(
                                       mainAxisSize: MainAxisSize.max,
                                       mainAxisAlignment:
@@ -1147,7 +1229,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                           MainAxisAlignment.center,
                                       children: <Widget>[
                                         Icon(Icons.visibility,
-                                            size: 25, color: Color(0xFFffc107 )),
+                                            size: 25, color: Color(0xFFffc107)),
                                         SizedBox(height: 10.0),
                                         Text(
                                           "Visualizar",

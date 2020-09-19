@@ -698,6 +698,7 @@ class DBHelper {
       if (_Modelo.idFichaSiciApp == 0 || _Modelo.idFichaSiciApp == null)
       {
         _Modelo.idFichaSiciApp = null;
+        _Modelo.isSincronizar = "S";
         _Modelo.idFichaSiciApp = await dbClient.insert('tbFichaSici', _Modelo.toJson());
       }
       else {
@@ -799,9 +800,19 @@ class DBHelper {
         where: 'idFichaSiciApp = ?',
         whereArgs: [idFichaSiciApp],
       );
-      _Operacao.erro = false;
-      _Operacao.mensagem = "Operação realizada com sucesso.";
-      _Operacao.resultado = "Operação realizada com sucesso.";
+      if(resp == 0)
+        {
+          _Operacao.erro = true;
+          _Operacao.mensagem = "Erro não identificado.";
+          _Operacao.resultado = "Erro não identificado.";
+        }
+      else
+        {
+          _Operacao.erro = false;
+          _Operacao.mensagem = "Operação realizada com sucesso.";
+          _Operacao.resultado = "Operação realizada com sucesso.";
+        }
+
     } catch (e) {
       _Operacao.erro = true;
       _Operacao.mensagem = e.toString();

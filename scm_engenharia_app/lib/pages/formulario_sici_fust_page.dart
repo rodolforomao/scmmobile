@@ -282,25 +282,11 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
     }
   }
 
-  void handleReadOnlyInputClick(context) {
-    showBottomSheet(
-        context: context,
-        builder: (BuildContext context) => Container(
-              width: MediaQuery.of(context).size.width,
-              child: CalendarDatePicker(
 
-                firstDate: DateTime(1995),
-                lastDate: DateTime.now(),
-
-              ),
-            ));
-  }
 
   OnSelecionarData(BuildContext context) async {
     final DateTime picked = await showDatePicker(
       context: context,
-
-
       initialDatePickerMode: DatePickerMode.year,
       initialEntryMode: DatePickerEntryMode.input,
       initialDate: _DataSelecionada,
@@ -1321,16 +1307,6 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                   content: Container(
                     child: Column(
                       children: [
-                        Container(
-                          height: 200,
-                          child: CupertinoDatePicker(
-                            mode: CupertinoDatePickerMode.dateAndTime,
-                            initialDateTime: DateTime(1969, 1, 1),
-                            onDateTimeChanged: (DateTime newDateTime) {
-                              // Do something
-                            },
-                          ),
-                        ),
                         SizedBox(height: 20.0),
                         TextFormField(
                           onTap: () {

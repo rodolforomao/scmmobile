@@ -59,7 +59,7 @@ class TbFichaSici {
   });
 
   TbFichaSici.fromJson(Map<String, dynamic> json) {
-    idFichaSiciApp= json['idFichaSiciApp'];
+    idFichaSiciApp = json['idFichaSiciApp'];
     idEmpresa= json['idEmpresa'];
     isSincronizar = json['isSincronizar'];
     idLancamento= json['idLancamento'];
@@ -90,31 +90,31 @@ class TbFichaSici {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['idFichaSiciApp'] = this.idFichaSiciApp;
-    data['idEmpresa'] = this.idEmpresa;
-    data['isSincronizar'] = this.isSincronizar;
-    data['idLancamento'] = this.idLancamento;
-    data['periodoReferencia'] = this.periodoReferencia;
-    data['razaoSocial'] = this.razaoSocial;
-    data['nomeCliente'] = this.nomeCliente;
-    data['nomeConsultor'] = this.nomeConsultor;
-    data['telefoneFixo'] = this.telefoneFixo;
-    data['cnpj'] = this.cnpj;
-    data['mesReferencia'] = this.mesReferencia;
-    data['telefoneMovel'] = this.telefoneMovel;
-    data['emailCliente'] = this.emailCliente;
-    data['emailConsutor'] = this.emailConsutor;
-    data['receitaBruta'] = this.receitaBruta;
-    data['idFinanceiro'] = this.idFinanceiro;
-    data['simples'] = this.simples;
-    data['simplesPorc'] = this.simplesPorc;
-    data['icms'] = this.icms;
-    data['icmsPorc'] = this.icmsPorc;
-    data['pis'] = this.pis;
-    data['pisPorc'] = this.pisPorc;
-    data['cofins'] = this.cofins;
-    data['cofinsPorc'] = this.cofinsPorc;
-    data['receitaLiquida'] = this.receitaLiquida;
-    data['observacoes'] = this.observacoes;
+    data['idEmpresa'] = this.idEmpresa == null ? "" : this.idEmpresa;
+    data['isSincronizar'] = this.isSincronizar== null ? "" : this.isSincronizar;
+    data['idLancamento'] = this.idLancamento== null ? "" : this.idLancamento;
+    data['periodoReferencia'] = this.periodoReferencia== null ? "" : this.periodoReferencia;
+    data['razaoSocial'] = this.razaoSocial== null ? "" : this.razaoSocial;
+    data['nomeCliente'] = this.nomeCliente== null ? "" : this.nomeCliente;
+    data['nomeConsultor'] = this.nomeConsultor== null ? "" : this.nomeConsultor;
+    data['telefoneFixo'] = this.telefoneFixo== null ? "" : this.telefoneFixo;
+    data['cnpj'] = this.cnpj== null ? "" : this.cnpj;
+    data['mesReferencia'] = this.mesReferencia== null ? "" : this.mesReferencia;
+    data['telefoneMovel'] = this.telefoneMovel== null ? "" : this.telefoneMovel;
+    data['emailCliente'] = this.emailCliente== null ? "" : this.emailCliente;
+    data['emailConsutor'] = this.emailConsutor== null ? "" : this.emailConsutor;
+    data['receitaBruta'] = this.receitaBruta== null ? "" : this.receitaBruta;
+    data['idFinanceiro'] = this.idFinanceiro== null ? "" : this.idFinanceiro;
+    data['simples'] = this.simples== null ? "" : this.simples;
+    data['simplesPorc'] = this.simplesPorc== null ? "" : this.simplesPorc;
+    data['icms'] = this.icms== null ? "" : this.icms;
+    data['icmsPorc'] = this.icmsPorc== null ? "" : this.icmsPorc;
+    data['pis'] = this.pis == null ? "" : this.pisPorc;
+    data['pisPorc'] = this.pisPorc== null ? "" : this.pisPorc;
+    data['cofins'] = this.cofins== null ? "" : this.cofins;
+    data['cofinsPorc'] = this.cofinsPorc== null ? "" : this.cofinsPorc;
+    data['receitaLiquida'] = this.receitaLiquida== null ? "" : this.receitaLiquida;
+    data['observacoes'] = this.observacoes== null ? "" : this.observacoes;
     return data;
   }
 }
