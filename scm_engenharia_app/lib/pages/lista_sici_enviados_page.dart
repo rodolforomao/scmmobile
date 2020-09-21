@@ -86,7 +86,6 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                         prop.distribuicaoFisicosServicoQuantitativo;
                     ListaFichaSici.add(ModelFichaSici);
                   }
-
                 }
                 _StatusTipoWidget = "renderizar_sici";
               } else
@@ -926,27 +925,16 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                                             )),
                                                         onPressed: () async {
                                                           FocusScope.of(context)
-                                                              .requestFocus(
-                                                                  new FocusNode());
-                                                          Operacao _respLoca = await dbHelper
-                                                              .OnDeletarFichaSici(
-                                                                  ListaFichaSici[
-                                                                          index]
-                                                                      .idFichaSiciApp);
+                                                              .requestFocus(new FocusNode());
+                                                          Operacao _respLoca = await dbHelper.OnDeletarFichaSici(ListaFichaSici[index].idFichaSiciApp);
                                                           if (_respLoca.erro)
-                                                            throw (_respLoca
-                                                                .mensagem);
+                                                            throw (_respLoca.mensagem);
                                                           else {
                                                             setState(() {
-                                                              ListaFichaSici
-                                                                  .remove(
-                                                                      [index]);
+                                                              ListaFichaSici.remove([index]);
                                                             });
-                                                            Navigator.pop(
-                                                                context);
-                                                            OnAlertaInformacao(
-                                                                _respLoca
-                                                                    .mensagem);
+                                                            //Navigator.pop(context);
+                                                            OnAlertaInformacao(_respLoca.mensagem);
                                                             Inc();
                                                           }
                                                         },

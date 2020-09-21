@@ -1613,7 +1613,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                         TextFormField(
                           controller: _TxtControllerObservacoes,
                           textAlign: TextAlign.start,
-                          keyboardType: TextInputType.number,
+                          keyboardType: TextInputType.text,
                           textInputAction: TextInputAction.done,
                           autofocus: false,
                           decoration: InputDecoration(

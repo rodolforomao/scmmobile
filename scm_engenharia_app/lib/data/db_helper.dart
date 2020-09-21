@@ -803,6 +803,8 @@ class DBHelper {
   Future<Operacao> OnDeletarFichaSici(int idFichaSiciApp) async {
     Operacao _Operacao = new Operacao();
     try {
+      if(idFichaSiciApp == 0 || idFichaSiciApp == null)
+        throw ("Não foi possivel identificar a ficha para exclusão ");
       final dbClient = await db;
       var resp = await dbClient.delete(
         'tbFichaSici',
@@ -810,11 +812,7 @@ class DBHelper {
         whereArgs: [idFichaSiciApp],
       );
       if(resp == 0)
-        {
-          _Operacao.erro = true;
-          _Operacao.mensagem = "Erro não identificado.";
-          _Operacao.resultado = "Erro não identificado.";
-        }
+        throw ("Erro não identificado.");
       else
         {
           _Operacao.erro = false;
