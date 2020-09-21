@@ -92,12 +92,21 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
               } else
                 _StatusTipoWidget = "nao_existe_sici_cadastrado";
             });
-            if (dialogContext != null)
+            if (dialogContext != null) {
               Navigator.pop(dialogContext);
+              setState(() {
+                dialogContext = null;
+              });
+            }
           }
         }
       } catch (error) {
-        if (dialogContext != null) Navigator.pop(dialogContext);
+        if (dialogContext != null) {
+          Navigator.pop(dialogContext);
+          setState(() {
+            dialogContext = null;
+          });
+        }
         if (ListaFichaSici.length > 0) {
           setState(() {
             _StatusTipoWidget = "renderizar_sici";
@@ -121,7 +130,12 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
         if (_FichaSiciLocal.erro)
           throw (_FichaSiciLocal.mensagem);
         else if (_FichaSiciLocal.resultado == null) {
-          if (dialogContext != null) Navigator.pop(dialogContext);
+          if (dialogContext != null) {
+            Navigator.pop(dialogContext);
+            setState(() {
+              dialogContext = null;
+            });
+          }
           IncRestWeb();
         } else if (_FichaSiciLocal.resultado != null) {
           setState(() {
@@ -129,12 +143,21 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
             ListaFichaSici = _FichaSiciLocal.resultado;
             _StatusTipoWidget = "renderizar_sici";
           });
-          if (dialogContext != null)
+          if (dialogContext != null) {
             Navigator.pop(dialogContext);
+            setState(() {
+              dialogContext = null;
+            });
+          }
           IncRestWeb();
         }
       } catch (error) {
-        if (dialogContext != null) Navigator.pop(dialogContext);
+        if (dialogContext != null) {
+          Navigator.pop(dialogContext);
+          setState(() {
+            dialogContext = null;
+          });
+        }
         if (ListaFichaSici.length > 0) {
           setState(() {
             _StatusTipoWidget = "renderizar_sici";
@@ -792,14 +815,22 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                                 });
                                                 Inc();
                                               }
-                                              if (dialogContext != null)
+                                              if (dialogContext != null) {
                                                 Navigator.pop(dialogContext);
+                                                setState(() {
+                                                  dialogContext = null;
+                                                });
+                                              }
                                               OnAlertaInformacao(_RestWeb.mensagem);
                                             }
                                           }
                                         } catch (error) {
-                                          if (dialogContext != null)
+                                          if (dialogContext != null) {
                                             Navigator.pop(dialogContext);
+                                            setState(() {
+                                              dialogContext = null;
+                                            });
+                                          }
                                           OnAlertaInformacao(error);
                                         }
                                       });
@@ -1056,8 +1087,12 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                           if (_respLocal.erro)
                                             throw (_respLocal.mensagem);
                                           else {
-                                            if (dialogContext != null)
+                                            if (dialogContext != null) {
                                               Navigator.pop(dialogContext);
+                                              setState(() {
+                                                dialogContext = null;
+                                              });
+                                            }
                                             showDialog(
                                               context: context,
                                               barrierDismissible: false,
@@ -1177,8 +1212,12 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                             );
                                           }
                                         } catch (error) {
-                                          if (dialogContext != null)
+                                          if (dialogContext != null) {
                                             Navigator.pop(dialogContext);
+                                            setState(() {
+                                              dialogContext = null;
+                                            });
+                                          }
                                           OnAlertaInformacao(error);
                                         }
                                       });

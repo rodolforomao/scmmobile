@@ -187,7 +187,12 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
         if (_respLocal.erro)
           throw (_respLocal.mensagem);
         else {
-          if (dialogContext != null) Navigator.pop(dialogContext);
+          if (dialogContext != null) {
+            Navigator.pop(dialogContext);
+            setState(() {
+              dialogContext = null;
+            });
+          }
           showDialog(
             context: context,
             barrierDismissible: false,
@@ -277,7 +282,12 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
         }
       }
     } catch (error) {
-      if (dialogContext != null) Navigator.pop(dialogContext);
+      if (dialogContext != null) {
+        Navigator.pop(dialogContext);
+        setState(() {
+          dialogContext = null;
+        });
+      }
       OnAlertaInformacao(error);
     }
   }

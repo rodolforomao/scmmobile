@@ -96,12 +96,22 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
               }
             }
           }
-          Navigator.pop(dialogContext);
+          if (dialogContext != null) {
+            Navigator.pop(dialogContext);
+            setState(() {
+              dialogContext = null;
+            });
+          }
           OnToastInformacao("Variáveis de ambiente atualizadas com sucesso");
         }
       }
     } catch (error) {
-      Navigator.pop(dialogContext);
+      if (dialogContext != null) {
+        Navigator.pop(dialogContext);
+        setState(() {
+          dialogContext = null;
+        });
+      }
       OnToastInformacao(error);
       setState(() {
         ErroInformacao = error;

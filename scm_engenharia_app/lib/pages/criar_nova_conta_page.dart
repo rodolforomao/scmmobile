@@ -50,11 +50,21 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
             setState(() {
               ListaUf = _Resultado.uF;
             });
-            Navigator.pop(dialogContext);
+            if (dialogContext != null) {
+              Navigator.pop(dialogContext);
+              setState(() {
+                dialogContext = null;
+              });
+            }
           }
       }
     } catch (error) {
-      Navigator.pop(dialogContext);
+      if (dialogContext != null) {
+        Navigator.pop(dialogContext);
+        setState(() {
+          dialogContext = null;
+        });
+      }
       OnToastInformacao(error);
       setState(() {
         _StatusTipoWidget = "widget_informacao";
@@ -98,12 +108,22 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
           throw (_RestWeb.mensagem);
         else
         {
-          Navigator.pop(dialogContext);
+          if (dialogContext != null) {
+            Navigator.pop(dialogContext);
+            setState(() {
+              dialogContext = null;
+            });
+          }
           OnToastInformacao(_RestWeb.mensagem);
         }
       }
     } catch (error) {
-      Navigator.pop(dialogContext);
+      if (dialogContext != null) {
+        Navigator.pop(dialogContext);
+        setState(() {
+          dialogContext = null;
+        });
+      }
       OnToastInformacao(error);
     }
   }
