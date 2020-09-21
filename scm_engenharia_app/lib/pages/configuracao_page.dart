@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:scm_engenharia_app/data/db_helper.dart';
+import 'package:scm_engenharia_app/models/operacao.dart';
 import 'dart:async';
 import 'package:scm_engenharia_app/pages/alterar_senha_page.dart';
 import 'package:scm_engenharia_app/pages/login_page.dart';
@@ -12,12 +14,13 @@ class ConfiguracaoPage extends StatefulWidget {
 }
 
 class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
-
-  bool  IsTemaEscuroAppOn = false, IsNotificacoesAtivarDesativada = false;
+  bool IsTemaEscuroAppOn = false, IsNotificacoesAtivarDesativada = false;
+  DBHelper dbHelper;
 
   @override
   void initState() {
     super.initState();
+    dbHelper = DBHelper();
   }
 
   Future<void> OnSwitchNotificacoesAtivarDesativadaChanged(bool value) async {
@@ -37,76 +40,86 @@ class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
       builder: (BuildContext context) {
         return Dialog(
             child: new Padding(
-              padding: EdgeInsets.all(25.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
-                    height: 50.0,
-                    child: new Text("Deseja realmente sair do aplicativo ?",
-                        style: TextStyle(
-                            fontFamily: 'open-sans-regular',
-                            fontSize: 17.0,
-                            color: Color(0xFF000000))),
-                  ),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
-                    child: new Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: <Widget>[
-                        OutlineButton(
-                          color: Color(0xFFf2f2f2),
-                          //`Icon` to display
-                          child: Text(
-                            'Sim',
-                            style: TextStyle(
-                              fontSize: 17.0,
-                              fontFamily: 'avenir-lt-std-roman',
-                              color: Color(0xff018a8a),
-                            ),
-                          ),
-                          onPressed: () async {
-                            FocusScope.of(context).requestFocus(new FocusNode());
-                            Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (BuildContext context) => new LoginPage()), (Route<dynamic> route) => false);
-                          },
-                          //callback when button is clicked
-                          borderSide: BorderSide(
-                            color: Color(0xFFf2f2f2), //Color of the border
-                            style: BorderStyle.solid, //Style of the border
-                            width: 1.0, //width of the border
-                          ),
-                        ),
-                        SizedBox(width: 15.0),
-                        FlatButton(
-                          color: Color(0xff018a8a),
-                          //`Icon` to display
-                          child: Text(
-                            'Não',
-                            style: TextStyle(
-                              fontSize: 17.0,
-                              fontFamily: 'avenir-lt-std-roman',
-                              color: Colors.white,
-                            ),
-                          ),
-                          //`Text` to display
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          shape: new RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(5.0),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+          padding: EdgeInsets.all(25.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
+                height: 50.0,
+                child: new Text("Deseja realmente sair do aplicativo ?",
+                    style: TextStyle(
+                        fontFamily: 'open-sans-regular',
+                        fontSize: 17.0,
+                        color: Color(0xFF000000))),
               ),
-            ));
+              Container(
+                margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
+                child: new Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    OutlineButton(
+                      color: Color(0xFFf2f2f2),
+                      //`Icon` to display
+                      child: Text(
+                        'Sim',
+                        style: TextStyle(
+                          fontSize: 17.0,
+                          fontFamily: 'avenir-lt-std-roman',
+                          color: Color(0xff018a8a),
+                        ),
+                      ),
+                      onPressed: () async {
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                        Operacao _RestLocal =
+                            await dbHelper.OnDeletarUsuario();
+                        if (_RestLocal.erro)
+                          throw (_RestLocal.mensagem);
+                        else {
+                          Navigator.of(context).pushAndRemoveUntil(
+                              new MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                  new LoginPage()),
+                                  (Route<dynamic> route) => false);
+                        }
+                      },
+                      //callback when button is clicked
+                      borderSide: BorderSide(
+                        color: Color(0xFFf2f2f2), //Color of the border
+                        style: BorderStyle.solid, //Style of the border
+                        width: 1.0, //width of the border
+                      ),
+                    ),
+                    SizedBox(width: 15.0),
+                    FlatButton(
+                      color: Color(0xff018a8a),
+                      //`Icon` to display
+                      child: Text(
+                        'Não',
+                        style: TextStyle(
+                          fontSize: 17.0,
+                          fontFamily: 'avenir-lt-std-roman',
+                          color: Colors.white,
+                        ),
+                      ),
+                      //`Text` to display
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      shape: new RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(5.0),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ));
       },
     );
   }
@@ -139,9 +152,7 @@ class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
               color: Color(0xffFFFFFF),
               fontFamily: "open-sans-regular"),
         ),
-        actions: <Widget>[
-
-        ],
+        actions: <Widget>[],
       ),
       body: Container(
         alignment: Alignment.topCenter,
@@ -178,9 +189,9 @@ class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
                 ),
                 trailing: CupertinoSwitch(
                     onChanged: OnSwitchNotificacoesAtivarDesativadaChanged,
-                    value: IsNotificacoesAtivarDesativada  == null
+                    value: IsNotificacoesAtivarDesativada == null
                         ? false
-                        : IsNotificacoesAtivarDesativada ,
+                        : IsNotificacoesAtivarDesativada,
                     activeColor: Color(0xFF005a7c)),
               ),
               Divider(
@@ -194,20 +205,19 @@ class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
                         maintainState: false,
                         fullscreenDialog: true,
                         builder: (BuildContext context) =>
-                        new AlterarSenhaPage(),
+                            new AlterarSenhaPage(),
                       ),
                     );
                   },
-                  contentPadding:
-                  EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+                  contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
                   leading: Container(
                     padding: EdgeInsets.only(right: 12.0),
                     decoration: new BoxDecoration(
                         border: new Border(
                             right: new BorderSide(
                                 width: 1.0, color: Color(0xFF545454)))),
-                    child: Icon(Icons.https,
-                        color: Color(0xff9e9e9e), size: 25.0),
+                    child:
+                        Icon(Icons.https, color: Color(0xff9e9e9e), size: 25.0),
                   ),
                   title: Text(
                     "Alterar senha",
@@ -229,13 +239,11 @@ class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
                       new CupertinoPageRoute<bool>(
                         maintainState: false,
                         fullscreenDialog: true,
-                        builder: (BuildContext context) =>
-                        new PerfilPage(),
+                        builder: (BuildContext context) => new PerfilPage(),
                       ),
                     );
                   },
-                  contentPadding:
-                  EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+                  contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
                   leading: Container(
                     padding: EdgeInsets.only(right: 12.0),
                     decoration: new BoxDecoration(
@@ -266,12 +274,11 @@ class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
                         maintainState: false,
                         fullscreenDialog: true,
                         builder: (BuildContext context) =>
-                        new VariavelDeAmbientePage(),
+                            new VariavelDeAmbientePage(),
                       ),
                     );
                   },
-                  contentPadding:
-                  EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+                  contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
                   leading: Container(
                     padding: EdgeInsets.only(right: 12.0),
                     decoration: new BoxDecoration(
@@ -298,15 +305,13 @@ class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
                   onTap: () {
                     onSairApp(context);
                   },
-                  contentPadding:
-                  EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+                  contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
                   leading: Container(
                     padding: EdgeInsets.only(right: 12.0),
                     decoration: new BoxDecoration(
                         border: new Border(
                             right: new BorderSide(
-                                width: 1.0,
-                                color: Color(0xff6C757D)))),
+                                width: 1.0, color: Color(0xff6C757D)))),
                     child: Icon(Icons.exit_to_app,
                         color: Color(0xff9e9e9e), size: 25.0),
                   ),

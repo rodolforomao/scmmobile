@@ -172,6 +172,7 @@ class DBHelper {
           listUsuario.add(TbUsuario.fromJson(results[i]));
         }
       }
+      int _Resp = 0;
       if (listUsuario.length > 0) {
         for (final i in listUsuario) {
           var resp = await dbClient.delete(
@@ -179,11 +180,19 @@ class DBHelper {
             where: 'idUsuarioApp = ?',
             whereArgs: [i.idUsuarioApp],
           );
+          _Resp = resp;
         }
       }
-      _Operacao.erro = false;
-      _Operacao.mensagem = "Usuário foi removido com sucesso";
-      _Operacao.resultado = "Usuário foi removido com sucesso";
+      if(_Resp == 1)
+        {
+          _Operacao.erro = false;
+          _Operacao.mensagem = "Usuário foi removido com sucesso";
+          _Operacao.resultado = "Usuário foi removido com sucesso";
+        }
+      else{
+        throw ("Houve uma inconsistência ao remover usuário");
+      }
+
     } catch (e) {
       _Operacao.erro = true;
       _Operacao.mensagem = e.toString();

@@ -136,7 +136,6 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
               dialogContext = null;
             });
           }
-          IncRestWeb();
         } else if (_FichaSiciLocal.resultado != null) {
           setState(() {
             ListaFichaSici = new List<TbFichaSici>();

@@ -155,6 +155,8 @@ class ServicoMobileService {
       response.fields['controllerReceitaLiquida'] = _Modelo.receitaLiquida == null ? "" : _Modelo.receitaLiquida;
       response.fields['controllerObservacoes'] = _Modelo.observacoes == null ? "" : _Modelo.observacoes;
       int index = 0;
+      if(_Modelo.distribuicaoFisicosServicoQuantitativo == null)
+        throw ("Distribuição do quantitativo de acessos físicos em serviço e obrigatório,favor adicionar.");
       for (var item in _Modelo.distribuicaoFisicosServicoQuantitativo) {
         print('controllerUF_'+index.toString());
         response.fields['controllerCodIBGE_'+index.toString()] = item.cod_ibge.toString() == null ? "" :  item.cod_ibge.toString();
