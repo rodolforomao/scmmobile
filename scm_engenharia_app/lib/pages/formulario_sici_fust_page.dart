@@ -25,7 +25,6 @@ class FormularioSiciFustPage extends StatefulWidget {
 
 class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
   final _ScaffoldKey = GlobalKey<ScaffoldState>();
-  ServicoMobileService _RestWebService = new ServicoMobileService();
   BuildContext dialogContext;
   DBHelper dbHelper;
   TbFichaSici _FichaSici = new TbFichaSici();
@@ -53,8 +52,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
   TextEditingController _TxtControllerEmailCliente = TextEditingController();
   TextEditingController _TxtControllerNomeCliente = TextEditingController();
   TextEditingController _TxtControllerMesReferencia = TextEditingController();
-  TextEditingController _TxtControllerPeriodoReferencia =
-      TextEditingController();
+  TextEditingController _TxtControllerPeriodoReferencia = TextEditingController();
 
   TextEditingController _TxtControllerReceitaBruta = TextEditingController();
   TextEditingController _TxtControllerReceitaLiquida = TextEditingController();
@@ -292,8 +290,6 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
     }
   }
 
-
-
   OnSelecionarData(BuildContext context) async {
     final DateTime picked = await showDatePicker(
       context: context,
@@ -316,9 +312,6 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
     }
   }
 
-
-
-
   Inc() async {
     try {
       Uf = await Components.OnlistaEstados() as List<String>;
@@ -327,8 +320,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
       });
       if (widget.FichaSiciModel != null) {
         _FichaSici = widget.FichaSiciModel;
-        _TxtControllerPeriodoDeReferencia.text =
-            widget.FichaSiciModel.periodoReferencia;
+        _TxtControllerPeriodoDeReferencia.text = widget.FichaSiciModel.periodoReferencia;
         _TxtControllerCnpj.text = widget.FichaSiciModel.cnpj;
         _TxtControllerRazaoSocial.text = widget.FichaSiciModel.razaoSocial;
         _TxtControllerNomeConsultor.text = widget.FichaSiciModel.nomeConsultor;
@@ -341,8 +333,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
         _TxtControllerMesReferencia.text = widget.FichaSiciModel.mesReferencia;
 
         _TxtControllerReceitaBruta.text = widget.FichaSiciModel.receitaBruta;
-        _TxtControllerReceitaLiquida.text =
-            widget.FichaSiciModel.receitaLiquida;
+        _TxtControllerReceitaLiquida.text = widget.FichaSiciModel.receitaLiquida;
         _TxtControllerSimples.text = widget.FichaSiciModel.simples;
         _TxtControllerSimplesPorc.text = widget.FichaSiciModel.simplesPorc;
         _TxtControllerIcms.text = widget.FichaSiciModel.icms;
@@ -421,8 +412,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
     );
   }
 
-  Card DistribuicaoFisicosServicoQuantitativoCard(
-          BuildContext context, int index) =>
+  Card DistribuicaoFisicosServicoQuantitativoCard(BuildContext context, int index) =>
       Card(
         elevation: 0.9,
         color: Color(0xffFFFFFF),
