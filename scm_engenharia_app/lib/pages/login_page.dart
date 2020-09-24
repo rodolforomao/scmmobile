@@ -1,6 +1,9 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import 'package:scm_engenharia_app/data/db_helper.dart';
 import 'package:scm_engenharia_app/data/tb_usuario.dart';
 import 'package:scm_engenharia_app/help/servico_mobile_service.dart';
@@ -16,6 +19,22 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  _launchWhatsApp() async {
+    String phoneNumber = "+5561982205225";
+    String message = 'Olá, gostaria de ter acesso ao aplicativo da SCM.';
+    var whatsappUrl = "whatsapp://send?phone=$phoneNumber&text=$message";
+    if (await canLaunch(whatsappUrl)) {
+      await launch(whatsappUrl);
+    } else {
+      throw 'Could not launch $whatsappUrl';
+    }
+  }
+
+  void whatsappopen() {
+    FlutterOpenWhatsapp.sendSingleMessage("5561982205225",
+        "Olá Pessoal, Gostaria de ter acesso ao aplicativo da SCM. Esta é uma mensagem automática gerada pelo aplicativo SCM Mobile.");
+  }
+
   ServicoMobileService _RestWebService = new ServicoMobileService();
   DBHelper dbHelper;
   TextEditingController _TxtControllerEmail = TextEditingController();
@@ -28,12 +47,9 @@ class _LoginPageState extends State<LoginPage> {
   Future<Null> RealizandoLogin(BuildContext context) async {
     try {
       var connectivityResult = await (Connectivity().checkConnectivity());
-      if (connectivityResult == ConnectivityResult.none)
-       {
-         OnAlertaInformacao("Não há conexão com a Internet");
-       }
-      else
-      {
+      if (connectivityResult == ConnectivityResult.none) {
+        OnAlertaInformacao("Não há conexão com a Internet");
+      } else {
         if (_TxtControllerEmail.text.isEmpty)
           throw ("E-mail e obrigatório");
         else if (_TxtControllerSenha.text.isEmpty)
@@ -41,13 +57,15 @@ class _LoginPageState extends State<LoginPage> {
         OnRealizandoOperacao("Realizando login..");
         _UsuarioLoginModelo.usuario = _TxtControllerEmail.text.trim();
         _UsuarioLoginModelo.password = _TxtControllerSenha.text.trim();
-        Operacao _RestWebUsuario = await _RestWebService.OnLogin(_UsuarioLoginModelo);
+        Operacao _RestWebUsuario =
+            await _RestWebService.OnLogin(_UsuarioLoginModelo);
         if (_RestWebUsuario.erro)
           throw (_RestWebUsuario.mensagem);
         else if (_RestWebUsuario.resultado == null)
           throw (_RestWebUsuario.mensagem);
         else {
-          ModelInformacaoUsuario _UsuarioModelo = ModelInformacaoUsuario.fromJson(_RestWebUsuario.resultado);
+          ModelInformacaoUsuario _UsuarioModelo =
+              ModelInformacaoUsuario.fromJson(_RestWebUsuario.resultado);
           TbUsuario Usuario = new TbUsuario();
           Usuario.idUsuarioApp = null;
           Usuario.idUsuario = _UsuarioModelo.idUsuario;
@@ -73,10 +91,10 @@ class _LoginPageState extends State<LoginPage> {
             Future.delayed(Duration.zero, () {
               Navigator.of(context).pushAndRemoveUntil(
                   new MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                      new MenuNavigation()),
-                      (Route<dynamic> route) => false);
-            });}
+                      builder: (BuildContext context) => new MenuNavigation()),
+                  (Route<dynamic> route) => false);
+            });
+          }
           if (dialogContext != null) {
             Navigator.pop(dialogContext);
             setState(() {
@@ -120,7 +138,8 @@ class _LoginPageState extends State<LoginPage> {
               ),
               Expanded(
                 child: Container(
-                  margin: EdgeInsets.only(left: 10.0, top: 20.0, bottom: 20.0, right: 5.0),
+                  margin: EdgeInsets.only(
+                      left: 10.0, top: 20.0, bottom: 20.0, right: 5.0),
                   child: Text(
                     txtInformacao,
                     softWrap: true,
@@ -148,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
         return Dialog(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(8.0))),
-          child:  Column(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
@@ -172,8 +191,9 @@ class _LoginPageState extends State<LoginPage> {
                   Divider(
                     color: Colors.black12,
                   ),
-                  Padding(padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-                    child:  Text(
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                    child: Text(
                       Mensagem,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 4,
@@ -364,17 +384,24 @@ class _LoginPageState extends State<LoginPage> {
                         color: const Color(0xFF373737)),
                     obscureText: true,
                     decoration: InputDecoration(
-                        contentPadding: EdgeInsets.fromLTRB(10.0, 12.0, 10.0, 12.0),
+                        contentPadding:
+                            EdgeInsets.fromLTRB(10.0, 12.0, 10.0, 12.0),
                         errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(width: 1, color: errorTextControllerEmail == null ? Color(0xFFb8b8b8) : Colors.redAccent)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(
+                                width: 1,
+                                color: errorTextControllerEmail == null
+                                    ? Color(0xFFb8b8b8)
+                                    : Colors.redAccent)),
                         focusedErrorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
                           borderSide: BorderSide(color: Colors.white, width: 0),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(color: Colors.white, width: 0.3),
+                          borderSide:
+                              BorderSide(color: Colors.white, width: 0.3),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -387,7 +414,8 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         hintText: "Digite sua senha",
                         border: InputBorder.none,
-                        hintStyle: TextStyle(fontSize: 16.0, color: const Color(0xFF90ffffff)),
+                        hintStyle: TextStyle(
+                            fontSize: 16.0, color: const Color(0xFF90ffffff)),
                         labelStyle: TextStyle(
                             fontSize: 16,
                             color: Color(0xFF90ffffff),
@@ -460,7 +488,8 @@ class _LoginPageState extends State<LoginPage> {
                 elevation: 0.0,
                 backgroundColor: Colors.transparent,
                 onPressed: () {
-                  //FlutterOpenWhatsapp.sendSingleMessage('61981119944', 'teste.');
+                  //_launchWhatsApp();
+                  whatsappopen();
                 },
                 child: Image(
                   width: 40,

@@ -11,21 +11,22 @@ import 'package:scm_engenharia_app/models/operacao.dart';
 import 'package:scm_engenharia_app/models/variaveis_de_ambiente.dart';
 
 class ServicoMobileService {
-
-   static final Url = "http://sici.scmengenharia.com.br";
+  static final Url = "http://sici.scmengenharia.com.br";
 
   //static final Url = "http://wsscm.ddns.net";
 
   Future<Operacao> OnLogin(ModelLoginJson _Modelo) async {
     Operacao _Operacao = new Operacao();
     try {
-       String token = await ComponentsJWTToken.JWTTokenPadrao();
-      final response = await http.post(Url + "/login_ws",
-          headers: {
-            "Content-type": "multipart/form-data",
-            "token": token,
-          },
-          encoding: Encoding.getByName("utf-8")).timeout(const Duration(seconds: 10));
+      String token = await ComponentsJWTToken.JWTTokenPadrao();
+      final response = await http
+          .post(Url + "/login_ws",
+              headers: {
+                //"Content-type": "multipart/form-data",
+                "token": token,
+              },
+              encoding: Encoding.getByName("utf-8"))
+          .timeout(const Duration(seconds: 10));
       _Operacao.erro = false;
       _Operacao.mensagem = "Operação realizada com sucesso";
       _Operacao.resultado = null;
@@ -43,10 +44,12 @@ class ServicoMobileService {
           }
           break;
         case 403:
+        case 200:
           {
             if (response.body.isEmpty)
               throw ("Houve um problema de comunicação com os servidores do SCM");
-            Map<String, dynamic> map = jsonDecode( Components.removeAllHtmlTags(response.body));
+            Map<String, dynamic> map =
+                jsonDecode(Components.removeAllHtmlTags(response.body));
             OperacaoJson _Resp = OperacaoJson.fromJson(map);
             _Operacao.erro = !_Resp.status;
             _Operacao.mensagem = _Resp.mensagem;
@@ -72,13 +75,15 @@ class ServicoMobileService {
     Operacao _Operacao = new Operacao();
     try {
       String token = await ComponentsJWTToken.JWTTokenPadrao();
-      final response = await http.post(Url + "/analise/Analise/recuperarVariaveisAmbiente_ws",
-          body: null,
-          headers: {
-            "Content-type": "multipart/form-data",
-            "token": token,
-          },
-          encoding: Encoding.getByName("utf-8")).timeout(const Duration(seconds: 10));
+      final response = await http
+          .post(Url + "/analise/Analise/recuperarVariaveisAmbiente_ws",
+              body: null,
+              headers: {
+                //"Content-type": "multipart/form-data",
+                "token": token,
+              },
+              encoding: Encoding.getByName("utf-8"))
+          .timeout(const Duration(seconds: 10));
       _Operacao.erro = false;
       _Operacao.mensagem = "Operação realizada com sucesso";
       _Operacao.resultado = null;
@@ -96,6 +101,7 @@ class ServicoMobileService {
           }
           break;
         case 403:
+        case 200:
           if (!response.body.isNotEmpty)
             throw ("Houve um problema de comunicação com os servidores do SCM");
           Map<String, dynamic> map = jsonDecode(response.body);
@@ -118,7 +124,7 @@ class ServicoMobileService {
     return _Operacao;
   }
 
-  Future<Operacao> OnRealizarLancamentosSici (TbFichaSici _Modelo) async {
+  Future<Operacao> OnRealizarLancamentosSici(TbFichaSici _Modelo) async {
     Operacao _Operacao = new Operacao();
     try {
       _Operacao.erro = false;
@@ -133,47 +139,85 @@ class ServicoMobileService {
       response = new http.MultipartRequest(
           'POST', Uri.parse(Url + "/analise/lancamento_ws"));
       response.headers.addAll(headers);
-      response.fields['controllerPeriodoReferencia'] =  _Modelo.periodoReferencia == null ? "" : _Modelo.periodoReferencia;
-      response.fields['controllerRazaoSocial'] = _Modelo.razaoSocial == null ? "" : _Modelo.razaoSocial;
-      response.fields['controllerResponsavelPreenchimento'] = _Modelo.nomeConsultor== null ? "" : _Modelo.nomeConsultor;
-      response.fields['controllerTelefoneFixo'] = _Modelo.telefoneFixo== null ? "" : _Modelo.telefoneFixo;
-      response.fields['controllerCNPJ'] = _Modelo.cnpj == null ? "" : _Modelo.cnpj;
-      response.fields['controllerMesReferencia'] = _Modelo.mesReferencia == null ? "" : _Modelo.mesReferencia;
-      response.fields['controllerTelefoneCelular'] = _Modelo.telefoneMovel == null ? "" : _Modelo.telefoneMovel;
+      response.fields['controllerPeriodoReferencia'] =
+          _Modelo.periodoReferencia == null ? "" : _Modelo.periodoReferencia;
+      response.fields['controllerRazaoSocial'] =
+          _Modelo.razaoSocial == null ? "" : _Modelo.razaoSocial;
+      response.fields['controllerResponsavelPreenchimento'] =
+          _Modelo.nomeConsultor == null ? "" : _Modelo.nomeConsultor;
+      response.fields['controllerTelefoneFixo'] =
+          _Modelo.telefoneFixo == null ? "" : _Modelo.telefoneFixo;
+      response.fields['controllerCNPJ'] =
+          _Modelo.cnpj == null ? "" : _Modelo.cnpj;
+      response.fields['controllerMesReferencia'] =
+          _Modelo.mesReferencia == null ? "" : _Modelo.mesReferencia;
+      response.fields['controllerTelefoneCelular'] =
+          _Modelo.telefoneMovel == null ? "" : _Modelo.telefoneMovel;
 
-      response.fields['controllerEmailCliente'] = _Modelo.emailCliente == null ? "" : _Modelo.emailCliente;
-      response.fields['controllerEmailConsultor'] = _Modelo.emailConsutor == null ? "" : _Modelo.emailConsutor;
-      response.fields['controllerReceitaBruta'] = _Modelo.receitaBruta == null ? "" : _Modelo.receitaBruta;
-      response.fields['controllerAliqSimples'] = _Modelo.simples == null ? "" : _Modelo.simples;
-      response.fields['controllerAliqSimplesPorc'] = _Modelo.simplesPorc == null ? "" : _Modelo.simplesPorc;
-      response.fields['controllerICMS'] = _Modelo.icms == null ? "" : _Modelo.icms;
-      response.fields['controllerICMSPorc'] = _Modelo.icmsPorc == null ? "" : _Modelo.icmsPorc;
+      response.fields['controllerEmailCliente'] =
+          _Modelo.emailCliente == null ? "" : _Modelo.emailCliente;
+      response.fields['controllerEmailConsultor'] =
+          _Modelo.emailConsutor == null ? "" : _Modelo.emailConsutor;
+      response.fields['controllerReceitaBruta'] =
+          _Modelo.receitaBruta == null ? "" : _Modelo.receitaBruta;
+      response.fields['controllerAliqSimples'] =
+          _Modelo.simples == null ? "" : _Modelo.simples;
+      response.fields['controllerAliqSimplesPorc'] =
+          _Modelo.simplesPorc == null ? "" : _Modelo.simplesPorc;
+      response.fields['controllerICMS'] =
+          _Modelo.icms == null ? "" : _Modelo.icms;
+      response.fields['controllerICMSPorc'] =
+          _Modelo.icmsPorc == null ? "" : _Modelo.icmsPorc;
       response.fields['controllerPIS'] = _Modelo.pis == null ? "" : _Modelo.pis;
-      response.fields['controllerPISPorc'] = _Modelo.pisPorc == null ? "" : _Modelo.pisPorc;
-      response.fields['controllerCOFINS'] = _Modelo.cofins == null ? "" : _Modelo.cofins;
-      response.fields['controllerCOFINSPorc'] = _Modelo.cofinsPorc == null ? "" : _Modelo.cofins;
-      response.fields['controllerReceitaLiquida'] = _Modelo.receitaLiquida == null ? "" : _Modelo.receitaLiquida;
-      response.fields['controllerObservacoes'] = _Modelo.observacoes == null ? "" : _Modelo.observacoes;
+      response.fields['controllerPISPorc'] =
+          _Modelo.pisPorc == null ? "" : _Modelo.pisPorc;
+      response.fields['controllerCOFINS'] =
+          _Modelo.cofins == null ? "" : _Modelo.cofins;
+      response.fields['controllerCOFINSPorc'] =
+          _Modelo.cofinsPorc == null ? "" : _Modelo.cofins;
+      response.fields['controllerReceitaLiquida'] =
+          _Modelo.receitaLiquida == null ? "" : _Modelo.receitaLiquida;
+      response.fields['controllerObservacoes'] =
+          _Modelo.observacoes == null ? "" : _Modelo.observacoes;
       int index = 0;
-      if(_Modelo.distribuicaoFisicosServicoQuantitativo == null)
+      if (_Modelo.distribuicaoFisicosServicoQuantitativo == null)
         throw ("Distribuição do quantitativo de acessos físicos em serviço e obrigatório,favor adicionar.");
       for (var item in _Modelo.distribuicaoFisicosServicoQuantitativo) {
-        print('controllerUF_'+index.toString());
-        response.fields['controllerCodIBGE_'+index.toString()] = item.cod_ibge.toString() == null ? "" :  item.cod_ibge.toString();
-        response.fields['controllerUF_'+index.toString()] = item.id_uf.toString()  == null ? "" :  item.id_uf.toString();
-        response.fields['controllerMunicipio_'+index.toString()] = item.id_municipio.toString()  == null ? "" :  item.id_municipio.toString();
-        response.fields['controllerTecnologia_'+ index.toString()] = item.id_tecnologia.toString()  == null ? "" :  item.id_tecnologia.toString();
-        response.fields['controllerCodIBGE_'+index.toString()] = item.cod_ibge == null ? "" : item.cod_ibge;
-        response.fields['controllerPF0_'+index.toString()] = item.pf_0 == null ? "" : item.pf_0;
-        response.fields['controllerPF512_'+index.toString()] = item.pf_512 == null ? "" : item.pf_512;
-        response.fields['controllerPF2_'+index.toString()] = item.pf_2 == null ? "" : item.pf_2;
-        response.fields['controllerPF12_'+index.toString()] = item.pf_12 == null ? "" : item.pf_12;
-        response.fields['controllerPF34_'+index.toString()] = item.pf_34 == null ? "" : item.pf_34;
-        response.fields['controllerPJ0_'+index.toString()] = item.pj_0 == null ? "" : item.pj_0;
-        response.fields['controllerPJ512_'+index.toString()] = item.pj_512 == null ? "" : item.pj_512;
-        response.fields['controllerPJ2_'+index.toString()] = item.pj_2 == null ? "" : item.pj_2;
-        response.fields['controllerPJ12_'+index.toString()] = item.pj_12 == null ? "" : item.pj_12;
-        response.fields['controllerPJ34_'+index.toString()] = item.pj_34 == null ? "" : item.pj_34;
+        print('controllerUF_' + index.toString());
+        response.fields['controllerCodIBGE_' + index.toString()] =
+            item.cod_ibge.toString() == null ? "" : item.cod_ibge.toString();
+        response.fields['controllerUF_' + index.toString()] =
+            item.id_uf.toString() == null ? "" : item.id_uf.toString();
+        response.fields['controllerMunicipio_' + index.toString()] =
+            item.id_municipio.toString() == null
+                ? ""
+                : item.id_municipio.toString();
+        response.fields['controllerTecnologia_' + index.toString()] =
+            item.id_tecnologia.toString() == null
+                ? ""
+                : item.id_tecnologia.toString();
+        response.fields['controllerCodIBGE_' + index.toString()] =
+            item.cod_ibge == null ? "" : item.cod_ibge;
+        response.fields['controllerPF0_' + index.toString()] =
+            item.pf_0 == null ? "" : item.pf_0;
+        response.fields['controllerPF512_' + index.toString()] =
+            item.pf_512 == null ? "" : item.pf_512;
+        response.fields['controllerPF2_' + index.toString()] =
+            item.pf_2 == null ? "" : item.pf_2;
+        response.fields['controllerPF12_' + index.toString()] =
+            item.pf_12 == null ? "" : item.pf_12;
+        response.fields['controllerPF34_' + index.toString()] =
+            item.pf_34 == null ? "" : item.pf_34;
+        response.fields['controllerPJ0_' + index.toString()] =
+            item.pj_0 == null ? "" : item.pj_0;
+        response.fields['controllerPJ512_' + index.toString()] =
+            item.pj_512 == null ? "" : item.pj_512;
+        response.fields['controllerPJ2_' + index.toString()] =
+            item.pj_2 == null ? "" : item.pj_2;
+        response.fields['controllerPJ12_' + index.toString()] =
+            item.pj_12 == null ? "" : item.pj_12;
+        response.fields['controllerPJ34_' + index.toString()] =
+            item.pj_34 == null ? "" : item.pj_34;
         index++;
       }
       var streamedResponse = await response.send();
@@ -222,13 +266,15 @@ class ServicoMobileService {
     Operacao _Operacao = new Operacao();
     try {
       String token = await ComponentsJWTToken.JWTTokenPadrao();
-      final response = await http.post(Url + "/analise/recuperar_ws",
-          body: null,
-          headers: {
-            "Content-type": "multipart/form-data",
-            "token": token,
-          },
-          encoding: Encoding.getByName("utf-8")).timeout(const Duration(seconds: 10));
+      final response = await http
+          .post(Url + "/analise/recuperar_ws",
+              body: null,
+              headers: {
+                //"Content-type": "multipart/form-data",
+                "token": token,
+              },
+              encoding: Encoding.getByName("utf-8"))
+          .timeout(const Duration(seconds: 10));
       _Operacao.erro = false;
       _Operacao.mensagem = "Operação realizada com sucesso";
       _Operacao.resultado = null;
@@ -247,6 +293,7 @@ class ServicoMobileService {
           }
           break;
         case 403:
+        case 200:
           if (!response.body.isNotEmpty)
             throw ("Houve um problema de comunicação com os servidores do SCM");
           Map<String, dynamic> map = jsonDecode(response.body);
@@ -309,9 +356,9 @@ class ServicoMobileService {
             if (jsonResp.isEmpty)
               throw ("Houve um problema de comunicação com os servidores do SCM");
             Map<String, dynamic> map = jsonDecode(jsonResp);
-             OperacaoJson _Resp = OperacaoJson.fromJson(map);
-             _Operacao.erro = !_Resp.status;
-             _Operacao.mensagem = _Resp.mensagem;
+            OperacaoJson _Resp = OperacaoJson.fromJson(map);
+            _Operacao.erro = !_Resp.status;
+            _Operacao.mensagem = _Resp.mensagem;
             _Operacao.resultado = _Resp.resultado;
             return _Operacao;
           }
@@ -329,5 +376,4 @@ class ServicoMobileService {
     }
     return _Operacao;
   }
-  
 }
