@@ -24,8 +24,8 @@ class DBHelper {
 
   initDatabase() async {
     io.Directory documentDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentDirectory.path, 'scmSici.db');
-    var db = await openDatabase(path, version: 5, onCreate: _onCreate);
+    String path = join(documentDirectory.path, 'scmSicii.db');
+    var db = await openDatabase(path, version: 1, onCreate: _onCreate);
     return db;
   }
 
@@ -68,8 +68,6 @@ class DBHelper {
       _Operacao.erro = false;
       _Operacao.resultado = false;
       _Operacao.mensagem = "";
-
-
       Operacao _Uf = await onSelecionarUf();
       if (_Uf.erro)
         throw (_Uf.mensagem);

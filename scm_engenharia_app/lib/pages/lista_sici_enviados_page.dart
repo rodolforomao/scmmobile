@@ -27,6 +27,12 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
     try {
       var connectivityResult = await (Connectivity().checkConnectivity());
       if (connectivityResult == ConnectivityResult.none) {
+        if (dialogContext != null) {
+          Navigator.of(context, rootNavigator: true).pop('dialog');
+          setState(() {
+            dialogContext = null;
+          });
+        }
         if (ListaFichaSici.length > 0) {
           setState(() {
             _StatusTipoWidget = "renderizar_sici";
@@ -84,8 +90,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                   ModelFichaSici.cofinsPorc = prop.cofinsPorc;
                   ModelFichaSici.receitaLiquida = prop.receitaLiquida;
                   ModelFichaSici.observacoes = prop.observacoes;
-                  ModelFichaSici.distribuicaoFisicosServicoQuantitativo =
-                      prop.distribuicaoFisicosServicoQuantitativo;
+                  ModelFichaSici.distribuicaoFisicosServicoQuantitativo = prop.distribuicaoFisicosServicoQuantitativo;
                   ListaFichaSici.add(ModelFichaSici);
                 }
               }
@@ -120,7 +125,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
       }
     } catch (error) {
       if (dialogContext != null) {
-        Navigator.pop(dialogContext);
+        Navigator.of(context, rootNavigator: true).pop('dialog');
         setState(() {
           dialogContext = null;
         });
