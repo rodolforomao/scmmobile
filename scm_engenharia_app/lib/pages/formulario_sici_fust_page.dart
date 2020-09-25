@@ -8,7 +8,6 @@ import 'package:scm_engenharia_app/data/tb_ficha_sici.dart';
 import 'dart:async';
 import 'package:scm_engenharia_app/help/components.dart';
 import 'package:scm_engenharia_app/help/masked_text_controller.dart';
-import 'package:scm_engenharia_app/help/servico_mobile_service.dart';
 import 'package:scm_engenharia_app/menu_navigation.dart';
 import 'package:scm_engenharia_app/models/operacao.dart';
 import 'package:scm_engenharia_app/pages/distribuicao_fisicos_servico_quantitativo_page.dart';
@@ -985,17 +984,9 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                                               FocusScope.of(context)
                                                   .requestFocus(
                                                       new FocusNode());
-                                              if (_FichaSici
-                                                      .distribuicaoFisicosServicoQuantitativo[
-                                                          index]
-                                                      .idDistribuicaoQuantitativoAcessosFisicosServicoApp ==
-                                                  null) {
+                                              if (_FichaSici.distribuicaoFisicosServicoQuantitativo[index].idApp == null ||_FichaSici.distribuicaoFisicosServicoQuantitativo[index].idApp == 0 ) {
                                                 setState(() {
-                                                  _FichaSici
-                                                      .distribuicaoFisicosServicoQuantitativo
-                                                      .remove(_FichaSici
-                                                              .distribuicaoFisicosServicoQuantitativo[
-                                                          index]);
+                                                  _FichaSici.distribuicaoFisicosServicoQuantitativo.remove(_FichaSici.distribuicaoFisicosServicoQuantitativo[index]);
                                                 });
                                               } else {
                                                 Operacao _respLocal = await dbHelper
@@ -1003,19 +994,14 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                                                         _FichaSici
                                                             .distribuicaoFisicosServicoQuantitativo[
                                                                 index]
-                                                            .idDistribuicaoQuantitativoAcessosFisicosServicoApp);
+                                                            .idApp);
                                                 if (_respLocal.erro)
                                                   throw (_respLocal.mensagem);
                                                 else {
-                                                  OnAlertaInformacao(
-                                                      _respLocal.mensagem);
                                                   setState(() {
-                                                    _FichaSici
-                                                        .distribuicaoFisicosServicoQuantitativo
-                                                        .remove(_FichaSici
-                                                                .distribuicaoFisicosServicoQuantitativo[
-                                                            index]);
+                                                    _FichaSici.distribuicaoFisicosServicoQuantitativo.remove(_FichaSici.distribuicaoFisicosServicoQuantitativo[index]);
                                                   });
+                                                  OnAlertaInformacao(_respLocal.mensagem);
                                                 }
                                               }
                                               Navigator.pop(context);
@@ -1660,13 +1646,14 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                               )
                                   .then((value) {
                                 if (value != null) {
-                                  value.index = _FichaSici
-                                          .distribuicaoFisicosServicoQuantitativo
-                                          .length +
-                                      1;
-                                  _FichaSici
-                                      .distribuicaoFisicosServicoQuantitativo
-                                      .add(value);
+                                  if(_FichaSici.distribuicaoFisicosServicoQuantitativo == null)
+                                   {
+                                     value.index = 1;
+                                     _FichaSici.distribuicaoFisicosServicoQuantitativo =   List<TbDistribuicaoQuantitativoAcessosFisicosServico>();
+                                   }
+                                    else
+                                    value.index = _FichaSici.distribuicaoFisicosServicoQuantitativo.length + 1;
+                                  _FichaSici.distribuicaoFisicosServicoQuantitativo.add(value);
                                 }
                               });
                             },

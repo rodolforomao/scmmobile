@@ -74,7 +74,7 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
       else if (_TxtControllerPj_0.text.isEmpty)
         throw ("UF deve ser selecionada");
       else if (_TxtControllerPj_512.text.isEmpty)
-        throw ("UF deve ser selecionada");
+        throw ("Pj 512 deve ser selecionada");
       else if (_TxtControllerPj_2.text.isEmpty)
         throw ("UF deve ser selecionada");
       else if (_TxtControllerPj_12.text.isEmpty)

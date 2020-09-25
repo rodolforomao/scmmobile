@@ -1,7 +1,7 @@
 class TbDistribuicaoQuantitativoAcessosFisicosServico {
-  int idDistribuicaoQuantitativoAcessosFisicosServicoApp;
+  int idApp;
   int index;
-  int idFichaSiciApp;
+  String idFichaSiciApp;
   String id;
   String cod_ibge;
   String id_uf;
@@ -18,14 +18,14 @@ class TbDistribuicaoQuantitativoAcessosFisicosServico {
   String pj_12;
   String pj_34;
   String id_lancamento;
-  String ultima_alteracao;
   String id_usuario_ultima_alteracao;
   String municipio;
   String uf;
   String tecnologia;
 
   TbDistribuicaoQuantitativoAcessosFisicosServico(
-      {this.idDistribuicaoQuantitativoAcessosFisicosServicoApp =0,
+      {this.idApp =0,
+
         this.idFichaSiciApp,
         this.index,
       this.id,
@@ -44,7 +44,6 @@ class TbDistribuicaoQuantitativoAcessosFisicosServico {
       this.pj_12,
       this.pj_34,
       this.id_lancamento,
-      this.ultima_alteracao,
       this.id_usuario_ultima_alteracao,
       this.municipio,
       this.uf,
@@ -52,8 +51,7 @@ class TbDistribuicaoQuantitativoAcessosFisicosServico {
 
   TbDistribuicaoQuantitativoAcessosFisicosServico.fromJson(
       Map<String, dynamic> json) {
-    idDistribuicaoQuantitativoAcessosFisicosServicoApp =
-        json['idDistribuicaoQuantitativoAcessosFisicosServicoApp'];
+    idApp = json['idApp'];
     idFichaSiciApp = json['idFichaSiciApp'];
     id = json['id'];
     cod_ibge = json['cod_ibge'];
@@ -71,7 +69,6 @@ class TbDistribuicaoQuantitativoAcessosFisicosServico {
     pj_12 = json['pj_12'];
     pj_34 = json['pj_34'];
     id_lancamento = json['id_lancamento'];
-    ultima_alteracao = json['ultima_alteracao'];
     id_usuario_ultima_alteracao = json['id_usuario_ultima_alteracao'];
     municipio = json['municipio'];
     uf = json['uf'];
@@ -80,9 +77,10 @@ class TbDistribuicaoQuantitativoAcessosFisicosServico {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['idDistribuicaoQuantitativoAcessosFisicosServicoApp'] = this.idDistribuicaoQuantitativoAcessosFisicosServicoApp == null ? "" : this.idDistribuicaoQuantitativoAcessosFisicosServicoApp;
-    data['cod_ibge'] = this.cod_ibge == null ? "" : this.cod_ibge;
+    data['idApp'] = this.idApp;
     data['idFichaSiciApp'] = this.idFichaSiciApp == null ? "" : this.idFichaSiciApp;
+    data['id'] = this.id == null ? "" : this.id;
+    data['cod_ibge'] = this.cod_ibge == null ? "" : this.cod_ibge;
     data['id_uf'] = this.id_uf== null ? "" : this.id_uf;
     data['id_municipio'] = this.id_municipio == null ? "" : this.id_municipio;
     data['id_tecnologia'] = this.id_tecnologia == null ? "" : this.id_tecnologia;
@@ -97,7 +95,6 @@ class TbDistribuicaoQuantitativoAcessosFisicosServico {
     data['pj_12'] = this.pj_12 == null ? "" : this.pj_12;
     data['pj_34'] = this.pj_34 == null ? "" : this.pj_34;
     data['id_lancamento'] = this.id_lancamento == null ? "" : this.id_lancamento;
-    data['ultima_alteracao'] = this.ultima_alteracao == null ? "" : this.ultima_alteracao;
     data['id_usuario_ultima_alteracao'] = this.id_usuario_ultima_alteracao == null ? "" : this.id_usuario_ultima_alteracao;
     data['municipio'] = this.municipio == null ? "" : this.municipio;
     data['uf'] = this.uf == null ? "" : this.uf;

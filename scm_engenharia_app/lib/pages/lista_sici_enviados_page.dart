@@ -19,157 +19,174 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
   ServicoMobileService _RestWebService = new ServicoMobileService();
   List<TbFichaSici> ListaFichaSici = new List<TbFichaSici>();
   DBHelper dbHelper;
-  String _StatusTipoWidget = "nao_existe_sici_cadastrado", ErroInformacao = "";
   BuildContext dialogContext;
+  String _StatusTipoWidget = "nao_existe_sici_cadastrado", ErroInformacao = "";
   StreamSubscription<ConnectivityResult> subscription;
 
   Future<Null> IncRestWeb() async {
-    Future.delayed(Duration.zero, () async {
-      try {
-        var connectivityResult = await (Connectivity().checkConnectivity());
-        if (connectivityResult == ConnectivityResult.none) {
+    try {
+      var connectivityResult = await (Connectivity().checkConnectivity());
+      if (connectivityResult == ConnectivityResult.none) {
+        if (ListaFichaSici.length > 0) {
+          setState(() {
+            _StatusTipoWidget = "renderizar_sici";
+          });
+        } else {
+          setState(() {
+            _StatusTipoWidget = "sem_internet";
+          });
+        }
+      } else {
+        OnRealizandoOperacao("Realizando busca de fichas sici Web");
+        Operacao _RestWeb = await _RestWebService.OnRecuperaLancamentosSici();
+        if (_RestWeb.erro || _RestWeb.resultado == null)
+          throw (_RestWeb.mensagem);
+        else {
+          var data = _RestWeb.resultado as List;
+          setState(() {
+            List<ModelFormularioSiciFustJson>
+                ListaModelFormularioSiciFustModelo = data
+                    .map<ModelFormularioSiciFustJson>(
+                        (json) => ModelFormularioSiciFustJson.fromJson(json))
+                    .toList();
+            if (ListaModelFormularioSiciFustModelo.length > 0) {
+              for (var prop in ListaModelFormularioSiciFustModelo) {
+                if (ListaFichaSici.where(
+                            (f) => f.idLancamento.startsWith(prop.idLancamento))
+                        .length >=
+                    1) {
+                  // A ficha  ja esta salva no dispositivo
+                } else {
+                  TbFichaSici ModelFichaSici = new TbFichaSici();
+                  ModelFichaSici.idFichaSiciApp = 0;
+                  ModelFichaSici.idEmpresa = prop.idEmpresa;
+                  ModelFichaSici.isSincronizar = "N";
+                  ModelFichaSici.idLancamento = prop.idLancamento;
+                  ModelFichaSici.periodoReferencia = prop.periodoReferencia;
+                  ModelFichaSici.razaoSocial = prop.razaoSocial;
+                  ModelFichaSici.nomeCliente = prop.nomeCliente;
+                  ModelFichaSici.nomeConsultor = prop.nomeConsultor;
+                  ModelFichaSici.telefoneFixo = prop.telefoneFixo;
+                  ModelFichaSici.cnpj = prop.cnpj;
+                  ModelFichaSici.mesReferencia = prop.mesReferencia;
+                  ModelFichaSici.telefoneMovel = prop.telefoneMovel;
+                  ModelFichaSici.emailCliente = prop.emailCliente;
+                  ModelFichaSici.emailConsutor = prop.emailConsutor;
+                  ModelFichaSici.receitaBruta = prop.receitaBruta;
+                  //ModelFichaSici.idFinanceiro  = prop.idFinanceiro; Não tem
+                  ModelFichaSici.simples = prop.simples;
+                  ModelFichaSici.simplesPorc = prop.simplesPorc;
+                  ModelFichaSici.icms = prop.icms;
+                  ModelFichaSici.icmsPorc = prop.icmsPorc;
+                  ModelFichaSici.pis = prop.pis;
+                  ModelFichaSici.pisPorc = prop.pisPorc;
+                  ModelFichaSici.cofins = prop.cofins;
+                  ModelFichaSici.cofinsPorc = prop.cofinsPorc;
+                  ModelFichaSici.receitaLiquida = prop.receitaLiquida;
+                  ModelFichaSici.observacoes = prop.observacoes;
+                  ModelFichaSici.distribuicaoFisicosServicoQuantitativo =
+                      prop.distribuicaoFisicosServicoQuantitativo;
+                  ListaFichaSici.add(ModelFichaSici);
+                }
+              }
+              if (ListaFichaSici.length > 0) {
+                setState(() {
+                  _StatusTipoWidget = "renderizar_sici";
+                });
+              } else
+                _StatusTipoWidget = "nao_existe_sici_cadastrado";
+            } else {
+              if (ListaFichaSici.length > 0) {
+                setState(() {
+                  _StatusTipoWidget = "renderizar_sici";
+                });
+              } else
+                _StatusTipoWidget = "nao_existe_sici_cadastrado";
+            }
+          });
+          if (dialogContext != null) {
+            Navigator.pop(dialogContext);
+            setState(() {
+              dialogContext = null;
+            });
+          }
           if (ListaFichaSici.length > 0) {
             setState(() {
               _StatusTipoWidget = "renderizar_sici";
             });
-          } else {
-            setState(() {
-              _StatusTipoWidget = "sem_internet";
-            });
-          }
-        } else {
-          OnRealizandoOperacao("Realizando busca de fichas sici Web");
-          Operacao _RestWeb = await _RestWebService.OnRecuperaLancamentosSici();
-          if (_RestWeb.erro || _RestWeb.resultado == null)
-            throw (_RestWeb.mensagem);
-          else {
-            var data = _RestWeb.resultado as List;
-            setState(() {
-              List<ModelFormularioSiciFustJson>
-              ListaModelFormularioSiciFustModelo = data
-                  .map<ModelFormularioSiciFustJson>(
-                      (json) => ModelFormularioSiciFustJson.fromJson(json))
-                  .toList();
-              if (ListaModelFormularioSiciFustModelo.length > 0) {
-                for (var prop in ListaModelFormularioSiciFustModelo) {
-                  if (ListaFichaSici.where((f) => f.idLancamento.startsWith(prop.idLancamento)).length >= 1) {
-                    // A ficha  ja esta salva no dispositivo
-                  } else {
-                    TbFichaSici ModelFichaSici = new TbFichaSici();
-                    ModelFichaSici.idFichaSiciApp = 0;
-                    ModelFichaSici.idEmpresa = prop.idEmpresa;
-                    ModelFichaSici.isSincronizar = "N";
-                    ModelFichaSici.idLancamento = prop.idLancamento;
-                    ModelFichaSici.periodoReferencia = prop.periodoReferencia;
-                    ModelFichaSici.razaoSocial = prop.razaoSocial;
-                    ModelFichaSici.nomeCliente = prop.nomeCliente;
-                    ModelFichaSici.nomeConsultor = prop.nomeConsultor;
-                    ModelFichaSici.telefoneFixo = prop.telefoneFixo;
-                    ModelFichaSici.cnpj = prop.cnpj;
-                    ModelFichaSici.mesReferencia = prop.mesReferencia;
-                    ModelFichaSici.telefoneMovel = prop.telefoneMovel;
-                    ModelFichaSici.emailCliente = prop.emailCliente;
-                    ModelFichaSici.emailConsutor = prop.emailConsutor;
-                    ModelFichaSici.receitaBruta = prop.receitaBruta;
-                    //ModelFichaSici.idFinanceiro  = prop.idFinanceiro; Não tem
-                    ModelFichaSici.simples = prop.simples;
-                    ModelFichaSici.simplesPorc = prop.simplesPorc;
-                    ModelFichaSici.icms = prop.icms;
-                    ModelFichaSici.icmsPorc = prop.icmsPorc;
-                    ModelFichaSici.pis = prop.pis;
-                    ModelFichaSici.pisPorc = prop.pisPorc;
-                    ModelFichaSici.cofins = prop.cofins;
-                    ModelFichaSici.cofinsPorc = prop.cofinsPorc;
-                    ModelFichaSici.receitaLiquida = prop.receitaLiquida;
-                    ModelFichaSici.observacoes = prop.observacoes;
-                    ModelFichaSici.distribuicaoFisicosServicoQuantitativo =
-                        prop.distribuicaoFisicosServicoQuantitativo;
-                    ListaFichaSici.add(ModelFichaSici);
-                  }
-                }
-                _StatusTipoWidget = "renderizar_sici";
-              } else
-                _StatusTipoWidget = "nao_existe_sici_cadastrado";
-            });
-            if (dialogContext != null) {
-              Navigator.pop(dialogContext);
-              setState(() {
-                dialogContext = null;
-              });
-            }
-          }
-        }
-      } catch (error) {
-        if (dialogContext != null) {
-          Navigator.pop(dialogContext);
-          setState(() {
-            dialogContext = null;
-          });
-        }
-        if (ListaFichaSici.length > 0) {
-          setState(() {
-            _StatusTipoWidget = "renderizar_sici";
-          });
-          OnAlertaInformacao(error);
-        } else {
-          setState(() {
-            _StatusTipoWidget = "erro_informacao";
-            ErroInformacao = error.toString();
-          });
+          } else
+            _StatusTipoWidget = "nao_existe_sici_cadastrado";
         }
       }
-    });
+    } catch (error) {
+      if (dialogContext != null) {
+        Navigator.pop(dialogContext);
+        setState(() {
+          dialogContext = null;
+        });
+      }
+      if (ListaFichaSici.length > 0) {
+        setState(() {
+          _StatusTipoWidget = "renderizar_sici";
+        });
+        OnAlertaInformacao(error);
+      } else {
+        setState(() {
+          _StatusTipoWidget = "erro_informacao";
+          ErroInformacao = error.toString();
+        });
+      }
+    }
   }
 
   Future<Null> Inc() async {
-    Future.delayed(Duration.zero, () async {
-      try {
-        OnRealizandoOperacao("Realizando busca de fichas sici local");
-        Operacao _FichaSiciLocal = await dbHelper.onSelecionarFichaSici();
-        if (_FichaSiciLocal.erro)
-          throw (_FichaSiciLocal.mensagem);
-        else if (_FichaSiciLocal.resultado == null) {
-          if (dialogContext != null) {
-            Navigator.pop(dialogContext);
-            setState(() {
-              dialogContext = null;
-            });
-          }
-        } else if (_FichaSiciLocal.resultado != null) {
-          setState(() {
-            ListaFichaSici = new List<TbFichaSici>();
-            ListaFichaSici = _FichaSiciLocal.resultado;
-            _StatusTipoWidget = "renderizar_sici";
-          });
-          if (dialogContext != null) {
-            Navigator.pop(dialogContext);
-            setState(() {
-              dialogContext = null;
-            });
-          }
-          IncRestWeb();
-        }
-      } catch (error) {
+    try {
+      OnRealizandoOperacao("Busca de fichas sici local");
+      Operacao _FichaSiciLocal = await dbHelper.onSelecionarFichaSici();
+      if (_FichaSiciLocal.erro)
+        throw (_FichaSiciLocal.mensagem);
+      else if (_FichaSiciLocal.resultado == null) {
+        ListaFichaSici = new List<TbFichaSici>();
+        Navigator.of(context, rootNavigator: true).pop('dialog');
+        setState(() {
+          dialogContext = null;
+        });
+        IncRestWeb();
+      } else {
+        setState(() {
+          ListaFichaSici = new List<TbFichaSici>();
+          ListaFichaSici = _FichaSiciLocal.resultado;
+          _StatusTipoWidget = "renderizar_sici";
+        });
         if (dialogContext != null) {
-          Navigator.pop(dialogContext);
+          Navigator.of(context, rootNavigator: true).pop('dialog');
           setState(() {
             dialogContext = null;
           });
         }
-        if (ListaFichaSici.length > 0) {
-          setState(() {
-            _StatusTipoWidget = "renderizar_sici";
-          });
-        } else {
-          setState(() {
-            _StatusTipoWidget = "erro_informacao";
-            ErroInformacao = error.toString();
-          });
-        }
-        OnAlertaInformacao(error);
         IncRestWeb();
       }
-    });
+    } catch (error) {
+      if (dialogContext != null) {
+        Navigator.of(context, rootNavigator: true).pop('dialog');
+        //Navigator.pop(dialogContext);
+        setState(() {
+          dialogContext = null;
+        });
+      }
+      if (ListaFichaSici.length > 0) {
+        setState(() {
+          _StatusTipoWidget = "renderizar_sici";
+        });
+        OnAlertaInformacao(error.toString());
+      } else {
+        setState(() {
+          _StatusTipoWidget = "erro_informacao";
+          ErroInformacao = error.toString();
+        });
+      }
+      IncRestWeb();
+    }
   }
 
   OnAlertaInformacao(String Mensagem) {
@@ -259,8 +276,15 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
   }
 
   OnRealizandoOperacao(String txtInformacao) {
+    if (dialogContext != null) {
+      Navigator.of(context, rootNavigator: true).pop('dialog');
+      //Navigator.pop(dialogContext);
+      setState(() {
+        dialogContext = null;
+      });
+    }
     showDialog(
-      context: context,
+      context: _ScaffoldKey.currentContext,
       barrierDismissible: false,
       builder: (BuildContext context) {
         dialogContext = context;
@@ -307,7 +331,9 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
   void initState() {
     super.initState();
     dbHelper = DBHelper();
-    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
       if (result == ConnectivityResult.none) {
         if (ListaFichaSici.length > 0) {
           setState(() {
@@ -320,12 +346,22 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
         }
       } else {}
     });
-    Inc();
+
+    Future.delayed(Duration.zero, () {
+      if (dialogContext != null) {
+        Navigator.pop(dialogContext);
+        setState(() {
+          dialogContext = null;
+        });
+      }
+      Inc();
+    });
   }
 
   @override
   void dispose() {
     super.dispose();
+    dialogContext = null;
     subscription?.cancel();
   }
 
@@ -466,7 +502,6 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                           ));
                         } else {
                           _ScaffoldKey.currentState.removeCurrentSnackBar();
-                          IncRestWeb();
                         }
                       },
                       child: Container(
@@ -573,7 +608,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                   Center(
                     child: InkWell(
                       onTap: () {
-                        IncRestWeb();
+                        Inc();
                       },
                       child: Container(
                         padding: EdgeInsets.fromLTRB(0.0, 5.0, 20.0, 0.0),
@@ -652,7 +687,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                   Center(
                     child: InkWell(
                       onTap: () {
-                        IncRestWeb();
+                        Inc();
                       },
                       child: Container(
                         padding: EdgeInsets.fromLTRB(0.0, 5.0, 20.0, 0.0),
@@ -707,73 +742,71 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                   SizedBox(
                     height: 10.0,
                   ),
-                  SizedBox(
-                    height: 110.0,
-                    child: ListTile(
-                      onTap: () {
-                        FocusScope.of(context).requestFocus(new FocusNode());
-                      },
-                      contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
-                      title: Flexible(
-                        child: RichText(
-                            textAlign: TextAlign.start,
-                            softWrap: false,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            text: TextSpan(children: [
-                              TextSpan(
-                                text: 'Período referencia :  ',
-                                style: TextStyle(
-                                    fontSize: 18.0,
-                                    color: Color(0xff333333),
-                                    fontFamily: "avenir-lt-std-medium"),
-                              ),
-                              TextSpan(
-                                text: ListaFichaSici[index].periodoReferencia,
-                                style: TextStyle(
-                                    fontSize: 20.0,
-                                    color: Color(0xff333333),
-                                    fontFamily: "avenir-lt-std-medium"),
-                              ),
-                            ])),
-                      ),
-                      subtitle: Container(
-                          height: 70,
-                          child: FittedBox(
-                              fit: BoxFit.none,
-                              alignment: Alignment.centerLeft,
-                              child: Container(
-                                padding:
-                                    EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
-                                child: Column(children: <Widget>[
-                                  SizedBox(
-                                    height: 10.0,
-                                  ),
-                                  Text(
-                                    ListaFichaSici[index].razaoSocial,
-                                    style: TextStyle(
-                                        fontSize: 17.0,
-                                        color: Color(0xff333333),
-                                        fontFamily:
-                                            "avenir-lt-std-medium-oblique"),
-                                  ),
-                                  SizedBox(
-                                    height: 5.0,
-                                  ),
-                                  Text(
-                                    ListaFichaSici[index].observacoes,
-                                    style: TextStyle(
-                                        fontSize: 15.0,
-                                        color: Color(0xff333333),
-                                        fontFamily:
-                                            "avenir-lt-std-medium-oblique"),
-                                  ),
-                                  SizedBox(
-                                    height: 5.0,
-                                  ),
-                                ]),
-                              ))),
+                  ListTile(
+                    onTap: () {
+                      FocusScope.of(context).requestFocus(new FocusNode());
+                    },
+                    contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+                    title: Container(
+                      alignment: Alignment.topLeft,
+                      child: RichText(
+                          textAlign: TextAlign.start,
+                          softWrap: false,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          text: TextSpan(children: [
+                            TextSpan(
+                              text: 'Período referencia :  ',
+                              style: TextStyle(
+                                  fontSize: 18.0,
+                                  color: Color(0xff333333),
+                                  fontFamily: "avenir-lt-std-medium"),
+                            ),
+                            TextSpan(
+                              text: ListaFichaSici[index].periodoReferencia,
+                              style: TextStyle(
+                                  fontSize: 20.0,
+                                  color: Color(0xff333333),
+                                  fontFamily: "avenir-lt-std-medium"),
+                            ),
+                          ])),
                     ),
+                    subtitle: Container(
+                        alignment: Alignment.topLeft,
+                        height: 70,
+                        child: FittedBox(
+                            fit: BoxFit.none,
+                            alignment: Alignment.centerLeft,
+                            child: Container(
+                              padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
+                              child: Column(children: <Widget>[
+                                SizedBox(
+                                  height: 10.0,
+                                ),
+                                Text(
+                                  ListaFichaSici[index].razaoSocial,
+                                  style: TextStyle(
+                                      fontSize: 17.0,
+                                      color: Color(0xff333333),
+                                      fontFamily:
+                                          "avenir-lt-std-medium-oblique"),
+                                ),
+                                SizedBox(
+                                  height: 5.0,
+                                ),
+                                Text(
+                                  ListaFichaSici[index].observacoes,
+                                  style: TextStyle(
+                                      fontSize: 15.0,
+                                      color: Color(0xff333333),
+                                      fontFamily:
+                                          "avenir-lt-std-medium-oblique"),
+                                ),
+                                SizedBox(
+                                  height: 5.0,
+                                ),
+                              ]),
+                            ))),
                   ),
                   ListaFichaSici[index].isSincronizar == "S"
                       ? Expanded(
@@ -792,24 +825,36 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                     onTap: () async {
                                       Future.delayed(Duration.zero, () async {
                                         try {
-                                          var connectivityResult = await (Connectivity().checkConnectivity());
-                                          if (connectivityResult == ConnectivityResult.none) {
+                                          var connectivityResult =
+                                              await (Connectivity()
+                                                  .checkConnectivity());
+                                          if (connectivityResult ==
+                                              ConnectivityResult.none) {
                                             OnAlertaInformacao(
                                                 "Por favor conecte-se à internet.");
                                           } else {
-                                            OnRealizandoOperacao("Realizando cadastro.");
-                                            Operacao _RestWeb = await _RestWebService.OnRealizarLancamentosSici(ListaFichaSici[index]);
+                                            OnRealizandoOperacao(
+                                                "Realizando cadastro.");
+                                            Operacao _RestWeb =
+                                                await _RestWebService
+                                                    .OnRealizarLancamentosSici(
+                                                        ListaFichaSici[index]);
                                             if (_RestWeb.erro)
                                               throw (_RestWeb.mensagem);
                                             else if (_RestWeb.resultado == null)
                                               throw (_RestWeb.mensagem);
                                             else {
-                                              Operacao _respLocal = await dbHelper.OnDeletarFichaSici(ListaFichaSici[index].idFichaSiciApp);
+                                              Operacao _respLocal =
+                                                  await dbHelper
+                                                      .OnDeletarFichaSici(
+                                                          ListaFichaSici[index]
+                                                              .idFichaSiciApp);
                                               if (_respLocal.erro)
                                                 throw (_respLocal.mensagem);
                                               else {
                                                 setState(() {
-                                                  ListaFichaSici.remove([index]);
+                                                  ListaFichaSici.remove(
+                                                      [index]);
                                                 });
                                                 Inc();
                                               }
@@ -819,7 +864,8 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                                   dialogContext = null;
                                                 });
                                               }
-                                              OnAlertaInformacao(_RestWeb.mensagem);
+                                              OnAlertaInformacao(
+                                                  _RestWeb.mensagem);
                                             }
                                           }
                                         } catch (error) {
@@ -924,18 +970,21 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                                               fontSize: 16.0,
                                                             )),
                                                         onPressed: () async {
-                                                          FocusScope.of(context)
-                                                              .requestFocus(new FocusNode());
-                                                          Operacao _respLoca = await dbHelper.OnDeletarFichaSici(ListaFichaSici[index].idFichaSiciApp);
-                                                          if (_respLoca.erro)
-                                                            throw (_respLoca.mensagem);
-                                                          else {
-                                                            setState(() {
-                                                              ListaFichaSici.remove([index]);
-                                                            });
-                                                            //Navigator.pop(context);
-                                                            OnAlertaInformacao(_respLoca.mensagem);
-                                                            Inc();
+                                                          try {
+                                                            FocusScope.of(context)
+                                                                .requestFocus(
+                                                                new FocusNode());
+                                                            Operacao _respLoca = await dbHelper.OnDeletarFichaSici(ListaFichaSici[index].idFichaSiciApp);
+                                                            if (_respLoca.erro)
+                                                              throw (_respLoca.mensagem);
+                                                            else {
+                                                              Navigator.of(context, rootNavigator: true).pop('dialog');
+                                                              OnAlertaInformacao(_respLoca.mensagem);
+                                                              Inc();
+                                                            }
+                                                          } catch (error) {
+                                                            OnAlertaInformacao(error.toString());
+                                                            print(error);
                                                           }
                                                         },
                                                         //callback when button is clicked
@@ -968,8 +1017,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                                             )),
                                                         //`Text` to display
                                                         onPressed: () {
-                                                          Navigator.pop(
-                                                              context);
+                                                          Navigator.of(context, rootNavigator: true).pop('dialog');
                                                         },
                                                         shape:
                                                             new RoundedRectangleBorder(
@@ -1069,8 +1117,11 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                     onTap: () async {
                                       Future.delayed(Duration.zero, () async {
                                         try {
-                                          OnRealizandoOperacao("Realizando cadastro.");
-                                          Operacao _respLocal = await dbHelper.OnAddFichaSici(ListaFichaSici[index]);
+                                          OnRealizandoOperacao(
+                                              "Realizando cadastro.");
+                                          Operacao _respLocal =
+                                              await dbHelper.OnAddFichaSici(
+                                                  ListaFichaSici[index]);
                                           if (_respLocal.erro)
                                             throw (_respLocal.mensagem);
                                           else {
@@ -1087,26 +1138,29 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                                 return Dialog(
                                                   shape: RoundedRectangleBorder(
                                                       borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(
-                                                              8.0))),
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  8.0))),
                                                   child: Column(
                                                     mainAxisAlignment:
-                                                    MainAxisAlignment.center,
+                                                        MainAxisAlignment
+                                                            .center,
                                                     crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                    mainAxisSize: MainAxisSize.min,
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
                                                     children: [
                                                       SizedBox(height: 15.0),
                                                       Column(
                                                         mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
+                                                            MainAxisAlignment
+                                                                .center,
                                                         crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
+                                                            CrossAxisAlignment
+                                                                .center,
                                                         mainAxisSize:
-                                                        MainAxisSize.min,
+                                                            MainAxisSize.min,
                                                         children: [
                                                           Text(
                                                             "Informação",
@@ -1115,33 +1169,37 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                                                 color: Color(
                                                                     0xff212529),
                                                                 fontFamily:
-                                                                "avenir-lt-std-roman"),
+                                                                    "avenir-lt-std-roman"),
                                                           ),
                                                           SizedBox(
                                                             height: 10,
                                                           ),
                                                           Divider(
-                                                            color: Colors.black12,
+                                                            color:
+                                                                Colors.black12,
                                                           ),
                                                           Padding(
-                                                            padding:
-                                                            EdgeInsets.fromLTRB(
-                                                                15.0,
-                                                                10.0,
-                                                                15.0,
-                                                                10.0),
+                                                            padding: EdgeInsets
+                                                                .fromLTRB(
+                                                                    15.0,
+                                                                    10.0,
+                                                                    15.0,
+                                                                    10.0),
                                                             child: Text(
-                                                              _respLocal.mensagem,
-                                                              overflow: TextOverflow
-                                                                  .ellipsis,
+                                                              _respLocal
+                                                                  .mensagem,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
                                                               maxLines: 4,
                                                               softWrap: false,
                                                               style: TextStyle(
-                                                                  fontSize: 17.0,
+                                                                  fontSize:
+                                                                      17.0,
                                                                   color: Color(
                                                                       0xff212529),
                                                                   fontFamily:
-                                                                  "avenir-lt-std-roman"),
+                                                                      "avenir-lt-std-roman"),
                                                             ),
                                                           ),
                                                         ],
@@ -1150,30 +1208,35 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                                         color: Colors.black12,
                                                       ),
                                                       Container(
-                                                        margin: EdgeInsets.fromLTRB(
-                                                            0.0, 10.0, 0.0, 15.0),
+                                                        margin:
+                                                            EdgeInsets.fromLTRB(
+                                                                0.0,
+                                                                10.0,
+                                                                0.0,
+                                                                15.0),
                                                         child: new Row(
                                                           mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
+                                                              MainAxisAlignment
+                                                                  .center,
                                                           crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
+                                                              CrossAxisAlignment
+                                                                  .center,
                                                           mainAxisSize:
-                                                          MainAxisSize.max,
+                                                              MainAxisSize.max,
                                                           children: <Widget>[
                                                             FlatButton(
-                                                              color:
-                                                              Color(0xff018a8a),
+                                                              color: Color(
+                                                                  0xff018a8a),
                                                               //`Icon` to display
                                                               child: Text(
                                                                 '           OK           ',
                                                                 style: TextStyle(
-                                                                    fontSize: 17.0,
+                                                                    fontSize:
+                                                                        17.0,
                                                                     color: Color(
                                                                         0xffFFFFFF),
                                                                     fontFamily:
-                                                                    "avenir-lt-std-roman"),
+                                                                        "avenir-lt-std-roman"),
                                                               ),
                                                               //`Text` to display
                                                               onPressed: () {
@@ -1182,11 +1245,11 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                                                 Inc();
                                                               },
                                                               shape:
-                                                              new RoundedRectangleBorder(
+                                                                  new RoundedRectangleBorder(
                                                                 borderRadius:
-                                                                new BorderRadius
-                                                                    .circular(
-                                                                    5.0),
+                                                                    new BorderRadius
+                                                                            .circular(
+                                                                        5.0),
                                                               ),
                                                             ),
                                                           ],
@@ -1208,7 +1271,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                           OnAlertaInformacao(error);
                                         }
                                       });
-                                      },
+                                    },
                                     child: Column(
                                       mainAxisSize: MainAxisSize.max,
                                       mainAxisAlignment:

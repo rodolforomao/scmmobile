@@ -25,7 +25,7 @@ class DBHelper {
   initDatabase() async {
     io.Directory documentDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentDirectory.path, 'scmSici.db');
-    var db = await openDatabase(path, version: 1, onCreate: _onCreate);
+    var db = await openDatabase(path, version: 5, onCreate: _onCreate);
     return db;
   }
 
@@ -34,7 +34,7 @@ class DBHelper {
     await db.execute('CREATE TABLE tbTecnologia (idTecnologiaApp INTEGER PRIMARY KEY AUTOINCREMENT, id TEXT , tecnologia TEXT)');
     await db.execute('CREATE TABLE tbUf (idUfApp INTEGER PRIMARY KEY AUTOINCREMENT,id TEXT,uf TEXT)');
     await db.execute('CREATE TABLE tbUfMunicipio (idMunicipioApp INTEGER PRIMARY KEY AUTOINCREMENT,ufId TEXT , uf TEXT,id TEXT,municipio TEXT)');
-    await db.execute('CREATE TABLE tbDistribuicaoQuantitativoAcessosFisicosServico (idDistribuicaoQuantitativoAcessosFisicosServicoApp INTEGER PRIMARY KEY AUTOINCREMENT,idFichaSiciApp NUMERIC,id TEXT ,cod_ibge TEXT,id_uf TEXT,id_municipio TEXT,id_tecnologia TEXT,pf_0 TEXT,pf_512 TEXT,pf_2 TEXT,pf_12 TEXT,pf_34 TEXT,pj_0 TEXT,pj_512 TEXT,pj_2 TEXT,pj_12 TEXT,pj_34 TEXT,id_lancamento TEXT,ultima_alteracao TEXT,id_usuario_ultima_alteracao TEXT,municipio TEXT,uf TEXT,tecnologia TEXT)');
+    await db.execute('CREATE TABLE tbAcessosFisicosServico (idApp INTEGER PRIMARY KEY AUTOINCREMENT,idFichaSiciApp TEXT,id TEXT ,cod_ibge TEXT,id_uf TEXT,id_municipio TEXT,id_tecnologia TEXT,pf_0 TEXT,pf_512 TEXT,pf_2 TEXT,pf_12 TEXT,pf_34 TEXT,pj_0 TEXT,pj_512 TEXT,pj_2 TEXT,pj_12 TEXT,pj_34 TEXT,id_lancamento TEXT,id_usuario_ultima_alteracao TEXT,municipio TEXT,uf TEXT,tecnologia TEXT)');
     await db.execute('CREATE TABLE tbFichaSici (idFichaSiciApp INTEGER PRIMARY KEY AUTOINCREMENT,isSincronizar TEXT, idEmpresa TEXT,idLancamento TEXT ,periodoReferencia TEXT,razaoSocial TEXT,nomeCliente TEXT,nomeConsultor TEXT,telefoneFixo TEXT,cnpj TEXT,mesReferencia TEXT,telefoneMovel TEXT,emailCliente TEXT,emailConsutor TEXT,receitaBruta TEXT,idFinanceiro TEXT,simples TEXT,simplesPorc TEXT,icms TEXT,icmsPorc TEXT,pis TEXT,pisPorc TEXT,cofins TEXT,cofinsPorc TEXT,receitaLiquida TEXT,observacoes TEXT)');
   }
 
@@ -717,10 +717,9 @@ class DBHelper {
           where: 'idFichaSiciApp = ?',
           whereArgs: [_Modelo.idFichaSiciApp],
         );
-        _Modelo.idFichaSiciApp = id;
       }
       for (var prop in _Modelo.distribuicaoFisicosServicoQuantitativo) {
-        prop.idFichaSiciApp = _Modelo.idFichaSiciApp;
+        prop.idFichaSiciApp = _Modelo.idFichaSiciApp.toString();
         Operacao _respLocal = await OnAddDistribuicaoQuantitativoAcessosFisicosServico(prop);
         if (_respLocal.erro)
           throw (_respLocal.mensagem);
@@ -837,19 +836,20 @@ class DBHelper {
     try {
 
       var dbClient = await db;
-      if (_Modelo.idDistribuicaoQuantitativoAcessosFisicosServicoApp == 0 || _Modelo.idDistribuicaoQuantitativoAcessosFisicosServicoApp == null)
+      if (_Modelo.idApp == 0 || _Modelo.idApp == null)
       {
-        _Modelo.idDistribuicaoQuantitativoAcessosFisicosServicoApp = null;
-        _Modelo.idDistribuicaoQuantitativoAcessosFisicosServicoApp = await dbClient.insert('tbDistribuicaoQuantitativoAcessosFisicosServico', _Modelo.toJson());
+        _Modelo.idApp = null;
+        var ds  = _Modelo.toJson();
+        var sd = await dbClient.insert('tbAcessosFisicosServico', ds);
+        var dsss  = sd;
       }
       else {
         int id = await dbClient.update(
-          'tbDistribuicaoQuantitativoAcessosFisicosServico',
+          'tbAcessosFisicosServico',
           _Modelo.toJson(),
-          where: 'idDistribuicaoQuantitativoAcessosFisicosServicoApp = ?',
-          whereArgs: [_Modelo.idDistribuicaoQuantitativoAcessosFisicosServicoApp],
+          where: 'idApp = ?',
+          whereArgs: [_Modelo.idApp],
         );
-        _Modelo.idDistribuicaoQuantitativoAcessosFisicosServicoApp = id;
       }
       _Operacao.erro = false;
       _Operacao.mensagem = "Operação realizada com sucesso.";
@@ -868,7 +868,7 @@ class DBHelper {
       _Operacao.mensagem = "";
       _Operacao.resultado = null;
       final dbClient = await db;
-      String Query = 'SELECT * FROM tbDistribuicaoQuantitativoAcessosFisicosServico WHERE idFichaSiciApp = ' + Id.toString();
+      String Query = 'SELECT * FROM tbAcessosFisicosServico  WHERE idApp  = ' + Id.toString();
       var results = await dbClient.rawQuery(Query);
       List<TbDistribuicaoQuantitativoAcessosFisicosServico> listDistribuicaoQuantitativoAcessosFisicosServico = [];
       if (results.length > 0) {
@@ -893,8 +893,8 @@ class DBHelper {
     try {
       final dbClient = await db;
       var resp = await dbClient.delete(
-        'tbDistribuicaoQuantitativoAcessosFisicosServico',
-        where: 'idDistribuicaoQuantitativoAcessosFisicosServicoApp = ?',
+        'tbAcessosFisicosServico ',
+        where: 'idApp = ?',
         whereArgs: [idDistribuicaoQuantitativoAcessosFisicosServicoApp],
       );
       _Operacao.erro = false;
