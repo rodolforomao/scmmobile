@@ -867,7 +867,7 @@ class DBHelper {
       _Operacao.mensagem = "";
       _Operacao.resultado = null;
       final dbClient = await db;
-      String Query = 'SELECT * FROM tbAcessosFisicosServico  WHERE idApp  = ' + Id.toString();
+      String Query = 'SELECT * FROM tbAcessosFisicosServico  WHERE idFichaSiciApp = ' + Id.toString();
       var results = await dbClient.rawQuery(Query);
       List<TbDistribuicaoQuantitativoAcessosFisicosServico> listDistribuicaoQuantitativoAcessosFisicosServico = [];
       if (results.length > 0) {

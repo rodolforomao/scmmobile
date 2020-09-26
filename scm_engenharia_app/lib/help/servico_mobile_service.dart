@@ -157,63 +157,38 @@ class ServicoMobileService {
       response = new http.MultipartRequest(
           'POST', Uri.parse(Url + "/analise/lancamento_ws"));
       response.headers.addAll(headers);
-      response.fields['controllerPeriodoReferencia'] =
-          _Modelo.periodoReferencia == null ? "" : _Modelo.periodoReferencia;
-      response.fields['controllerRazaoSocial'] =
-          _Modelo.razaoSocial == null ? "" : _Modelo.razaoSocial;
-      response.fields['controllerResponsavelPreenchimento'] =
-          _Modelo.nomeConsultor == null ? "" : _Modelo.nomeConsultor;
-      response.fields['controllerTelefoneFixo'] =
-          _Modelo.telefoneFixo == null ? "" : _Modelo.telefoneFixo;
-      response.fields['controllerCNPJ'] =
-          _Modelo.cnpj == null ? "" : _Modelo.cnpj;
-      response.fields['controllerMesReferencia'] =
-          _Modelo.mesReferencia == null ? "" : _Modelo.mesReferencia;
-      response.fields['controllerTelefoneCelular'] =
-          _Modelo.telefoneMovel == null ? "" : _Modelo.telefoneMovel;
+      response.fields['controllerPeriodoReferencia'] = _Modelo.periodoReferencia == null ? "" : _Modelo.periodoReferencia;
+      response.fields['controllerRazaoSocial'] = _Modelo.razaoSocial == null ? "" : _Modelo.razaoSocial;
+      response.fields['controllerResponsavelPreenchimento'] = _Modelo.nomeConsultor == null ? "" : _Modelo.nomeConsultor;
+      response.fields['controllerTelefoneFixo'] = _Modelo.telefoneFixo == null ? "" : _Modelo.telefoneFixo;
+      response.fields['controllerCNPJ'] = _Modelo.cnpj == null ? "" : _Modelo.cnpj;
+      response.fields['controllerMesReferencia'] = _Modelo.mesReferencia == null ? "" : _Modelo.mesReferencia;
+      response.fields['controllerTelefoneCelular'] = _Modelo.telefoneMovel == null ? "" : _Modelo.telefoneMovel;
 
-      response.fields['controllerEmailCliente'] =
-          _Modelo.emailCliente == null ? "" : _Modelo.emailCliente;
-      response.fields['controllerEmailConsultor'] =
-          _Modelo.emailConsutor == null ? "" : _Modelo.emailConsutor;
-      response.fields['controllerReceitaBruta'] =
-          _Modelo.receitaBruta == null ? "" : _Modelo.receitaBruta;
-      response.fields['controllerAliqSimples'] =
-          _Modelo.simples == null ? "" : _Modelo.simples;
-      response.fields['controllerAliqSimplesPorc'] =
-          _Modelo.simplesPorc == null ? "" : _Modelo.simplesPorc;
-      response.fields['controllerICMS'] =
-          _Modelo.icms == null ? "" : _Modelo.icms;
-      response.fields['controllerICMSPorc'] =
-          _Modelo.icmsPorc == null ? "" : _Modelo.icmsPorc;
+      response.fields['controllerEmailCliente'] = _Modelo.emailCliente == null ? "" : _Modelo.emailCliente;
+      response.fields['controllerEmailConsultor'] = _Modelo.emailConsutor == null ? "" : _Modelo.emailConsutor;
+      response.fields['controllerReceitaBruta'] = _Modelo.receitaBruta == null ? "" : _Modelo.receitaBruta;
+      response.fields['controllerAliqSimples'] = _Modelo.simples == null ? "" : _Modelo.simples;
+      response.fields['controllerAliqSimplesPorc'] = _Modelo.simplesPorc == null ? "" : _Modelo.simplesPorc;
+      response.fields['controllerICMS'] = _Modelo.icms == null ? "" : _Modelo.icms;
+      response.fields['controllerICMSPorc'] = _Modelo.icmsPorc == null ? "" : _Modelo.icmsPorc;
       response.fields['controllerPIS'] = _Modelo.pis == null ? "" : _Modelo.pis;
-      response.fields['controllerPISPorc'] =
-          _Modelo.pisPorc == null ? "" : _Modelo.pisPorc;
-      response.fields['controllerCOFINS'] =
-          _Modelo.cofins == null ? "" : _Modelo.cofins;
-      response.fields['controllerCOFINSPorc'] =
-          _Modelo.cofinsPorc == null ? "" : _Modelo.cofins;
-      response.fields['controllerReceitaLiquida'] =
-          _Modelo.receitaLiquida == null ? "" : _Modelo.receitaLiquida;
-      response.fields['controllerObservacoes'] =
-          _Modelo.observacoes == null ? "" : _Modelo.observacoes;
+      response.fields['controllerPISPorc'] = _Modelo.pisPorc == null ? "" : _Modelo.pisPorc;
+      response.fields['controllerCOFINS'] = _Modelo.cofins == null ? "" : _Modelo.cofins;
+      response.fields['controllerCOFINSPorc'] = _Modelo.cofinsPorc == null ? "" : _Modelo.cofins;
+      response.fields['controllerReceitaLiquida'] = _Modelo.receitaLiquida == null ? "" : _Modelo.receitaLiquida;
+      response.fields['controllerObservacoes'] = _Modelo.observacoes == null ? "" : _Modelo.observacoes;
       int index = 0;
       if (_Modelo.distribuicaoFisicosServicoQuantitativo == null)
         throw ("Distribuição do quantitativo de acessos físicos em serviço e obrigatório,favor adicionar.");
       for (var item in _Modelo.distribuicaoFisicosServicoQuantitativo) {
         print('controllerUF_' + index.toString());
-        response.fields['controllerCodIBGE_' + index.toString()] =
-            item.cod_ibge.toString() == null ? "" : item.cod_ibge.toString();
+        response.fields['controllerCodIBGE_' + index.toString()] = item.cod_ibge.toString() == null ? "" : item.cod_ibge.toString();
         response.fields['controllerUF_' + index.toString()] =
             item.id_uf.toString() == null ? "" : item.id_uf.toString();
-        response.fields['controllerMunicipio_' + index.toString()] =
-            item.id_municipio.toString() == null
-                ? ""
-                : item.id_municipio.toString();
+        response.fields['controllerMunicipio_' + index.toString()] = item.id_municipio.toString() == null ? "" : item.id_municipio.toString();
         response.fields['controllerTecnologia_' + index.toString()] =
-            item.id_tecnologia.toString() == null
-                ? ""
-                : item.id_tecnologia.toString();
+            item.id_tecnologia.toString() == null ? "" : item.id_tecnologia.toString();
         response.fields['controllerCodIBGE_' + index.toString()] =
             item.cod_ibge == null ? "" : item.cod_ibge;
         response.fields['controllerPF0_' + index.toString()] =
@@ -325,6 +300,11 @@ class ServicoMobileService {
           }
           break;
         case 403:
+          {
+            _Operacao.mensagem = "Token inválido";
+            _Operacao.resultado = null;
+          }
+          break;
         case 200:
           if (!response.body.isNotEmpty)
             throw ("Houve um problema de comunicação com os servidores do SCM");
