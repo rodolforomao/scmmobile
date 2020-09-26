@@ -709,6 +709,7 @@ class DBHelper {
         _Modelo.idFichaSiciApp = await dbClient.insert('tbFichaSici', _Modelo.toJson());
       }
       else {
+        _Modelo.isSincronizar = "S";
         int id = await dbClient.update(
           'tbFichaSici',
           _Modelo.toJson(),

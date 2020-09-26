@@ -825,63 +825,44 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                               children: <Widget>[
                                 Container(
                                   color: Color(0xffFFFFFF),
-                                  //width: MediaQuery.of(context).size.width / 3,
                                   child: InkWell(
                                     onTap: () async {
-                                      Future.delayed(Duration.zero, () async {
-                                        try {
-                                          var connectivityResult =
-                                              await (Connectivity()
-                                                  .checkConnectivity());
-                                          if (connectivityResult ==
-                                              ConnectivityResult.none) {
-                                            OnAlertaInformacao(
-                                                "Por favor conecte-se à internet.");
-                                          } else {
-                                            OnRealizandoOperacao(
-                                                "Realizando cadastro.");
-                                            Operacao _RestWeb =
-                                                await _RestWebService
-                                                    .OnRealizarLancamentosSici(
-                                                        ListaFichaSici[index]);
-                                            if (_RestWeb.erro)
-                                              throw (_RestWeb.mensagem);
-                                            else if (_RestWeb.resultado == null)
-                                              throw (_RestWeb.mensagem);
+                                      try {
+                                        var connectivityResult = await (Connectivity().checkConnectivity());
+                                        if (connectivityResult == ConnectivityResult.none) {
+                                          OnAlertaInformacao("Por favor conecte-se à internet.");
+                                        } else {
+                                          OnRealizandoOperacao("Realizando cadastro.");
+                                          Operacao _RestWeb = await _RestWebService.OnRealizarLancamentosSici(ListaFichaSici[index]);
+                                          if (_RestWeb.erro)
+                                            throw (_RestWeb.mensagem);
+                                          else if (_RestWeb.resultado == null)
+                                            throw (_RestWeb.mensagem);
+                                          else {
+                                            Operacao _respLocal = await dbHelper.OnDeletarFichaSici(ListaFichaSici[index].idFichaSiciApp);
+                                            if (_respLocal.erro)
+                                              throw (_respLocal.mensagem);
                                             else {
-                                              Operacao _respLocal =
-                                                  await dbHelper
-                                                      .OnDeletarFichaSici(
-                                                          ListaFichaSici[index]
-                                                              .idFichaSiciApp);
-                                              if (_respLocal.erro)
-                                                throw (_respLocal.mensagem);
-                                              else {
-                                                setState(() {
-                                                  ListaFichaSici.remove(
-                                                      [index]);
-                                                });
-                                                Inc();
-                                              }
-                                              if (dialogContext != null) {
-                                                Navigator.pop(dialogContext);
-                                                setState(() {
-                                                  dialogContext = null;
-                                                });
-                                              }
-                                              OnAlertaInformacao(
-                                                  _RestWeb.mensagem);
+                                              setState(() {
+                                                ListaFichaSici.remove(
+                                                    [index]);
+                                              });
+                                              Inc();
                                             }
+                                            Navigator.of(context, rootNavigator: true).pop('dialog');
+                                            OnAlertaInformacao(_RestWeb.mensagem);
                                           }
-                                        } catch (error) {
-                                          if (dialogContext != null) {
-                                            Navigator.pop(dialogContext);
-                                            setState(() {
-                                              dialogContext = null;
-                                            });
-                                          }
-                                          OnAlertaInformacao(error);
                                         }
+                                      } catch (error) {
+                                        if (dialogContext != null) {
+                                          Navigator.of(context, rootNavigator: true).pop('dialog');
+                                        }
+                                        OnAlertaInformacao(error);
+                                      }
+
+
+                                      Future.delayed(Duration.zero, () async {
+
                                       });
                                     },
                                     child: Column(

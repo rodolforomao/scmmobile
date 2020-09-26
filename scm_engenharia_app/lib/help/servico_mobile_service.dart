@@ -31,6 +31,13 @@ class ServicoMobileService {
       _Operacao.mensagem = "Operação realizada com sucesso";
       _Operacao.resultado = null;
       switch (response.statusCode) {
+        case 500:
+          {
+            _Operacao.erro = true;
+            _Operacao.mensagem = "Erro 500 – Erro Interno do Servidor";
+            _Operacao.resultado = null;
+          }
+          break;
         case 400:
           {
             _Operacao.mensagem = "Solicitação inválida";
@@ -88,6 +95,13 @@ class ServicoMobileService {
       _Operacao.mensagem = "Operação realizada com sucesso";
       _Operacao.resultado = null;
       switch (response.statusCode) {
+        case 500:
+          {
+            _Operacao.erro = true;
+            _Operacao.mensagem = "Erro 500 – Erro Interno do Servidor";
+            _Operacao.resultado = null;
+          }
+          break;
         case 400:
           {
             _Operacao.mensagem = "Solicitação inválida";
@@ -127,6 +141,10 @@ class ServicoMobileService {
   Future<Operacao> OnRealizarLancamentosSici(TbFichaSici _Modelo) async {
     Operacao _Operacao = new Operacao();
     try {
+      print(_Modelo.toJson());
+      String json = jsonEncode(_Modelo.toJson());
+      String jsons = jsonEncode(_Modelo.distribuicaoFisicosServicoQuantitativo);
+      var re = _Modelo.toJson();
       _Operacao.erro = false;
       _Operacao.mensagem = "Operação realizada com sucesso";
       _Operacao.resultado = null;
@@ -224,6 +242,13 @@ class ServicoMobileService {
       final respStr = await streamedResponse.stream.bytesToString();
       var jsonResp = Components.removeAllHtmlTags(respStr);
       switch (streamedResponse.statusCode) {
+        case 500:
+          {
+            _Operacao.erro = true;
+            _Operacao.mensagem = "Erro 500 – Erro Interno do Servidor";
+            _Operacao.resultado = null;
+          }
+          break;
         case 400:
           {
             _Operacao.mensagem = "Solicitação inválida";
@@ -280,6 +305,13 @@ class ServicoMobileService {
       _Operacao.resultado = null;
       print(response.body);
       switch (response.statusCode) {
+        case 500:
+          {
+            _Operacao.erro = true;
+            _Operacao.mensagem = "Erro 500 – Erro Interno do Servidor";
+            _Operacao.resultado = null;
+          }
+          break;
         case 400:
           {
             _Operacao.mensagem = "Solicitação inválida";
@@ -339,6 +371,13 @@ class ServicoMobileService {
       final respStr = await streamedResponse.stream.bytesToString();
       var jsonResp = Components.removeAllHtmlTags(respStr);
       switch (streamedResponse.statusCode) {
+        case 500:
+          {
+            _Operacao.erro = true;
+            _Operacao.mensagem = "Erro 500 – Erro Interno do Servidor";
+            _Operacao.resultado = null;
+          }
+          break;
         case 400:
           {
             _Operacao.mensagem = "Solicitação inválida";
