@@ -47,13 +47,6 @@ class ModelFormularioSiciFustJson {
   String estado;
   String passo;
   String estadoRobo;
-  String nomeCliente;
-  String nomeConsultor;
-
-  String emailConsutor;
-  String emailCliente;
-  String mesReferencia;
-
   String envioLancamento;
 
   List<TbDistribuicaoQuantitativoAcessosFisicosServico> distribuicaoFisicosServicoQuantitativo;
@@ -104,12 +97,8 @@ class ModelFormularioSiciFustJson {
         this.estado,
         this.passo,
         this.estadoRobo,
-        this.nomeCliente,
-        this.nomeConsultor,
+
         this.envioLancamento,
-        this.emailConsutor,
-        this.emailCliente,
-        this.mesReferencia,
         this.distribuicaoFisicosServicoQuantitativo});
 
   ModelFormularioSiciFustJson.fromJson(Map<String, dynamic> json) {
@@ -158,14 +147,7 @@ class ModelFormularioSiciFustJson {
     estado = json['estado'];
     passo = json['passo'];
     estadoRobo = json['estado_robo'];
-    nomeCliente = json['nome_cliente'];
-    nomeConsultor = json['nome_consultor'];
     envioLancamento = json['envio_lancamento'];
-
-    emailConsutor = json['mes_referencia'];
-    emailCliente = json['email_cliente'];
-    mesReferencia = json['mes_referencia'];
-
     if (json['dadosEmServicos'] != null) {
       distribuicaoFisicosServicoQuantitativo = new List<TbDistribuicaoQuantitativoAcessosFisicosServico>();
       json['dadosEmServicos'].forEach((v) {
@@ -221,14 +203,7 @@ class ModelFormularioSiciFustJson {
     data['estado'] = this.estado;
     data['passo'] = this.passo;
     data['estado_robo'] = this.estadoRobo;
-    data['nome_cliente'] = this.nomeCliente;
-    data['nome_consultor'] = this.nomeConsultor;
     data['envio_lancamento'] = this.envioLancamento;
-
-    data['mes_referencia'] = this.emailConsutor;
-    data['email_cliente'] = this.emailCliente;
-    data['mes_referencia'] = this.mesReferencia;
-
 
     if (this.distribuicaoFisicosServicoQuantitativo != null) {
       data['dadosEmServicos'] =

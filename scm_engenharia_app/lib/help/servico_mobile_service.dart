@@ -161,21 +161,17 @@ class ServicoMobileService {
           _Modelo.periodoReferencia == null ? "" : _Modelo.periodoReferencia;
       response.fields['controllerRazaoSocial'] =
           _Modelo.razaoSocial == null ? "" : _Modelo.razaoSocial;
-      response.fields['controllerResponsavelPreenchimento'] =
-          _Modelo.nomeConsultor == null ? "" : _Modelo.nomeConsultor;
+
+
       response.fields['controllerTelefoneFixo'] =
           _Modelo.telefoneFixo == null ? "" : _Modelo.telefoneFixo;
       response.fields['controllerCNPJ'] =
           _Modelo.cnpj == null ? "" : _Modelo.cnpj;
-      response.fields['controllerMesReferencia'] =
-          _Modelo.mesReferencia == null ? "" : _Modelo.mesReferencia;
+
       response.fields['controllerTelefoneCelular'] =
           _Modelo.telefoneMovel == null ? "" : _Modelo.telefoneMovel;
 
-      response.fields['controllerEmailCliente'] =
-          _Modelo.emailCliente == null ? "" : _Modelo.emailCliente;
-      response.fields['controllerEmailConsultor'] =
-          _Modelo.emailConsutor == null ? "" : _Modelo.emailConsutor;
+
       response.fields['controllerReceitaBruta'] =
           _Modelo.receitaBruta == null ? "" : _Modelo.receitaBruta;
       response.fields['controllerAliqSimples'] =

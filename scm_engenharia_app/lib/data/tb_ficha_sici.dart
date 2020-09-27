@@ -7,14 +7,9 @@ class TbFichaSici {
   String idLancamento;
   String periodoReferencia;
   String razaoSocial;
-  String nomeCliente;
-  String nomeConsultor;
   String telefoneFixo;
   String cnpj;
-  String mesReferencia;
   String telefoneMovel;
-  String emailCliente;
-  String emailConsutor;
   String receitaBruta;
   String idFinanceiro;
   String simples;
@@ -36,14 +31,9 @@ class TbFichaSici {
     this.idLancamento,
     this.periodoReferencia,
     this.razaoSocial,
-    this.nomeCliente,
-    this.nomeConsultor,
     this.telefoneFixo,
     this.cnpj,
-    this.mesReferencia,
     this.telefoneMovel,
-    this.emailCliente,
-    this.emailConsutor,
     this.receitaBruta,
     this.idFinanceiro,
     this.simples,
@@ -66,14 +56,9 @@ class TbFichaSici {
     idLancamento = json['idLancamento'];
     periodoReferencia = json['periodoReferencia'];
     razaoSocial = json['razaoSocial'];
-    nomeCliente = json['nomeCliente'];
-    nomeConsultor = json['nomeConsultor'];
     telefoneFixo = json['telefoneFixo'];
     cnpj = json['cnpj'];
-    mesReferencia = json['mesReferencia'];
     telefoneMovel = json['telefoneMovel'];
-    emailCliente = json['emailCliente'];
-    emailConsutor = json['emailConsutor'];
     receitaBruta = json['receitaBruta'];
     idFinanceiro = json['idFinanceiro'];
     simples = json['simples'];
@@ -98,18 +83,13 @@ class TbFichaSici {
     data['periodoReferencia'] =
         this.periodoReferencia == null ? "" : this.periodoReferencia;
     data['razaoSocial'] = this.razaoSocial == null ? "" : this.razaoSocial;
-    data['nomeCliente'] = this.nomeCliente == null ? "" : this.nomeCliente;
-    data['nomeConsultor'] =
-        this.nomeConsultor == null ? "" : this.nomeConsultor;
+
     data['telefoneFixo'] = this.telefoneFixo == null ? "" : this.telefoneFixo;
     data['cnpj'] = this.cnpj == null ? "" : this.cnpj;
-    data['mesReferencia'] =
-        this.mesReferencia == null ? "" : this.mesReferencia;
+
     data['telefoneMovel'] =
         this.telefoneMovel == null ? "" : this.telefoneMovel;
-    data['emailCliente'] = this.emailCliente == null ? "" : this.emailCliente;
-    data['emailConsutor'] =
-        this.emailConsutor == null ? "" : this.emailConsutor;
+
     data['receitaBruta'] = this.receitaBruta == null ? "" : this.receitaBruta;
     data['idFinanceiro'] = this.idFinanceiro == null ? "" : this.idFinanceiro;
     data['simples'] = this.simples == null ? "" : this.simples;

@@ -34,23 +34,20 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
   DateTime _DataSelecionada = DateTime.now();
 
   StreamSubscription<ConnectivityResult> subscription;
-  DateTime _DataSelecionadaConsulta = DateTime.now();
+
 
   TextEditingController _TxtControllerPeriodoDeReferencia =
       TextEditingController();
   TextEditingController _TxtControllerCnpj =
       new MaskedTextController(mask: '00.000.000/0000-00');
   TextEditingController _TxtControllerRazaoSocial = TextEditingController();
-  TextEditingController _TxtControllerNomeConsultor = TextEditingController();
+
   TextEditingController _TxtControllerTelefoneMovel =
       new MaskedTextController(mask: '(00) 0 0000-0000');
   TextEditingController _TxtControllerTelefoneFixo =
       new MaskedTextController(mask: '(00) 0 0000-0000');
 
-  TextEditingController _TxtControllerEmailConsutor = TextEditingController();
-  TextEditingController _TxtControllerEmailCliente = TextEditingController();
-  TextEditingController _TxtControllerNomeCliente = TextEditingController();
-  TextEditingController _TxtControllerMesReferencia = TextEditingController();
+
   TextEditingController _TxtControllerPeriodoReferencia = TextEditingController();
 
   TextEditingController _TxtControllerReceitaBruta = TextEditingController();
@@ -158,14 +155,8 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
       _FichaSici.isSincronizar = "S";
       _FichaSici.cnpj = _TxtControllerCnpj.text;
       _FichaSici.razaoSocial = _TxtControllerRazaoSocial.text;
-      _FichaSici.nomeConsultor = _TxtControllerNomeConsultor.text;
       _FichaSici.telefoneMovel = _TxtControllerTelefoneMovel.text;
       _FichaSici.telefoneFixo = _TxtControllerTelefoneFixo.text;
-      _FichaSici.emailConsutor = _TxtControllerEmailConsutor.text;
-      _FichaSici.emailCliente = _TxtControllerEmailCliente.text;
-      _FichaSici.nomeCliente = _TxtControllerNomeCliente.text;
-      _FichaSici.mesReferencia = _TxtControllerMesReferencia.text;
-
       _FichaSici.receitaBruta = _TxtControllerReceitaBruta.text;
       _FichaSici.receitaLiquida = _TxtControllerReceitaLiquida.text;
       _FichaSici.simples = _TxtControllerSimples.text;
@@ -319,18 +310,12 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
       });
       if (widget.FichaSiciModel != null) {
         _FichaSici = widget.FichaSiciModel;
-        _TxtControllerPeriodoDeReferencia.text = widget.FichaSiciModel.periodoReferencia;
+        _DataSelecionada = DateTime.parse(widget.FichaSiciModel.periodoReferencia);
+        _TxtControllerPeriodoReferencia.text = DateFormat('dd/MM/yyyy').format(DateTime.parse(widget.FichaSiciModel.periodoReferencia));
         _TxtControllerCnpj.text = widget.FichaSiciModel.cnpj;
         _TxtControllerRazaoSocial.text = widget.FichaSiciModel.razaoSocial;
-        _TxtControllerNomeConsultor.text = widget.FichaSiciModel.nomeConsultor;
         _TxtControllerTelefoneMovel.text = widget.FichaSiciModel.telefoneMovel;
         _TxtControllerTelefoneFixo.text = widget.FichaSiciModel.telefoneFixo;
-
-        _TxtControllerEmailConsutor.text = widget.FichaSiciModel.emailConsutor;
-        _TxtControllerEmailCliente.text = widget.FichaSiciModel.emailCliente;
-        _TxtControllerNomeCliente.text = widget.FichaSiciModel.nomeCliente;
-        _TxtControllerMesReferencia.text = widget.FichaSiciModel.mesReferencia;
-
         _TxtControllerReceitaBruta.text = widget.FichaSiciModel.receitaBruta;
         _TxtControllerReceitaLiquida.text = widget.FichaSiciModel.receitaLiquida;
         _TxtControllerSimples.text = widget.FichaSiciModel.simples;
@@ -1330,33 +1315,6 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                         ),
                         SizedBox(height: 20.0),
                         TextFormField(
-                          controller: _TxtControllerNomeConsultor,
-                          textAlign: TextAlign.start,
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.done,
-                          autofocus: false,
-                          maxLength: 100,
-                          decoration: InputDecoration(
-                            labelText:
-                                'Responsável - Preenchimento SICI e Fust:',
-                            hintText: 'Nome consultor.',
-                          ),
-                        ),
-                        SizedBox(height: 20.0),
-                        TextFormField(
-                          controller: _TxtControllerNomeCliente,
-                          textAlign: TextAlign.start,
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.done,
-                          autofocus: false,
-                          maxLength: 100,
-                          decoration: InputDecoration(
-                            labelText: 'Cliente:',
-                            hintText: 'Nome cliente.',
-                          ),
-                        ),
-                        SizedBox(height: 20.0),
-                        TextFormField(
                           controller: _TxtControllerTelefoneFixo,
                           textAlign: TextAlign.start,
                           keyboardType: TextInputType.number,
@@ -1382,19 +1340,6 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                         ),
                         SizedBox(height: 20.0),
                         TextFormField(
-                          controller: _TxtControllerMesReferencia,
-                          textAlign: TextAlign.start,
-                          keyboardType: TextInputType.datetime,
-                          textInputAction: TextInputAction.done,
-                          autofocus: false,
-                          decoration: InputDecoration(
-                            labelText: 'MÊS DE REFERÊNCIA:',
-                            hintText: '',
-                          ),
-                          maxLength: 20,
-                        ),
-                        SizedBox(height: 20.0),
-                        TextFormField(
                           controller: _TxtControllerTelefoneMovel,
                           textAlign: TextAlign.start,
                           keyboardType: TextInputType.number,
@@ -1405,30 +1350,6 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                             hintText: '',
                           ),
                           maxLength: 20,
-                        ),
-                        SizedBox(height: 20.0),
-                        TextFormField(
-                          controller: _TxtControllerEmailCliente,
-                          textAlign: TextAlign.start,
-                          keyboardType: TextInputType.emailAddress,
-                          textInputAction: TextInputAction.done,
-                          autofocus: false,
-                          decoration: InputDecoration(
-                            labelText: 'E-MAIL CLIENTE:',
-                            hintText: 'cliente@empresa.com.br',
-                          ),
-                        ),
-                        SizedBox(height: 20.0),
-                        TextFormField(
-                          controller: _TxtControllerEmailConsutor,
-                          textAlign: TextAlign.start,
-                          keyboardType: TextInputType.emailAddress,
-                          textInputAction: TextInputAction.done,
-                          autofocus: false,
-                          decoration: InputDecoration(
-                            labelText: 'E-MAIL CONSULTOR:',
-                            hintText: 'consultor@scmengenharia.com.br',
-                          ),
                         ),
                         SizedBox(height: 20.0),
                       ],

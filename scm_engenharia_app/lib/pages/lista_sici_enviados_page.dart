@@ -70,14 +70,9 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                   ModelFichaSici.idLancamento = prop.idLancamento;
                   ModelFichaSici.periodoReferencia = prop.periodoReferencia;
                   ModelFichaSici.razaoSocial = prop.razaoSocial;
-                  ModelFichaSici.nomeCliente = prop.nomeCliente;
-                  ModelFichaSici.nomeConsultor = prop.nomeConsultor;
                   ModelFichaSici.telefoneFixo = prop.telefoneFixo;
                   ModelFichaSici.cnpj = prop.cnpj;
-                  ModelFichaSici.mesReferencia = prop.mesReferencia;
                   ModelFichaSici.telefoneMovel = prop.telefoneMovel;
-                  ModelFichaSici.emailCliente = prop.emailCliente;
-                  ModelFichaSici.emailConsutor = prop.emailConsutor;
                   ModelFichaSici.receitaBruta = prop.receitaBruta;
                   //ModelFichaSici.idFinanceiro  = prop.idFinanceiro; Não tem
                   ModelFichaSici.simples = prop.simples;
@@ -957,9 +952,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                                             )),
                                                         onPressed: () async {
                                                           try {
-                                                            FocusScope.of(context)
-                                                                .requestFocus(
-                                                                new FocusNode());
+                                                            FocusScope.of(context).requestFocus(new FocusNode());
                                                             Operacao _respLoca = await dbHelper.OnDeletarFichaSici(ListaFichaSici[index].idFichaSiciApp);
                                                             if (_respLoca.erro)
                                                               throw (_respLoca.mensagem);
@@ -1103,16 +1096,13 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                     onTap: () async {
                                       Future.delayed(Duration.zero, () async {
                                         try {
-                                          OnRealizandoOperacao(
-                                              "Realizando cadastro.");
-                                          Operacao _respLocal =
-                                              await dbHelper.OnAddFichaSici(
-                                                  ListaFichaSici[index]);
+                                          OnRealizandoOperacao("Realizando cadastro.");
+                                          Operacao _respLocal = await dbHelper.OnAddFichaSici(ListaFichaSici[index]);
                                           if (_respLocal.erro)
                                             throw (_respLocal.mensagem);
                                           else {
+                                            Navigator.of(context, rootNavigator: true).pop('dialog');
                                             if (dialogContext != null) {
-                                              Navigator.pop(dialogContext);
                                               setState(() {
                                                 dialogContext = null;
                                               });
@@ -1249,7 +1239,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                           }
                                         } catch (error) {
                                           if (dialogContext != null) {
-                                            Navigator.pop(dialogContext);
+                                            Navigator.of(context, rootNavigator: true).pop('dialog');
                                             setState(() {
                                               dialogContext = null;
                                             });
