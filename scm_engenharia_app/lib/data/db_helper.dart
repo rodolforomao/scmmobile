@@ -35,7 +35,7 @@ class DBHelper {
     await db.execute('CREATE TABLE tbUf (idUfApp INTEGER PRIMARY KEY AUTOINCREMENT,id TEXT,uf TEXT)');
     await db.execute('CREATE TABLE tbUfMunicipio (idMunicipioApp INTEGER PRIMARY KEY AUTOINCREMENT,ufId TEXT , uf TEXT,id TEXT,municipio TEXT)');
     await db.execute('CREATE TABLE tbAcessosFisicosServico (idApp INTEGER PRIMARY KEY AUTOINCREMENT,idFichaSiciApp TEXT,id TEXT ,cod_ibge TEXT,id_uf TEXT,id_municipio TEXT,id_tecnologia TEXT,pf_0 TEXT,pf_512 TEXT,pf_2 TEXT,pf_12 TEXT,pf_34 TEXT,pj_0 TEXT,pj_512 TEXT,pj_2 TEXT,pj_12 TEXT,pj_34 TEXT,id_lancamento TEXT,id_usuario_ultima_alteracao TEXT,municipio TEXT,uf TEXT,tecnologia TEXT)');
-    await db.execute('CREATE TABLE tbFichaSici (idFichaSiciApp INTEGER PRIMARY KEY AUTOINCREMENT,isSincronizar TEXT, idEmpresa TEXT,idLancamento TEXT ,periodoReferencia TEXT,razaoSocial TEXT,nomeCliente TEXT,nomeConsultor TEXT,telefoneFixo TEXT,cnpj TEXT,mesReferencia TEXT,telefoneMovel TEXT,emailCliente TEXT,emailConsutor TEXT,receitaBruta TEXT,idFinanceiro TEXT,simples TEXT,simplesPorc TEXT,icms TEXT,icmsPorc TEXT,pis TEXT,pisPorc TEXT,cofins TEXT,cofinsPorc TEXT,receitaLiquida TEXT,observacoes TEXT)');
+    await db.execute('CREATE TABLE tbFichaSici (idFichaSiciApp INTEGER PRIMARY KEY AUTOINCREMENT,isSincronizar TEXT, idEmpresa TEXT,idLancamento TEXT ,periodoReferencia TEXT,razaoSocial TEXT,telefoneFixo TEXT,cnpj  TEXT,telefoneMovel TEXT,receitaBruta TEXT,idFinanceiro TEXT,simples TEXT,simplesPorc TEXT,icms TEXT,icmsPorc TEXT,pis TEXT,pisPorc TEXT,cofins TEXT,cofinsPorc TEXT,receitaLiquida TEXT,observacoes TEXT)');
   }
 
   Future<Operacao> limparTabelas(int idUsuario) async {
