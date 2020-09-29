@@ -162,7 +162,6 @@ class ServicoMobileService {
       response.fields['controllerRazaoSocial'] =
           _Modelo.razaoSocial == null ? "" : _Modelo.razaoSocial;
 
-
       response.fields['controllerTelefoneFixo'] =
           _Modelo.telefoneFixo == null ? "" : _Modelo.telefoneFixo;
       response.fields['controllerCNPJ'] =
@@ -170,7 +169,6 @@ class ServicoMobileService {
 
       response.fields['controllerTelefoneCelular'] =
           _Modelo.telefoneMovel == null ? "" : _Modelo.telefoneMovel;
-
 
       response.fields['controllerReceitaBruta'] =
           _Modelo.receitaBruta == null ? "" : _Modelo.receitaBruta;
@@ -359,7 +357,9 @@ class ServicoMobileService {
       };
       http.MultipartRequest response;
       response = new http.MultipartRequest(
-          'POST', Uri.parse(Url + "/usuario/inserir_usuario_ws"));
+          // 'POST', Uri.parse(Url + "/usuario/inserir_usuario_ws"));
+          'POST',
+          Uri.parse("http://10.0.2.2:8083" + "/usuario/inserir_usuario_ws"));
       response.headers.addAll(headers);
       response.fields['controllerNome'] = _Modelo.nome;
       response.fields['controllerCPF'] = _Modelo.uf;
