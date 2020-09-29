@@ -17,28 +17,30 @@ import 'package:scm_engenharia_app/models/operacao.dart';
 import 'package:scm_engenharia_app/models/variaveis_de_ambiente.dart';
 import 'package:scm_engenharia_app/pages/login_page.dart';
 
-class PerfilPage  extends StatefulWidget {
+class PerfilPage extends StatefulWidget {
   @override
   _PerfilPageState createState() => _PerfilPageState();
 }
 
-class _PerfilPageState extends State<PerfilPage > {
+class _PerfilPageState extends State<PerfilPage> {
   TbUsuario _Usuariodb = new TbUsuario();
   ServicoMobileService _RestWebService = new ServicoMobileService();
   BuildContext dialogContext;
   DBHelper dbHelper;
 
   TextEditingController _TxtControllerNome = TextEditingController();
-  TextEditingController _TxtControllerCpf = new MaskedTextController(mask: '000.000.000-00');
+  TextEditingController _TxtControllerCpf =
+      new MaskedTextController(mask: '000.000.000-00');
   TextEditingController _TxtControllerEmail = TextEditingController();
-  TextEditingController _TxtControllerTelefone = new MaskedTextController(mask: '(00) 0 0000-0000');
-  TextEditingController _TxtControllerTelefoneWhatsapp = new MaskedTextController(mask: '(00) 0 0000-0000');
+  TextEditingController _TxtControllerTelefone =
+      new MaskedTextController(mask: '(00) 0 0000-0000');
+  TextEditingController _TxtControllerTelefoneWhatsapp =
+      new MaskedTextController(mask: '(00) 0 0000-0000');
   TextEditingController _TxtControllerEmpresa = TextEditingController();
   TextEditingController _TxtControllerUf = TextEditingController();
 
   UF UfSelecionada;
   List<UF> ListaUf = new List<UF>();
-
 
   Future<Null> OnGetUfs() async {
     try {
@@ -51,9 +53,9 @@ class _PerfilPageState extends State<PerfilPage > {
           throw (_RestWeb.mensagem);
         else if (_RestWeb.resultado == null)
           throw (_RestWeb.mensagem);
-        else
-        {
-          VariaveisDeAmbienteResultado  _Resultado = _RestWeb.resultado as VariaveisDeAmbienteResultado;
+        else {
+          VariaveisDeAmbienteResultado _Resultado =
+              _RestWeb.resultado as VariaveisDeAmbienteResultado;
           setState(() {
             ListaUf = _Resultado.uF;
           });
@@ -82,35 +84,36 @@ class _PerfilPageState extends State<PerfilPage > {
       if (connectivityResult == ConnectivityResult.none) {
       } else {
         if (_TxtControllerNome.text.isEmpty)
-          throw ("Nome e obrigatório");
+          throw ("Nome é obrigatório");
         else if (_TxtControllerCpf.text.isEmpty)
-          throw ("CPF e obrigatório");
+          throw ("CPF é obrigatório");
         else if (_TxtControllerEmail.text.isEmpty)
-          throw ("Email e obrigatório");
+          throw ("Email é obrigatório");
         else if (_TxtControllerTelefone.text.isEmpty)
-          throw ("Telefone e obrigatório");
+          throw ("Telefone é obrigatório");
         else if (_TxtControllerTelefoneWhatsapp.text.isEmpty)
-          throw ("Telefone Whatsapp e obrigatório");
+          throw ("Telefone Whatsapp é obrigatório");
         else if (_TxtControllerEmpresa.text.isEmpty)
-          throw ("Empresa e obrigatório");
+          throw ("Empresa é obrigatório");
         else if (_TxtControllerUf.text.isEmpty)
           throw ("UF deve ser selecionada");
         ModelDadosUsuarioJson _ModelDadosUsuario = new ModelDadosUsuarioJson();
         _ModelDadosUsuario.nome = _TxtControllerNome.text;
-        _ModelDadosUsuario.cpf= _TxtControllerCpf.text;
-        _ModelDadosUsuario.email= _TxtControllerEmail.text;
-        _ModelDadosUsuario.telefone= _TxtControllerTelefone.text;
-        _ModelDadosUsuario.telefoneWhatsapp= _TxtControllerTelefoneWhatsapp.text;
-        _ModelDadosUsuario.empresa= _TxtControllerEmpresa.text;
+        _ModelDadosUsuario.cpf = _TxtControllerCpf.text;
+        _ModelDadosUsuario.email = _TxtControllerEmail.text;
+        _ModelDadosUsuario.telefone = _TxtControllerTelefone.text;
+        _ModelDadosUsuario.telefoneWhatsapp =
+            _TxtControllerTelefoneWhatsapp.text;
+        _ModelDadosUsuario.empresa = _TxtControllerEmpresa.text;
         _ModelDadosUsuario.uf = UfSelecionada.id;
         OnRealizandoOperacao("Realizando cadastro");
-        Operacao _RestWeb = await _RestWebService.OnCadastraUsuario(_ModelDadosUsuario);
+        Operacao _RestWeb =
+            await _RestWebService.OnCadastraUsuario(_ModelDadosUsuario);
         if (_RestWeb.erro)
           throw (_RestWeb.mensagem);
         else if (_RestWeb.resultado == null)
           throw (_RestWeb.mensagem);
-        else
-        {
+        else {
           if (dialogContext != null) {
             Navigator.pop(dialogContext);
             setState(() {
@@ -140,20 +143,18 @@ class _PerfilPageState extends State<PerfilPage > {
         Navigator.of(context).pushAndRemoveUntil(
             new MaterialPageRoute(
                 builder: (BuildContext context) => new LoginPage()),
-                (Route<dynamic> route) => false);
-      }
-      else {
-         _Usuariodb = _UsuarioLogado.resultado as TbUsuario;
-         _TxtControllerNome.text = _Usuariodb.nome;
-         _TxtControllerCpf.text = _Usuariodb.cpf;
-         _TxtControllerEmail.text = _Usuariodb.email;
-         _TxtControllerTelefone.text = _Usuariodb.telefone;
-         _TxtControllerTelefoneWhatsapp.text = _Usuariodb.telefone;
-         _TxtControllerEmpresa.text = _Usuariodb.empresa;
+            (Route<dynamic> route) => false);
+      } else {
+        _Usuariodb = _UsuarioLogado.resultado as TbUsuario;
+        _TxtControllerNome.text = _Usuariodb.nome;
+        _TxtControllerCpf.text = _Usuariodb.cpf;
+        _TxtControllerEmail.text = _Usuariodb.email;
+        _TxtControllerTelefone.text = _Usuariodb.telefone;
+        _TxtControllerTelefoneWhatsapp.text = _Usuariodb.telefone;
+        _TxtControllerEmpresa.text = _Usuariodb.empresa;
       }
 
-
-     // OnGetUfs();
+      // OnGetUfs();
       //Uf = await Components.OnlistaEstados() as List<String>;
       setState(() {
         // UfTxt = Uf.first;
@@ -187,7 +188,8 @@ class _PerfilPageState extends State<PerfilPage > {
               ),
               Expanded(
                 child: Container(
-                  margin: EdgeInsets.only(left: 10.0, top: 20.0, bottom: 20.0, right: 5.0),
+                  margin: EdgeInsets.only(
+                      left: 10.0, top: 20.0, bottom: 20.0, right: 5.0),
                   child: Text(
                     txtInformacao,
                     softWrap: true,
@@ -215,7 +217,7 @@ class _PerfilPageState extends State<PerfilPage > {
         return Dialog(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(8.0))),
-          child:  Column(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
@@ -239,8 +241,9 @@ class _PerfilPageState extends State<PerfilPage > {
                   Divider(
                     color: Colors.black12,
                   ),
-                  Padding(padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-                    child:  Text(
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                    child: Text(
                       Mensagem,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 4,
@@ -327,9 +330,7 @@ class _PerfilPageState extends State<PerfilPage > {
               color: Color(0xffFFFFFF),
               fontFamily: "open-sans-regular"),
         ),
-        actions: <Widget>[
-
-        ],
+        actions: <Widget>[],
       ),
       body: Container(
         alignment: Alignment.topCenter,
@@ -417,58 +418,61 @@ class _PerfilPageState extends State<PerfilPage > {
                   child: FormField<String>(
                     builder: (FormFieldState<String> state) {
                       return InputDecorator(
-                        decoration: InputDecoration(
-                          labelText: 'Nome da estado',
-                          hintText: 'avenir-lt-std-medium',
-                        ),
-                        child: Container(
-                          padding: EdgeInsets.fromLTRB(10.0, 0.0, 20.0, 0.0),
-                          child: DropdownButtonHideUnderline(
-                          child:  DropdownButton<UF>(
-                            hint: Text("Selecione ..", style: TextStyle(
-                                fontSize: 16.0,
-                                color: const Color(0xFF90ffffff)),),
-                            elevation: 16,
-                            style: TextStyle(
-                                fontSize: 12,
-                                fontFamily: 'avenir-lt-std-medium',
-                                color: Color(0xFF000000)),
-                            iconEnabledColor: Colors.white,
-                            iconDisabledColor: Colors.white,
-                            value: UfSelecionada != null ? UfSelecionada : null,
-                            isExpanded: true,
-                            iconSize: 35,
-                            items: ListaUf.map((UF value) {
-                              return new DropdownMenuItem<UF>(
-                                value: value,
-                                child: Text(
-                                  value.uf,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 19.0,
-                                      color: Color(0xFF000000),
-                                      fontFamily:
-                                      "avenir-next-rounded-pro-regular"),
-                                ),
-                              );
-                            }).toList(),
-                            onChanged: (UF newValue) {
-                              setState(() {
-                                UfSelecionada = newValue;
-                                _TxtControllerUf.text = newValue.uf;
-                              });
-                            },
+                          decoration: InputDecoration(
+                            labelText: 'Nome da estado',
+                            hintText: 'avenir-lt-std-medium',
                           ),
-                        ),)
-                      );
+                          child: Container(
+                            padding: EdgeInsets.fromLTRB(10.0, 0.0, 20.0, 0.0),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<UF>(
+                                hint: Text(
+                                  "Selecione ..",
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      color: const Color(0xFF90ffffff)),
+                                ),
+                                elevation: 16,
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    fontFamily: 'avenir-lt-std-medium',
+                                    color: Color(0xFF000000)),
+                                iconEnabledColor: Colors.white,
+                                iconDisabledColor: Colors.white,
+                                value: UfSelecionada != null
+                                    ? UfSelecionada
+                                    : null,
+                                isExpanded: true,
+                                iconSize: 35,
+                                items: ListaUf.map((UF value) {
+                                  return new DropdownMenuItem<UF>(
+                                    value: value,
+                                    child: Text(
+                                      value.uf,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 19.0,
+                                          color: Color(0xFF000000),
+                                          fontFamily:
+                                              "avenir-next-rounded-pro-regular"),
+                                    ),
+                                  );
+                                }).toList(),
+                                onChanged: (UF newValue) {
+                                  setState(() {
+                                    UfSelecionada = newValue;
+                                    _TxtControllerUf.text = newValue.uf;
+                                  });
+                                },
+                              ),
+                            ),
+                          ));
                     },
                   )),
               SizedBox(height: 25.0),
               Center(
                 child: InkWell(
-                  onTap: () async {
-
-                  },
+                  onTap: () async {},
                   child: Container(
                     padding: EdgeInsets.fromLTRB(0.0, 5.0, 20.0, 0.0),
                     constraints: BoxConstraints(maxWidth: 300),

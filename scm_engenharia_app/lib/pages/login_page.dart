@@ -51,9 +51,9 @@ class _LoginPageState extends State<LoginPage> {
         OnAlertaInformacao("Não há conexão com a Internet");
       } else {
         if (_TxtControllerEmail.text.isEmpty)
-          throw ("E-mail e obrigatório");
+          throw ("E-mail é obrigatório");
         else if (_TxtControllerSenha.text.isEmpty)
-          throw ("Senha e obrigatório");
+          throw ("Senha é obrigatória");
         OnRealizandoOperacao("Realizando login..");
         _UsuarioLoginModelo.usuario = _TxtControllerEmail.text.trim();
         _UsuarioLoginModelo.password = _TxtControllerSenha.text.trim();
