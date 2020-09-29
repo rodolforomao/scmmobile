@@ -31,13 +31,11 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
   List<String> Uf = new List<String>();
   String UfTxt, _StatusTipoWidget = "renderizar_ficha_sici";
 
-  DateTime _DataSelecionada = DateTime.now();
+  DateTime _DataSelecionada = DateTime(DateTime.now().year, DateTime.now().month-1,1);
 
   StreamSubscription<ConnectivityResult> subscription;
 
 
-  TextEditingController _TxtControllerPeriodoDeReferencia =
-      TextEditingController();
   TextEditingController _TxtControllerCnpj =
       new MaskedTextController(mask: '00.000.000/0000-00');
   TextEditingController _TxtControllerRazaoSocial = TextEditingController();
@@ -283,11 +281,11 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
   OnSelecionarData(BuildContext context) async {
     final DateTime picked = await showDatePicker(
       context: context,
-      initialDatePickerMode: DatePickerMode.year,
-      initialEntryMode: DatePickerEntryMode.input,
+      initialDatePickerMode: DatePickerMode.day,
+      initialEntryMode: DatePickerEntryMode.calendar,
       initialDate: _DataSelecionada,
       firstDate: DateTime(2015, 8),
-      lastDate: DateTime.now(),
+      lastDate: DateTime(DateTime.now().year, DateTime.now().month-1,1),
       errorFormatText: 'Insira uma data válida',
       errorInvalidText: 'Insira a data em um intervalo válido',
       fieldLabelText: 'Período referência ',
@@ -296,8 +294,8 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
     );
     if (picked != null && picked != _DataSelecionada) {
       setState(() {
-        _DataSelecionada = picked;
-        _TxtControllerPeriodoReferencia.text = DateFormat('dd/MM/yyyy').format(picked.toLocal());
+        _DataSelecionada = DateTime(picked.year, picked.month,1);
+        _TxtControllerPeriodoReferencia.text = DateFormat('dd/MM/yyyy').format(DateTime(picked.year, picked.month,1));
       });
     }
   }
@@ -396,8 +394,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
     );
   }
 
-  Card DistribuicaoFisicosServicoQuantitativoCard(BuildContext context, int index) =>
-      Card(
+  Card DistribuicaoFisicosServicoQuantitativoCard(BuildContext context, int index) => Card(
         elevation: 0.9,
         color: Color(0xffFFFFFF),
         child: Container(

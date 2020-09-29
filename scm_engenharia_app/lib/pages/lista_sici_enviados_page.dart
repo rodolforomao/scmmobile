@@ -27,12 +27,6 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
     try {
       var connectivityResult = await (Connectivity().checkConnectivity());
       if (connectivityResult == ConnectivityResult.none) {
-        if (dialogContext != null) {
-          Navigator.of(context, rootNavigator: true).pop('dialog');
-          setState(() {
-            dialogContext = null;
-          });
-        }
         if (ListaFichaSici.length > 0) {
           setState(() {
             _StatusTipoWidget = "renderizar_sici";
@@ -43,7 +37,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
           });
         }
       } else {
-        OnRealizandoOperacao("Realizando busca de fichas sici Web");
+        OnRealizandoOperacao("Realizando busca de fichas sici Web",true);
         Operacao _RestWeb = await _RestWebService.OnRecuperaLancamentosSici();
         if (_RestWeb.erro || _RestWeb.resultado == null)
           throw (_RestWeb.mensagem);
@@ -104,12 +98,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                 _StatusTipoWidget = "nao_existe_sici_cadastrado";
             }
           });
-          if (dialogContext != null) {
-            Navigator.pop(dialogContext);
-            setState(() {
-              dialogContext = null;
-            });
-          }
+          OnRealizandoOperacao("",false);
           if (ListaFichaSici.length > 0) {
             setState(() {
               _StatusTipoWidget = "renderizar_sici";
@@ -119,12 +108,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
         }
       }
     } catch (error) {
-      if (dialogContext != null) {
-        Navigator.of(context, rootNavigator: true).pop('dialog');
-        setState(() {
-          dialogContext = null;
-        });
-      }
+      OnRealizandoOperacao("",false);
       if (ListaFichaSici.length > 0) {
         setState(() {
           _StatusTipoWidget = "renderizar_sici";
@@ -141,16 +125,13 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
 
   Future<Null> Inc() async {
     try {
-      OnRealizandoOperacao("Busca de fichas sici local");
+      OnRealizandoOperacao("Busca de fichas sici local",true);
       Operacao _FichaSiciLocal = await dbHelper.onSelecionarFichaSici();
       if (_FichaSiciLocal.erro)
         throw (_FichaSiciLocal.mensagem);
       else if (_FichaSiciLocal.resultado == null) {
         ListaFichaSici = new List<TbFichaSici>();
-        Navigator.of(context, rootNavigator: true).pop('dialog');
-        setState(() {
-          dialogContext = null;
-        });
+        OnRealizandoOperacao("",false);
         IncRestWeb();
       } else {
         setState(() {
@@ -158,22 +139,17 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
           ListaFichaSici = _FichaSiciLocal.resultado;
           _StatusTipoWidget = "renderizar_sici";
         });
-        if (dialogContext != null) {
-          Navigator.of(context, rootNavigator: true).pop('dialog');
-          setState(() {
-            dialogContext = null;
-          });
-        }
+       // if (dialogContext != null) {
+       //   Navigator.of(context, rootNavigator: true).pop('dialog');
+       //   setState(() {
+        //    dialogContext = null;
+        //  });
+       // }
+        OnRealizandoOperacao("",false);
         IncRestWeb();
       }
     } catch (error) {
-      if (dialogContext != null) {
-        Navigator.of(context, rootNavigator: true).pop('dialog');
-        //Navigator.pop(dialogContext);
-        setState(() {
-          dialogContext = null;
-        });
-      }
+      OnRealizandoOperacao("",false);
       if (ListaFichaSici.length > 0) {
         setState(() {
           _StatusTipoWidget = "renderizar_sici";
@@ -275,56 +251,62 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
     );
   }
 
-  OnRealizandoOperacao(String txtInformacao) {
-    if (dialogContext != null) {
+  OnRealizandoOperacao(String txtInformacao ,bool IsRealizandoOperacao) {
+    if (IsRealizandoOperacao != true && txtInformacao == "") {
       Navigator.of(context, rootNavigator: true).pop('dialog');
-      //Navigator.pop(dialogContext);
       setState(() {
         dialogContext = null;
+        IsRealizandoOperacao = false;
       });
     }
-    showDialog(
-      context: _ScaffoldKey.currentContext,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        dialogContext = context;
-        return Dialog(
-          child: new Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Container(
-                margin: const EdgeInsets.only(
-                    left: 10.0, top: 20.0, bottom: 20.0, right: 10.0),
-                child: Theme(
-                  data: Theme.of(context).copyWith(
-                    accentColor: Color(0xff018a8a),
+    else
+      {
+        setState(() {
+          IsRealizandoOperacao = false;
+        });
+        showDialog(
+          context: _ScaffoldKey.currentContext,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            dialogContext = context;
+            return Dialog(
+              child: new Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(
+                        left: 10.0, top: 20.0, bottom: 20.0, right: 10.0),
+                    child: Theme(
+                      data: Theme.of(context).copyWith(
+                        accentColor: Color(0xff018a8a),
+                      ),
+                      child: new CircularProgressIndicator(),
+                    ),
                   ),
-                  child: new CircularProgressIndicator(),
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  margin: EdgeInsets.only(
-                      left: 10.0, top: 20.0, bottom: 20.0, right: 5.0),
-                  child: Text(
-                    txtInformacao,
-                    softWrap: true,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                        fontSize: 17.0,
-                        color: Color(0xff212529),
-                        fontFamily: "open-sans-regular"),
+                  Expanded(
+                    child: Container(
+                      margin: EdgeInsets.only(
+                          left: 10.0, top: 20.0, bottom: 20.0, right: 5.0),
+                      child: Text(
+                        txtInformacao,
+                        softWrap: true,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            fontSize: 17.0,
+                            color: Color(0xff212529),
+                            fontFamily: "open-sans-regular"),
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         );
-      },
-    );
+      }
   }
 
   @override
@@ -827,7 +809,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                         if (connectivityResult == ConnectivityResult.none) {
                                           OnAlertaInformacao("Por favor conecte-se à internet.");
                                         } else {
-                                          OnRealizandoOperacao("Realizando cadastro.");
+                                          OnRealizandoOperacao("Realizando cadastro.", true);
                                           Operacao _RestWeb = await _RestWebService.OnRealizarLancamentosSici(ListaFichaSici[index]);
                                           if (_RestWeb.erro)
                                             throw (_RestWeb.mensagem);
@@ -844,14 +826,12 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                               });
                                               Inc();
                                             }
-                                            Navigator.of(context, rootNavigator: true).pop('dialog');
+                                            OnRealizandoOperacao("", false);
                                             OnAlertaInformacao(_RestWeb.mensagem);
                                           }
                                         }
                                       } catch (error) {
-                                        if (dialogContext != null) {
-                                          Navigator.of(context, rootNavigator: true).pop('dialog');
-                                        }
+                                        OnRealizandoOperacao("", false);
                                         OnAlertaInformacao(error);
                                       }
 
@@ -1096,17 +1076,12 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                     onTap: () async {
                                       Future.delayed(Duration.zero, () async {
                                         try {
-                                          OnRealizandoOperacao("Realizando cadastro.");
+                                          OnRealizandoOperacao("Realizando cadastro." , true);
                                           Operacao _respLocal = await dbHelper.OnAddFichaSici(ListaFichaSici[index]);
                                           if (_respLocal.erro)
                                             throw (_respLocal.mensagem);
                                           else {
-                                            Navigator.of(context, rootNavigator: true).pop('dialog');
-                                            if (dialogContext != null) {
-                                              setState(() {
-                                                dialogContext = null;
-                                              });
-                                            }
+                                            OnRealizandoOperacao("", false);
                                             showDialog(
                                               context: context,
                                               barrierDismissible: false,
