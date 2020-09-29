@@ -357,9 +357,7 @@ class ServicoMobileService {
       };
       http.MultipartRequest response;
       response = new http.MultipartRequest(
-          // 'POST', Uri.parse(Url + "/usuario/inserir_usuario_ws"));
-          'POST',
-          Uri.parse("http://10.0.2.2:8083" + "/usuario/inserir_usuario_ws"));
+          'POST', Uri.parse(Url + "/usuario/inserir_usuario_ws"));
       response.headers.addAll(headers);
       response.fields['controllerNome'] = _Modelo.nome;
       response.fields['controllerCPF'] = _Modelo.uf;
