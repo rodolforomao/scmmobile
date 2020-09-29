@@ -60,27 +60,26 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
       else if (id_tecnologia == "0")
         throw ("O tecnologia  deve ser selecionado");
       else if (_TxtControllerCod_ibge.text.isEmpty)
-        throw ("Nome e obrigatório");
+        _TxtControllerCod_ibge.text = "";
       else if (_TxtControllerPf_0.text.isEmpty)
-        throw ("CPF e obrigatório");
+        _TxtControllerPf_0.text = "";
       else if (_TxtControllerPf_512.text.isEmpty)
-        throw ("Email e obrigatório");
+        _TxtControllerPf_512.text = "";
       else if (_TxtControllerPf_2.text.isEmpty)
-        throw ("Telefone e obrigatório");
+        _TxtControllerPf_2.text = "";
       else if (_TxtControllerPf_12.text.isEmpty)
-        throw ("Telefone Whatsapp e obrigatório");
+        _TxtControllerPf_12.text = "";
       else if (_TxtControllerPf_34.text.isEmpty)
-        throw ("Empresa e obrigatório");
+        _TxtControllerPf_34.text = "";
       else if (_TxtControllerPj_0.text.isEmpty)
-        throw ("UF deve ser selecionada");
+        _TxtControllerPj_0.text = "";
       else if (_TxtControllerPj_512.text.isEmpty)
-        throw ("Pj 512 deve ser selecionada");
+        _TxtControllerPj_512.text = "";
       else if (_TxtControllerPj_2.text.isEmpty)
-        throw ("UF deve ser selecionada");
+        _TxtControllerPj_2.text = "";
       else if (_TxtControllerPj_12.text.isEmpty)
-        throw ("UF deve ser selecionada");
-      else if (_TxtControllerPj_34.text.isEmpty)
-        throw ("UF deve ser selecionada");
+        _TxtControllerPj_12.text = "";
+      else if (_TxtControllerPj_34.text.isEmpty) _TxtControllerPj_34.text = "";
       _DistribuicaoFisicosServicoQuantitativo.id_uf = id_uf;
       _DistribuicaoFisicosServicoQuantitativo.id_municipio = id_municipio;
       _DistribuicaoFisicosServicoQuantitativo.id_tecnologia = id_tecnologia;
@@ -88,12 +87,14 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
       _DistribuicaoFisicosServicoQuantitativo.cod_ibge =
           _TxtControllerCod_ibge.text;
       _DistribuicaoFisicosServicoQuantitativo.pf_0 = _TxtControllerPf_0.text;
-      _DistribuicaoFisicosServicoQuantitativo.pf_512 = _TxtControllerPf_512.text;
+      _DistribuicaoFisicosServicoQuantitativo.pf_512 =
+          _TxtControllerPf_512.text;
       _DistribuicaoFisicosServicoQuantitativo.pf_2 = _TxtControllerPf_2.text;
       _DistribuicaoFisicosServicoQuantitativo.pf_12 = _TxtControllerPf_12.text;
       _DistribuicaoFisicosServicoQuantitativo.pf_34 = _TxtControllerPf_34.text;
       _DistribuicaoFisicosServicoQuantitativo.pj_0 = _TxtControllerPj_0.text;
-      _DistribuicaoFisicosServicoQuantitativo.pj_512 = _TxtControllerPj_512.text;
+      _DistribuicaoFisicosServicoQuantitativo.pj_512 =
+          _TxtControllerPj_512.text;
       _DistribuicaoFisicosServicoQuantitativo.pj_2 = _TxtControllerPj_2.text;
       _DistribuicaoFisicosServicoQuantitativo.pj_12 = _TxtControllerPj_12.text;
       _DistribuicaoFisicosServicoQuantitativo.pj_34 = _TxtControllerPj_34.text;
@@ -111,7 +112,7 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
         return Dialog(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(8.0))),
-          child:  Column(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
@@ -135,8 +136,9 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
                   Divider(
                     color: Colors.black12,
                   ),
-                  Padding(padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-                    child:  Text(
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                    child: Text(
                       Mensagem,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 4,
@@ -190,17 +192,20 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
 
   Inc() async {
     try {
-      Operacao _ExisteVariavelDeAmbiente = await dbHelper.OnExisteVariavelDeAmbiente();
+      Operacao _ExisteVariavelDeAmbiente =
+          await dbHelper.OnExisteVariavelDeAmbiente();
       if (_ExisteVariavelDeAmbiente.erro)
         throw (_ExisteVariavelDeAmbiente.mensagem);
       else if (_ExisteVariavelDeAmbiente.resultado == true) {
-        Navigator.of(context, rootNavigator: true).push(
+        Navigator.of(context, rootNavigator: true)
+            .push(
           new CupertinoPageRoute<bool>(
             maintainState: false,
             fullscreenDialog: true,
             builder: (BuildContext context) => new VariavelDeAmbientePage(),
           ),
-        ).then((value) {
+        )
+            .then((value) {
           Inc();
         });
       } else {
@@ -248,46 +253,47 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
         }
 
         if (widget.sDistribuicaoFisicosServicoQuantitativo == null) {
-
         } else {
-          _DistribuicaoFisicosServicoQuantitativo = widget.sDistribuicaoFisicosServicoQuantitativo;
+          _DistribuicaoFisicosServicoQuantitativo =
+              widget.sDistribuicaoFisicosServicoQuantitativo;
 
-          TbUf resUf = ListUfdb.where((i) => i.id == widget.sDistribuicaoFisicosServicoQuantitativo.id_uf).first;
+          TbUf resUf = ListUfdb.where((i) =>
+                  i.id == widget.sDistribuicaoFisicosServicoQuantitativo.id_uf)
+              .first;
           tbUf.idUfApp = resUf.idUfApp;
           tbUf.id = resUf.id;
           tbUf.uf = resUf.uf;
-           id_uf = resUf.id;
+          id_uf = resUf.id;
 
-
-
-          Operacao _UfMunicipio = await dbHelper
-              .onSelecionarMunicipioByIdUf(
-              tbUf.id);
+          Operacao _UfMunicipio =
+              await dbHelper.onSelecionarMunicipioByIdUf(tbUf.id);
           if (_UfMunicipio.erro)
             throw (_UfMunicipio.mensagem);
           else if (_UfMunicipio.resultado == null) {
-            OnToastInformacao("Para o estado " +
-                tbUf.uf +
-                " não a município cadastrado");
+            OnToastInformacao(
+                "Para o estado " + tbUf.uf + " não a município cadastrado");
           } else {
-            for (var prop in _UfMunicipio.resultado
-            as List<TbUfMunicipio>) {
+            for (var prop in _UfMunicipio.resultado as List<TbUfMunicipio>) {
               setState(() {
                 ListUfMunicipiodb.add(prop);
               });
             }
-            TbUfMunicipio resMunicipio = ListUfMunicipiodb.where((i) => i.id == widget.sDistribuicaoFisicosServicoQuantitativo.id_municipio).first;
+            TbUfMunicipio resMunicipio = ListUfMunicipiodb.where((i) =>
+                    i.id ==
+                    widget.sDistribuicaoFisicosServicoQuantitativo.id_municipio)
+                .first;
             tbUfMunicipio.idMunicipioApp = resMunicipio.idMunicipioApp;
             tbUfMunicipio.ufId = resMunicipio.ufId;
             tbUfMunicipio.uf = resMunicipio.uf;
             tbUfMunicipio.id = resMunicipio.id;
             tbUfMunicipio.municipio = resMunicipio.municipio;
-             id_municipio = resMunicipio.id;
-
+            id_municipio = resMunicipio.id;
           }
 
           TbTecnologia resTecnologia = ListTecnologiadb.where((i) =>
-          i.id == widget.sDistribuicaoFisicosServicoQuantitativo.id_tecnologia).first;
+                  i.id ==
+                  widget.sDistribuicaoFisicosServicoQuantitativo.id_tecnologia)
+              .first;
           tbTecnologia.idTecnologiaApp = resTecnologia.idTecnologiaApp;
           tbTecnologia.id = resTecnologia.id;
           tbTecnologia.tecnologia = resTecnologia.tecnologia;
@@ -435,7 +441,8 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
                                       tbUfMunicipio.uf = "0";
                                       tbUfMunicipio.id = "0";
                                       tbUfMunicipio.municipio = "Selecione...";
-                                      _DistribuicaoFisicosServicoQuantitativo.uf =  newValue.uf;
+                                      _DistribuicaoFisicosServicoQuantitativo
+                                          .uf = newValue.uf;
                                       ListUfMunicipiodb.add(tbUfMunicipio);
                                       for (var prop in _UfMunicipio.resultado
                                           as List<TbUfMunicipio>) {
@@ -500,7 +507,8 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
                                       setState(() {
                                         tbUfMunicipio = value;
                                         id_municipio = value.id;
-                                        _DistribuicaoFisicosServicoQuantitativo.municipio = value.municipio;
+                                        _DistribuicaoFisicosServicoQuantitativo
+                                            .municipio = value.municipio;
                                       });
                                     },
                                     child: Text(
@@ -572,7 +580,8 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
                                   setState(() {
                                     tbTecnologia = newValue;
                                     id_tecnologia = newValue.id;
-                                    _DistribuicaoFisicosServicoQuantitativo.tecnologia = newValue.tecnologia;
+                                    _DistribuicaoFisicosServicoQuantitativo
+                                        .tecnologia = newValue.tecnologia;
                                   });
                                 },
                               ),

@@ -2,6 +2,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'package:scm_engenharia_app/data/db_helper.dart';
 import 'package:scm_engenharia_app/data/tb_distribuicao_quantitativo_acessos_fisicos_servico.dart';
 import 'package:scm_engenharia_app/data/tb_ficha_sici.dart';
@@ -31,10 +32,10 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
   List<String> Uf = new List<String>();
   String UfTxt, _StatusTipoWidget = "renderizar_ficha_sici";
 
-  DateTime _DataSelecionada = DateTime(DateTime.now().year, DateTime.now().month-1,1);
+  DateTime _DataSelecionada =
+      DateTime(DateTime.now().year, DateTime.now().month - 1, 1);
 
   StreamSubscription<ConnectivityResult> subscription;
-
 
   TextEditingController _TxtControllerCnpj =
       new MaskedTextController(mask: '00.000.000/0000-00');
@@ -45,8 +46,8 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
   TextEditingController _TxtControllerTelefoneFixo =
       new MaskedTextController(mask: '(00) 0 0000-0000');
 
-
-  TextEditingController _TxtControllerPeriodoReferencia = TextEditingController();
+  TextEditingController _TxtControllerPeriodoReferencia =
+      TextEditingController();
 
   TextEditingController _TxtControllerReceitaBruta = TextEditingController();
   TextEditingController _TxtControllerReceitaLiquida = TextEditingController();
@@ -148,11 +149,16 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
 
   Future<Null> OnSalvarFormularioDbLocal() async {
     try {
-      if (_TxtControllerCnpj.text.isEmpty) throw ("O campo cnpj e obrigatório");
+      if (_TxtControllerCnpj.text.isEmpty) throw ("O campo cnpj é obrigatório");
       _FichaSici.periodoReferencia = _TxtControllerPeriodoReferencia.text;
       _FichaSici.isSincronizar = "S";
       _FichaSici.cnpj = _TxtControllerCnpj.text;
+      if (_TxtControllerRazaoSocial.text.isEmpty)
+        throw ("O campo Razão Social é obrigatório");
       _FichaSici.razaoSocial = _TxtControllerRazaoSocial.text;
+      if (_TxtControllerTelefoneMovel.text.isEmpty &&
+          _TxtControllerTelefoneFixo.text.isEmpty)
+        throw ("Pelo menos um campo 'Telefone' é obrigatório");
       _FichaSici.telefoneMovel = _TxtControllerTelefoneMovel.text;
       _FichaSici.telefoneFixo = _TxtControllerTelefoneFixo.text;
       _FichaSici.receitaBruta = _TxtControllerReceitaBruta.text;
@@ -167,7 +173,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
       _FichaSici.cofinsPorc = _TxtControllerCofinsPorc.text;
       _FichaSici.observacoes = _TxtControllerObservacoes.text;
       if (_FichaSici.distribuicaoFisicosServicoQuantitativo.length == 0)
-        throw ("Distribuição do quantitativo de acessos físicos em serviço e obrigatório,favor adicionar.");
+        throw ("Distribuição do quantitativo de acessos físicos em serviço é obrigatório,favor adicionar.");
       else {
         Operacao _respLocal = await dbHelper.OnAddFichaSici(_FichaSici);
         if (_respLocal.erro)
@@ -285,19 +291,46 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
       initialEntryMode: DatePickerEntryMode.calendar,
       initialDate: _DataSelecionada,
       firstDate: DateTime(2015, 8),
-      lastDate: DateTime(DateTime.now().year, DateTime.now().month-1,1),
+      lastDate: DateTime(DateTime.now().year, DateTime.now().month - 1, 1),
       errorFormatText: 'Insira uma data válida',
       errorInvalidText: 'Insira a data em um intervalo válido',
       fieldLabelText: 'Período referência ',
       fieldHintText: 'Dia/Mês/Ano',
       helpText: 'Selecione o período referência',
     );
+
     if (picked != null && picked != _DataSelecionada) {
       setState(() {
-        _DataSelecionada = DateTime(picked.year, picked.month,1);
-        _TxtControllerPeriodoReferencia.text = DateFormat('dd/MM/yyyy').format(DateTime(picked.year, picked.month,1));
+        _DataSelecionada = DateTime(picked.year, picked.month, 1);
+        _TxtControllerPeriodoReferencia.text = DateFormat('dd/MM/yyyy')
+            .format(DateTime(picked.year, picked.month, 1));
       });
     }
+
+    // DateTime selectedDate = DateTime.parse("01-07-2020");
+
+    // showMonthPicker(
+    //   context: context,
+    //   firstDate: DateTime(DateTime.now().year - 2, 5),
+    //   lastDate: DateTime(DateTime.now().year, 9),
+    //   initialDate: selectedDate ?? DateTime.parse("01-07-2020"),
+    //   locale: Locale("us"),
+    // ).then((date) {
+    //   if (date != null) {
+    //     setState(() {
+    //       selectedDate = date;
+    //     });
+    //   }
+    // });
+
+    // if (selectedDate != null && selectedDate != _DataSelecionada) {
+    //   setState(() {
+    //     _DataSelecionada =
+    //         DateTime(selectedDate.year, selectedDate.month - 1, 1);
+    //     _TxtControllerPeriodoReferencia.text = DateFormat('dd/MM/yyyy')
+    //         .format(DateTime(selectedDate.year, selectedDate.month, 1));
+    //   });
+    // }
   }
 
   Inc() async {
@@ -308,14 +341,17 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
       });
       if (widget.FichaSiciModel != null) {
         _FichaSici = widget.FichaSiciModel;
-        _DataSelecionada = DateTime.parse(widget.FichaSiciModel.periodoReferencia);
-        _TxtControllerPeriodoReferencia.text = DateFormat('dd/MM/yyyy').format(DateTime.parse(widget.FichaSiciModel.periodoReferencia));
+        _DataSelecionada =
+            DateTime.parse(widget.FichaSiciModel.periodoReferencia);
+        _TxtControllerPeriodoReferencia.text = DateFormat('dd/MM/yyyy')
+            .format(DateTime.parse(widget.FichaSiciModel.periodoReferencia));
         _TxtControllerCnpj.text = widget.FichaSiciModel.cnpj;
         _TxtControllerRazaoSocial.text = widget.FichaSiciModel.razaoSocial;
         _TxtControllerTelefoneMovel.text = widget.FichaSiciModel.telefoneMovel;
         _TxtControllerTelefoneFixo.text = widget.FichaSiciModel.telefoneFixo;
         _TxtControllerReceitaBruta.text = widget.FichaSiciModel.receitaBruta;
-        _TxtControllerReceitaLiquida.text = widget.FichaSiciModel.receitaLiquida;
+        _TxtControllerReceitaLiquida.text =
+            widget.FichaSiciModel.receitaLiquida;
         _TxtControllerSimples.text = widget.FichaSiciModel.simples;
         _TxtControllerSimplesPorc.text = widget.FichaSiciModel.simplesPorc;
         _TxtControllerIcms.text = widget.FichaSiciModel.icms;
@@ -394,7 +430,9 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
     );
   }
 
-  Card DistribuicaoFisicosServicoQuantitativoCard(BuildContext context, int index) => Card(
+  Card DistribuicaoFisicosServicoQuantitativoCard(
+          BuildContext context, int index) =>
+      Card(
         elevation: 0.9,
         color: Color(0xffFFFFFF),
         child: Container(
@@ -966,9 +1004,22 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                                               FocusScope.of(context)
                                                   .requestFocus(
                                                       new FocusNode());
-                                              if (_FichaSici.distribuicaoFisicosServicoQuantitativo[index].idApp == null ||_FichaSici.distribuicaoFisicosServicoQuantitativo[index].idApp == 0 ) {
+                                              if (_FichaSici
+                                                          .distribuicaoFisicosServicoQuantitativo[
+                                                              index]
+                                                          .idApp ==
+                                                      null ||
+                                                  _FichaSici
+                                                          .distribuicaoFisicosServicoQuantitativo[
+                                                              index]
+                                                          .idApp ==
+                                                      0) {
                                                 setState(() {
-                                                  _FichaSici.distribuicaoFisicosServicoQuantitativo.remove(_FichaSici.distribuicaoFisicosServicoQuantitativo[index]);
+                                                  _FichaSici
+                                                      .distribuicaoFisicosServicoQuantitativo
+                                                      .remove(_FichaSici
+                                                              .distribuicaoFisicosServicoQuantitativo[
+                                                          index]);
                                                 });
                                               } else {
                                                 Operacao _respLocal = await dbHelper
@@ -981,9 +1032,14 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                                                   throw (_respLocal.mensagem);
                                                 else {
                                                   setState(() {
-                                                    _FichaSici.distribuicaoFisicosServicoQuantitativo.remove(_FichaSici.distribuicaoFisicosServicoQuantitativo[index]);
+                                                    _FichaSici
+                                                        .distribuicaoFisicosServicoQuantitativo
+                                                        .remove(_FichaSici
+                                                                .distribuicaoFisicosServicoQuantitativo[
+                                                            index]);
                                                   });
-                                                  OnAlertaInformacao(_respLocal.mensagem);
+                                                  OnAlertaInformacao(
+                                                      _respLocal.mensagem);
                                                 }
                                               }
                                               Navigator.pop(context);
@@ -1564,14 +1620,22 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                               )
                                   .then((value) {
                                 if (value != null) {
-                                  if(_FichaSici.distribuicaoFisicosServicoQuantitativo == null)
-                                   {
-                                     value.index = 1;
-                                     _FichaSici.distribuicaoFisicosServicoQuantitativo =   List<TbDistribuicaoQuantitativoAcessosFisicosServico>();
-                                   }
-                                    else
-                                    value.index = _FichaSici.distribuicaoFisicosServicoQuantitativo.length + 1;
-                                  _FichaSici.distribuicaoFisicosServicoQuantitativo.add(value);
+                                  if (_FichaSici
+                                          .distribuicaoFisicosServicoQuantitativo ==
+                                      null) {
+                                    value.index = 1;
+                                    _FichaSici
+                                            .distribuicaoFisicosServicoQuantitativo =
+                                        List<
+                                            TbDistribuicaoQuantitativoAcessosFisicosServico>();
+                                  } else
+                                    value.index = _FichaSici
+                                            .distribuicaoFisicosServicoQuantitativo
+                                            .length +
+                                        1;
+                                  _FichaSici
+                                      .distribuicaoFisicosServicoQuantitativo
+                                      .add(value);
                                 }
                               });
                             },

@@ -22,16 +22,18 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
   StreamSubscription<ConnectivityResult> subscription;
   String _StatusTipoWidget, ErroInformacao = "";
   TextEditingController _TxtControllerNome = TextEditingController();
-  TextEditingController _TxtControllerCpf = new MaskedTextController(mask: '000.000.000-00');
+  TextEditingController _TxtControllerCpf =
+      new MaskedTextController(mask: '000.000.000-00');
   TextEditingController _TxtControllerEmail = TextEditingController();
-  TextEditingController _TxtControllerTelefone = new MaskedTextController(mask: '(00) 0 0000-0000');
-  TextEditingController _TxtControllerTelefoneWhatsapp = new MaskedTextController(mask: '(00) 0 0000-0000');
+  TextEditingController _TxtControllerTelefone =
+      new MaskedTextController(mask: '(00) 0 0000-0000');
+  TextEditingController _TxtControllerTelefoneWhatsapp =
+      new MaskedTextController(mask: '(00) 0 0000-0000');
   TextEditingController _TxtControllerEmpresa = TextEditingController();
   TextEditingController _TxtControllerUf = TextEditingController();
 
   UF UfSelecionada;
   List<UF> ListaUf = new List<UF>();
-
 
   Future<Null> OnGetUfs() async {
     try {
@@ -44,19 +46,19 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
           throw (_RestWeb.mensagem);
         else if (_RestWeb.resultado == null)
           throw (_RestWeb.mensagem);
-        else
-          {
-            VariaveisDeAmbienteResultado  _Resultado = _RestWeb.resultado as VariaveisDeAmbienteResultado;
+        else {
+          VariaveisDeAmbienteResultado _Resultado =
+              _RestWeb.resultado as VariaveisDeAmbienteResultado;
+          setState(() {
+            ListaUf = _Resultado.uF;
+          });
+          if (dialogContext != null) {
+            Navigator.pop(dialogContext);
             setState(() {
-              ListaUf = _Resultado.uF;
+              dialogContext = null;
             });
-            if (dialogContext != null) {
-              Navigator.pop(dialogContext);
-              setState(() {
-                dialogContext = null;
-              });
-            }
           }
+        }
       }
     } catch (error) {
       if (dialogContext != null) {
@@ -79,35 +81,36 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
       if (connectivityResult == ConnectivityResult.none) {
       } else {
         if (_TxtControllerNome.text.isEmpty)
-          throw ("Nome e obrigatório");
+          throw ("Nome é obrigatório");
         else if (_TxtControllerCpf.text.isEmpty)
-          throw ("CPF e obrigatório");
+          throw ("CPF é obrigatório");
         else if (_TxtControllerEmail.text.isEmpty)
-          throw ("Email e obrigatório");
+          throw ("Email é obrigatório");
         else if (_TxtControllerTelefone.text.isEmpty)
-          throw ("Telefone e obrigatório");
+          throw ("Telefone é obrigatório");
         else if (_TxtControllerTelefoneWhatsapp.text.isEmpty)
-          throw ("Telefone Whatsapp e obrigatório");
+          throw ("Telefone Whatsapp é obrigatório");
         else if (_TxtControllerEmpresa.text.isEmpty)
-          throw ("Empresa e obrigatório");
+          throw ("Empresa é obrigatório");
         else if (_TxtControllerUf.text.isEmpty)
           throw ("UF deve ser selecionada");
-         ModelDadosUsuarioJson _ModelDadosUsuario = new ModelDadosUsuarioJson();
+        ModelDadosUsuarioJson _ModelDadosUsuario = new ModelDadosUsuarioJson();
         _ModelDadosUsuario.nome = _TxtControllerNome.text;
-        _ModelDadosUsuario.cpf= _TxtControllerCpf.text;
-        _ModelDadosUsuario.email= _TxtControllerEmail.text;
-        _ModelDadosUsuario.telefone= _TxtControllerTelefone.text;
-        _ModelDadosUsuario.telefoneWhatsapp= _TxtControllerTelefoneWhatsapp.text;
-        _ModelDadosUsuario.empresa= _TxtControllerEmpresa.text;
+        _ModelDadosUsuario.cpf = _TxtControllerCpf.text;
+        _ModelDadosUsuario.email = _TxtControllerEmail.text;
+        _ModelDadosUsuario.telefone = _TxtControllerTelefone.text;
+        _ModelDadosUsuario.telefoneWhatsapp =
+            _TxtControllerTelefoneWhatsapp.text;
+        _ModelDadosUsuario.empresa = _TxtControllerEmpresa.text;
         _ModelDadosUsuario.uf = UfSelecionada.id;
         OnRealizandoOperacao("Realizando cadastro");
-        Operacao _RestWeb = await _RestWebService.OnCadastraUsuario(_ModelDadosUsuario);
+        Operacao _RestWeb =
+            await _RestWebService.OnCadastraUsuario(_ModelDadosUsuario);
         if (_RestWeb.erro)
           throw (_RestWeb.mensagem);
         else if (_RestWeb.resultado == null)
           throw (_RestWeb.mensagem);
-        else
-        {
+        else {
           if (dialogContext != null) {
             Navigator.pop(dialogContext);
             setState(() {
@@ -142,9 +145,10 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
           });
         }
       });
-      subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      subscription = Connectivity()
+          .onConnectivityChanged
+          .listen((ConnectivityResult result) {
         if (result == ConnectivityResult.none) {
-
         } else {
           _ScaffoldKey.currentState.removeCurrentSnackBar();
           setState(() {
@@ -182,7 +186,8 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
               ),
               Expanded(
                 child: Container(
-                  margin: EdgeInsets.only(left: 10.0, top: 20.0, bottom: 20.0, right: 5.0),
+                  margin: EdgeInsets.only(
+                      left: 10.0, top: 20.0, bottom: 20.0, right: 5.0),
                   child: Text(
                     txtInformacao,
                     softWrap: true,
@@ -210,7 +215,7 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
         return Dialog(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(8.0))),
-          child:  Column(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
@@ -234,8 +239,9 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
                   Divider(
                     color: Colors.black12,
                   ),
-                  Padding(padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-                    child:  Text(
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                    child: Text(
                       Mensagem,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 4,
@@ -378,12 +384,14 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
                       fontFamily: "avenir-lt-std-roman",
                       fontSize: 15.0,
                       color: Colors.white,
-                    ),),
+                    ),
+                  ),
                   SizedBox(height: 40.0),
                   Center(
                     child: InkWell(
                       onTap: () async {
-                        var connectivityResult = await (Connectivity().checkConnectivity());
+                        var connectivityResult =
+                            await (Connectivity().checkConnectivity());
                         if (connectivityResult == ConnectivityResult.none) {
                           setState(() {
                             _StatusTipoWidget = "sem_internet";
@@ -398,7 +406,8 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
                             content: SizedBox(
                               height: 30.0,
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
@@ -416,8 +425,8 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
                                   ),
                                   SizedBox(
                                     child: CircularProgressIndicator(
-                                      valueColor:
-                                      AlwaysStoppedAnimation<Color>(Color(0xff2fdf84)),
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          Color(0xff2fdf84)),
                                     ),
                                     height: 30.0,
                                     width: 30.0,
@@ -506,7 +515,8 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
                       fontFamily: "avenir-lt-std-roman",
                       fontSize: 15.0,
                       color: Colors.white,
-                    ),),
+                    ),
+                  ),
                   SizedBox(height: 40.0),
                   Center(
                     child: InkWell(
@@ -579,23 +589,28 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
                           color: const Color(0xFF000000)),
                       decoration: InputDecoration(
                           contentPadding:
-                          EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
+                              EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
                           errorBorder: OutlineInputBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10.0)),
+                                BorderRadius.all(Radius.circular(10.0)),
                           ),
                           focusedErrorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(color: Colors.white, width: 0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 0),
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
                             borderSide:
-                            BorderSide(color: Colors.white, width: 0.3),
+                                BorderSide(color: Colors.white, width: 0.3),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(color: Colors.white, width: 0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 0),
                           ),
                           hintText: "Digite seu nome completo",
                           border: InputBorder.none,
@@ -637,23 +652,28 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
                           color: const Color(0xFF000000)),
                       decoration: InputDecoration(
                           contentPadding:
-                          EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
+                              EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
                           errorBorder: OutlineInputBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10.0)),
+                                BorderRadius.all(Radius.circular(10.0)),
                           ),
                           focusedErrorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(color: Colors.white, width: 0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 0),
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
                             borderSide:
-                            BorderSide(color: Colors.white, width: 0.3),
+                                BorderSide(color: Colors.white, width: 0.3),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(color: Colors.white, width: 0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 0),
                           ),
                           hintText: "Digite seu CPF",
                           border: InputBorder.none,
@@ -687,7 +707,7 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
                   TextFormField(
                       autofocus: false,
                       keyboardType: TextInputType.emailAddress,
-                      controller: _TxtControllerEmail ,
+                      controller: _TxtControllerEmail,
                       textInputAction: TextInputAction.done,
                       style: TextStyle(
                           fontSize: 20,
@@ -695,23 +715,28 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
                           color: const Color(0xFF000000)),
                       decoration: InputDecoration(
                           contentPadding:
-                          EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
+                              EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
                           errorBorder: OutlineInputBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10.0)),
+                                BorderRadius.all(Radius.circular(10.0)),
                           ),
                           focusedErrorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(color: Colors.white, width: 0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 0),
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
                             borderSide:
-                            BorderSide(color: Colors.white, width: 0.3),
+                                BorderSide(color: Colors.white, width: 0.3),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(color: Colors.white, width: 0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 0),
                           ),
                           hintText: "Digite seu e-mail",
                           border: InputBorder.none,
@@ -753,23 +778,28 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
                           color: const Color(0xFF000000)),
                       decoration: InputDecoration(
                           contentPadding:
-                          EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
+                              EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
                           errorBorder: OutlineInputBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10.0)),
+                                BorderRadius.all(Radius.circular(10.0)),
                           ),
                           focusedErrorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(color: Colors.white, width: 0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 0),
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
                             borderSide:
-                            BorderSide(color: Colors.white, width: 0.3),
+                                BorderSide(color: Colors.white, width: 0.3),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(color: Colors.white, width: 0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 0),
                           ),
                           hintText: "Digite telefone fixo",
                           border: InputBorder.none,
@@ -811,22 +841,28 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
                           color: const Color(0xFF000000)),
                       decoration: InputDecoration(
                           contentPadding:
-                          EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
+                              EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
                           errorBorder: OutlineInputBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10.0)),),
+                                BorderRadius.all(Radius.circular(10.0)),
+                          ),
                           focusedErrorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(color: Colors.white, width: 0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 0),
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
                             borderSide:
-                            BorderSide(color: Colors.white, width: 0.3),
+                                BorderSide(color: Colors.white, width: 0.3),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(color: Colors.white, width: 0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 0),
                           ),
                           hintText: "Digite Whatsapp",
                           border: InputBorder.none,
@@ -868,24 +904,28 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
                           color: const Color(0xFF000000)),
                       decoration: InputDecoration(
                           contentPadding:
-                          EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
+                              EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
                           errorBorder: OutlineInputBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10.0)),
+                                BorderRadius.all(Radius.circular(10.0)),
                           ),
                           focusedErrorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(color: Colors.white, width: 0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 0),
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
                             borderSide:
-                            BorderSide(color: Colors.white, width: 0.3),
+                                BorderSide(color: Colors.white, width: 0.3),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
                             borderSide:
-                            BorderSide(color: Colors.white, width: 0.3),
+                                BorderSide(color: Colors.white, width: 0.3),
                           ),
                           hintText: "Digite o nome da empresa",
                           border: InputBorder.none,
@@ -921,30 +961,29 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
                           return InputDecorator(
                             decoration: InputDecoration(
                                 contentPadding:
-                                EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
+                                    EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
                                 errorBorder: OutlineInputBorder(
                                   borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0)),
+                                      BorderRadius.all(Radius.circular(10.0)),
                                 ),
                                 focusedErrorBorder: OutlineInputBorder(
                                   borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0)),
+                                      BorderRadius.all(Radius.circular(10.0)),
                                   borderSide:
-                                  BorderSide(color: Colors.white, width: 0),
+                                      BorderSide(color: Colors.white, width: 0),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0)),
-                                  borderSide:
-                                  BorderSide(color: Colors.white, width: 0.3),
+                                      BorderRadius.all(Radius.circular(10.0)),
+                                  borderSide: BorderSide(
+                                      color: Colors.white, width: 0.3),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0)),
-                                  borderSide:
-                                  BorderSide(color: Colors.white, width: 0.3),
+                                      BorderRadius.all(Radius.circular(10.0)),
+                                  borderSide: BorderSide(
+                                      color: Colors.white, width: 0.3),
                                 ),
-
                                 border: InputBorder.none,
                                 hintStyle: TextStyle(
                                     fontSize: 16.0,
@@ -956,12 +995,16 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
                                 fillColor: Color(0xff80ff9b7b),
                                 filled: true),
                             child: Container(
-                              padding: EdgeInsets.fromLTRB(10.0, 0.0, 20.0, 0.0),
+                              padding:
+                                  EdgeInsets.fromLTRB(10.0, 0.0, 20.0, 0.0),
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<UF>(
-                                  hint: Text("Selecione ..", style: TextStyle(
-                                      fontSize: 16.0,
-                                      color: const Color(0xFF90ffffff)),),
+                                  hint: Text(
+                                    "Selecione ..",
+                                    style: TextStyle(
+                                        fontSize: 16.0,
+                                        color: const Color(0xFF90ffffff)),
+                                  ),
                                   elevation: 16,
                                   style: TextStyle(
                                       fontSize: 12,
@@ -969,7 +1012,9 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
                                       color: Color(0xFF000000)),
                                   iconEnabledColor: Colors.white,
                                   iconDisabledColor: Colors.white,
-                                  value: UfSelecionada != null ? UfSelecionada : null,
+                                  value: UfSelecionada != null
+                                      ? UfSelecionada
+                                      : null,
                                   isExpanded: true,
                                   iconSize: 35,
                                   items: ListaUf.map((UF value) {
@@ -982,7 +1027,7 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
                                             fontSize: 19.0,
                                             color: Color(0xFF000000),
                                             fontFamily:
-                                            "avenir-next-rounded-pro-regular"),
+                                                "avenir-next-rounded-pro-regular"),
                                       ),
                                     );
                                   }).toList(),
