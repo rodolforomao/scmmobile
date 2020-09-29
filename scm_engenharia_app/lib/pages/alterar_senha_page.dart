@@ -3,6 +3,12 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:scm_engenharia_app/data/db_helper.dart';
+import 'package:scm_engenharia_app/data/tb_usuario.dart';
+import 'package:scm_engenharia_app/help/servico_mobile_service.dart';
+import 'package:scm_engenharia_app/models/operacao.dart';
+import 'package:scm_engenharia_app/pages/login_page.dart';
+import 'package:scm_engenharia_app/splash_screen.dart';
 
 class AlterarSenhaPage extends StatefulWidget {
   @override
@@ -11,23 +17,131 @@ class AlterarSenhaPage extends StatefulWidget {
 
 class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
   final _ScaffoldKey = GlobalKey<ScaffoldState>();
-
+  ServicoMobileService _RestWebService = new ServicoMobileService();
+  DBHelper dbHelper;
+  BuildContext dialogContext;
+  TbUsuario _Usuariodb = new TbUsuario();
   StreamSubscription<ConnectivityResult> subscription;
   TextEditingController _TxtControlleraSenha = TextEditingController();
   TextEditingController _TxtControllerNova = TextEditingController();
   TextEditingController _TxtControllerConfirmarSenha = TextEditingController();
   String _StatusTipoWidget;
 
-  Future<Null> OnCadastroAtualizarSenha(BuildContext context) async {
+  Future<Null> OnAtualizarSenha() async {
     try {
       var connectivityResult = await (Connectivity().checkConnectivity());
       if (connectivityResult == ConnectivityResult.none)
         OnAlertaInformacao("Verifique sua conexão com a internet e tente novamente.");
       else {
-
+        if (_TxtControlleraSenha.text.isEmpty)
+          throw ("O campo senha e obrigatório");
+        else if (_TxtControllerNova.text.isEmpty)
+          throw ("O nova senha e obrigatório");
+        else if (_TxtControllerConfirmarSenha.text.isEmpty)
+          throw ("O confirmar e nova senha e obrigatório");
+        else if (_TxtControllerNova.text != _TxtControllerConfirmarSenha.text)
+          throw ("O nova senha e confirmar e nova senha obrigatório");
+        OnRealizandoOperacao("Realizando operação",true);
+        Operacao _RespResultado = await _RestWebService.OnAlterarSenha(_TxtControllerNova.text);
+        if(_RespResultado.erro)
+          throw(_RespResultado.mensagem);
+        else
+        {
+          _Usuariodb.email = _TxtControllerNova.text;
+          Operacao _UsuarioLogado = await dbHelper.OnAddUpdateUsuario(_Usuariodb);
+          if (_UsuarioLogado.erro)
+            throw (_UsuarioLogado.mensagem);
+          else {
+            OnRealizandoOperacao("",false);
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return Dialog(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                  child:  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(height: 15.0),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            "Informação",
+                            style: TextStyle(
+                                fontSize: 20.0,
+                                color: Color(0xff212529),
+                                fontFamily: "avenir-lt-std-roman"),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Divider(
+                            color: Colors.black12,
+                          ),
+                          Padding(padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                            child:  Text(
+                              _RespResultado.mensagem,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 4,
+                              softWrap: false,
+                              style: TextStyle(
+                                  fontSize: 17.0,
+                                  color: Color(0xff212529),
+                                  fontFamily: "avenir-lt-std-roman"),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Divider(
+                        color: Colors.black12,
+                      ),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
+                        child: new Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.max,
+                          children: <Widget>[
+                            FlatButton(
+                              color: Color(0xff018a8a),
+                              //`Icon` to display
+                              child: Text(
+                                '           OK           ',
+                                style: TextStyle(
+                                    fontSize: 17.0,
+                                    color: Color(0xffFFFFFF),
+                                    fontFamily: "avenir-lt-std-roman"),
+                              ),
+                              //`Text` to display
+                              onPressed: () {
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    new MaterialPageRoute(
+                                        builder: (BuildContext context) => new SplashScreen()),
+                                        (Route<dynamic> route) => false);
+                              },
+                              shape: new RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(5.0),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
+          }
+        }
       }
     } catch (error) {
-
+      OnRealizandoOperacao("",false);
       print(error);
       OnAlertaInformacao(error.toString());
     }
@@ -118,9 +232,95 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
     );
   }
 
+  OnRealizandoOperacao(String txtInformacao ,bool IsRealizandoOperacao) {
+    if (IsRealizandoOperacao != true && txtInformacao == "") {
+      Navigator.of(context, rootNavigator: true).pop('dialog');
+      setState(() {
+        dialogContext = null;
+        IsRealizandoOperacao = false;
+      });
+    }
+    else
+    {
+      setState(() {
+        IsRealizandoOperacao = false;
+      });
+      showDialog(
+        context: _ScaffoldKey.currentContext,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          dialogContext = context;
+          return Dialog(
+            child: new Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(
+                      left: 10.0, top: 20.0, bottom: 20.0, right: 10.0),
+                  child: Theme(
+                    data: Theme.of(context).copyWith(
+                      accentColor: Color(0xff018a8a),
+                    ),
+                    child: new CircularProgressIndicator(),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.only(
+                        left: 10.0, top: 20.0, bottom: 20.0, right: 5.0),
+                    child: Text(
+                      txtInformacao,
+                      softWrap: true,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          fontSize: 17.0,
+                          color: Color(0xff212529),
+                          fontFamily: "open-sans-regular"),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    }
+  }
+
+  Inc() async {
+    try {
+      Operacao _UsuarioLogado = await dbHelper.onSelecionarUsuario();
+      if (_UsuarioLogado.erro)
+        throw (_UsuarioLogado.mensagem);
+      else if (_UsuarioLogado.resultado == null) {
+        Navigator.of(context).pushAndRemoveUntil(
+            new MaterialPageRoute(
+                builder: (BuildContext context) => new LoginPage()),
+                (Route<dynamic> route) => false);
+      }
+      else {
+        _Usuariodb = _UsuarioLogado.resultado as TbUsuario;
+
+      }
+
+
+      // OnGetUfs();
+      //Uf = await Components.OnlistaEstados() as List<String>;
+      setState(() {
+        // UfTxt = Uf.first;
+      });
+    } catch (error) {
+      //Navigator.of(context, rootNavigator: true).pop();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    dbHelper = DBHelper();
     Future.delayed(Duration.zero, () async {
       var connectivityResult = await (Connectivity().checkConnectivity());
       if (connectivityResult == ConnectivityResult.none) {
@@ -399,7 +599,7 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
                   Center(
                     child: InkWell(
                       onTap: () async {
-
+                        OnAtualizarSenha();
                       },
                       child: Container(
                         padding: EdgeInsets.fromLTRB(0.0, 5.0, 20.0, 0.0),

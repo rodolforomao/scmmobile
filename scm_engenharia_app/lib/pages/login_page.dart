@@ -57,8 +57,7 @@ class _LoginPageState extends State<LoginPage> {
         OnRealizandoOperacao("Realizando login..");
         _UsuarioLoginModelo.usuario = _TxtControllerEmail.text.trim();
         _UsuarioLoginModelo.password = _TxtControllerSenha.text.trim();
-        Operacao _RestWebUsuario =
-            await _RestWebService.OnLogin(_UsuarioLoginModelo);
+        Operacao _RestWebUsuario = await _RestWebService.OnLogin(_UsuarioLoginModelo);
         if (_RestWebUsuario.erro)
           throw (_RestWebUsuario.mensagem);
         else if (_RestWebUsuario.resultado == null)

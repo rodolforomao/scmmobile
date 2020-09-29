@@ -78,6 +78,68 @@ class ServicoMobileService {
     return _Operacao;
   }
 
+  Future<Operacao> OnAlterarSenha(String _Senha) async {
+    Operacao _Operacao = new Operacao();
+    try {
+      String token = await ComponentsJWTToken.JWTTokenPadrao();
+      Map<String, String> headers = {
+        'Content-Type': 'application/json; charset=utf-8',
+        "token": token,
+      };
+      http.MultipartRequest response;
+      response = new http.MultipartRequest(
+          'POST', Uri.parse(Url + "/usuario/alterar_senha_ws"));
+      response.headers.addAll(headers);
+      response.fields['nova_senha'] = _Senha;
+      var streamedResponse = await response.send();
+      final respStr = await streamedResponse.stream.bytesToString();
+      var jsonResp = Components.removeAllHtmlTags(respStr);
+      switch (streamedResponse.statusCode) {
+        case 500:
+          {
+            _Operacao.erro = true;
+            _Operacao.mensagem = "Erro 500 – Erro Interno do Servidor";
+            _Operacao.resultado = null;
+          }
+          break;
+        case 400:
+          {
+            _Operacao.mensagem = "Solicitação inválida";
+            _Operacao.resultado = null;
+          }
+          break;
+        case 401:
+          {
+            _Operacao.mensagem = "Token inválido";
+            _Operacao.resultado = null;
+          }
+          break;
+        case 200:
+          {
+            if (jsonResp.isEmpty)
+              throw ("Houve um problema de comunicação com os servidores do SCM");
+            Map<String, dynamic> map = jsonDecode(jsonResp);
+            OperacaoJson _Resp = OperacaoJson.fromJson(map);
+            _Operacao.erro = !_Resp.status;
+            _Operacao.mensagem = _Resp.mensagem;
+            _Operacao.resultado = _Resp.resultado;
+            return _Operacao;
+          }
+          break;
+        default:
+          {
+            _Operacao.erro = true;
+            _Operacao.mensagem = "Não foi possível realizar a operação";
+          }
+          break;
+      }
+    } catch (e) {
+      _Operacao.erro = true;
+      _Operacao.mensagem = e.toString();
+    }
+    return _Operacao;
+  }
+
   Future<Operacao> OnVariaveisDeAmbiente() async {
     Operacao _Operacao = new Operacao();
     try {
