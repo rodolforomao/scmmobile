@@ -12,6 +12,7 @@ import 'package:scm_engenharia_app/help/masked_text_controller.dart';
 import 'package:scm_engenharia_app/menu_navigation.dart';
 import 'package:scm_engenharia_app/models/operacao.dart';
 import 'package:scm_engenharia_app/pages/distribuicao_fisicos_servico_quantitativo_page.dart';
+import "package:flutter/services.dart";
 
 class FormularioSiciFustPage extends StatefulWidget {
   final TbFichaSici FichaSiciModel;
@@ -21,6 +22,52 @@ class FormularioSiciFustPage extends StatefulWidget {
 
   @override
   _FormularioSiciFustPageState createState() => _FormularioSiciFustPageState();
+}
+
+class CurrencyPtBrInputFormatter extends TextInputFormatter {
+  CurrencyPtBrInputFormatter({this.maxDigits});
+  final int maxDigits;
+
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    if (newValue.selection.baseOffset == 0) {
+      return newValue;
+    }
+
+    if (maxDigits != null && newValue.selection.baseOffset > maxDigits) {
+      return oldValue;
+    }
+
+    double value = double.parse(newValue.text);
+    final formatter = new NumberFormat("#,##0.00", "pt_BR");
+    String newText = "R\$ " + formatter.format(value / 100);
+    return newValue.copyWith(
+        text: newText,
+        selection: new TextSelection.collapsed(offset: newText.length));
+  }
+}
+
+class CurrencyPercentInputFormatter extends TextInputFormatter {
+  CurrencyPercentInputFormatter({this.maxDigits});
+  final int maxDigits;
+
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    if (newValue.selection.baseOffset == 0) {
+      return newValue;
+    }
+
+    if (maxDigits != null && newValue.selection.baseOffset > maxDigits) {
+      return oldValue;
+    }
+
+    double value = double.parse(newValue.text);
+    final formatter = new NumberFormat("##0.00", "pt_BR");
+    String newText = formatter.format(value / 100) + "\%";
+    return newValue.copyWith(
+        text: newText,
+        selection: new TextSelection.collapsed(offset: newText.length));
+  }
 }
 
 class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
@@ -1434,32 +1481,44 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           controller: _TxtControllerReceitaBruta,
                           textAlign: TextAlign.start,
                           keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            WhitelistingTextInputFormatter.digitsOnly,
+                            CurrencyPtBrInputFormatter()
+                          ],
                           textInputAction: TextInputAction.done,
                           autofocus: false,
                           decoration: InputDecoration(
                             labelText: 'Receita Bruta',
                             hintText: '',
                           ),
-                          maxLength: 12,
+                          maxLength: 20,
                         ),
                         SizedBox(height: 20.0),
                         TextFormField(
                           controller: _TxtControllerSimples,
                           textAlign: TextAlign.start,
                           keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            WhitelistingTextInputFormatter.digitsOnly,
+                            CurrencyPtBrInputFormatter()
+                          ],
                           textInputAction: TextInputAction.done,
                           autofocus: false,
                           decoration: InputDecoration(
                             labelText: 'Aliquota Simples',
                             hintText: '',
                           ),
-                          maxLength: 12,
+                          maxLength: 20,
                         ),
                         SizedBox(height: 20.0),
                         TextFormField(
                           controller: _TxtControllerSimplesPorc,
                           textAlign: TextAlign.start,
                           keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            WhitelistingTextInputFormatter.digitsOnly,
+                            CurrencyPercentInputFormatter()
+                          ],
                           textInputAction: TextInputAction.done,
                           autofocus: false,
                           decoration: InputDecoration(
@@ -1473,19 +1532,27 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           controller: _TxtControllerIcms,
                           textAlign: TextAlign.start,
                           keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            WhitelistingTextInputFormatter.digitsOnly,
+                            CurrencyPtBrInputFormatter()
+                          ],
                           textInputAction: TextInputAction.done,
                           autofocus: false,
                           decoration: InputDecoration(
                             labelText: 'ICMS',
                             hintText: '',
                           ),
-                          maxLength: 12,
+                          maxLength: 20,
                         ),
                         SizedBox(height: 20.0),
                         TextFormField(
                           controller: _TxtControllerIcmsPorc,
                           textAlign: TextAlign.start,
                           keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            WhitelistingTextInputFormatter.digitsOnly,
+                            CurrencyPercentInputFormatter()
+                          ],
                           textInputAction: TextInputAction.done,
                           autofocus: false,
                           decoration: InputDecoration(
@@ -1499,19 +1566,27 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           controller: _TxtControllerPis,
                           textAlign: TextAlign.start,
                           keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            WhitelistingTextInputFormatter.digitsOnly,
+                            CurrencyPtBrInputFormatter()
+                          ],
                           textInputAction: TextInputAction.done,
                           autofocus: false,
                           decoration: InputDecoration(
                             labelText: 'PIS',
                             hintText: '',
                           ),
-                          maxLength: 12,
+                          maxLength: 20,
                         ),
                         SizedBox(height: 20.0),
                         TextFormField(
                           controller: _TxtControllerPisPorc,
                           textAlign: TextAlign.start,
                           keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            WhitelistingTextInputFormatter.digitsOnly,
+                            CurrencyPercentInputFormatter()
+                          ],
                           textInputAction: TextInputAction.done,
                           autofocus: false,
                           decoration: InputDecoration(
@@ -1525,19 +1600,27 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           controller: _TxtControllerCofins,
                           textAlign: TextAlign.start,
                           keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            WhitelistingTextInputFormatter.digitsOnly,
+                            CurrencyPtBrInputFormatter()
+                          ],
                           textInputAction: TextInputAction.done,
                           autofocus: false,
                           decoration: InputDecoration(
                             labelText: 'COFINS',
                             hintText: '',
                           ),
-                          maxLength: 12,
+                          maxLength: 20,
                         ),
                         SizedBox(height: 20.0),
                         TextFormField(
                           controller: _TxtControllerCofinsPorc,
                           textAlign: TextAlign.start,
                           keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            WhitelistingTextInputFormatter.digitsOnly,
+                            CurrencyPercentInputFormatter()
+                          ],
                           textInputAction: TextInputAction.done,
                           autofocus: false,
                           decoration: InputDecoration(
@@ -1551,13 +1634,17 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           controller: _TxtControllerReceitaLiquida,
                           textAlign: TextAlign.start,
                           keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            WhitelistingTextInputFormatter.digitsOnly,
+                            CurrencyPtBrInputFormatter()
+                          ],
                           textInputAction: TextInputAction.done,
                           autofocus: false,
                           decoration: InputDecoration(
                             labelText: 'Receita Liquida',
                             hintText: '',
                           ),
-                          maxLength: 12,
+                          maxLength: 20,
                         ),
                         SizedBox(height: 20.0),
                         TextFormField(
