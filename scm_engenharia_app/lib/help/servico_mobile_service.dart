@@ -19,7 +19,7 @@ class ServicoMobileService {
   Future<Operacao> OnLogin(ModelLoginJson _Modelo) async {
     Operacao _Operacao = new Operacao();
     try {
-      String token = await ComponentsJWTToken.JWTTokenPadrao();
+      String token = await Components.JWTToken(_Modelo.usuario,_Modelo.password);
       final response = await http
           .post(Url + "/login_ws",
               headers: {

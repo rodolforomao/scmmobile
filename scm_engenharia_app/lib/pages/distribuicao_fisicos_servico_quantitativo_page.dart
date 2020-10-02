@@ -27,6 +27,8 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
   TbDistribuicaoQuantitativoAcessosFisicosServico
       _DistribuicaoFisicosServicoQuantitativo =
       new TbDistribuicaoQuantitativoAcessosFisicosServico();
+
+  final GlobalKey<ScaffoldState> _ScaffoldKey = GlobalKey<ScaffoldState>();
   DBHelper dbHelper;
   List<TbTecnologia> ListTecnologiadb = new List<TbTecnologia>();
   List<TbUf> ListUfdb = new List<TbUf>();
@@ -106,7 +108,7 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
 
   void OnToastInformacao(String Mensagem) {
     showDialog(
-      context: context,
+      context: _ScaffoldKey.currentContext,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
@@ -197,16 +199,13 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
       if (_ExisteVariavelDeAmbiente.erro)
         throw (_ExisteVariavelDeAmbiente.mensagem);
       else if (_ExisteVariavelDeAmbiente.resultado == true) {
-        Navigator.of(context, rootNavigator: true)
-            .push(
-          new CupertinoPageRoute<bool>(
-            maintainState: false,
-            fullscreenDialog: true,
-            builder: (BuildContext context) => new VariavelDeAmbientePage(),
-          ),
-        )
-            .then((value) {
-          Inc();
+        Navigator.push(
+            context,
+            new CupertinoPageRoute(
+                fullscreenDialog: true,
+                builder: (BuildContext context) =>
+                    new VariavelDeAmbientePage())).then((value) {
+
         });
       } else {
         tbUfMunicipio.idMunicipioApp = 0;
@@ -337,12 +336,12 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
   @override
   void dispose() {
     super.dispose();
-    FocusScope.of(context).requestFocus(new FocusNode());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _ScaffoldKey,
       appBar: AppBar(
         flexibleSpace: Container(
           decoration: BoxDecoration(
