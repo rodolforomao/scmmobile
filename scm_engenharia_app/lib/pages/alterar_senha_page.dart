@@ -31,7 +31,7 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
     try {
       var connectivityResult = await (Connectivity().checkConnectivity());
       if (connectivityResult == ConnectivityResult.none)
-        OnAlertaInformacao("Verifique sua conexão com a internet e tente novamente.");
+        OnAlertaInformacao("Verifique sua conexão com a internet e tente novamente.",0xffde3544);
       else {
         if (_TxtControlleraSenha.text.isEmpty)
           throw ("O campo senha e obrigatório");
@@ -143,11 +143,11 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
     } catch (error) {
       OnRealizandoOperacao("",false);
       print(error);
-      OnAlertaInformacao(error.toString());
+      OnAlertaInformacao(error.toString(),0xffde3544);
     }
   }
 
-  OnAlertaInformacao(String Mensagem) {
+  OnAlertaInformacao(String Mensagem, int CorButton) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -204,7 +204,7 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
                     FlatButton(
-                      color: Color(0xff018a8a),
+                      color: Color(CorButton),
                       //`Icon` to display
                       child: Text(
                         '           OK           ',
