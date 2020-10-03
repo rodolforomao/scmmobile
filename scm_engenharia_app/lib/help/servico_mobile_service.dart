@@ -119,6 +119,7 @@ class ServicoMobileService {
           {
             if (jsonResp.isEmpty)
               throw ("Houve um problema de comunicação com os servidores do SCM");
+            print(jsonResp);
             Map<String, dynamic> map = jsonDecode(jsonResp);
             OperacaoJson _Resp = OperacaoJson.fromJson(map);
             _Operacao.erro = !_Resp.status;

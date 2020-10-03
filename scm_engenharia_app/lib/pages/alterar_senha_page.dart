@@ -47,7 +47,7 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
           throw(_RespResultado.mensagem);
         else
         {
-          _Usuariodb.email = _TxtControllerNova.text;
+          _Usuariodb.senha = _TxtControllerNova.text;
           Operacao _UsuarioLogado = await dbHelper.OnAddUpdateUsuario(_Usuariodb);
           if (_UsuarioLogado.erro)
             throw (_UsuarioLogado.mensagem);

@@ -79,8 +79,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
   List<String> Uf = new List<String>();
   String UfTxt, _StatusTipoWidget = "renderizar_ficha_sici";
 
-  DateTime _DataSelecionada =
-      DateTime(DateTime.now().year, DateTime.now().month - 1, 1);
+  DateTime _DataSelecionada = DateTime(DateTime.now().year, DateTime.now().month - 1, 1);
 
   StreamSubscription<ConnectivityResult> subscription;
 
@@ -345,12 +344,10 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
       fieldHintText: 'Dia/Mês/Ano',
       helpText: 'Selecione o período referência',
     );
-
-    if (picked != null && picked != _DataSelecionada) {
+    if (picked != null) {
       setState(() {
         _DataSelecionada = DateTime(picked.year, picked.month, 1);
-        _TxtControllerPeriodoReferencia.text = DateFormat('dd/MM/yyyy')
-            .format(DateTime(picked.year, picked.month, 1));
+        _TxtControllerPeriodoReferencia.text = DateFormat('dd/MM/yyyy').format(DateTime(picked.year, picked.month, 1));
       });
     }
 
@@ -388,10 +385,11 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
       });
       if (widget.FichaSiciModel != null) {
         _FichaSici = widget.FichaSiciModel;
-        _DataSelecionada =
-            DateTime.parse(widget.FichaSiciModel.periodoReferencia);
-        _TxtControllerPeriodoReferencia.text = DateFormat('dd/MM/yyyy')
-            .format(DateTime.parse(widget.FichaSiciModel.periodoReferencia));
+        if(widget.FichaSiciModel.periodoReferencia.isNotEmpty)
+          {
+            _DataSelecionada = DateTime.parse(widget.FichaSiciModel.periodoReferencia);
+            _TxtControllerPeriodoReferencia.text = DateFormat('dd/MM/yyyy').format(DateTime.parse(widget.FichaSiciModel.periodoReferencia));
+          }
         _TxtControllerCnpj.text = widget.FichaSiciModel.cnpj;
         _TxtControllerRazaoSocial.text = widget.FichaSiciModel.razaoSocial;
         _TxtControllerTelefoneMovel.text = widget.FichaSiciModel.telefoneMovel;
@@ -413,6 +411,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
             new List<TbDistribuicaoQuantitativoAcessosFisicosServico>();
       }
     } catch (error) {
+      OnAlertaInformacao(error.toString());
       //Navigator.of(context, rootNavigator: true).pop();
     }
   }
