@@ -2,7 +2,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:month_picker_dialog/month_picker_dialog.dart';
+//import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'package:scm_engenharia_app/data/db_helper.dart';
 import 'package:scm_engenharia_app/data/tb_distribuicao_quantitativo_acessos_fisicos_servico.dart';
 import 'package:scm_engenharia_app/data/tb_ficha_sici.dart';
@@ -79,7 +79,8 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
   List<String> Uf = new List<String>();
   String UfTxt, _StatusTipoWidget = "renderizar_ficha_sici";
 
-  DateTime _DataSelecionada = DateTime(DateTime.now().year, DateTime.now().month - 1, 1);
+  DateTime _DataSelecionada =
+      DateTime(DateTime.now().year, DateTime.now().month - 1, 1);
 
   StreamSubscription<ConnectivityResult> subscription;
 
@@ -347,7 +348,8 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
     if (picked != null) {
       setState(() {
         _DataSelecionada = DateTime(picked.year, picked.month, 1);
-        _TxtControllerPeriodoReferencia.text = DateFormat('dd/MM/yyyy').format(DateTime(picked.year, picked.month, 1));
+        _TxtControllerPeriodoReferencia.text = DateFormat('dd/MM/yyyy')
+            .format(DateTime(picked.year, picked.month, 1));
       });
     }
 
@@ -385,11 +387,12 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
       });
       if (widget.FichaSiciModel != null) {
         _FichaSici = widget.FichaSiciModel;
-        if(widget.FichaSiciModel.periodoReferencia.isNotEmpty)
-          {
-            _DataSelecionada = DateTime.parse(widget.FichaSiciModel.periodoReferencia);
-            _TxtControllerPeriodoReferencia.text = DateFormat('dd/MM/yyyy').format(DateTime.parse(widget.FichaSiciModel.periodoReferencia));
-          }
+        if (widget.FichaSiciModel.periodoReferencia.isNotEmpty) {
+          _DataSelecionada =
+              DateTime.parse(widget.FichaSiciModel.periodoReferencia);
+          _TxtControllerPeriodoReferencia.text = DateFormat('dd/MM/yyyy')
+              .format(DateTime.parse(widget.FichaSiciModel.periodoReferencia));
+        }
         _TxtControllerCnpj.text = widget.FichaSiciModel.cnpj;
         _TxtControllerRazaoSocial.text = widget.FichaSiciModel.razaoSocial;
         _TxtControllerTelefoneMovel.text = widget.FichaSiciModel.telefoneMovel;
@@ -1504,7 +1507,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           textInputAction: TextInputAction.done,
                           autofocus: false,
                           decoration: InputDecoration(
-                            labelText: 'Aliquota Simples',
+                            labelText: 'Valor Simples',
                             hintText: '',
                           ),
                           maxLength: 20,
@@ -1538,7 +1541,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           textInputAction: TextInputAction.done,
                           autofocus: false,
                           decoration: InputDecoration(
-                            labelText: 'ICMS',
+                            labelText: 'Valor ICMS',
                             hintText: '',
                           ),
                           maxLength: 20,
@@ -1572,7 +1575,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           textInputAction: TextInputAction.done,
                           autofocus: false,
                           decoration: InputDecoration(
-                            labelText: 'PIS',
+                            labelText: 'Valor PIS',
                             hintText: '',
                           ),
                           maxLength: 20,
@@ -1606,7 +1609,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           textInputAction: TextInputAction.done,
                           autofocus: false,
                           decoration: InputDecoration(
-                            labelText: 'COFINS',
+                            labelText: 'Valor COFINS',
                             hintText: '',
                           ),
                           maxLength: 20,
