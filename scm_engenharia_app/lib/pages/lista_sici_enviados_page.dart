@@ -24,6 +24,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
   StreamSubscription<ConnectivityResult> subscription;
 
   Future<Null> IncRestWeb() async {
+    OnRealizandoOperacao("Web: Buscando lançamentos", true);
     try {
       var connectivityResult = await (Connectivity().checkConnectivity());
       if (connectivityResult == ConnectivityResult.none) {
@@ -37,7 +38,6 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
           });
         }
       } else {
-        OnRealizandoOperacao("Realizando busca de fichas sici Web", true);
         Operacao _RestWeb = await _RestWebService.OnRecuperaLancamentosSici();
         if (_RestWeb.erro || _RestWeb.resultado == null)
           throw (_RestWeb.mensagem);
@@ -99,7 +99,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                 _StatusTipoWidget = "nao_existe_sici_cadastrado";
             }
           });
-          OnRealizandoOperacao("", false);
+          //OnRealizandoOperacao("", false);
           if (ListaFichaSici.length > 0) {
             setState(() {
               _StatusTipoWidget = "renderizar_sici";
@@ -109,7 +109,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
         }
       }
     } catch (error) {
-      OnRealizandoOperacao("", false);
+      //OnRealizandoOperacao("", false);
       if (ListaFichaSici.length > 0) {
         setState(() {
           _StatusTipoWidget = "renderizar_sici";
@@ -122,17 +122,18 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
         });
       }
     }
+    OnRealizandoOperacao("", false);
   }
 
   Future<Null> Inc() async {
+    //OnRealizandoOperacao("DB: Buscando Lançamentos", true);
     try {
-      OnRealizandoOperacao("Buscando Lançamentos", true);
       Operacao _FichaSiciLocal = await dbHelper.onSelecionarFichaSici();
-      if (_FichaSiciLocal.erro)
+      if (_FichaSiciLocal.erro) {
+        //OnRealizandoOperacao("", false);
         throw (_FichaSiciLocal.mensagem);
-      else if (_FichaSiciLocal.resultado == null) {
+      } else if (_FichaSiciLocal.resultado == null) {
         ListaFichaSici = new List<TbFichaSici>();
-        OnRealizandoOperacao("", false);
         IncRestWeb();
       } else {
         setState(() {
@@ -140,12 +141,6 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
           ListaFichaSici = _FichaSiciLocal.resultado;
           _StatusTipoWidget = "renderizar_sici";
         });
-        // if (dialogContext != null) {
-        //   Navigator.of(context, rootNavigator: true).pop('dialog');
-        //   setState(() {
-        //    dialogContext = null;
-        //  });
-        // }
         IncRestWeb();
       }
     } catch (error) {
@@ -162,7 +157,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
       }
       IncRestWeb();
     }
-    OnRealizandoOperacao("", false);
+    //OnRealizandoOperacao("", false);
   }
 
   OnAlertaInformacao(String Mensagem) {

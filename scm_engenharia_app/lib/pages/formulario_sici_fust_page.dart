@@ -334,11 +334,11 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
   OnSelecionarData(BuildContext context) async {
     final DateTime picked = await showDatePicker(
       context: context,
-      initialDatePickerMode: DatePickerMode.day,
+      initialDatePickerMode: DatePickerMode.year,
       initialEntryMode: DatePickerEntryMode.calendar,
       initialDate: _DataSelecionada,
       firstDate: DateTime(2015, 8),
-      lastDate: DateTime(DateTime.now().year, DateTime.now().month - 1, 1),
+      lastDate: DateTime(DateTime.now().year, DateTime.now().month - 1),
       errorFormatText: 'Insira uma data válida',
       errorInvalidText: 'Insira a data em um intervalo válido',
       fieldLabelText: 'Período referência ',
