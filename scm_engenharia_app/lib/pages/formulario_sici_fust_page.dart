@@ -1496,140 +1496,176 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           maxLength: 20,
                         ),
                         SizedBox(height: 20.0),
-                        TextFormField(
-                          controller: _TxtControllerSimples,
-                          textAlign: TextAlign.start,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            WhitelistingTextInputFormatter.digitsOnly,
-                            CurrencyPtBrInputFormatter()
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Expanded(
+                              child: TextFormField(
+                                controller: _TxtControllerSimples,
+                                textAlign: TextAlign.start,
+                                keyboardType: TextInputType.number,
+                                inputFormatters: [
+                                  WhitelistingTextInputFormatter.digitsOnly,
+                                  CurrencyPtBrInputFormatter()
+                                ],
+                                textInputAction: TextInputAction.done,
+                                autofocus: false,
+                                decoration: InputDecoration(
+                                  labelText: 'Valor Simples',
+                                  hintText: '',
+                                ),
+                                maxLength: 20,
+                              ),
+                            ),
+                            SizedBox(width: 15),
+                            Expanded(
+                              child: TextFormField(
+                                controller: _TxtControllerSimplesPorc,
+                                textAlign: TextAlign.start,
+                                keyboardType: TextInputType.number,
+                                inputFormatters: [
+                                  WhitelistingTextInputFormatter.digitsOnly,
+                                  CurrencyPercentInputFormatter()
+                                ],
+                                textInputAction: TextInputAction.done,
+                                autofocus: false,
+                                decoration: InputDecoration(
+                                  labelText: 'Aliquota Simples %',
+                                  hintText: '',
+                                ),
+                                maxLength: 7,
+                              ),
+                            ),
                           ],
-                          textInputAction: TextInputAction.done,
-                          autofocus: false,
-                          decoration: InputDecoration(
-                            labelText: 'Valor Simples',
-                            hintText: '',
-                          ),
-                          maxLength: 20,
                         ),
                         SizedBox(height: 20.0),
-                        TextFormField(
-                          controller: _TxtControllerSimplesPorc,
-                          textAlign: TextAlign.start,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            WhitelistingTextInputFormatter.digitsOnly,
-                            CurrencyPercentInputFormatter()
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Expanded(
+                              child: TextFormField(
+                                controller: _TxtControllerIcms,
+                                textAlign: TextAlign.start,
+                                keyboardType: TextInputType.number,
+                                inputFormatters: [
+                                  WhitelistingTextInputFormatter.digitsOnly,
+                                  CurrencyPtBrInputFormatter()
+                                ],
+                                textInputAction: TextInputAction.done,
+                                autofocus: false,
+                                decoration: InputDecoration(
+                                  labelText: 'Valor ICMS',
+                                  hintText: '',
+                                ),
+                                maxLength: 20,
+                              ),
+                            ),
+                            SizedBox(width: 15),
+                            Expanded(
+                              child: TextFormField(
+                                controller: _TxtControllerIcmsPorc,
+                                textAlign: TextAlign.start,
+                                keyboardType: TextInputType.number,
+                                inputFormatters: [
+                                  WhitelistingTextInputFormatter.digitsOnly,
+                                  CurrencyPercentInputFormatter()
+                                ],
+                                textInputAction: TextInputAction.done,
+                                autofocus: false,
+                                decoration: InputDecoration(
+                                  labelText: 'ICMS (%)',
+                                  hintText: '',
+                                ),
+                                maxLength: 12,
+                              ),
+                            ),
                           ],
-                          textInputAction: TextInputAction.done,
-                          autofocus: false,
-                          decoration: InputDecoration(
-                            labelText: 'Aliquota Simples %',
-                            hintText: '',
-                          ),
-                          maxLength: 12,
                         ),
                         SizedBox(height: 20.0),
-                        TextFormField(
-                          controller: _TxtControllerIcms,
-                          textAlign: TextAlign.start,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            WhitelistingTextInputFormatter.digitsOnly,
-                            CurrencyPtBrInputFormatter()
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Expanded(
+                              child: TextFormField(
+                                controller: _TxtControllerPis,
+                                textAlign: TextAlign.start,
+                                keyboardType: TextInputType.number,
+                                inputFormatters: [
+                                  WhitelistingTextInputFormatter.digitsOnly,
+                                  CurrencyPtBrInputFormatter()
+                                ],
+                                textInputAction: TextInputAction.done,
+                                autofocus: false,
+                                decoration: InputDecoration(
+                                  labelText: 'Valor PIS',
+                                  hintText: '',
+                                ),
+                                maxLength: 20,
+                              ),
+                            ),
+                            SizedBox(width: 15),
+                            Expanded(
+                              child: TextFormField(
+                                controller: _TxtControllerPisPorc,
+                                textAlign: TextAlign.start,
+                                keyboardType: TextInputType.number,
+                                inputFormatters: [
+                                  WhitelistingTextInputFormatter.digitsOnly,
+                                  CurrencyPercentInputFormatter()
+                                ],
+                                textInputAction: TextInputAction.done,
+                                autofocus: false,
+                                decoration: InputDecoration(
+                                  labelText: 'PIS (%)',
+                                  hintText: '',
+                                ),
+                                maxLength: 12,
+                              ),
+                            ),
                           ],
-                          textInputAction: TextInputAction.done,
-                          autofocus: false,
-                          decoration: InputDecoration(
-                            labelText: 'Valor ICMS',
-                            hintText: '',
-                          ),
-                          maxLength: 20,
                         ),
                         SizedBox(height: 20.0),
-                        TextFormField(
-                          controller: _TxtControllerIcmsPorc,
-                          textAlign: TextAlign.start,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            WhitelistingTextInputFormatter.digitsOnly,
-                            CurrencyPercentInputFormatter()
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Expanded(
+                              child: TextFormField(
+                                controller: _TxtControllerCofins,
+                                textAlign: TextAlign.start,
+                                keyboardType: TextInputType.number,
+                                inputFormatters: [
+                                  WhitelistingTextInputFormatter.digitsOnly,
+                                  CurrencyPtBrInputFormatter()
+                                ],
+                                textInputAction: TextInputAction.done,
+                                autofocus: false,
+                                decoration: InputDecoration(
+                                  labelText: 'Valor COFINS',
+                                  hintText: '',
+                                ),
+                                maxLength: 20,
+                              ),
+                            ),
+                            SizedBox(width: 15),
+                            Expanded(
+                              child: TextFormField(
+                                controller: _TxtControllerCofinsPorc,
+                                textAlign: TextAlign.start,
+                                keyboardType: TextInputType.number,
+                                inputFormatters: [
+                                  WhitelistingTextInputFormatter.digitsOnly,
+                                  CurrencyPercentInputFormatter()
+                                ],
+                                textInputAction: TextInputAction.done,
+                                autofocus: false,
+                                decoration: InputDecoration(
+                                  labelText: 'COFINS (%)',
+                                  hintText: '',
+                                ),
+                                maxLength: 12,
+                              ),
+                            ),
                           ],
-                          textInputAction: TextInputAction.done,
-                          autofocus: false,
-                          decoration: InputDecoration(
-                            labelText: 'ICMS (%)',
-                            hintText: '',
-                          ),
-                          maxLength: 12,
-                        ),
-                        SizedBox(height: 20.0),
-                        TextFormField(
-                          controller: _TxtControllerPis,
-                          textAlign: TextAlign.start,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            WhitelistingTextInputFormatter.digitsOnly,
-                            CurrencyPtBrInputFormatter()
-                          ],
-                          textInputAction: TextInputAction.done,
-                          autofocus: false,
-                          decoration: InputDecoration(
-                            labelText: 'Valor PIS',
-                            hintText: '',
-                          ),
-                          maxLength: 20,
-                        ),
-                        SizedBox(height: 20.0),
-                        TextFormField(
-                          controller: _TxtControllerPisPorc,
-                          textAlign: TextAlign.start,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            WhitelistingTextInputFormatter.digitsOnly,
-                            CurrencyPercentInputFormatter()
-                          ],
-                          textInputAction: TextInputAction.done,
-                          autofocus: false,
-                          decoration: InputDecoration(
-                            labelText: 'PIS (%)',
-                            hintText: '',
-                          ),
-                          maxLength: 12,
-                        ),
-                        SizedBox(height: 20.0),
-                        TextFormField(
-                          controller: _TxtControllerCofins,
-                          textAlign: TextAlign.start,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            WhitelistingTextInputFormatter.digitsOnly,
-                            CurrencyPtBrInputFormatter()
-                          ],
-                          textInputAction: TextInputAction.done,
-                          autofocus: false,
-                          decoration: InputDecoration(
-                            labelText: 'Valor COFINS',
-                            hintText: '',
-                          ),
-                          maxLength: 20,
-                        ),
-                        SizedBox(height: 20.0),
-                        TextFormField(
-                          controller: _TxtControllerCofinsPorc,
-                          textAlign: TextAlign.start,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            WhitelistingTextInputFormatter.digitsOnly,
-                            CurrencyPercentInputFormatter()
-                          ],
-                          textInputAction: TextInputAction.done,
-                          autofocus: false,
-                          decoration: InputDecoration(
-                            labelText: 'COFINS (%)',
-                            hintText: '',
-                          ),
-                          maxLength: 12,
                         ),
                         SizedBox(height: 20.0),
                         TextFormField(
