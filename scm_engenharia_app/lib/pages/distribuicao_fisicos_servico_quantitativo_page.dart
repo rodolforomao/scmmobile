@@ -204,9 +204,7 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
             new CupertinoPageRoute(
                 fullscreenDialog: true,
                 builder: (BuildContext context) =>
-                    new VariavelDeAmbientePage())).then((value) {
-
-        });
+                    new VariavelDeAmbientePage())).then((value) {});
       } else {
         tbUfMunicipio.idMunicipioApp = 0;
         tbUfMunicipio.ufId = "0";
@@ -600,114 +598,152 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
                 maxLength: 500,
               ),
               SizedBox(height: 20.0),
-              TextFormField(
-                controller: _TxtControllerPf_0,
-                textAlign: TextAlign.start,
-                decoration: InputDecoration(
-                  labelText: 'PF - 0 - 512 Kbps',
-                  hintText: '',
-                ),
-                keyboardType: TextInputType.text,
-                maxLength: 500,
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Expanded(
+                    child: TextFormField(
+                      controller: _TxtControllerPf_0,
+                      textAlign: TextAlign.start,
+                      decoration: InputDecoration(
+                        labelText: 'PF - 0 - 512 Kbps',
+                        hintText: '',
+                      ),
+                      keyboardType: TextInputType.text,
+                      maxLength: 6,
+                    ),
+                  ),
+                  SizedBox(width: 15),
+                  Expanded(
+                    child: TextFormField(
+                      controller: _TxtControllerPf_512,
+                      textAlign: TextAlign.start,
+                      decoration: InputDecoration(
+                        labelText: 'PF - 512 - 2',
+                        hintText: '',
+                      ),
+                      keyboardType: TextInputType.text,
+                      maxLength: 6,
+                    ),
+                  ),
+                  SizedBox(width: 15),
+                  Expanded(
+                    child: TextFormField(
+                      controller: _TxtControllerPf_2,
+                      textAlign: TextAlign.start,
+                      decoration: InputDecoration(
+                        labelText: 'PF - 2 - 12',
+                        hintText: '',
+                      ),
+                      keyboardType: TextInputType.text,
+                      maxLength: 500,
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(height: 20.0),
-              TextFormField(
-                controller: _TxtControllerPf_512,
-                textAlign: TextAlign.start,
-                decoration: InputDecoration(
-                  labelText: 'PF - 512 - 2 Mbps',
-                  hintText: '',
-                ),
-                keyboardType: TextInputType.text,
-                maxLength: 500,
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Expanded(
+                    child: TextFormField(
+                      controller: _TxtControllerPf_12,
+                      textAlign: TextAlign.start,
+                      decoration: InputDecoration(
+                        labelText: 'PF - 12 - 34 Mbps',
+                        hintText: '',
+                      ),
+                      keyboardType: TextInputType.text,
+                      maxLength: 6,
+                    ),
+                  ),
+                  SizedBox(width: 15),
+                  Expanded(
+                    child: TextFormField(
+                      controller: _TxtControllerPf_34,
+                      textAlign: TextAlign.start,
+                      decoration: InputDecoration(
+                        labelText: 'PF - Maior 34 Mbps',
+                        hintText: '',
+                      ),
+                      keyboardType: TextInputType.text,
+                      maxLength: 6,
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(height: 20.0),
-              TextFormField(
-                controller: _TxtControllerPf_2,
-                textAlign: TextAlign.start,
-                decoration: InputDecoration(
-                  labelText: 'PF - 2 - 12 Mbps',
-                  hintText: '',
-                ),
-                keyboardType: TextInputType.text,
-                maxLength: 500,
+              SizedBox(height: 40.0),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Expanded(
+                    child: TextFormField(
+                      controller: _TxtControllerPj_0,
+                      textAlign: TextAlign.start,
+                      decoration: InputDecoration(
+                        labelText: 'PJ - 0 - 512 Kbps',
+                        hintText: '',
+                      ),
+                      keyboardType: TextInputType.text,
+                      maxLength: 6,
+                    ),
+                  ),
+                  SizedBox(width: 15),
+                  Expanded(
+                    child: TextFormField(
+                      controller: _TxtControllerPj_512,
+                      textAlign: TextAlign.start,
+                      decoration: InputDecoration(
+                        labelText: 'PJ - 512 - 2',
+                        hintText: '',
+                      ),
+                      keyboardType: TextInputType.text,
+                      maxLength: 6,
+                    ),
+                  ),
+                  SizedBox(width: 15),
+                  Expanded(
+                    child: TextFormField(
+                      controller: _TxtControllerPj_2,
+                      textAlign: TextAlign.start,
+                      decoration: InputDecoration(
+                        labelText: 'PJ - 2 - 12',
+                        hintText: '',
+                      ),
+                      keyboardType: TextInputType.text,
+                      maxLength: 500,
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(height: 20.0),
-              TextFormField(
-                controller: _TxtControllerPf_12,
-                textAlign: TextAlign.start,
-                decoration: InputDecoration(
-                  labelText: 'PF - 12 - 34 Mbps',
-                  hintText: '',
-                ),
-                keyboardType: TextInputType.text,
-                maxLength: 500,
-              ),
-              SizedBox(height: 20.0),
-              TextFormField(
-                controller: _TxtControllerPf_34,
-                textAlign: TextAlign.start,
-                decoration: InputDecoration(
-                  labelText: 'PF - Acima de 34 Mbps',
-                  hintText: '',
-                ),
-                keyboardType: TextInputType.text,
-                maxLength: 500,
-              ),
-              SizedBox(height: 20.0),
-              TextFormField(
-                controller: _TxtControllerPj_0,
-                textAlign: TextAlign.start,
-                decoration: InputDecoration(
-                  labelText: 'PJ - 0 - 512 Kbps',
-                  hintText: '',
-                ),
-                keyboardType: TextInputType.text,
-                maxLength: 500,
-              ),
-              SizedBox(height: 20.0),
-              TextFormField(
-                controller: _TxtControllerPj_512,
-                textAlign: TextAlign.start,
-                decoration: InputDecoration(
-                  labelText: 'PJ - 512 - 2 Mbps',
-                  hintText: '',
-                ),
-                keyboardType: TextInputType.text,
-                maxLength: 500,
-              ),
-              SizedBox(height: 20.0),
-              TextFormField(
-                controller: _TxtControllerPj_2,
-                textAlign: TextAlign.start,
-                decoration: InputDecoration(
-                  labelText: 'PJ - 2 - 12 Mbps',
-                  hintText: '',
-                ),
-                keyboardType: TextInputType.text,
-                maxLength: 500,
-              ),
-              SizedBox(height: 20.0),
-              TextFormField(
-                controller: _TxtControllerPj_12,
-                textAlign: TextAlign.start,
-                decoration: InputDecoration(
-                  labelText: 'PJ - 12 - 34 Mbps',
-                  hintText: '',
-                ),
-                keyboardType: TextInputType.text,
-                maxLength: 500,
-              ),
-              SizedBox(height: 20.0),
-              TextFormField(
-                controller: _TxtControllerPj_34,
-                textAlign: TextAlign.start,
-                decoration: InputDecoration(
-                  labelText: 'PJ - Acima de 34 Mbps',
-                  hintText: '',
-                ),
-                keyboardType: TextInputType.text,
-                maxLength: 500,
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Expanded(
+                    child: TextFormField(
+                      controller: _TxtControllerPj_12,
+                      textAlign: TextAlign.start,
+                      decoration: InputDecoration(
+                        labelText: 'PJ - 12 - 34 Mbps',
+                        hintText: '',
+                      ),
+                      keyboardType: TextInputType.text,
+                      maxLength: 6,
+                    ),
+                  ),
+                  SizedBox(width: 15),
+                  Expanded(
+                    child: TextFormField(
+                      controller: _TxtControllerPj_34,
+                      textAlign: TextAlign.start,
+                      decoration: InputDecoration(
+                        labelText: 'PJ - Maior 34 Mbps',
+                        hintText: '',
+                      ),
+                      keyboardType: TextInputType.text,
+                      maxLength: 6,
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: 30.0),
               Center(
