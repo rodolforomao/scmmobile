@@ -13,17 +13,17 @@ class TbUsuario {
 
   TbUsuario(
       {
-        this.idUsuarioApp,
-        this.idUsuario,
-        this.idPerfil,
-        this.nome,
-        this.senha,
-        this.email,
-        this.telefone,
-        this.dtUltacesso,
-        this.empresa,
-        this.periodoReferencia,
-        this.cpf,
+        this.idUsuarioApp = 0,
+        this.idUsuario = "",
+        this.idPerfil = "",
+        this.nome = "",
+        this.senha = "",
+        this.email = "",
+        this.telefone = "",
+        this.dtUltacesso = "",
+        this.empresa = "",
+        this.periodoReferencia = "",
+        this.cpf = "",
       });
 
   TbUsuario.fromJson(Map<String, dynamic> json) {

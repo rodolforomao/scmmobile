@@ -142,7 +142,6 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
       }
     } catch (error) {
       OnRealizandoOperacao("",false);
-      print(error);
       OnAlertaInformacao(error.toString(),0xffde3544);
     }
   }
@@ -233,7 +232,13 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
   }
 
   OnRealizandoOperacao(String txtInformacao ,bool IsRealizandoOperacao) {
-    if (IsRealizandoOperacao != true && txtInformacao == "") {
+    if (dialogContext == null) {
+      setState(() {
+        dialogContext = null;
+        IsRealizandoOperacao = false;
+      });
+    }
+    else  if (IsRealizandoOperacao != true && txtInformacao == "") {
       Navigator.of(context, rootNavigator: true).pop('dialog');
       setState(() {
         dialogContext = null;
@@ -303,17 +308,9 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
       }
       else {
         _Usuariodb = _UsuarioLogado.resultado as TbUsuario;
-
       }
-
-
-      // OnGetUfs();
-      //Uf = await Components.OnlistaEstados() as List<String>;
-      setState(() {
-        // UfTxt = Uf.first;
-      });
     } catch (error) {
-      //Navigator.of(context, rootNavigator: true).pop();
+      OnAlertaInformacao(error.toString(),0xffde3544);
     }
   }
 
@@ -343,6 +340,7 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
         });
       }
     });
+    Inc();
   }
 
   @override

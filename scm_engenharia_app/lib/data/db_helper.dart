@@ -102,7 +102,20 @@ class DBHelper {
 
       var dbClient = await db;
       if (Usuario.idUsuarioApp == 0 || Usuario.idUsuarioApp == null)
-        Usuario.idUsuarioApp = await dbClient.insert('tbUsuario', Usuario.toJson());
+     {
+       if (Usuario.nome == null || Usuario.nome == "")
+         throw ("Nome é obrigatório");
+       else if (Usuario.cpf == null || Usuario.cpf == "")
+         throw ("CPF é obrigatório");
+       else if (Usuario.email == null || Usuario.email == "")
+         throw ("Email é obrigatório");
+       else if (Usuario.telefone == null || Usuario.telefone == "")
+         throw ("Telefone é obrigatório");
+       else if (Usuario.empresa  == null || Usuario.empresa == "")
+         throw ("Empresa é obrigatório");
+       else
+         Usuario.idUsuarioApp = await dbClient.insert('tbUsuario', Usuario.toJson());
+    }
       else {
         int id = await dbClient.update(
           'tbUsuario',
