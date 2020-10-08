@@ -139,12 +139,6 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
           ListaFichaSici = _FichaSiciLocal.resultado;
           _StatusTipoWidget = "renderizar_sici";
         });
-       // if (dialogContext != null) {
-       //   Navigator.of(context, rootNavigator: true).pop('dialog');
-       //   setState(() {
-        //    dialogContext = null;
-        //  });
-       // }
         OnRealizandoOperacao("",false);
         IncRestWeb();
       }
@@ -252,7 +246,13 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
   }
 
   OnRealizandoOperacao(String txtInformacao ,bool IsRealizandoOperacao) {
-    if (IsRealizandoOperacao != true && txtInformacao == "") {
+    if (dialogContext == null) {
+      setState(() {
+        dialogContext = null;
+        IsRealizandoOperacao = false;
+      });
+    }
+    else if (IsRealizandoOperacao != true && txtInformacao == "") {
       Navigator.of(context, rootNavigator: true).pop('dialog');
       setState(() {
         dialogContext = null;
@@ -821,8 +821,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                               throw (_respLocal.mensagem);
                                             else {
                                               setState(() {
-                                                ListaFichaSici.remove(
-                                                    [index]);
+                                                ListaFichaSici.remove([index]);
                                               });
                                               Inc();
                                             }
@@ -1071,156 +1070,152 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                               children: <Widget>[
                                 Container(
                                   color: Color(0xffFFFFFF),
-                                  //width: MediaQuery.of(context).size.width / 3,
                                   child: InkWell(
                                     onTap: () async {
-                                      Future.delayed(Duration.zero, () async {
-                                        try {
-                                          OnRealizandoOperacao("Realizando cadastro." , true);
-                                          Operacao _respLocal = await dbHelper.OnAddFichaSici(ListaFichaSici[index]);
-                                          if (_respLocal.erro)
-                                            throw (_respLocal.mensagem);
-                                          else {
-                                            OnRealizandoOperacao("", false);
-                                            showDialog(
-                                              context: context,
-                                              barrierDismissible: false,
-                                              builder: (BuildContext context) {
-                                                return Dialog(
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  8.0))),
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: [
-                                                      SizedBox(height: 15.0),
-                                                      Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .center,
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
-                                                        children: [
-                                                          Text(
-                                                            "Informação",
+                                      try {
+                                        OnRealizandoOperacao("Realizando Downloads." , true);
+                                        Operacao _respLocal = await dbHelper.OnAddFichaSici(ListaFichaSici[index]);
+                                        if (_respLocal.erro)
+                                          throw (_respLocal.mensagem);
+                                        else {
+                                          OnRealizandoOperacao("", false);
+                                          showDialog(
+                                            context: context,
+                                            barrierDismissible: false,
+                                            builder: (BuildContext context) {
+                                              return Dialog(
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                    BorderRadius.all(
+                                                        Radius.circular(
+                                                            8.0))),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .center,
+                                                  crossAxisAlignment:
+                                                  CrossAxisAlignment
+                                                      .center,
+                                                  mainAxisSize:
+                                                  MainAxisSize.min,
+                                                  children: [
+                                                    SizedBox(height: 15.0),
+                                                    Column(
+                                                      mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .center,
+                                                      crossAxisAlignment:
+                                                      CrossAxisAlignment
+                                                          .center,
+                                                      mainAxisSize:
+                                                      MainAxisSize.min,
+                                                      children: [
+                                                        Text(
+                                                          "Informação",
+                                                          style: TextStyle(
+                                                              fontSize: 20.0,
+                                                              color: Color(
+                                                                  0xff212529),
+                                                              fontFamily:
+                                                              "avenir-lt-std-roman"),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        Divider(
+                                                          color:
+                                                          Colors.black12,
+                                                        ),
+                                                        Padding(
+                                                          padding: EdgeInsets
+                                                              .fromLTRB(
+                                                              15.0,
+                                                              10.0,
+                                                              15.0,
+                                                              10.0),
+                                                          child: Text(
+                                                            _respLocal
+                                                                .mensagem,
+                                                            overflow:
+                                                            TextOverflow
+                                                                .ellipsis,
+                                                            maxLines: 4,
+                                                            softWrap: false,
                                                             style: TextStyle(
-                                                                fontSize: 20.0,
+                                                                fontSize:
+                                                                17.0,
                                                                 color: Color(
                                                                     0xff212529),
                                                                 fontFamily:
-                                                                    "avenir-lt-std-roman"),
+                                                                "avenir-lt-std-roman"),
                                                           ),
-                                                          SizedBox(
-                                                            height: 10,
-                                                          ),
-                                                          Divider(
-                                                            color:
-                                                                Colors.black12,
-                                                          ),
-                                                          Padding(
-                                                            padding: EdgeInsets
-                                                                .fromLTRB(
-                                                                    15.0,
-                                                                    10.0,
-                                                                    15.0,
-                                                                    10.0),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Divider(
+                                                      color: Colors.black12,
+                                                    ),
+                                                    Container(
+                                                      margin:
+                                                      EdgeInsets.fromLTRB(
+                                                          0.0,
+                                                          10.0,
+                                                          0.0,
+                                                          15.0),
+                                                      child: new Row(
+                                                        mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                        crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                        mainAxisSize:
+                                                        MainAxisSize.max,
+                                                        children: <Widget>[
+                                                          FlatButton(
+                                                            color: Color(
+                                                                0xff018a8a),
+                                                            //`Icon` to display
                                                             child: Text(
-                                                              _respLocal
-                                                                  .mensagem,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              maxLines: 4,
-                                                              softWrap: false,
+                                                              '           OK           ',
                                                               style: TextStyle(
                                                                   fontSize:
-                                                                      17.0,
+                                                                  17.0,
                                                                   color: Color(
-                                                                      0xff212529),
+                                                                      0xffFFFFFF),
                                                                   fontFamily:
-                                                                      "avenir-lt-std-roman"),
+                                                                  "avenir-lt-std-roman"),
+                                                            ),
+                                                            //`Text` to display
+                                                            onPressed: () {
+                                                              Navigator.pop(
+                                                                  context);
+                                                              Inc();
+                                                            },
+                                                            shape:
+                                                            new RoundedRectangleBorder(
+                                                              borderRadius:
+                                                              new BorderRadius
+                                                                  .circular(
+                                                                  5.0),
                                                             ),
                                                           ),
                                                         ],
                                                       ),
-                                                      Divider(
-                                                        color: Colors.black12,
-                                                      ),
-                                                      Container(
-                                                        margin:
-                                                            EdgeInsets.fromLTRB(
-                                                                0.0,
-                                                                10.0,
-                                                                0.0,
-                                                                15.0),
-                                                        child: new Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
-                                                          mainAxisSize:
-                                                              MainAxisSize.max,
-                                                          children: <Widget>[
-                                                            FlatButton(
-                                                              color: Color(
-                                                                  0xff018a8a),
-                                                              //`Icon` to display
-                                                              child: Text(
-                                                                '           OK           ',
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        17.0,
-                                                                    color: Color(
-                                                                        0xffFFFFFF),
-                                                                    fontFamily:
-                                                                        "avenir-lt-std-roman"),
-                                                              ),
-                                                              //`Text` to display
-                                                              onPressed: () {
-                                                                Navigator.pop(
-                                                                    context);
-                                                                Inc();
-                                                              },
-                                                              shape:
-                                                                  new RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    new BorderRadius
-                                                                            .circular(
-                                                                        5.0),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                );
-                                              },
-                                            );
-                                          }
-                                        } catch (error) {
-                                          if (dialogContext != null) {
-                                            Navigator.of(context, rootNavigator: true).pop('dialog');
-                                            setState(() {
-                                              dialogContext = null;
-                                            });
-                                          }
-                                          OnAlertaInformacao(error);
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                          );
                                         }
+                                      } catch (error) {
+                                        OnRealizandoOperacao("", false);
+                                        OnAlertaInformacao(error);
+                                      }
+
+                                      Future.delayed(Duration.zero, () async {
+
                                       });
                                     },
                                     child: Column(

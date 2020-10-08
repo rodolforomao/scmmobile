@@ -238,7 +238,7 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
         IsRealizandoOperacao = false;
       });
     }
-    else  if (IsRealizandoOperacao != true && txtInformacao == "") {
+    else if (IsRealizandoOperacao != true && txtInformacao == "") {
       Navigator.of(context, rootNavigator: true).pop('dialog');
       setState(() {
         dialogContext = null;
