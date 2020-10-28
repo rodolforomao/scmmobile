@@ -2,7 +2,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-//import 'package:month_picker_dialog/month_picker_dialog.dart';
+import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'package:scm_engenharia_app/data/db_helper.dart';
 import 'package:scm_engenharia_app/data/tb_distribuicao_quantitativo_acessos_fisicos_servico.dart';
 import 'package:scm_engenharia_app/data/tb_ficha_sici.dart';
@@ -79,8 +79,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
   List<String> Uf = new List<String>();
   String UfTxt, _StatusTipoWidget = "renderizar_ficha_sici";
 
-  DateTime _DataSelecionada =
-      DateTime(DateTime.now().year, DateTime.now().month - 1, 1);
+  DateTime _DataSelecionada = DateTime(DateTime.now().year, DateTime.now().month - 1, 1);
 
   StreamSubscription<ConnectivityResult> subscription;
 
@@ -93,8 +92,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
   TextEditingController _TxtControllerTelefoneFixo =
       new MaskedTextController(mask: '(00) 0 0000-0000');
 
-  TextEditingController _TxtControllerPeriodoReferencia =
-      TextEditingController();
+  TextEditingController _TxtControllerPeriodoReferencia = TextEditingController();
 
   TextEditingController _TxtControllerReceitaBruta = TextEditingController();
   TextEditingController _TxtControllerReceitaLiquida = TextEditingController();
@@ -348,8 +346,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
     if (picked != null) {
       setState(() {
         _DataSelecionada = DateTime(picked.year, picked.month, 1);
-        _TxtControllerPeriodoReferencia.text = DateFormat('dd/MM/yyyy')
-            .format(DateTime(picked.year, picked.month, 1));
+        _TxtControllerPeriodoReferencia.text = DateFormat('dd/MM/yyyy').format(DateTime(picked.year, picked.month, 1));
       });
     }
 
@@ -416,6 +413,25 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
     } catch (error) {
       OnAlertaInformacao(error.toString());
       //Navigator.of(context, rootNavigator: true).pop();
+    }
+  }
+
+
+  Future<Null> selectDate(BuildContext context) async
+  {
+    final DateTime picked = await showMonthPicker
+      (
+        context: context
+        , initialDate: _DataSelecionada
+        , firstDate: DateTime(2015)
+        , lastDate: DateTime(DateTime.now().year, DateTime.now().month - 1),
+    );
+    if(picked != null && picked != _DataSelecionada)
+    {
+      _DataSelecionada = picked;
+      print(_DataSelecionada.toString());
+      _TxtControllerPeriodoReferencia.text = DateFormat('dd/MM/yyyy').format(DateTime(_DataSelecionada.year, _DataSelecionada.month, 1));
+      //_TxtControllerPeriodoReferencia.text = _DataSelecionada.toString();
     }
   }
 
@@ -1385,7 +1401,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                           onTap: () {
                             FocusScope.of(context)
                                 .requestFocus(new FocusNode());
-                            OnSelecionarData(context);
+                            selectDate(context);
                           },
                           controller: _TxtControllerPeriodoReferencia,
                           textAlign: TextAlign.start,

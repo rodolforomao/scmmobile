@@ -246,17 +246,19 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
             setState(() {
               ListTecnologiadb.add(prop);
             });
+            if (prop.id == "8") {
+              tbTecnologia.idTecnologiaApp = prop.idTecnologiaApp;
+              tbTecnologia.id = prop.id;
+              tbTecnologia.tecnologia = prop.tecnologia;
+            }
           }
         }
 
         if (widget.sDistribuicaoFisicosServicoQuantitativo == null) {
         } else {
-          _DistribuicaoFisicosServicoQuantitativo =
-              widget.sDistribuicaoFisicosServicoQuantitativo;
+          _DistribuicaoFisicosServicoQuantitativo = widget.sDistribuicaoFisicosServicoQuantitativo;
 
-          TbUf resUf = ListUfdb.where((i) =>
-                  i.id == widget.sDistribuicaoFisicosServicoQuantitativo.id_uf)
-              .first;
+          TbUf resUf = ListUfdb.where((i) => i.id == widget.sDistribuicaoFisicosServicoQuantitativo.id_uf).first;
           tbUf.idUfApp = resUf.idUfApp;
           tbUf.id = resUf.id;
           tbUf.uf = resUf.uf;
@@ -378,214 +380,192 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
             children: <Widget>[
               SizedBox(height: 20.0),
               Container(
-                  height: 55.0,
-                  child: FormField<String>(
-                    builder: (FormFieldState<String> state) {
-                      return InputDecorator(
-                          decoration: InputDecoration(
-                            labelText: 'Nome da UF',
-                            hintText: 'avenir-lt-std-medium',
-                          ),
-                          child: Container(
-                            padding: EdgeInsets.fromLTRB(10.0, 0.0, 20.0, 0.0),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<TbUf>(
-                                elevation: 16,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontFamily: 'avenir-lt-std-medium',
-                                  color: Color(0xFF000000),
-                                ),
-                                iconEnabledColor: Colors.white,
-                                value: tbUf,
-                                isExpanded: true,
-                                iconSize: 35,
-                                items: ListUfdb.map((TbUf value) {
-                                  return new DropdownMenuItem<TbUf>(
-                                    onTap: () {
-                                      setState(() {
-                                        tbUf = value;
-                                        id_uf = value.id;
-                                      });
-                                    },
-                                    value: value,
-                                    child: Text(
-                                      value.uf,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 19.0,
-                                          color: Color(0xFF000000),
-                                          fontFamily:
-                                              "avenir-next-rounded-pro-regular"),
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (TbUf newValue) async {
-                                  try {
-                                    Operacao _UfMunicipio = await dbHelper
-                                        .onSelecionarMunicipioByIdUf(
-                                            newValue.id);
-                                    if (_UfMunicipio.erro)
-                                      throw (_UfMunicipio.mensagem);
-                                    else if (_UfMunicipio.resultado == null) {
-                                      OnToastInformacao("Para o estado " +
-                                          newValue.uf +
-                                          " não a município cadastrado");
-                                    } else {
-                                      ListUfMunicipiodb.clear();
-                                      tbUfMunicipio.idMunicipioApp = 0;
-                                      tbUfMunicipio.ufId = "0";
-                                      tbUfMunicipio.uf = "0";
-                                      tbUfMunicipio.id = "0";
-                                      tbUfMunicipio.municipio = "Selecione...";
-                                      _DistribuicaoFisicosServicoQuantitativo
-                                          .uf = newValue.uf;
-                                      ListUfMunicipiodb.add(tbUfMunicipio);
-                                      for (var prop in _UfMunicipio.resultado
-                                          as List<TbUfMunicipio>) {
-                                        setState(() {
-                                          ListUfMunicipiodb.add(prop);
-                                        });
-                                      }
-                                      tbUfMunicipio = ListUfMunicipiodb.first;
-                                    }
-                                  } catch (error) {
-                                    Navigator.push(
-                                            context,
-                                            CupertinoPageRoute(
-                                                builder: (context) =>
-                                                    new ErroInformacaoPage(
-                                                        informacao: error)))
-                                        .then((value) {
-                                      Inc();
-                                    });
-                                  }
-                                },
-                              ),
-                            ),
-                          ));
-                    },
-                  )),
+                height: 58.0,
+                margin: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+                child:  DropdownButtonFormField(
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.fromLTRB(10.0, 18.0, 10.0, 16.0),
+                    labelText: 'UF',
+                    hintText: '',
+                  ),
+                  elevation: 16,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontFamily: 'avenir-lt-std-medium',
+                    color: Color(0xFF000000),
+                  ),
+                  iconEnabledColor: Colors.white,
+                  value: tbUf,
+                  isExpanded: true,
+                  iconSize: 35,
+                  items: ListUfdb.map((TbUf value) {
+                    return new DropdownMenuItem<TbUf>(
+                      onTap: () {
+                        setState(() {
+                          tbUf = value;
+                          id_uf = value.id;
+                        });
+                      },
+                      value: value,
+                      child: Text(
+                        value.uf,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 19.0,
+                            color: Color(0xFF000000),
+                            fontFamily:
+                            "avenir-next-rounded-pro-regular"),
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (TbUf newValue) async {
+                    try {
+                      Operacao _UfMunicipio = await dbHelper
+                          .onSelecionarMunicipioByIdUf(
+                          newValue.id);
+                      if (_UfMunicipio.erro)
+                        throw (_UfMunicipio.mensagem);
+                      else if (_UfMunicipio.resultado == null) {
+                        OnToastInformacao("Para o estado " +
+                            newValue.uf +
+                            " não a município cadastrado");
+                      } else {
+                        ListUfMunicipiodb.clear();
+                        tbUfMunicipio.idMunicipioApp = 0;
+                        tbUfMunicipio.ufId = "0";
+                        tbUfMunicipio.uf = "0";
+                        tbUfMunicipio.id = "0";
+                        tbUfMunicipio.municipio = "Selecione...";
+                        _DistribuicaoFisicosServicoQuantitativo
+                            .uf = newValue.uf;
+                        ListUfMunicipiodb.add(tbUfMunicipio);
+                        for (var prop in _UfMunicipio.resultado
+                        as List<TbUfMunicipio>) {
+                          setState(() {
+                            ListUfMunicipiodb.add(prop);
+                          });
+                        }
+                        tbUfMunicipio = ListUfMunicipiodb.first;
+                      }
+                    } catch (error) {
+                      Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                              builder: (context) =>
+                              new ErroInformacaoPage(
+                                  informacao: error)))
+                          .then((value) {
+                        Inc();
+                      });
+                    }
+                  },
+                ),
+
+                ),
               SizedBox(height: 20.0),
               Container(
-                  height: 55.0,
-                  child: FormField<String>(
-                    builder: (FormFieldState<String> state) {
-                      return InputDecorator(
-                          decoration: InputDecoration(
-                            labelText: 'Nome município',
-                            hintText: 'avenir-lt-std-medium',
-                          ),
-                          child: Container(
-                            padding: EdgeInsets.fromLTRB(10.0, 0.0, 20.0, 0.0),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<TbUfMunicipio>(
-                                hint: Text(
-                                  "Selecione ..",
-                                  style: TextStyle(
-                                      fontSize: 16.0,
-                                      color: const Color(0xFF90ffffff)),
-                                ),
-                                elevation: 16,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontFamily: 'avenir-lt-std-medium',
-                                  color: Color(0xFF000000),
-                                ),
-                                iconEnabledColor: Colors.white,
-                                value: tbUfMunicipio,
-                                isExpanded: true,
-                                iconSize: 35,
-                                items: ListUfMunicipiodb.map(
-                                    (TbUfMunicipio value) {
-                                  return new DropdownMenuItem<TbUfMunicipio>(
-                                    value: value,
-                                    onTap: () {
-                                      setState(() {
-                                        tbUfMunicipio = value;
-                                        id_municipio = value.id;
-                                        _DistribuicaoFisicosServicoQuantitativo
-                                            .municipio = value.municipio;
-                                      });
-                                    },
-                                    child: Text(
-                                      value.municipio,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 19.0,
-                                          color: Color(0xFF000000),
-                                          fontFamily:
-                                              "avenir-next-rounded-pro-regular"),
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (TbUfMunicipio newValue) {
-                                  setState(() {});
-                                },
-                              ),
-                            ),
-                          ));
+                  height: 58.0,
+                  margin: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+                  child:DropdownButtonFormField(
+                    decoration: InputDecoration(
+                      labelText: 'Município',
+                      hintText: '',
+                    ),
+                    items: ListUfMunicipiodb.map((TbUfMunicipio value) {
+                      return new DropdownMenuItem<TbUfMunicipio>(
+                        value: value,
+                        onTap: () {
+                          setState(() {
+                            tbUfMunicipio = value;
+                            id_municipio = value.id;
+                            _DistribuicaoFisicosServicoQuantitativo
+                                .municipio = value.municipio;
+                          });
+                        },
+                        child: Text(
+                          value.municipio,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 19.0,
+                              color: Color(0xFF000000),
+                              fontFamily:
+                              "avenir-next-rounded-pro-regular"),
+                        ),
+                      );
+                    }).toList(),
+                    hint: Text(
+                      "Selecione ..",
+                      style: TextStyle(
+                          fontSize: 16.0,
+                          color: const Color(0xFF90ffffff)),
+                    ),
+                    elevation: 16,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontFamily: 'avenir-lt-std-medium',
+                      color: Color(0xFF000000),
+                    ),
+                    iconEnabledColor: Colors.white,
+                    value: tbUfMunicipio,
+                    isExpanded: true,
+                    iconSize: 35,
+                    onChanged: (TbUfMunicipio newValue) {
+                      setState(() {});
                     },
-                  )),
+
+                  ),),
               SizedBox(height: 20.0),
               Container(
-                  height: 55.0,
-                  child: FormField<String>(
-                    builder: (FormFieldState<String> state) {
-                      return InputDecorator(
-                          decoration: InputDecoration(
-                            labelText: 'Nome tecnologia',
-                            hintText: 'avenir-lt-std-medium',
-                          ),
-                          child: Container(
-                            padding: EdgeInsets.fromLTRB(10.0, 0.0, 20.0, 0.0),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<TbTecnologia>(
-                                hint: Text(
-                                  "Selecione ..",
-                                  style: TextStyle(
-                                      fontSize: 16.0,
-                                      color: const Color(0xFF90ffffff)),
-                                ),
-                                elevation: 16,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontFamily: 'avenir-lt-std-medium',
-                                  color: Color(0xFF000000),
-                                ),
-                                iconEnabledColor: Colors.white,
-                                value:
-                                    tbTecnologia != null ? tbTecnologia : null,
-                                isExpanded: true,
-                                iconSize: 35,
-                                items:
-                                    ListTecnologiadb.map((TbTecnologia value) {
-                                  return new DropdownMenuItem<TbTecnologia>(
-                                    value: value,
-                                    child: Text(
-                                      value.tecnologia,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 19.0,
-                                          color: Color(0xFF000000),
-                                          fontFamily:
-                                              "avenir-next-rounded-pro-regular"),
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (TbTecnologia newValue) {
-                                  setState(() {
-                                    tbTecnologia = newValue;
-                                    id_tecnologia = newValue.id;
-                                    _DistribuicaoFisicosServicoQuantitativo
-                                        .tecnologia = newValue.tecnologia;
-                                  });
-                                },
-                              ),
-                            ),
-                          ));
-                    },
-                  )),
+                height: 58.0,
+                margin: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+                child:  DropdownButtonFormField(
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.fromLTRB(10.0, 18.0, 10.0, 16.0),
+                    labelText: 'Nome tecnologia',
+                    hintText: '',
+                  ),
+                  hint: Text(
+                    "Selecione ..",
+                    style: TextStyle(
+                        fontSize: 16.0,
+                        color: const Color(0xFF90ffffff)),
+                  ),
+                  elevation: 16,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontFamily: 'avenir-lt-std-medium',
+                    color: Color(0xFF000000),
+                  ),
+                  iconEnabledColor: Colors.white,
+                  value: tbTecnologia != null ? tbTecnologia : null,
+                  isExpanded: true,
+                  iconSize: 35,
+                  items:
+                  ListTecnologiadb.map((TbTecnologia value) {
+                    return new DropdownMenuItem<TbTecnologia>(
+                      value: value,
+                      child: Text(
+                        value.tecnologia,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 19.0,
+                            color: Color(0xFF000000),
+                            fontFamily:
+                            "avenir-next-rounded-pro-regular"),
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (TbTecnologia newValue) {
+                    setState(() {
+                      tbTecnologia = newValue;
+                      id_tecnologia = newValue.id;
+                      _DistribuicaoFisicosServicoQuantitativo
+                          .tecnologia = newValue.tecnologia;
+                    });
+                  },
+                ),
+
+              ),
               SizedBox(height: 20.0),
               TextFormField(
                 controller: _TxtControllerCod_ibge,
