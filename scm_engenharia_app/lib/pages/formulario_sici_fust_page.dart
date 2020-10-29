@@ -1752,7 +1752,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                                 new CupertinoPageRoute<
                                     TbDistribuicaoQuantitativoAcessosFisicosServico>(
                                   maintainState: false,
-                                  fullscreenDialog: true,
+                                  fullscreenDialog: false,
                                   builder: (BuildContext context) =>
                                       new DistribuicaoFisicosServicoQuantitativoPage(
                                           sDistribuicaoFisicosServicoQuantitativo:

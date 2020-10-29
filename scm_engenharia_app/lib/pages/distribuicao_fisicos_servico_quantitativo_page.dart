@@ -7,6 +7,7 @@ import 'package:scm_engenharia_app/data/tb_uf.dart';
 import 'package:scm_engenharia_app/data/tb_uf_municipio.dart';
 import 'package:scm_engenharia_app/models/operacao.dart';
 import 'package:scm_engenharia_app/pages/erro_informacao_page.dart';
+import 'package:scm_engenharia_app/pages/selecionar_municipio_view.dart';
 import 'package:scm_engenharia_app/pages/variavel_de_ambiente_page.dart';
 
 class DistribuicaoFisicosServicoQuantitativoPage extends StatefulWidget {
@@ -40,7 +41,7 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
   String id_uf = "0";
   String id_municipio = "0";
   String id_tecnologia = "0";
-
+  TextEditingController _TxtControllerMunicipio = TextEditingController();
   TextEditingController _TxtControllerCod_ibge = TextEditingController();
   TextEditingController _TxtControllerPf_0 = TextEditingController();
   TextEditingController _TxtControllerPf_512 = TextEditingController();
@@ -206,11 +207,6 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
                 builder: (BuildContext context) =>
                     new VariavelDeAmbientePage())).then((value) {});
       } else {
-        tbUfMunicipio.idMunicipioApp = 0;
-        tbUfMunicipio.ufId = "0";
-        tbUfMunicipio.uf = "0";
-        tbUfMunicipio.id = "0";
-        tbUfMunicipio.municipio = "Selecione...";
 
         tbUf.idUfApp = 0;
         tbUf.id = "0";
@@ -463,57 +459,46 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
 
                 ),
               SizedBox(height: 20.0),
-              Container(
-                  height: 58.0,
-                  margin: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-                  child:DropdownButtonFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Município',
-                      hintText: '',
-                    ),
-                    items: ListUfMunicipiodb.map((TbUfMunicipio value) {
-                      return new DropdownMenuItem<TbUfMunicipio>(
-                        value: value,
-                        onTap: () {
+              Padding( padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),child:TextField(
+                onTap: () {
+                  FocusScope.of(context).requestFocus(new FocusNode());
+                  try {
+                    if (id_uf == "0")
+                      throw ("O estado deve ser selecionado");
+                    else
+                    {
+                      Navigator.of(context, rootNavigator: true).push(
+                        new CupertinoPageRoute<TbUfMunicipio>(
+                          maintainState: false,
+                          fullscreenDialog: true,
+                          builder: (BuildContext context) =>
+                          new SelecionarMunicipioView(sMunicipios:ListUfMunicipiodb,Uf:tbUf.uf),
+                        ),
+                      ).then((value) {
+                        if(value != null)
+                        {
                           setState(() {
                             tbUfMunicipio = value;
                             id_municipio = value.id;
-                            _DistribuicaoFisicosServicoQuantitativo
-                                .municipio = value.municipio;
                           });
-                        },
-                        child: Text(
-                          value.municipio,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 19.0,
-                              color: Color(0xFF000000),
-                              fontFamily:
-                              "avenir-next-rounded-pro-regular"),
-                        ),
-                      );
-                    }).toList(),
-                    hint: Text(
-                      "Selecione ..",
-                      style: TextStyle(
-                          fontSize: 16.0,
-                          color: const Color(0xFF90ffffff)),
-                    ),
-                    elevation: 16,
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontFamily: 'avenir-lt-std-medium',
-                      color: Color(0xFF000000),
-                    ),
-                    iconEnabledColor: Colors.white,
-                    value: tbUfMunicipio,
-                    isExpanded: true,
-                    iconSize: 35,
-                    onChanged: (TbUfMunicipio newValue) {
-                      setState(() {});
-                    },
-
-                  ),),
+                          _DistribuicaoFisicosServicoQuantitativo.municipio = value.municipio;
+                          _TxtControllerMunicipio.text = value.municipio.toString();
+                        }
+                      });
+                    }
+                  } catch (error) {
+                    OnToastInformacao(error);
+                  }},
+                controller: _TxtControllerMunicipio,
+                autofocus: false,
+                keyboardType: TextInputType.text,
+                textInputAction: TextInputAction.done,
+                textAlign: TextAlign.start,
+                decoration: InputDecoration(
+                  labelText: 'Selecione ..',
+                  hintText: '',
+                ),
+              ),),
               SizedBox(height: 20.0),
               Container(
                 height: 58.0,
@@ -566,7 +551,9 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
                 ),
 
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 10.0),
+              Divider(),
+              SizedBox(height: 10.0),
               TextFormField(
                 controller: _TxtControllerCod_ibge,
                 textAlign: TextAlign.start,
