@@ -13,8 +13,6 @@ class SelecionarMunicipioView extends StatefulWidget {
   _SelecionarMunicipioView createState() => _SelecionarMunicipioView();
 }
 
-
-
 class _SelecionarMunicipioView extends State<SelecionarMunicipioView>  {
   ScrollController _scrollController;
   List<TbUfMunicipio> ListMunicipio = new List<TbUfMunicipio>();
@@ -22,10 +20,27 @@ class _SelecionarMunicipioView extends State<SelecionarMunicipioView>  {
 
   Inc() async {
     try {
-      setState(() {
-        _StatusTipoWidget = "view_renderizar_tela";
-        ListMunicipio = widget.sMunicipios;
-      });
+      if(widget.sMunicipios == null)
+      {
+        setState(() {
+          _StatusTipoWidget = "view_erro_informacao";
+          ErroInformacao = "Não há  municípios selecionados";
+        });
+      }
+      else if(widget.sMunicipios.length == 0)
+        {
+          setState(() {
+            _StatusTipoWidget = "view_erro_informacao";
+            ErroInformacao = "Não há  municípios selecionados";
+          });
+        }
+      else
+        {
+          setState(() {
+            _StatusTipoWidget = "view_renderizar_tela";
+            ListMunicipio =widget.sMunicipios;
+          });
+        }
     } catch (error) {
       setState(() {
         ErroInformacao = error.toString();
@@ -45,39 +60,37 @@ class _SelecionarMunicipioView extends State<SelecionarMunicipioView>  {
   @override
   void dispose() {
     super.dispose();
-    _scrollController?.dispose();
+   // _scrollController?.dispose();
   }
+
+
   double scale = 1.0;
-  bool get _showTitle {
+  bool get OnShowTextField {
 
-    //starting fab position
+    //Posição inicial
     final double defaultTopMargin = 100.0;
-    //pixels from top where scaling should start
+    //Pixels de cima, onde a escala deve começar
     final double scaleStart = 30.0;
-    //pixels from top where scaling should end
+    //Pixels de cima, onde a escala deve terminar
     final double scaleEnd = scaleStart / 2;
-
     double top = defaultTopMargin;
-
     if (_scrollController.hasClients) {
       print(scale);
       double offset = _scrollController.offset;
       top -= offset;
       if (offset < defaultTopMargin - scaleStart) {
-        //offset small => don't scale down
+        //offset small => não diminua
         scale = 1.0;
       } else if (offset < defaultTopMargin - scaleEnd) {
-        //offset between scaleStart and scaleEnd => scale down
+        //Deslocamento entre scaleStart e scaleEnd => scale down
         setState(() {
           scale = (defaultTopMargin - scaleEnd - offset) / scaleEnd;
         });
-
       } else {
-        //offset passed scaleEnd => hide fab
+        //offset passado scaleEnd => ocultar fab
         setState(() {
           scale = 0.0;
         });
-
       }
     }
     print(_scrollController.hasClients && _scrollController.offset > 200.0 - kToolbarHeight);
@@ -117,7 +130,7 @@ class _SelecionarMunicipioView extends State<SelecionarMunicipioView>  {
                   ],
                 ),
               ),
-              child: _showTitle
+              child: OnShowTextField
                   ?  Container() : Opacity(
                 opacity: scale,
                 child: Container(
@@ -130,17 +143,20 @@ class _SelecionarMunicipioView extends State<SelecionarMunicipioView>  {
                       onChanged: (String value) async {
                         print(value);
                         if (value.length >= 1) {
-                          //ListMunicipio.sort((a, b) => a.Valor.compareTo(b.Valor));
-                          ListMunicipio =  widget.sMunicipios.where((f) => f.municipio.toLowerCase().startsWith(value.toLowerCase())).toList();
+                          setState(() {
+                            ListMunicipio =  widget.sMunicipios.where((f) => f.municipio.toLowerCase().startsWith(value.toLowerCase())).toList();
+                          });
                         } else if (value.length == 0) {
                           FocusScope.of(context).requestFocus(new FocusNode());
-                          ListMunicipio =  widget.sMunicipios.toList();
+                          setState(() {
+                            ListMunicipio =  widget.sMunicipios.toList();
+                          });
                         }
                       },
                       style: TextStyle(
                           fontSize: 17,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Montserrat-Regular',
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'open-sans-regular',
                           color: const Color(0xFFffffff)),
                       decoration: InputDecoration(
                         filled: true,
@@ -151,7 +167,7 @@ class _SelecionarMunicipioView extends State<SelecionarMunicipioView>  {
                             fontSize: 15,
                             color: Color(0xFFb8b8b8),
                             fontFamily: 'avenir-lt-std-medium-oblique'),
-                        contentPadding: EdgeInsets.fromLTRB(10.0, 13.0, 10.0, 11.0),
+                        contentPadding: EdgeInsets.fromLTRB(10.0, 11.0, 10.0, 11.0),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.white, width: 0.5),
                           borderRadius: BorderRadius.circular(25.7),
@@ -199,7 +215,7 @@ class _SelecionarMunicipioView extends State<SelecionarMunicipioView>  {
                   children: <Widget>[
                     SizedBox(height: 30.0),
                     Text(
-                      "Realizando busca das cidades...",
+                      "Realizando busca dos municípios ...",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         decoration: TextDecoration.none,
@@ -237,11 +253,9 @@ class _SelecionarMunicipioView extends State<SelecionarMunicipioView>  {
                 width: MediaQuery.of(context).size.width,
                 child: ListTile(
                     onTap: () {
-                      FocusScope.of(context).requestFocus(new FocusNode());
                       Navigator.pop(context,ListMunicipio[index]);
                     },
                     contentPadding: EdgeInsets.fromLTRB(15.0, 7.0, 15.0, 7.0),
-                    dense: true,
                     title: Text(
                       ListMunicipio[index].municipio,
                       style: TextStyle(
