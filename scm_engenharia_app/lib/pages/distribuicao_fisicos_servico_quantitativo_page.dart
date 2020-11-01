@@ -12,7 +12,7 @@ import 'package:scm_engenharia_app/pages/variavel_de_ambiente_page.dart';
 
 class DistribuicaoFisicosServicoQuantitativoPage extends StatefulWidget {
   final TbDistribuicaoQuantitativoAcessosFisicosServico
-      sDistribuicaoFisicosServicoQuantitativo;
+sDistribuicaoFisicosServicoQuantitativo;
 
   DistribuicaoFisicosServicoQuantitativoPage(
       {Key key, @required this.sDistribuicaoFisicosServicoQuantitativo})
@@ -24,7 +24,9 @@ class DistribuicaoFisicosServicoQuantitativoPage extends StatefulWidget {
 }
 
 class _DistribuicaoFisicosServicoQuantitativoPageState extends State<DistribuicaoFisicosServicoQuantitativoPage> {
-  final GlobalKey<ScaffoldState> _ScaffoldKey = GlobalKey<ScaffoldState>();TbDistribuicaoQuantitativoAcessosFisicosServico
+  final GlobalKey<ScaffoldState> _ScaffoldKey = GlobalKey<ScaffoldState>();
+
+  TbDistribuicaoQuantitativoAcessosFisicosServico
       _DistribuicaoFisicosServicoQuantitativo =
       new TbDistribuicaoQuantitativoAcessosFisicosServico();
 
@@ -450,12 +452,12 @@ class _DistribuicaoFisicosServicoQuantitativoPageState extends State<Distribuica
                       throw ("A uf deve ser selecionado");
                     else
                     {
-                      Navigator.of(context, rootNavigator: true).push(
+                      Navigator.of(context, rootNavigator: false).push(
                         new CupertinoPageRoute<TbUfMunicipio>(
                           maintainState: false,
                           fullscreenDialog: true,
                           builder: (BuildContext context) =>
-                          new SelecionarMunicipioView(sMunicipios:ListUfMunicipiodb,Uf:tbUf.uf),
+                           SelecionarMunicipioView(sMunicipios:ListUfMunicipiodb,Uf:tbUf.uf),
                         ),
                       ).then((value) {
                         if(value != null)

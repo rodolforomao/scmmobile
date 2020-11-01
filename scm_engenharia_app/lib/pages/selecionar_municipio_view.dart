@@ -218,7 +218,9 @@ class _SelecionarMunicipioView extends State<SelecionarMunicipioView>  {
                 itemCount: ListMunicipio.length,
                 itemBuilder: (BuildContext context, int index) => ListTile(
                     onTap: () {
-                      Navigator.pop(context,ListMunicipio[index]);
+                     // Navigator.pop(context,ListMunicipio[index],);
+                      Navigator.of(context).pop(ListMunicipio[index]);
+                      //Navigator.of(context).pop(context);
                     },
                     contentPadding: EdgeInsets.fromLTRB(15.0, 7.0, 15.0, 7.0),
                     title: Text(

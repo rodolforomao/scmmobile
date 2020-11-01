@@ -225,6 +225,9 @@ class DBHelper {
         throw (_Tecnologia.mensagem);
       else if (_Tecnologia.resultado == null)
       {
+        //var count = dbClient.firstIntValue(await database.rawQuery('SELECT COUNT(*) FROM Test'));
+
+
         if (Tecnologia.idTecnologiaApp == 0)
         {
           Tecnologia.idTecnologiaApp = null;
