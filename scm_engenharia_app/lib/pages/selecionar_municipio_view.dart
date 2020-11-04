@@ -214,7 +214,6 @@ class _SelecionarMunicipioView extends State<SelecionarMunicipioView>  {
               child: ListView.builder(
                 physics: const AlwaysScrollableScrollPhysics(),
                 scrollDirection: Axis.vertical,
-                shrinkWrap: true,
                 itemCount: ListMunicipio.length,
                 itemBuilder: (BuildContext context, int index) => ListTile(
                     onTap: () {
@@ -241,7 +240,6 @@ class _SelecionarMunicipioView extends State<SelecionarMunicipioView>  {
         {
           return Container(
               alignment: Alignment.center,
-
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                 color: Colors.white,

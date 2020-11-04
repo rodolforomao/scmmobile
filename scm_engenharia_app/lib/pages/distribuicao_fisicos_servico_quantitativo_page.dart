@@ -24,7 +24,7 @@ sDistribuicaoFisicosServicoQuantitativo;
 }
 
 class _DistribuicaoFisicosServicoQuantitativoPageState extends State<DistribuicaoFisicosServicoQuantitativoPage> {
-  final GlobalKey<ScaffoldState> _ScaffoldKey = GlobalKey<ScaffoldState>();
+  final _ScaffoldKey = GlobalKey<ScaffoldState>();
 
   TbDistribuicaoQuantitativoAcessosFisicosServico
       _DistribuicaoFisicosServicoQuantitativo =
@@ -202,7 +202,7 @@ class _DistribuicaoFisicosServicoQuantitativoPageState extends State<Distribuica
             new CupertinoPageRoute(
                 fullscreenDialog: true,
                 builder: (BuildContext context) =>
-                    new VariavelDeAmbientePage())).then((value) {});
+                new VariavelDeAmbientePage())).then((value) {});
       } else {
 
         tbUf.idUfApp = 0;
@@ -354,7 +354,20 @@ class _DistribuicaoFisicosServicoQuantitativoPageState extends State<Distribuica
               color: Color(0xffFFFFFF),
               fontFamily: "open-sans-regular"),
         ),
-        actions: <Widget>[],
+        actions: <Widget>[
+          IconButton(
+            icon: new Icon(Icons.menu),
+            onPressed: ()
+            {
+              Navigator.push(
+                  context,
+                  new CupertinoPageRoute(
+                      fullscreenDialog: true,
+                      builder: (BuildContext context) =>
+                      new VariavelDeAmbientePage())).then((value) {});
+            },
+          )
+        ],
       ),
       body: Container(
         alignment: Alignment.center,
@@ -440,9 +453,7 @@ class _DistribuicaoFisicosServicoQuantitativoPageState extends State<Distribuica
                       });
                     }
                   },
-                ),
-
-                ),
+                ),),
               SizedBox(height: 20.0),
               Padding( padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),child:TextField(
                 onTap: () {
@@ -452,6 +463,11 @@ class _DistribuicaoFisicosServicoQuantitativoPageState extends State<Distribuica
                       throw ("A uf deve ser selecionado");
                     else
                     {
+
+
+
+
+
                       Navigator.of(context, rootNavigator: false).push(
                         new CupertinoPageRoute<TbUfMunicipio>(
                           maintainState: false,

@@ -1745,39 +1745,32 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                         Center(
                           child: InkWell(
                             onTap: () async {
-                              FocusScope.of(context)
-                                  .requestFocus(new FocusNode());
-                              Navigator.of(context, rootNavigator: true)
-                                  .push(
-                                new CupertinoPageRoute<
-                                    TbDistribuicaoQuantitativoAcessosFisicosServico>(
-                                  maintainState: false,
-                                  fullscreenDialog: false,
-                                  builder: (BuildContext context) =>
-                                      new DistribuicaoFisicosServicoQuantitativoPage(
-                                          sDistribuicaoFisicosServicoQuantitativo:
-                                              null),
-                                ),
-                              )
-                                  .then((value) {
+                              FocusScope.of(context).requestFocus(new FocusNode());
+                              Navigator.push(
+                                  context,
+                                  new CupertinoPageRoute<TbDistribuicaoQuantitativoAcessosFisicosServico>(
+                                      fullscreenDialog: true,
+                                      builder: (BuildContext context) =>
+                                      new DistribuicaoFisicosServicoQuantitativoPage(sDistribuicaoFisicosServicoQuantitativo: null))).then((value) {
                                 if (value != null) {
                                   if (_FichaSici
-                                          .distribuicaoFisicosServicoQuantitativo ==
+                                      .distribuicaoFisicosServicoQuantitativo ==
                                       null) {
                                     value.index = 1;
                                     _FichaSici
-                                            .distribuicaoFisicosServicoQuantitativo =
+                                        .distribuicaoFisicosServicoQuantitativo =
                                         List<
                                             TbDistribuicaoQuantitativoAcessosFisicosServico>();
                                   } else
                                     value.index = _FichaSici
-                                            .distribuicaoFisicosServicoQuantitativo
-                                            .length +
+                                        .distribuicaoFisicosServicoQuantitativo
+                                        .length +
                                         1;
                                   _FichaSici
                                       .distribuicaoFisicosServicoQuantitativo
                                       .add(value);
                                 }
+
                               });
                             },
                             child: Container(
