@@ -355,18 +355,7 @@ class _DistribuicaoFisicosServicoQuantitativoPageState extends State<Distribuica
               fontFamily: "open-sans-regular"),
         ),
         actions: <Widget>[
-          IconButton(
-            icon: new Icon(Icons.menu),
-            onPressed: ()
-            {
-              Navigator.push(
-                  context,
-                  new CupertinoPageRoute(
-                      fullscreenDialog: true,
-                      builder: (BuildContext context) =>
-                      new VariavelDeAmbientePage())).then((value) {});
-            },
-          )
+         
         ],
       ),
       body: Container(
