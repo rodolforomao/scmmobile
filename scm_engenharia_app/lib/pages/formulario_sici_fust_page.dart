@@ -438,7 +438,6 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
   void initState() {
     dbHelper = DBHelper();
     super.initState();
-
     _TxtControllerPeriodoReferencia.text =  DateFormat('dd/MM/yyyy').format(DateTime(DateTime.now().year, DateTime.now().month - 1));
     Inc();
   }
