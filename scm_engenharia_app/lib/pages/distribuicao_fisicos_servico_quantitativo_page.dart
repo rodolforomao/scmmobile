@@ -202,7 +202,9 @@ class _DistribuicaoFisicosServicoQuantitativoPageState extends State<Distribuica
             new CupertinoPageRoute(
                 fullscreenDialog: true,
                 builder: (BuildContext context) =>
-                new VariavelDeAmbientePage())).then((value) {});
+                new VariavelDeAmbientePage())).then((value) {
+          Inc();
+        });
       } else {
 
         tbUf.idUfApp = 0;
@@ -243,6 +245,8 @@ class _DistribuicaoFisicosServicoQuantitativoPageState extends State<Distribuica
               tbTecnologia.idTecnologiaApp = prop.idTecnologiaApp;
               tbTecnologia.id = prop.id;
               tbTecnologia.tecnologia = prop.tecnologia;
+              _DistribuicaoFisicosServicoQuantitativo.id_tecnologia =  prop.id;
+                  id_tecnologia = prop.id;
             }
           }
         }
@@ -355,7 +359,7 @@ class _DistribuicaoFisicosServicoQuantitativoPageState extends State<Distribuica
               fontFamily: "open-sans-regular"),
         ),
         actions: <Widget>[
-         
+
         ],
       ),
       body: Container(
@@ -452,11 +456,6 @@ class _DistribuicaoFisicosServicoQuantitativoPageState extends State<Distribuica
                       throw ("A uf deve ser selecionado");
                     else
                     {
-
-
-
-
-
                       Navigator.of(context, rootNavigator: false).push(
                         new CupertinoPageRoute<TbUfMunicipio>(
                           maintainState: false,
