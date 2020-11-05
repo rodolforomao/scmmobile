@@ -247,6 +247,7 @@ class _DistribuicaoFisicosServicoQuantitativoPageState extends State<Distribuica
               tbTecnologia.tecnologia = prop.tecnologia;
               _DistribuicaoFisicosServicoQuantitativo.id_tecnologia =  prop.id;
                   id_tecnologia = prop.id;
+              _DistribuicaoFisicosServicoQuantitativo .tecnologia = prop.tecnologia;
             }
           }
         }
@@ -254,7 +255,6 @@ class _DistribuicaoFisicosServicoQuantitativoPageState extends State<Distribuica
         if (widget.sDistribuicaoFisicosServicoQuantitativo == null) {
         } else {
           _DistribuicaoFisicosServicoQuantitativo = widget.sDistribuicaoFisicosServicoQuantitativo;
-
           TbUf resUf = ListUfdb.where((i) => i.id == widget.sDistribuicaoFisicosServicoQuantitativo.id_uf).first;
           tbUf.idUfApp = resUf.idUfApp;
           tbUf.id = resUf.id;
@@ -291,7 +291,8 @@ class _DistribuicaoFisicosServicoQuantitativoPageState extends State<Distribuica
           tbTecnologia.id = resTecnologia.id;
           tbTecnologia.tecnologia = resTecnologia.tecnologia;
           id_tecnologia = resTecnologia.id;
-          _TxtControllerMunicipio.text = resTecnologia.tecnologia;
+
+          _TxtControllerMunicipio.text = tbUfMunicipio.municipio;
           _TxtControllerCod_ibge.text = widget.sDistribuicaoFisicosServicoQuantitativo.cod_ibge;
           _TxtControllerPf_0.text = widget.sDistribuicaoFisicosServicoQuantitativo.pf_0;
           _TxtControllerPf_512.text = widget.sDistribuicaoFisicosServicoQuantitativo.pf_512;
