@@ -431,7 +431,6 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
       _DataSelecionada = picked;
       print(_DataSelecionada.toString());
       _TxtControllerPeriodoReferencia.text = DateFormat('dd/MM/yyyy').format(DateTime(_DataSelecionada.year, _DataSelecionada.month, 1));
-      //_TxtControllerPeriodoReferencia.text = _DataSelecionada.toString();
     }
   }
 
@@ -439,6 +438,8 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
   void initState() {
     dbHelper = DBHelper();
     super.initState();
+
+    _TxtControllerPeriodoReferencia.text =  DateFormat('dd/MM/yyyy').format(DateTime(DateTime.now().year, DateTime.now().month - 1));
     Inc();
   }
 
