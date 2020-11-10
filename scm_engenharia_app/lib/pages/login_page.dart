@@ -2,6 +2,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
+import 'package:scm_engenharia_app/help/notification_firebase.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:scm_engenharia_app/data/db_helper.dart';
@@ -87,6 +88,8 @@ class _LoginPageState extends State<LoginPage> {
                 dialogContext = null;
               });
             }
+            print("nroCPF-" +Usuario.cpf);
+            NotificationHandler().subscribeToTopic("nroCPF-" +Usuario.cpf);
             Future.delayed(Duration.zero, () {
               Navigator.of(context).pushAndRemoveUntil(
                   new MaterialPageRoute(

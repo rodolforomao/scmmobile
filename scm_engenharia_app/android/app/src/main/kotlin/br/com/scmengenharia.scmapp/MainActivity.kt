@@ -1,4 +1,4 @@
-package br.com.scm_engenharia_app
+package br.com.scmengenharia.scmapp
 
 import io.flutter.embedding.android.FlutterActivity
 

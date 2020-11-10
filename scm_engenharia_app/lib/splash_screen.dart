@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show TargetPlatform, kIsWeb;
 import 'package:scm_engenharia_app/data/db_helper.dart';
 import 'package:scm_engenharia_app/data/tb_usuario.dart';
+import 'package:scm_engenharia_app/help/notification_firebase.dart';
 import 'package:scm_engenharia_app/help/servico_mobile_service.dart';
 import 'package:scm_engenharia_app/menu_navigation.dart';
 import 'package:scm_engenharia_app/models/model_usuario.dart';
@@ -118,6 +119,7 @@ class _SplashScreenState extends State<SplashScreen> {
   {
     super.initState();
     dbHelper = DBHelper();
+    NotificationHandler().initializeFcmNotification();
     Future(() {
        OnInc();
     });

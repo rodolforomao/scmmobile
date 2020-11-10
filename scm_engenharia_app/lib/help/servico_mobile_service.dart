@@ -27,6 +27,7 @@ class ServicoMobileService {
               },
               encoding: Encoding.getByName("utf-8"))
           .timeout(const Duration(seconds: 10));
+
       _Operacao.erro = false;
       _Operacao.mensagem = "Operação realizada com sucesso";
       _Operacao.resultado = null;
@@ -53,6 +54,7 @@ class ServicoMobileService {
         case 403:
         case 200:
           {
+            print(jsonDecode(Components.removeAllHtmlTags(response.body)));
             if (response.body.isEmpty)
               throw ("Houve um problema de comunicação com os servidores do SCM");
             Map<String, dynamic> map =
