@@ -88,8 +88,10 @@ class _LoginPageState extends State<LoginPage> {
                 dialogContext = null;
               });
             }
+            NotificationHandler().unsubscribeFromTopic("scmengenhariaUserNLogado");
             print("nroCPF-" +Usuario.cpf);
             NotificationHandler().subscribeToTopic("nroCPF-" +Usuario.cpf);
+            NotificationHandler().subscribeToTopic("scmengenhariaUserAllLogado");
             Future.delayed(Duration.zero, () {
               Navigator.of(context).pushAndRemoveUntil(
                   new MaterialPageRoute(
@@ -251,6 +253,7 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     dbHelper = DBHelper();
+     NotificationHandler().subscribeToTopic("scmengenhariaUserNLogado");
     _TxtControllerEmail.text = "rodolforomao@gmail.com";
     _TxtControllerSenha.text = "123456";
   }

@@ -10,7 +10,9 @@
         android:name=".Application"
         android:label="SCM Engenharia"
         android:icon="@mipmap/ic_launcher" android:usesCleartextTraffic="true">
-
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@mipmap/notification_icon" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorNotificationFirebase" />
