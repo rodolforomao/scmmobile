@@ -89,7 +89,6 @@ class _LoginPageState extends State<LoginPage> {
               });
             }
             NotificationHandler().unsubscribeFromTopic("scmengenhariaUserNLogado");
-            print("nroCPF-" +Usuario.cpf);
             NotificationHandler().subscribeToTopic("nroCPF-" +Usuario.cpf);
             NotificationHandler().subscribeToTopic("scmengenhariaUserAllLogado");
             Future.delayed(Duration.zero, () {
@@ -256,6 +255,8 @@ class _LoginPageState extends State<LoginPage> {
      NotificationHandler().subscribeToTopic("scmengenhariaUserNLogado");
     _TxtControllerEmail.text = "rodolforomao@gmail.com";
     _TxtControllerSenha.text = "123456";
+
+
   }
 
   @override
