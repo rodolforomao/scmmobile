@@ -425,11 +425,11 @@ class ServicoMobileService {
           'POST', Uri.parse(Url + "/usuario/inserir_usuario_ws"));
       response.headers.addAll(headers);
       response.fields['controllerNome'] = _Modelo.nome;
-      response.fields['controllerCPF'] = _Modelo.uf;
+      response.fields['controllerCPF'] = _Modelo.cpf;
       response.fields['controllerEmail'] = _Modelo.email;
       response.fields['controllerTelefone'] = _Modelo.telefone;
       response.fields['controllerTelefoneWhatsapp'] = _Modelo.telefoneWhatsapp;
-      response.fields['controllerEmpresa'] = _Modelo.empresa;
+      response.fields['controllerEmpresa'] = _Modelo.empresa;s
       response.fields['controllerUF'] = _Modelo.uf;
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
