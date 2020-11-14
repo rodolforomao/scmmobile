@@ -256,7 +256,6 @@ class _LoginPageState extends State<LoginPage> {
     _TxtControllerEmail.text = "rodolforomao@gmail.com";
     _TxtControllerSenha.text = "123456";
 
-
   }
 
   @override

@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:scm_engenharia_app/data/tb_usuario.dart';
 import 'package:scm_engenharia_app/help/custom_fab_button.dart';
 import 'package:scm_engenharia_app/pages/configuracao_page.dart';
 import 'package:scm_engenharia_app/pages/formulario_sici_fust_page.dart';
@@ -14,8 +13,6 @@ class MenuNavigation extends StatefulWidget {
 }
 
 class _MenuNavigationState extends State<MenuNavigation> {
-
-  final GlobalKey<ScaffoldState>  _ScaffoldKey = GlobalKey<ScaffoldState>();
   int _SelecionarPaginaWidgetIndex = 0;
 
   @override
@@ -129,7 +126,6 @@ class _MenuNavigationState extends State<MenuNavigation> {
       );
     } else {
       return Scaffold(
-        key: _ScaffoldKey,
         resizeToAvoidBottomPadding: false,
         body: OnSelecionarPaginaWidget(_SelecionarPaginaWidgetIndex),
         bottomNavigationBar: new Theme(

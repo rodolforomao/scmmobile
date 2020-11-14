@@ -1,4 +1,4 @@
-import 'package:connectivity/connectivity.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -81,7 +81,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
 
   DateTime _DataSelecionada = DateTime(DateTime.now().year, DateTime.now().month - 1, 1);
 
-  StreamSubscription<ConnectivityResult> subscription;
+
 
   TextEditingController _TxtControllerCnpj =
       new MaskedTextController(mask: '00.000.000/0000-00');
@@ -491,7 +491,548 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
               )),
         ],
       ),
-      body: _TipoWidget(context),
+      body: Container(
+        constraints: BoxConstraints(
+          maxWidth: MediaQuery.of(context).size.width,
+        ),
+        child: Stepper(
+          controlsBuilder: (BuildContext context,
+              {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
+            return Row(
+              children: <Widget>[
+                Visibility(
+                  visible: current_step == 2 ? false : true,
+                  child: FlatButton(
+                    color: Color(0xff018a8a),
+                    //`Icon` to display
+                    child: Text(
+                      'Próximo',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                        fontFamily: 'avenir-lt-std-roman',
+                        fontSize: 15.0,
+                      ),
+                    ),
+                    //`Text` to display
+                    onPressed: () async {
+                      setState(() {
+                        switch (current_step) {
+                          case 0:
+                            current_step = 1;
+                            break;
+                          case 1:
+                            current_step = 2;
+                            break;
+                        }
+                      });
+                    },
+                    shape: new RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(5.0),
+                    ),
+                  ),
+                ),
+                new Padding(
+                  padding: new EdgeInsets.all(10),
+                ),
+                Visibility(
+                  visible: current_step > 0 ? true : false,
+                  child: FlatButton(
+                    onPressed: () async {
+                      setState(() {
+                        switch (current_step) {
+                          case 2:
+                            current_step = 1;
+                            break;
+                          case 1:
+                            current_step = 0;
+                            break;
+                        }
+                      });
+                    },
+                    child: Text(
+                      'Cancelar',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xff018a8a),
+                        fontFamily: 'avenir-lt-std-roman',
+                        fontSize: 15.0,
+                      ),
+                    ),
+                    textColor: Color(0xff018a8a),
+                    shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                            color: Color(0xff018a8a),
+                            width: 1,
+                            style: BorderStyle.solid),
+                        borderRadius: BorderRadius.circular(5.0)),
+                  ),
+                )
+              ],
+            );
+          },
+          steps: <Step>[
+            Step(
+              title: SizedBox(
+                width: MediaQuery.of(context).size.width - 90,
+                child: Text(
+                  "INFORMAÇÕES DA EMPRESA",
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: false,
+                  style: TextStyle(
+                      fontSize: 14.0,
+                      color: Color(0xff000000),
+                      fontFamily: "open-sans-regular"),
+                ),
+              ),
+              content: Container(
+                child: Column(
+                  children: [
+                    SizedBox(height: 20.0),
+                    TextFormField(
+                      onTap: () {
+                        FocusScope.of(context)
+                            .requestFocus(new FocusNode());
+                        selectDate(context);
+                      },
+                      controller: _TxtControllerPeriodoReferencia,
+                      textAlign: TextAlign.start,
+                      keyboardType: TextInputType.datetime,
+                      textInputAction: TextInputAction.done,
+                      autofocus: false,
+                      decoration: InputDecoration(
+                        labelText: 'Período referência:',
+                        hintText: '',
+                      ),
+                      maxLength: 20,
+                    ),
+                    SizedBox(height: 20.0),
+                    TextFormField(
+                      controller: _TxtControllerRazaoSocial,
+                      textAlign: TextAlign.start,
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.done,
+                      autofocus: false,
+                      maxLength: 100,
+                      style: TextStyle(
+                          fontSize: 17,
+                          fontFamily: 'nunito-regular',
+                          color: const Color(0xFF000000)),
+                      decoration: InputDecoration(
+                        labelText: 'Razão social:',
+                        hintText: 'Razão social LTDA - ME.',
+                      ),
+                    ),
+                    SizedBox(height: 20.0),
+                    TextFormField(
+                      controller: _TxtControllerTelefoneFixo,
+                      textAlign: TextAlign.start,
+                      keyboardType: TextInputType.number,
+                      textInputAction: TextInputAction.done,
+                      autofocus: false,
+                      maxLength: 100,
+                      decoration: InputDecoration(
+                        labelText: 'Telefone Fixo:',
+                        hintText: '',
+                      ),
+                    ),
+                    SizedBox(height: 20.0),
+                    TextFormField(
+                      controller: _TxtControllerCnpj,
+                      textAlign: TextAlign.start,
+                      keyboardType: TextInputType.number,
+                      textInputAction: TextInputAction.done,
+                      autofocus: false,
+                      decoration: InputDecoration(
+                        labelText: 'CNPJ:',
+                        hintText: '',
+                      ),
+                    ),
+                    SizedBox(height: 20.0),
+                    TextFormField(
+                      controller: _TxtControllerTelefoneMovel,
+                      textAlign: TextAlign.start,
+                      keyboardType: TextInputType.number,
+                      textInputAction: TextInputAction.done,
+                      autofocus: false,
+                      decoration: InputDecoration(
+                        labelText: 'TELEFONE CELULAR:',
+                        hintText: '',
+                      ),
+                      maxLength: 20,
+                    ),
+                    SizedBox(height: 20.0),
+                  ],
+                ),
+              ),
+              state: current_step > 0
+                  ? StepState.complete
+                  : StepState.disabled,
+              isActive: true,
+            ),
+            Step(
+              title: SizedBox(
+                width: MediaQuery.of(context).size.width - 90,
+                child: Text(
+                  "INFORMAÇÕES FINANCEIRAS",
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: false,
+                  style: TextStyle(
+                      fontSize: 14.0,
+                      color: Color(0xff000000),
+                      fontFamily: "open-sans-regular"),
+                ),
+              ),
+              content: Container(
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: _TxtControllerReceitaBruta,
+                      textAlign: TextAlign.start,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        WhitelistingTextInputFormatter.digitsOnly,
+                        CurrencyPtBrInputFormatter()
+                      ],
+                      textInputAction: TextInputAction.done,
+                      autofocus: false,
+                      decoration: InputDecoration(
+                        labelText: 'Receita Bruta',
+                        hintText: '',
+                      ),
+                      maxLength: 20,
+                    ),
+                    SizedBox(height: 20.0),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Expanded(
+                          child: TextFormField(
+                            controller: _TxtControllerSimples,
+                            textAlign: TextAlign.start,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              WhitelistingTextInputFormatter.digitsOnly,
+                              CurrencyPtBrInputFormatter()
+                            ],
+                            textInputAction: TextInputAction.done,
+                            autofocus: false,
+                            decoration: InputDecoration(
+                              labelText: 'Valor Simples',
+                              hintText: '',
+                            ),
+                            maxLength: 20,
+                          ),
+                        ),
+                        SizedBox(width: 15),
+                        Expanded(
+                          child: TextFormField(
+                            controller: _TxtControllerSimplesPorc,
+                            textAlign: TextAlign.start,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              WhitelistingTextInputFormatter.digitsOnly,
+                              CurrencyPercentInputFormatter()
+                            ],
+                            textInputAction: TextInputAction.done,
+                            autofocus: false,
+                            decoration: InputDecoration(
+                              labelText: 'Aliquota Simples %',
+                              hintText: '',
+                            ),
+                            maxLength: 7,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20.0),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Expanded(
+                          child: TextFormField(
+                            controller: _TxtControllerIcms,
+                            textAlign: TextAlign.start,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              WhitelistingTextInputFormatter.digitsOnly,
+                              CurrencyPtBrInputFormatter()
+                            ],
+                            textInputAction: TextInputAction.done,
+                            autofocus: false,
+                            decoration: InputDecoration(
+                              labelText: 'Valor ICMS',
+                              hintText: '',
+                            ),
+                            maxLength: 20,
+                          ),
+                        ),
+                        SizedBox(width: 15),
+                        Expanded(
+                          child: TextFormField(
+                            controller: _TxtControllerIcmsPorc,
+                            textAlign: TextAlign.start,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              WhitelistingTextInputFormatter.digitsOnly,
+                              CurrencyPercentInputFormatter()
+                            ],
+                            textInputAction: TextInputAction.done,
+                            autofocus: false,
+                            decoration: InputDecoration(
+                              labelText: 'ICMS (%)',
+                              hintText: '',
+                            ),
+                            maxLength: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20.0),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Expanded(
+                          child: TextFormField(
+                            controller: _TxtControllerPis,
+                            textAlign: TextAlign.start,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              WhitelistingTextInputFormatter.digitsOnly,
+                              CurrencyPtBrInputFormatter()
+                            ],
+                            textInputAction: TextInputAction.done,
+                            autofocus: false,
+                            decoration: InputDecoration(
+                              labelText: 'Valor PIS',
+                              hintText: '',
+                            ),
+                            maxLength: 20,
+                          ),
+                        ),
+                        SizedBox(width: 15),
+                        Expanded(
+                          child: TextFormField(
+                            controller: _TxtControllerPisPorc,
+                            textAlign: TextAlign.start,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              WhitelistingTextInputFormatter.digitsOnly,
+                              CurrencyPercentInputFormatter()
+                            ],
+                            textInputAction: TextInputAction.done,
+                            autofocus: false,
+                            decoration: InputDecoration(
+                              labelText: 'PIS (%)',
+                              hintText: '',
+                            ),
+                            maxLength: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20.0),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Expanded(
+                          child: TextFormField(
+                            controller: _TxtControllerCofins,
+                            textAlign: TextAlign.start,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              WhitelistingTextInputFormatter.digitsOnly,
+                              CurrencyPtBrInputFormatter()
+                            ],
+                            textInputAction: TextInputAction.done,
+                            autofocus: false,
+                            decoration: InputDecoration(
+                              labelText: 'Valor COFINS',
+                              hintText: '',
+                            ),
+                            maxLength: 20,
+                          ),
+                        ),
+                        SizedBox(width: 15),
+                        Expanded(
+                          child: TextFormField(
+                            controller: _TxtControllerCofinsPorc,
+                            textAlign: TextAlign.start,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              WhitelistingTextInputFormatter.digitsOnly,
+                              CurrencyPercentInputFormatter()
+                            ],
+                            textInputAction: TextInputAction.done,
+                            autofocus: false,
+                            decoration: InputDecoration(
+                              labelText: 'COFINS (%)',
+                              hintText: '',
+                            ),
+                            maxLength: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20.0),
+                    TextFormField(
+                      controller: _TxtControllerReceitaLiquida,
+                      textAlign: TextAlign.start,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        WhitelistingTextInputFormatter.digitsOnly,
+                        CurrencyPtBrInputFormatter()
+                      ],
+                      textInputAction: TextInputAction.done,
+                      autofocus: false,
+                      decoration: InputDecoration(
+                        labelText: 'Receita Liquida',
+                        hintText: '',
+                      ),
+                      maxLength: 20,
+                    ),
+                    SizedBox(height: 20.0),
+                    TextFormField(
+                      controller: _TxtControllerObservacoes,
+                      textAlign: TextAlign.start,
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.done,
+                      autofocus: false,
+                      decoration: InputDecoration(
+                        labelText: 'Observações Gerais',
+                        hintText: '',
+                      ),
+                      maxLength: 1500,
+                    ),
+                    SizedBox(height: 20.0),
+                  ],
+                ),
+              ),
+              state: current_step > 1
+                  ? StepState.complete
+                  : StepState.disabled,
+              isActive: true,
+            ),
+            Step(
+              title: SizedBox(
+                width: MediaQuery.of(context).size.width - 90,
+                child: Text(
+                  "DISTRIBUIÇÃO DO QUANTITATIVO DE ACESSOS FÍSICOS EM SERVIÇO",
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: false,
+                  style: TextStyle(
+                      fontSize: 14.0,
+                      color: Color(0xff000000),
+                      fontFamily: "open-sans-regular"),
+                ),
+              ),
+              content: Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 30.0),
+                    Center(
+                      child: InkWell(
+                        onTap: () async {
+                          FocusScope.of(context).requestFocus(new FocusNode());
+                          Navigator.push(
+                              context,
+                              new CupertinoPageRoute<TbDistribuicaoQuantitativoAcessosFisicosServico>(
+                                  fullscreenDialog: true,
+                                  builder: (BuildContext context) =>
+                                  new DistribuicaoFisicosServicoQuantitativoPage(sDistribuicaoFisicosServicoQuantitativo: null))).then((value) {
+                            if (value != null) {
+                              if (_FichaSici.distribuicaoFisicosServicoQuantitativo == null) {
+                                value.index = 1;
+                                _FichaSici.distribuicaoFisicosServicoQuantitativo = List<TbDistribuicaoQuantitativoAcessosFisicosServico>();
+                                _FichaSici.distribuicaoFisicosServicoQuantitativo.add(value);
+                              } else
+                                value.index = _FichaSici.distribuicaoFisicosServicoQuantitativo.length + 1;
+                              _FichaSici.distribuicaoFisicosServicoQuantitativo.add(value);
+                            }
+
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(0.0, 5.0, 20.0, 0.0),
+                          constraints: BoxConstraints(maxWidth: 300),
+                          width: MediaQuery.of(context).size.width,
+                          height: 45,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(3)),
+                              color: Color(0xff8854d0)),
+                          child: Text(
+                            'Adicionar',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white,
+                              fontFamily: 'avenir-lt-std-roman',
+                              fontSize: 18.0,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 30.0),
+                    Builder(
+                      builder: (BuildContext context) {
+                        return ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: _FichaSici
+                              .distribuicaoFisicosServicoQuantitativo ==
+                              null
+                              ? 0
+                              : _FichaSici
+                              .distribuicaoFisicosServicoQuantitativo
+                              .length,
+                          itemBuilder:
+                          DistribuicaoFisicosServicoQuantitativoCard,
+                        );
+                      },
+                    ),
+                    SizedBox(height: 20.0),
+                  ],
+                ),
+              ),
+              isActive: true,
+            ),
+          ],
+          type: StepperType.vertical,
+          currentStep: current_step,
+          onStepTapped: (step) {
+            setState(() {
+              current_step = step;
+            });
+          },
+          onStepContinue: () {
+            setState(() {
+              if (current_step < spr.length - 1) {
+                current_step = current_step + 1;
+              } else {
+                current_step = 0;
+              }
+            });
+          },
+          onStepCancel: () {
+            setState(() {
+              if (current_step > 0) {
+                current_step = current_step - 1;
+              } else {
+                current_step = 0;
+              }
+            });
+          },
+        ),
+      )
     );
   }
 
@@ -1159,698 +1700,4 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
               ],
             )),
       );
-
-  _TipoWidget(BuildContext context) {
-    switch (_StatusTipoWidget) {
-      case "sem_internet":
-        {
-          return SingleChildScrollView(
-            child: Container(
-              alignment: Alignment.center,
-              padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-              constraints: BoxConstraints(
-                minHeight: MediaQuery.of(context).size.height,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Image.asset(
-                    "assets/imagens/img_sem_sinal.png",
-                    width: 150.0,
-                    height: 150.0,
-                    fit: BoxFit.fill,
-                  ),
-                  SizedBox(height: 30.0),
-                  Text(
-                    "Não há conexão com a internet",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      decoration: TextDecoration.none,
-                      fontFamily: "avenir-lt-std-roman",
-                      fontSize: 20.0,
-                      color: Colors.black,
-                    ),
-                  ),
-                  SizedBox(height: 10.0),
-                  Text(
-                    "Verifique sua conexão com a internet e tente novamente.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      decoration: TextDecoration.none,
-                      fontFamily: "avenir-lt-std-roman",
-                      fontSize: 15.0,
-                      color: Colors.black54,
-                    ),
-                  ),
-                  SizedBox(height: 20.0),
-                  Center(
-                    child: InkWell(
-                      onTap: () async {
-                        var connectivityResult =
-                            await (Connectivity().checkConnectivity());
-                        if (connectivityResult == ConnectivityResult.none) {
-                          setState(() {
-                            _StatusTipoWidget = "sem_internet";
-                          });
-                          _ScaffoldKey.currentState.showSnackBar(SnackBar(
-                            onVisible: () {
-                              print('Visible');
-                            },
-                            elevation: 6.0,
-                            backgroundColor: Colors.black,
-                            behavior: SnackBarBehavior.floating,
-                            content: SizedBox(
-                              height: 30.0,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Text(
-                                    "Tentando reconectar a internet",
-                                    softWrap: true,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      decoration: TextDecoration.none,
-                                      fontFamily: "avenir-lt-std-roman",
-                                      fontSize: 16.0,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    child: CircularProgressIndicator(
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                          Color(0xff2fdf84)),
-                                    ),
-                                    height: 30.0,
-                                    width: 30.0,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            duration: Duration(days: 365),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              side: BorderSide(
-                                color: Colors.black54,
-                                width: 2,
-                              ),
-                            ),
-                          ));
-                        } else {
-                          _ScaffoldKey.currentState.removeCurrentSnackBar();
-                          setState(() {
-                            _StatusTipoWidget = "renderizar_ficha_sici";
-                          });
-                        }
-                      },
-                      child: Container(
-                        padding: EdgeInsets.fromLTRB(0.0, 5.0, 20.0, 0.0),
-                        constraints: BoxConstraints(maxWidth: 300),
-                        width: MediaQuery.of(context).size.width,
-                        height: 45,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(3)),
-                            color: Color(0xff8854d0)),
-                        child: Text(
-                          'TENTE NOVAMENTE',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            fontFamily: 'avenir-lt-std-roman',
-                            fontSize: 12.0,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 20.0),
-                ],
-              ), /* add child content here */
-            ),
-          );
-        }
-        break;
-      case "renderizar_ficha_sici":
-        {
-          return Container(
-            constraints: BoxConstraints(
-              maxWidth: MediaQuery.of(context).size.width,
-            ),
-            child: Stepper(
-              controlsBuilder: (BuildContext context,
-                  {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
-                return Row(
-                  children: <Widget>[
-                    Visibility(
-                      visible: current_step == 2 ? false : true,
-                      child: FlatButton(
-                        color: Color(0xff018a8a),
-                        //`Icon` to display
-                        child: Text(
-                          'Próximo',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white,
-                            fontFamily: 'avenir-lt-std-roman',
-                            fontSize: 15.0,
-                          ),
-                        ),
-                        //`Text` to display
-                        onPressed: () async {
-                          setState(() {
-                            switch (current_step) {
-                              case 0:
-                                current_step = 1;
-                                break;
-                              case 1:
-                                current_step = 2;
-                                break;
-                            }
-                          });
-                        },
-                        shape: new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(5.0),
-                        ),
-                      ),
-                    ),
-                    new Padding(
-                      padding: new EdgeInsets.all(10),
-                    ),
-                    Visibility(
-                      visible: current_step > 0 ? true : false,
-                      child: FlatButton(
-                        onPressed: () async {
-                          setState(() {
-                            switch (current_step) {
-                              case 2:
-                                current_step = 1;
-                                break;
-                              case 1:
-                                current_step = 0;
-                                break;
-                            }
-                          });
-                        },
-                        child: Text(
-                          'Cancelar',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xff018a8a),
-                            fontFamily: 'avenir-lt-std-roman',
-                            fontSize: 15.0,
-                          ),
-                        ),
-                        textColor: Color(0xff018a8a),
-                        shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                                color: Color(0xff018a8a),
-                                width: 1,
-                                style: BorderStyle.solid),
-                            borderRadius: BorderRadius.circular(5.0)),
-                      ),
-                    )
-                  ],
-                );
-              },
-              steps: <Step>[
-                Step(
-                  title: SizedBox(
-                    width: MediaQuery.of(context).size.width - 90,
-                    child: Text(
-                      "INFORMAÇÕES DA EMPRESA",
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      softWrap: false,
-                      style: TextStyle(
-                          fontSize: 14.0,
-                          color: Color(0xff000000),
-                          fontFamily: "open-sans-regular"),
-                    ),
-                  ),
-                  content: Container(
-                    child: Column(
-                      children: [
-                        SizedBox(height: 20.0),
-                        TextFormField(
-                          onTap: () {
-                            FocusScope.of(context)
-                                .requestFocus(new FocusNode());
-                            selectDate(context);
-                          },
-                          controller: _TxtControllerPeriodoReferencia,
-                          textAlign: TextAlign.start,
-                          keyboardType: TextInputType.datetime,
-                          textInputAction: TextInputAction.done,
-                          autofocus: false,
-                          decoration: InputDecoration(
-                            labelText: 'Período referência:',
-                            hintText: '',
-                          ),
-                          maxLength: 20,
-                        ),
-                        SizedBox(height: 20.0),
-                        TextFormField(
-                          controller: _TxtControllerRazaoSocial,
-                          textAlign: TextAlign.start,
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.done,
-                          autofocus: false,
-                          maxLength: 100,
-                          style: TextStyle(
-                              fontSize: 17,
-                              fontFamily: 'nunito-regular',
-                              color: const Color(0xFF000000)),
-                          decoration: InputDecoration(
-                            labelText: 'Razão social:',
-                            hintText: 'Razão social LTDA - ME.',
-                          ),
-                        ),
-                        SizedBox(height: 20.0),
-                        TextFormField(
-                          controller: _TxtControllerTelefoneFixo,
-                          textAlign: TextAlign.start,
-                          keyboardType: TextInputType.number,
-                          textInputAction: TextInputAction.done,
-                          autofocus: false,
-                          maxLength: 100,
-                          decoration: InputDecoration(
-                            labelText: 'Telefone Fixo:',
-                            hintText: '',
-                          ),
-                        ),
-                        SizedBox(height: 20.0),
-                        TextFormField(
-                          controller: _TxtControllerCnpj,
-                          textAlign: TextAlign.start,
-                          keyboardType: TextInputType.number,
-                          textInputAction: TextInputAction.done,
-                          autofocus: false,
-                          decoration: InputDecoration(
-                            labelText: 'CNPJ:',
-                            hintText: '',
-                          ),
-                        ),
-                        SizedBox(height: 20.0),
-                        TextFormField(
-                          controller: _TxtControllerTelefoneMovel,
-                          textAlign: TextAlign.start,
-                          keyboardType: TextInputType.number,
-                          textInputAction: TextInputAction.done,
-                          autofocus: false,
-                          decoration: InputDecoration(
-                            labelText: 'TELEFONE CELULAR:',
-                            hintText: '',
-                          ),
-                          maxLength: 20,
-                        ),
-                        SizedBox(height: 20.0),
-                      ],
-                    ),
-                  ),
-                  state: current_step > 0
-                      ? StepState.complete
-                      : StepState.disabled,
-                  isActive: true,
-                ),
-                Step(
-                  title: SizedBox(
-                    width: MediaQuery.of(context).size.width - 90,
-                    child: Text(
-                      "INFORMAÇÕES FINANCEIRAS",
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      softWrap: false,
-                      style: TextStyle(
-                          fontSize: 14.0,
-                          color: Color(0xff000000),
-                          fontFamily: "open-sans-regular"),
-                    ),
-                  ),
-                  content: Container(
-                    child: Column(
-                      children: [
-                        TextFormField(
-                          controller: _TxtControllerReceitaBruta,
-                          textAlign: TextAlign.start,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            WhitelistingTextInputFormatter.digitsOnly,
-                            CurrencyPtBrInputFormatter()
-                          ],
-                          textInputAction: TextInputAction.done,
-                          autofocus: false,
-                          decoration: InputDecoration(
-                            labelText: 'Receita Bruta',
-                            hintText: '',
-                          ),
-                          maxLength: 20,
-                        ),
-                        SizedBox(height: 20.0),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Expanded(
-                              child: TextFormField(
-                                controller: _TxtControllerSimples,
-                                textAlign: TextAlign.start,
-                                keyboardType: TextInputType.number,
-                                inputFormatters: [
-                                  WhitelistingTextInputFormatter.digitsOnly,
-                                  CurrencyPtBrInputFormatter()
-                                ],
-                                textInputAction: TextInputAction.done,
-                                autofocus: false,
-                                decoration: InputDecoration(
-                                  labelText: 'Valor Simples',
-                                  hintText: '',
-                                ),
-                                maxLength: 20,
-                              ),
-                            ),
-                            SizedBox(width: 15),
-                            Expanded(
-                              child: TextFormField(
-                                controller: _TxtControllerSimplesPorc,
-                                textAlign: TextAlign.start,
-                                keyboardType: TextInputType.number,
-                                inputFormatters: [
-                                  WhitelistingTextInputFormatter.digitsOnly,
-                                  CurrencyPercentInputFormatter()
-                                ],
-                                textInputAction: TextInputAction.done,
-                                autofocus: false,
-                                decoration: InputDecoration(
-                                  labelText: 'Aliquota Simples %',
-                                  hintText: '',
-                                ),
-                                maxLength: 7,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 20.0),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Expanded(
-                              child: TextFormField(
-                                controller: _TxtControllerIcms,
-                                textAlign: TextAlign.start,
-                                keyboardType: TextInputType.number,
-                                inputFormatters: [
-                                  WhitelistingTextInputFormatter.digitsOnly,
-                                  CurrencyPtBrInputFormatter()
-                                ],
-                                textInputAction: TextInputAction.done,
-                                autofocus: false,
-                                decoration: InputDecoration(
-                                  labelText: 'Valor ICMS',
-                                  hintText: '',
-                                ),
-                                maxLength: 20,
-                              ),
-                            ),
-                            SizedBox(width: 15),
-                            Expanded(
-                              child: TextFormField(
-                                controller: _TxtControllerIcmsPorc,
-                                textAlign: TextAlign.start,
-                                keyboardType: TextInputType.number,
-                                inputFormatters: [
-                                  WhitelistingTextInputFormatter.digitsOnly,
-                                  CurrencyPercentInputFormatter()
-                                ],
-                                textInputAction: TextInputAction.done,
-                                autofocus: false,
-                                decoration: InputDecoration(
-                                  labelText: 'ICMS (%)',
-                                  hintText: '',
-                                ),
-                                maxLength: 12,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 20.0),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Expanded(
-                              child: TextFormField(
-                                controller: _TxtControllerPis,
-                                textAlign: TextAlign.start,
-                                keyboardType: TextInputType.number,
-                                inputFormatters: [
-                                  WhitelistingTextInputFormatter.digitsOnly,
-                                  CurrencyPtBrInputFormatter()
-                                ],
-                                textInputAction: TextInputAction.done,
-                                autofocus: false,
-                                decoration: InputDecoration(
-                                  labelText: 'Valor PIS',
-                                  hintText: '',
-                                ),
-                                maxLength: 20,
-                              ),
-                            ),
-                            SizedBox(width: 15),
-                            Expanded(
-                              child: TextFormField(
-                                controller: _TxtControllerPisPorc,
-                                textAlign: TextAlign.start,
-                                keyboardType: TextInputType.number,
-                                inputFormatters: [
-                                  WhitelistingTextInputFormatter.digitsOnly,
-                                  CurrencyPercentInputFormatter()
-                                ],
-                                textInputAction: TextInputAction.done,
-                                autofocus: false,
-                                decoration: InputDecoration(
-                                  labelText: 'PIS (%)',
-                                  hintText: '',
-                                ),
-                                maxLength: 12,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 20.0),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Expanded(
-                              child: TextFormField(
-                                controller: _TxtControllerCofins,
-                                textAlign: TextAlign.start,
-                                keyboardType: TextInputType.number,
-                                inputFormatters: [
-                                  WhitelistingTextInputFormatter.digitsOnly,
-                                  CurrencyPtBrInputFormatter()
-                                ],
-                                textInputAction: TextInputAction.done,
-                                autofocus: false,
-                                decoration: InputDecoration(
-                                  labelText: 'Valor COFINS',
-                                  hintText: '',
-                                ),
-                                maxLength: 20,
-                              ),
-                            ),
-                            SizedBox(width: 15),
-                            Expanded(
-                              child: TextFormField(
-                                controller: _TxtControllerCofinsPorc,
-                                textAlign: TextAlign.start,
-                                keyboardType: TextInputType.number,
-                                inputFormatters: [
-                                  WhitelistingTextInputFormatter.digitsOnly,
-                                  CurrencyPercentInputFormatter()
-                                ],
-                                textInputAction: TextInputAction.done,
-                                autofocus: false,
-                                decoration: InputDecoration(
-                                  labelText: 'COFINS (%)',
-                                  hintText: '',
-                                ),
-                                maxLength: 12,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 20.0),
-                        TextFormField(
-                          controller: _TxtControllerReceitaLiquida,
-                          textAlign: TextAlign.start,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            WhitelistingTextInputFormatter.digitsOnly,
-                            CurrencyPtBrInputFormatter()
-                          ],
-                          textInputAction: TextInputAction.done,
-                          autofocus: false,
-                          decoration: InputDecoration(
-                            labelText: 'Receita Liquida',
-                            hintText: '',
-                          ),
-                          maxLength: 20,
-                        ),
-                        SizedBox(height: 20.0),
-                        TextFormField(
-                          controller: _TxtControllerObservacoes,
-                          textAlign: TextAlign.start,
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.done,
-                          autofocus: false,
-                          decoration: InputDecoration(
-                            labelText: 'Observações Gerais',
-                            hintText: '',
-                          ),
-                          maxLength: 1500,
-                        ),
-                        SizedBox(height: 20.0),
-                      ],
-                    ),
-                  ),
-                  state: current_step > 1
-                      ? StepState.complete
-                      : StepState.disabled,
-                  isActive: true,
-                ),
-                Step(
-                  title: SizedBox(
-                    width: MediaQuery.of(context).size.width - 90,
-                    child: Text(
-                      "DISTRIBUIÇÃO DO QUANTITATIVO DE ACESSOS FÍSICOS EM SERVIÇO",
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      softWrap: false,
-                      style: TextStyle(
-                          fontSize: 14.0,
-                          color: Color(0xff000000),
-                          fontFamily: "open-sans-regular"),
-                    ),
-                  ),
-                  content: Container(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(height: 30.0),
-                        Center(
-                          child: InkWell(
-                            onTap: () async {
-                              FocusScope.of(context).requestFocus(new FocusNode());
-                              Navigator.push(
-                                  context,
-                                  new CupertinoPageRoute<TbDistribuicaoQuantitativoAcessosFisicosServico>(
-                                      fullscreenDialog: true,
-                                      builder: (BuildContext context) =>
-                                      new DistribuicaoFisicosServicoQuantitativoPage(sDistribuicaoFisicosServicoQuantitativo: null))).then((value) {
-                                if (value != null) {
-                                  if (_FichaSici
-                                      .distribuicaoFisicosServicoQuantitativo ==
-                                      null) {
-                                    value.index = 1;
-                                    _FichaSici
-                                        .distribuicaoFisicosServicoQuantitativo =
-                                        List<
-                                            TbDistribuicaoQuantitativoAcessosFisicosServico>();
-                                  } else
-                                    value.index = _FichaSici
-                                        .distribuicaoFisicosServicoQuantitativo
-                                        .length +
-                                        1;
-                                  _FichaSici
-                                      .distribuicaoFisicosServicoQuantitativo
-                                      .add(value);
-                                }
-
-                              });
-                            },
-                            child: Container(
-                              padding: EdgeInsets.fromLTRB(0.0, 5.0, 20.0, 0.0),
-                              constraints: BoxConstraints(maxWidth: 300),
-                              width: MediaQuery.of(context).size.width,
-                              height: 45,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(3)),
-                                  color: Color(0xff8854d0)),
-                              child: Text(
-                                'Adicionar',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white,
-                                  fontFamily: 'avenir-lt-std-roman',
-                                  fontSize: 18.0,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 30.0),
-                        Builder(
-                          builder: (BuildContext context) {
-                            return ListView.builder(
-                              scrollDirection: Axis.vertical,
-                              physics: NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: _FichaSici
-                                          .distribuicaoFisicosServicoQuantitativo ==
-                                      null
-                                  ? 0
-                                  : _FichaSici
-                                      .distribuicaoFisicosServicoQuantitativo
-                                      .length,
-                              itemBuilder:
-                                  DistribuicaoFisicosServicoQuantitativoCard,
-                            );
-                          },
-                        ),
-                        SizedBox(height: 20.0),
-                      ],
-                    ),
-                  ),
-                  isActive: true,
-                ),
-              ],
-              type: StepperType.vertical,
-              currentStep: current_step,
-              onStepTapped: (step) {
-                setState(() {
-                  current_step = step;
-                });
-              },
-              onStepContinue: () {
-                setState(() {
-                  if (current_step < spr.length - 1) {
-                    current_step = current_step + 1;
-                  } else {
-                    current_step = 0;
-                  }
-                });
-              },
-              onStepCancel: () {
-                setState(() {
-                  if (current_step > 0) {
-                    current_step = current_step - 1;
-                  } else {
-                    current_step = 0;
-                  }
-                });
-              },
-            ),
-          );
-        }
-        break;
-    }
-  }
 }
