@@ -946,10 +946,9 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                                   builder: (BuildContext context) =>
                                   new DistribuicaoFisicosServicoQuantitativoPage(sDistribuicaoFisicosServicoQuantitativo: null))).then((value) {
                             if (value != null) {
-                              if (_FichaSici.distribuicaoFisicosServicoQuantitativo == null) {
+                              if (_FichaSici.distribuicaoFisicosServicoQuantitativo.length == 0) {
                                 value.index = 1;
                                 _FichaSici.distribuicaoFisicosServicoQuantitativo = List<TbDistribuicaoQuantitativoAcessosFisicosServico>();
-                                _FichaSici.distribuicaoFisicosServicoQuantitativo.add(value);
                               } else
                                 value.index = _FichaSici.distribuicaoFisicosServicoQuantitativo.length + 1;
                               _FichaSici.distribuicaoFisicosServicoQuantitativo.add(value);
@@ -1036,8 +1035,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
     );
   }
 
-  Card DistribuicaoFisicosServicoQuantitativoCard(
-          BuildContext context, int index) =>
+  Card DistribuicaoFisicosServicoQuantitativoCard(BuildContext context, int index) =>
       Card(
         elevation: 0.9,
         color: Color(0xffFFFFFF),
