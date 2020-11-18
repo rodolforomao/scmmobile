@@ -429,7 +429,7 @@ class ServicoMobileService {
       response.fields['controllerEmail'] = _Modelo.email;
       response.fields['controllerTelefone'] = _Modelo.telefone;
       response.fields['controllerTelefoneWhatsapp'] = _Modelo.telefoneWhatsapp;
-      response.fields['controllerEmpresa'] = _Modelo.empresa;s
+      response.fields['controllerEmpresa'] = _Modelo.empresa;
       response.fields['controllerUF'] = _Modelo.uf;
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
