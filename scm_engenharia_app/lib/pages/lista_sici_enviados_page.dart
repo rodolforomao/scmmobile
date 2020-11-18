@@ -710,61 +710,71 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Container(
-                alignment: Alignment.centerLeft,
                 height: 111.0,
                 padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
-                child: Column(children: <Widget>[
-                  RichText(
-                      textAlign: TextAlign.start,
-                      softWrap: false,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      text: TextSpan(children: [
-                        TextSpan(
-                          text: 'Período referencia :  ',
-                          style: TextStyle(
-                              fontSize: 18.0,
-                              color: Color(0xff333333),
-                              fontFamily: "avenir-lt-std-medium"),
-                        ),
-                        TextSpan(
-                          text: ListaFichaSici[index].periodoReferencia,
-                          style: TextStyle(
-                              fontSize: 20.0,
-                              color: Color(0xff333333),
-                              fontFamily: "avenir-lt-std-medium"),
-                        ),
-                      ])),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: RichText(
+                        textAlign: TextAlign.start,
+                        softWrap: false,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        text: TextSpan(children: [
+                          TextSpan(
+                            text: 'Período referencia :  ',
+                            style: TextStyle(
+                                fontSize: 18.0,
+                                color: Color(0xff333333),
+                                fontFamily: "avenir-lt-std-medium"),
+                          ),
+                          TextSpan(
+                            text: ListaFichaSici[index].periodoReferencia,
+                            style: TextStyle(
+                                fontSize: 20.0,
+                                color: Color(0xff333333),
+                                fontFamily: "avenir-lt-std-medium"),
+                          ),
+                        ])),
+                  ),
                   SizedBox(
                     height: 10.0,
                   ),
-                  Text(
-                    ListaFichaSici[index].razaoSocial,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    softWrap: false,
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        fontSize: 17.0,
-                        color: Color(0xff333333),
-                        fontFamily: "avenir-lt-std-medium-oblique"),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      ListaFichaSici[index].razaoSocial,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      softWrap: false,
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          fontSize: 17.0,
+                          color: Color(0xff333333),
+                          fontFamily: "avenir-lt-std-medium-oblique"),
+                    ),
                   ),
                   SizedBox(
                     height: 5.0,
                   ),
-                  Text(
-                    ListaFichaSici[index].observacoes,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                    softWrap: false,
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        fontSize: 14.0,
-                        color: Color(0xff333333),
-                        fontFamily: "avenir-lt-std-medium-oblique"),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child:Text(
+                      ListaFichaSici[index].observacoes,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                      softWrap: false,
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          fontSize: 14.0,
+                          color: Color(0xff333333),
+                          fontFamily: "avenir-lt-std-medium-oblique"),
+                    ),
                   ),
                 ]),
               ),
