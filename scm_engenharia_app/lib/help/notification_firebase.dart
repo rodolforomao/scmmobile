@@ -2,6 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:scm_engenharia_app/help/components.dart';
+import 'package:scm_engenharia_app/main.dart';
+import 'package:scm_engenharia_app/models/model_notificacao.dart';
+import 'package:scm_engenharia_app/pages/notificacao_page.dart';
 
 class FcmFirebase {
   static Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
@@ -31,24 +36,60 @@ class NotificationHandler {
 
   NotificationHandler._internal();
 
-
-
   initializeFcmNotification() async {
     try {
       _fcm.configure(
         onMessage: (Map<String, dynamic> message) async {
-          Object JsonEncode = json.encode(message);
+          try {
+            Object JsonEncode = json.encode(message);
+            print(jsonDecode(Components.removeAllHtmlTags(JsonEncode)));
 
-          print('on message $JsonEncode');
+
+            ModelNotificacao _Resp = ModelNotificacao.fromJson(jsonDecode(Components.removeAllHtmlTags(JsonEncode)));
+            navigatorKey.currentState.push(
+              CupertinoPageRoute(
+                  fullscreenDialog: true,
+                  builder: (BuildContext context) => NotificacaoPage(idNotificacao:_Resp.data.idNotificacao)),
+            );
+            print('on message $message');
+          } catch (error) {
+            print(error);
+          }
         },
         onBackgroundMessage: Platform.isIOS ? null : FcmFirebase.myBackgroundMessageHandler,
         onResume: (Map<String, dynamic> message) async {
-          Object JsonEncode = json.encode(message);
-          print('on resume $JsonEncode');
+          try {
+            Object JsonEncode = json.encode(message);
+            print(jsonDecode(Components.removeAllHtmlTags(JsonEncode)));
+
+
+            ModelNotificacao _Resp = ModelNotificacao.fromJson(jsonDecode(Components.removeAllHtmlTags(JsonEncode)));
+            navigatorKey.currentState.push(
+              CupertinoPageRoute(
+                  fullscreenDialog: true,
+                  builder: (BuildContext context) => NotificacaoPage(idNotificacao:_Resp.data.idNotificacao)),
+            );
+            print('on onResume $message');
+          } catch (error) {
+            print(error);
+          }
         },
         onLaunch: (Map<String, dynamic> message) async {
-          Object JsonEncode = json.encode(message);
-          print('on launch $JsonEncode');
+          try {
+            Object JsonEncode = json.encode(message);
+            print(jsonDecode(Components.removeAllHtmlTags(JsonEncode)));
+
+
+            ModelNotificacao _Resp = ModelNotificacao.fromJson(jsonDecode(Components.removeAllHtmlTags(JsonEncode)));
+            navigatorKey.currentState.push(
+              CupertinoPageRoute(
+                  fullscreenDialog: true,
+                  builder: (BuildContext context) => NotificacaoPage(idNotificacao:_Resp.data.idNotificacao)),
+            );
+            print('on onLaunch $message');
+          } catch (error) {
+            print(error);
+          }
         },
       );
       if (Platform.isIOS) {
