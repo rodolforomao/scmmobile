@@ -601,7 +601,7 @@ class ServicoMobileService {
     return _Operacao;
   }
 
-  Future<Operacao> OnQuantidadeNotificacoesPeloCPF(String cpf) async {
+  Future<Operacao> OnNotificacoesPeloCPF(String cpf) async {
     Operacao _Operacao = new Operacao();
     try {
       String token = await ComponentsJWTToken.JWTTokenPadrao();

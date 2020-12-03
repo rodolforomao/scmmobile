@@ -29,7 +29,7 @@ class _NotificacoesPageState extends State<NotificacoesPage> {
         OnAlertaInformacaoErro("Verifique sua conexão com a internet e tente novamente.",context);
       else {
         OnRealizandoOperacao("Realizando operação",true,context);
-        Operacao _RespResultado = await _RestWebService.OnQuantidadeNotificacoesPeloCPF(UsuarioLogado.DadosUsuarioLogado.cpf);
+        Operacao _RespResultado = await _RestWebService.OnNotificacoesPeloCPF(UsuarioLogado.DadosUsuarioLogado.cpf);
         if(_RespResultado.erro)
           throw(_RespResultado.mensagem);
         else
