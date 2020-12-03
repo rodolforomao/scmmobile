@@ -337,11 +337,11 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
 
         ],
       ),
-      body: _TipoWidget(context),
+      body: _TipoWidget(),
     );
   }
 
-  _TipoWidget(BuildContext context) {
+  _TipoWidget() {
     switch (_StatusTipoWidget) {
       case "sem_internet":
         {

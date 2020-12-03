@@ -13,6 +13,8 @@ import 'package:scm_engenharia_app/models/operacao.dart';
 import 'package:scm_engenharia_app/pages/erro_informacao_page.dart';
 import 'package:scm_engenharia_app/pages/login_page.dart';
 import 'package:scm_engenharia_app/pages/variavel_de_ambiente_page.dart';
+import 'package:scm_engenharia_app/help/usuario_logado.dart' as UsuarioLogado;
+
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -58,8 +60,8 @@ class _SplashScreenState extends State<SplashScreen> {
             });
           } else {
             _Usuariodb = _UsuarioLogado.resultado as TbUsuario;
-            var connectivityResult = await (Connectivity().checkConnectivity());
-            if (connectivityResult == ConnectivityResult.none) {
+            if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+              UsuarioLogado.DadosUsuarioLogado = _Usuariodb;
               Navigator.of(context).pushAndRemoveUntil(
                   new MaterialPageRoute(
                       builder: (BuildContext context) =>
@@ -93,6 +95,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 if (_UsuarioLogado.erro)
                   throw (_UsuarioLogado.mensagem);
                 else {
+                  UsuarioLogado.DadosUsuarioLogado = Usuario;
                   Navigator.of(context).pushAndRemoveUntil(
                       new MaterialPageRoute(
                           builder: (BuildContext context) =>

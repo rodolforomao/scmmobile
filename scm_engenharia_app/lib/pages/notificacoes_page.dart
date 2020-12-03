@@ -3,39 +3,33 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scm_engenharia_app/data/db_helper.dart';
-import 'package:scm_engenharia_app/data/tb_usuario.dart';
+import 'package:scm_engenharia_app/help/notification_alert.dart';
 import 'package:scm_engenharia_app/help/servico_mobile_service.dart';
 import 'package:scm_engenharia_app/models/model_notificacao.dart';
 import 'package:scm_engenharia_app/models/operacao.dart';
-import 'package:scm_engenharia_app/pages/login_page.dart';
-
-class NotificacaoPage extends StatefulWidget {
-  String idNotificacao;
-  NotificacaoPage({Key key, @required this.idNotificacao}) : super(key: key);
+import 'package:scm_engenharia_app/help/usuario_logado.dart' as UsuarioLogado;
+class NotificacoesPage extends StatefulWidget {
   @override
-  _NotificacaoPageState createState() => _NotificacaoPageState();
+  _NotificacoesPageState createState() => _NotificacoesPageState();
 }
 
-class _NotificacaoPageState extends State<NotificacaoPage> {
+class _NotificacoesPageState extends State<NotificacoesPage> {
   final _ScaffoldKey = GlobalKey<ScaffoldState>();
   ServicoMobileService _RestWebService = new ServicoMobileService();
   NotificacaoScmEngenharia _NotificacaoScmEngenharia = new NotificacaoScmEngenharia();
-  DBHelper dbHelper;
-  BuildContext dialogContext;
-  TbUsuario _Usuariodb = new TbUsuario();
+
   StreamSubscription<ConnectivityResult> subscription;
 
-  String _StatusTipoWidget;
+  String _StatusTipoWidget = "view_realizando_busca", ErroInformacao = "";
 
-  Future<Null> OnRecuperaNotificacaoPeloId() async {
+  Future<Null> OnRecuperaNotificacaoPeloCpf() async {
     try {
       var connectivityResult = await (Connectivity().checkConnectivity());
       if (connectivityResult == ConnectivityResult.none)
-        OnAlertaInformacao("Verifique sua conexão com a internet e tente novamente.",0xffde3544);
+        OnAlertaInformacaoErro("Verifique sua conexão com a internet e tente novamente.",context);
       else {
-
-        OnRealizandoOperacao("Realizando operação",true);
-        Operacao _RespResultado = await _RestWebService.OnRecuperaNotificacaoPeloId(widget.idNotificacao);
+        OnRealizandoOperacao("Realizando operação",true,context);
+        Operacao _RespResultado = await _RestWebService.OnQuantidadeNotificacoesPeloCPF(UsuarioLogado.DadosUsuarioLogado.cpf);
         if(_RespResultado.erro)
           throw(_RespResultado.mensagem);
         else
@@ -48,188 +42,24 @@ class _NotificacaoPageState extends State<NotificacaoPage> {
         }
       }
     } catch (error) {
-      OnRealizandoOperacao("",false);
-      OnAlertaInformacao(error.toString(),0xffde3544);
-    }
-  }
-
-  OnAlertaInformacao(String Mensagem, int CorButton) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8.0))),
-          child:  Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(height: 15.0),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    "Informação",
-                    style: TextStyle(
-                        fontSize: 20.0,
-                        color: Color(0xff212529),
-                        fontFamily: "avenir-lt-std-roman"),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Divider(
-                    color: Colors.black12,
-                  ),
-                  Padding(padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-                    child:  Text(
-                      Mensagem,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 4,
-                      softWrap: false,
-                      style: TextStyle(
-                          fontSize: 17.0,
-                          color: Color(0xff212529),
-                          fontFamily: "avenir-lt-std-roman"),
-                    ),
-                  ),
-                ],
-              ),
-              Divider(
-                color: Colors.black12,
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
-                child: new Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    FlatButton(
-                      color: Color(CorButton),
-                      //`Icon` to display
-                      child: Text(
-                        '           OK           ',
-                        style: TextStyle(
-                            fontSize: 17.0,
-                            color: Color(0xffFFFFFF),
-                            fontFamily: "avenir-lt-std-roman"),
-                      ),
-                      //`Text` to display
-                      onPressed: () {
-                        Navigator.pop(context);
-                        FocusManager.instance.primaryFocus.unfocus();
-                      },
-                      shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(5.0),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  OnRealizandoOperacao(String txtInformacao ,bool IsRealizandoOperacao) {
-    if (dialogContext == null) {
-      setState(() {
-        dialogContext = null;
-        IsRealizandoOperacao = false;
-      });
-    }
-    else if (IsRealizandoOperacao != true && txtInformacao == "") {
-      Navigator.of(context, rootNavigator: true).pop('dialog');
-      setState(() {
-        dialogContext = null;
-        IsRealizandoOperacao = false;
-      });
-    }
-    else
-    {
-      setState(() {
-        IsRealizandoOperacao = false;
-      });
-      showDialog(
-        context: _ScaffoldKey.currentContext,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          dialogContext = context;
-          return Dialog(
-            child: new Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(
-                      left: 10.0, top: 20.0, bottom: 20.0, right: 10.0),
-                  child: Theme(
-                    data: Theme.of(context).copyWith(
-                      accentColor: Color(0xff018a8a),
-                    ),
-                    child: new CircularProgressIndicator(),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    margin: EdgeInsets.only(
-                        left: 10.0, top: 20.0, bottom: 20.0, right: 5.0),
-                    child: Text(
-                      txtInformacao,
-                      softWrap: true,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          fontSize: 17.0,
-                          color: Color(0xff212529),
-                          fontFamily: "open-sans-regular"),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-      );
+      OnRealizandoOperacao("",false,context);
+      OnAlertaInformacaoErro(error.toString(),context);
     }
   }
 
   Inc() async {
     try {
-      Operacao _UsuarioLogado = await dbHelper.onSelecionarUsuario();
-      if (_UsuarioLogado.erro)
-        throw (_UsuarioLogado.mensagem);
-      else if (_UsuarioLogado.resultado == null) {
-        Navigator.of(context).pushAndRemoveUntil(
-            new MaterialPageRoute(
-                builder: (BuildContext context) => new LoginPage()),
-                (Route<dynamic> route) => false);
-      }
-      else {
-        _Usuariodb = _UsuarioLogado.resultado as TbUsuario;
-        OnRecuperaNotificacaoPeloId();
-      }
+      OnRecuperaNotificacaoPeloCpf();
     } catch (error) {
-      OnAlertaInformacao(error.toString(),0xffde3544);
+      OnAlertaInformacaoErro(error.toString(),context);
     }
   }
 
   @override
   void initState() {
     super.initState();
-    _NotificacaoScmEngenharia.titulo = "";
-    _NotificacaoScmEngenharia.mensagem = "";
-    dbHelper = DBHelper();
+
     Future.delayed(Duration.zero, () async {
-      print('idNotificacao ' + widget.idNotificacao);
       var connectivityResult = await (Connectivity().checkConnectivity());
       if (connectivityResult == ConnectivityResult.none) {
         setState(() {
@@ -260,7 +90,6 @@ class _NotificacaoPageState extends State<NotificacaoPage> {
     subscription?.cancel();
   }
 
-
   Widget build(BuildContext context) {
     return new Scaffold(
       key: _ScaffoldKey,
@@ -282,7 +111,7 @@ class _NotificacaoPageState extends State<NotificacaoPage> {
         centerTitle: true,
         elevation: 0.0,
         title: Text(
-          "Notificação",
+          "Notificações",
           textAlign: TextAlign.start,
           style: TextStyle(
               fontSize: 19.0,
@@ -433,64 +262,92 @@ class _NotificacaoPageState extends State<NotificacaoPage> {
       case "renderizar_tela":
         {
           return Container(
-            alignment: Alignment.topLeft,
+            width: MediaQuery.of(context).size.width,
+            padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 5.0),
             decoration: BoxDecoration(
               color: Colors.white,
             ),
             constraints: BoxConstraints(
-              minHeight: MediaQuery.of(context).size.height,
+              maxWidth: MediaQuery.of(context).size.width,
             ),
-            child: SingleChildScrollView(
-              padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+          );
+        }
+        break;
+      case "view_realizando_busca":
+        {
+          return SingleChildScrollView(
+            child: Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+              constraints: BoxConstraints(
+                minHeight: MediaQuery.of(context).size.height,
+              ),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  SizedBox(height: 10.0),
-                  Text(
-                    "Título",
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black,
-                      fontFamily: 'avenir-lt-std-roman',
-                      fontSize: 16.0,
+                  Center(
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 15.0),
+                      height: 80.0,
+                      width: 80.0,
+                      child: new CircularProgressIndicator(
+                          valueColor: new AlwaysStoppedAnimation(Colors.blue),
+                          strokeWidth: 6.0),
                     ),
                   ),
-                  SizedBox(height: 10.0),
+                  SizedBox(
+                    height: 20.0,
+                  ),
                   Text(
-                    _NotificacaoScmEngenharia.titulo,
+                    "Realizando  operação...",
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black54,
-                      fontFamily: 'avenir-lt-std-roman',
-                      fontSize: 15.0,
-                    ),
+                        fontFamily: 'Montserrat-Medium',
+                        fontSize: 17.0,
+                        color: Color(0xFF151515)),
                   ),
                   SizedBox(height: 20.0),
+                ],
+              ),
+            ),
+          );
+        }
+        break;
+      case "view_erro_informacao":
+        {
+          return SingleChildScrollView(
+            child: Container(
+              alignment: Alignment.center,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Image.asset(
+                    "assets/img/img_informacao.png",
+                    width: 150.0,
+                    height: 150.0,
+                    fit: BoxFit.fill,
+                  ),
+                  SizedBox(height: 30.0),
                   Text(
-                    "Descrição",
+                    ErroInformacao,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black,
-                      fontFamily: 'avenir-lt-std-roman',
-                      fontSize: 16.0,
-                    ),
+                        fontSize: 18.0,
+                        color: Color(0xff575757),
+                        fontFamily: "Ubuntu-Regular"),
                   ),
-                  SizedBox(height: 10.0),
-                  Text(
-                    _NotificacaoScmEngenharia.mensagem,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black54,
-                      fontFamily: 'avenir-lt-std-roman',
-                      fontSize: 15.0,
-                    ),
-                  ),
-                  SizedBox(height: 10.0),
+                  SizedBox(height: 25.0),
                 ],
               ),
             ),

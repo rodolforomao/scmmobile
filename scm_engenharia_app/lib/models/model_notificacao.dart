@@ -78,3 +78,52 @@ class Data {
     return data;
   }
 }
+
+class NotificacaoScmEngenharia {
+  String idTbNotificacoes;
+  String mensagem;
+  String destinatario;
+  String idTbUsuarioRemetente;
+  String idUsuarioUltimaAlteracao;
+  String ultimaAlteracao;
+  String titulo;
+  String firebaseMessageId;
+  String lida;
+
+  NotificacaoScmEngenharia(
+      {this.idTbNotificacoes,
+        this.mensagem,
+        this.destinatario,
+        this.idTbUsuarioRemetente,
+        this.idUsuarioUltimaAlteracao,
+        this.ultimaAlteracao,
+        this.titulo,
+        this.firebaseMessageId,
+        this.lida});
+
+  NotificacaoScmEngenharia.fromJson(Map<String, dynamic> json) {
+    idTbNotificacoes = json['id_tb_notificacoes'];
+    mensagem = json['mensagem'];
+    destinatario = json['destinatario'];
+    idTbUsuarioRemetente = json['id_tb_usuario_remetente'];
+    idUsuarioUltimaAlteracao = json['id_usuario_ultima_alteracao'];
+    ultimaAlteracao = json['ultima_alteracao'];
+    titulo = json['titulo'];
+    firebaseMessageId = json['firebase_message_id'];
+    lida = json['lida'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id_tb_notificacoes'] = this.idTbNotificacoes;
+    data['mensagem'] = this.mensagem;
+    data['destinatario'] = this.destinatario;
+    data['id_tb_usuario_remetente'] = this.idTbUsuarioRemetente;
+    data['id_usuario_ultima_alteracao'] = this.idUsuarioUltimaAlteracao;
+    data['ultima_alteracao'] = this.ultimaAlteracao;
+    data['titulo'] = this.titulo;
+    data['firebase_message_id'] = this.firebaseMessageId;
+    data['lida'] = this.lida;
+    return data;
+  }
+}

@@ -13,7 +13,7 @@ import 'package:scm_engenharia_app/models/model_usuario.dart';
 import 'package:scm_engenharia_app/models/operacao.dart';
 import 'package:scm_engenharia_app/pages/criar_nova_conta_page.dart';
 import 'package:scm_engenharia_app/pages/esqueceu_sua_senha_page.dart';
-
+import 'package:scm_engenharia_app/help/usuario_logado.dart' as UsuarioLogado;
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -64,8 +64,7 @@ class _LoginPageState extends State<LoginPage> {
         else if (_RestWebUsuario.resultado == null)
           throw (_RestWebUsuario.mensagem);
         else {
-          ModelInformacaoUsuario _UsuarioModelo =
-              ModelInformacaoUsuario.fromJson(_RestWebUsuario.resultado);
+          ModelInformacaoUsuario _UsuarioModelo = ModelInformacaoUsuario.fromJson(_RestWebUsuario.resultado);
           TbUsuario Usuario = new TbUsuario();
           Usuario.idUsuarioApp = null;
           Usuario.idUsuario = _UsuarioModelo.idUsuario;
@@ -92,6 +91,7 @@ class _LoginPageState extends State<LoginPage> {
             NotificationHandler().subscribeToTopic("nroCPF-" +Usuario.cpf);
             NotificationHandler().subscribeToTopic("scmengenhariaUserAllLogado");
             Future.delayed(Duration.zero, () {
+              UsuarioLogado.DadosUsuarioLogado = Usuario;
               Navigator.of(context).pushAndRemoveUntil(
                   new MaterialPageRoute(
                       builder: (BuildContext context) => new MenuNavigation()),

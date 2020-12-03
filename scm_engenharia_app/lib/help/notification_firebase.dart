@@ -7,6 +7,7 @@ import 'package:scm_engenharia_app/help/components.dart';
 import 'package:scm_engenharia_app/main.dart';
 import 'package:scm_engenharia_app/models/model_notificacao.dart';
 import 'package:scm_engenharia_app/pages/notificacao_page.dart';
+import 'package:scm_engenharia_app/splash_screen.dart';
 
 class FcmFirebase {
   static Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
@@ -42,15 +43,15 @@ class NotificationHandler {
         onMessage: (Map<String, dynamic> message) async {
           try {
             Object JsonEncode = json.encode(message);
-            print(jsonDecode(Components.removeAllHtmlTags(JsonEncode)));
-
-
             ModelNotificacao _Resp = ModelNotificacao.fromJson(jsonDecode(Components.removeAllHtmlTags(JsonEncode)));
             navigatorKey.currentState.push(
               CupertinoPageRoute(
-                  fullscreenDialog: true,
+                  fullscreenDialog: false,
                   builder: (BuildContext context) => NotificacaoPage(idNotificacao:_Resp.data.idNotificacao)),
-            );
+            ).then((value) {
+              navigatorKey.currentState.pushAndRemoveUntil(CupertinoPageRoute(builder: (context) =>
+                  SplashScreen()), (Route<dynamic> route) => false);
+            });
             print('on message $message');
           } catch (error) {
             print(error);
@@ -60,16 +61,16 @@ class NotificationHandler {
         onResume: (Map<String, dynamic> message) async {
           try {
             Object JsonEncode = json.encode(message);
-            print(jsonDecode(Components.removeAllHtmlTags(JsonEncode)));
-
-
             ModelNotificacao _Resp = ModelNotificacao.fromJson(jsonDecode(Components.removeAllHtmlTags(JsonEncode)));
             navigatorKey.currentState.push(
               CupertinoPageRoute(
-                  fullscreenDialog: true,
+                  fullscreenDialog: false,
                   builder: (BuildContext context) => NotificacaoPage(idNotificacao:_Resp.data.idNotificacao)),
-            );
-            print('on onResume $message');
+            ).then((value) {
+              navigatorKey.currentState.pushAndRemoveUntil(CupertinoPageRoute(builder: (context) =>
+                  SplashScreen()), (Route<dynamic> route) => false);
+            });
+            print('on message $message');
           } catch (error) {
             print(error);
           }
@@ -77,16 +78,16 @@ class NotificationHandler {
         onLaunch: (Map<String, dynamic> message) async {
           try {
             Object JsonEncode = json.encode(message);
-            print(jsonDecode(Components.removeAllHtmlTags(JsonEncode)));
-
-
             ModelNotificacao _Resp = ModelNotificacao.fromJson(jsonDecode(Components.removeAllHtmlTags(JsonEncode)));
             navigatorKey.currentState.push(
               CupertinoPageRoute(
-                  fullscreenDialog: true,
+                  fullscreenDialog: false,
                   builder: (BuildContext context) => NotificacaoPage(idNotificacao:_Resp.data.idNotificacao)),
-            );
-            print('on onLaunch $message');
+            ).then((value) {
+              navigatorKey.currentState.pushAndRemoveUntil(CupertinoPageRoute(builder: (context) =>
+                  SplashScreen()), (Route<dynamic> route) => false);
+            });
+            print('on message $message');
           } catch (error) {
             print(error);
           }

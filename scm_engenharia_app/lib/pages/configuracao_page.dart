@@ -5,7 +5,7 @@ import 'package:scm_engenharia_app/models/operacao.dart';
 import 'dart:async';
 import 'package:scm_engenharia_app/pages/alterar_senha_page.dart';
 import 'package:scm_engenharia_app/pages/login_page.dart';
-import 'package:scm_engenharia_app/pages/notificacao_lista_page.dart';
+import 'package:scm_engenharia_app/pages/notificacoes_page.dart';
 import 'package:scm_engenharia_app/pages/perfil_page.dart';
 import 'package:scm_engenharia_app/pages/variavel_de_ambiente_page.dart';
 
@@ -205,7 +205,7 @@ class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
                       new CupertinoPageRoute<bool>(
                         maintainState: false,
                         fullscreenDialog: true,
-                        builder: (BuildContext context) => new NotificacaoListaPage(),
+                        builder: (BuildContext context) => new NotificacoesPage(),
                       ),
                     );
                   },
