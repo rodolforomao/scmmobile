@@ -1501,21 +1501,15 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                         //`Text` to display
                         onPressed: () {
                           FocusScope.of(context).requestFocus(new FocusNode());
-                          Navigator.of(context, rootNavigator: true)
-                              .push(
-                            new CupertinoPageRoute<
-                                TbDistribuicaoQuantitativoAcessosFisicosServico>(
+                          Navigator.of(context, rootNavigator: true).push(new CupertinoPageRoute<TbDistribuicaoQuantitativoAcessosFisicosServico>(
                               maintainState: false,
                               fullscreenDialog: true,
                               builder: (BuildContext context) =>
                                   new DistribuicaoFisicosServicoQuantitativoPage(
                                       sDistribuicaoFisicosServicoQuantitativo:
-                                          _FichaSici
-                                                  .distribuicaoFisicosServicoQuantitativo[
-                                              index]),
+                                          _FichaSici.distribuicaoFisicosServicoQuantitativo[index]),
                             ),
-                          )
-                              .then((value) {
+                          ).then((value) {
                             if (value != null) {
                               int Index = _FichaSici
                                   .distribuicaoFisicosServicoQuantitativo

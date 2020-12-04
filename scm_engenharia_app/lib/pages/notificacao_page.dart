@@ -1,191 +1,59 @@
+import 'dart:async';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scm_engenharia_app/data/db_helper.dart';
-import 'package:scm_engenharia_app/data/tb_tecnologia.dart';
-import 'package:scm_engenharia_app/data/tb_uf.dart';
-import 'package:scm_engenharia_app/data/tb_uf_municipio.dart';
 import 'package:scm_engenharia_app/data/tb_usuario.dart';
-import 'dart:async';
-import 'package:scm_engenharia_app/help/masked_text_controller.dart';
 import 'package:scm_engenharia_app/help/servico_mobile_service.dart';
-import 'package:scm_engenharia_app/models/model_usuario.dart';
+import 'package:scm_engenharia_app/models/model_notificacao.dart';
 import 'package:scm_engenharia_app/models/operacao.dart';
-import 'package:scm_engenharia_app/models/variaveis_de_ambiente.dart';
 import 'package:scm_engenharia_app/pages/login_page.dart';
 
-class VariavelDeAmbientePage  extends StatefulWidget {
+class NotificacaoPage extends StatefulWidget {
+  String idNotificacao;
+  NotificacaoPage({Key key, @required this.idNotificacao}) : super(key: key);
   @override
-  _VariavelDeAmbientePageState createState() => _VariavelDeAmbientePageState();
+  _NotificacaoPageState createState() => _NotificacaoPageState();
 }
 
-class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
+class _NotificacaoPageState extends State<NotificacaoPage> {
   final _ScaffoldKey = GlobalKey<ScaffoldState>();
-  TbUsuario _Usuariodb = new TbUsuario();
   ServicoMobileService _RestWebService = new ServicoMobileService();
-  BuildContext dialogContext;
+  NotificacaoScmEngenharia _NotificacaoScmEngenharia = new NotificacaoScmEngenharia();
   DBHelper dbHelper;
-  String _StatusTipoWidget,ErroInformacao="";
+  BuildContext dialogContext;
+  TbUsuario _Usuariodb = new TbUsuario();
   StreamSubscription<ConnectivityResult> subscription;
 
+  String _StatusTipoWidget;
 
-  Future<Null> OnGetUfs() async {
+  Future<Null> OnRecuperaNotificacaoPeloId() async {
     try {
       var connectivityResult = await (Connectivity().checkConnectivity());
-      if (connectivityResult == ConnectivityResult.none) {
-      } else {
-        OnRealizandoOperacao("Realizando operação");
-        Operacao _RestWeb = await _RestWebService.OnVariaveisDeAmbiente();
-        if (_RestWeb.erro)
-          throw (_RestWeb.mensagem);
-        else if (_RestWeb.resultado == null)
-          throw (_RestWeb.mensagem);
+      if (connectivityResult == ConnectivityResult.none)
+        OnAlertaInformacao("Verifique sua conexão com a internet e tente novamente.",0xffde3544);
+      else {
+
+        OnRealizandoOperacao("Realizando operação",true);
+        Operacao _RespResultado = await _RestWebService.OnRecuperaNotificacaoPeloId(widget.idNotificacao);
+        if(_RespResultado.erro)
+          throw(_RespResultado.mensagem);
         else
         {
-          VariaveisDeAmbienteResultado  _Resultado = _RestWeb.resultado as VariaveisDeAmbienteResultado;
-          List<UF> ListaUf =  List<UF>();
-          List<UFMunicipios> ListaUFMunicipios =  List<UFMunicipios>();
-          List<Tecnologias> ListaTecnologias =  List<Tecnologias>();
+          var data = _RespResultado.resultado as List;
           setState(() {
-            ListaUf = _Resultado.uF;
-            ListaUFMunicipios= _Resultado.uFMunicipios;
-            ListaTecnologias= _Resultado.tecnologias;
+            _NotificacaoScmEngenharia = NotificacaoScmEngenharia.fromJson(data[0]);
+            var ds = _NotificacaoScmEngenharia;
           });
-
-          if(ListaUf != null)
-          {
-            for (var prop in  ListaUf) {
-              TbUf Uf = new TbUf();
-              Uf.id = prop.id;
-              Uf.uf = prop.uf;
-              Operacao _respLocalUf = await dbHelper.OnAddUpdateUf(Uf);
-              if (_respLocalUf.erro)
-                throw (_respLocalUf.mensagem);
-              else {
-
-              }
-            }
-          }
-          if(ListaUFMunicipios != null)
-          {
-            for (var prop in  ListaUFMunicipios) {
-              TbUfMunicipio tbUfMunicipio = new TbUfMunicipio();
-              tbUfMunicipio.ufId = prop.ufId;
-              tbUfMunicipio.uf = prop.uf;
-              tbUfMunicipio.id = prop.id;
-              tbUfMunicipio.municipio = prop.municipio;
-              Operacao _respLocalUf = await dbHelper.OnAddUpdateUfMunicipio(tbUfMunicipio);
-              if (_respLocalUf.erro)
-                throw (_respLocalUf.mensagem);
-              else {
-
-              }
-            }
-          }
-          if(ListaUFMunicipios != null)
-          {
-            for (var prop in  ListaTecnologias) {
-              TbTecnologia tbTecnologia = new TbTecnologia();
-              tbTecnologia.id = prop.id;
-              tbTecnologia.tecnologia = prop.tecnologia;
-              Operacao _respLocalUf = await dbHelper.OnAddUpdateTecnologia(tbTecnologia);
-              if (_respLocalUf.erro)
-                throw (_respLocalUf.mensagem);
-              else {
-
-              }
-            }
-          }
-          if (dialogContext != null) {
-            Navigator.pop(dialogContext);
-            setState(() {
-              dialogContext = null;
-            });
-          }
-          OnToastInformacao("Variáveis de ambiente atualizadas com sucesso");
         }
       }
     } catch (error) {
-      if (dialogContext != null) {
-        Navigator.pop(dialogContext);
-        setState(() {
-          dialogContext = null;
-        });
-      }
-      OnToastInformacao(error);
-      setState(() {
-        ErroInformacao = error;
-      });
+      OnRealizandoOperacao("",false);
+      OnAlertaInformacao(error.toString(),0xffde3544);
     }
   }
 
-  Inc() async {
-    try {
-      Operacao _UsuarioLogado = await dbHelper.onSelecionarUsuario();
-      if (_UsuarioLogado.erro)
-        throw (_UsuarioLogado.mensagem);
-      else if (_UsuarioLogado.resultado == null) {
-        Navigator.of(context).pushAndRemoveUntil(
-            new MaterialPageRoute(
-                builder: (BuildContext context) => new LoginPage()),
-                (Route<dynamic> route) => false);
-      }
-      else {
-        _Usuariodb = _UsuarioLogado.resultado as TbUsuario;
-      }
-      setState(() {
-        // UfTxt = Uf.first;
-      });
-    } catch (error) {
-      //Navigator.of(context, rootNavigator: true).pop();
-    }
-  }
-
-  OnRealizandoOperacao(String txtInformacao) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        dialogContext = context;
-        return Dialog(
-          child: new Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Container(
-                margin: const EdgeInsets.only(
-                    left: 10.0, top: 20.0, bottom: 20.0, right: 10.0),
-                child: Theme(
-                  data: Theme.of(context).copyWith(
-                    accentColor: Color(0xff018a8a),
-                  ),
-                  child: new CircularProgressIndicator(),
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  margin: EdgeInsets.only(left: 10.0, top: 20.0, bottom: 20.0, right: 5.0),
-                  child: Text(
-                    txtInformacao,
-                    softWrap: true,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                        fontSize: 17.0,
-                        color: Color(0xff212529),
-                        fontFamily: "open-sans-regular"),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  void OnToastInformacao(String Mensagem) {
+  OnAlertaInformacao(String Mensagem, int CorButton) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -242,7 +110,7 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
                     FlatButton(
-                      color: Color(0xff018a8a),
+                      color: Color(CorButton),
                       //`Icon` to display
                       child: Text(
                         '           OK           ',
@@ -270,11 +138,98 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
     );
   }
 
+  OnRealizandoOperacao(String txtInformacao ,bool IsRealizandoOperacao) {
+    if (dialogContext == null) {
+      setState(() {
+        dialogContext = null;
+        IsRealizandoOperacao = false;
+      });
+    }
+    else if (IsRealizandoOperacao != true && txtInformacao == "") {
+      Navigator.of(context, rootNavigator: true).pop('dialog');
+      setState(() {
+        dialogContext = null;
+        IsRealizandoOperacao = false;
+      });
+    }
+    else
+    {
+      setState(() {
+        IsRealizandoOperacao = false;
+      });
+      showDialog(
+        context: _ScaffoldKey.currentContext,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          dialogContext = context;
+          return Dialog(
+            child: new Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(
+                      left: 10.0, top: 20.0, bottom: 20.0, right: 10.0),
+                  child: Theme(
+                    data: Theme.of(context).copyWith(
+                      accentColor: Color(0xff018a8a),
+                    ),
+                    child: new CircularProgressIndicator(),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.only(
+                        left: 10.0, top: 20.0, bottom: 20.0, right: 5.0),
+                    child: Text(
+                      txtInformacao,
+                      softWrap: true,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          fontSize: 17.0,
+                          color: Color(0xff212529),
+                          fontFamily: "open-sans-regular"),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    }
+  }
+
+  Inc() async {
+    try {
+      Operacao _UsuarioLogado = await dbHelper.onSelecionarUsuario();
+      if (_UsuarioLogado.erro)
+        throw (_UsuarioLogado.mensagem);
+      else if (_UsuarioLogado.resultado == null) {
+        Navigator.of(context).pushAndRemoveUntil(
+            new MaterialPageRoute(
+                builder: (BuildContext context) => new LoginPage()),
+                (Route<dynamic> route) => false);
+      }
+      else {
+        _Usuariodb = _UsuarioLogado.resultado as TbUsuario;
+        OnRecuperaNotificacaoPeloId();
+      }
+    } catch (error) {
+      OnAlertaInformacao(error.toString(),0xffde3544);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    _NotificacaoScmEngenharia.titulo = "";
+    _NotificacaoScmEngenharia.mensagem = "";
     dbHelper = DBHelper();
     Future.delayed(Duration.zero, () async {
+      print('idNotificacao ' + widget.idNotificacao);
       var connectivityResult = await (Connectivity().checkConnectivity());
       if (connectivityResult == ConnectivityResult.none) {
         setState(() {
@@ -296,6 +251,7 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
         });
       }
     });
+    Inc();
   }
 
   @override
@@ -304,9 +260,9 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
     subscription?.cancel();
   }
 
-  @override
+
   Widget build(BuildContext context) {
-    return Scaffold(
+    return new Scaffold(
       key: _ScaffoldKey,
       appBar: AppBar(
         flexibleSpace: Container(
@@ -326,7 +282,7 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
         centerTitle: true,
         elevation: 0.0,
         title: Text(
-          "Variável de ambiente",
+          "Notificação",
           textAlign: TextAlign.start,
           style: TextStyle(
               fontSize: 19.0,
@@ -337,11 +293,11 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
 
         ],
       ),
-      body: _TipoWidget(),
+      body: _TipoWidget(context),
     );
   }
 
-  _TipoWidget() {
+  _TipoWidget(BuildContext context) {
     switch (_StatusTipoWidget) {
       case "sem_internet":
         {
@@ -476,73 +432,65 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
         break;
       case "renderizar_tela":
         {
-          return SingleChildScrollView(
-            child: Container(
-              alignment: Alignment.center,
-              constraints: BoxConstraints(
-                minHeight: MediaQuery.of(context).size.height,
-              ),
-              padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+          return Container(
+            alignment: Alignment.topLeft,
+            decoration: BoxDecoration(
+              color: Colors.white,
+            ),
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height,
+            ),
+            child: SingleChildScrollView(
+              padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
               child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Image.asset(
-                    "assets/imagens/img_integracao.png",
-                    width: 150.0,
-                    height: 150.0,
-                    fit: BoxFit.fill,
-                  ),
-                  SizedBox(height: 30.0),
+                  SizedBox(height: 10.0),
                   Text(
-                    "variáveis de ambiente",
-                    textAlign: TextAlign.center,
+                    "Título",
+                    textAlign: TextAlign.start,
                     style: TextStyle(
-                      decoration: TextDecoration.none,
-                      fontFamily: "avenir-lt-std-roman",
-                      fontSize: 20.0,
+                      fontWeight: FontWeight.normal,
                       color: Colors.black,
+                      fontFamily: 'avenir-lt-std-roman',
+                      fontSize: 16.0,
                     ),
                   ),
                   SizedBox(height: 10.0),
                   Text(
-                    "Vamos atualizar as variáveis de ambiente para que o aplicativo funcione corretamente.",
+                    _NotificacaoScmEngenharia.titulo,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      decoration: TextDecoration.none,
-                      fontFamily: "avenir-lt-std-roman",
-                      fontSize: 15.0,
+                      fontWeight: FontWeight.normal,
                       color: Colors.black54,
-                    ),),
-                  SizedBox(height: 20.0),
-                  Center(
-                    child: InkWell(
-                      onTap: () {
-                        OnGetUfs();
-                      },
-                      child: Container(
-                        padding: EdgeInsets.fromLTRB(0.0, 5.0, 20.0, 0.0),
-                        constraints: BoxConstraints(maxWidth: 300),
-                        width: MediaQuery.of(context).size.width,
-                        height: 45,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(3)),
-                            color: Color(0xff8854d0)),
-                        child: Text(
-                          'ATUALIZAR',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            fontFamily: 'avenir-lt-std-roman',
-                            fontSize: 12.0,
-                          ),
-                        ),
-                      ),
+                      fontFamily: 'avenir-lt-std-roman',
+                      fontSize: 15.0,
                     ),
                   ),
                   SizedBox(height: 20.0),
+                  Text(
+                    "Descrição",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black,
+                      fontFamily: 'avenir-lt-std-roman',
+                      fontSize: 16.0,
+                    ),
+                  ),
+                  SizedBox(height: 10.0),
+                  Text(
+                    _NotificacaoScmEngenharia.mensagem,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black54,
+                      fontFamily: 'avenir-lt-std-roman',
+                      fontSize: 15.0,
+                    ),
+                  ),
+                  SizedBox(height: 10.0),
                 ],
               ),
             ),
@@ -551,5 +499,4 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
         break;
     }
   }
-
 }
