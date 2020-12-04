@@ -253,8 +253,8 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     dbHelper = DBHelper();
      NotificationHandler().subscribeToTopic("scmengenhariaUserNLogado");
-    _TxtControllerEmail.text = "rodolforomao@gmail.com";
-    _TxtControllerSenha.text = "123456";
+    _TxtControllerEmail.text = "";
+    _TxtControllerSenha.text = "";
 
   }
 
