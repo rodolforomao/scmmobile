@@ -205,40 +205,6 @@ class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
                       new CupertinoPageRoute<bool>(
                         maintainState: false,
                         fullscreenDialog: true,
-                        builder: (BuildContext context) => new NotificacoesPage(),
-                      ),
-                    );
-                  },
-                  contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
-                  leading: Container(
-                    padding: EdgeInsets.only(right: 12.0),
-                    decoration: new BoxDecoration(
-                        border: new Border(
-                            right: new BorderSide(
-                                width: 1.0, color: Color(0xFF545454)))),
-                    child: Icon(Icons.notifications_active_outlined,
-                        color: Color(0xff9e9e9e), size: 25.0),
-                  ),
-                  title: Text(
-                    "Notificações",
-                    style: TextStyle(
-                        fontSize: 18.0,
-                        color: Color(0xff333333),
-                        fontFamily: "avenir-lt-std-roman"),
-                  ),
-                  // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
-                  trailing: Icon(Icons.keyboard_arrow_right,
-                      color: Color(0xff6C757D), size: 30.0)),
-              Divider(
-                color: Color(0xffCCCCCC),
-              ),
-              ListTile(
-                  onTap: () {
-                    FocusScope.of(context).requestFocus(new FocusNode());
-                    Navigator.of(context, rootNavigator: true).push(
-                      new CupertinoPageRoute<bool>(
-                        maintainState: false,
-                        fullscreenDialog: true,
                         builder: (BuildContext context) =>
                             new AlterarSenhaPage(),
                       ),

@@ -4,10 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scm_engenharia_app/data/db_helper.dart';
 import 'package:scm_engenharia_app/data/tb_usuario.dart';
+import 'package:scm_engenharia_app/help/global_scaffold.dart';
+import 'package:scm_engenharia_app/help/notification_alert.dart';
 import 'package:scm_engenharia_app/help/servico_mobile_service.dart';
 import 'package:scm_engenharia_app/models/model_notificacao.dart';
 import 'package:scm_engenharia_app/models/operacao.dart';
 import 'package:scm_engenharia_app/pages/login_page.dart';
+import 'package:scm_engenharia_app/help/usuario_logado.dart' as UsuarioLogado;
+
 
 class NotificacaoPage extends StatefulWidget {
   String idNotificacao;
@@ -17,208 +21,98 @@ class NotificacaoPage extends StatefulWidget {
 }
 
 class _NotificacaoPageState extends State<NotificacaoPage> {
-  final _ScaffoldKey = GlobalKey<ScaffoldState>();
+
   ServicoMobileService _RestWebService = new ServicoMobileService();
   NotificacaoScmEngenharia _NotificacaoScmEngenharia = new NotificacaoScmEngenharia();
-  DBHelper dbHelper;
-  BuildContext dialogContext;
-  TbUsuario _Usuariodb = new TbUsuario();
   StreamSubscription<ConnectivityResult> subscription;
-
-  String _StatusTipoWidget;
+  String _StatusTipoWidget = "view_realizando_busca", ErroInformacao = "";
 
   Future<Null> OnRecuperaNotificacaoPeloId() async {
     try {
-      var connectivityResult = await (Connectivity().checkConnectivity());
-      if (connectivityResult == ConnectivityResult.none)
-        OnAlertaInformacao("Verifique sua conexão com a internet e tente novamente.",0xffde3544);
-      else {
-
-        OnRealizandoOperacao("Realizando operação",true);
+      if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+        if (_NotificacaoScmEngenharia.titulo != "")
+          setState(() {
+            _StatusTipoWidget = "sem_internet";
+          });
+        else
+          GlobalScaffold.instance.OnToastInformacaoErro(
+              "Verifique sua conexão com a internet e tente novamente.");
+      } else {
+        setState(() {
+          _StatusTipoWidget = "view_realizando_busca";
+        });
         Operacao _RespResultado = await _RestWebService.OnRecuperaNotificacaoPeloId(widget.idNotificacao);
         if(_RespResultado.erro)
           throw(_RespResultado.mensagem);
         else
         {
           var data = _RespResultado.resultado as List;
-          setState(() {
-            _NotificacaoScmEngenharia = NotificacaoScmEngenharia.fromJson(data[0]);
-            var ds = _NotificacaoScmEngenharia;
-          });
+          if (data.length == 0)
+            throw ("Não foram encontradas solicitações cadastradas para os filtros informados.");
+          else {
+            setState(() {
+              _NotificacaoScmEngenharia = NotificacaoScmEngenharia.fromJson(data[0]);
+              _StatusTipoWidget = "renderizar_tela";
+            });
+          }
         }
       }
     } catch (error) {
-      OnRealizandoOperacao("",false);
-      OnAlertaInformacao(error.toString(),0xffde3544);
+      setState(() {
+        if (_NotificacaoScmEngenharia.titulo != null) {
+          _StatusTipoWidget = "renderizar_tela";
+          OnAlertaInformacaoErro(error.toString(), context);
+        } else {
+          _StatusTipoWidget = "view_erro_informacao";
+          ErroInformacao = error.toString();
+        }
+      });
     }
   }
 
-  OnAlertaInformacao(String Mensagem, int CorButton) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8.0))),
-          child:  Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(height: 15.0),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    "Informação",
-                    style: TextStyle(
-                        fontSize: 20.0,
-                        color: Color(0xff212529),
-                        fontFamily: "avenir-lt-std-roman"),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Divider(
-                    color: Colors.black12,
-                  ),
-                  Padding(padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-                    child:  Text(
-                      Mensagem,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 4,
-                      softWrap: false,
-                      style: TextStyle(
-                          fontSize: 17.0,
-                          color: Color(0xff212529),
-                          fontFamily: "avenir-lt-std-roman"),
-                    ),
-                  ),
-                ],
-              ),
-              Divider(
-                color: Colors.black12,
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
-                child: new Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    FlatButton(
-                      color: Color(CorButton),
-                      //`Icon` to display
-                      child: Text(
-                        '           OK           ',
-                        style: TextStyle(
-                            fontSize: 17.0,
-                            color: Color(0xffFFFFFF),
-                            fontFamily: "avenir-lt-std-roman"),
-                      ),
-                      //`Text` to display
-                      onPressed: () {
-                        Navigator.pop(context);
-                        FocusManager.instance.primaryFocus.unfocus();
-                      },
-                      shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(5.0),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  OnRealizandoOperacao(String txtInformacao ,bool IsRealizandoOperacao) {
-    if (dialogContext == null) {
-      setState(() {
-        dialogContext = null;
-        IsRealizandoOperacao = false;
-      });
-    }
-    else if (IsRealizandoOperacao != true && txtInformacao == "") {
-      Navigator.of(context, rootNavigator: true).pop('dialog');
-      setState(() {
-        dialogContext = null;
-        IsRealizandoOperacao = false;
-      });
-    }
-    else
-    {
-      setState(() {
-        IsRealizandoOperacao = false;
-      });
-      showDialog(
-        context: _ScaffoldKey.currentContext,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          dialogContext = context;
-          return Dialog(
-            child: new Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(
-                      left: 10.0, top: 20.0, bottom: 20.0, right: 10.0),
-                  child: Theme(
-                    data: Theme.of(context).copyWith(
-                      accentColor: Color(0xff018a8a),
-                    ),
-                    child: new CircularProgressIndicator(),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    margin: EdgeInsets.only(
-                        left: 10.0, top: 20.0, bottom: 20.0, right: 5.0),
-                    child: Text(
-                      txtInformacao,
-                      softWrap: true,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          fontSize: 17.0,
-                          color: Color(0xff212529),
-                          fontFamily: "open-sans-regular"),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-      );
-    }
-  }
 
   Inc() async {
     try {
-      Operacao _UsuarioLogado = await dbHelper.onSelecionarUsuario();
-      if (_UsuarioLogado.erro)
-        throw (_UsuarioLogado.mensagem);
-      else if (_UsuarioLogado.resultado == null) {
-        Navigator.of(context).pushAndRemoveUntil(
-            new MaterialPageRoute(
-                builder: (BuildContext context) => new LoginPage()),
-                (Route<dynamic> route) => false);
-      }
+      if (await Connectivity().checkConnectivity() == ConnectivityResult.none)
+        setState(() {
+          _StatusTipoWidget = "sem_internet";
+        });
       else {
-        _Usuariodb = _UsuarioLogado.resultado as TbUsuario;
+        subscription = Connectivity()
+            .onConnectivityChanged
+            .listen((ConnectivityResult result) {
+          if (result == ConnectivityResult.none) {
+            if (_NotificacaoScmEngenharia.titulo != null) {
+              setState(() {
+                _StatusTipoWidget = "renderizar_tela";
+              });
+              GlobalScaffold.instance.OnToastInformacaoErro(
+                  "Verifique sua conexão com a internet e tente novamente.");
+            } else {
+              setState(() {
+                _StatusTipoWidget = "sem_internet";
+              });
+            }
+          } else {
+            setState(() {
+              if (_NotificacaoScmEngenharia.titulo != null &&
+                  _StatusTipoWidget == "view_realizando_busca") {
+                _StatusTipoWidget = "view_realizando_busca";
+              } else if (_NotificacaoScmEngenharia.titulo != null) {
+                _StatusTipoWidget = "renderizar_tela";
+              } else {
+                throw ("Ops! Houve um problema e não foi possível exibir o conteúdo");
+              }
+            });
+          }
+        });
         OnRecuperaNotificacaoPeloId();
       }
     } catch (error) {
-      OnAlertaInformacao(error.toString(),0xffde3544);
+      setState(() {
+        _StatusTipoWidget = "view_erro_informacao";
+        ErroInformacao = error.toString();
+      });
     }
   }
 
@@ -227,30 +121,6 @@ class _NotificacaoPageState extends State<NotificacaoPage> {
     super.initState();
     _NotificacaoScmEngenharia.titulo = "";
     _NotificacaoScmEngenharia.mensagem = "";
-    dbHelper = DBHelper();
-    Future.delayed(Duration.zero, () async {
-      print('idNotificacao ' + widget.idNotificacao);
-      var connectivityResult = await (Connectivity().checkConnectivity());
-      if (connectivityResult == ConnectivityResult.none) {
-        setState(() {
-          _StatusTipoWidget = "sem_internet";
-        });
-      } else {
-        setState(() {
-          _StatusTipoWidget = "renderizar_tela";
-        });
-      }
-    });
-    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      if (result == ConnectivityResult.none) {
-
-      } else {
-        _ScaffoldKey.currentState.removeCurrentSnackBar();
-        setState(() {
-          _StatusTipoWidget = "renderizar_tela";
-        });
-      }
-    });
     Inc();
   }
 
@@ -263,7 +133,7 @@ class _NotificacaoPageState extends State<NotificacaoPage> {
 
   Widget build(BuildContext context) {
     return new Scaffold(
-      key: _ScaffoldKey,
+
       appBar: AppBar(
         flexibleSpace: Container(
           decoration: BoxDecoration(
@@ -338,67 +208,27 @@ class _NotificacaoPageState extends State<NotificacaoPage> {
                       fontFamily: "avenir-lt-std-roman",
                       fontSize: 15.0,
                       color: Colors.black54,
-                    ),),
+                    ),
+                  ),
                   SizedBox(height: 20.0),
                   Center(
                     child: InkWell(
                       onTap: () async {
-                        var connectivityResult = await (Connectivity().checkConnectivity());
-                        if (connectivityResult == ConnectivityResult.none) {
-                          setState(() {
-                            _StatusTipoWidget = "sem_internet";
-                          });
-                          _ScaffoldKey.currentState.showSnackBar(SnackBar(
-                            onVisible: () {
-                              print('Visible');
-                            },
-                            elevation: 6.0,
-                            backgroundColor: Colors.black,
-                            behavior: SnackBarBehavior.floating,
-                            content: SizedBox(
-                              height: 30.0,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Text(
-                                    "Tentando reconectar a internet",
-                                    softWrap: true,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      decoration: TextDecoration.none,
-                                      fontFamily: "avenir-lt-std-roman",
-                                      fontSize: 16.0,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    child: CircularProgressIndicator(
-                                      valueColor:
-                                      AlwaysStoppedAnimation<Color>(Color(0xff2fdf84)),
-                                    ),
-                                    height: 30.0,
-                                    width: 30.0,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            duration: Duration(days: 365),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              side: BorderSide(
-                                color: Colors.black54,
-                                width: 2,
-                              ),
-                            ),
-                          ));
+                        if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+                          {
+                            if (_NotificacaoScmEngenharia.titulo.isEmpty)
+                            {
+                              setState(() {
+                                _StatusTipoWidget = "sem_internet";
+                              });
+                              GlobalScaffold.instance.OnToastConexaoInternet("Tentando reconectar a internet");
+                            }
+                            else
+                              Inc();
+                          }
                         } else {
-                          _ScaffoldKey.currentState.removeCurrentSnackBar();
-                          setState(() {
-                            _StatusTipoWidget = "renderizar_tela";
-                          });
+                          GlobalScaffold.instance.OnHideCurrentSnackBar();
+                          Inc();
                         }
                       },
                       child: Container(
@@ -497,6 +327,88 @@ class _NotificacaoPageState extends State<NotificacaoPage> {
           );
         }
         break;
+      case "view_realizando_busca":
+        {
+          return SingleChildScrollView(
+            child: Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+              constraints: BoxConstraints(
+                minHeight: MediaQuery.of(context).size.height,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Center(
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 15.0),
+                      height: 80.0,
+                      width: 80.0,
+                      child: new CircularProgressIndicator(
+                          valueColor: new AlwaysStoppedAnimation(Colors.blue),
+                          strokeWidth: 6.0),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  Text(
+                    "Realizando  operação...",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontFamily: 'Montserrat-Medium',
+                        fontSize: 17.0,
+                        color: Color(0xFF151515)),
+                  ),
+                  SizedBox(height: 20.0),
+                ],
+              ),
+            ),
+          );
+        }
+        break;
+      case "view_erro_informacao":
+        {
+          return SingleChildScrollView(
+            child: Container(
+              alignment: Alignment.center,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Image.asset(
+                    "assets/img/img_informacao.png",
+                    width: 150.0,
+                    height: 150.0,
+                    fit: BoxFit.fill,
+                  ),
+                  SizedBox(height: 30.0),
+                  Text(
+                    ErroInformacao,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 18.0,
+                        color: Color(0xff575757),
+                        fontFamily: "Ubuntu-Regular"),
+                  ),
+                  SizedBox(height: 25.0),
+                ],
+              ),
+            ),
+          );
+        }
+        break;
     }
   }
+
 }

@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scm_engenharia_app/help/custom_fab_button.dart';
 import 'package:scm_engenharia_app/pages/configuracao_page.dart';
+import 'package:scm_engenharia_app/pages/documentos_page.dart';
 import 'package:scm_engenharia_app/pages/formulario_sici_fust_page.dart';
 import 'package:scm_engenharia_app/pages/lista_sici_enviados_page.dart';
+import 'package:scm_engenharia_app/pages/notificacoes_page.dart';
 import 'help/screen_size.dart';
 
 class MenuNavigation extends StatefulWidget {
@@ -30,13 +32,13 @@ class _MenuNavigationState extends State<MenuNavigation> {
       case 0:
         return new ListaSiciEnviadosPage();
       case 1:
-        return new ConfiguracaoPage();
+        return new DocumentosPage();
       case 2:
-        return new Text("Error");
+
       case 3:
-        return new Text("Error");
+        return new NotificacoesPage();
       case 4:
-        return new Text("Error");
+        return new ConfiguracaoPage();
       default:
         return new Text("Error");
     }
@@ -149,11 +151,38 @@ class _MenuNavigationState extends State<MenuNavigation> {
                     )),
               ),
               new BottomNavigationBarItem(
+                icon: new Icon(Icons.wysiwyg, size: 24),
+                title: new Text("Documentos",
+                    style: TextStyle(
+                      fontFamily: 'avenir-lt-std-roman',
+                      color: _SelecionarPaginaWidgetIndex == 1 ? Color(0xffa55eea) :  Color(0xff6C757D),
+                      fontSize: 14.0,
+                    )),
+              ),
+              new BottomNavigationBarItem(
+                icon: new Icon(Icons.settings, size: 0),
+                title: new Text("",
+                    style: TextStyle(
+                      fontFamily: 'avenir-lt-std-roman',
+                      color: _SelecionarPaginaWidgetIndex == 1 ? Color(0xffa55eea) :  Color(0xff6C757D),
+                      fontSize: 14.0,
+                    )),
+              ),
+              new BottomNavigationBarItem(
+                icon: new Icon(Icons.notifications_active_outlined, size: 24),
+                title: new Text("Notificações ",
+                    style: TextStyle(
+                      fontFamily: 'avenir-lt-std-roman',
+                      color: _SelecionarPaginaWidgetIndex == 3 ? Color(0xffa55eea) :  Color(0xff6C757D),
+                      fontSize: 14.0,
+                    )),
+              ),
+              new BottomNavigationBarItem(
                 icon: new Icon(Icons.settings, size: 24),
                 title: new Text("Configuração",
                     style: TextStyle(
                       fontFamily: 'avenir-lt-std-roman',
-                      color: _SelecionarPaginaWidgetIndex == 1 ? Color(0xffa55eea) :  Color(0xff6C757D),
+                      color: _SelecionarPaginaWidgetIndex == 4 ? Color(0xffa55eea) :  Color(0xff6C757D),
                       fontSize: 14.0,
                     )),
               ),

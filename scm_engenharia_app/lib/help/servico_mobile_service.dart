@@ -610,7 +610,8 @@ class ServicoMobileService {
         "token": token,
       };
       http.MultipartRequest response;
-      response = new http.MultipartRequest('POST', Uri.parse(Url + "/notificacoes/recuperarTodasNotificacaoByCpf_wss"));
+      response = new http.MultipartRequest('POST', Uri.parse(Url + "/notificacoes/recuperarTodasNotificacaoByCpf_ws"
+          ""));
       response.headers.addAll(headers);
       response.fields['cpf'] = cpf;
       var streamedResponse = await response.send();

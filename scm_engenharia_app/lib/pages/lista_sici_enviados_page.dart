@@ -45,10 +45,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
           var data = _RestWeb.resultado as List;
           setState(() {
             List<ModelFormularioSiciFustJson>
-                ListaModelFormularioSiciFustModelo = data
-                    .map<ModelFormularioSiciFustJson>(
-                        (json) => ModelFormularioSiciFustJson.fromJson(json))
-                    .toList();
+                ListaModelFormularioSiciFustModelo = data.map<ModelFormularioSiciFustJson>((json) => ModelFormularioSiciFustJson.fromJson(json)).toList();
             if (ListaModelFormularioSiciFustModelo.length > 0) {
               for (var prop in ListaModelFormularioSiciFustModelo) {
                 if (ListaFichaSici.where(

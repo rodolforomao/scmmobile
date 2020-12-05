@@ -2,85 +2,121 @@ import 'dart:async';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:scm_engenharia_app/data/db_helper.dart';
+import 'package:scm_engenharia_app/help/global_scaffold.dart';
 import 'package:scm_engenharia_app/help/notification_alert.dart';
 import 'package:scm_engenharia_app/help/servico_mobile_service.dart';
 import 'package:scm_engenharia_app/models/model_notificacao.dart';
 import 'package:scm_engenharia_app/models/operacao.dart';
 import 'package:scm_engenharia_app/help/usuario_logado.dart' as UsuarioLogado;
+import 'package:scm_engenharia_app/pages/notificacao_page.dart';
+
 class NotificacoesPage extends StatefulWidget {
   @override
   _NotificacoesPageState createState() => _NotificacoesPageState();
 }
 
 class _NotificacoesPageState extends State<NotificacoesPage> {
-  final _ScaffoldKey = GlobalKey<ScaffoldState>();
   ServicoMobileService _RestWebService = new ServicoMobileService();
-  NotificacaoScmEngenharia _NotificacaoScmEngenharia = new NotificacaoScmEngenharia();
-
+  List<NotificacaoScmEngenharia> ListaNotificacaoScmEngenharia =
+      new List<NotificacaoScmEngenharia>();
   StreamSubscription<ConnectivityResult> subscription;
 
   String _StatusTipoWidget = "view_realizando_busca", ErroInformacao = "";
 
   Future<Null> OnRecuperaNotificacaoPeloCpf() async {
     try {
-      var connectivityResult = await (Connectivity().checkConnectivity());
-      if (connectivityResult == ConnectivityResult.none)
-        OnAlertaInformacaoErro("Verifique sua conexão com a internet e tente novamente.",context);
-      else {
-        OnRealizandoOperacao("Realizando operação",true,context);
-        Operacao _RespResultado = await _RestWebService.OnNotificacoesPeloCPF(UsuarioLogado.DadosUsuarioLogado.cpf);
-        if(_RespResultado.erro)
-          throw(_RespResultado.mensagem);
-        else
-        {
-          var data = _RespResultado.resultado as List;
+      if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+        if (ListaNotificacaoScmEngenharia.length == 0)
           setState(() {
-            _NotificacaoScmEngenharia = NotificacaoScmEngenharia.fromJson(data[0]);
-            var ds = _NotificacaoScmEngenharia;
+            _StatusTipoWidget = "sem_internet";
           });
+        else
+          GlobalScaffold.instance.OnToastInformacaoErro(
+              "Verifique sua conexão com a internet e tente novamente.");
+      } else {
+        setState(() {
+          _StatusTipoWidget = "view_realizando_busca";
+        });
+        Operacao _RespResultado = await _RestWebService.OnNotificacoesPeloCPF(
+            UsuarioLogado.DadosUsuarioLogado.cpf);
+        if (_RespResultado.erro)
+          throw (_RespResultado.mensagem);
+        else {
+          var data = _RespResultado.resultado as List;
+          if (data.length == 0)
+            throw ("Não foram encontradas solicitações cadastradas para os filtros informados.");
+          else {
+            setState(() {
+              ListaNotificacaoScmEngenharia = data
+                  .map<NotificacaoScmEngenharia>(
+                      (json) => NotificacaoScmEngenharia.fromJson(json))
+                  .toList();
+              _StatusTipoWidget = "renderizar_tela";
+            });
+          }
         }
       }
     } catch (error) {
-      OnRealizandoOperacao("",false,context);
-      OnAlertaInformacaoErro(error.toString(),context);
+      setState(() {
+        if (ListaNotificacaoScmEngenharia.length > 0) {
+          _StatusTipoWidget = "renderizar_tela";
+          OnAlertaInformacaoErro(error.toString(), context);
+        } else {
+          _StatusTipoWidget = "view_erro_informacao";
+          ErroInformacao = error.toString();
+        }
+      });
     }
   }
 
   Inc() async {
     try {
-      OnRecuperaNotificacaoPeloCpf();
+      if (await Connectivity().checkConnectivity() == ConnectivityResult.none)
+        setState(() {
+          _StatusTipoWidget = "sem_internet";
+        });
+      else {
+        subscription = Connectivity()
+            .onConnectivityChanged
+            .listen((ConnectivityResult result) {
+          if (result == ConnectivityResult.none) {
+            if (ListaNotificacaoScmEngenharia.length > 0) {
+              setState(() {
+                _StatusTipoWidget = "renderizar_tela";
+              });
+              GlobalScaffold.instance.OnToastInformacaoErro(
+                  "Verifique sua conexão com a internet e tente novamente.");
+            } else {
+              setState(() {
+                _StatusTipoWidget = "sem_internet";
+              });
+            }
+          } else {
+            setState(() {
+              if (ListaNotificacaoScmEngenharia.length == 0 &&
+                  _StatusTipoWidget == "view_realizando_busca") {
+                _StatusTipoWidget = "view_realizando_busca";
+              } else if (ListaNotificacaoScmEngenharia.length > 0) {
+                _StatusTipoWidget = "renderizar_tela";
+              } else {
+                throw ("Ops! Houve um problema e não foi possível exibir o conteúdo");
+              }
+            });
+          }
+        });
+        OnRecuperaNotificacaoPeloCpf();
+      }
     } catch (error) {
-      OnAlertaInformacaoErro(error.toString(),context);
+      setState(() {
+        _StatusTipoWidget = "view_erro_informacao";
+        ErroInformacao = error.toString();
+      });
     }
   }
 
   @override
   void initState() {
     super.initState();
-
-    Future.delayed(Duration.zero, () async {
-      var connectivityResult = await (Connectivity().checkConnectivity());
-      if (connectivityResult == ConnectivityResult.none) {
-        setState(() {
-          _StatusTipoWidget = "sem_internet";
-        });
-      } else {
-        setState(() {
-          _StatusTipoWidget = "renderizar_tela";
-        });
-      }
-    });
-    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      if (result == ConnectivityResult.none) {
-
-      } else {
-        _ScaffoldKey.currentState.removeCurrentSnackBar();
-        setState(() {
-          _StatusTipoWidget = "renderizar_tela";
-        });
-      }
-    });
     Inc();
   }
 
@@ -92,7 +128,6 @@ class _NotificacoesPageState extends State<NotificacoesPage> {
 
   Widget build(BuildContext context) {
     return new Scaffold(
-      key: _ScaffoldKey,
       appBar: AppBar(
         flexibleSpace: Container(
           decoration: BoxDecoration(
@@ -118,9 +153,7 @@ class _NotificacoesPageState extends State<NotificacoesPage> {
               color: Color(0xffFFFFFF),
               fontFamily: "open-sans-regular"),
         ),
-        actions: <Widget>[
-
-        ],
+        actions: <Widget>[],
       ),
       body: _TipoWidget(context),
     );
@@ -167,67 +200,27 @@ class _NotificacoesPageState extends State<NotificacoesPage> {
                       fontFamily: "avenir-lt-std-roman",
                       fontSize: 15.0,
                       color: Colors.black54,
-                    ),),
+                    ),
+                  ),
                   SizedBox(height: 20.0),
                   Center(
                     child: InkWell(
                       onTap: () async {
-                        var connectivityResult = await (Connectivity().checkConnectivity());
-                        if (connectivityResult == ConnectivityResult.none) {
-                          setState(() {
-                            _StatusTipoWidget = "sem_internet";
-                          });
-                          _ScaffoldKey.currentState.showSnackBar(SnackBar(
-                            onVisible: () {
-                              print('Visible');
-                            },
-                            elevation: 6.0,
-                            backgroundColor: Colors.black,
-                            behavior: SnackBarBehavior.floating,
-                            content: SizedBox(
-                              height: 30.0,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Text(
-                                    "Tentando reconectar a internet",
-                                    softWrap: true,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      decoration: TextDecoration.none,
-                                      fontFamily: "avenir-lt-std-roman",
-                                      fontSize: 16.0,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    child: CircularProgressIndicator(
-                                      valueColor:
-                                      AlwaysStoppedAnimation<Color>(Color(0xff2fdf84)),
-                                    ),
-                                    height: 30.0,
-                                    width: 30.0,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            duration: Duration(days: 365),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              side: BorderSide(
-                                color: Colors.black54,
-                                width: 2,
-                              ),
-                            ),
-                          ));
+                        if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+                          {
+                            if (ListaNotificacaoScmEngenharia.length == 0)
+                              {
+                                setState(() {
+                                  _StatusTipoWidget = "sem_internet";
+                                });
+                                GlobalScaffold.instance.OnToastConexaoInternet("Tentando reconectar a internet");
+                              }
+                            else
+                              Inc();
+                          }
                         } else {
-                          _ScaffoldKey.currentState.removeCurrentSnackBar();
-                          setState(() {
-                            _StatusTipoWidget = "renderizar_tela";
-                          });
+                          GlobalScaffold.instance.OnHideCurrentSnackBar();
+                          Inc();
                         }
                       },
                       child: Container(
@@ -269,6 +262,89 @@ class _NotificacoesPageState extends State<NotificacoesPage> {
             ),
             constraints: BoxConstraints(
               maxWidth: MediaQuery.of(context).size.width,
+            ),
+            child: RefreshIndicator(
+              onRefresh: () async {},
+              child: ListView.separated(
+                separatorBuilder: (context, index) => Divider(
+                  color: Color(0xffCCCCCC),
+                ),
+                physics: const AlwaysScrollableScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: ListaNotificacaoScmEngenharia.length,
+                itemBuilder: (BuildContext context, int index) => ListTile(
+                    onTap: () {
+                      FocusScope.of(context).requestFocus(new FocusNode());
+                      Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                              fullscreenDialog: true,
+                              builder: (BuildContext context) =>
+                                  NotificacaoPage(
+                                      idNotificacao:
+                                          ListaNotificacaoScmEngenharia[index]
+                                              .idTbNotificacoes))).then((value) {
+                        OnRecuperaNotificacaoPeloCpf();
+
+                      });
+                    },
+                    contentPadding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+                    leading: Container(
+                      width: 30,
+                      alignment: Alignment.centerRight,
+                      padding: EdgeInsets.only(right: 15.0),
+                      decoration: new BoxDecoration(
+                          border: new Border(
+                              right: new BorderSide(
+                                  width: 1.0, color: Color(0xFF545454)))),
+                      child: ListaNotificacaoScmEngenharia[index].lida == "0"
+                          ? Icon(Icons.error_outline,
+                              color: Color(0xFFd37d0e), size: 25.0)
+                          : Icon(Icons.check_circle_outline_outlined,
+                              color: Color(0xFF2fac51), size: 25.0),
+                    ),
+                    dense: true,
+                    title: Container(
+                      alignment: Alignment.centerLeft,
+                      padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
+                      child: Text(
+                        ListaNotificacaoScmEngenharia[index].titulo,
+                        textAlign: TextAlign.start,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        softWrap: false,
+                        style: TextStyle(
+                            decoration: TextDecoration.none,
+                            fontSize: 15.0,
+                            color: Color(0xff333333),
+                            fontFamily: "avenir-lt-std-medium"),
+                      ),
+                    ),
+                    subtitle: Container(
+                      alignment: Alignment.centerLeft,
+                      height: 45,
+                      padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
+                      child: Text(
+                        ListaNotificacaoScmEngenharia[index].mensagem,
+                        textAlign: TextAlign.start,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        softWrap: false,
+                        style: TextStyle(
+                            decoration: TextDecoration.none,
+                            fontSize: 13.0,
+                            color: Color(0xff333333),
+                            fontFamily: "avenir-lt-std-medium"),
+                      ),
+                    ),
+                    trailing: Container(
+                      width: 30,
+                      alignment: Alignment.centerLeft,
+                      child: Icon(Icons.keyboard_arrow_right,
+                          color: Color(0xff848484), size: 30.0),
+                    )),
+              ),
             ),
           );
         }
