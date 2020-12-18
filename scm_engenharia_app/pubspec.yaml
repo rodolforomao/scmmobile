@@ -31,8 +31,8 @@ dependencies:
   cupertino_icons: ^1.0.0
   http: ^0.12.2
   connectivity: ^2.0.1
-  path_provider: ^1.6.22
-  intl: ^0.17.0-nullsafety.2
+  path_provider: ^1.6.24
+  intl: ^0.16.1
   shared_preferences: ^0.5.12+2
   device_info: ^0.4.2+9
   jaguar_jwt: ^2.1.6
