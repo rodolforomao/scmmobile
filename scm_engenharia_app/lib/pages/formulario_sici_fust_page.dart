@@ -83,14 +83,10 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
 
 
 
-  TextEditingController _TxtControllerCnpj =
-      new MaskedTextController(mask: '00.000.000/0000-00');
+  TextEditingController _TxtControllerCnpj = new MaskedTextController(mask: '00.000.000/0000-00');
   TextEditingController _TxtControllerRazaoSocial = TextEditingController();
-
-  TextEditingController _TxtControllerTelefoneMovel =
-      new MaskedTextController(mask: '(00) 0 0000-0000');
-  TextEditingController _TxtControllerTelefoneFixo =
-      new MaskedTextController(mask: '(00) 0 0000-0000');
+  TextEditingController _TxtControllerTelefoneMovel = new MaskedTextController(mask: '(00) 0 0000-0000');
+  TextEditingController _TxtControllerTelefoneFixo = new MaskedTextController(mask: '(00) 0 0000-0000');
 
   TextEditingController _TxtControllerPeriodoReferencia = TextEditingController();
 
@@ -395,8 +391,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
         _TxtControllerTelefoneMovel.text = widget.FichaSiciModel.telefoneMovel;
         _TxtControllerTelefoneFixo.text = widget.FichaSiciModel.telefoneFixo;
         _TxtControllerReceitaBruta.text = widget.FichaSiciModel.receitaBruta;
-        _TxtControllerReceitaLiquida.text =
-            widget.FichaSiciModel.receitaLiquida;
+        _TxtControllerReceitaLiquida.text = widget.FichaSiciModel.receitaLiquida;
         _TxtControllerSimples.text = widget.FichaSiciModel.simples;
         _TxtControllerSimplesPorc.text = widget.FichaSiciModel.simplesPorc;
         _TxtControllerIcms.text = widget.FichaSiciModel.icms;

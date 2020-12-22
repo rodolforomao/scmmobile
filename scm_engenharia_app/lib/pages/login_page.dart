@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 import 'package:scm_engenharia_app/help/notification_firebase.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import 'package:scm_engenharia_app/data/db_helper.dart';
 import 'package:scm_engenharia_app/data/tb_usuario.dart';
 import 'package:scm_engenharia_app/help/servico_mobile_service.dart';
@@ -253,8 +252,8 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     dbHelper = DBHelper();
      NotificationHandler().subscribeToTopic("scmengenhariaUserNLogado");
-    // _TxtControllerEmail.text = "rodolforomao@gmail.com";
-    // _TxtControllerSenha.text = "123456";
+     _TxtControllerEmail.text = "rodolforomao@gmail.com";
+     _TxtControllerSenha.text = "123456";
 
   }
 

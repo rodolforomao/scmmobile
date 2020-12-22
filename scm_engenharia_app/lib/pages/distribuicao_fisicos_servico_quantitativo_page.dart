@@ -25,13 +25,9 @@ sDistribuicaoFisicosServicoQuantitativo;
 
 class _DistribuicaoFisicosServicoQuantitativoPageState extends State<DistribuicaoFisicosServicoQuantitativoPage> {
   final _ScaffoldKey = GlobalKey<ScaffoldState>();
-
-  TbDistribuicaoQuantitativoAcessosFisicosServico
-      _DistribuicaoFisicosServicoQuantitativo =
-      new TbDistribuicaoQuantitativoAcessosFisicosServico();
-
-
+  TbDistribuicaoQuantitativoAcessosFisicosServico _DistribuicaoFisicosServicoQuantitativo = new TbDistribuicaoQuantitativoAcessosFisicosServico();
   DBHelper dbHelper;
+
   List<TbTecnologia> ListTecnologiadb = new List<TbTecnologia>();
   List<TbUf> ListUfdb = new List<TbUf>();
   List<TbUfMunicipio> ListUfMunicipiodb = new List<TbUfMunicipio>();
@@ -42,6 +38,7 @@ class _DistribuicaoFisicosServicoQuantitativoPageState extends State<Distribuica
   String id_uf = "0";
   String id_municipio = "0";
   String id_tecnologia = "0";
+
   TextEditingController _TxtControllerMunicipio = TextEditingController();
   TextEditingController _TxtControllerCod_ibge = TextEditingController();
   TextEditingController _TxtControllerPf_0 = TextEditingController();

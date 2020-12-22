@@ -5,8 +5,8 @@ import 'package:scm_engenharia_app/models/operacao.dart';
 import 'dart:async';
 import 'package:scm_engenharia_app/pages/alterar_senha_page.dart';
 import 'package:scm_engenharia_app/pages/login_page.dart';
-import 'package:scm_engenharia_app/pages/notificacoes_page.dart';
 import 'package:scm_engenharia_app/pages/perfil_page.dart';
+import 'package:scm_engenharia_app/pages/poste/lista_empresa_page.dart';
 import 'package:scm_engenharia_app/pages/variavel_de_ambiente_page.dart';
 
 class ConfiguracaoPage extends StatefulWidget {
@@ -294,6 +294,41 @@ class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
                     style: TextStyle(
                         fontSize: 18.0,
                         color: Color(0xff333333),
+                        fontFamily: "avenir-lt-std-roman"),
+                  ),
+                  // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
+                  trailing: Icon(Icons.keyboard_arrow_right,
+                      color: Color(0xff6C757D), size: 30.0)),
+              Divider(
+                color: Color(0xffCCCCCC),
+              ),
+              ListTile(
+                  onTap: () {
+                    FocusScope.of(context).requestFocus(new FocusNode());
+                    Navigator.of(context, rootNavigator: true).push(
+                      new CupertinoPageRoute(
+                        maintainState: false,
+                        fullscreenDialog: true,
+                        builder: (BuildContext context) =>
+                        new ListaEmpresaPage(),
+                      ),
+                    );
+                  },
+                  contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+                  leading: Container(
+                    padding: EdgeInsets.only(right: 12.0),
+                    decoration: new BoxDecoration(
+                        border: new Border(
+                            right: new BorderSide(
+                                width: 1.0, color: Color(0xff6C757D)))),
+                    child: Icon(Icons.account_tree_outlined,
+                        color: Color(0xff9e9e9e), size: 25.0),
+                  ),
+                  title: Text(
+                    "Poste",
+                    style: TextStyle(
+                        fontSize: 18.0,
+                        color: Color(0xff212529),
                         fontFamily: "avenir-lt-std-roman"),
                   ),
                   // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
