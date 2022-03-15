@@ -32,7 +32,8 @@ dependencies:
   http: ^0.12.2
   connectivity: ^2.0.1
   path_provider: ^1.6.24
-  intl: ^0.16.1
+  #intl: ^0.16.1
+  intl: ^0.17.0
   shared_preferences: ^0.5.12+2
   device_info: ^0.4.2+9
   jaguar_jwt: ^2.1.6

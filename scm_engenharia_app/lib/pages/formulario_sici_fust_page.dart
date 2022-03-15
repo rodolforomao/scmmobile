@@ -693,7 +693,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                       textAlign: TextAlign.start,
                       keyboardType: TextInputType.number,
                       inputFormatters: [
-                        WhitelistingTextInputFormatter.digitsOnly,
+                        //WhitelistingTextInputFormatter.digitsOnly,
                         CurrencyPtBrInputFormatter()
                       ],
                       textInputAction: TextInputAction.done,
@@ -714,7 +714,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                             textAlign: TextAlign.start,
                             keyboardType: TextInputType.number,
                             inputFormatters: [
-                              WhitelistingTextInputFormatter.digitsOnly,
+                              //WhitelistingTextInputFormatter.digitsOnly,
                               CurrencyPtBrInputFormatter()
                             ],
                             textInputAction: TextInputAction.done,
@@ -733,7 +733,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                             textAlign: TextAlign.start,
                             keyboardType: TextInputType.number,
                             inputFormatters: [
-                              WhitelistingTextInputFormatter.digitsOnly,
+                              //WhitelistingTextInputFormatter.digitsOnly,
                               CurrencyPercentInputFormatter()
                             ],
                             textInputAction: TextInputAction.done,
@@ -757,7 +757,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                             textAlign: TextAlign.start,
                             keyboardType: TextInputType.number,
                             inputFormatters: [
-                              WhitelistingTextInputFormatter.digitsOnly,
+                              //WhitelistingTextInputFormatter.digitsOnly,
                               CurrencyPtBrInputFormatter()
                             ],
                             textInputAction: TextInputAction.done,
@@ -776,7 +776,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                             textAlign: TextAlign.start,
                             keyboardType: TextInputType.number,
                             inputFormatters: [
-                              WhitelistingTextInputFormatter.digitsOnly,
+                              //WhitelistingTextInputFormatter.digitsOnly,
                               CurrencyPercentInputFormatter()
                             ],
                             textInputAction: TextInputAction.done,
@@ -800,7 +800,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                             textAlign: TextAlign.start,
                             keyboardType: TextInputType.number,
                             inputFormatters: [
-                              WhitelistingTextInputFormatter.digitsOnly,
+                              //WhitelistingTextInputFormatter.digitsOnly,
                               CurrencyPtBrInputFormatter()
                             ],
                             textInputAction: TextInputAction.done,
@@ -819,7 +819,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                             textAlign: TextAlign.start,
                             keyboardType: TextInputType.number,
                             inputFormatters: [
-                              WhitelistingTextInputFormatter.digitsOnly,
+                              //WhitelistingTextInputFormatter.digitsOnly,
                               CurrencyPercentInputFormatter()
                             ],
                             textInputAction: TextInputAction.done,
@@ -843,7 +843,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                             textAlign: TextAlign.start,
                             keyboardType: TextInputType.number,
                             inputFormatters: [
-                              WhitelistingTextInputFormatter.digitsOnly,
+                              //WhitelistingTextInputFormatter.digitsOnly,
                               CurrencyPtBrInputFormatter()
                             ],
                             textInputAction: TextInputAction.done,
@@ -862,7 +862,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                             textAlign: TextAlign.start,
                             keyboardType: TextInputType.number,
                             inputFormatters: [
-                              WhitelistingTextInputFormatter.digitsOnly,
+                              //WhitelistingTextInputFormatter.digitsOnly,
                               CurrencyPercentInputFormatter()
                             ],
                             textInputAction: TextInputAction.done,
@@ -882,7 +882,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                       textAlign: TextAlign.start,
                       keyboardType: TextInputType.number,
                       inputFormatters: [
-                        WhitelistingTextInputFormatter.digitsOnly,
+                        // WhitelistingTextInputFormatter.digitsOnly,
                         CurrencyPtBrInputFormatter()
                       ],
                       textInputAction: TextInputAction.done,

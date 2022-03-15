@@ -42,7 +42,7 @@ class themas{
       ) ,
       elevation: 0,
       textTheme: TextTheme(
-        title: TextStyle(
+        titleMedium: TextStyle(
             fontSize: 19.0,
             color: Color(0xffFFFFFF),
             fontFamily: "avenir-lt-medium"),
@@ -61,7 +61,7 @@ class themas{
     appBarTheme: AppBarTheme(
       elevation: 0,
       textTheme: TextTheme(
-        title: TextStyle(
+        titleMedium: TextStyle(
           color: Colors.black,
           fontSize: 18.0,
           fontWeight: FontWeight.w800,
