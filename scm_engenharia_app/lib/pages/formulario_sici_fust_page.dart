@@ -76,7 +76,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
   DBHelper dbHelper;
   TbFichaSici _FichaSici = new TbFichaSici();
 
-  List<String> Uf = new List<String>();
+  List<String> Uf = [];
   String UfTxt, _StatusTipoWidget = "renderizar_ficha_sici";
 
   DateTime _DataSelecionada = DateTime(DateTime.now().year, DateTime.now().month - 1, 1);
@@ -496,8 +496,8 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
           maxWidth: MediaQuery.of(context).size.width,
         ),
         child: Stepper(
-          controlsBuilder: (BuildContext context,
-              {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
+         controlsBuilder: (BuildContext context, ControlsDetails details)
+          {
             return Row(
               children: <Widget>[
                 Visibility(
