@@ -1,7 +1,7 @@
 class TbUf {
-  int idUfApp;
-  String id;
-  String uf;
+  int? idUfApp;
+  String? id;
+  String? uf;
 
   TbUf({this.idUfApp = 0, this.id, this.uf});
 

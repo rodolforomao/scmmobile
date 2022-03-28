@@ -23,7 +23,7 @@ class GlobalScaffold {
       duration: Duration(seconds: 4),
       backgroundColor: Color(0xffe84c3d),
     );
-    scaffoldKey.currentState.showSnackBar(snackBar);
+    scaffoldKey.currentState!.showSnackBar(snackBar);
   }
 
   OnToastInformacaoSucesso(String Mensagem) {
@@ -44,12 +44,12 @@ class GlobalScaffold {
       duration: Duration(seconds: 4),
       backgroundColor: Color(0xff30bc8c),
     );
-    scaffoldKey.currentState.showSnackBar(snackBar);
+    scaffoldKey.currentState!.showSnackBar(snackBar);
   }
 
   OnHideCurrentSnackBar() {
-    if (scaffoldKey.currentState.showSnackBar != null)
-      scaffoldKey.currentState.hideCurrentSnackBar();
+    if (scaffoldKey.currentState!.showSnackBar != null)
+      scaffoldKey.currentState!.hideCurrentSnackBar();
   }
 
   OnToastConexaoInternet(String Mensagem) {
@@ -97,10 +97,10 @@ class GlobalScaffold {
         ),
       ),
     );
-    if (scaffoldKey.currentState.showSnackBar != null)
-      scaffoldKey.currentState.hideCurrentSnackBar();
+    if (scaffoldKey.currentState!.showSnackBar != null)
+      scaffoldKey.currentState!.hideCurrentSnackBar();
     else
-      scaffoldKey.currentState.showSnackBar(snackBar);
+      scaffoldKey.currentState!.showSnackBar(snackBar);
   }
 
   OnToastRealizandoOperacao(String Mensagem) {
@@ -154,6 +154,6 @@ class GlobalScaffold {
         ),
       ),
     );
-    scaffoldKey.currentState.showSnackBar(snackBar);
+    scaffoldKey.currentState!.showSnackBar(snackBar);
   }
 }

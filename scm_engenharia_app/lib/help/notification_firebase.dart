@@ -28,7 +28,7 @@ class FcmFirebase {
 class NotificationHandler {
   FirebaseMessaging _fcm = FirebaseMessaging();
   StreamSubscription iosSubscription;
-  static final NotificationHandler _singleton =
+  static late final NotificationHandler _singleton =
   new NotificationHandler._internal();
 
   factory NotificationHandler() {
@@ -43,13 +43,13 @@ class NotificationHandler {
         onMessage: (Map<String, dynamic> message) async {
           try {
             Object JsonEncode = json.encode(message);
-            ModelNotificacao _Resp = ModelNotificacao.fromJson(jsonDecode(Components.removeAllHtmlTags(JsonEncode)));
-            navigatorKey.currentState.push(
+            ModelNotificacao _Resp = ModelNotificacao.fromJson(jsonDecode(Components.removeAllHtmlTags(JsonEncode.toString())));
+            navigatorKey.currentState?.push(
               CupertinoPageRoute(
                   fullscreenDialog: false,
-                  builder: (BuildContext context) => NotificacaoPage(idNotificacao:_Resp.data.idNotificacao)),
+                  builder: (BuildContext context) => NotificacaoPage(idNotificacao:_Resp.data!.idNotificacao!)),
             ).then((value) {
-              navigatorKey.currentState.pushAndRemoveUntil(CupertinoPageRoute(builder: (context) =>
+              navigatorKey.currentState?.pushAndRemoveUntil(CupertinoPageRoute(builder: (context) =>
                   SplashScreen()), (Route<dynamic> route) => false);
             });
             print('on message $message');
@@ -61,13 +61,13 @@ class NotificationHandler {
         onResume: (Map<String, dynamic> message) async {
           try {
             Object JsonEncode = json.encode(message);
-            ModelNotificacao _Resp = ModelNotificacao.fromJson(jsonDecode(Components.removeAllHtmlTags(JsonEncode)));
-            navigatorKey.currentState.push(
+            ModelNotificacao _Resp = ModelNotificacao.fromJson(jsonDecode(Components.removeAllHtmlTags(JsonEncode.toString())));
+            navigatorKey.currentState?.push(
               CupertinoPageRoute(
                   fullscreenDialog: false,
-                  builder: (BuildContext context) => NotificacaoPage(idNotificacao:_Resp.data.idNotificacao)),
+                  builder: (BuildContext context) => NotificacaoPage(idNotificacao:_Resp.data!.idNotificacao!)),
             ).then((value) {
-              navigatorKey.currentState.pushAndRemoveUntil(CupertinoPageRoute(builder: (context) =>
+              navigatorKey.currentState?.pushAndRemoveUntil(CupertinoPageRoute(builder: (context) =>
                   SplashScreen()), (Route<dynamic> route) => false);
             });
             print('on message $message');
@@ -78,13 +78,13 @@ class NotificationHandler {
         onLaunch: (Map<String, dynamic> message) async {
           try {
             Object JsonEncode = json.encode(message);
-            ModelNotificacao _Resp = ModelNotificacao.fromJson(jsonDecode(Components.removeAllHtmlTags(JsonEncode)));
-            navigatorKey.currentState.push(
+            ModelNotificacao _Resp = ModelNotificacao.fromJson(jsonDecode(Components.removeAllHtmlTags(JsonEncode.toString())));
+            navigatorKey.currentState?.push(
               CupertinoPageRoute(
                   fullscreenDialog: false,
-                  builder: (BuildContext context) => NotificacaoPage(idNotificacao:_Resp.data.idNotificacao)),
+                  builder: (BuildContext context) => NotificacaoPage(idNotificacao:_Resp.data!.idNotificacao!)),
             ).then((value) {
-              navigatorKey.currentState.pushAndRemoveUntil(CupertinoPageRoute(builder: (context) =>
+              navigatorKey.currentState?.pushAndRemoveUntil(CupertinoPageRoute(builder: (context) =>
                   SplashScreen()), (Route<dynamic> route) => false);
             });
             print('on message $message');

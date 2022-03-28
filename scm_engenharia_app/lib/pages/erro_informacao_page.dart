@@ -7,7 +7,7 @@ import 'package:scm_engenharia_app/splash_screen.dart';
 class ErroInformacaoPage extends StatefulWidget {
   String informacao;
 
-  ErroInformacaoPage({Key key, @required this.informacao}) : super(key: key);
+  ErroInformacaoPage({Key? key, required this.informacao}) : super(key: key);
 
   @override
   _ErroInformacaoPage createState() => _ErroInformacaoPage();
@@ -15,7 +15,7 @@ class ErroInformacaoPage extends StatefulWidget {
 
 class _ErroInformacaoPage extends State<ErroInformacaoPage> {
   final GlobalKey<ScaffoldState> _ScaffoldKey = GlobalKey<ScaffoldState>();
-  DBHelper dbHelper;
+  late DBHelper dbHelper;
 
   @override
   void initState() {
@@ -30,7 +30,7 @@ class _ErroInformacaoPage extends State<ErroInformacaoPage> {
   }
 
   OnToastInformacao(String Mensagem) {
-    _ScaffoldKey.currentState.removeCurrentSnackBar();
+    _ScaffoldKey.currentState!.removeCurrentSnackBar();
     final snackBar = SnackBar(
         backgroundColor: Color(0xFF000000),
         duration: Duration(seconds: 4),
@@ -44,7 +44,7 @@ class _ErroInformacaoPage extends State<ErroInformacaoPage> {
               color: Color(0xffFFFFFF),
               fontFamily: "open-sans-regular"),
         ));
-    _ScaffoldKey.currentState.showSnackBar(snackBar);
+    _ScaffoldKey.currentState!.showSnackBar(snackBar);
   }
 
   Future<Null> onSairApp(BuildContext context) async {
@@ -92,7 +92,7 @@ class _ErroInformacaoPage extends State<ErroInformacaoPage> {
                               FocusScope.of(context).requestFocus(new FocusNode());
                               Operacao _UsuarioLogado = await dbHelper.OnDeletarUsuario();
                               if (_UsuarioLogado.erro) {
-                                throw (_UsuarioLogado.mensagem);
+                                throw (_UsuarioLogado.mensagem!);
                               } else {
                                 Navigator.of(context).pushAndRemoveUntil(
                                     new MaterialPageRoute(
@@ -102,9 +102,9 @@ class _ErroInformacaoPage extends State<ErroInformacaoPage> {
                               }
                             } catch (error) {
                               setState(() {
-                                widget.informacao = error;
+                                widget.informacao = error.toString();
                               });
-                              OnToastInformacao(error);
+                              OnToastInformacao(error.toString());
                             }
                           },
                           //callback when button is clicked

@@ -1,55 +1,55 @@
 import 'package:scm_engenharia_app/data/tb_distribuicao_quantitativo_acessos_fisicos_servico.dart';
 
 class ModelFormularioSiciFustJson {
-  String id;
-  String idEmpresa;
-  String idUsuarioCliente;
-  String idUsuarioConsultor;
-  String periodoReferencia;
+  String? id;
+  String? idEmpresa;
+  String? idUsuarioCliente;
+  String? idUsuarioConsultor;
+  String? periodoReferencia;
 
-  String razaoSocial;
-  String cnpj;
-  String telefoneFixo;
-  String telefoneMovel;
-  String emailEmpresa;
-  String receitaBruta;
-  String receitaLiquida;
-  String simples;
-  String simplesPorc;
-  String icms;
-  String icmsPorc;
-  String pis;
-  String pisPorc;
-  String cofins;
-  String cofinsPorc;
-  String observacoes;
-  String idLancamento;
-  String idUsuario;
-  String iDPERFIL;
-  String cODISENHA;
-  String dESCNOME;
-  String dATAULTIMOACESSO;
-  String eMAIL;
-  String tELEFONE;
-  String fLAGALTERASENHA;
-  String idUsuarioAlteracao;
-  String fLAGPRIMEIROACESSO;
-  String cpf;
-  String empresa;
-  String idUf;
-  String aprovado;
-  String tELEFONEWHATSAPP;
-  String codValidacao;
-  String validacaoEmail;
-  String excluido;
-  String bloqueado;
-  String idEstado;
-  String estado;
-  String passo;
-  String estadoRobo;
-  String envioLancamento;
+  String? razaoSocial;
+  String? cnpj;
+  String? telefoneFixo;
+  String? telefoneMovel;
+  String? emailEmpresa;
+  String? receitaBruta;
+  String? receitaLiquida;
+  String? simples;
+  String? simplesPorc;
+  String? icms;
+  String? icmsPorc;
+  String? pis;
+  String? pisPorc;
+  String? cofins;
+  String? cofinsPorc;
+  String? observacoes;
+  String? idLancamento;
+  String? idUsuario;
+  String? iDPERFIL;
+  String? cODISENHA;
+  String? dESCNOME;
+  String? dATAULTIMOACESSO;
+  String? eMAIL;
+  String? tELEFONE;
+  String? fLAGALTERASENHA;
+  String? idUsuarioAlteracao;
+  String? fLAGPRIMEIROACESSO;
+  String? cpf;
+  String? empresa;
+  String? idUf;
+  String? aprovado;
+  String? tELEFONEWHATSAPP;
+  String? codValidacao;
+  String? validacaoEmail;
+  String? excluido;
+  String? bloqueado;
+  String? idEstado;
+  String? estado;
+  String? passo;
+  String? estadoRobo;
+  String? envioLancamento;
 
-  List<TbDistribuicaoQuantitativoAcessosFisicosServico> distribuicaoFisicosServicoQuantitativo;
+  List<TbDistribuicaoQuantitativoAcessosFisicosServico>? distribuicaoFisicosServicoQuantitativo;
 
   ModelFormularioSiciFustJson(
       { this.id,
@@ -149,9 +149,9 @@ class ModelFormularioSiciFustJson {
     estadoRobo = json['estado_robo'];
     envioLancamento = json['envio_lancamento'];
     if (json['dadosEmServicos'] != null) {
-      distribuicaoFisicosServicoQuantitativo = new List<TbDistribuicaoQuantitativoAcessosFisicosServico>();
+      distribuicaoFisicosServicoQuantitativo = [];
       json['dadosEmServicos'].forEach((v) {
-        distribuicaoFisicosServicoQuantitativo.add(new TbDistribuicaoQuantitativoAcessosFisicosServico.fromJson(v));
+        distribuicaoFisicosServicoQuantitativo!.add(new TbDistribuicaoQuantitativoAcessosFisicosServico.fromJson(v));
       });
     }
   }
@@ -207,7 +207,7 @@ class ModelFormularioSiciFustJson {
 
     if (this.distribuicaoFisicosServicoQuantitativo != null) {
       data['dadosEmServicos'] =
-          this.distribuicaoFisicosServicoQuantitativo.map((v) => v.toJson()).toList();
+          this.distribuicaoFisicosServicoQuantitativo!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -216,10 +216,10 @@ class ModelFormularioSiciFustJson {
 
 
 class ResultadoFormularioSiciFust {
-  String idEmpresa;
-  String idLancamento;
-  String idFinanceiro;
-  IdDadosServicos idDadosServicos;
+  String? idEmpresa;
+  String? idLancamento;
+  String? idFinanceiro;
+  IdDadosServicos? idDadosServicos;
 
   ResultadoFormularioSiciFust(
       {this.idEmpresa,
@@ -242,7 +242,7 @@ class ResultadoFormularioSiciFust {
     data['idLancamento'] = this.idLancamento;
     data['idFinanceiro'] = this.idFinanceiro;
     if (this.idDadosServicos != null) {
-      data['idDadosServicos'] = this.idDadosServicos.toJson();
+      data['idDadosServicos'] = this.idDadosServicos!.toJson();
     }
     return data;
   }
@@ -251,7 +251,7 @@ class ResultadoFormularioSiciFust {
 
 
 class IdDadosServicos {
-  String id;
+  String? id;
 
   IdDadosServicos({this.id});
 

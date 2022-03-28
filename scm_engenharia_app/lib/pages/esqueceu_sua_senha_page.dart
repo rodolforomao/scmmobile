@@ -13,7 +13,7 @@ class EsqueceuSuaSenhaPageState extends StatefulWidget {
 class _EsqueceuSuaSenhaPageState extends State<EsqueceuSuaSenhaPageState> {
   TextEditingController _TxtControllerEmail = TextEditingController();
 
-  String errorTextControllerSenha, errorTextControllerEmail;
+  late String errorTextControllerSenha, errorTextControllerEmail;
   bool _IsLogando = false, isVisualizarSenha = false;
 
   @override

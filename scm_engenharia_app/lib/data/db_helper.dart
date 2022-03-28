@@ -12,7 +12,7 @@ import 'package:path_provider/path_provider.dart';
 
 class DBHelper {
 
-  static Database _db;
+    static late Database _db;
 
   Future<Database> get db async {
     if (_db != null) {
@@ -70,19 +70,19 @@ class DBHelper {
       _Operacao.mensagem = "";
       Operacao _Uf = await onSelecionarUf();
       if (_Uf.erro)
-        throw (_Uf.mensagem);
+        throw (_Uf.mensagem!);
       else if (_Uf.resultado == null) {
         _Operacao.resultado = true;
       }
       Operacao _Tecnologia = await onSelecionarTecnologia();
       if (_Tecnologia.erro)
-        throw (_Tecnologia.mensagem);
+        throw (_Tecnologia.mensagem!);
       else if (_Tecnologia.resultado == null) {
         _Operacao.resultado = true;
       }
       Operacao _SelecionarUf = await onSelecionarUfMunicipio();
       if (_SelecionarUf.erro)
-        throw (_SelecionarUf.mensagem);
+        throw (_SelecionarUf.mensagem!);
       else if (_SelecionarUf.resultado == null) {
         _Operacao.resultado = true;
       }
@@ -220,9 +220,9 @@ class DBHelper {
     Operacao _Operacao = new Operacao();
     try {
       var dbClient = await db;
-      Operacao _Tecnologia = await onSelecionarTecnologiaBayId(Tecnologia.id);
+      Operacao _Tecnologia = await onSelecionarTecnologiaBayId(Tecnologia.id!);
       if (_Tecnologia.erro)
-        throw (_Tecnologia.mensagem);
+        throw (_Tecnologia.mensagem!);
       else if (_Tecnologia.resultado == null)
       {
         //var count = dbClient.firstIntValue(await database.rawQuery('SELECT COUNT(*) FROM Test'));
@@ -236,7 +236,7 @@ class DBHelper {
       }
       else
         {
-          int idTecnologiaApp = Tecnologia.idTecnologiaApp;
+          int idTecnologiaApp = Tecnologia.idTecnologiaApp!;
           Tecnologia = _Tecnologia.resultado as TbTecnologia;
           Tecnologia.idTecnologiaApp = idTecnologiaApp;
           int id = await dbClient.update(
@@ -379,9 +379,9 @@ class DBHelper {
     Operacao _Operacao = new Operacao();
     try {
       var dbClient = await db;
-      Operacao _Uf = await onSelecionarUfBayId(Uf.id);
+      Operacao _Uf = await onSelecionarUfBayId(Uf.id!);
       if (_Uf.erro)
-        throw (_Uf.mensagem);
+        throw (_Uf.mensagem!);
       else if (_Uf.resultado == null)
         {
           if (Uf.idUfApp == 0)
@@ -392,7 +392,7 @@ class DBHelper {
         }
       else
         {
-          int idUfApp = Uf.idUfApp;
+          int idUfApp = Uf.idUfApp!;
           Uf = _Uf.resultado as TbUf;
           Uf.idUfApp = idUfApp;
           int id = await dbClient.update(
@@ -535,9 +535,9 @@ class DBHelper {
     Operacao _Operacao = new Operacao();
     try {
       var dbClient = await db;
-      Operacao _UfMunicipio = await onSelecionarMunicipioById(UfMunicipio.id);
+      Operacao _UfMunicipio = await onSelecionarMunicipioById(UfMunicipio.id!);
       if (_UfMunicipio.erro)
-        throw (_UfMunicipio.mensagem);
+        throw (_UfMunicipio.mensagem!);
       else if (_UfMunicipio.resultado == null)
         {
           if (UfMunicipio.idMunicipioApp == 0)
@@ -548,7 +548,7 @@ class DBHelper {
       }
       else
         {
-          int idMunicipioApp = UfMunicipio.idMunicipioApp;
+          int idMunicipioApp = UfMunicipio.idMunicipioApp!;
           UfMunicipio = _UfMunicipio.resultado as TbUfMunicipio;
           UfMunicipio.idMunicipioApp = idMunicipioApp;
           int id = await dbClient.update(
@@ -733,11 +733,11 @@ class DBHelper {
           whereArgs: [_Modelo.idFichaSiciApp],
         );
       }
-      for (var prop in _Modelo.distribuicaoFisicosServicoQuantitativo) {
+      for (var prop in _Modelo.distribuicaoFisicosServicoQuantitativo!) {
         prop.idFichaSiciApp = _Modelo.idFichaSiciApp.toString();
         Operacao _respLocal = await OnAddDistribuicaoQuantitativoAcessosFisicosServico(prop);
         if (_respLocal.erro)
-          throw (_respLocal.mensagem);
+          throw (_respLocal.mensagem!);
         else {
 
         }
@@ -792,11 +792,11 @@ class DBHelper {
       if (results.length > 0) {
         for (int i = 0; i < results.length; i++) {
           listFichaSici.add(TbFichaSici.fromJson(results[i]));
-          Operacao _FichaSiciLocal = await onSelecionarDistribuicaoQuantitativoAcessosFisicosServicoByIdFichaSiciApp(listFichaSici[i].idFichaSiciApp);
+          Operacao _FichaSiciLocal = await onSelecionarDistribuicaoQuantitativoAcessosFisicosServicoByIdFichaSiciApp(listFichaSici[i].idFichaSiciApp!);
           if (_FichaSiciLocal.erro)
-            throw (_FichaSiciLocal.mensagem);
+            throw (_FichaSiciLocal.mensagem!);
           else if (_FichaSiciLocal.resultado != null) {
-            List<TbDistribuicaoQuantitativoAcessosFisicosServico>resp = _FichaSiciLocal.resultado;
+            List<TbDistribuicaoQuantitativoAcessosFisicosServico> resp = _FichaSiciLocal.resultado as  List<TbDistribuicaoQuantitativoAcessosFisicosServico>;
             listFichaSici[i].distribuicaoFisicosServicoQuantitativo = resp;
           }
 

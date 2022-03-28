@@ -1,15 +1,15 @@
 class TbUsuario {
-  int idUsuarioApp;
-  String idUsuario;
-  String idPerfil;
-  String nome;
-  String senha;
-  String email;
-  String telefone;
-  String dtUltacesso;
-  String empresa;
-  String periodoReferencia;
-  String cpf;
+  int? idUsuarioApp;
+  String? idUsuario;
+  String? idPerfil;
+  String? nome;
+  String? senha;
+  String? email;
+  String? telefone;
+  String? dtUltacesso;
+  String? empresa;
+  String? periodoReferencia;
+  String? cpf;
 
   TbUsuario(
       {

@@ -1,12 +1,12 @@
 class Operacao {
-  bool erro;
-  String mensagem;
-  Object resultado;
+  late bool erro;
+  String? mensagem;
+  Object? resultado;
 }
 class OperacaoJson {
-  bool status;
-  String mensagem;
-  Object resultado;
+  late bool? status;
+  String? mensagem;
+  Object? resultado;
 
   OperacaoJson({this.status, this.mensagem, this.resultado});
 

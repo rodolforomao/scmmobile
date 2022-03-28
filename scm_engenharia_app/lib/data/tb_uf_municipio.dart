@@ -1,9 +1,9 @@
 class TbUfMunicipio {
-  int idMunicipioApp;
-  String ufId;
-  String uf;
-  String id;
-  String municipio;
+  int? idMunicipioApp;
+  String? ufId;
+  String? uf;
+  String? id;
+  String? municipio;
 
   TbUfMunicipio({this.idMunicipioApp = 0,this.ufId, this.uf, this.id, this.municipio});
 

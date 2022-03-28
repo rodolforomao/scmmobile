@@ -1,6 +1,6 @@
 class ModelNotificacao {
-  Notification notification;
-  Data data;
+  Notification? notification;
+  Data? data;
 
   ModelNotificacao({this.notification, this.data});
 
@@ -14,18 +14,18 @@ class ModelNotificacao {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (this.notification != null) {
-      data['notification'] = this.notification.toJson();
+      data['notification'] = this.notification!.toJson();
     }
     if (this.data != null) {
-      data['data'] = this.data.toJson();
+      data['data'] = this.data!.toJson();
     }
     return data;
   }
 }
 
 class Notification {
-  String title;
-  String body;
+  String? title;
+  String? body;
 
   Notification({this.title, this.body});
 
@@ -43,12 +43,12 @@ class Notification {
 }
 
 class Data {
-  String idNotificacao;
-  String priority;
-  String title;
-  String clickAction;
-  String message;
-  String contentAvailable;
+  String? idNotificacao;
+  String? priority;
+  String? title;
+  String? clickAction;
+  String? message;
+  String? contentAvailable;
 
   Data(
       {this.idNotificacao,
@@ -80,15 +80,15 @@ class Data {
 }
 
 class NotificacaoScmEngenharia {
-  String idTbNotificacoes;
-  String mensagem;
-  String destinatario;
-  String idTbUsuarioRemetente;
-  String idUsuarioUltimaAlteracao;
-  String ultimaAlteracao;
-  String titulo;
-  String firebaseMessageId;
-  String lida;
+  String? idTbNotificacoes;
+  String? mensagem;
+  String? destinatario;
+  String? idTbUsuarioRemetente;
+  String? idUsuarioUltimaAlteracao;
+  String? ultimaAlteracao;
+  String? titulo;
+  String? firebaseMessageId;
+  String? lida;
 
   NotificacaoScmEngenharia(
       {this.idTbNotificacoes,

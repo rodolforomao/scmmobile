@@ -9,6 +9,7 @@ import 'package:scm_engenharia_app/help/servico_mobile_service.dart';
 import 'package:scm_engenharia_app/models/operacao.dart';
 import 'package:scm_engenharia_app/pages/login_page.dart';
 import 'package:scm_engenharia_app/splash_screen.dart';
+import 'help_pages/global_scaffold.dart';
 
 class AlterarSenhaPage extends StatefulWidget {
   @override
@@ -18,14 +19,14 @@ class AlterarSenhaPage extends StatefulWidget {
 class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
   final _ScaffoldKey = GlobalKey<ScaffoldState>();
   ServicoMobileService _RestWebService = new ServicoMobileService();
-  DBHelper dbHelper;
-  BuildContext dialogContext;
+  late DBHelper dbHelper;
+  late BuildContext dialogContext;
   TbUsuario _Usuariodb = new TbUsuario();
-  StreamSubscription<ConnectivityResult> subscription;
+  late StreamSubscription<ConnectivityResult> subscription;
   TextEditingController _TxtControlleraSenha = TextEditingController();
   TextEditingController _TxtControllerNova = TextEditingController();
   TextEditingController _TxtControllerConfirmarSenha = TextEditingController();
-  String _StatusTipoWidget;
+  late String _StatusTipoWidget;
 
   Future<Null> OnAtualizarSenha() async {
     try {
@@ -41,18 +42,18 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
           throw ("O confirmar e nova senha e obrigatório");
         else if (_TxtControllerNova.text != _TxtControllerConfirmarSenha.text)
           throw ("O nova senha e confirmar e nova senha obrigatório");
-        OnRealizandoOperacao("Realizando operação",true);
+        onRealizandoOperacao('Realizando operação ... ', true, context);
         Operacao _RespResultado = await _RestWebService.OnAlterarSenha(_TxtControllerNova.text);
         if(_RespResultado.erro)
-          throw(_RespResultado.mensagem);
+          throw(_RespResultado.mensagem!);
         else
         {
           _Usuariodb.senha = _TxtControllerNova.text;
           Operacao _UsuarioLogado = await dbHelper.OnAddUpdateUsuario(_Usuariodb);
           if (_UsuarioLogado.erro)
-            throw (_UsuarioLogado.mensagem);
+            throw (_UsuarioLogado.mensagem!);
           else {
-            OnRealizandoOperacao("",false);
+            onRealizandoOperacao('', false, context);
             showDialog(
               context: context,
               barrierDismissible: false,
@@ -86,7 +87,7 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
                           ),
                           Padding(padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
                             child:  Text(
-                              _RespResultado.mensagem,
+                              _RespResultado.mensagem!,
                               overflow: TextOverflow.ellipsis,
                               maxLines: 4,
                               softWrap: false,
@@ -141,7 +142,7 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
         }
       }
     } catch (error) {
-      OnRealizandoOperacao("",false);
+      onAlertaInformacaoErro(error.toString(), context);
       OnAlertaInformacao(error.toString(),0xffde3544);
     }
   }
@@ -215,7 +216,7 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
                       //`Text` to display
                       onPressed: () {
                         Navigator.pop(context);
-                        FocusManager.instance.primaryFocus.unfocus();
+                        FocusManager.instance.primaryFocus!.unfocus();
                       },
                       shape: new RoundedRectangleBorder(
                         borderRadius: new BorderRadius.circular(5.0),
@@ -231,75 +232,13 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
     );
   }
 
-  OnRealizandoOperacao(String txtInformacao ,bool IsRealizandoOperacao) {
-    if (dialogContext == null) {
-      setState(() {
-        dialogContext = null;
-        IsRealizandoOperacao = false;
-      });
-    }
-    else if (IsRealizandoOperacao != true && txtInformacao == "") {
-      Navigator.of(context, rootNavigator: true).pop('dialog');
-      setState(() {
-        dialogContext = null;
-        IsRealizandoOperacao = false;
-      });
-    }
-    else
-    {
-      setState(() {
-        IsRealizandoOperacao = false;
-      });
-      showDialog(
-        context: _ScaffoldKey.currentContext,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          dialogContext = context;
-          return Dialog(
-            child: new Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(
-                      left: 10.0, top: 20.0, bottom: 20.0, right: 10.0),
-                  child: Theme(
-                    data: Theme.of(context).copyWith(
-                      accentColor: Color(0xff018a8a),
-                    ),
-                    child: new CircularProgressIndicator(),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    margin: EdgeInsets.only(
-                        left: 10.0, top: 20.0, bottom: 20.0, right: 5.0),
-                    child: Text(
-                      txtInformacao,
-                      softWrap: true,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          fontSize: 17.0,
-                          color: Color(0xff212529),
-                          fontFamily: "open-sans-regular"),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-      );
-    }
-  }
+
 
   Inc() async {
     try {
       Operacao _UsuarioLogado = await dbHelper.onSelecionarUsuario();
       if (_UsuarioLogado.erro)
-        throw (_UsuarioLogado.mensagem);
+        throw (_UsuarioLogado.mensagem!);
       else if (_UsuarioLogado.resultado == null) {
         Navigator.of(context).pushAndRemoveUntil(
             new MaterialPageRoute(
@@ -334,7 +273,7 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
       if (result == ConnectivityResult.none) {
 
       } else {
-        _ScaffoldKey.currentState.removeCurrentSnackBar();
+        _ScaffoldKey.currentState!.removeCurrentSnackBar();
         setState(() {
           _StatusTipoWidget = "renderizar_tela";
         });
@@ -437,7 +376,7 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
                           setState(() {
                             _StatusTipoWidget = "sem_internet";
                           });
-                          _ScaffoldKey.currentState.showSnackBar(SnackBar(
+                          _ScaffoldKey.currentState!.showSnackBar(SnackBar(
                             onVisible: () {
                               print('Visible');
                             },
@@ -484,7 +423,7 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
                             ),
                           ));
                         } else {
-                          _ScaffoldKey.currentState.removeCurrentSnackBar();
+                          _ScaffoldKey.currentState!.removeCurrentSnackBar();
                           setState(() {
                             _StatusTipoWidget = "renderizar_tela";
                           });

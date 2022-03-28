@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.2.00+6
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.16.1 <3.0.0"
 
 dependencies:
   flutter:
@@ -46,6 +46,13 @@ dependencies:
   firebase_core: ^0.5.2
   firebase_messaging: ^7.0.3
   google_maps_flutter: ^1.0.6
+
+  #Plugin Flutter Community
+  connectivity_plus: ^2.2.1 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  device_info_plus: ^3.2.2 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  package_info_plus: ^1.4.0 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  share_plus: ^3.1.0 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+
 
 dev_dependencies:
   flutter_test:

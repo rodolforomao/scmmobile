@@ -18,9 +18,10 @@ class Components {
     } catch (error) {
       {}
     }
+    return Txt;
   }
 
-  static String JWTToken(String User, String password) {
+  static String? JWTToken(String User, String password) {
     try {
       String key = "bc47f175a831996b652146d47e159349f75e6c4665570ef35606678a18054d13";
       final claimSet = new JwtClaim(otherClaims: <String, Object>{
@@ -33,9 +34,10 @@ class Components {
     } catch (error) {
 
     }
+    return null;
   }
 
-  static String JWTTokenPadrao() {
+  static String? JWTTokenPadrao() {
     try {
       String key =
           "bc47f175a831996b652146d47e159349f75e6c4665570ef35606678a18054d13";
@@ -47,6 +49,7 @@ class Components {
       final token = issueJwtHS256(claimSet, key);
       return token;
     } catch (error) {}
+    return null;
   }
 
   static String removeAllHtmlTags(String htmlText) {
@@ -65,7 +68,7 @@ class Components {
   }
 
   static Future<List<Object>> OnlistaEstados() async {
-    List<String> listaEstados = List<String>();
+    List<String> listaEstados = [];
     listaEstados.add("Selecione...");
     listaEstados.add("AC");
     listaEstados.add("AL");
@@ -98,7 +101,7 @@ class Components {
   }
 
   static Future<List<Object>> OnListaGenero() async {
-    List<String> listaGenero = List<String>();
+    List<String> listaGenero = [];
     listaGenero.add("Selecione...");
     listaGenero.add("Masculino");
     listaGenero.add("Fermino");

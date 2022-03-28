@@ -9,6 +9,8 @@ import 'package:scm_engenharia_app/models/model_formulario_sici_fust.dart';
 import 'package:scm_engenharia_app/models/operacao.dart';
 import 'package:scm_engenharia_app/pages/formulario_sici_fust_page.dart';
 
+import 'help_pages/global_scaffold.dart';
+
 class ListaSiciEnviadosPage extends StatefulWidget {
   @override
   _ListaSiciEnviadosPageState createState() => _ListaSiciEnviadosPageState();
@@ -17,14 +19,14 @@ class ListaSiciEnviadosPage extends StatefulWidget {
 class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
   final _ScaffoldKey = GlobalKey<ScaffoldState>();
   ServicoMobileService _RestWebService = new ServicoMobileService();
-  List<TbFichaSici> ListaFichaSici = new List<TbFichaSici>();
-  DBHelper dbHelper;
-  BuildContext dialogContext;
+  List<TbFichaSici> ListaFichaSici = [];
+  late DBHelper dbHelper;
+  late BuildContext dialogContext;
   String _StatusTipoWidget = "nao_existe_sici_cadastrado", ErroInformacao = "";
-  StreamSubscription<ConnectivityResult> subscription;
+  late StreamSubscription<ConnectivityResult> subscription;
 
   Future<Null> IncRestWeb() async {
-    OnRealizandoOperacao("Web: Buscando lançamentos", true);
+    onRealizandoOperacao("Web: Buscando lançamentos", true, context);
     try {
       var connectivityResult = await (Connectivity().checkConnectivity());
       if (connectivityResult == ConnectivityResult.none) {
@@ -40,7 +42,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
       } else {
         Operacao _RestWeb = await _RestWebService.OnRecuperaLancamentosSici();
         if (_RestWeb.erro || _RestWeb.resultado == null)
-          throw (_RestWeb.mensagem);
+          throw (_RestWeb.mensagem!);
         else {
           var data = _RestWeb.resultado as List;
           setState(() {
@@ -49,7 +51,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
             if (ListaModelFormularioSiciFustModelo.length > 0) {
               for (var prop in ListaModelFormularioSiciFustModelo) {
                 if (ListaFichaSici.where(
-                            (f) => f.idLancamento.startsWith(prop.idLancamento))
+                            (f) => f.idLancamento!.startsWith(prop.idLancamento!))
                         .length >=
                     1) {
                   // A ficha  ja esta salva no dispositivo
@@ -111,7 +113,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
         setState(() {
           _StatusTipoWidget = "renderizar_sici";
         });
-        OnAlertaInformacao(error);
+        onAlertaInformacaoErro(error.toString(), context);
       } else {
         setState(() {
           _StatusTipoWidget = "erro_informacao";
@@ -119,7 +121,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
         });
       }
     }
-    OnRealizandoOperacao("", false);
+    onRealizandoOperacao('', false, context);
   }
 
   Future<Null> Inc() async {
@@ -128,14 +130,14 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
       Operacao _FichaSiciLocal = await dbHelper.onSelecionarFichaSici();
       if (_FichaSiciLocal.erro) {
         //OnRealizandoOperacao("", false);
-        throw (_FichaSiciLocal.mensagem);
+        throw (_FichaSiciLocal.mensagem!);
       } else if (_FichaSiciLocal.resultado == null) {
-        ListaFichaSici = new List<TbFichaSici>();
+        ListaFichaSici = [];
         IncRestWeb();
       } else {
         setState(() {
-          ListaFichaSici = new List<TbFichaSici>();
-          ListaFichaSici = _FichaSiciLocal.resultado;
+          ListaFichaSici = [];
+          ListaFichaSici = _FichaSiciLocal.resultado as   List<TbFichaSici>;
           _StatusTipoWidget = "renderizar_sici";
         });
         IncRestWeb();
@@ -145,7 +147,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
         setState(() {
           _StatusTipoWidget = "renderizar_sici";
         });
-        OnAlertaInformacao(error.toString());
+        onAlertaInformacaoErro(error.toString(), context);
       } else {
         setState(() {
           _StatusTipoWidget = "erro_informacao";
@@ -157,147 +159,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
     //OnRealizandoOperacao("", false);
   }
 
-  OnAlertaInformacao(String Mensagem) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8.0))),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(height: 15.0),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    "Informação",
-                    style: TextStyle(
-                        fontSize: 20.0,
-                        color: Color(0xff212529),
-                        fontFamily: "avenir-lt-std-roman"),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Divider(
-                    color: Colors.black12,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-                    child: Text(
-                      Mensagem,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 4,
-                      softWrap: false,
-                      style: TextStyle(
-                          fontSize: 17.0,
-                          color: Color(0xff212529),
-                          fontFamily: "avenir-lt-std-roman"),
-                    ),
-                  ),
-                ],
-              ),
-              Divider(
-                color: Colors.black12,
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
-                child: new Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    FlatButton(
-                      color: Color(0xff018a8a),
-                      //`Icon` to display
-                      child: Text(
-                        '           OK           ',
-                        style: TextStyle(
-                            fontSize: 17.0,
-                            color: Color(0xffFFFFFF),
-                            fontFamily: "avenir-lt-std-roman"),
-                      ),
-                      //`Text` to display
-                      onPressed: () {
-                        Navigator.pop(context);
-                        FocusManager.instance.primaryFocus.unfocus();
-                      },
-                      shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(5.0),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
 
-  OnRealizandoOperacao(String txtInformacao, bool IsRealizandoOperacao) {
-    if (IsRealizandoOperacao != true && txtInformacao == "") {
-      Navigator.of(context, rootNavigator: true).pop('dialog');
-      setState(() {
-        dialogContext = null;
-        IsRealizandoOperacao = false;
-      });
-    } else {
-      setState(() {
-        IsRealizandoOperacao = false;
-      });
-      showDialog(
-        context: _ScaffoldKey.currentContext,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          dialogContext = context;
-          return Dialog(
-            child: new Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(
-                      left: 10.0, top: 20.0, bottom: 20.0, right: 10.0),
-                  child: Theme(
-                    data: Theme.of(context).copyWith(
-                      accentColor: Color(0xff018a8a),
-                    ),
-                    child: new CircularProgressIndicator(),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    margin: EdgeInsets.only(
-                        left: 10.0, top: 20.0, bottom: 20.0, right: 5.0),
-                    child: Text(
-                      txtInformacao,
-                      softWrap: true,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          fontSize: 17.0,
-                          color: Color(0xff212529),
-                          fontFamily: "open-sans-regular"),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-      );
-    }
-  }
 
   @override
   void initState() {
@@ -318,12 +180,6 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
     });
 
     Future.delayed(Duration.zero, () {
-      if (dialogContext != null) {
-        Navigator.pop(dialogContext);
-        setState(() {
-          dialogContext = null;
-        });
-      }
       Inc();
     });
   }
@@ -428,7 +284,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                           setState(() {
                             _StatusTipoWidget = "sem_internet";
                           });
-                          _ScaffoldKey.currentState.showSnackBar(SnackBar(
+                          _ScaffoldKey.currentState!.showSnackBar(SnackBar(
                             onVisible: () {
                               print('Visible');
                             },
@@ -476,7 +332,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                             ),
                           ));
                         } else {
-                          _ScaffoldKey.currentState.removeCurrentSnackBar();
+                          _ScaffoldKey.currentState!.removeCurrentSnackBar();
                         }
                       },
                       child: Container(
@@ -745,7 +601,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      ListaFichaSici[index].razaoSocial,
+                      ListaFichaSici[index].razaoSocial!,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                       softWrap: false,
@@ -762,7 +618,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child:Text(
-                      ListaFichaSici[index].observacoes,
+                      ListaFichaSici[index].observacoes!,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
                       softWrap: false,
@@ -799,28 +655,26 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                 .checkConnectivity());
                             if (connectivityResult ==
                                 ConnectivityResult.none) {
-                              OnAlertaInformacao(
-                                  "Por favor conecte-se à internet.");
+                              onAlertaInformacaoErro("Por favor conecte-se à internet.", context);
                             } else {
-                              OnRealizandoOperacao(
-                                  "Realizando cadastro.", true);
+                              onRealizandoOperacao('Realizando cadastro ... ', true, context);
                               Operacao _RestWeb =
                               await _RestWebService
                                   .OnRealizarLancamentosSici(
                                   ListaFichaSici[index]);
-                              OnRealizandoOperacao("", false);
+                              onRealizandoOperacao('', false, context);
                               if (_RestWeb.erro)
-                                throw (_RestWeb.mensagem);
+                                throw (_RestWeb.mensagem!);
                               else if (_RestWeb.resultado == null)
-                                throw (_RestWeb.mensagem);
+                                throw (_RestWeb.mensagem!);
                               else {
                                 Operacao _respLocal =
                                 await dbHelper.OnDeletarFichaSici(
                                     ListaFichaSici[index]
-                                        .idFichaSiciApp);
+                                        .idFichaSiciApp!);
 
                                 if (_respLocal.erro)
-                                  throw (_respLocal.mensagem);
+                                  throw (_respLocal.mensagem!);
                                 else {
                                   setState(() {
                                     ListaFichaSici.remove([index]);
@@ -828,13 +682,11 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
 
                                   Inc();
                                 }
-                                //OnRealizandoOperacao("", false);
-                                OnAlertaInformacao(_RestWeb.mensagem);
+                                onAlertaInformacaoErro(_RestWeb.mensagem!, context);
                               }
                             }
                           } catch (error) {
-                            //OnRealizandoOperacao("", false);
-                            OnAlertaInformacao(error);
+                            onAlertaInformacaoErro(error.toString(), context);
                           }
 
                           Future.delayed(Duration.zero, () async {});
@@ -931,25 +783,21 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                                         .OnDeletarFichaSici(
                                                         ListaFichaSici[
                                                         index]
-                                                            .idFichaSiciApp);
+                                                            .idFichaSiciApp!);
                                                     if (_respLoca.erro)
                                                       throw (_respLoca
-                                                          .mensagem);
+                                                          .mensagem!);
                                                     else {
                                                       Navigator.of(
                                                           context,
                                                           rootNavigator:
                                                           true)
                                                           .pop('dialog');
-                                                      OnAlertaInformacao(
-                                                          _respLoca
-                                                              .mensagem);
+                                                      onAlertaInformacaoErro(_respLoca.mensagem!, context);
                                                       Inc();
                                                     }
                                                   } catch (error) {
-                                                    OnAlertaInformacao(
-                                                        error.toString());
-                                                    print(error);
+                                                    onAlertaInformacaoErro(error.toString(), context);
                                                   }
                                                 },
                                                 //callback when button is clicked
@@ -1078,15 +926,14 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                         onTap: () async {
                           Future.delayed(Duration.zero, () async {
                             try {
-                              OnRealizandoOperacao(
-                                  "Realizando cadastro.", true);
+                              onRealizandoOperacao("Realizando cadastro.", true, context);
                               Operacao _respLocal =
                               await dbHelper.OnAddFichaSici(
                                   ListaFichaSici[index]);
                               if (_respLocal.erro)
-                                throw (_respLocal.mensagem);
+                                throw (_respLocal.mensagem!);
                               else {
-                                OnRealizandoOperacao("", false);
+                                onRealizandoOperacao('', false, context);
                                 showDialog(
                                   context: context,
                                   barrierDismissible: false,
@@ -1139,7 +986,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                                     15.0,
                                                     10.0),
                                                 child: Text(
-                                                  _respLocal.mensagem,
+                                                  _respLocal.mensagem!,
                                                   overflow:
                                                   TextOverflow
                                                       .ellipsis,
@@ -1213,15 +1060,8 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
                                 );
                               }
                             } catch (error) {
-                              if (dialogContext != null) {
-                                Navigator.of(context,
-                                    rootNavigator: true)
-                                    .pop('dialog');
-                                setState(() {
-                                  dialogContext = null;
-                                });
-                              }
-                              OnAlertaInformacao(error);
+                              onRealizandoOperacao('', false, context);
+                              onAlertaInformacaoErro(error.toString(), context);
                             }
                           });
                         },

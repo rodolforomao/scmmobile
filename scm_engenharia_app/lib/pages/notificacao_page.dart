@@ -5,17 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:scm_engenharia_app/data/db_helper.dart';
 import 'package:scm_engenharia_app/data/tb_usuario.dart';
 import 'package:scm_engenharia_app/help/global_scaffold.dart';
-import 'package:scm_engenharia_app/help/notification_alert.dart';
 import 'package:scm_engenharia_app/help/servico_mobile_service.dart';
 import 'package:scm_engenharia_app/models/model_notificacao.dart';
 import 'package:scm_engenharia_app/models/operacao.dart';
 import 'package:scm_engenharia_app/pages/login_page.dart';
 import 'package:scm_engenharia_app/help/usuario_logado.dart' as UsuarioLogado;
 
+import 'help_pages/global_scaffold.dart';
+
 
 class NotificacaoPage extends StatefulWidget {
   String idNotificacao;
-  NotificacaoPage({Key key, @required this.idNotificacao}) : super(key: key);
+  NotificacaoPage({Key? key, required this.idNotificacao}) : super(key: key);
   @override
   _NotificacaoPageState createState() => _NotificacaoPageState();
 }
@@ -24,7 +25,7 @@ class _NotificacaoPageState extends State<NotificacaoPage> {
 
   ServicoMobileService _RestWebService = new ServicoMobileService();
   NotificacaoScmEngenharia _NotificacaoScmEngenharia = new NotificacaoScmEngenharia();
-  StreamSubscription<ConnectivityResult> subscription;
+  late StreamSubscription<ConnectivityResult> subscription;
   String _StatusTipoWidget = "view_realizando_busca", ErroInformacao = "";
 
   Future<Null> OnRecuperaNotificacaoPeloId() async {
@@ -34,16 +35,15 @@ class _NotificacaoPageState extends State<NotificacaoPage> {
           setState(() {
             _StatusTipoWidget = "sem_internet";
           });
-        else
-          GlobalScaffold.instance.OnToastInformacaoErro(
-              "Verifique sua conexão com a internet e tente novamente.");
+        //else
+         // GlobalScaffold.instance.OnToastInformacaoErro("Verifique sua conexão com a internet e tente novamente.");
       } else {
         setState(() {
           _StatusTipoWidget = "view_realizando_busca";
         });
         Operacao _RespResultado = await _RestWebService.OnRecuperaNotificacaoPeloId(widget.idNotificacao);
         if(_RespResultado.erro)
-          throw(_RespResultado.mensagem);
+          throw(_RespResultado.mensagem!);
         else
         {
           var data = _RespResultado.resultado as List;
@@ -61,7 +61,7 @@ class _NotificacaoPageState extends State<NotificacaoPage> {
       setState(() {
         if (_NotificacaoScmEngenharia.titulo != null) {
           _StatusTipoWidget = "renderizar_tela";
-          OnAlertaInformacaoErro(error.toString(), context);
+          onAlertaInformacaoErro(error.toString(), context);
         } else {
           _StatusTipoWidget = "view_erro_informacao";
           ErroInformacao = error.toString();
@@ -86,8 +86,7 @@ class _NotificacaoPageState extends State<NotificacaoPage> {
               setState(() {
                 _StatusTipoWidget = "renderizar_tela";
               });
-              GlobalScaffold.instance.OnToastInformacaoErro(
-                  "Verifique sua conexão com a internet e tente novamente.");
+             // GlobalScaffold.instance.OnToastInformacaoErro("Verifique sua conexão com a internet e tente novamente.");
             } else {
               setState(() {
                 _StatusTipoWidget = "sem_internet";
@@ -216,18 +215,18 @@ class _NotificacaoPageState extends State<NotificacaoPage> {
                       onTap: () async {
                         if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
                           {
-                            if (_NotificacaoScmEngenharia.titulo.isEmpty)
+                            if (_NotificacaoScmEngenharia.titulo!.isEmpty)
                             {
                               setState(() {
                                 _StatusTipoWidget = "sem_internet";
                               });
-                              GlobalScaffold.instance.OnToastConexaoInternet("Tentando reconectar a internet");
+                             // GlobalScaffold.instance.OnToastConexaoInternet("Tentando reconectar a internet");
                             }
                             else
                               Inc();
                           }
                         } else {
-                          GlobalScaffold.instance.OnHideCurrentSnackBar();
+                          //GlobalScaffold.instance.OnHideCurrentSnackBar();
                           Inc();
                         }
                       },
@@ -289,7 +288,7 @@ class _NotificacaoPageState extends State<NotificacaoPage> {
                   ),
                   SizedBox(height: 10.0),
                   Text(
-                    _NotificacaoScmEngenharia.titulo,
+                    _NotificacaoScmEngenharia.titulo!,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontWeight: FontWeight.normal,
@@ -311,7 +310,7 @@ class _NotificacaoPageState extends State<NotificacaoPage> {
                   ),
                   SizedBox(height: 10.0),
                   Text(
-                    _NotificacaoScmEngenharia.mensagem,
+                    _NotificacaoScmEngenharia.mensagem!,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontWeight: FontWeight.normal,

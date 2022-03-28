@@ -2,10 +2,154 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 
-class OnAlertaInformacaoErro {
+
+class GlobalScaffold {
+  static final GlobalScaffold instance = GlobalScaffold();
+  final navigatorKey = new GlobalKey<NavigatorState>();
+  final messangerKey = new GlobalKey<ScaffoldMessengerState>();
+  final scaffoldKeyMenuDrawer = new GlobalKey<ScaffoldState>();
+
+  int selectedPageBottomNavigationIndex = 0;
+  String selectedPageView = '';
+  static String ErroInformacao = 'Ops! Algo de errado aconteceu? Não se preocupe, vou te ajudar a resolver!';
+
+
+  onToastInformacaoErro(String mensagem) {
+    onHideCurrentSnackBar();
+    FocusScope.of(navigatorKey.currentState!.context).requestFocus(new FocusNode());
+    final snackBar = SnackBar(
+      elevation: 2.0,
+      behavior: SnackBarBehavior.floating,
+      content: Text(
+        mensagem,
+        overflow: TextOverflow.ellipsis,
+        maxLines: 2,
+        softWrap: false,
+        style: TextStyle(
+            fontSize: 15.0,
+            color: Color(0xffFFFFFF),
+            fontFamily: 'avenir-lt-medium'),
+      ),
+      duration: Duration(seconds: 4),
+      backgroundColor: Color(0xffe84c3d),
+    );
+    messangerKey.currentState!.showSnackBar(snackBar);
+  }
+
+  onToastInformacaoSucesso(String mensagem) {
+    FocusScope.of(navigatorKey.currentState!.context).requestFocus(new FocusNode());
+    onHideCurrentSnackBar();
+    final snackBar = SnackBar(
+      elevation: 2.0,
+      behavior: SnackBarBehavior.floating,
+      content: Text(
+        mensagem,
+        overflow: TextOverflow.ellipsis,
+        maxLines: 2,
+        softWrap: false,
+        style: TextStyle(
+            fontSize: 15.0,
+            color: Color(0xffFFFFFF),
+            fontFamily: "avenir-lt-medium"),
+      ),
+      duration: Duration(seconds: 4),
+      backgroundColor: Color(0xff4bb263),
+    );
+    messangerKey.currentState!.showSnackBar(snackBar);
+  }
+
+  onHideCurrentSnackBar() {
+    if (messangerKey.currentState!.showSnackBar != null)
+      messangerKey.currentState!.hideCurrentSnackBar();
+  }
+
+  onToastConexaoInternet() {
+    FocusScope.of(navigatorKey.currentState!.context).requestFocus(new FocusNode());
+    final snackBar = SnackBar(
+      elevation: 2.0,
+      behavior: SnackBarBehavior.floating,
+      content: Text(
+        'Parece que você está sem internet 😑 !\nPor favor, verifique a sua conexão e tente novamente.',
+        overflow: TextOverflow.ellipsis,
+        maxLines: 4,
+        softWrap: false,
+        style: TextStyle(
+            fontSize: 15.0,
+            color: Color(0xffFFFFFF),
+            fontFamily: "avenir-lt-medium"),
+      ),
+      duration: Duration(seconds: 7),
+      backgroundColor: Color(0xffe84c3d),
+    );
+    messangerKey.currentState!.showSnackBar(snackBar);
+  }
+
+  onToastRealizandoOperacao(String mensagem) {
+    FocusScope.of(navigatorKey.currentState!.context).requestFocus(new FocusNode());
+    final snackBar = SnackBar(
+      duration: Duration(days: 365),
+      onVisible: () {},
+      elevation: 6.0,
+      backgroundColor: Colors.black,
+      behavior: SnackBarBehavior.floating,
+      content: SizedBox(
+        height: 30.0,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Flexible(
+              child: Text(
+                mensagem,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+                softWrap: false,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'avenir-lt-std-medium',
+                    fontSize: 13.0,
+                    color: Color(0xffFFFFFF)),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            SizedBox(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Color(0xff5c9e3b)),
+              ),
+              height: 30.0,
+              width: 30.0,
+            ),
+            SizedBox(
+              width: 5.0,
+            ),
+          ],
+        ),
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+        side: BorderSide(
+          color: Colors.black54,
+          width: 2,
+        ),
+      ),
+    );
+    messangerKey.currentState!.showSnackBar(snackBar);
+  }
+
+}
+
+
+//--------------------------------------------------------------------------------------------------------
+
+class onAlertaInformacaoErro {
   final String Mensagem;
   final BuildContext context;
-  OnAlertaInformacaoErro(this.Mensagem,this.context) {
+
+  onAlertaInformacaoErro(this.Mensagem, this.context) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -74,7 +218,7 @@ class OnAlertaInformacaoErro {
                       //`Text` to display
                       onPressed: () {
                         Navigator.pop(context);
-                        FocusManager.instance.primaryFocus.unfocus();
+                        FocusManager.instance.primaryFocus!.unfocus();
                       },
                       shape: new RoundedRectangleBorder(
                         borderRadius: new BorderRadius.circular(5.0),
@@ -91,10 +235,11 @@ class OnAlertaInformacaoErro {
   }
 }
 
-class OnAlertaInformacaoSucesso {
-  final String Mensagem;
+class onAlertaInformacaoSucesso {
+  final String? mensagem;
   final BuildContext context;
-  OnAlertaInformacaoSucesso(this.Mensagem,this.context) {
+
+  onAlertaInformacaoSucesso(this.mensagem, this.context) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -128,7 +273,7 @@ class OnAlertaInformacaoSucesso {
                   ),
                   Padding(padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
                     child:  Text(
-                      Mensagem,
+                      mensagem.toString(),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 4,
                       softWrap: false,
@@ -163,7 +308,7 @@ class OnAlertaInformacaoSucesso {
                       //`Text` to display
                       onPressed: () {
                         Navigator.pop(context);
-                        FocusManager.instance.primaryFocus.unfocus();
+                        FocusManager.instance.primaryFocus!.unfocus();
                       },
                       shape: new RoundedRectangleBorder(
                         borderRadius: new BorderRadius.circular(5.0),
@@ -180,21 +325,28 @@ class OnAlertaInformacaoSucesso {
   }
 }
 
-BuildContext dialogContext;
+BuildContext? dialogContext;
 
-class OnRealizandoOperacao {
+class onRealizandoOperacao {
   final String txtInformacao;
-  final bool IsRealizandoOperacao;
-  final BuildContext context;
+  final bool isRealizandoOperacao;
+  BuildContext? context;
 
-  OnRealizandoOperacao(this.txtInformacao, this.IsRealizandoOperacao,this.context) {
-    if (IsRealizandoOperacao == false && txtInformacao == "") {
-      if(dialogContext != null)
-        Navigator.pop(dialogContext);
-      dialogContext = null;
+  onRealizandoOperacao(this.txtInformacao, this.isRealizandoOperacao, this.context) {
+    if (isRealizandoOperacao == false && txtInformacao == '') {
+      if (dialogContext != null)
+      {
+        if(ModalRoute.of(context!)?.isCurrent != true)
+        {
+          Navigator.pop(dialogContext!);
+          dialogContext = null;
+        }
+      }
+      else
+        dialogContext = null;
     } else {
       showDialog(
-        context: context,
+        context: context!,
         barrierDismissible: false,
         builder: (BuildContext context) {
           dialogContext = context;
@@ -237,5 +389,7 @@ class OnRealizandoOperacao {
       );
     }
   }
-
 }
+
+
+

@@ -9,6 +9,7 @@ import 'package:scm_engenharia_app/help/servico_mobile_service.dart';
 import 'package:scm_engenharia_app/models/model_usuario.dart';
 import 'package:scm_engenharia_app/models/operacao.dart';
 import 'package:scm_engenharia_app/models/variaveis_de_ambiente.dart';
+import 'help_pages/global_scaffold.dart';
 
 class CriarNovaContaPageState extends StatefulWidget {
   @override
@@ -18,9 +19,9 @@ class CriarNovaContaPageState extends StatefulWidget {
 class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
   final _ScaffoldKey = GlobalKey<ScaffoldState>();
   ServicoMobileService _RestWebService = new ServicoMobileService();
-  BuildContext dialogContext;
-  StreamSubscription<ConnectivityResult> subscription;
-  String _StatusTipoWidget, ErroInformacao = "";
+  late BuildContext dialogContext;
+  late StreamSubscription<ConnectivityResult> subscription;
+  late String _StatusTipoWidget, ErroInformacao = "";
   TextEditingController _TxtControllerNome = TextEditingController();
   TextEditingController _TxtControllerCpf =
       new MaskedTextController(mask: '000.000.000-00');
@@ -32,45 +33,35 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
   TextEditingController _TxtControllerEmpresa = TextEditingController();
   TextEditingController _TxtControllerUf = TextEditingController();
 
-  UF UfSelecionada;
-  List<UF> ListaUf = new List<UF>();
+  late UF UfSelecionada;
+  List<UF> ListaUf = [];
 
   Future<Null> OnGetUfs() async {
     try {
       var connectivityResult = await (Connectivity().checkConnectivity());
       if (connectivityResult == ConnectivityResult.none) {
       } else {
-        OnRealizandoOperacao("Realizando operação");
+        onRealizandoOperacao('Realizando operação ... ', true, context);
         Operacao _RestWeb = await _RestWebService.OnVariaveisDeAmbiente();
         if (_RestWeb.erro)
-          throw (_RestWeb.mensagem);
+          throw (_RestWeb.mensagem!);
         else if (_RestWeb.resultado == null)
-          throw (_RestWeb.mensagem);
+          throw (_RestWeb.mensagem!);
         else {
           VariaveisDeAmbienteResultado _Resultado =
               _RestWeb.resultado as VariaveisDeAmbienteResultado;
           setState(() {
-            ListaUf = _Resultado.uF;
+            ListaUf = _Resultado.uF!;
           });
-          if (dialogContext != null) {
-            Navigator.pop(dialogContext);
-            setState(() {
-              dialogContext = null;
-            });
-          }
+          onRealizandoOperacao('', false, context);
         }
       }
     } catch (error) {
-      if (dialogContext != null) {
-        Navigator.pop(dialogContext);
-        setState(() {
-          dialogContext = null;
-        });
-      }
-      OnToastInformacao(error);
+      onRealizandoOperacao('', false, context);
+      onAlertaInformacaoErro(error.toString(), context);
       setState(() {
         _StatusTipoWidget = "widget_informacao";
-        ErroInformacao = error;
+        ErroInformacao = error.toString();
       });
     }
   }
@@ -103,31 +94,20 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
             _TxtControllerTelefoneWhatsapp.text;
         _ModelDadosUsuario.empresa = _TxtControllerEmpresa.text;
         _ModelDadosUsuario.uf = UfSelecionada.id;
-        OnRealizandoOperacao("Realizando cadastro");
+        onRealizandoOperacao('Realizando operação ... ', true, context);
         Operacao _RestWeb =
             await _RestWebService.OnCadastraUsuario(_ModelDadosUsuario);
         if (_RestWeb.erro)
-          throw (_RestWeb.mensagem);
+          throw (_RestWeb.mensagem!);
         else if (_RestWeb.resultado == null)
-          throw (_RestWeb.mensagem);
+          throw (_RestWeb.mensagem!);
         else {
-          if (dialogContext != null) {
-            Navigator.pop(dialogContext);
-            setState(() {
-              dialogContext = null;
-            });
-          }
-          OnToastInformacao(_RestWeb.mensagem);
+          onRealizandoOperacao('', false, context);
         }
       }
     } catch (error) {
-      if (dialogContext != null) {
-        Navigator.pop(dialogContext);
-        setState(() {
-          dialogContext = null;
-        });
-      }
-      OnToastInformacao(error);
+      onRealizandoOperacao('', false, context);
+      onAlertaInformacaoErro(error.toString(), context);
     }
   }
 
@@ -150,7 +130,7 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
           .listen((ConnectivityResult result) {
         if (result == ConnectivityResult.none) {
         } else {
-          _ScaffoldKey.currentState.removeCurrentSnackBar();
+          _ScaffoldKey.currentState!.removeCurrentSnackBar();
           setState(() {
             _StatusTipoWidget = "renderizar_tela";
           });
@@ -158,140 +138,11 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
       });
       OnGetUfs();
     } catch (error) {
-      OnToastInformacao(error);
+      onAlertaInformacaoErro(error!.toString(),context);
     }
   }
 
-  OnRealizandoOperacao(String txtInformacao) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        dialogContext = context;
-        return Dialog(
-          child: new Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Container(
-                margin: const EdgeInsets.only(
-                    left: 10.0, top: 20.0, bottom: 20.0, right: 10.0),
-                child: Theme(
-                  data: Theme.of(context).copyWith(
-                    accentColor: Color(0xff018a8a),
-                  ),
-                  child: new CircularProgressIndicator(),
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  margin: EdgeInsets.only(
-                      left: 10.0, top: 20.0, bottom: 20.0, right: 5.0),
-                  child: Text(
-                    txtInformacao,
-                    softWrap: true,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                        fontSize: 17.0,
-                        color: Color(0xff212529),
-                        fontFamily: "open-sans-regular"),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
 
-  void OnToastInformacao(String Mensagem) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8.0))),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(height: 15.0),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    "Informação",
-                    style: TextStyle(
-                        fontSize: 20.0,
-                        color: Color(0xff212529),
-                        fontFamily: "avenir-lt-std-roman"),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Divider(
-                    color: Colors.black12,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-                    child: Text(
-                      Mensagem,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 4,
-                      softWrap: false,
-                      style: TextStyle(
-                          fontSize: 17.0,
-                          color: Color(0xff212529),
-                          fontFamily: "avenir-lt-std-roman"),
-                    ),
-                  ),
-                ],
-              ),
-              Divider(
-                color: Colors.black12,
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
-                child: new Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    FlatButton(
-                      color: Color(0xff018a8a),
-                      //`Icon` to display
-                      child: Text(
-                        '           OK           ',
-                        style: TextStyle(
-                            fontSize: 17.0,
-                            color: Color(0xffFFFFFF),
-                            fontFamily: "avenir-lt-std-roman"),
-                      ),
-                      //`Text` to display
-                      onPressed: () {
-                        Navigator.pop(context);
-                        FocusManager.instance.primaryFocus.unfocus();
-                      },
-                      shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(5.0),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
 
   @override
   void initState() {
@@ -396,7 +247,7 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
                           setState(() {
                             _StatusTipoWidget = "sem_internet";
                           });
-                          _ScaffoldKey.currentState.showSnackBar(SnackBar(
+                          _ScaffoldKey.currentState!.showSnackBar(SnackBar(
                             onVisible: () {
                               print('Visible');
                             },
@@ -444,7 +295,7 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
                             ),
                           ));
                         } else {
-                          _ScaffoldKey.currentState.removeCurrentSnackBar();
+                          _ScaffoldKey.currentState!.removeCurrentSnackBar();
                           setState(() {
                             _StatusTipoWidget = "renderizar_tela";
                           });
@@ -1021,7 +872,7 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
                                     return new DropdownMenuItem<UF>(
                                       value: value,
                                       child: Text(
-                                        value.uf,
+                                        value.uf!,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             fontSize: 19.0,
@@ -1031,10 +882,10 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
                                       ),
                                     );
                                   }).toList(),
-                                  onChanged: (UF newValue) {
+                                  onChanged: (UF? newValue) {
                                     setState(() {
-                                      UfSelecionada = newValue;
-                                      _TxtControllerUf.text = newValue.uf;
+                                       UfSelecionada = newValue!;
+                                      _TxtControllerUf.text = newValue.uf!;
                                     });
                                   },
                                 ),
@@ -1047,7 +898,7 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
                   Center(
                     child: InkWell(
                       onTap: () async {
-                        FocusManager.instance.primaryFocus.unfocus();
+                        FocusManager.instance.primaryFocus!.unfocus();
                         OnSalvarConta();
                       },
                       child: Container(

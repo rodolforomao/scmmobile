@@ -14,6 +14,8 @@ import 'package:scm_engenharia_app/models/operacao.dart';
 import 'package:scm_engenharia_app/models/variaveis_de_ambiente.dart';
 import 'package:scm_engenharia_app/pages/login_page.dart';
 
+import 'help_pages/global_scaffold.dart';
+
 class VariavelDeAmbientePage  extends StatefulWidget {
   @override
   _VariavelDeAmbientePageState createState() => _VariavelDeAmbientePageState();
@@ -23,10 +25,10 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
   final _ScaffoldKey = GlobalKey<ScaffoldState>();
   TbUsuario _Usuariodb = new TbUsuario();
   ServicoMobileService _RestWebService = new ServicoMobileService();
-  BuildContext dialogContext;
-  DBHelper dbHelper;
-  String _StatusTipoWidget,ErroInformacao="";
-  StreamSubscription<ConnectivityResult> subscription;
+  late BuildContext dialogContext;
+  late DBHelper dbHelper;
+  late String _StatusTipoWidget,ErroInformacao="";
+  late StreamSubscription<ConnectivityResult> subscription;
 
 
   Future<Null> OnGetUfs() async {
@@ -34,22 +36,22 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
       var connectivityResult = await (Connectivity().checkConnectivity());
       if (connectivityResult == ConnectivityResult.none) {
       } else {
-        OnRealizandoOperacao("Realizando operação");
+        onRealizandoOperacao('Realizando operação ... ', true, context);
         Operacao _RestWeb = await _RestWebService.OnVariaveisDeAmbiente();
         if (_RestWeb.erro)
-          throw (_RestWeb.mensagem);
+          throw (_RestWeb.mensagem!);
         else if (_RestWeb.resultado == null)
-          throw (_RestWeb.mensagem);
+          throw (_RestWeb.mensagem!);
         else
         {
           VariaveisDeAmbienteResultado  _Resultado = _RestWeb.resultado as VariaveisDeAmbienteResultado;
-          List<UF> ListaUf =  List<UF>();
-          List<UFMunicipios> ListaUFMunicipios =  List<UFMunicipios>();
-          List<Tecnologias> ListaTecnologias =  List<Tecnologias>();
+          List<UF> ListaUf =  [];
+          List<UFMunicipios> ListaUFMunicipios  =  [];
+          List<Tecnologias> ListaTecnologias  =  [];
           setState(() {
-            ListaUf = _Resultado.uF;
-            ListaUFMunicipios= _Resultado.uFMunicipios;
-            ListaTecnologias= _Resultado.tecnologias;
+            ListaUf = _Resultado.uF!;
+            ListaUFMunicipios= _Resultado.uFMunicipios!;
+            ListaTecnologias= _Resultado.tecnologias!;
           });
 
           if(ListaUf != null)
@@ -60,7 +62,7 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
               Uf.uf = prop.uf;
               Operacao _respLocalUf = await dbHelper.OnAddUpdateUf(Uf);
               if (_respLocalUf.erro)
-                throw (_respLocalUf.mensagem);
+                throw (_respLocalUf.mensagem!);
               else {
 
               }
@@ -76,7 +78,7 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
               tbUfMunicipio.municipio = prop.municipio;
               Operacao _respLocalUf = await dbHelper.OnAddUpdateUfMunicipio(tbUfMunicipio);
               if (_respLocalUf.erro)
-                throw (_respLocalUf.mensagem);
+                throw (_respLocalUf.mensagem!);
               else {
 
               }
@@ -90,32 +92,19 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
               tbTecnologia.tecnologia = prop.tecnologia;
               Operacao _respLocalUf = await dbHelper.OnAddUpdateTecnologia(tbTecnologia);
               if (_respLocalUf.erro)
-                throw (_respLocalUf.mensagem);
+                throw (_respLocalUf.mensagem!);
               else {
 
               }
             }
           }
-          if (dialogContext != null) {
-            Navigator.pop(dialogContext);
-            setState(() {
-              dialogContext = null;
-            });
-          }
-          OnToastInformacao("Variáveis de ambiente atualizadas com sucesso");
+          onRealizandoOperacao('', false, context);
+          onAlertaInformacaoSucesso("Variáveis de ambiente atualizadas com sucesso", context);
         }
       }
     } catch (error) {
-      if (dialogContext != null) {
-        Navigator.pop(dialogContext);
-        setState(() {
-          dialogContext = null;
-        });
-      }
-      OnToastInformacao(error);
-      setState(() {
-        ErroInformacao = error;
-      });
+      onRealizandoOperacao('', false, context);
+      onAlertaInformacaoErro(error.toString(), context);
     }
   }
 
@@ -123,7 +112,7 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
     try {
       Operacao _UsuarioLogado = await dbHelper.onSelecionarUsuario();
       if (_UsuarioLogado.erro)
-        throw (_UsuarioLogado.mensagem);
+        throw (_UsuarioLogado.mensagem!);
       else if (_UsuarioLogado.resultado == null) {
         Navigator.of(context).pushAndRemoveUntil(
             new MaterialPageRoute(
@@ -141,134 +130,7 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
     }
   }
 
-  OnRealizandoOperacao(String txtInformacao) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        dialogContext = context;
-        return Dialog(
-          child: new Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Container(
-                margin: const EdgeInsets.only(
-                    left: 10.0, top: 20.0, bottom: 20.0, right: 10.0),
-                child: Theme(
-                  data: Theme.of(context).copyWith(
-                    accentColor: Color(0xff018a8a),
-                  ),
-                  child: new CircularProgressIndicator(),
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  margin: EdgeInsets.only(left: 10.0, top: 20.0, bottom: 20.0, right: 5.0),
-                  child: Text(
-                    txtInformacao,
-                    softWrap: true,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                        fontSize: 17.0,
-                        color: Color(0xff212529),
-                        fontFamily: "open-sans-regular"),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
 
-  void OnToastInformacao(String Mensagem) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8.0))),
-          child:  Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(height: 15.0),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    "Informação",
-                    style: TextStyle(
-                        fontSize: 20.0,
-                        color: Color(0xff212529),
-                        fontFamily: "avenir-lt-std-roman"),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Divider(
-                    color: Colors.black12,
-                  ),
-                  Padding(padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-                    child:  Text(
-                      Mensagem,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 4,
-                      softWrap: false,
-                      style: TextStyle(
-                          fontSize: 17.0,
-                          color: Color(0xff212529),
-                          fontFamily: "avenir-lt-std-roman"),
-                    ),
-                  ),
-                ],
-              ),
-              Divider(
-                color: Colors.black12,
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
-                child: new Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    FlatButton(
-                      color: Color(0xff018a8a),
-                      //`Icon` to display
-                      child: Text(
-                        '           OK           ',
-                        style: TextStyle(
-                            fontSize: 17.0,
-                            color: Color(0xffFFFFFF),
-                            fontFamily: "avenir-lt-std-roman"),
-                      ),
-                      //`Text` to display
-                      onPressed: () {
-                        Navigator.pop(context);
-                        FocusManager.instance.primaryFocus.unfocus();
-                      },
-                      shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(5.0),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
 
   @override
   void initState() {
@@ -290,7 +152,7 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
       if (result == ConnectivityResult.none) {
 
       } else {
-        _ScaffoldKey.currentState.removeCurrentSnackBar();
+        _ScaffoldKey.currentState!.removeCurrentSnackBar();
         setState(() {
           _StatusTipoWidget = "renderizar_tela";
         });
@@ -392,7 +254,7 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
                           setState(() {
                             _StatusTipoWidget = "sem_internet";
                           });
-                          _ScaffoldKey.currentState.showSnackBar(SnackBar(
+                          _ScaffoldKey.currentState!.showSnackBar(SnackBar(
                             onVisible: () {
                               print('Visible');
                             },
@@ -439,7 +301,7 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
                             ),
                           ));
                         } else {
-                          _ScaffoldKey.currentState.removeCurrentSnackBar();
+                          _ScaffoldKey.currentState!.removeCurrentSnackBar();
                           setState(() {
                             _StatusTipoWidget = "renderizar_tela";
                           });

@@ -17,12 +17,12 @@ class ServicoMobileService {
   Future<Operacao> OnLogin(ModelLoginJson _Modelo) async {
     Operacao _Operacao = new Operacao();
     try {
-      String token = await Components.JWTToken(_Modelo.usuario, _Modelo.password);
+      String? token = await Components.JWTToken(_Modelo.usuario.toString(), _Modelo.password!);
       final response = await http
           .post(Url + "/login_ws",
               headers: {
                 //"Content-type": "multipart/form-data",
-                "token": token,
+                "token": token!,
               },
               encoding: Encoding.getByName("utf-8"))
           .timeout(const Duration(seconds: 10));
@@ -57,7 +57,7 @@ class ServicoMobileService {
               throw ("Houve um problema de comunicação com os servidores do SCM");
             Map<String, dynamic> map = jsonDecode(Components.removeAllHtmlTags(response.body));
             OperacaoJson _Resp = OperacaoJson.fromJson(map);
-            _Operacao.erro = !_Resp.status;
+            _Operacao.erro = !_Resp.status!;
             _Operacao.mensagem = _Resp.mensagem;
             _Operacao.resultado = _Resp.resultado;
             return _Operacao;
@@ -80,10 +80,10 @@ class ServicoMobileService {
   Future<Operacao> OnAlterarSenha(String _Senha) async {
     Operacao _Operacao = new Operacao();
     try {
-      String token = await ComponentsJWTToken.JWTTokenPadrao();
+      String? token = await ComponentsJWTToken.JWTTokenPadrao();
       Map<String, String> headers = {
         'Content-Type': 'application/json; charset=utf-8',
-        "token": token,
+        "token": token!,
       };
       http.MultipartRequest response;
       response = new http.MultipartRequest(
@@ -120,7 +120,7 @@ class ServicoMobileService {
             print(jsonResp);
             Map<String, dynamic> map = jsonDecode(jsonResp);
             OperacaoJson _Resp = OperacaoJson.fromJson(map);
-            _Operacao.erro = !_Resp.status;
+            _Operacao.erro = !_Resp.status!;
             _Operacao.mensagem = _Resp.mensagem;
             _Operacao.resultado = _Resp.resultado;
             return _Operacao;
@@ -143,13 +143,13 @@ class ServicoMobileService {
   Future<Operacao> OnVariaveisDeAmbiente() async {
     Operacao _Operacao = new Operacao();
     try {
-      String token = await ComponentsJWTToken.JWTTokenPadrao();
+      String? token = await ComponentsJWTToken.JWTTokenPadrao();
       final response = await http
           .post(Url + "/analise/Analise/recuperarVariaveisAmbiente_ws",
               body: null,
               headers: {
                 //"Content-type": "multipart/form-data",
-                "token": token,
+                "token": token!,
               },
               encoding: Encoding.getByName("utf-8"))
           .timeout(const Duration(seconds: 10));
@@ -182,7 +182,7 @@ class ServicoMobileService {
             throw ("Houve um problema de comunicação com os servidores do SCM");
           Map<String, dynamic> map = jsonDecode(response.body);
           VariaveisDeAmbiente _Resp = VariaveisDeAmbiente.fromJson(map);
-          _Operacao.erro = !_Resp.status;
+          _Operacao.erro = !_Resp.status!;
           _Operacao.mensagem = _Resp.mensagem;
           _Operacao.resultado = _Resp.resultado;
           break;
@@ -210,10 +210,10 @@ class ServicoMobileService {
       _Operacao.erro = false;
       _Operacao.mensagem = "Operação realizada com sucesso";
       _Operacao.resultado = null;
-      String token = await ComponentsJWTToken.JWTTokenPadrao();
+      String? token = await ComponentsJWTToken.JWTTokenPadrao();
       Map<String, String> headers = {
         'Content-Type': 'application/json; charset=utf-8',
-        "token": token,
+        "token": token!,
       };
       http.MultipartRequest response;
       response = new http.MultipartRequest(
@@ -256,7 +256,7 @@ class ServicoMobileService {
       int index = 1;
       if (_Modelo.distribuicaoFisicosServicoQuantitativo == null)
         throw ("Distribuição do quantitativo de acessos físicos em serviço e obrigatório,favor adicionar.");
-      for (var item in _Modelo.distribuicaoFisicosServicoQuantitativo) {
+      for (var item in _Modelo.distribuicaoFisicosServicoQuantitativo!) {
         print('controllerUF_' + index.toString());
         response.fields['controllerCodIBGE_' + index.toString()] =
             item.cod_ibge.toString() == null ? "" : item.cod_ibge.toString();
@@ -323,7 +323,7 @@ class ServicoMobileService {
               throw ("Houve um problema de comunicação com os servidores do SCM");
             Map<String, dynamic> map = jsonDecode(jsonResp);
             OperacaoJson _Resp = OperacaoJson.fromJson(map);
-            _Operacao.erro = !_Resp.status;
+            _Operacao.erro = !_Resp.status!;
             _Operacao.mensagem = _Resp.mensagem;
             _Operacao.resultado = _Resp.resultado;
             return _Operacao;
@@ -346,13 +346,13 @@ class ServicoMobileService {
   Future<Operacao> OnRecuperaLancamentosSici() async {
     Operacao _Operacao = new Operacao();
     try {
-      String token = await ComponentsJWTToken.JWTTokenPadrao();
+      String? token = await ComponentsJWTToken.JWTTokenPadrao();
       final response = await http
           .post(Url + "/analise/recuperar_ws",
               body: null,
               headers: {
                 //"Content-type": "multipart/form-data",
-                "token": token,
+                "token": token!,
               },
               encoding: Encoding.getByName("utf-8"))
           .timeout(const Duration(seconds: 10));
@@ -391,7 +391,7 @@ class ServicoMobileService {
             throw ("Houve um problema de comunicação com os servidores do SCM");
           Map<String, dynamic> map = jsonDecode(response.body);
           OperacaoJson _Resp = OperacaoJson.fromJson(map);
-          _Operacao.erro = !_Resp.status;
+          _Operacao.erro = !_Resp.status!;
           _Operacao.mensagem = _Resp.mensagem;
           _Operacao.resultado = _Resp.resultado;
           break;
@@ -412,10 +412,10 @@ class ServicoMobileService {
   Future<Operacao> OnCadastraUsuario(ModelDadosUsuarioJson _Modelo) async {
     Operacao _Operacao = new Operacao();
     try {
-      String token = await ComponentsJWTToken.JWTTokenPadrao();
+      String? token = await ComponentsJWTToken.JWTTokenPadrao();
       Map<String, String> headers = {
         'Content-Type': 'application/json; charset=utf-8',
-        "token": token,
+        "token": token!,
       };
       http.MultipartRequest response;
       response = new http.MultipartRequest(
@@ -457,7 +457,7 @@ class ServicoMobileService {
               throw ("Houve um problema de comunicação com os servidores do SCM");
             Map<String, dynamic> map = jsonDecode(jsonResp);
             OperacaoJson _Resp = OperacaoJson.fromJson(map);
-            _Operacao.erro = !_Resp.status;
+            _Operacao.erro = !_Resp.status!;
             _Operacao.mensagem = _Resp.mensagem;
             _Operacao.resultado = _Resp.resultado;
             return _Operacao;
@@ -480,10 +480,10 @@ class ServicoMobileService {
   Future<Operacao> OnRecuperaNotificacaoPeloId(String IdNotificacao) async {
     Operacao _Operacao = new Operacao();
     try {
-      String token = await ComponentsJWTToken.JWTTokenPadrao();
+      String? token = await ComponentsJWTToken.JWTTokenPadrao();
       Map<String, String> headers = {
         'Content-Type': 'application/json; charset=utf-8',
-        "token": token,
+        "token": token!,
       };
       http.MultipartRequest response;
       response = new http.MultipartRequest('POST', Uri.parse(Url + "/notificacoes/Notificacoes_ws/recuperarNotificacao_ws"));
@@ -519,7 +519,7 @@ class ServicoMobileService {
             print(jsonResp);
             Map<String, dynamic> map = jsonDecode(jsonResp);
             OperacaoJson _Resp = OperacaoJson.fromJson(map);
-            _Operacao.erro = !_Resp.status;
+            _Operacao.erro = !_Resp.status!;
             _Operacao.mensagem = _Resp.mensagem;
             _Operacao.resultado = _Resp.resultado;
             return _Operacao;
@@ -542,10 +542,10 @@ class ServicoMobileService {
   Future<Operacao> OnRecuperaNotificacoesPeloId(String IdNotificacao) async {
     Operacao _Operacao = new Operacao();
     try {
-      String token = await ComponentsJWTToken.JWTTokenPadrao();
+      String? token = await ComponentsJWTToken.JWTTokenPadrao();
       Map<String, String> headers = {
         'Content-Type': 'application/json; charset=utf-8',
-        "token": token,
+        "token": token!,
       };
       http.MultipartRequest response;
       response = new http.MultipartRequest('POST', Uri.parse(Url + "/notificacoes/Notificacoes_ws/recuperarNotificacao_ws"));
@@ -581,7 +581,7 @@ class ServicoMobileService {
             print(jsonResp);
             Map<String, dynamic> map = jsonDecode(jsonResp);
             OperacaoJson _Resp = OperacaoJson.fromJson(map);
-            _Operacao.erro = !_Resp.status;
+            _Operacao.erro = !_Resp.status!;
             _Operacao.mensagem = _Resp.mensagem;
             _Operacao.resultado = _Resp.resultado;
             return _Operacao;
@@ -604,10 +604,10 @@ class ServicoMobileService {
   Future<Operacao> OnNotificacoesPeloCPF(String cpf) async {
     Operacao _Operacao = new Operacao();
     try {
-      String token = await ComponentsJWTToken.JWTTokenPadrao();
+      String? token = await ComponentsJWTToken.JWTTokenPadrao();
       Map<String, String> headers = {
         'Content-Type': 'application/json; charset=utf-8',
-        "token": token,
+        "token": token!,
       };
       http.MultipartRequest response;
       response = new http.MultipartRequest('POST', Uri.parse(Url + "/notificacoes/recuperarTodasNotificacaoByCpf_ws"
@@ -644,7 +644,7 @@ class ServicoMobileService {
             print(jsonResp);
             Map<String, dynamic> map = jsonDecode(jsonResp);
             OperacaoJson _Resp = OperacaoJson.fromJson(map);
-            _Operacao.erro = !_Resp.status;
+            _Operacao.erro = !_Resp.status!;
             _Operacao.mensagem = _Resp.mensagem;
             _Operacao.resultado = _Resp.resultado;
             return _Operacao;

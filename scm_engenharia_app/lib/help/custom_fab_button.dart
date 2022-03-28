@@ -7,10 +7,10 @@ class CustomFabButton extends StatefulWidget {
 
 class _CustomFabButtonState extends State<CustomFabButton>
     with SingleTickerProviderStateMixin {
-  AnimationController _animationController;
-  Animation<double> _animatedIcon;
+  late AnimationController _animationController;
+  late Animation<double> _animatedIcon;
   bool isTapped = false;
-  Animation<Color> _animatedColor;
+  late Animation<Color> _animatedColor;
   Curve _curve = Curves.easeOut;
   @override
   void initState() {

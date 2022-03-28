@@ -16,7 +16,7 @@ class ConfiguracaoPage extends StatefulWidget {
 
 class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
   bool IsTemaEscuroAppOn = false, IsNotificacoesAtivarDesativada = false;
-  DBHelper dbHelper;
+  late DBHelper dbHelper;
 
   @override
   void initState() {
@@ -79,7 +79,7 @@ class _ConfiguracaoPageState extends State<ConfiguracaoPage> {
                         Operacao _RestLocal =
                             await dbHelper.OnDeletarUsuario();
                         if (_RestLocal.erro)
-                          throw (_RestLocal.mensagem);
+                          throw (_RestLocal.mensagem!);
                         else {
                           Navigator.of(context).pushAndRemoveUntil(
                               new MaterialPageRoute(

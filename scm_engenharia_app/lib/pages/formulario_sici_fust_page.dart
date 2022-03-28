@@ -14,10 +14,12 @@ import 'package:scm_engenharia_app/models/operacao.dart';
 import 'package:scm_engenharia_app/pages/distribuicao_fisicos_servico_quantitativo_page.dart';
 import "package:flutter/services.dart";
 
-class FormularioSiciFustPage extends StatefulWidget {
-  final TbFichaSici FichaSiciModel;
+import 'help_pages/global_scaffold.dart';
 
-  FormularioSiciFustPage({Key key, @required this.FichaSiciModel})
+class FormularioSiciFustPage extends StatefulWidget {
+   TbFichaSici? FichaSiciModel;
+
+  FormularioSiciFustPage({ Key? key, required this.FichaSiciModel})
       : super(key: key);
 
   @override
@@ -25,7 +27,7 @@ class FormularioSiciFustPage extends StatefulWidget {
 }
 
 class CurrencyPtBrInputFormatter extends TextInputFormatter {
-  CurrencyPtBrInputFormatter({this.maxDigits});
+  CurrencyPtBrInputFormatter({required this.maxDigits});
   final int maxDigits;
 
   TextEditingValue formatEditUpdate(
@@ -48,7 +50,7 @@ class CurrencyPtBrInputFormatter extends TextInputFormatter {
 }
 
 class CurrencyPercentInputFormatter extends TextInputFormatter {
-  CurrencyPercentInputFormatter({this.maxDigits});
+  CurrencyPercentInputFormatter({required this.maxDigits});
   final int maxDigits;
 
   TextEditingValue formatEditUpdate(
@@ -72,12 +74,12 @@ class CurrencyPercentInputFormatter extends TextInputFormatter {
 
 class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
   final _ScaffoldKey = GlobalKey<ScaffoldState>();
-  BuildContext dialogContext;
-  DBHelper dbHelper;
+  late BuildContext dialogContext;
+  late DBHelper dbHelper;
   TbFichaSici _FichaSici = new TbFichaSici();
 
   List<String> Uf = [];
-  String UfTxt, _StatusTipoWidget = "renderizar_ficha_sici";
+  late String UfTxt, _StatusTipoWidget = "renderizar_ficha_sici";
 
   DateTime _DataSelecionada = DateTime(DateTime.now().year, DateTime.now().month - 1, 1);
 
@@ -176,7 +178,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                       //`Text` to display
                       onPressed: () {
                         Navigator.pop(context);
-                        FocusManager.instance.primaryFocus.unfocus();
+                        FocusManager.instance.primaryFocus?.unfocus();
                       },
                       shape: new RoundedRectangleBorder(
                         borderRadius: new BorderRadius.circular(5.0),
@@ -217,19 +219,14 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
       _FichaSici.cofins = _TxtControllerCofins.text;
       _FichaSici.cofinsPorc = _TxtControllerCofinsPorc.text;
       _FichaSici.observacoes = _TxtControllerObservacoes.text;
-      if (_FichaSici.distribuicaoFisicosServicoQuantitativo.length == 0)
+      if (_FichaSici.distribuicaoFisicosServicoQuantitativo!.length == 0)
         throw ("Distribuição do quantitativo de acessos físicos em serviço é obrigatório,favor adicionar.");
       else {
         Operacao _respLocal = await dbHelper.OnAddFichaSici(_FichaSici);
         if (_respLocal.erro)
-          throw (_respLocal.mensagem);
+          throw (_respLocal.mensagem!);
         else {
-          if (dialogContext != null) {
-            Navigator.pop(dialogContext);
-            setState(() {
-              dialogContext = null;
-            });
-          }
+          onRealizandoOperacao('', false, context);
           showDialog(
             context: context,
             barrierDismissible: false,
@@ -264,7 +261,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                         Padding(
                           padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
                           child: Text(
-                            _respLocal.mensagem,
+                            _respLocal.mensagem!,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 4,
                             softWrap: false,
@@ -319,18 +316,13 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
         }
       }
     } catch (error) {
-      if (dialogContext != null) {
-        Navigator.pop(dialogContext);
-        setState(() {
-          dialogContext = null;
-        });
-      }
-      OnAlertaInformacao(error);
+      onRealizandoOperacao('', false, context);
+      onAlertaInformacaoSucesso(error.toString(), context);
     }
   }
 
   OnSelecionarData(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
+    final DateTime? picked = await showDatePicker(
       context: context,
       initialDatePickerMode: DatePickerMode.year,
       initialEntryMode: DatePickerEntryMode.calendar,
@@ -383,32 +375,30 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
         UfTxt = Uf.first;
       });
       if (widget.FichaSiciModel != null) {
-        _FichaSici = widget.FichaSiciModel;
-        if (widget.FichaSiciModel.periodoReferencia.isNotEmpty) {
+        _FichaSici = widget.FichaSiciModel!;
+        if (widget.FichaSiciModel!.periodoReferencia!.isNotEmpty) {
           _DataSelecionada =
-              DateTime.parse(widget.FichaSiciModel.periodoReferencia);
+              DateTime.parse(widget.FichaSiciModel!.periodoReferencia!);
           _TxtControllerPeriodoReferencia.text = DateFormat('dd/MM/yyyy')
-              .format(DateTime.parse(widget.FichaSiciModel.periodoReferencia));
+              .format(DateTime.parse(widget.FichaSiciModel!.periodoReferencia!));
         }
-        _TxtControllerCnpj.text = widget.FichaSiciModel.cnpj;
-        _TxtControllerRazaoSocial.text = widget.FichaSiciModel.razaoSocial;
-        _TxtControllerTelefoneMovel.text = widget.FichaSiciModel.telefoneMovel;
-        _TxtControllerTelefoneFixo.text = widget.FichaSiciModel.telefoneFixo;
-        _TxtControllerReceitaBruta.text = widget.FichaSiciModel.receitaBruta;
-        _TxtControllerReceitaLiquida.text =
-            widget.FichaSiciModel.receitaLiquida;
-        _TxtControllerSimples.text = widget.FichaSiciModel.simples;
-        _TxtControllerSimplesPorc.text = widget.FichaSiciModel.simplesPorc;
-        _TxtControllerIcms.text = widget.FichaSiciModel.icms;
-        _TxtControllerIcmsPorc.text = widget.FichaSiciModel.icmsPorc;
-        _TxtControllerPis.text = widget.FichaSiciModel.pis;
-        _TxtControllerPisPorc.text = widget.FichaSiciModel.pisPorc;
-        _TxtControllerCofins.text = widget.FichaSiciModel.cofins;
-        _TxtControllerCofinsPorc.text = widget.FichaSiciModel.cofinsPorc;
-        _TxtControllerObservacoes.text = widget.FichaSiciModel.observacoes;
+        _TxtControllerCnpj.text = widget.FichaSiciModel!.cnpj!;
+        _TxtControllerRazaoSocial.text = widget.FichaSiciModel!.razaoSocial!;
+        _TxtControllerTelefoneMovel.text = widget.FichaSiciModel!.telefoneMovel!;
+        _TxtControllerTelefoneFixo.text = widget.FichaSiciModel!.telefoneFixo!;
+        _TxtControllerReceitaBruta.text = widget.FichaSiciModel!.receitaBruta!;
+        _TxtControllerReceitaLiquida.text = widget.FichaSiciModel!.receitaLiquida!;
+        _TxtControllerSimples.text = widget.FichaSiciModel!.simples!;
+        _TxtControllerSimplesPorc.text = widget.FichaSiciModel!.simplesPorc!;
+        _TxtControllerIcms.text = widget.FichaSiciModel!.icms!;
+        _TxtControllerIcmsPorc.text = widget.FichaSiciModel!.icmsPorc!;
+        _TxtControllerPis.text = widget.FichaSiciModel!.pis!;
+        _TxtControllerPisPorc.text = widget.FichaSiciModel!.pisPorc!;
+        _TxtControllerCofins.text = widget.FichaSiciModel!.cofins!;
+        _TxtControllerCofinsPorc.text = widget.FichaSiciModel!.cofinsPorc!;
+        _TxtControllerObservacoes.text = widget.FichaSiciModel!.observacoes!;
       } else {
-        _FichaSici.distribuicaoFisicosServicoQuantitativo =
-            new List<TbDistribuicaoQuantitativoAcessosFisicosServico>();
+        _FichaSici.distribuicaoFisicosServicoQuantitativo = [];
       }
     } catch (error) {
       OnAlertaInformacao(error.toString());
@@ -694,7 +684,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                       keyboardType: TextInputType.number,
                       inputFormatters: [
                         //WhitelistingTextInputFormatter.digitsOnly,
-                        CurrencyPtBrInputFormatter()
+                        //CurrencyPtBrInputFormatter()
                       ],
                       textInputAction: TextInputAction.done,
                       autofocus: false,
@@ -715,7 +705,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                             keyboardType: TextInputType.number,
                             inputFormatters: [
                               //WhitelistingTextInputFormatter.digitsOnly,
-                              CurrencyPtBrInputFormatter()
+                              //CurrencyPtBrInputFormatter()
                             ],
                             textInputAction: TextInputAction.done,
                             autofocus: false,
@@ -734,7 +724,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                             keyboardType: TextInputType.number,
                             inputFormatters: [
                               //WhitelistingTextInputFormatter.digitsOnly,
-                              CurrencyPercentInputFormatter()
+                              CurrencyInputFormatter()
                             ],
                             textInputAction: TextInputAction.done,
                             autofocus: false,
@@ -758,7 +748,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                             keyboardType: TextInputType.number,
                             inputFormatters: [
                               //WhitelistingTextInputFormatter.digitsOnly,
-                              CurrencyPtBrInputFormatter()
+                              //CurrencyPtBrInputFormatter()
                             ],
                             textInputAction: TextInputAction.done,
                             autofocus: false,
@@ -777,7 +767,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                             keyboardType: TextInputType.number,
                             inputFormatters: [
                               //WhitelistingTextInputFormatter.digitsOnly,
-                              CurrencyPercentInputFormatter()
+                              //CurrencyPercentInputFormatter()
                             ],
                             textInputAction: TextInputAction.done,
                             autofocus: false,
@@ -801,7 +791,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                             keyboardType: TextInputType.number,
                             inputFormatters: [
                               //WhitelistingTextInputFormatter.digitsOnly,
-                              CurrencyPtBrInputFormatter()
+                             // CurrencyPtBrInputFormatter()
                             ],
                             textInputAction: TextInputAction.done,
                             autofocus: false,
@@ -820,7 +810,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                             keyboardType: TextInputType.number,
                             inputFormatters: [
                               //WhitelistingTextInputFormatter.digitsOnly,
-                              CurrencyPercentInputFormatter()
+                              //CurrencyPercentInputFormatter()
                             ],
                             textInputAction: TextInputAction.done,
                             autofocus: false,
@@ -844,7 +834,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                             keyboardType: TextInputType.number,
                             inputFormatters: [
                               //WhitelistingTextInputFormatter.digitsOnly,
-                              CurrencyPtBrInputFormatter()
+                              //CurrencyPtBrInputFormatter()
                             ],
                             textInputAction: TextInputAction.done,
                             autofocus: false,
@@ -863,7 +853,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                             keyboardType: TextInputType.number,
                             inputFormatters: [
                               //WhitelistingTextInputFormatter.digitsOnly,
-                              CurrencyPercentInputFormatter()
+                              //CurrencyPercentInputFormatter()
                             ],
                             textInputAction: TextInputAction.done,
                             autofocus: false,
@@ -883,7 +873,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                       keyboardType: TextInputType.number,
                       inputFormatters: [
                         // WhitelistingTextInputFormatter.digitsOnly,
-                        CurrencyPtBrInputFormatter()
+                       // CurrencyPtBrInputFormatter()
                       ],
                       textInputAction: TextInputAction.done,
                       autofocus: false,
@@ -946,12 +936,12 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                                   builder: (BuildContext context) =>
                                   new DistribuicaoFisicosServicoQuantitativoPage(sDistribuicaoFisicosServicoQuantitativo: null))).then((value) {
                             if (value != null) {
-                              if (_FichaSici.distribuicaoFisicosServicoQuantitativo.length == 0) {
+                              if (_FichaSici.distribuicaoFisicosServicoQuantitativo!.length == 0) {
                                 value.index = 1;
-                                _FichaSici.distribuicaoFisicosServicoQuantitativo = List<TbDistribuicaoQuantitativoAcessosFisicosServico>();
+                                _FichaSici.distribuicaoFisicosServicoQuantitativo = [];
                               } else
-                                value.index = _FichaSici.distribuicaoFisicosServicoQuantitativo.length + 1;
-                              _FichaSici.distribuicaoFisicosServicoQuantitativo.add(value);
+                                value.index = _FichaSici.distribuicaoFisicosServicoQuantitativo!.length + 1;
+                              _FichaSici.distribuicaoFisicosServicoQuantitativo!.add(value);
                             }
 
                           });
@@ -992,7 +982,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                               ? 0
                               : _FichaSici
                               .distribuicaoFisicosServicoQuantitativo
-                              .length,
+                              !.length,
                           itemBuilder:
                           DistribuicaoFisicosServicoQuantitativoCard,
                         );
@@ -1070,7 +1060,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                         ),
                         TextSpan(
                           text: _FichaSici
-                              .distribuicaoFisicosServicoQuantitativo[index].uf,
+                              .distribuicaoFisicosServicoQuantitativo![index].uf,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -1099,8 +1089,8 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                         ),
                         TextSpan(
                           text: _FichaSici
-                              .distribuicaoFisicosServicoQuantitativo[index]
-                              .municipio,
+                              .distribuicaoFisicosServicoQuantitativo![index]
+                              ?.municipio,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,
@@ -1129,7 +1119,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                         ),
                         TextSpan(
                           text: _FichaSici
-                              .distribuicaoFisicosServicoQuantitativo[index]
+                              .distribuicaoFisicosServicoQuantitativo![index]
                               .tecnologia,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
@@ -1159,7 +1149,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                         ),
                         TextSpan(
                           text: _FichaSici
-                              .distribuicaoFisicosServicoQuantitativo[index]
+                              .distribuicaoFisicosServicoQuantitativo![index]
                               .cod_ibge,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
@@ -1189,7 +1179,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                         ),
                         TextSpan(
                           text: _FichaSici
-                              .distribuicaoFisicosServicoQuantitativo[index]
+                              .distribuicaoFisicosServicoQuantitativo![index]
                               .pf_0,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
@@ -1219,7 +1209,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                         ),
                         TextSpan(
                           text: _FichaSici
-                              .distribuicaoFisicosServicoQuantitativo[index]
+                              .distribuicaoFisicosServicoQuantitativo![index]
                               .pf_512,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
@@ -1249,7 +1239,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                         ),
                         TextSpan(
                           text: _FichaSici
-                              .distribuicaoFisicosServicoQuantitativo[index]
+                              .distribuicaoFisicosServicoQuantitativo![index]
                               .pf_2,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
@@ -1279,7 +1269,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                         ),
                         TextSpan(
                           text: _FichaSici
-                              .distribuicaoFisicosServicoQuantitativo[index]
+                              .distribuicaoFisicosServicoQuantitativo![index]
                               .pf_12,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
@@ -1309,7 +1299,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                         ),
                         TextSpan(
                           text: _FichaSici
-                              .distribuicaoFisicosServicoQuantitativo[index]
+                              .distribuicaoFisicosServicoQuantitativo![index]
                               .pf_34,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
@@ -1339,7 +1329,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                         ),
                         TextSpan(
                           text: _FichaSici
-                              .distribuicaoFisicosServicoQuantitativo[index]
+                              .distribuicaoFisicosServicoQuantitativo![index]
                               .pj_0,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
@@ -1369,7 +1359,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                         ),
                         TextSpan(
                           text: _FichaSici
-                              .distribuicaoFisicosServicoQuantitativo[index]
+                              .distribuicaoFisicosServicoQuantitativo![index]
                               .pj_512,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
@@ -1399,7 +1389,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                         ),
                         TextSpan(
                           text: _FichaSici
-                              .distribuicaoFisicosServicoQuantitativo[index]
+                              .distribuicaoFisicosServicoQuantitativo![index]
                               .pj_2,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
@@ -1429,7 +1419,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                         ),
                         TextSpan(
                           text: _FichaSici
-                              .distribuicaoFisicosServicoQuantitativo[index]
+                              .distribuicaoFisicosServicoQuantitativo![index]
                               .pj_12,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
@@ -1459,7 +1449,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                         ),
                         TextSpan(
                           text: _FichaSici
-                              .distribuicaoFisicosServicoQuantitativo[index]
+                              .distribuicaoFisicosServicoQuantitativo![index]
                               .pj_34,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
@@ -1507,17 +1497,17 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                               builder: (BuildContext context) =>
                                   new DistribuicaoFisicosServicoQuantitativoPage(
                                       sDistribuicaoFisicosServicoQuantitativo:
-                                          _FichaSici.distribuicaoFisicosServicoQuantitativo[index]),
+                                          _FichaSici.distribuicaoFisicosServicoQuantitativo![index]),
                             ),
                           ).then((value) {
                             if (value != null) {
                               int Index = _FichaSici
                                   .distribuicaoFisicosServicoQuantitativo
-                                  .indexWhere(
+                                  !.indexWhere(
                                       (item) => item.index == value.index);
                               setState(() {
                                 _FichaSici
-                                        .distribuicaoFisicosServicoQuantitativo[
+                                        .distribuicaoFisicosServicoQuantitativo![
                                     Index] = value;
                               });
                             }
@@ -1603,41 +1593,37 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                                                   .requestFocus(
                                                       new FocusNode());
                                               if (_FichaSici
-                                                          .distribuicaoFisicosServicoQuantitativo[
+                                                          .distribuicaoFisicosServicoQuantitativo![
                                                               index]
                                                           .idApp ==
                                                       null ||
                                                   _FichaSici
-                                                          .distribuicaoFisicosServicoQuantitativo[
+                                                          .distribuicaoFisicosServicoQuantitativo![
                                                               index]
                                                           .idApp ==
                                                       0) {
                                                 setState(() {
                                                   _FichaSici
                                                       .distribuicaoFisicosServicoQuantitativo
-                                                      .remove(_FichaSici
-                                                              .distribuicaoFisicosServicoQuantitativo[
+                                                      !.remove(_FichaSici
+                                                              .distribuicaoFisicosServicoQuantitativo![
                                                           index]);
                                                 });
                                               } else {
                                                 Operacao _respLocal = await dbHelper
-                                                    .OnDeletarDistribuicaoQuantitativoAcessosFisicosServico(
-                                                        _FichaSici
-                                                            .distribuicaoFisicosServicoQuantitativo[
-                                                                index]
-                                                            .idApp);
+                                                    .OnDeletarDistribuicaoQuantitativoAcessosFisicosServico(_FichaSici.distribuicaoFisicosServicoQuantitativo![index].idApp!);
                                                 if (_respLocal.erro)
-                                                  throw (_respLocal.mensagem);
+                                                  throw (_respLocal.mensagem!);
                                                 else {
                                                   setState(() {
                                                     _FichaSici
                                                         .distribuicaoFisicosServicoQuantitativo
-                                                        .remove(_FichaSici
-                                                                .distribuicaoFisicosServicoQuantitativo[
+                                                        !.remove(_FichaSici
+                                                                .distribuicaoFisicosServicoQuantitativo![
                                                             index]);
                                                   });
                                                   OnAlertaInformacao(
-                                                      _respLocal.mensagem);
+                                                      _respLocal.mensagem!);
                                                 }
                                               }
                                               Navigator.pop(context);

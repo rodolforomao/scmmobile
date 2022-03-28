@@ -1,7 +1,7 @@
 class VariaveisDeAmbiente {
-  bool status;
-  String mensagem;
-  VariaveisDeAmbienteResultado resultado;
+  late bool? status;
+  String? mensagem;
+  VariaveisDeAmbienteResultado? resultado;
 
   VariaveisDeAmbiente({this.status, this.mensagem, this.resultado});
 
@@ -18,36 +18,36 @@ class VariaveisDeAmbiente {
     data['status'] = this.status;
     data['mensagem'] = this.mensagem;
     if (this.resultado != null) {
-      data['resultado'] = this.resultado.toJson();
+      data['resultado'] = this.resultado!.toJson();
     }
     return data;
   }
 }
 
 class VariaveisDeAmbienteResultado {
-  List<UFMunicipios> uFMunicipios;
-  List<UF> uF;
-  List<Tecnologias> tecnologias;
+  List<UFMunicipios>? uFMunicipios;
+  List<UF>? uF;
+  List<Tecnologias>? tecnologias;
 
   VariaveisDeAmbienteResultado({this.uFMunicipios, this.uF, this.tecnologias});
 
   VariaveisDeAmbienteResultado.fromJson(Map<String, dynamic> json) {
     if (json['UFMunicipios'] != null) {
-      uFMunicipios = new List<UFMunicipios>();
+      uFMunicipios = [];
       json['UFMunicipios'].forEach((v) {
-        uFMunicipios.add(new UFMunicipios.fromJson(v));
+        uFMunicipios!.add(new UFMunicipios.fromJson(v));
       });
     }
     if (json['UF'] != null) {
-      uF = new List<UF>();
+      uF = [];
       json['UF'].forEach((v) {
-        uF.add(new UF.fromJson(v));
+        uF!.add(new UF.fromJson(v));
       });
     }
     if (json['Tecnologias'] != null) {
-      tecnologias = new List<Tecnologias>();
+      tecnologias = [];
       json['Tecnologias'].forEach((v) {
-        tecnologias.add(new Tecnologias.fromJson(v));
+        tecnologias!.add(new Tecnologias.fromJson(v));
       });
     }
   }
@@ -55,23 +55,23 @@ class VariaveisDeAmbienteResultado {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (this.uFMunicipios != null) {
-      data['UFMunicipios'] = this.uFMunicipios.map((v) => v.toJson()).toList();
+      data['UFMunicipios'] = this.uFMunicipios!.map((v) => v.toJson()).toList();
     }
     if (this.uF != null) {
-      data['UF'] = this.uF.map((v) => v.toJson()).toList();
+      data['UF'] = this.uF!.map((v) => v.toJson()).toList();
     }
     if (this.tecnologias != null) {
-      data['Tecnologias'] = this.tecnologias.map((v) => v.toJson()).toList();
+      data['Tecnologias'] = this.tecnologias!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class UFMunicipios {
-  String ufId;
-  String uf;
-  String id;
-  String municipio;
+  String? ufId;
+  String? uf;
+  String? id;
+  String? municipio;
 
   UFMunicipios({this.ufId, this.uf, this.id, this.municipio});
 
@@ -93,8 +93,8 @@ class UFMunicipios {
 }
 
 class UF {
-  String id;
-  String uf;
+  String? id;
+  String? uf;
 
   UF({this.id, this.uf});
 
@@ -112,8 +112,8 @@ class UF {
 }
 
 class Tecnologias {
-  String id;
-  String tecnologia;
+  String? id;
+  String? tecnologia;
 
   Tecnologias({this.id, this.tecnologia});
 

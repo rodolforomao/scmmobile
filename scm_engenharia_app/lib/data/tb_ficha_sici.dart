@@ -1,28 +1,28 @@
 import 'package:scm_engenharia_app/data/tb_distribuicao_quantitativo_acessos_fisicos_servico.dart';
 
 class TbFichaSici {
-  int idFichaSiciApp;
-  String idEmpresa;
-  String isSincronizar;
-  String idLancamento;
-  String periodoReferencia;
-  String razaoSocial;
-  String telefoneFixo;
-  String cnpj;
-  String telefoneMovel;
-  String receitaBruta;
-  String idFinanceiro;
-  String simples;
-  String simplesPorc;
-  String icms;
-  String icmsPorc;
-  String pis;
-  String pisPorc;
-  String cofins;
-  String cofinsPorc;
-  String receitaLiquida;
-  String observacoes;
-  List<TbDistribuicaoQuantitativoAcessosFisicosServico>
+  int? idFichaSiciApp;
+  String? idEmpresa;
+  String? isSincronizar;
+  String? idLancamento;
+  String? periodoReferencia;
+  String? razaoSocial;
+  String? telefoneFixo;
+  String? cnpj;
+  String? telefoneMovel;
+  String? receitaBruta;
+  String? idFinanceiro;
+  String? simples;
+  String? simplesPorc;
+  String? icms;
+  String? icmsPorc;
+  String? pis;
+  String? pisPorc;
+  String? cofins;
+  String? cofinsPorc;
+  String? receitaLiquida;
+  String? observacoes;
+  List<TbDistribuicaoQuantitativoAcessosFisicosServico>?
       distribuicaoFisicosServicoQuantitativo;
   TbFichaSici({
     this.idFichaSiciApp = 0,

@@ -14,6 +14,8 @@ import 'package:scm_engenharia_app/models/operacao.dart';
 import 'package:scm_engenharia_app/pages/criar_nova_conta_page.dart';
 import 'package:scm_engenharia_app/pages/esqueceu_sua_senha_page.dart';
 import 'package:scm_engenharia_app/help/usuario_logado.dart' as UsuarioLogado;
+
+import 'help_pages/global_scaffold.dart';
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -37,13 +39,13 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   ServicoMobileService _RestWebService = new ServicoMobileService();
-  DBHelper dbHelper;
+  late DBHelper dbHelper;
   TextEditingController _TxtControllerEmail = TextEditingController();
   TextEditingController _TxtControllerSenha = TextEditingController();
-  String errorTextControllerSenha, errorTextControllerEmail;
+  late String errorTextControllerSenha, errorTextControllerEmail;
   ModelLoginJson _UsuarioLoginModelo = new ModelLoginJson();
   bool isVisualizarSenha = false;
-  BuildContext dialogContext;
+  late BuildContext dialogContext;
 
   Future<Null> RealizandoLogin(BuildContext context) async {
     try {
@@ -60,11 +62,11 @@ class _LoginPageState extends State<LoginPage> {
         _UsuarioLoginModelo.password = _TxtControllerSenha.text.trim();
         Operacao _RestWebUsuario = await _RestWebService.OnLogin(_UsuarioLoginModelo);
         if (_RestWebUsuario.erro)
-          throw (_RestWebUsuario.mensagem);
+          throw (_RestWebUsuario.mensagem!);
         else if (_RestWebUsuario.resultado == null)
-          throw (_RestWebUsuario.mensagem);
+          throw (_RestWebUsuario.mensagem!);
         else {
-          ModelInformacaoUsuario _UsuarioModelo = ModelInformacaoUsuario.fromJson(_RestWebUsuario.resultado);
+          ModelInformacaoUsuario _UsuarioModelo = ModelInformacaoUsuario.fromJson(_RestWebUsuario.resultado as Map<String, dynamic>);
           TbUsuario Usuario = new TbUsuario();
           Usuario.idUsuarioApp = null;
           Usuario.idUsuario = _UsuarioModelo.idUsuario;
@@ -79,16 +81,11 @@ class _LoginPageState extends State<LoginPage> {
           Usuario.cpf = _UsuarioModelo.cpf;
           Operacao _UsuarioLogado = await dbHelper.OnAddUpdateUsuario(Usuario);
           if (_UsuarioLogado.erro)
-            throw (_UsuarioLogado.mensagem);
+            throw (_UsuarioLogado.mensagem!);
           else {
-            if (dialogContext != null) {
-              Navigator.pop(dialogContext);
-              setState(() {
-                dialogContext = null;
-              });
-            }
+            onRealizandoOperacao('', false, context);
             NotificationHandler().unsubscribeFromTopic("scmengenhariaUserNLogado");
-            NotificationHandler().subscribeToTopic("nroCPF-" +Usuario.cpf);
+            NotificationHandler().subscribeToTopic("nroCPF-" +Usuario.cpf!);
             NotificationHandler().subscribeToTopic("scmengenhariaUserAllLogado");
             Future.delayed(Duration.zero, () {
               UsuarioLogado.DadosUsuarioLogado = Usuario;
@@ -98,22 +95,10 @@ class _LoginPageState extends State<LoginPage> {
                   (Route<dynamic> route) => false);
             });
           }
-          if (dialogContext != null) {
-            Navigator.pop(dialogContext);
-            setState(() {
-              dialogContext = null;
-            });
-          }
         }
       }
     } catch (error) {
-      if (dialogContext != null) {
-        Navigator.pop(dialogContext);
-        setState(() {
-          dialogContext = null;
-        });
-      }
-      OnAlertaInformacao(error);
+      onAlertaInformacaoErro(error.toString(), context);
     }
   }
 
@@ -232,7 +217,7 @@ class _LoginPageState extends State<LoginPage> {
                       //`Text` to display
                       onPressed: () {
                         Navigator.pop(context);
-                        FocusManager.instance.primaryFocus.unfocus();
+                        FocusManager.instance.primaryFocus!.unfocus();
                       },
                       shape: new RoundedRectangleBorder(
                         borderRadius: new BorderRadius.circular(5.0),

@@ -7,7 +7,7 @@ class SelecionarMunicipioView extends StatefulWidget {
 
   List<TbUfMunicipio> sMunicipios;
   String Uf;
-  SelecionarMunicipioView({Key key, @required this.sMunicipios,@required this.Uf}) : super(key: key);
+  SelecionarMunicipioView({Key? key, required this.sMunicipios,required this.Uf}) : super(key: key);
 
   @override
   _SelecionarMunicipioView createState() => _SelecionarMunicipioView();
@@ -15,7 +15,7 @@ class SelecionarMunicipioView extends StatefulWidget {
 
 class _SelecionarMunicipioView extends State<SelecionarMunicipioView>  {
 
-  List<TbUfMunicipio> ListMunicipio = new List<TbUfMunicipio>();
+  List<TbUfMunicipio> ListMunicipio = [];
   String _StatusTipoWidget = "view_realizando_busca", ErroInformacao = "";
 
   Inc() async {
@@ -104,7 +104,7 @@ class _SelecionarMunicipioView extends State<SelecionarMunicipioView>  {
                     print(value);
                     if (value.length >= 1) {
                       setState(() {
-                        ListMunicipio =  widget.sMunicipios.where((f) => f.municipio.toLowerCase().startsWith(value.toLowerCase())).toList();
+                        ListMunicipio =  widget.sMunicipios.where((f) => f.municipio!.toLowerCase().startsWith(value.toLowerCase())).toList();
                       });
                     } else if (value.length == 0) {
                       FocusScope.of(context).requestFocus(new FocusNode());
@@ -223,7 +223,7 @@ class _SelecionarMunicipioView extends State<SelecionarMunicipioView>  {
                     },
                     contentPadding: EdgeInsets.fromLTRB(15.0, 7.0, 15.0, 7.0),
                     title: Text(
-                      ListMunicipio[index].municipio,
+                      ListMunicipio[index].municipio!,
                       style: TextStyle(
                           fontSize: 19.0,
                           color: Color(0xff333333),

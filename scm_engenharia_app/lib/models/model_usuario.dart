@@ -1,6 +1,6 @@
 class ModelLoginJson {
-  String usuario;
-  String password;
+  String? usuario;
+  String? password;
 
   ModelLoginJson({
     this.usuario,
@@ -21,13 +21,13 @@ class ModelLoginJson {
 }
 
 class ModelDadosUsuarioJson {
-  String nome;
-  String cpf;
-  String email;
-  String telefone;
-  String telefoneWhatsapp;
-  String empresa;
-  String uf;
+  String? nome;
+  String? cpf;
+  String? email;
+  String? telefone;
+  String? telefoneWhatsapp;
+  String? empresa;
+  String? uf;
   ModelDadosUsuarioJson({
     this.nome,
     this.cpf,
@@ -63,16 +63,16 @@ class ModelDadosUsuarioJson {
 }
 
 class ModelInformacaoUsuario {
-  String descNome;
-  String idPerfil;
-  String email;
-  String idUsuario;
-  String dtUltacesso;
-  String empresa;
-  String periodoReferencia;
-  String idContrato;
-  String telefoneConsultor;
-  String cpf;
+  String? descNome;
+  String? idPerfil;
+  String? email;
+  String? idUsuario;
+  String? dtUltacesso;
+  String? empresa;
+  String? periodoReferencia;
+  String? idContrato;
+  String? telefoneConsultor;
+  String? cpf;
 
   ModelInformacaoUsuario(
       {this.descNome,

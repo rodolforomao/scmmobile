@@ -3,12 +3,13 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scm_engenharia_app/help/global_scaffold.dart';
-import 'package:scm_engenharia_app/help/notification_alert.dart';
 import 'package:scm_engenharia_app/help/servico_mobile_service.dart';
 import 'package:scm_engenharia_app/models/model_notificacao.dart';
 import 'package:scm_engenharia_app/models/operacao.dart';
 import 'package:scm_engenharia_app/help/usuario_logado.dart' as UsuarioLogado;
 import 'package:scm_engenharia_app/pages/notificacao_page.dart';
+
+import 'help_pages/global_scaffold.dart';
 
 class NotificacoesPage extends StatefulWidget {
   @override
@@ -18,8 +19,8 @@ class NotificacoesPage extends StatefulWidget {
 class _NotificacoesPageState extends State<NotificacoesPage> {
   ServicoMobileService _RestWebService = new ServicoMobileService();
   List<NotificacaoScmEngenharia> ListaNotificacaoScmEngenharia =
-      new List<NotificacaoScmEngenharia>();
-  StreamSubscription<ConnectivityResult> subscription;
+       [];
+  late StreamSubscription<ConnectivityResult> subscription;
 
   String _StatusTipoWidget = "view_realizando_busca", ErroInformacao = "";
 
@@ -30,17 +31,16 @@ class _NotificacoesPageState extends State<NotificacoesPage> {
           setState(() {
             _StatusTipoWidget = "sem_internet";
           });
-        else
-          GlobalScaffold.instance.OnToastInformacaoErro(
-              "Verifique sua conexão com a internet e tente novamente.");
+       // else
+          //GlobalScaffold.instance.OnToastInformacaoErro("Verifique sua conexão com a internet e tente novamente.");
       } else {
         setState(() {
           _StatusTipoWidget = "view_realizando_busca";
         });
         Operacao _RespResultado = await _RestWebService.OnNotificacoesPeloCPF(
-            UsuarioLogado.DadosUsuarioLogado.cpf);
+            UsuarioLogado.DadosUsuarioLogado!.cpf!);
         if (_RespResultado.erro)
-          throw (_RespResultado.mensagem);
+          throw (_RespResultado.mensagem!);
         else {
           var data = _RespResultado.resultado as List;
           if (data.length == 0)
@@ -60,7 +60,7 @@ class _NotificacoesPageState extends State<NotificacoesPage> {
       setState(() {
         if (ListaNotificacaoScmEngenharia.length > 0) {
           _StatusTipoWidget = "renderizar_tela";
-          OnAlertaInformacaoErro(error.toString(), context);
+          onAlertaInformacaoErro(error.toString(), context);
         } else {
           _StatusTipoWidget = "view_erro_informacao";
           ErroInformacao = error.toString();
@@ -84,8 +84,7 @@ class _NotificacoesPageState extends State<NotificacoesPage> {
               setState(() {
                 _StatusTipoWidget = "renderizar_tela";
               });
-              GlobalScaffold.instance.OnToastInformacaoErro(
-                  "Verifique sua conexão com a internet e tente novamente.");
+              //GlobalScaffold.instance.OnToastInformacaoErro("Verifique sua conexão com a internet e tente novamente.");
             } else {
               setState(() {
                 _StatusTipoWidget = "sem_internet";
@@ -213,13 +212,13 @@ class _NotificacoesPageState extends State<NotificacoesPage> {
                                 setState(() {
                                   _StatusTipoWidget = "sem_internet";
                                 });
-                                GlobalScaffold.instance.OnToastConexaoInternet("Tentando reconectar a internet");
+                                //GlobalScaffold.instance.OnToastConexaoInternet("Tentando reconectar a internet");
                               }
                             else
                               Inc();
                           }
                         } else {
-                          GlobalScaffold.instance.OnHideCurrentSnackBar();
+                          //GlobalScaffold.instance.OnHideCurrentSnackBar();
                           Inc();
                         }
                       },
@@ -283,8 +282,7 @@ class _NotificacoesPageState extends State<NotificacoesPage> {
                               builder: (BuildContext context) =>
                                   NotificacaoPage(
                                       idNotificacao:
-                                          ListaNotificacaoScmEngenharia[index]
-                                              .idTbNotificacoes))).then((value) {
+                                          ListaNotificacaoScmEngenharia[index].idTbNotificacoes!))).then((value) {
                         OnRecuperaNotificacaoPeloCpf();
 
                       });
@@ -309,7 +307,7 @@ class _NotificacoesPageState extends State<NotificacoesPage> {
                       alignment: Alignment.centerLeft,
                       padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
                       child: Text(
-                        ListaNotificacaoScmEngenharia[index].titulo,
+                        ListaNotificacaoScmEngenharia[index].titulo!,
                         textAlign: TextAlign.start,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
@@ -326,7 +324,7 @@ class _NotificacoesPageState extends State<NotificacoesPage> {
                       height: 45,
                       padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
                       child: Text(
-                        ListaNotificacaoScmEngenharia[index].mensagem,
+                        ListaNotificacaoScmEngenharia[index].mensagem!,
                         textAlign: TextAlign.start,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,

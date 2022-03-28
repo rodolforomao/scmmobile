@@ -1,7 +1,7 @@
 class TbTecnologia {
-  int idTecnologiaApp;
-  String id;
-  String tecnologia;
+  int? idTecnologiaApp;
+  String? id;
+  String? tecnologia;
 
   TbTecnologia({
     this.idTecnologiaApp = 0,

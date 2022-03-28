@@ -1,6 +1,6 @@
 class ModelJWTToken {
-  String User;
-  String password;
+  String? User;
+  String? password;
 
   ModelJWTToken({
     this.User,

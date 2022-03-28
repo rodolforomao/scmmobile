@@ -25,8 +25,8 @@ class _SplashScreenState extends State<SplashScreen> {
   final GlobalKey<ScaffoldState> _ScaffoldKey = GlobalKey<ScaffoldState>();
   ServicoMobileService _RestWebService = new ServicoMobileService();
   TbUsuario _Usuariodb = new TbUsuario();
-  DBHelper dbHelper;
-  StreamSubscription<ConnectivityResult> subscription;
+  late DBHelper dbHelper;
+  late StreamSubscription<ConnectivityResult> subscription;
 
   OnInc() async {
     try {
@@ -37,7 +37,7 @@ class _SplashScreenState extends State<SplashScreen> {
         Operacao _UsuarioLogado = await dbHelper.onSelecionarUsuario();
         print("Fim busca  busca");
         if (_UsuarioLogado.erro)
-          throw (_UsuarioLogado.mensagem);
+          throw (_UsuarioLogado.mensagem!);
         else if (_UsuarioLogado.resultado == null) {
           Navigator.of(context).pushAndRemoveUntil(
               new MaterialPageRoute(
@@ -47,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
         else {
           Operacao _ExisteVariavelDeAmbiente = await dbHelper.OnExisteVariavelDeAmbiente();
           if (_ExisteVariavelDeAmbiente.erro)
-            throw (_ExisteVariavelDeAmbiente.mensagem);
+            throw (_ExisteVariavelDeAmbiente.mensagem!);
           else if (_ExisteVariavelDeAmbiente.resultado == true) {
             Navigator.of(context, rootNavigator: true).push(
               new CupertinoPageRoute<bool>(
@@ -74,11 +74,11 @@ class _SplashScreenState extends State<SplashScreen> {
               _UsuarioLoginModelo.usuario = _Usuariodb.email;
               Operacao _RestWebUsuario = await _RestWebService.OnLogin(_UsuarioLoginModelo);
               if (_RestWebUsuario.erro)
-                throw (_RestWebUsuario.mensagem);
+                throw (_RestWebUsuario.mensagem!);
               else if (_RestWebUsuario.resultado == null)
-                throw (_RestWebUsuario.mensagem);
+                throw (_RestWebUsuario.mensagem!);
               else {
-                ModelInformacaoUsuario _UsuarioModelo = ModelInformacaoUsuario.fromJson( _RestWebUsuario.resultado);
+                ModelInformacaoUsuario _UsuarioModelo = ModelInformacaoUsuario.fromJson( _RestWebUsuario.resultado as Map<String, dynamic>);
                 TbUsuario Usuario = new TbUsuario();
                 Usuario.idUsuarioApp = _Usuariodb.idUsuarioApp;
                 Usuario.idUsuario = _UsuarioModelo.idUsuario;
@@ -93,7 +93,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 Usuario.cpf = _UsuarioModelo.cpf;
                 Operacao _UsuarioLogado = await dbHelper.OnAddUpdateUsuario(Usuario);
                 if (_UsuarioLogado.erro)
-                  throw (_UsuarioLogado.mensagem);
+                  throw (_UsuarioLogado.mensagem!);
                 else {
                   UsuarioLogado.DadosUsuarioLogado = Usuario;
                   Navigator.of(context).pushAndRemoveUntil(
@@ -111,7 +111,7 @@ class _SplashScreenState extends State<SplashScreen> {
       Navigator.push(
           context,
           CupertinoPageRoute(
-              builder: (context) => new ErroInformacaoPage(informacao:error))).then((value) {
+              builder: (context) => new ErroInformacaoPage(informacao:error.toString()))).then((value) {
             OnInc();
       });
     }
