@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show TargetPlatform, kIsWeb;
@@ -122,7 +122,7 @@ class _SplashScreenState extends State<SplashScreen> {
   {
     super.initState();
     dbHelper = DBHelper();
-    NotificationHandler().initializeFcmNotification();
+    //NotificationHandler().initializeFcmNotification();
     Future(() {
        OnInc();
     });

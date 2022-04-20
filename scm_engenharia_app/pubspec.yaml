@@ -28,24 +28,29 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.0
-  http: ^0.12.2
-  connectivity: ^2.0.1
-  path_provider: ^1.6.24
-  #intl: ^0.16.1
-  intl: ^0.17.0
-  shared_preferences: ^0.5.12+2
-  device_info: ^0.4.2+9
-  jaguar_jwt: ^2.1.6
-  hive: ^1.4.4+1
-  sqflite: ^1.3.2+1
-  flutter_open_whatsapp: ^0.1.2
-  url_launcher: ^5.7.8
-  month_picker_dialog: ^0.3.3
-  autocomplete_textfield: ^1.7.3
-  firebase_core: ^0.5.2
-  firebase_messaging: ^7.0.3
-  google_maps_flutter: ^1.0.6
+
+  #Plugin Flutter.dev
+  cupertino_icons: ^1.0.4 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  animations: ^2.0.2 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  image_picker: ^0.8.5  # ANDROID, IOS, WEB
+  path_provider: ^2.0.9 # ANDROID, IOS, LINUX, MACOS, WINDOWS
+  shared_preferences: ^2.0.13 # ANDROID, IOS, LINUX, MACOS, WEB
+  webview_flutter: ^3.0.1 # ANDROID, IOS
+  url_launcher: ^6.0.20 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  file_selector: ^0.8.4+1 #  MACOS, WEB , WINDOWS
+  google_maps_flutter: ^2.1.3
+
+  #Plugin dart.dev
+  http: ^0.13.4 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  mockito: ^5.1.0 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  intl: ^0.17.0 # ANDROID, IOS, LINUX,MACOS, WEB, WINDOWS
+  html: ^0.15.0
+
+  #Plugin firebase
+  firebase_core: ^1.13.1 # ANDROID ,IOS, MACOS, WEB,
+  firebase_crashlytics: ^2.6.0 # ANDROID ,IOS, MACOS
+  firebase_messaging: ^11.2.12 # ANDROID,IOS, MACOS, WEB
+  firebase_analytics: ^9.1.3 # ANDROID,IOS,MACOS,WEB
 
   #Plugin Flutter Community
   connectivity_plus: ^2.2.1 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
@@ -53,6 +58,13 @@ dependencies:
   package_info_plus: ^1.4.0 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
   share_plus: ^3.1.0 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
 
+  #Plugin outros
+  jaguar_jwt: ^3.0.0
+  hive: ^1.4.4+1
+  sqflite: ^1.3.2+1
+
+  month_picker_dialog: ^0.3.3
+  autocomplete_textfield: ^1.7.3
 
 dev_dependencies:
   flutter_test:

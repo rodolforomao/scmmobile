@@ -1,14 +1,9 @@
 import 'dart:async';
-import 'package:connectivity/connectivity.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:scm_engenharia_app/data/db_helper.dart';
-import 'package:scm_engenharia_app/data/tb_usuario.dart';
-import 'package:scm_engenharia_app/help/global_scaffold.dart';
 import 'package:scm_engenharia_app/help/servico_mobile_service.dart';
 import 'package:scm_engenharia_app/models/model_notificacao.dart';
 import 'package:scm_engenharia_app/models/operacao.dart';
-import 'package:scm_engenharia_app/pages/login_page.dart';
 import 'package:scm_engenharia_app/help/usuario_logado.dart' as UsuarioLogado;
 
 import 'help_pages/global_scaffold.dart';

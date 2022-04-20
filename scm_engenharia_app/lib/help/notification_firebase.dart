@@ -24,7 +24,7 @@ class FcmFirebase {
     }
   }
 }
-
+/*
 class NotificationHandler {
   FirebaseMessaging _fcm = FirebaseMessaging();
   StreamSubscription iosSubscription;
@@ -118,3 +118,5 @@ class NotificationHandler {
   }
 
 }
+
+ */

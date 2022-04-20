@@ -12,6 +12,15 @@ class _CustomFabButtonState extends State<CustomFabButton>
   bool isTapped = false;
   late Animation<Color> _animatedColor;
   Curve _curve = Curves.easeOut;
+  late Tween<double> tween;
+
+  Animation<double> get stepOne => tween.animate(
+    CurvedAnimation(
+      parent: _animationController,
+      curve: Interval(0.00, 1.00, curve: _curve),
+    ),
+  );
+
   @override
   void initState() {
     _animationController = AnimationController(
@@ -20,15 +29,13 @@ class _CustomFabButtonState extends State<CustomFabButton>
     )..addListener(() {
       setState(() {});
     });
-    _animatedIcon =
-        Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
+
+
+    _animatedIcon = Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
     _animatedColor = ColorTween(
       begin: Color.fromRGBO(52, 73, 94, 1),
       end: Color.fromRGBO(41, 128, 185, 1.0),
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Interval(0.00, 1.00, curve: _curve),
-    ));
+    ) as Animation<Color>;
     super.initState();
   }
 

@@ -1,10 +1,8 @@
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 import 'package:scm_engenharia_app/help/notification_firebase.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import 'package:scm_engenharia_app/data/db_helper.dart';
 import 'package:scm_engenharia_app/data/tb_usuario.dart';
 import 'package:scm_engenharia_app/help/servico_mobile_service.dart';
@@ -16,6 +14,8 @@ import 'package:scm_engenharia_app/pages/esqueceu_sua_senha_page.dart';
 import 'package:scm_engenharia_app/help/usuario_logado.dart' as UsuarioLogado;
 
 import 'help_pages/global_scaffold.dart';
+
+
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -33,9 +33,19 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  void whatsappopen() {
-    FlutterOpenWhatsapp.sendSingleMessage("5561982205225",
-        "Olá Pessoal, Gostaria de ter acesso ao aplicativo da SCM. Esta é uma mensagem automática gerada pelo aplicativo SCM Mobile.");
+  void whatsappopen() async {
+    FocusScope.of(context).requestFocus(new FocusNode());
+    try {
+      var url = 'https://api.whatsapp.com/send?phone=5561982205225';
+      if (await canLaunch(url)) {
+    throw 'Não foi possível realizar a operação';
+    } else {
+    await launch(url);
+    }
+    } catch (error) {
+    GlobalScaffold.instance.onToastInformacaoErro(error.toString());
+    }
+    //FlutterOpenWhatsapp.sendSingleMessage("5561982205225", "Olá Pessoal, Gostaria de ter acesso ao aplicativo da SCM. Esta é uma mensagem automática gerada pelo aplicativo SCM Mobile.");
   }
 
   ServicoMobileService _RestWebService = new ServicoMobileService();
@@ -84,9 +94,9 @@ class _LoginPageState extends State<LoginPage> {
             throw (_UsuarioLogado.mensagem!);
           else {
             onRealizandoOperacao('', false, context);
-            NotificationHandler().unsubscribeFromTopic("scmengenhariaUserNLogado");
-            NotificationHandler().subscribeToTopic("nroCPF-" +Usuario.cpf!);
-            NotificationHandler().subscribeToTopic("scmengenhariaUserAllLogado");
+            //NotificationHandler().unsubscribeFromTopic("scmengenhariaUserNLogado");
+            //NotificationHandler().subscribeToTopic("nroCPF-" +Usuario.cpf!);
+            //NotificationHandler().subscribeToTopic("scmengenhariaUserAllLogado");
             Future.delayed(Duration.zero, () {
               UsuarioLogado.DadosUsuarioLogado = Usuario;
               Navigator.of(context).pushAndRemoveUntil(
@@ -237,7 +247,7 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     dbHelper = DBHelper();
-     NotificationHandler().subscribeToTopic("scmengenhariaUserNLogado");
+     //NotificationHandler().subscribeToTopic("scmengenhariaUserNLogado");
     // _TxtControllerEmail.text = "rodolforomao@gmail.com";
     // _TxtControllerSenha.text = "123456";
 

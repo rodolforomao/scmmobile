@@ -1,8 +1,7 @@
 import 'dart:async';
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:scm_engenharia_app/help/global_scaffold.dart';
 import 'package:scm_engenharia_app/help/servico_mobile_service.dart';
 import 'package:scm_engenharia_app/models/model_notificacao.dart';
 import 'package:scm_engenharia_app/models/operacao.dart';
