@@ -138,7 +138,7 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
       });
       OnGetUfs();
     } catch (error) {
-      onAlertaInformacaoErro(error!.toString(),context);
+      onAlertaInformacaoErro(error.toString(),context);
     }
   }
 
@@ -153,7 +153,7 @@ class _CriarNovaContaPageState extends State<CriarNovaContaPageState> {
   @override
   void dispose() {
     super.dispose();
-    subscription?.cancel();
+    subscription.cancel();
   }
 
   @override

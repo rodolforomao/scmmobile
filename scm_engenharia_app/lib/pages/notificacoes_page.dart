@@ -121,7 +121,7 @@ class _NotificacoesPageState extends State<NotificacoesPage> {
   @override
   void dispose() {
     super.dispose();
-    subscription?.cancel();
+    subscription.cancel();
   }
 
   Widget build(BuildContext context) {

@@ -409,7 +409,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
 
   Future<Null> selectDate(BuildContext context) async
   {
-    final DateTime picked = await showMonthPicker
+    final DateTime? picked = await showMonthPicker
       (
         context: context
         , initialDate: _DataSelecionada
@@ -1090,7 +1090,7 @@ class _FormularioSiciFustPageState extends State<FormularioSiciFustPage> {
                         TextSpan(
                           text: _FichaSici
                               .distribuicaoFisicosServicoQuantitativo![index]
-                              ?.municipio,
+                              .municipio,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black54,

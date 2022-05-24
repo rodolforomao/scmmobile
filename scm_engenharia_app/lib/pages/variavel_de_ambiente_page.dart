@@ -160,7 +160,7 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
   @override
   void dispose() {
     super.dispose();
-    subscription?.cancel();
+    subscription.cancel();
   }
 
   @override

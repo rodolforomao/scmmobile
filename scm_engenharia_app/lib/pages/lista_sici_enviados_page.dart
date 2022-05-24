@@ -187,7 +187,7 @@ class _ListaSiciEnviadosPageState extends State<ListaSiciEnviadosPage> {
   @override
   void dispose() {
     try {
-      subscription?.cancel();
+      subscription.cancel();
     } catch (exception, stackTrace) {
       print("exception.toString()");
       print(exception.toString());

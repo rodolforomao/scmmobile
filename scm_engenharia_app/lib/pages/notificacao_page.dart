@@ -121,7 +121,7 @@ class _NotificacaoPageState extends State<NotificacaoPage> {
   @override
   void dispose() {
     super.dispose();
-    subscription?.cancel();
+    subscription.cancel();
   }
 
 
