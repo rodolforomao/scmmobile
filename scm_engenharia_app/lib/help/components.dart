@@ -43,7 +43,7 @@ class Components {
           "bc47f175a831996b652146d47e159349f75e6c4665570ef35606678a18054d13";
       final claimSet = new JwtClaim(otherClaims: <String, Object>{
         "user": "" + 'scm_app@scmengenharia.com.br' + "",
-        "pass": "" + '123456' + "",
+        "pass": "" + '1234567' + "",
       });
       // Generate a JWT from the claim set
       final token = issueJwtHS256(claimSet, key);
