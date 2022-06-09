@@ -37,6 +37,7 @@ class _LoginPageState extends State<LoginPage> {
     FocusScope.of(context).requestFocus(new FocusNode());
     try {
       var url = 'https://api.whatsapp.com/send?phone=5561982205225';
+      await launch(url);
       if (await canLaunch(url)) {
     throw 'Não foi possível realizar a operação';
     } else {
