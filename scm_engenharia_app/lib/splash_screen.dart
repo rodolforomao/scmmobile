@@ -31,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
   OnInc() async {
     try {
       if (kIsWeb) {
-
+        print("isweb");
       } else {
         print("Inicio busca");
         Operacao _UsuarioLogado = await dbHelper.onSelecionarUsuario();

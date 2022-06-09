@@ -9,7 +9,7 @@ import 'package:scm_engenharia_app/models/operacao.dart';
 import 'package:scm_engenharia_app/models/variaveis_de_ambiente.dart';
 
 class ServicoMobileService {
-  static final Url = "http://sici.scmengenharia.com.br";
+  static final Url = "http://dici.scmengenharia.com.br";
   //static final Url = "http://10.0.2.2:8083";
   //static final Url = "http://192.168.0.122:8083";
   //static final Url = "http://wsscm.ddns.net";

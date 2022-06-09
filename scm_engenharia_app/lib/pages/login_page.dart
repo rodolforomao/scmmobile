@@ -52,7 +52,8 @@ class _LoginPageState extends State<LoginPage> {
   late DBHelper dbHelper;
   TextEditingController _TxtControllerEmail = TextEditingController();
   TextEditingController _TxtControllerSenha = TextEditingController();
-  late String errorTextControllerSenha, errorTextControllerEmail;
+  late String errorTextControllerSenha;
+  late String errorTextControllerEmail = '';
   ModelLoginJson _UsuarioLoginModelo = new ModelLoginJson();
   bool isVisualizarSenha = false;
   late BuildContext dialogContext;
