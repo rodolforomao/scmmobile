@@ -9,7 +9,6 @@ import 'package:scm_engenharia_app/pages/notificacoes_page.dart';
 import 'help/screen_size.dart';
 
 class MenuNavigation extends StatefulWidget {
-
   @override
   _MenuNavigationState createState() => _MenuNavigationState();
 }
@@ -44,7 +43,6 @@ class _MenuNavigationState extends State<MenuNavigation> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     if (isMediumScreenMenu(context)) {
@@ -64,7 +62,7 @@ class _MenuNavigationState extends State<MenuNavigation> {
               ),
               selectedLabelTextStyle: TextStyle(
                 fontFamily: 'Montserrat-Bold',
-                color:  Color(0xff6C757D),
+                color: Color(0xff6C757D),
                 fontSize: 14.0,
               ),
               backgroundColor: Colors.white,
@@ -81,7 +79,9 @@ class _MenuNavigationState extends State<MenuNavigation> {
                   label: new Text('Sici/Fust',
                       style: TextStyle(
                         fontFamily: 'avenir-lt-std-roman',
-                        color: _SelecionarPaginaWidgetIndex == 0 ? Color(0xffa55eea) :  Color(0xff6C757D),
+                        color: _SelecionarPaginaWidgetIndex == 0
+                            ? Color(0xffa55eea)
+                            : Color(0xff6C757D),
                         fontSize: 14.0,
                       )),
                 ),
@@ -90,7 +90,9 @@ class _MenuNavigationState extends State<MenuNavigation> {
                   label: new Text("Documentos",
                       style: TextStyle(
                         fontFamily: 'avenir-lt-std-roman',
-                        color: _SelecionarPaginaWidgetIndex == 1 ? Color(0xffa55eea) :  Color(0xff6C757D),
+                        color: _SelecionarPaginaWidgetIndex == 1
+                            ? Color(0xffa55eea)
+                            : Color(0xff6C757D),
                         fontSize: 14.0,
                       )),
                 ),
@@ -99,7 +101,9 @@ class _MenuNavigationState extends State<MenuNavigation> {
                   label: new Text("Notificações ",
                       style: TextStyle(
                         fontFamily: 'avenir-lt-std-roman',
-                        color: _SelecionarPaginaWidgetIndex == 3 ? Color(0xffa55eea) :  Color(0xff6C757D),
+                        color: _SelecionarPaginaWidgetIndex == 3
+                            ? Color(0xffa55eea)
+                            : Color(0xff6C757D),
                         fontSize: 14.0,
                       )),
                 ),
@@ -108,7 +112,9 @@ class _MenuNavigationState extends State<MenuNavigation> {
                   label: new Text("Configuração",
                       style: TextStyle(
                         fontFamily: 'avenir-lt-std-roman',
-                        color: _SelecionarPaginaWidgetIndex == 4 ? Color(0xffa55eea) :  Color(0xff6C757D),
+                        color: _SelecionarPaginaWidgetIndex == 4
+                            ? Color(0xffa55eea)
+                            : Color(0xff6C757D),
                         fontSize: 14.0,
                       )),
                 ),
@@ -134,8 +140,10 @@ class _MenuNavigationState extends State<MenuNavigation> {
           data: Theme.of(context).copyWith(
               canvasColor: Colors.white,
               primaryColor: Color(0xffa55eea),
-              textTheme: Theme.of(context).textTheme.copyWith(caption: new TextStyle(color: Color(0xff6C757D),))
-          ),
+              textTheme: Theme.of(context).textTheme.copyWith(
+                      caption: new TextStyle(
+                    color: Color(0xff6C757D),
+                  ))),
           child: new BottomNavigationBar(
             elevation: 9.0,
             type: BottomNavigationBarType.fixed,
@@ -143,48 +151,19 @@ class _MenuNavigationState extends State<MenuNavigation> {
             items: [
               new BottomNavigationBarItem(
                 icon: new Icon(Icons.format_list_bulleted, size: 26),
-                label: new Text("Sici/Fust",
-                    style: TextStyle(
-                      fontFamily: 'avenir-lt-std-roman',
-                      color: _SelecionarPaginaWidgetIndex == 0 ? Color(0xffa55eea) :  Color(0xff6C757D),
-                      fontSize: 14.0,
-                    )).toString(),
+                label: "Sici/Fust",
               ),
               new BottomNavigationBarItem(
-                icon: new Icon(Icons.wysiwyg, size: 24),
-                label: new Text("Documentos",
-                    style: TextStyle(
-                      fontFamily: 'avenir-lt-std-roman',
-                      color: _SelecionarPaginaWidgetIndex == 1 ? Color(0xffa55eea) :  Color(0xff6C757D),
-                      fontSize: 14.0,
-                    )).toString(),
-              ),
+                  icon: new Icon(Icons.wysiwyg, size: 24), label: "Docs"),
               new BottomNavigationBarItem(
-                icon: new Icon(Icons.settings, size: 0),
-                label: new Text("",
-                    style: TextStyle(
-                      fontFamily: 'avenir-lt-std-roman',
-                      color: _SelecionarPaginaWidgetIndex == 1 ? Color(0xffa55eea) :  Color(0xff6C757D),
-                      fontSize: 14.0,
-                    )).toString(),
-              ),
+                  icon: new Icon(Icons.settings, size: 0), label: ""),
               new BottomNavigationBarItem(
                 icon: new Icon(Icons.notifications_active_outlined, size: 24),
-                label: new Text("Notificações ",
-                    style: TextStyle(
-                      fontFamily: 'avenir-lt-std-roman',
-                      color: _SelecionarPaginaWidgetIndex == 3 ? Color(0xffa55eea) :  Color(0xff6C757D),
-                      fontSize: 14.0,
-                    )).toString(),
+                label: "Alertas",
               ),
               new BottomNavigationBarItem(
                 icon: new Icon(Icons.settings, size: 24),
-                label: new Text("Configuração",
-                    style: TextStyle(
-                      fontFamily: 'avenir-lt-std-roman',
-                      color: _SelecionarPaginaWidgetIndex == 4 ? Color(0xffa55eea) :  Color(0xff6C757D),
-                      fontSize: 14.0,
-                    )).toString(),
+                label: "Config.",
               ),
             ],
             onTap: (int index) {
@@ -205,7 +184,8 @@ class _MenuNavigationState extends State<MenuNavigation> {
                 Navigator.push(
                     context,
                     CupertinoPageRoute(
-                      builder: (context) => FormularioSiciFustPage(FichaSiciModel:null),
+                      builder: (context) =>
+                          FormularioSiciFustPage(FichaSiciModel: null),
                     ));
               },
             ),

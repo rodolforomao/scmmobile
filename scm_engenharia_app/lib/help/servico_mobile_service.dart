@@ -7,17 +7,19 @@ import 'package:scm_engenharia_app/help/components.dart';
 import 'package:scm_engenharia_app/models/model_usuario.dart';
 import 'package:scm_engenharia_app/models/operacao.dart';
 import 'package:scm_engenharia_app/models/variaveis_de_ambiente.dart';
+import 'package:flutter/foundation.dart';
 
 class ServicoMobileService {
-  static final Url = "http://dici.scmengenharia.com.br";
+  //static final Url = "http://dici.scmengenharia.com.br";
   //static final Url = "http://10.0.2.2:8083";
-  //static final Url = "http://192.168.0.122:8083";
+  static final Url = "http://192.168.0.246:8083";
   //static final Url = "http://wsscm.ddns.net";
 
   Future<Operacao> OnLogin(ModelLoginJson _Modelo) async {
     Operacao _Operacao = new Operacao();
     try {
-      String? token = await Components.JWTToken(_Modelo.usuario.toString(), _Modelo.password!);
+      String? token = await Components.JWTToken(
+          _Modelo.usuario.toString(), _Modelo.password!);
       final response = await http
           .post(Uri.parse(Url + "/login_ws"),
               headers: {
@@ -55,7 +57,8 @@ class ServicoMobileService {
             print(jsonDecode(Components.removeAllHtmlTags(response.body)));
             if (response.body.isEmpty)
               throw ("Houve um problema de comunicação com os servidores do SCM");
-            Map<String, dynamic> map = jsonDecode(Components.removeAllHtmlTags(response.body));
+            Map<String, dynamic> map =
+                jsonDecode(Components.removeAllHtmlTags(response.body));
             OperacaoJson _Resp = OperacaoJson.fromJson(map);
             _Operacao.erro = !_Resp.status!;
             _Operacao.mensagem = _Resp.mensagem;
@@ -145,14 +148,15 @@ class ServicoMobileService {
     try {
       String? token = await ComponentsJWTToken.JWTTokenPadrao();
       final response = await http
-          .post(Uri.parse(Url + "/analise/Analise/recuperarVariaveisAmbiente_ws"),
+          .post(
+              Uri.parse(Url + "/analise/Analise/recuperarVariaveisAmbiente_ws"),
               body: null,
               headers: {
                 //"Content-type": "multipart/form-data",
                 "token": token!,
               },
               encoding: Encoding.getByName("utf-8"))
-          .timeout(const Duration(seconds: 10));
+          .timeout(const Duration(seconds: (kDebugMode == true ? 9999 : 10)));
       _Operacao.erro = false;
       _Operacao.mensagem = "Operação realizada com sucesso";
       _Operacao.resultado = null;
@@ -224,7 +228,8 @@ class ServicoMobileService {
       response.fields['controllerRazaoSocial'] =
           (_Modelo.razaoSocial == null ? "" : _Modelo.razaoSocial)!;
 
-      response.fields['controllerTelefoneFixo'] = _Modelo.telefoneFixo == null ? "" : _Modelo.telefoneFixo!;
+      response.fields['controllerTelefoneFixo'] =
+          _Modelo.telefoneFixo == null ? "" : _Modelo.telefoneFixo!;
       response.fields['controllerCNPJ'] =
           _Modelo.cnpj == null ? "" : _Modelo.cnpj!;
 
@@ -241,7 +246,8 @@ class ServicoMobileService {
           _Modelo.icms == null ? "" : _Modelo.icms!;
       response.fields['controllerICMSPorc'] =
           _Modelo.icmsPorc == null ? "" : _Modelo.icmsPorc!;
-      response.fields['controllerPIS'] = _Modelo.pis == null ? "" : _Modelo.pis!;
+      response.fields['controllerPIS'] =
+          _Modelo.pis == null ? "" : _Modelo.pis!;
       response.fields['controllerPISPorc'] =
           _Modelo.pisPorc == null ? "" : _Modelo.pisPorc!;
       response.fields['controllerCOFINS'] =
@@ -346,7 +352,8 @@ class ServicoMobileService {
     Operacao _Operacao = new Operacao();
     try {
       String? token = await ComponentsJWTToken.JWTTokenPadrao();
-      final response = await http.post(Uri.parse(Url + "/analise/recuperar_ws"),
+      final response = await http
+          .post(Uri.parse(Url + "/analise/recuperar_ws"),
               body: null,
               headers: {
                 //"Content-type": "multipart/form-data",
@@ -484,7 +491,10 @@ class ServicoMobileService {
         "token": token!,
       };
       http.MultipartRequest response;
-      response = new http.MultipartRequest('POST', Uri.parse(Url + "/notificacoes/Notificacoes_ws/recuperarNotificacao_ws"));
+      response = new http.MultipartRequest(
+          'POST',
+          Uri.parse(
+              Url + "/notificacoes/Notificacoes_ws/recuperarNotificacao_ws"));
       response.headers.addAll(headers);
       response.fields['id'] = IdNotificacao;
       var streamedResponse = await response.send();
@@ -546,7 +556,10 @@ class ServicoMobileService {
         "token": token!,
       };
       http.MultipartRequest response;
-      response = new http.MultipartRequest('POST', Uri.parse(Url + "/notificacoes/Notificacoes_ws/recuperarNotificacao_ws"));
+      response = new http.MultipartRequest(
+          'POST',
+          Uri.parse(
+              Url + "/notificacoes/Notificacoes_ws/recuperarNotificacao_ws"));
       response.headers.addAll(headers);
       response.fields['id'] = IdNotificacao;
       var streamedResponse = await response.send();
@@ -608,8 +621,11 @@ class ServicoMobileService {
         "token": token!,
       };
       http.MultipartRequest response;
-      response = new http.MultipartRequest('POST', Uri.parse(Url + "/notificacoes/recuperarTodasNotificacaoByCpf_ws"
-          ""));
+      response = new http.MultipartRequest(
+          'POST',
+          Uri.parse(Url +
+              "/notificacoes/recuperarTodasNotificacaoByCpf_ws"
+                  ""));
       response.headers.addAll(headers);
       response.fields['cpf'] = cpf;
       var streamedResponse = await response.send();

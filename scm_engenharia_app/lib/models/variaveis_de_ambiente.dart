@@ -32,21 +32,21 @@ class VariaveisDeAmbienteResultado {
   VariaveisDeAmbienteResultado({this.uFMunicipios, this.uF, this.tecnologias});
 
   VariaveisDeAmbienteResultado.fromJson(Map<String, dynamic> json) {
-    if (json['UFMunicipios'] != null) {
+    if (json['CodIbge'] != null) {
       uFMunicipios = [];
-      json['UFMunicipios'].forEach((v) {
+      json['CodIbge'].forEach((v) {
         uFMunicipios!.add(new UFMunicipios.fromJson(v));
       });
     }
-    if (json['UF'] != null) {
+    if (json['Uf'] != null) {
       uF = [];
-      json['UF'].forEach((v) {
+      json['Uf'].forEach((v) {
         uF!.add(new UF.fromJson(v));
       });
     }
-    if (json['Tecnologias'] != null) {
+    if (json['TipoTecnologia'] != null) {
       tecnologias = [];
-      json['Tecnologias'].forEach((v) {
+      json['TipoTecnologia'].forEach((v) {
         tecnologias!.add(new Tecnologias.fromJson(v));
       });
     }
@@ -119,7 +119,7 @@ class Tecnologias {
 
   Tecnologias.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    tecnologia = json['tecnologia'];
+    tecnologia = json['descricao'];
   }
 
   Map<String, dynamic> toJson() {

@@ -3,15 +3,13 @@ class TbTecnologia {
   String? id;
   String? tecnologia;
 
-  TbTecnologia({
-    this.idTecnologiaApp = 0,
-    this.id,
-    this.tecnologia});
+  TbTecnologia({this.idTecnologiaApp = 0, this.id, this.tecnologia});
 
   TbTecnologia.fromJson(Map<String, dynamic> json) {
     idTecnologiaApp = json['idTecnologiaApp'];
     id = json['id'];
-    tecnologia = json['tecnologia'];
+    tecnologia =
+        json['descricao'] == null ? json['tecnologia'] : json['descricao'];
   }
 
   Map<String, dynamic> toJson() {

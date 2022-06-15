@@ -13,20 +13,19 @@ import 'package:scm_engenharia_app/pages/login_page.dart';
 
 import 'help_pages/global_scaffold.dart';
 
-class VariavelDeAmbientePage  extends StatefulWidget {
+class VariavelDeAmbientePage extends StatefulWidget {
   @override
   _VariavelDeAmbientePageState createState() => _VariavelDeAmbientePageState();
 }
 
-class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
+class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage> {
   final _ScaffoldKey = GlobalKey<ScaffoldState>();
   TbUsuario _Usuariodb = new TbUsuario();
   ServicoMobileService _RestWebService = new ServicoMobileService();
   late BuildContext dialogContext;
   late DBHelper dbHelper;
-  late String _StatusTipoWidget,ErroInformacao="";
+  late String _StatusTipoWidget = "", ErroInformacao = "";
   late StreamSubscription<ConnectivityResult> subscription;
-
 
   Future<Null> OnGetUfs() async {
     try {
@@ -39,64 +38,58 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
           throw (_RestWeb.mensagem!);
         else if (_RestWeb.resultado == null)
           throw (_RestWeb.mensagem!);
-        else
-        {
-          VariaveisDeAmbienteResultado  _Resultado = _RestWeb.resultado as VariaveisDeAmbienteResultado;
-          List<UF> ListaUf =  [];
-          List<UFMunicipios> ListaUFMunicipios  =  [];
-          List<Tecnologias> ListaTecnologias  =  [];
+        else {
+          VariaveisDeAmbienteResultado _Resultado =
+              _RestWeb.resultado as VariaveisDeAmbienteResultado;
+          List<UF> ListaUf = [];
+          List<UFMunicipios> ListaUFMunicipios = [];
+          List<Tecnologias> ListaTecnologias = [];
           setState(() {
             ListaUf = _Resultado.uF!;
-            ListaUFMunicipios= _Resultado.uFMunicipios!;
-            ListaTecnologias= _Resultado.tecnologias!;
+            ListaUFMunicipios = _Resultado.uFMunicipios!;
+            ListaTecnologias = _Resultado.tecnologias!;
           });
 
-          if(ListaUf != null)
-          {
-            for (var prop in  ListaUf) {
+          if (ListaUf != null) {
+            for (var prop in ListaUf) {
               TbUf Uf = new TbUf();
               Uf.id = prop.id;
               Uf.uf = prop.uf;
               Operacao _respLocalUf = await dbHelper.OnAddUpdateUf(Uf);
               if (_respLocalUf.erro)
                 throw (_respLocalUf.mensagem!);
-              else {
-
-              }
+              else {}
             }
           }
-          if(ListaUFMunicipios != null)
-          {
-            for (var prop in  ListaUFMunicipios) {
+          if (ListaUFMunicipios != null) {
+            for (var prop in ListaUFMunicipios) {
               TbUfMunicipio tbUfMunicipio = new TbUfMunicipio();
               tbUfMunicipio.ufId = prop.ufId;
               tbUfMunicipio.uf = prop.uf;
               tbUfMunicipio.id = prop.id;
               tbUfMunicipio.municipio = prop.municipio;
-              Operacao _respLocalUf = await dbHelper.OnAddUpdateUfMunicipio(tbUfMunicipio);
+              Operacao _respLocalUf =
+                  await dbHelper.OnAddUpdateUfMunicipio(tbUfMunicipio);
               if (_respLocalUf.erro)
                 throw (_respLocalUf.mensagem!);
-              else {
-
-              }
+              else {}
             }
           }
-          if(ListaUFMunicipios != null)
-          {
-            for (var prop in  ListaTecnologias) {
+          if (ListaUFMunicipios != null) {
+            for (var prop in ListaTecnologias) {
               TbTecnologia tbTecnologia = new TbTecnologia();
               tbTecnologia.id = prop.id;
               tbTecnologia.tecnologia = prop.tecnologia;
-              Operacao _respLocalUf = await dbHelper.OnAddUpdateTecnologia(tbTecnologia);
+              Operacao _respLocalUf =
+                  await dbHelper.OnAddUpdateTecnologia(tbTecnologia);
               if (_respLocalUf.erro)
                 throw (_respLocalUf.mensagem!);
-              else {
-
-              }
+              else {}
             }
           }
           onRealizandoOperacao('', false, context);
-          onAlertaInformacaoSucesso("Variáveis de ambiente atualizadas com sucesso", context);
+          onAlertaInformacaoSucesso(
+              "Variáveis de ambiente atualizadas com sucesso", context);
         }
       }
     } catch (error) {
@@ -114,9 +107,8 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
         Navigator.of(context).pushAndRemoveUntil(
             new MaterialPageRoute(
                 builder: (BuildContext context) => new LoginPage()),
-                (Route<dynamic> route) => false);
-      }
-      else {
+            (Route<dynamic> route) => false);
+      } else {
         _Usuariodb = _UsuarioLogado.resultado as TbUsuario;
       }
       setState(() {
@@ -126,8 +118,6 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
       //Navigator.of(context, rootNavigator: true).pop();
     }
   }
-
-
 
   @override
   void initState() {
@@ -145,9 +135,10 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
         });
       }
     });
-    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
       if (result == ConnectivityResult.none) {
-
       } else {
         _ScaffoldKey.currentState!.removeCurrentSnackBar();
         setState(() {
@@ -192,9 +183,7 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
               color: Color(0xffFFFFFF),
               fontFamily: "open-sans-regular"),
         ),
-        actions: <Widget>[
-
-        ],
+        actions: <Widget>[],
       ),
       body: _TipoWidget(),
     );
@@ -241,12 +230,14 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
                       fontFamily: "avenir-lt-std-roman",
                       fontSize: 15.0,
                       color: Colors.black54,
-                    ),),
+                    ),
+                  ),
                   SizedBox(height: 20.0),
                   Center(
                     child: InkWell(
                       onTap: () async {
-                        var connectivityResult = await (Connectivity().checkConnectivity());
+                        var connectivityResult =
+                            await (Connectivity().checkConnectivity());
                         if (connectivityResult == ConnectivityResult.none) {
                           setState(() {
                             _StatusTipoWidget = "sem_internet";
@@ -261,7 +252,8 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
                             content: SizedBox(
                               height: 30.0,
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
@@ -279,8 +271,8 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
                                   ),
                                   SizedBox(
                                     child: CircularProgressIndicator(
-                                      valueColor:
-                                      AlwaysStoppedAnimation<Color>(Color(0xff2fdf84)),
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          Color(0xff2fdf84)),
                                     ),
                                     height: 30.0,
                                     width: 30.0,
@@ -372,7 +364,8 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
                       fontFamily: "avenir-lt-std-roman",
                       fontSize: 15.0,
                       color: Colors.black54,
-                    ),),
+                    ),
+                  ),
                   SizedBox(height: 20.0),
                   Center(
                     child: InkWell(
@@ -410,5 +403,4 @@ class _VariavelDeAmbientePageState extends State<VariavelDeAmbientePage > {
         break;
     }
   }
-
 }
