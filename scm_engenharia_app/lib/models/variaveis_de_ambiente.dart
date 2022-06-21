@@ -76,10 +76,12 @@ class UFMunicipios {
   UFMunicipios({this.ufId, this.uf, this.id, this.municipio});
 
   UFMunicipios.fromJson(Map<String, dynamic> json) {
-    ufId = json['uf_id'];
-    uf = json['uf'];
+    ufId = json['id_uf'];
+    uf = json['cod_ibge'];
     id = json['id'];
-    municipio = json['municipio'];
+    //municipio = json['municipio'];
+    municipio =
+        json['descricao'] == null ? json['municipio'] : json['descricao'];
   }
 
   Map<String, dynamic> toJson() {

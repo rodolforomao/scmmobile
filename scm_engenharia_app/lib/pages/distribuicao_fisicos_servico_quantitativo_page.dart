@@ -190,7 +190,7 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
             throw (_UfMunicipio.mensagem!);
           else if (_UfMunicipio.resultado == null) {
             onAlertaInformacaoErro(
-                "Para o estado " + tbUf.uf! + " não a município cadastrado",
+                "Para o estado " + tbUf.uf! + " não há município cadastrado",
                 context);
           } else {
             for (var prop in _UfMunicipio.resultado as List<TbUfMunicipio>) {
