@@ -430,6 +430,19 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
                 ),
               ),
               SizedBox(height: 20.0),
+              TextFormField(
+                controller: _TxtControllerCod_ibge,
+                textAlign: TextAlign.start,
+                decoration: InputDecoration(
+                  labelText: 'Código IBGE',
+                  hintText: '',
+                ),
+                keyboardType: TextInputType.text,
+                maxLength: 500,
+              ),
+              SizedBox(height: 10.0),
+              Divider(),
+              SizedBox(height: 10.0),
               Container(
                 height: 58.0,
                 margin: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
@@ -477,18 +490,197 @@ class _DistribuicaoFisicosServicoQuantitativoPageState
                   },
                 ),
               ),
-              SizedBox(height: 10.0),
-              Divider(),
-              SizedBox(height: 10.0),
-              TextFormField(
-                controller: _TxtControllerCod_ibge,
-                textAlign: TextAlign.start,
-                decoration: InputDecoration(
-                  labelText: 'Código IBGE',
-                  hintText: '',
+              SizedBox(height: 20.0),
+              Container(
+                height: 58.0,
+                margin: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+                child: DropdownButtonFormField(
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.fromLTRB(10.0, 18.0, 10.0, 16.0),
+                    labelText: 'Tipo Cliente',
+                    hintText: '',
+                  ),
+                  hint: Text(
+                    "Selecione ..",
+                    style: TextStyle(
+                        fontSize: 16.0, color: const Color(0xFF90ffffff)),
+                  ),
+                  elevation: 16,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontFamily: 'avenir-lt-std-medium',
+                    color: Color(0xFF000000),
+                  ),
+                  iconEnabledColor: Colors.white,
+                  value: tbTecnologia != null ? tbTecnologia : null,
+                  isExpanded: true,
+                  iconSize: 35,
+                  items: ListTecnologiadb.map((TbTecnologia value) {
+                    return new DropdownMenuItem<TbTecnologia>(
+                      value: value,
+                      child: Text(
+                        value.tecnologia!,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 19.0,
+                            color: Color(0xFF000000),
+                            fontFamily: "avenir-next-rounded-pro-regular"),
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (TbTecnologia? newValue) {
+                    setState(() {
+                      tbTecnologia = newValue!;
+                      id_tecnologia = newValue.id!;
+                      _DistribuicaoFisicosServicoQuantitativo.tecnologia =
+                          newValue.tecnologia;
+                    });
+                  },
                 ),
-                keyboardType: TextInputType.text,
-                maxLength: 500,
+              ),
+              SizedBox(height: 20.0),
+              Container(
+                height: 58.0,
+                margin: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+                child: DropdownButtonFormField(
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.fromLTRB(10.0, 18.0, 10.0, 16.0),
+                    labelText: 'Tipo Atendimento',
+                    hintText: '',
+                  ),
+                  hint: Text(
+                    "Selecione ..",
+                    style: TextStyle(
+                        fontSize: 16.0, color: const Color(0xFF90ffffff)),
+                  ),
+                  elevation: 16,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontFamily: 'avenir-lt-std-medium',
+                    color: Color(0xFF000000),
+                  ),
+                  iconEnabledColor: Colors.white,
+                  value: tbTecnologia != null ? tbTecnologia : null,
+                  isExpanded: true,
+                  iconSize: 35,
+                  items: ListTecnologiadb.map((TbTecnologia value) {
+                    return new DropdownMenuItem<TbTecnologia>(
+                      value: value,
+                      child: Text(
+                        value.tecnologia!,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 19.0,
+                            color: Color(0xFF000000),
+                            fontFamily: "avenir-next-rounded-pro-regular"),
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (TbTecnologia? newValue) {
+                    setState(() {
+                      tbTecnologia = newValue!;
+                      id_tecnologia = newValue.id!;
+                      _DistribuicaoFisicosServicoQuantitativo.tecnologia =
+                          newValue.tecnologia;
+                    });
+                  },
+                ),
+              ),
+              SizedBox(height: 20.0),
+              Container(
+                height: 58.0,
+                margin: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+                child: DropdownButtonFormField(
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.fromLTRB(10.0, 18.0, 10.0, 16.0),
+                    labelText: 'Tipo Meio Acesso',
+                    hintText: '',
+                  ),
+                  hint: Text(
+                    "Selecione ..",
+                    style: TextStyle(
+                        fontSize: 16.0, color: const Color(0xFF90ffffff)),
+                  ),
+                  elevation: 16,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontFamily: 'avenir-lt-std-medium',
+                    color: Color(0xFF000000),
+                  ),
+                  iconEnabledColor: Colors.white,
+                  value: tbTecnologia != null ? tbTecnologia : null,
+                  isExpanded: true,
+                  iconSize: 35,
+                  items: ListTecnologiadb.map((TbTecnologia value) {
+                    return new DropdownMenuItem<TbTecnologia>(
+                      value: value,
+                      child: Text(
+                        value.tecnologia!,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 19.0,
+                            color: Color(0xFF000000),
+                            fontFamily: "avenir-next-rounded-pro-regular"),
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (TbTecnologia? newValue) {
+                    setState(() {
+                      tbTecnologia = newValue!;
+                      id_tecnologia = newValue.id!;
+                      _DistribuicaoFisicosServicoQuantitativo.tecnologia =
+                          newValue.tecnologia;
+                    });
+                  },
+                ),
+              ),
+              SizedBox(height: 20.0),
+              Container(
+                height: 58.0,
+                margin: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+                child: DropdownButtonFormField(
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.fromLTRB(10.0, 18.0, 10.0, 16.0),
+                    labelText: 'Tipo Produto',
+                    hintText: '',
+                  ),
+                  hint: Text(
+                    "Selecione ..",
+                    style: TextStyle(
+                        fontSize: 16.0, color: const Color(0xFF90ffffff)),
+                  ),
+                  elevation: 16,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontFamily: 'avenir-lt-std-medium',
+                    color: Color(0xFF000000),
+                  ),
+                  iconEnabledColor: Colors.white,
+                  value: tbTecnologia != null ? tbTecnologia : null,
+                  isExpanded: true,
+                  iconSize: 35,
+                  items: ListTecnologiadb.map((TbTecnologia value) {
+                    return new DropdownMenuItem<TbTecnologia>(
+                      value: value,
+                      child: Text(
+                        value.tecnologia!,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 19.0,
+                            color: Color(0xFF000000),
+                            fontFamily: "avenir-next-rounded-pro-regular"),
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (TbTecnologia? newValue) {
+                    setState(() {
+                      tbTecnologia = newValue!;
+                      id_tecnologia = newValue.id!;
+                      _DistribuicaoFisicosServicoQuantitativo.tecnologia =
+                          newValue.tecnologia;
+                    });
+                  },
+                ),
               ),
               SizedBox(height: 20.0),
               Row(
