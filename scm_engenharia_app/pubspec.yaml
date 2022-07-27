@@ -1,8 +1,12 @@
 name: scm_engenharia_app
-description: A new Flutter project.
+description: A SCM Engenharia oferece consultoria especializada sobre legislação, regulamentação e fiscalização da atividade no setor de telecomunicação
+version: 0.1.0
+build: 10000
+homepage: https://www.scmengenharia.com.br
+repository: https://www.scmengenharia.com.br
 
 # The following line prevents the package from being accidentally published to
-# pub.dev using `pub publish`. This is preferred for private packages.
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
@@ -15,45 +19,78 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.2.00+6
+
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.17.5 <3.0.0"
 
+# Dependencies specify other packages that your package needs in order to work.
+# To automatically upgrade your package dependencies to the latest versions
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
+# dependencies can be manually updated by changing the version numbers below to
+# the latest version available on pub.dev. To see which dependencies have newer
+# versions available, run `flutter pub outdated`.
 dependencies:
   flutter:
     sdk: flutter
-  flutter_localizations:
-    sdk: flutter
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.0
-  http: ^0.12.2
-  connectivity: ^2.0.1
-  path_provider: ^1.6.24
-  intl: ^0.16.1
-  shared_preferences: ^0.5.12+2
-  device_info: ^0.4.2+9
-  jaguar_jwt: ^2.1.6
-  hive: ^1.4.4+1
-  sqflite: ^1.3.2+1
-  flutter_open_whatsapp: ^0.1.2
-  url_launcher: ^5.7.8
-  month_picker_dialog: ^0.3.3
-  autocomplete_textfield: ^1.7.3
-  firebase_core: ^0.5.2
-  firebase_messaging: ^7.0.3
-  google_maps_flutter: ^1.0.6
+
+  cupertino_icons: ^1.0.5 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  animations: ^2.0.3 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  image_picker: ^0.8.5+3  # ANDROID, IOS, WEB
+  path_provider: ^2.0.11 # ANDROID, IOS, LINUX, MACOS, WINDOWS
+  shared_preferences: ^2.0.15 # ANDROID, IOS, LINUX, MACOS, WEB
+  webview_flutter: ^3.0.4 # ANDROID, IOS
+  url_launcher: ^6.1.5 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  file_selector: ^0.9.0 #  MACOS, WEB , WINDOWS
+
+  #Plugin microsoft
+  fluentui_system_icons: ^1.1.175 # ANDROID ,IOS, LINUX, MACOS, WEB, WINDOWS
+
+  #Plugin dart.dev
+  http: ^0.13.4 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  mockito: ^5.2.0 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  intl: ^0.17.0 # ANDROID, IOS, LINUX,MACOS, WEB, WINDOWS
+  html: ^0.15.0 # ANDROID, IOS, LINUX,MACOS, WEB, WINDOWS
+
+  #Plugin tekartik.com
+  realm: ^0.3.1+beta # ANDROID, IOS, LINUX, MACOS, WINDOWS
+
+  #Plugin Flutter Community
+  connectivity_plus: ^2.3.6 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  #device_info_plus: ^4.0.1 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  #package_info_plus: ^1.4.3 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  #share_plus: ^4.0.10 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+
+  #Plugin google
+  file: ^6.1.2 # ANDROID, IOS, LINUX, MACOS, WINDOWS
+
+  #Plugin firebase
+  firebase_core: ^1.20.0 # ANDROID ,IOS, MACOS, WEB,
+  firebase_crashlytics: ^2.8.6 # ANDROID ,IOS, MACOS
+  firebase_messaging: ^12.0.1 # ANDROID,IOS, MACOS, WEB
+  firebase_analytics: ^9.2.1 # ANDROID,IOS,MACOS,WEB
+
+  jaguar_jwt: ^3.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  # The "flutter_lints" package below contains a set of recommended lints to
+  # encourage good coding practices. The lint set provided by the package is
+  # activated in the `analysis_options.yaml` file located at the root of your
+  # package. See that file for information about deactivating specific lint
+  # rules and activating additional ones.
+  flutter_lints: ^2.0.0
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
-# The following section is specific to Flutter.
+# The following section is specific to Flutter packages.
 flutter:
 
   # The following line ensures that the Material Icons font is
@@ -62,21 +99,12 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  assets:
-    - assets/login_logo.png # logo negativa em branco
-    - assets/ic_whatsapp.png
-    - assets/img_error.png
-    - assets/img_integracao.png
-    - assets/img_sem_sinal.png
-    - assets/img_informacao.png
-
-
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/assets-and-images/#resolution-aware.
+  # https://flutter.dev/assets-and-images/#resolution-aware
 
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
@@ -86,116 +114,6 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  fonts:
-    - family: avenir-next-rounded-pro-bold
-      fonts:
-        - asset: assets/fonts/avenir_next/avenir-next-rounded-pro-bold.ttf
-    # -------------------------------------------------------------------------------
-    - family: avenir-next-rounded-pro-bold-lt
-      fonts:
-        - asset: assets/fonts/avenir_next/avenir-next-rounded-pro-bold-lt.ttf
-    # -------------------------------------------------------------------------------
-    - family: avenir-next-rounded-pro-demi
-      fonts:
-        - asset: assets/fonts/avenir_next/avenir-next-rounded-pro-demi.ttf
-    # -------------------------------------------------------------------------------
-    - family: avenir-next-rounded-pro-demi-lt
-      fonts:
-        - asset: assets/fonts/avenir_next/avenir-next-rounded-pro-demi-lt.ttf
-    # -------------------------------------------------------------------------------
-    - family: avenir-next-rounded-pro-medium
-      fonts:
-        - asset: assets/fonts/avenir_next/avenir-next-rounded-pro-medium.ttf
-    # -------------------------------------------------------------------------------
-    - family: avenir-next-rounded-pro-medium-lt
-      fonts:
-        - asset: assets/fonts/avenir_next/avenir-next-rounded-pro-medium-lt.ttf
-    # -------------------------------------------------------------------------------
-    - family: avenir-next-rounded-pro-regular
-      fonts:
-        - asset: assets/fonts/avenir_next/avenir-next-rounded-pro-regular.ttf
-    # -------------------------------------------------------------------------------
-    - family: avenir-next-rounded-pro-regular-lt
-      fonts:
-        - asset: assets/fonts/avenir_next/avenir-next-rounded-pro-regular-lt.ttf
-
-
-    # -------------------------------------------------------------------------------
-    - family: avenir-lt-std-book
-      fonts:
-        - asset: assets/fonts/avenir_lt/avenir-lt-std-book.otf
-    # -------------------------------------------------------------------------------
-    - family: avenir-lt-std-book-oblique
-      fonts:
-        - asset: assets/fonts/avenir_lt/avenir-lt-std-book-oblique.otf
-    # -------------------------------------------------------------------------------
-    - family: avenir-lt-std-light
-      fonts:
-        - asset: assets/fonts/avenir_lt/avenir-lt-std-light.otf
-    # -------------------------------------------------------------------------------
-    - family: avenir-lt-std-light-oblique
-      fonts:
-        - asset: assets/fonts/avenir_lt/avenir-lt-std-light-oblique.otf
-    # -------------------------------------------------------------------------------
-    - family: avenir-lt-std-medium
-      fonts:
-        - asset: assets/fonts/avenir_lt/avenir-lt-std-medium.otf
-    # -------------------------------------------------------------------------------
-    - family: avenir-lt-std-medium-oblique
-      fonts:
-        - asset: assets/fonts/avenir_lt/avenir-lt-std-medium-oblique.otf
-    # -------------------------------------------------------------------------------
-    - family: avenir-lt-std-oblique
-      fonts:
-        - asset: assets/fonts/avenir_lt/avenir-lt-std-oblique.otf
-    # -------------------------------------------------------------------------------
-    - family: avenir-lt-std-roman
-      fonts:
-        - asset: assets/fonts/avenir_lt/avenir-lt-std-roman.otf
-    # -------------------------------------------------------------------------------
-
-
-
-    - family: open-sans-bold
-      fonts:
-        - asset: assets/fonts/open_sans/open-sans-bold.ttf
-    # -------------------------------------------------------------------------------
-    - family: open-sans-bold-italic
-      fonts:
-        - asset: assets/fonts/open_sans/open-sans-bold-italic.ttf
-    # -------------------------------------------------------------------------------
-    - family: open-sans-extra-bold
-      fonts:
-        - asset: assets/fonts/open_sans/open-sans-extra-bold.ttf
-    # -------------------------------------------------------------------------------
-    - family: open-sans-extra-bold-italic
-      fonts:
-        - asset: assets/fonts/open_sans/open-sans-extra-bold-italic.ttf
-    # -------------------------------------------------------------------------------
-    - family: open-sans-italic
-      fonts:
-        - asset: assets/fonts/open_sans/open-sans-italic.ttf
-    # -------------------------------------------------------------------------------
-    - family: open-sans-light
-      fonts:
-        - asset: assets/fonts/open_sans/open-sans-light.ttf
-    # -------------------------------------------------------------------------------
-    - family: open-sans-light-italic
-      fonts:
-        - asset: assets/fonts/open_sans/open-sans-light-italic.ttf
-    # -------------------------------------------------------------------------------
-    - family: open-sans-regular
-      fonts:
-        - asset: assets/fonts/open_sans/open-sans-regular.ttf
-    # -------------------------------------------------------------------------------
-    - family: open-sans-semi-bold
-      fonts:
-        - asset: assets/fonts/open_sans/open-sans-semi-bold.ttf
-    # -------------------------------------------------------------------------------
-    - family: open-sans-semi-bold-italic
-      fonts:
-        - asset: assets/fonts/open_sans/open-sans-semi-bold-italic.ttf
-    # -------------------------------------------------------------------------------
   # fonts:
   #   - family: Schyler
   #     fonts:
