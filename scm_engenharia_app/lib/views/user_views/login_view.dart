@@ -1,19 +1,8 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:scm_engenharia_app/help/notification_firebase.dart';
+import '../../help/navigation_service/route_paths.dart' as routes;
 import 'package:url_launcher/url_launcher.dart';
-import 'package:scm_engenharia_app/data/db_helper.dart';
-import 'package:scm_engenharia_app/data/user_model.dart';
-import 'package:scm_engenharia_app/help/servico_mobile_service.dart';
-import 'package:scm_engenharia_app/menu_navigation.dart';
-import 'package:scm_engenharia_app/models/model_usuario.dart';
-import 'package:scm_engenharia_app/models/operacao.dart';
-import 'package:scm_engenharia_app/pages/create_new_account_view.dart';
-import 'package:scm_engenharia_app/pages/esqueceu_sua_senha_page.dart';
-import 'package:scm_engenharia_app/help/usuario_logado.dart' as UsuarioLogado;
+import '../help_views/global_scaffold.dart';
 
-import 'help_pages/global_scaffold.dart';
 
 
 class LoginView extends StatefulWidget {
@@ -23,231 +12,18 @@ class LoginView extends StatefulWidget {
 }
 
 class LoginState extends State<LoginView> {
-  _launchWhatsApp() async {
-    String phoneNumber = "+5561982205225";
-    String message = 'Olá, gostaria de ter acesso ao aplicativo da SCM.';
-    var whatsappUrl = "whatsapp://send?phone=$phoneNumber&text=$message";
-    if (await canLaunch(whatsappUrl)) {
-      await launch(whatsappUrl);
-    } else {
-      throw 'Could not launch $whatsappUrl';
-    }
-  }
 
-  void whatsappopen() async {
-    FocusScope.of(context).requestFocus(new FocusNode());
-    try {
-      var url = 'https://api.whatsapp.com/send?phone=5561982205225';
-      if (await canLaunch(url)) {
-    throw 'Não foi possível realizar a operação';
-    } else {
-    await launch(url);
-    }
-    } catch (error) {
-    GlobalScaffold.instance.onToastInformacaoErro(error.toString());
-    }
-    //FlutterOpenWhatsapp.sendSingleMessage("5561982205225", "Olá Pessoal, Gostaria de ter acesso ao aplicativo da SCM. Esta é uma mensagem automática gerada pelo aplicativo SCM Mobile.");
-  }
-
-  ServicoMobileService _RestWebService = new ServicoMobileService();
-  late DBHelper dbHelper;
-  TextEditingController _TxtControllerEmail = TextEditingController();
-  TextEditingController _TxtControllerSenha = TextEditingController();
+  final txtControllerEmail = TextEditingController();
+  final txtControllerPassword= TextEditingController();
   late String errorTextControllerSenha, errorTextControllerEmail;
-  ModelLoginJson _UsuarioLoginModelo = new ModelLoginJson();
+
   bool isVisualizarSenha = false;
-  late BuildContext dialogContext;
-
-  Future<Null> RealizandoLogin(BuildContext context) async {
-    try {
-      var connectivityResult = await (Connectivity().checkConnectivity());
-      if (connectivityResult == ConnectivityResult.none) {
-        OnAlertaInformacao("Não há conexão com a Internet");
-      } else {
-        if (_TxtControllerEmail.text.isEmpty)
-          throw ("E-mail é obrigatório");
-        else if (_TxtControllerSenha.text.isEmpty)
-          throw ("Senha é obrigatória");
-        OnRealizandoOperacao("Realizando login..");
-        _UsuarioLoginModelo.usuario = _TxtControllerEmail.text.trim();
-        _UsuarioLoginModelo.password = _TxtControllerSenha.text.trim();
-        Operacao _RestWebUsuario = await _RestWebService.OnLogin(_UsuarioLoginModelo);
-        if (_RestWebUsuario.erro)
-          throw (_RestWebUsuario.mensagem!);
-        else if (_RestWebUsuario.resultado == null)
-          throw (_RestWebUsuario.mensagem!);
-        else {
-          ModelInformacaoUsuario _UsuarioModelo = ModelInformacaoUsuario.fromJson(_RestWebUsuario.resultado as Map<String, dynamic>);
-          TbUsuario Usuario = new TbUsuario();
-          Usuario.idUsuarioApp = null;
-          Usuario.idUsuario = _UsuarioModelo.idUsuario;
-          Usuario.idPerfil = _UsuarioModelo.idPerfil;
-          Usuario.nome = _UsuarioModelo.descNome;
-          Usuario.senha = _TxtControllerSenha.text.trim();
-          Usuario.email = _TxtControllerEmail.text.trim();
-          Usuario.telefone = _UsuarioModelo.telefoneConsultor;
-          Usuario.dtUltacesso = _UsuarioModelo.dtUltacesso;
-          Usuario.empresa = _UsuarioModelo.empresa;
-          Usuario.periodoReferencia = _UsuarioModelo.periodoReferencia;
-          Usuario.cpf = _UsuarioModelo.cpf;
-          Operacao _UsuarioLogado = await dbHelper.OnAddUpdateUsuario(Usuario);
-          if (_UsuarioLogado.erro)
-            throw (_UsuarioLogado.mensagem!);
-          else {
-            onRealizandoOperacao('', false, context);
-            //NotificationHandler().unsubscribeFromTopic("scmengenhariaUserNLogado");
-            //NotificationHandler().subscribeToTopic("nroCPF-" +Usuario.cpf!);
-            //NotificationHandler().subscribeToTopic("scmengenhariaUserAllLogado");
-            Future.delayed(Duration.zero, () {
-              UsuarioLogado.DadosUsuarioLogado = Usuario;
-              Navigator.of(context).pushAndRemoveUntil(
-                  new MaterialPageRoute(
-                      builder: (BuildContext context) => new MenuNavigation()),
-                  (Route<dynamic> route) => false);
-            });
-          }
-        }
-      }
-    } catch (error) {
-      onAlertaInformacaoErro(error.toString(), context);
-    }
-  }
-
-  OnRealizandoOperacao(String txtInformacao) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        dialogContext = context;
-        return Dialog(
-          child: new Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Container(
-                margin: const EdgeInsets.only(
-                    left: 10.0, top: 20.0, bottom: 20.0, right: 10.0),
-                child: Theme(
-                  data: Theme.of(context).copyWith(
-                    accentColor: Color(0xff018a8a),
-                  ),
-                  child: new CircularProgressIndicator(),
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  margin: EdgeInsets.only(
-                      left: 10.0, top: 20.0, bottom: 20.0, right: 5.0),
-                  child: Text(
-                    txtInformacao,
-                    softWrap: true,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                        fontSize: 17.0,
-                        color: Color(0xff212529),
-                        fontFamily: "open-sans-regular"),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  OnAlertaInformacao(String Mensagem) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8.0))),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(height: 15.0),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    "Informação",
-                    style: TextStyle(
-                        fontSize: 20.0,
-                        color: Color(0xff212529),
-                        fontFamily: "avenir-lt-std-roman"),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Divider(
-                    color: Colors.black12,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-                    child: Text(
-                      Mensagem,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 4,
-                      softWrap: false,
-                      style: TextStyle(
-                          fontSize: 17.0,
-                          color: Color(0xff212529),
-                          fontFamily: "avenir-lt-std-roman"),
-                    ),
-                  ),
-                ],
-              ),
-              Divider(
-                color: Colors.black12,
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
-                child: new Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    FlatButton(
-                      color: Color(0xff018a8a),
-                      //`Icon` to display
-                      child: Text(
-                        '           OK           ',
-                        style: TextStyle(
-                            fontSize: 17.0,
-                            color: Color(0xffFFFFFF),
-                            fontFamily: "avenir-lt-std-roman"),
-                      ),
-                      //`Text` to display
-                      onPressed: () {
-                        Navigator.pop(context);
-                        FocusManager.instance.primaryFocus!.unfocus();
-                      },
-                      shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(5.0),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
+  
   @override
   void initState() {
+
     super.initState();
-    dbHelper = DBHelper();
+
      //NotificationHandler().subscribeToTopic("scmengenhariaUserNLogado");
     // _TxtControllerEmail.text = "rodolforomao@gmail.com";
     // _TxtControllerSenha.text = "123456";
@@ -255,11 +31,18 @@ class LoginState extends State<LoginView> {
   }
 
   @override
+  void dispose() {
+    txtControllerEmail.dispose();
+    txtControllerPassword.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final bool showFab = MediaQuery.of(context).viewInsets.bottom == 0.0;
     return Container(
       alignment: Alignment.center,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
@@ -307,10 +90,10 @@ class LoginState extends State<LoginView> {
                 SizedBox(
                   height: 5.0,
                 ),
-                TextFormField(
+                TextField(
                     autofocus: false,
                     keyboardType: TextInputType.emailAddress,
-                    controller: _TxtControllerEmail,
+                    controller: txtControllerEmail,
                     textInputAction: TextInputAction.done,
                     style: TextStyle(
                         fontSize: 19,
@@ -319,14 +102,6 @@ class LoginState extends State<LoginView> {
                     decoration: InputDecoration(
                         contentPadding:
                             EdgeInsets.fromLTRB(10.0, 12.0, 10.0, 12.0),
-                        errorBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(
-                                width: 1,
-                                color: errorTextControllerEmail == null
-                                    ? Color(0xFFb8b8b8)
-                                    : Colors.redAccent)),
                         focusedErrorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
                           borderSide: BorderSide(color: Colors.white, width: 0),
@@ -374,10 +149,10 @@ class LoginState extends State<LoginView> {
                 SizedBox(
                   height: 5.0,
                 ),
-                TextFormField(
+                TextField(
                     autofocus: false,
                     keyboardType: TextInputType.text,
-                    controller: _TxtControllerSenha,
+                    controller: txtControllerPassword,
                     textInputAction: TextInputAction.done,
                     style: TextStyle(
                         fontSize: 19,
@@ -387,14 +162,6 @@ class LoginState extends State<LoginView> {
                     decoration: InputDecoration(
                         contentPadding:
                             EdgeInsets.fromLTRB(10.0, 12.0, 10.0, 12.0),
-                        errorBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(
-                                width: 1,
-                                color: errorTextControllerEmail == null
-                                    ? Color(0xFFb8b8b8)
-                                    : Colors.redAccent)),
                         focusedErrorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
                           borderSide: BorderSide(color: Colors.white, width: 0),
@@ -431,18 +198,18 @@ class LoginState extends State<LoginView> {
                 Center(
                   child: InkWell(
                     onTap: () async {
-                      RealizandoLogin(context);
+
                     },
                     child: Container(
-                      padding: EdgeInsets.fromLTRB(0.0, 5.0, 20.0, 0.0),
-                      constraints: BoxConstraints(maxWidth: 300),
+                      padding: const EdgeInsets.fromLTRB(0.0, 5.0, 20.0, 0.0),
+                      constraints: const BoxConstraints(maxWidth: 300),
                       width: MediaQuery.of(context).size.width,
                       height: 45,
                       alignment: Alignment.center,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(3)),
                           color: Color(0xff8854d0)),
-                      child: Text(
+                      child: const Text(
                         'LOGIN',
                         textAlign: TextAlign.center,
                         style: TextStyle(
@@ -459,17 +226,12 @@ class LoginState extends State<LoginView> {
                 Center(
                   child: GestureDetector(
                     onTap: () {
-                      FocusScope.of(context).requestFocus(new FocusNode());
-                      Navigator.of(context, rootNavigator: true).push(
-                        new CupertinoPageRoute<bool>(
-                          maintainState: false,
-                          fullscreenDialog: true,
-                          builder: (BuildContext context) =>
-                              new CriarNovaContaPageState(),
-                        ),
+                      FocusScope.of(context).requestFocus(FocusNode());
+                      Navigator.of(context).pushNamed(
+                        routes.createNewAccountRoute,
                       );
                     },
-                    child: Text(
+                    child: const Text(
                       "Criar uma nova conta",
                       style: TextStyle(
                         decoration: TextDecoration.underline,
@@ -489,10 +251,9 @@ class LoginState extends State<LoginView> {
                 elevation: 0.0,
                 backgroundColor: Colors.transparent,
                 onPressed: () {
-                  //_launchWhatsApp();
-                  whatsappopen();
+                  GlobalScaffold.instance.onRedirectUri(Uri.parse('https://api.whatsapp.com/send?phone=5561982205225'));
                 },
-                child: Image(
+                child: const Image(
                   width: 40,
                   height: 40,
                   image: AssetImage(

@@ -1,23 +1,10 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:scm_engenharia_app/data/db_helper.dart';
-import 'package:scm_engenharia_app/data/user_model.dart';
 import 'dart:ui' as ui;
 import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
-
-import 'package:scm_engenharia_app/help/components.dart';
-import 'package:scm_engenharia_app/help/masked_text_controller.dart';
-import 'package:scm_engenharia_app/help/servico_mobile_service.dart';
-import 'package:scm_engenharia_app/models/model_usuario.dart';
-import 'package:scm_engenharia_app/models/operacao.dart';
-import 'package:scm_engenharia_app/models/variaveis_de_ambiente.dart';
-import 'package:scm_engenharia_app/pages/login_view.dart';
-
-import 'help_pages/global_scaffold.dart';
-
 class ProfileView extends StatefulWidget {
   const ProfileView({Key? key}) : super(key: key);
   @override
@@ -25,134 +12,15 @@ class ProfileView extends StatefulWidget {
 }
 
 class ProfileState extends State<ProfileView> {
-  TbUsuario _Usuariodb = new TbUsuario();
-  ServicoMobileService _RestWebService = new ServicoMobileService();
-  late BuildContext dialogContext;
-  late DBHelper dbHelper;
 
-  TextEditingController _TxtControllerNome = TextEditingController();
-  TextEditingController _TxtControllerCpf = new MaskedTextController(mask: '000.000.000-00');
-  TextEditingController _TxtControllerEmail = TextEditingController();
-  TextEditingController _TxtControllerTelefone =
-      new MaskedTextController(mask: '(00) 0 0000-0000');
-  TextEditingController _TxtControllerTelefoneWhatsapp =
-      new MaskedTextController(mask: '(00) 0 0000-0000');
-  TextEditingController _TxtControllerEmpresa = TextEditingController();
-  TextEditingController _TxtControllerUf = TextEditingController();
-
-  late UF UfSelecionada;
-  List<UF> ListaUf = [];
-
-  Future<Null> OnGetUfs() async {
-    try {
-      var connectivityResult = await (Connectivity().checkConnectivity());
-      if (connectivityResult == ConnectivityResult.none) {
-      } else {
-        onRealizandoOperacao('Realizando operação ... ', true, context);
-        Operacao _RestWeb = await _RestWebService.OnVariaveisDeAmbiente();
-        if (_RestWeb.erro)
-          throw (_RestWeb.mensagem!);
-        else if (_RestWeb.resultado == null)
-          throw (_RestWeb.mensagem!);
-        else {
-          VariaveisDeAmbienteResultado _Resultado =
-              _RestWeb.resultado as VariaveisDeAmbienteResultado;
-          setState(() {
-            ListaUf = _Resultado.uF!;
-          });
-          onRealizandoOperacao('', false, context);
-        }
-      }
-    } catch (error) {
-      onRealizandoOperacao('', false, context);
-      onAlertaInformacaoErro(error.toString(), context);
-    }
-  }
-
-  Future<Null> OnSalvarConta() async {
-    try {
-      var connectivityResult = await (Connectivity().checkConnectivity());
-      if (connectivityResult == ConnectivityResult.none) {
-      } else {
-        if (_TxtControllerNome.text.isEmpty)
-          throw ("Nome é obrigatório");
-        else if (_TxtControllerCpf.text.isEmpty)
-          throw ("CPF é obrigatório");
-        else if (_TxtControllerEmail.text.isEmpty)
-          throw ("Email é obrigatório");
-        else if (_TxtControllerTelefone.text.isEmpty)
-          throw ("Telefone é obrigatório");
-        else if (_TxtControllerTelefoneWhatsapp.text.isEmpty)
-          throw ("Telefone Whatsapp é obrigatório");
-        else if (_TxtControllerEmpresa.text.isEmpty)
-          throw ("Empresa é obrigatório");
-        else if (_TxtControllerUf.text.isEmpty)
-          throw ("UF deve ser selecionada");
-        ModelDadosUsuarioJson _ModelDadosUsuario = new ModelDadosUsuarioJson();
-        _ModelDadosUsuario.nome = _TxtControllerNome.text;
-        _ModelDadosUsuario.cpf = _TxtControllerCpf.text;
-        _ModelDadosUsuario.email = _TxtControllerEmail.text;
-        _ModelDadosUsuario.telefone = _TxtControllerTelefone.text;
-        _ModelDadosUsuario.telefoneWhatsapp =
-            _TxtControllerTelefoneWhatsapp.text;
-        _ModelDadosUsuario.empresa = _TxtControllerEmpresa.text;
-        _ModelDadosUsuario.uf = UfSelecionada.id;
-        onRealizandoOperacao('Realizando operação ... ', true, context);
-        Operacao _RestWeb =
-            await _RestWebService.OnCadastraUsuario(_ModelDadosUsuario);
-        if (_RestWeb.erro)
-          throw (_RestWeb.mensagem!);
-        else if (_RestWeb.resultado == null)
-          throw (_RestWeb.mensagem!);
-        else {
-
-          onRealizandoOperacao('', false, context);
-
-        }
-      }
-    } catch (error) {
-      onRealizandoOperacao('', false, context);
-      onAlertaInformacaoErro(error.toString(), context);
-    }
-  }
-
-  Inc() async {
-    try {
-      Operacao _UsuarioLogado = await dbHelper.onSelecionarUsuario();
-      if (_UsuarioLogado.erro)
-        throw (_UsuarioLogado.mensagem!);
-      else if (_UsuarioLogado.resultado == null) {
-        Navigator.of(context).pushAndRemoveUntil(
-            new MaterialPageRoute(
-                builder: (BuildContext context) => new LoginPage()),
-            (Route<dynamic> route) => false);
-      } else {
-        _Usuariodb = _UsuarioLogado.resultado as TbUsuario;
-        _TxtControllerNome.text = _Usuariodb.nome!;
-        _TxtControllerCpf.text = _Usuariodb.cpf!;
-        _TxtControllerEmail.text = _Usuariodb.email!;
-        _TxtControllerTelefone.text = _Usuariodb.telefone!;
-        _TxtControllerTelefoneWhatsapp.text = _Usuariodb.telefone!;
-        _TxtControllerEmpresa.text = _Usuariodb.empresa!;
-      }
-
-      // OnGetUfs();
-      //Uf = await Components.OnlistaEstados() as List<String>;
-      setState(() {
-        // UfTxt = Uf.first;
-      });
-    } catch (error) {
-      //Navigator.of(context, rootNavigator: true).pop();
-    }
-  }
 
 
 
   @override
   void initState() {
     super.initState();
-    dbHelper = DBHelper();
-    Inc();
+
+
   }
 
   @override
@@ -197,7 +65,6 @@ class ProfileState extends State<ProfileView> {
               TextFormField(
                 autofocus: false,
                 keyboardType: TextInputType.text,
-                controller: _TxtControllerNome,
                 textInputAction: TextInputAction.done,
                 decoration: InputDecoration(
                   labelText: 'Nome completo',
@@ -212,7 +79,7 @@ class ProfileState extends State<ProfileView> {
                 ),
                 autofocus: false,
                 keyboardType: TextInputType.number,
-                controller: _TxtControllerCpf,
+
                 textInputAction: TextInputAction.done,
               ),
               SizedBox(height: 20.0),
@@ -224,7 +91,7 @@ class ProfileState extends State<ProfileView> {
                 ),
                 autofocus: false,
                 keyboardType: TextInputType.emailAddress,
-                controller: _TxtControllerEmail,
+
                 textInputAction: TextInputAction.done,
               ),
               SizedBox(height: 20.0),
@@ -236,7 +103,7 @@ class ProfileState extends State<ProfileView> {
                 ),
                 autofocus: false,
                 keyboardType: TextInputType.phone,
-                controller: _TxtControllerTelefone,
+
                 textInputAction: TextInputAction.done,
               ),
               SizedBox(height: 20.0),
@@ -247,7 +114,7 @@ class ProfileState extends State<ProfileView> {
                 ),
                 autofocus: false,
                 keyboardType: TextInputType.phone,
-                controller: _TxtControllerTelefoneWhatsapp,
+
                 textInputAction: TextInputAction.done,
               ),
               SizedBox(height: 20.0),
@@ -259,69 +126,14 @@ class ProfileState extends State<ProfileView> {
                 ),
                 autofocus: false,
                 keyboardType: TextInputType.text,
-                controller: _TxtControllerEmpresa,
+
                 textInputAction: TextInputAction.done,
               ),
               SizedBox(height: 20.0),
               SizedBox(
                 height: 5.0,
               ),
-              Container(
-                  height: 55.0,
-                  child: FormField<String>(
-                    builder: (FormFieldState<String> state) {
-                      return InputDecorator(
-                          decoration: InputDecoration(
-                            labelText: 'Nome da estado',
-                            hintText: 'avenir-lt-std-medium',
-                          ),
-                          child: Container(
-                            padding: EdgeInsets.fromLTRB(10.0, 0.0, 20.0, 0.0),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<UF>(
-                                hint: Text(
-                                  "Selecione ..",
-                                  style: TextStyle(
-                                      fontSize: 16.0,
-                                      color: const Color(0xFF90ffffff)),
-                                ),
-                                elevation: 16,
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    fontFamily: 'avenir-lt-std-medium',
-                                    color: Color(0xFF000000)),
-                                iconEnabledColor: Colors.white,
-                                iconDisabledColor: Colors.white,
-                                value: UfSelecionada != null
-                                    ? UfSelecionada
-                                    : null,
-                                isExpanded: true,
-                                iconSize: 35,
-                                items: ListaUf.map((UF value) {
-                                  return new DropdownMenuItem<UF>(
-                                    value: value,
-                                    child: Text(
-                                      value.uf!,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 19.0,
-                                          color: Color(0xFF000000),
-                                          fontFamily:
-                                              "avenir-next-rounded-pro-regular"),
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (UF? newValue) {
-                                  setState(() {
-                                    UfSelecionada = newValue!;
-                                    _TxtControllerUf.text = newValue.uf!;
-                                  });
-                                },
-                              ),
-                            ),
-                          ));
-                    },
-                  )),
+
               SizedBox(height: 25.0),
               Center(
                 child: InkWell(

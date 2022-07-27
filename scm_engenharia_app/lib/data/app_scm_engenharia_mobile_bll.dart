@@ -1,15 +1,16 @@
 import 'package:realm/realm.dart';
+import 'package:scm_engenharia_app/data/tb_form_sici_fust.dart';
 import '../models/operation.dart';
 import 'tb_uf_municipality.dart';
 import 'tb_user.dart';
 
-class AppGeapMobileEngenhariaBll {
+class AppScmEngenhariaMobileBll {
 
-  static late AppGeapMobileEngenhariaBll instance = AppGeapMobileEngenhariaBll();
+  static late AppScmEngenhariaMobileBll instance = AppScmEngenhariaMobileBll();
 
   //---------------------------------------------------------------------------------------------------
   late Realm realm;
-  appGeapMobilePrestadorBll() {
+  AppScmEngenhariaMobileBll() {
     final config = Configuration.local([TbUser.schema ,TbUfMunicipality.schema]);
     realm = Realm(config);
   }
@@ -517,14 +518,14 @@ class AppGeapMobileEngenhariaBll {
 
   // Form Sici - Fust ---------------------------------------------------------------------------------
 
-  Future<Operation> onSaveFormSiciFust(TbUser user) async {
+  Future<Operation> onSaveFormSiciFust(TbFormSiciFust formSiciFust) async {
     Operation operation = Operation();
     operation.result = null;
     operation.message = 'Operação realizada com sucesso';
     operation.erro = false;
     try {
       realm.write(() {
-        realm.add<TbUser>(user);
+        realm.add<TbFormSiciFust>(formSiciFust);
       });
       operation.result = true;
     } catch (ex) {
@@ -684,7 +685,7 @@ class AppGeapMobileEngenhariaBll {
     operation.erro = false;
     try {
       realm.write(() {
-        realm.add<TbUser>(user);
+        //realm.add<TbUser>(null);
       });
       operation.result = true;
     } catch (ex) {
@@ -701,7 +702,7 @@ class AppGeapMobileEngenhariaBll {
     operation.erro = false;
     try {
       realm.write(() {
-        realm.add<TbUser>(user);
+        //realm.add<TbUser>(user);
       });
       operation.result = true;
     } catch (ex) {

@@ -122,7 +122,7 @@ class _MenuNavigationState extends State<MenuNavigation> {
               Navigator.push(
                   context,
                   CupertinoPageRoute(
-                    builder: (context) => SiciFustFormView(FichaSiciModel:null),
+                    builder: (context) => SiciFustFormView(siciFileModel: null,),
                   ));
             },
           ),

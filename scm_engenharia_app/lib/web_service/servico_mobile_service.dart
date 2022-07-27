@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import '../data/JWTTokenDbLocal.dart';
 import '../help/componentes.dart';
 import '../models/Operation.dart';
+import '../models/sici_file_model.dart';
 
 class ServicoMobileService {
   static final Url = "http://sici.scmengenharia.com.br";
@@ -13,12 +14,12 @@ class ServicoMobileService {
   //static final Url = "http://192.168.0.122:8083";
   //static final Url = "http://wsscm.ddns.net";
 
-  Future<Operation> OnLogin(ModelLoginJson _Modelo) async {
+  Future<Operation> onLogin(String usuario,String password) async {
     Operation operacao = Operation();
     try {
-      String? token = await Componentes.JWTToken(_Modelo.usuario.toString(), _Modelo.password!);
+      String? token = await Componentes.JWTToken(usuario, password);
       final response = await http
-          .post(Uri.parse(Url + "/login_ws"),
+          .post(Uri.parse("$Url/login_ws"),
               headers: {
                 //"Content-type": "multipart/form-data",
                 "token": token!,
@@ -35,8 +36,8 @@ class ServicoMobileService {
             Map<String, dynamic> map = jsonDecode(Componentes.removeAllHtmlTags(response.body));
             OperationJson resp = OperationJson.fromJson(map);
             operacao.erro = !resp.status!;
-            operacao.message = resp.mensagem;
-            operacao.result = resp.resultado;
+            operacao.message = resp.message;
+            operacao.result = resp.result;
           }
         if (operacao.message == null) {
           throw ('Não foi identificado resposta');
@@ -51,7 +52,7 @@ class ServicoMobileService {
     return operacao;
   }
 
-  Future<Operation> OnAlterarSenha(String _Senha) async {
+  Future<Operation> onAlterarSenha(String senha) async {
     Operation operacao = Operation();
     try {
       String? token = await ComponentsJWTToken.JWTTokenPadrao();
@@ -62,28 +63,27 @@ class ServicoMobileService {
       http.MultipartRequest response;
       response = http.MultipartRequest('POST', Uri.parse(Url + "/usuario/alterar_senha_ws"));
       response.headers.addAll(headers);
-      response.fields['nova_senha'] = _Senha;
+      response.fields['nova_senha'] = senha;
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
-      var jsonResp = Componentes.removeAllHtmlTags(respStr);
       operacao.statusCode = streamedResponse.statusCode;
       if (streamedResponse.statusCode == 200) {
-        if (!streamedResponse.body.isNotEmpty) {
+        if (streamedResponse.stream.isEmpty == true) {
           throw (ApiRestInformation.problemOfComunication);
         }
         else
         {
-          Map<String, dynamic> map = jsonDecode(Componentes.removeAllHtmlTags(response.body));
+          Map<String, dynamic> map = jsonDecode(Componentes.removeAllHtmlTags(respStr));
           OperationJson resp = OperationJson.fromJson(map);
           operacao.erro = !resp.status!;
-          operacao.message = resp.mensagem;
-          operacao.result = resp.resultado;
+          operacao.message = resp.message;
+          operacao.result = resp.result;
         }
         if (operacao.message == null) {
           throw ('Não foi identificado resposta');
         }
       } else {
-        operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(response.statusCode, response.body);
+        operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(streamedResponse.statusCode, response.method);
       }
     } catch (e) {
       operacao.erro = true;
@@ -92,7 +92,7 @@ class ServicoMobileService {
     return operacao;
   }
 
-  Future<Operation> OnVariaveisDeAmbiente() async {
+  Future<Operation> onVariaveisDeAmbiente() async {
     Operation operacao = Operation();
     try {
       String? token = await ComponentsJWTToken.JWTTokenPadrao();
@@ -106,8 +106,8 @@ class ServicoMobileService {
               encoding: Encoding.getByName("utf-8"))
           .timeout(const Duration(seconds: 10));
       operacao.erro = false;
-      _Operacao.mensagem = "Operação realizada com sucesso";
-      _Operacao.resultado = null;
+      operacao.message = "Operação realizada com sucesso";
+      operacao.result = null;
       if (response.statusCode == 200) {
         if (!response.body.isNotEmpty) {
           throw (ApiRestInformation.problemOfComunication);
@@ -115,10 +115,10 @@ class ServicoMobileService {
         else
         {
           Map<String, dynamic> map = jsonDecode(Componentes.removeAllHtmlTags(response.body));
-          OperationJson resp = VariaveisDeAmbiente.fromJson(map);
+          OperationJson resp = OperationJson.fromJson(map);
           operacao.erro = !resp.status!;
-          operacao.message = resp.mensagem;
-          operacao.result = resp.resultado;
+          operacao.message = resp.message;
+          operacao.result = resp.result;
         }
         if (operacao.message == null) {
           throw ('Não foi identificado resposta');
@@ -133,16 +133,13 @@ class ServicoMobileService {
     return operacao;
   }
 
-  Future<Operation> OnRealizarLancamentosSici(TbFichaSici _Modelo) async {
+  Future<Operation> OnRealizarLancamentosSici(SiciFileModel siciFileModel) async {
     Operation operacao = Operation();
     try {
-      print(_Modelo.toJson());
-      String json = jsonEncode(_Modelo.toJson());
-      String jsons = jsonEncode(_Modelo.distribuicaoFisicosServicoQuantitativo);
-      var re = _Modelo.toJson();
-      _Operacao.erro = false;
-      _Operacao.mensagem = "Operação realizada com sucesso";
-      _Operacao.resultado = null;
+
+      operacao.erro = false;
+      operacao.message = "Operação realizada com sucesso";
+      operacao.result = null;
       String? token = await ComponentsJWTToken.JWTTokenPadrao();
       Map<String, String> headers = {
         'Content-Type': 'application/json; charset=utf-8',
@@ -153,42 +150,42 @@ class ServicoMobileService {
           'POST', Uri.parse(Url + "/analise/lancamento_ws"));
       response.headers.addAll(headers);
       response.fields['controllerPeriodoReferencia'] =
-          (_Modelo.periodoReferencia == null ? "" : _Modelo.periodoReferencia)!;
+          (siciFileModel.periodoReferencia == null ? "" : siciFileModel.periodoReferencia)!;
       response.fields['controllerRazaoSocial'] =
-          (_Modelo.razaoSocial == null ? "" : _Modelo.razaoSocial)!;
+          (siciFileModel.razaoSocial == null ? "" : siciFileModel.razaoSocial)!;
 
-      response.fields['controllerTelefoneFixo'] = _Modelo.telefoneFixo == null ? "" : _Modelo.telefoneFixo!;
+      response.fields['controllerTelefoneFixo'] = siciFileModel.telefoneFixo == null ? "" : siciFileModel.telefoneFixo!;
       response.fields['controllerCNPJ'] =
-          _Modelo.cnpj == null ? "" : _Modelo.cnpj!;
+      siciFileModel.cnpj == null ? "" : siciFileModel.cnpj!;
 
       response.fields['controllerTelefoneCelular'] =
-          _Modelo.telefoneMovel == null ? "" : _Modelo.telefoneMovel!;
+      siciFileModel.telefoneMovel == null ? "" : siciFileModel.telefoneMovel!;
 
       response.fields['controllerReceitaBruta'] =
-          _Modelo.receitaBruta == null ? "" : _Modelo.receitaBruta!;
+      siciFileModel.receitaBruta == null ? "" : siciFileModel.receitaBruta!;
       response.fields['controllerAliqSimples'] =
-          _Modelo.simples == null ? "" : _Modelo.simples!;
+      siciFileModel.simples == null ? "" : siciFileModel.simples!;
       response.fields['controllerAliqSimplesPorc'] =
-          _Modelo.simplesPorc == null ? "" : _Modelo.simplesPorc!;
+      siciFileModel.simplesPorc == null ? "" : siciFileModel.simplesPorc!;
       response.fields['controllerICMS'] =
-          _Modelo.icms == null ? "" : _Modelo.icms!;
+      siciFileModel.icms == null ? "" : siciFileModel.icms!;
       response.fields['controllerICMSPorc'] =
-          _Modelo.icmsPorc == null ? "" : _Modelo.icmsPorc!;
-      response.fields['controllerPIS'] = _Modelo.pis == null ? "" : _Modelo.pis!;
+      siciFileModel.icmsPorc == null ? "" : siciFileModel.icmsPorc!;
+      response.fields['controllerPIS'] = siciFileModel.pis == null ? "" : siciFileModel.pis!;
       response.fields['controllerPISPorc'] =
-          _Modelo.pisPorc == null ? "" : _Modelo.pisPorc!;
+      siciFileModel.pisPorc == null ? "" : siciFileModel.pisPorc!;
       response.fields['controllerCOFINS'] =
-          _Modelo.cofins == null ? "" : _Modelo.cofins!;
+      siciFileModel.cofins == null ? "" : siciFileModel.cofins!;
       response.fields['controllerCOFINSPorc'] =
-          _Modelo.cofinsPorc == null ? "" : _Modelo.cofinsPorc!;
+      siciFileModel.cofinsPorc == null ? "" : siciFileModel.cofinsPorc!;
       response.fields['controllerReceitaLiquida'] =
-          _Modelo.receitaLiquida == null ? "" : _Modelo.receitaLiquida!;
+      siciFileModel.receitaLiquida == null ? "" : siciFileModel.receitaLiquida!;
       response.fields['controllerObservacoes'] =
-          _Modelo.observacoes == null ? "" : _Modelo.observacoes!;
+      siciFileModel.observacoes == null ? "" : siciFileModel.observacoes!;
       int index = 1;
-      if (_Modelo.distribuicaoFisicosServicoQuantitativo == null)
+      if (siciFileModel.distribuicaoFisicosServicoQuantitativo == null)
         throw ("Distribuição do quantitativo de acessos físicos em serviço e obrigatório,favor adicionar.");
-      for (var item in _Modelo.distribuicaoFisicosServicoQuantitativo!) {
+      for (var item in siciFileModel.distribuicaoFisicosServicoQuantitativo!) {
         print('controllerUF_' + index.toString());
         response.fields['controllerCodIBGE_' + index.toString()] =
             item.cod_ibge.toString() == null ? "" : item.cod_ibge.toString();
@@ -229,23 +226,23 @@ class ServicoMobileService {
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
       var jsonResp = Componentes.removeAllHtmlTags(respStr);
-      if (response.statusCode == 200) {
-        if (!response.body.isNotEmpty) {
+      if (streamedResponse.statusCode == 200) {
+        if (streamedResponse.stream.isEmpty == true) {
           throw (ApiRestInformation.problemOfComunication);
         }
         else
         {
-          Map<String, dynamic> map = jsonDecode(Componentes.removeAllHtmlTags(response.body));
+          Map<String, dynamic> map = jsonDecode(Componentes.removeAllHtmlTags(respStr));
           OperationJson resp = OperationJson.fromJson(map);
           operacao.erro = !resp.status!;
-          operacao.message = resp.mensagem;
-          operacao.result = resp.resultado;
+          operacao.message = resp.message;
+          operacao.result = resp.result;
         }
         if (operacao.message == null) {
           throw ('Não foi identificado resposta');
         }
       } else {
-        operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(response.statusCode, response.body);
+        operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(streamedResponse.statusCode, streamedResponse.stream.toString());
       }
     } catch (e) {
       operacao.erro = true;
@@ -266,10 +263,10 @@ class ServicoMobileService {
               },
               encoding: Encoding.getByName("utf-8"))
           .timeout(const Duration(seconds: 10));
-      _Operacao.erro = false;
-      _Operacao.mensagem = "Operação realizada com sucesso";
-      _Operacao.resultado = null;
-      print(response.body);
+      operacao.erro = false;
+      operacao.message = "Operação realizada com sucesso";
+      operacao.result = null;
+      operacao.statusCode = response.statusCode;
       if (response.statusCode == 200) {
         if (!response.body.isNotEmpty) {
           throw (ApiRestInformation.problemOfComunication);
@@ -279,8 +276,8 @@ class ServicoMobileService {
           Map<String, dynamic> map = jsonDecode(Componentes.removeAllHtmlTags(response.body));
           OperationJson resp = OperationJson.fromJson(map);
           operacao.erro = !resp.status!;
-          operacao.message = resp.mensagem;
-          operacao.result = resp.resultado;
+          operacao.message = resp.message;
+          operacao.result = resp.result;
         }
         if (operacao.message == null) {
           throw ('Não foi identificado resposta');
@@ -295,7 +292,7 @@ class ServicoMobileService {
     return operacao;
   }
 
-  Future<Operation> OnCadastraUsuario(ModelDadosUsuarioJson _Modelo) async {
+  Future<Operation> OnCadastraUsuario(String nome,String cpf,String email ,String telefone ,String telefoneWhatsapp ,String empresa,String uf) async {
     Operation operacao = Operation();
     try {
       String? token = await ComponentsJWTToken.JWTTokenPadrao();
@@ -304,36 +301,35 @@ class ServicoMobileService {
         "token": token!,
       };
       http.MultipartRequest response;
-      response = new http.MultipartRequest(
+      response = http.MultipartRequest(
           'POST', Uri.parse(Url + "/usuario/inserir_usuario_ws"));
       response.headers.addAll(headers);
-      response.fields['controllerNome'] = _Modelo.nome!;
-      response.fields['controllerCPF'] = _Modelo.cpf!;
-      response.fields['controllerEmail'] = _Modelo.email!;
-      response.fields['controllerTelefone'] = _Modelo.telefone!;
-      response.fields['controllerTelefoneWhatsapp'] = _Modelo.telefoneWhatsapp!;
-      response.fields['controllerEmpresa'] = _Modelo.empresa!;
-      response.fields['controllerUF'] = _Modelo.uf!;
+      response.fields['controllerNome'] = nome;
+      response.fields['controllerCPF'] = cpf;
+      response.fields['controllerEmail'] = email;
+      response.fields['controllerTelefone'] = telefone;
+      response.fields['controllerTelefoneWhatsapp'] = telefoneWhatsapp;
+      response.fields['controllerEmpresa'] = empresa;
+      response.fields['controllerUF'] = uf;
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
-      var jsonResp = Componentes.removeAllHtmlTags(respStr);
-      if (response.statusCode == 200) {
-        if (!response.body.isNotEmpty) {
+      if (streamedResponse.statusCode == 200) {
+        if (streamedResponse.stream.isEmpty == true) {
           throw (ApiRestInformation.problemOfComunication);
         }
         else
         {
-          Map<String, dynamic> map = jsonDecode(Componentes.removeAllHtmlTags(response.body));
+          Map<String, dynamic> map = jsonDecode(Componentes.removeAllHtmlTags(respStr));
           OperationJson resp = OperationJson.fromJson(map);
           operacao.erro = !resp.status!;
-          operacao.message = resp.mensagem;
-          operacao.result = resp.resultado;
+          operacao.message = resp.message;
+          operacao.result = resp.result;
         }
         if (operacao.message == null) {
           throw ('Não foi identificado resposta');
         }
       } else {
-        operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(response.statusCode, response.body);
+        operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(streamedResponse.statusCode, streamedResponse.stream.toString());
       }
     } catch (e) {
       operacao.erro = true;
@@ -356,25 +352,23 @@ class ServicoMobileService {
       response.fields['id'] = IdNotificacao;
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
-      var jsonResp = Componentes.removeAllHtmlTags(respStr);
-
-      if (response.statusCode == 200) {
-        if (!response.body.isNotEmpty) {
+      if (streamedResponse.statusCode == 200) {
+        if (streamedResponse.stream.isEmpty == true) {
           throw (ApiRestInformation.problemOfComunication);
         }
         else
         {
-          Map<String, dynamic> map = jsonDecode(Componentes.removeAllHtmlTags(response.body));
+          Map<String, dynamic> map = jsonDecode(Componentes.removeAllHtmlTags(respStr));
           OperationJson resp = OperationJson.fromJson(map);
           operacao.erro = !resp.status!;
-          operacao.message = resp.mensagem;
-          operacao.result = resp.resultado;
+          operacao.message = resp.message;
+          operacao.result = resp.result;
         }
         if (operacao.message == null) {
           throw ('Não foi identificado resposta');
         }
       } else {
-        operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(response.statusCode, response.body);
+        operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(streamedResponse.statusCode, streamedResponse.stream.toString());
       }
     } catch (e) {
       operacao.erro = true;
@@ -383,7 +377,7 @@ class ServicoMobileService {
     return operacao;
   }
 
-  Future<Operation> OnRecuperaNotificacoesPeloId(String IdNotificacao) async {
+  Future<Operation> onRecuperaNotificacoesPeloId(String idNotificacao) async {
     Operation operacao = Operation();
     try {
       String? token = await ComponentsJWTToken.JWTTokenPadrao();
@@ -392,29 +386,28 @@ class ServicoMobileService {
         "token": token!,
       };
       http.MultipartRequest response;
-      response = new http.MultipartRequest('POST', Uri.parse(Url + "/notificacoes/Notificacoes_ws/recuperarNotificacao_ws"));
+      response = http.MultipartRequest('POST', Uri.parse(Url + "/notificacoes/Notificacoes_ws/recuperarNotificacao_ws"));
       response.headers.addAll(headers);
-      response.fields['id'] = IdNotificacao;
+      response.fields['id'] = idNotificacao;
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
-      var jsonResp = Componentes.removeAllHtmlTags(respStr);
-      if (response.statusCode == 200) {
-        if (!response.body.isNotEmpty) {
+      if (streamedResponse.statusCode == 200) {
+        if (streamedResponse.stream.isEmpty == true) {
           throw (ApiRestInformation.problemOfComunication);
         }
         else
         {
-          Map<String, dynamic> map = jsonDecode(Componentes.removeAllHtmlTags(response.body));
+          Map<String, dynamic> map = jsonDecode(Componentes.removeAllHtmlTags(respStr));
           OperationJson resp = OperationJson.fromJson(map);
           operacao.erro = !resp.status!;
-          operacao.message = resp.mensagem;
-          operacao.result = resp.resultado;
+          operacao.message = resp.message;
+          operacao.result = resp.result;
         }
         if (operacao.message == null) {
           throw ('Não foi identificado resposta');
         }
       } else {
-        operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(response.statusCode, response.body);
+        operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(streamedResponse.statusCode, streamedResponse.stream.toString());
       }
     } catch (e) {
       operacao.erro = true;
@@ -438,24 +431,24 @@ class ServicoMobileService {
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
       var jsonResp = Componentes.removeAllHtmlTags(respStr);
-      operacao.statusCode = response.statusCode;
-      if (response.statusCode == 200) {
-        if (!response.body.isNotEmpty) {
+      operacao.statusCode = streamedResponse.statusCode;
+      if (streamedResponse.statusCode == 200) {
+        if (streamedResponse.stream.isEmpty == true) {
           throw (ApiRestInformation.problemOfComunication);
         }
         else
         {
-          Map<String, dynamic> map = jsonDecode(Componentes.removeAllHtmlTags(response.body));
+          Map<String, dynamic> map = jsonDecode(Componentes.removeAllHtmlTags(Componentes.removeAllHtmlTags(respStr)));
           OperationJson resp = OperationJson.fromJson(map);
           operacao.erro = !resp.status!;
-          operacao.message = resp.mensagem;
-          operacao.result = resp.resultado;
+          operacao.message = resp.message;
+          operacao.result = resp.result;
         }
         if (operacao.message == null) {
           throw ('Não foi identificado resposta');
         }
       } else {
-        operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(response.statusCode, response.body);
+        operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(streamedResponse.statusCode, streamedResponse.stream.toString());
       }
     } catch (e) {
       operacao.erro = true;
@@ -535,7 +528,7 @@ class ApiRestStatusAnswerHTTP {
            // Erro500 resp = Erro500.fromJson(map);
            // operacao.mensagem = resp.message;
           } catch (error) {
-            operation.mensagem = error.toString();
+            operation.message = error.toString();
           }
         }
         break;

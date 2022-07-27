@@ -29,7 +29,7 @@ class NotificationsState extends State<NotificationsView> {
 
       } else {
         statusView = TypeView.viewLoading;
-        Operation resultRest = await ServicoMobileService.onGetListNotificationByCpf(global_user_logged.globalUserLogged!.cpf!);
+        Operation resultRest = await ServicoMobileService.onGetListNotificationByCpf(global_user_logged.globalUserLogged!.cpf);
         if (resultRest.erro) {
           throw (resultRest.result!);
         } else {

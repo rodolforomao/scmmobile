@@ -106,7 +106,7 @@ class SelectCityState extends State<SelectCityView>  {
                     print(value);
                     if (value.length >= 1) {
                       setState(() {
-                        ListMunicipio =  widget.sMunicipality.where((f) => f.municipality!.toLowerCase().startsWith(value.toLowerCase())).toList();
+                        ListMunicipio =  widget.sMunicipality.where((f) => f.municipality.toLowerCase().startsWith(value.toLowerCase())).toList();
                       });
                     } else if (value.length == 0) {
                       FocusScope.of(context).requestFocus(new FocusNode());
@@ -225,7 +225,7 @@ class SelectCityState extends State<SelectCityView>  {
                     },
                     contentPadding: EdgeInsets.fromLTRB(15.0, 7.0, 15.0, 7.0),
                     title: Text(
-                      ListMunicipio[index].municipality!,
+                      ListMunicipio[index].municipality,
                       style: TextStyle(
                           fontSize: 19.0,
                           color: Color(0xff333333),

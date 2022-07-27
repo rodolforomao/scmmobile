@@ -1,10 +1,9 @@
-import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../views/sici_views/list_sici_sent_view.dart';
 import '../../views/sici_views/physical_distribution_quantitative_service_view.dart';
 import '../../views/sici_views/sici_fust_form_view.dart';
-import '../../views/splash_screen.dart';
+import '../../views/splash_screen_view.dart';
 import '/help/navigation_service/route_paths.dart' as routes;
 import '../../views/error_information_view.dart';
 import '../../views/menu_navigation.dart';
@@ -27,10 +26,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
   //#region  outros
     case '/':
       {
-        return MaterialPageRoute(builder: (context) => SplashScreen());
+        return MaterialPageRoute(builder: (context) => const SplashScreenView());
       }
     case routes.splashScreenRoute:
-      return MaterialPageRoute(builder: (context) => SplashScreen());
+      return MaterialPageRoute(builder: (context) => const SplashScreenView());
     case routes.errorInformationRoute:
       {
         Map<String, dynamic> map = settings.arguments as Map<String, dynamic>;
@@ -58,11 +57,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       }
     case routes.physicalDistributionQuantitativeServiceRoute:
       {
-        return MaterialPageRoute(builder: (context) => PhysicalDistributionQuantitativeServiceView(sDistribuicaoFisicosServicoQuantitativo: null,));
+        return MaterialPageRoute(builder: (context) => PhysicalDistributionQuantitativeServiceView());
       }
     case routes.siciFustFormRoute:
       {
-        return MaterialPageRoute(builder: (context) => SiciFustFormView(FichaSiciModel: null,));
+        return MaterialPageRoute(builder: (context) => SiciFustFormView(siciFileModel: null,));
       }
   //#endregion
 
@@ -141,12 +140,12 @@ class RoutesPage {
       routes.errorInformationRoute : (context) => ErrorInformationView(informacao:'Ops! Algo de errado aconteceu? Não se preocupe, vou te ajudar a resolver!',originPage:''),
       routes.menuNavigationRoute : (context) => MenuNavigation(),
       routes.settingsRoute : (context) => const SettingsView(),
-      routes.splashScreenRoute : (context) => SplashScreen(),
+      routes.splashScreenRoute : (context) => const SplashScreenView(),
 
       // Visualizações sici ----------------------------------------------------------------------------------------------------
       routes.listSiciSentRoute : (context) => const ListSiciSentView(),
-      routes.physicalDistributionQuantitativeServiceRoute : (context) => PhysicalDistributionQuantitativeServiceView(sDistribuicaoFisicosServicoQuantitativo: null,),
-      routes.siciFustFormRoute : (context) => SiciFustFormView(FichaSiciModel: null,),
+      routes.physicalDistributionQuantitativeServiceRoute : (context) => PhysicalDistributionQuantitativeServiceView(),
+      routes.siciFustFormRoute : (context) => SiciFustFormView(siciFileModel: null,),
 
       //Visualizações de notificação -------------------------------------------------------------------------------------------
       routes.notificationRoute : (context) => NotificationView(idNotificacao: '',),

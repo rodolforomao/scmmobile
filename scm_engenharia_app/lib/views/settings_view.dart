@@ -11,12 +11,12 @@ class SettingsView extends StatefulWidget {
 
 class SettingsState extends State<SettingsView> {
   bool IsTemaEscuroAppOn = false, IsNotificacoesAtivarDesativada = false;
-  late DBHelper dbHelper;
+
 
   @override
   void initState() {
     super.initState();
-    dbHelper = DBHelper();
+
   }
 
   Future<void> OnSwitchNotificacoesAtivarDesativadaChanged(bool value) async {
@@ -58,58 +58,7 @@ class SettingsState extends State<SettingsView> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
-                        OutlineButton(
-                          color: Color(0xFFf2f2f2),
-                          //`Icon` to display
-                          child: Text(
-                            'Sim',
-                            style: TextStyle(
-                              fontSize: 17.0,
-                              fontFamily: 'avenir-lt-std-roman',
-                              color: Color(0xff018a8a),
-                            ),
-                          ),
-                          onPressed: () async {
-                            FocusScope.of(context).requestFocus(new FocusNode());
-                            Operacao _RestLocal =
-                            await dbHelper.OnDeletarUsuario();
-                            if (_RestLocal.erro)
-                              throw (_RestLocal.mensagem!);
-                            else {
-                              Navigator.of(context).pushAndRemoveUntil(
-                                  new MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                      new LoginPage()),
-                                      (Route<dynamic> route) => false);
-                            }
-                          },
-                          //callback when button is clicked
-                          borderSide: BorderSide(
-                            color: Color(0xFFf2f2f2), //Color of the border
-                            style: BorderStyle.solid, //Style of the border
-                            width: 1.0, //width of the border
-                          ),
-                        ),
-                        SizedBox(width: 15.0),
-                        FlatButton(
-                          color: Color(0xff018a8a),
-                          //`Icon` to display
-                          child: Text(
-                            'Não',
-                            style: TextStyle(
-                              fontSize: 17.0,
-                              fontFamily: 'avenir-lt-std-roman',
-                              color: Colors.white,
-                            ),
-                          ),
-                          //`Text` to display
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          shape: new RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(5.0),
-                          ),
-                        ),
+
                       ],
                     ),
                   ),
@@ -196,14 +145,7 @@ class SettingsState extends State<SettingsView> {
               ListTile(
                   onTap: () {
                     FocusScope.of(context).requestFocus(new FocusNode());
-                    Navigator.of(context, rootNavigator: true).push(
-                      new CupertinoPageRoute<bool>(
-                        maintainState: false,
-                        fullscreenDialog: true,
-                        builder: (BuildContext context) =>
-                        new AlterarSenhaPage(),
-                      ),
-                    );
+
                   },
                   contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
                   leading: Container(
@@ -231,13 +173,7 @@ class SettingsState extends State<SettingsView> {
               ListTile(
                   onTap: () {
                     FocusScope.of(context).requestFocus(new FocusNode());
-                    Navigator.of(context, rootNavigator: true).push(
-                      new CupertinoPageRoute<bool>(
-                        maintainState: false,
-                        fullscreenDialog: true,
-                        builder: (BuildContext context) => new PerfilPage(),
-                      ),
-                    );
+
                   },
                   contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
                   leading: Container(
@@ -265,14 +201,7 @@ class SettingsState extends State<SettingsView> {
               ListTile(
                   onTap: () {
                     FocusScope.of(context).requestFocus(new FocusNode());
-                    Navigator.of(context, rootNavigator: true).push(
-                      new CupertinoPageRoute<bool>(
-                        maintainState: false,
-                        fullscreenDialog: true,
-                        builder: (BuildContext context) =>
-                        new VariavelDeAmbientePage(),
-                      ),
-                    );
+
                   },
                   contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
                   leading: Container(

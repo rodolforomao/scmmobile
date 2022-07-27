@@ -1,4 +1,4 @@
 library global_user_logged;
-import '../models/user_model.dart';
+import '../data/tb_user.dart';
 
-UserModel? globalUserLogged;
+TbUser? globalUserLogged;

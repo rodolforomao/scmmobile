@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:scm_engenharia_app/views/splash_screen.dart';
+import 'package:scm_engenharia_app/views/splash_screen_view.dart';
 
 
 class ErrorInformationView extends StatefulWidget {

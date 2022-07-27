@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class GlobalScaffold {
   static final GlobalScaffold instance = GlobalScaffold();
-  final navigatorKey = new GlobalKey<NavigatorState>();
-  final messangerKey = new GlobalKey<ScaffoldMessengerState>();
-  final scaffoldKeyMenuDrawer = new GlobalKey<ScaffoldState>();
+  final navigatorKey = GlobalKey<NavigatorState>();
+  final messangerKey = GlobalKey<ScaffoldMessengerState>();
+  final scaffoldKeyMenuDrawer = GlobalKey<ScaffoldState>();
+  final globalKey = GlobalKey<ScaffoldState>();
 
   int selectedPageBottomNavigationIndex = 0;
   String selectedPageView = '';
@@ -138,6 +140,21 @@ class GlobalScaffold {
     messangerKey.currentState!.showSnackBar(snackBar);
   }
 
+  onRedirectUri(Uri url) async {
+    try {
+      if (!await launchUrl(url, mode: LaunchMode.inAppWebView, webOnlyWindowName: '_self' ,webViewConfiguration:const WebViewConfiguration(enableJavaScript: true , enableDomStorage: true ,headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Access-Control-Allow-Methods': '*',
+        'Access-Control-Allow-Headers': '*',
+      })).whenComplete(() {
+
+
+      })) throw 'Não foi possível iniciar $url';
+    } catch (error) {
+      GlobalScaffold.instance.onToastInformacaoErro(error.toString());
+    }
+  }
 }
 
 
@@ -322,6 +339,97 @@ class OnAlertaInformacaoSucesso {
     );
   }
 }
+
+class OnAlertInformation {
+  final String? message;
+  final BuildContext context;
+
+  OnAlertInformation(this.message, this.context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8.0))),
+          child:  Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(height: 15.0),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "Informação",
+                    style: TextStyle(
+                        fontSize: 20.0,
+                        color: Color(0xff212529),
+                        fontFamily: "avenir-lt-std-roman"),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Divider(
+                    color: Colors.black12,
+                  ),
+                  Padding(padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                    child:  Text(
+                      message.toString(),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 4,
+                      softWrap: false,
+                      style: TextStyle(
+                          fontSize: 17.0,
+                          color: Color(0xff212529),
+                          fontFamily: "avenir-lt-std-roman"),
+                    ),
+                  ),
+                ],
+              ),
+              Divider(
+                color: Colors.black12,
+              ),
+              Container(
+                margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
+                child: new Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    FlatButton(
+                      color: Color(0xff30bc8c),
+                      //`Icon` to display
+                      child: Text(
+                        '           OK           ',
+                        style: TextStyle(
+                            fontSize: 17.0,
+                            color: Color(0xffFFFFFF),
+                            fontFamily: "avenir-lt-std-roman"),
+                      ),
+                      //`Text` to display
+                      onPressed: () {
+                        Navigator.pop(context);
+                        FocusManager.instance.primaryFocus!.unfocus();
+                      },
+                      shape: new RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(5.0),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
 
 BuildContext? dialogContext;
 
