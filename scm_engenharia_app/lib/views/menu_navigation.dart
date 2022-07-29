@@ -12,7 +12,7 @@ class MenuNavigation extends StatefulWidget {
 }
 
 class _MenuNavigationState extends State<MenuNavigation> {
-  int _SelecionarPaginaWidgetIndex = 0;
+  int selectedView = 0;
 
   @override
   void initState() {
@@ -24,10 +24,10 @@ class _MenuNavigationState extends State<MenuNavigation> {
     super.dispose();
   }
 
-  OnSelecionarPaginaWidget(int pos) {
-    switch (pos) {
+  onSelectedPage() {
+    switch (selectedView) {
       case 0:
-        return new ListSiciSentView();
+        return const ListSiciSentView();
       case 1:
         //return new DocumentosPage();
       case 2:
@@ -46,78 +46,53 @@ class _MenuNavigationState extends State<MenuNavigation> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: OnSelecionarPaginaWidget(_SelecionarPaginaWidgetIndex),
-      bottomNavigationBar: new Theme(
+      body: onSelectedPage(),
+      bottomNavigationBar: Theme(
         data: Theme.of(context).copyWith(
             canvasColor: Colors.white,
-            primaryColor: Color(0xffa55eea),
-            textTheme: Theme.of(context).textTheme.copyWith(caption: new TextStyle(color: Color(0xff6C757D),))
+            primaryColor: const Color(0xffa55eea),
+            textTheme: Theme.of(context).textTheme.copyWith(caption: const TextStyle(color: Color(0xff6C757D),))
         ),
-        child: new BottomNavigationBar(
+        child: BottomNavigationBar(
           elevation: 9.0,
           type: BottomNavigationBarType.fixed,
-          currentIndex: _SelecionarPaginaWidgetIndex,
-          items: [
-            new BottomNavigationBarItem(
-              icon: new Icon(Icons.format_list_bulleted, size: 26),
-              label: new Text("Sici/Fust",
-                  style: TextStyle(
-                    fontFamily: 'avenir-lt-std-roman',
-                    color: _SelecionarPaginaWidgetIndex == 0 ? Color(0xffa55eea) :  Color(0xff6C757D),
-                    fontSize: 14.0,
-                  )).toString(),
+          currentIndex: selectedView,
+          items: const [
+             BottomNavigationBarItem(
+              icon: Icon(Icons.format_list_bulleted, size: 26),
+              label: "Sici/Fust",
             ),
-            new BottomNavigationBarItem(
-              icon: new Icon(Icons.wysiwyg, size: 24),
-              label: new Text("Documentos",
-                  style: TextStyle(
-                    fontFamily: 'avenir-lt-std-roman',
-                    color: _SelecionarPaginaWidgetIndex == 1 ? Color(0xffa55eea) :  Color(0xff6C757D),
-                    fontSize: 14.0,
-                  )).toString(),
+             BottomNavigationBarItem(
+              icon:  Icon(Icons.wysiwyg, size: 24),
+              label:"Documentos",
             ),
-            new BottomNavigationBarItem(
-              icon: new Icon(Icons.settings, size: 0),
-              label: new Text("",
-                  style: TextStyle(
-                    fontFamily: 'avenir-lt-std-roman',
-                    color: _SelecionarPaginaWidgetIndex == 1 ? Color(0xffa55eea) :  Color(0xff6C757D),
-                    fontSize: 14.0,
-                  )).toString(),
+             BottomNavigationBarItem(
+              icon:  Icon(Icons.settings, size: 0),
+              label: '',
             ),
-            new BottomNavigationBarItem(
-              icon: new Icon(Icons.notifications_active_outlined, size: 24),
-              label: new Text("Notificações ",
-                  style: TextStyle(
-                    fontFamily: 'avenir-lt-std-roman',
-                    color: _SelecionarPaginaWidgetIndex == 3 ? Color(0xffa55eea) :  Color(0xff6C757D),
-                    fontSize: 14.0,
-                  )).toString(),
+             BottomNavigationBarItem(
+              icon:  Icon(Icons.notifications_active_outlined, size: 24),
+              label: "Notificações ",
             ),
-            new BottomNavigationBarItem(
-              icon: new Icon(Icons.settings, size: 24),
-              label: new Text("Configuração",
-                  style: TextStyle(
-                    fontFamily: 'avenir-lt-std-roman',
-                    color: _SelecionarPaginaWidgetIndex == 4 ? Color(0xffa55eea) :  Color(0xff6C757D),
-                    fontSize: 14.0,
-                  )).toString(),
+             BottomNavigationBarItem(
+              icon:  Icon(Icons.settings, size: 24),
+              label: 'Configuração',
             ),
           ],
           onTap: (int index) {
-            setState(() => _SelecionarPaginaWidgetIndex = index);
+            setState(() => selectedView = index);
           },
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Container(
+      floatingActionButton: SizedBox(
         height: 65.0,
         width: 65.0,
         child: FittedBox(
           child: FloatingActionButton(
             elevation: 10,
-            backgroundColor: Color(0xffa55eea),
-            child: new Icon(Icons.add, size: 25),
+            backgroundColor: const Color(0xffa55eea),
+            child: const Icon(Icons.add, size: 25),
             onPressed: () {
               Navigator.push(
                   context,

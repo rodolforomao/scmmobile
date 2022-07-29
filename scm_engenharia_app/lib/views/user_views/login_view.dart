@@ -1,6 +1,13 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:realm/realm.dart';
+import '../../data/app_scm_engenharia_mobile_bll.dart';
+import '../../data/tb_user.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
 import 'package:url_launcher/url_launcher.dart';
+import '../../models/operation.dart';
+import '../../models/user_response_model.dart';
+import '../../web_service/servico_mobile_service.dart';
 import '../help_views/global_scaffold.dart';
 
 
@@ -16,17 +23,68 @@ class LoginState extends State<LoginView> {
   final txtControllerEmail = TextEditingController();
   final txtControllerPassword= TextEditingController();
   late String errorTextControllerSenha, errorTextControllerEmail;
-
   bool isVisualizarSenha = false;
-  
+
+  onLoggingIn() async {
+    try {
+      if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+        OnAlertaInformacaoErro('Verifique sua conexão com a internet e tente novamente.',context);
+      } else {
+        if (txtControllerEmail.text.isEmpty)
+          {
+            throw ("E-mail é obrigatório");
+          }
+        else if (txtControllerPassword.text.isEmpty)
+         {
+           throw ("Senha é obrigatória");
+         }
+        OnRealizandoOperacao('Realizando operação', true,context);
+        Operation restWeb = await ServicoMobileService.onLogin(txtControllerEmail.text, txtControllerPassword.text);
+        if (restWeb.erro) {
+          throw (restWeb.message!);
+        } else if (restWeb.result == null) {
+          throw (restWeb.message!);
+        } else {
+            UserResponseModel resul = UserResponseModel.fromJson(restWeb.result as Map<String, dynamic>);
+             TbUser userResul = TbUser(ObjectId(),
+                 resul.idUsuario!,
+                 resul.idPerfil!,
+                 resul.descNome!,
+                 txtControllerPassword.text,
+                 resul.email!,
+                 resul.telefoneConsultor!,
+                 resul.dtUltacesso!,
+                 resul.empresa!,
+                 resul.periodoReferencia!,
+                 resul.cpf!);
+            Operation respBll = await AppScmEngenhariaMobileBll.instance.onSaveUser(userResul);
+            if (!respBll.erro) {
+              throw respBll.message!;
+            } else if (respBll.result == null) {
+              throw respBll.message!;
+            } else {
+              Navigator.of(context).pushNamedAndRemoveUntil(routes.menuNavigationRoute, (Route<dynamic> route) => false);
+            }
+
+            //NotificationHandler().unsubscribeFromTopic("scmengenhariaUserNLogado");
+            //NotificationHandler().subscribeToTopic("nroCPF-" +Usuario.cpf);
+            //NotificationHandler().subscribeToTopic("scmengenhariaUserAllLogado");
+
+        }
+      }
+    } catch (error) {
+      OnRealizandoOperacao('', false,context);
+      OnAlertaInformacaoErro(error.toString(),context);
+    }
+  }
+
   @override
   void initState() {
 
     super.initState();
-
-     //NotificationHandler().subscribeToTopic("scmengenhariaUserNLogado");
-    // _TxtControllerEmail.text = "rodolforomao@gmail.com";
-    // _TxtControllerSenha.text = "123456";
+    // NotificationHandler().subscribeToTopic("scmengenhariaUserNLogado");
+    txtControllerEmail.text = "rodolforomao@gmail.com";
+    txtControllerPassword.text = "1234567";
 
   }
 
@@ -62,8 +120,12 @@ class LoginState extends State<LoginView> {
         body: Container(
           alignment: Alignment.center,
           child: SingleChildScrollView(
-            padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
-            child: Column(
+            padding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+            child: Container( constraints: const BoxConstraints(
+              minWidth: 200,
+              maxWidth: 800,
+            ),
+              padding: const EdgeInsets.only(top: 10.0, right: 30.0, left: 30.0, bottom: 50.0),child:  Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -101,7 +163,7 @@ class LoginState extends State<LoginView> {
                         color: const Color(0xFF373737)),
                     decoration: InputDecoration(
                         contentPadding:
-                            EdgeInsets.fromLTRB(10.0, 12.0, 10.0, 12.0),
+                        EdgeInsets.fromLTRB(10.0, 12.0, 10.0, 12.0),
                         focusedErrorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
                           borderSide: BorderSide(color: Colors.white, width: 0),
@@ -109,7 +171,7 @@ class LoginState extends State<LoginView> {
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
                           borderSide:
-                              BorderSide(color: Colors.white, width: 0.3),
+                          BorderSide(color: Colors.white, width: 0.3),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -161,7 +223,7 @@ class LoginState extends State<LoginView> {
                     obscureText: true,
                     decoration: InputDecoration(
                         contentPadding:
-                            EdgeInsets.fromLTRB(10.0, 12.0, 10.0, 12.0),
+                        EdgeInsets.fromLTRB(10.0, 12.0, 10.0, 12.0),
                         focusedErrorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
                           borderSide: BorderSide(color: Colors.white, width: 0),
@@ -169,7 +231,7 @@ class LoginState extends State<LoginView> {
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
                           borderSide:
-                              BorderSide(color: Colors.white, width: 0.3),
+                          BorderSide(color: Colors.white, width: 0.3),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -198,7 +260,7 @@ class LoginState extends State<LoginView> {
                 Center(
                   child: InkWell(
                     onTap: () async {
-
+                      onLoggingIn();
                     },
                     child: Container(
                       padding: const EdgeInsets.fromLTRB(0.0, 5.0, 20.0, 0.0),
@@ -243,7 +305,7 @@ class LoginState extends State<LoginView> {
                   ),
                 )
               ],
-            ),
+            ),),
           ),
         ),
         floatingActionButton: showFab

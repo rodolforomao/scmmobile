@@ -1,20 +1,18 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
-
 import '../data/JWTTokenDbLocal.dart';
 import '../help/componentes.dart';
-import '../models/Operation.dart';
+import '../models/operation.dart';
 import '../models/sici_file_model.dart';
 
 class ServicoMobileService {
-  static final Url = "http://sici.scmengenharia.com.br";
+  static const Url = "http://sici.scmengenharia.com.br";
   //static final Url = "http://10.0.2.2:8083";
   //static final Url = "http://192.168.0.122:8083";
   //static final Url = "http://wsscm.ddns.net";
 
-  Future<Operation> onLogin(String usuario,String password) async {
+  static Future<Operation> onLogin(String usuario,String password) async {
     Operation operacao = Operation();
     try {
       String? token = await Componentes.JWTToken(usuario, password);
@@ -39,7 +37,7 @@ class ServicoMobileService {
             operacao.message = resp.message;
             operacao.result = resp.result;
           }
-        if (operacao.message == null) {
+        if (operacao.message == null && operacao.result == null) {
           throw ('Não foi identificado resposta');
         }
       } else {
@@ -92,7 +90,7 @@ class ServicoMobileService {
     return operacao;
   }
 
-  Future<Operation> onVariaveisDeAmbiente() async {
+  static Future<Operation> onEnvironmentVariables() async {
     Operation operacao = Operation();
     try {
       String? token = await ComponentsJWTToken.JWTTokenPadrao();
@@ -425,15 +423,14 @@ class ServicoMobileService {
         "token": token!,
       };
       http.MultipartRequest response;
-      response = http.MultipartRequest('POST', Uri.parse(Url + "/notificacoes/recuperarTodasNotificacaoByCpf_ws"));
+      response = http.MultipartRequest('POST', Uri.parse("$Url/notificacoes/recuperarTodasNotificacaoByCpf_ws"));
       response.headers.addAll(headers);
       response.fields['cpf'] = cpf;
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
-      var jsonResp = Componentes.removeAllHtmlTags(respStr);
       operacao.statusCode = streamedResponse.statusCode;
       if (streamedResponse.statusCode == 200) {
-        if (streamedResponse.stream.isEmpty == true) {
+        if (respStr.isEmpty) {
           throw (ApiRestInformation.problemOfComunication);
         }
         else
@@ -443,8 +440,9 @@ class ServicoMobileService {
           operacao.erro = !resp.status!;
           operacao.message = resp.message;
           operacao.result = resp.result;
+          operacao.resultList = resp.result as List?;
         }
-        if (operacao.message == null) {
+        if (operacao.message == null && operacao.result == null) {
           throw ('Não foi identificado resposta');
         }
       } else {

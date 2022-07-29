@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
-import '../../models/Operation.dart';
+import '../../models/operation.dart';
 import '../../models/notification_models/notification_model.dart';
 import '../../web_service/servico_mobile_service.dart';
 import '../help_views/global_scaffold.dart';

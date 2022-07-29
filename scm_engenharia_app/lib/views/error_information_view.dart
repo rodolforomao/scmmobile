@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:scm_engenharia_app/views/splash_screen_view.dart';
+import 'package:scm_engenharia_app/help/global_user_logged.dart' as global_user_logged;
 
 
 class ErrorInformationView extends StatefulWidget {
@@ -27,11 +27,12 @@ class ErrorInformationState extends State<ErrorInformationView> {
 
 
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       appBar: PreferredSize(
+        preferredSize: Size(MediaQuery.of(context).size.width, 50.0),
         child: AppBar(
           flexibleSpace: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
@@ -43,10 +44,9 @@ class ErrorInformationState extends State<ErrorInformationView> {
               ),
             ),
           ),
-          automaticallyImplyLeading: false,
           centerTitle: true,
           elevation: 0.0,
-          title: Text(
+          title: const Text(
             "Informação",
             textAlign: TextAlign.start,
             style: TextStyle(
@@ -55,7 +55,7 @@ class ErrorInformationState extends State<ErrorInformationView> {
                 fontFamily: "open-sans-regular"),
           ),
           actions: <Widget>[
-            IconButton(
+            global_user_logged.globalUserLogged == null ? Container() :   IconButton(
               icon: Icon(
                 Icons.exit_to_app,
                 color: Colors.white,
@@ -64,10 +64,9 @@ class ErrorInformationState extends State<ErrorInformationView> {
               onPressed: () {
 
               },
-            )
+            ),
           ],
         ),
-        preferredSize: new Size(MediaQuery.of(context).size.width, 50.0),
       ),
       body: Container(
         alignment: Alignment.center,
@@ -98,7 +97,7 @@ class ErrorInformationState extends State<ErrorInformationView> {
               Text(
                 widget.informacao,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                     fontSize: 15.0,
                     color: Color(0xff575757),
                     fontFamily: "avenir-lt-medium"),

@@ -1,9 +1,8 @@
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scm_engenharia_app/help/global_user_logged.dart' as global_user_logged;
-import '../../models/Operation.dart';
+import '../../models/operation.dart';
 import '../../models/notification_models/notification_model.dart';
 import '../../web_service/servico_mobile_service.dart';
 import '../help_views/global_scaffold.dart';
@@ -26,15 +25,15 @@ class NotificationsState extends State<NotificationsView> {
   onGetListNotificationByCpf() async {
     try {
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
-
+        throw ('Verifique sua conexão com a internet e tente novamente.');
       } else {
         statusView = TypeView.viewLoading;
         Operation resultRest = await ServicoMobileService.onGetListNotificationByCpf(global_user_logged.globalUserLogged!.cpf);
         if (resultRest.erro) {
-          throw (resultRest.result!);
+          throw (resultRest.message!);
         } else {
           setState(() {
-            //listNotificationScmEngineering = resultRest.resultList!.map<NotificationScmEngineering>((json) => NotificationScmEngineering.fromJson(json)).toList();
+            listNotificationScmEngineering = resultRest.resultList!.map<NotificationScmEngineering>((json) => NotificationScmEngineering.fromJson(json)).toList();
             statusView = TypeView.viewRenderInformation;
           });
         }

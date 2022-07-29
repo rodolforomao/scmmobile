@@ -34,6 +34,23 @@ class AppScmEngenhariaMobileBll {
     return operation;
   }
 
+  Future<Operation> onUpdateUser(TbUser user) async {
+    Operation operation = Operation();
+    operation.result = null;
+    operation.message = 'Operação realizada com sucesso';
+    operation.erro = false;
+    try {
+      realm.write(() {
+        user;
+      });
+      operation.result = true;
+    } catch (ex) {
+      operation.erro = true;
+      operation.message = ' , erro ' + ex.toString();
+    }
+    return operation;
+  }
+
   Future<Operation> onDeleteUser() async {
     Operation operation = Operation();
     operation.result = null;

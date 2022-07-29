@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show TargetPlatform, kIsWeb;
 import '../data/app_scm_engenharia_mobile_bll.dart';
@@ -17,7 +15,6 @@ class SplashScreenView extends StatefulWidget {
 
 class SplashScreenState extends State<SplashScreenView> {
 
-
   onInc() async {
     try {
       if (kIsWeb) {
@@ -25,7 +22,6 @@ class SplashScreenState extends State<SplashScreenView> {
           //Navigator.of(context).pushNamedAndRemoveUntil(routes.inicioRoute, (Route<dynamic> route) => false);
         });
       } else {
-
         Operation respUser = await AppScmEngenhariaMobileBll.instance.onSelectUser();
         if (respUser.erro) {
           throw respUser.message!;
@@ -33,6 +29,7 @@ class SplashScreenState extends State<SplashScreenView> {
           Navigator.of(context).pushNamedAndRemoveUntil(routes.loginRoute, (Route<dynamic> route) => false);
         } else {
           global_user_logged.globalUserLogged = respUser.result as TbUser;
+          Navigator.of(context).pushNamedAndRemoveUntil(routes.menuNavigationRoute, (Route<dynamic> route) => false);
         }
       }
     } catch (error, s) {
