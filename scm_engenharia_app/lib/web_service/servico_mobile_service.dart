@@ -50,7 +50,7 @@ class ServicoMobileService {
     return operacao;
   }
 
-  Future<Operation> onAlterarSenha(String senha) async {
+  static Future<Operation> onUpdatePassword(String senha) async {
     Operation operacao = Operation();
     try {
       String? token = await ComponentsJWTToken.JWTTokenPadrao();

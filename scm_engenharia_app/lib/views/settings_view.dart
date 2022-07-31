@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
-
+import '../help/navigation_service/route_paths.dart' as routes;
+import 'help_views/global_view.dart';
 
 class SettingsView extends StatefulWidget {
   const SettingsView({Key? key}) : super(key: key);
@@ -29,45 +30,7 @@ class SettingsState extends State<SettingsView> {
     }
   }
 
-  Future<Null> onSairApp(BuildContext context) async {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Dialog(
-            child: new Padding(
-              padding: EdgeInsets.all(25.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
-                    height: 50.0,
-                    child: new Text("Deseja realmente sair do aplicativo ?",
-                        style: TextStyle(
-                            fontFamily: 'open-sans-regular',
-                            fontSize: 17.0,
-                            color: Color(0xFF000000))),
-                  ),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
-                    child: new Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: <Widget>[
 
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ));
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -144,8 +107,9 @@ class SettingsState extends State<SettingsView> {
               ),
               ListTile(
                   onTap: () {
-                    FocusScope.of(context).requestFocus(new FocusNode());
-
+                    Navigator.of(context).pushNamed(
+                      routes.changePasswordRoute,
+                    );
                   },
                   contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
                   leading: Container(
@@ -172,8 +136,9 @@ class SettingsState extends State<SettingsView> {
               ),
               ListTile(
                   onTap: () {
-                    FocusScope.of(context).requestFocus(new FocusNode());
-
+                    Navigator.of(context).pushNamed(
+                      routes.perfilRoute,
+                    );
                   },
                   contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
                   leading: Container(
@@ -201,7 +166,9 @@ class SettingsState extends State<SettingsView> {
               ListTile(
                   onTap: () {
                     FocusScope.of(context).requestFocus(new FocusNode());
-
+                    Navigator.of(context).pushNamed(
+                      routes.environmentVariableRoute,
+                    );
                   },
                   contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
                   leading: Container(
@@ -228,7 +195,7 @@ class SettingsState extends State<SettingsView> {
               ),
               ListTile(
                   onTap: () {
-                    onSairApp(context);
+                    OnExitApp(context);
                   },
                   contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
                   leading: Container(

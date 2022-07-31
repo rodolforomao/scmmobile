@@ -1,9 +1,14 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:jaguar_jwt/jaguar_jwt.dart';
+import '../../help/navigation_service/route_paths.dart' as routes;
+import '../data/app_scm_engenharia_mobile_bll.dart';
+import '../models/operation.dart';
+import '../views/help_views/global_scaffold.dart';
 
 
 class Componentes {
@@ -109,6 +114,23 @@ class Componentes {
     listaGenero.add("Outros");
     listaGenero.add("Não quero informar");
     return listaGenero;
+  }
+
+  static logoffApp() async {
+    try {
+      Operation accessTokenBll = await  AppScmEngenhariaMobileBll.instance.onDeleteUser();
+      if (!accessTokenBll.erro) {
+        throw accessTokenBll.message!;
+      } else if (accessTokenBll.result == null) {
+        throw accessTokenBll.message!;
+      } else {
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          Navigator.of(GlobalScaffold.instance.navigatorKey.currentContext!).pushNamedAndRemoveUntil(routes.loginRoute, (Route<dynamic> route) => false);
+        });
+      }
+    } catch (error) {
+      throw (error.toString());
+    }
   }
 
 }

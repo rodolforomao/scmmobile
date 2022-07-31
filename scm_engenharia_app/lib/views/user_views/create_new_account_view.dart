@@ -12,6 +12,7 @@ import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
 
+
 class CreateNewAccountView extends StatefulWidget {
   const CreateNewAccountView({Key? key}) : super(key: key);
   @override
@@ -31,6 +32,7 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
 
   FocusNode? txtFocusNodeNomeCompleto;
   FocusNode? txtFocusNodeCPF;
+  FocusNode? txtFocusNodeEmail;
   FocusNode? txtFocusNodeTelefoneFixo;
   FocusNode? txtFocusNodeWhatsapp;
   FocusNode? txtFocusNodeNomeDaEmpresa;
@@ -150,13 +152,11 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
                   color: Colors.white,
                 ),
               ),
-              const SizedBox(
-                height: 5.0,
-              ),
               TextField(
                   autofocus: false,
                   keyboardType: TextInputType.text,
                   controller: txtControlleNomeCompleto,
+                  focusNode: txtFocusNodeNomeCompleto,
                   textInputAction: TextInputAction.next,
                   style: const TextStyle(
                       fontSize: 20,
@@ -166,9 +166,8 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
                     txtFocusNodeNomeCompleto!.unfocus();
                     FocusScope.of(context).requestFocus(txtFocusNodeCPF);
                   },
-                  decoration: InputDecoration(
-                      contentPadding:
-                      EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
+                  decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
                       errorBorder: OutlineInputBorder(
                         borderRadius:
                         BorderRadius.all(Radius.circular(10.0)),
@@ -194,7 +193,7 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
                       hintText: "Digite seu nome completo",
                       border: InputBorder.none,
                       hintStyle: TextStyle(
-                          fontSize: 16.0, color: const Color(0xFF90ffffff)),
+                          fontSize: 16.0, color: Color(0xFF90ffffff)),
                       labelStyle: TextStyle(
                           fontSize: 16,
                           color: Color(0xFF90ffffff),
@@ -205,10 +204,7 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
                           fontFamily: 'open-sans-regular'),
                       fillColor: Color(0xff80ff9b7b),
                       filled: true)),
-              SizedBox(
-                height: 17.0,
-              ),
-              Text(
+              const Text(
                 "CPF",
                 style: TextStyle(
                   decoration: TextDecoration.none,
@@ -221,10 +217,10 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
                 height: 5.0,
               ),
               TextField(
-                  autofocus: false,
-                  keyboardType: TextInputType.number,
                   controller: txtControllerCPF,
-                  textInputAction: TextInputAction.done,
+                  focusNode: txtFocusNodeCPF,
+                  textInputAction: TextInputAction.next,
+                  keyboardType: TextInputType.number,
                   inputFormatters: [
                     // obrigatório
                     FilteringTextInputFormatter.digitsOnly,
@@ -277,10 +273,10 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
                           fontFamily: 'open-sans-regular'),
                       fillColor: Color(0xff80ff9b7b),
                       filled: true)),
-              SizedBox(
+              const SizedBox(
                 height: 17.0,
               ),
-              Text(
+              const Text(
                 "E-mail",
                 style: TextStyle(
                   decoration: TextDecoration.none,
@@ -289,16 +285,17 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
                   color: Colors.white,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 5.0,
               ),
               TextField(
                   autofocus: false,
                   keyboardType: TextInputType.emailAddress,
                   controller: txtControllerEmail,
+                  focusNode: txtFocusNodeEmail,
                   textInputAction: TextInputAction.next,
                   onSubmitted: (term) {
-                    txtFocusNodeCPF!.unfocus();
+                    txtFocusNodeEmail!.unfocus();
                     FocusScope.of(context).requestFocus(txtFocusNodeTelefoneFixo);
                   },
                   style: TextStyle(
@@ -363,6 +360,7 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
                   autofocus: false,
                   keyboardType: TextInputType.number,
                   controller: txtControllerTelefoneFixo,
+                  focusNode: txtFocusNodeTelefoneFixo,
                   textInputAction: TextInputAction.next,
                   onSubmitted: (term) {
                     txtFocusNodeTelefoneFixo!.unfocus();
@@ -429,7 +427,8 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
               TextField(
                   autofocus: false,
                   keyboardType: TextInputType.number,
-                  controller: txtControllerTelefoneFixo,
+                  controller: txtControllerWhatsapp,
+                  focusNode: txtFocusNodeWhatsapp,
                   textInputAction: TextInputAction.next,
                   onSubmitted: (term) {
                     txtFocusNodeWhatsapp!.unfocus();
@@ -497,7 +496,8 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
                   autofocus: false,
                   keyboardType: TextInputType.text,
                   controller: txtControllerNomeDaEmpresa,
-                  textInputAction: TextInputAction.next,
+                  focusNode: txtFocusNodeNomeDaEmpresa,
+                  textInputAction: TextInputAction.go,
                   onSubmitted: (term) {
                    // txtFocusNodeWhatsapp!.unfocus();
                    // FocusScope.of(context).requestFocus(txtFocusNodeNomeDaEmpresa);

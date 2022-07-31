@@ -4,7 +4,6 @@ import 'package:realm/realm.dart';
 import '../../data/app_scm_engenharia_mobile_bll.dart';
 import '../../data/tb_user.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
-import 'package:url_launcher/url_launcher.dart';
 import '../../models/operation.dart';
 import '../../models/user_response_model.dart';
 import '../../web_service/servico_mobile_service.dart';
@@ -22,6 +21,11 @@ class LoginState extends State<LoginView> {
 
   final txtControllerEmail = TextEditingController();
   final txtControllerPassword= TextEditingController();
+
+  FocusNode? focusNodeEmail;
+  FocusNode? focusNodePassword;
+
+
   late String errorTextControllerSenha, errorTextControllerEmail;
   bool isVisualizarSenha = false;
 
@@ -128,19 +132,19 @@ class LoginState extends State<LoginView> {
               padding: const EdgeInsets.only(top: 10.0, right: 30.0, left: 30.0, bottom: 50.0),child:  Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
-                Center(
-                  child: Image.asset(
-                    "assets/login_logo.png",
-                    height: 200.0,
-                    fit: BoxFit.fill,
-                  ),
+                Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: Image.asset(
+                  'assets/imagens/login_logo.png',
+                  height: 200.0,
+                  fit: BoxFit.fill,
                 ),
-                SizedBox(
-                  height: 25.0,
-                ),
-                Text(
+              ),
+            ),
+                const Text(
                   "E-mail",
                   style: TextStyle(
                     decoration: TextDecoration.none,
@@ -149,21 +153,22 @@ class LoginState extends State<LoginView> {
                     color: Colors.white,
                   ),
                 ),
-                SizedBox(
-                  height: 5.0,
-                ),
-                TextField(
+                Padding(child:TextField(
                     autofocus: false,
                     keyboardType: TextInputType.emailAddress,
                     controller: txtControllerEmail,
-                    textInputAction: TextInputAction.done,
+                    focusNode: focusNodeEmail,
+                    textInputAction: TextInputAction.next,
+                    onSubmitted: (term) {
+                      focusNodeEmail!.unfocus();
+                      FocusScope.of(context).requestFocus(focusNodePassword);
+                    },
                     style: TextStyle(
                         fontSize: 19,
                         fontFamily: 'open-sans-regular',
                         color: const Color(0xFF373737)),
-                    decoration: InputDecoration(
-                        contentPadding:
-                        EdgeInsets.fromLTRB(10.0, 12.0, 10.0, 12.0),
+                    decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.fromLTRB(10.0, 12.0, 10.0, 12.0),
                         focusedErrorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
                           borderSide: BorderSide(color: Colors.white, width: 0),
@@ -177,15 +182,15 @@ class LoginState extends State<LoginView> {
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
                           borderSide: BorderSide(color: Colors.white, width: 0),
                         ),
-                        prefixIcon: const Icon(
+                        prefixIcon: Icon(
                           Icons.email,
                           size: 20,
-                          color: const Color(0xffFFFFFF),
+                          color: Color(0xffFFFFFF),
                         ),
                         hintText: "Digite seu email",
                         border: InputBorder.none,
                         hintStyle: TextStyle(
-                            fontSize: 16.0, color: const Color(0xFF90ffffff)),
+                            fontSize: 16.0, color: Color(0xFF90ffffff)),
                         labelStyle: TextStyle(
                             fontSize: 16,
                             color: Color(0xFF90ffffff),
@@ -195,11 +200,8 @@ class LoginState extends State<LoginView> {
                             color: Colors.red,
                             fontFamily: 'open-sans-regular'),
                         fillColor: Color(0xff80ff9b7b),
-                        filled: true)),
-                SizedBox(
-                  height: 17.0,
-                ),
-                Text(
+                        filled: true)), padding: const EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0),),
+                const Text(
                   "Senha",
                   style: TextStyle(
                     decoration: TextDecoration.none,
@@ -208,21 +210,21 @@ class LoginState extends State<LoginView> {
                     color: Colors.white,
                   ),
                 ),
-                SizedBox(
-                  height: 5.0,
-                ),
-                TextField(
+                Padding(child:TextField(
                     autofocus: false,
                     keyboardType: TextInputType.text,
                     controller: txtControllerPassword,
-                    textInputAction: TextInputAction.done,
+                    textInputAction: TextInputAction.go,
+                    onSubmitted: (term) {
+                      focusNodeEmail!.unfocus();
+                      onLoggingIn();
+                    },
                     style: TextStyle(
                         fontSize: 19,
                         fontFamily: 'open-sans-regular',
                         color: const Color(0xFF373737)),
                     obscureText: true,
-                    decoration: InputDecoration(
-                        contentPadding:
+                    decoration: InputDecoration(contentPadding:
                         EdgeInsets.fromLTRB(10.0, 12.0, 10.0, 12.0),
                         focusedErrorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -255,36 +257,13 @@ class LoginState extends State<LoginView> {
                             color: Colors.red,
                             fontFamily: 'open-sans-regular'),
                         fillColor: Color(0xff80ff9b7b),
-                        filled: true)),
-                SizedBox(height: 40.0),
-                Center(
-                  child: InkWell(
-                    onTap: () async {
-                      onLoggingIn();
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.fromLTRB(0.0, 5.0, 20.0, 0.0),
-                      constraints: const BoxConstraints(maxWidth: 300),
-                      width: MediaQuery.of(context).size.width,
-                      height: 45,
-                      alignment: Alignment.center,
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(3)),
-                          color: Color(0xff8854d0)),
-                      child: const Text(
-                        'LOGIN',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontFamily: 'avenir-lt-std-roman',
-                          fontSize: 12.0,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 30.0),
+                        filled: true)), padding: const EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0),),
+                Padding(padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),child: TextButton(
+                  child: const Text(' LOGIN '),
+                  onPressed: () async {
+                    onLoggingIn();
+                  },
+                ),),
                 Center(
                   child: GestureDetector(
                     onTap: () {
@@ -319,7 +298,7 @@ class LoginState extends State<LoginView> {
                   width: 40,
                   height: 40,
                   image: AssetImage(
-                    'assets/ic_whatsapp.png',
+                    'assets/imagens/ic_whatsapp.png',
                   ),
                   fit: BoxFit.fill,
                 ),

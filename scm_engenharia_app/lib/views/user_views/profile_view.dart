@@ -15,7 +15,6 @@ class ProfileState extends State<ProfileView> {
 
 
 
-
   @override
   void initState() {
     super.initState();
@@ -28,7 +27,7 @@ class ProfileState extends State<ProfileView> {
     return Scaffold(
       appBar: AppBar(
         flexibleSpace: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
@@ -43,26 +42,31 @@ class ProfileState extends State<ProfileView> {
         automaticallyImplyLeading: true,
         centerTitle: true,
         elevation: 0.0,
-        title: Text(
-          "Dados",
+        title: const Text(
+          'Dados',
           textAlign: TextAlign.start,
           style: TextStyle(
               fontSize: 19.0,
               color: Color(0xffFFFFFF),
               fontFamily: "open-sans-regular"),
         ),
-        actions: <Widget>[],
       ),
       body: Container(
         alignment: Alignment.topCenter,
+        padding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
         child: SingleChildScrollView(
-          padding: EdgeInsets.fromLTRB(15.0, 25.0, 15.0, 0.0),
-          child: Column(
+          padding: const EdgeInsets.fromLTRB(15.0, 25.0, 15.0, 0.0),
+          child: Container(
+            constraints: const BoxConstraints(
+              minWidth: 200,
+              maxWidth: 800,
+            ),
+            child:  Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
-              TextFormField(
+              TextField(
                 autofocus: false,
                 keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.done,
@@ -133,36 +137,16 @@ class ProfileState extends State<ProfileView> {
               SizedBox(
                 height: 5.0,
               ),
-
               SizedBox(height: 25.0),
-              Center(
-                child: InkWell(
-                  onTap: () async {},
-                  child: Container(
-                    padding: EdgeInsets.fromLTRB(0.0, 5.0, 20.0, 0.0),
-                    constraints: BoxConstraints(maxWidth: 300),
-                    width: MediaQuery.of(context).size.width,
-                    height: 45,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(3)),
-                        color: Color(0xff8854d0)),
-                    child: Text(
-                      'ATUALIZAR',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontFamily: 'avenir-lt-std-roman',
-                        fontSize: 12.0,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              Padding(padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),child: TextButton(
+                child: const Text(' ATUALIZAR '),
+                onPressed: () async {
+
+                },
+              ),),
               SizedBox(height: 30.0),
             ],
-          ),
+          ),),
         ),
       ),
     );

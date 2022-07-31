@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show TargetPlatform, kIsWeb;
 import '../data/app_scm_engenharia_mobile_bll.dart';
@@ -6,6 +7,8 @@ import '../data/tb_user.dart';
 import '../help/navigation_service/route_paths.dart' as routes;
 import '../models/operation.dart';
 import 'package:scm_engenharia_app/help/global_user_logged.dart' as global_user_logged;
+import '../models/user_response_model.dart';
+import '../web_service/servico_mobile_service.dart';
 
 class SplashScreenView extends StatefulWidget {
   const SplashScreenView({Key? key}) : super(key: key);
@@ -26,10 +29,43 @@ class SplashScreenState extends State<SplashScreenView> {
         if (respUser.erro) {
           throw respUser.message!;
         } else if (respUser.result == null) {
-          Navigator.of(context).pushNamedAndRemoveUntil(routes.loginRoute, (Route<dynamic> route) => false);
+         Navigator.of(context).pushNamedAndRemoveUntil(routes.loginRoute, (Route<dynamic> route) => false);
         } else {
           global_user_logged.globalUserLogged = respUser.result as TbUser;
-          Navigator.of(context).pushNamedAndRemoveUntil(routes.menuNavigationRoute, (Route<dynamic> route) => false);
+          if (await Connectivity().checkConnectivity() == ConnectivityResult.none)
+          {
+            Navigator.of(context).pushNamedAndRemoveUntil(routes.menuNavigationRoute, (Route<dynamic> route) => false);
+          }
+          else {
+            Operation restWeb = await ServicoMobileService.onLogin(global_user_logged.globalUserLogged!.email,global_user_logged.globalUserLogged!.password);
+            if (restWeb.erro) {
+              throw (restWeb.message!);
+            } else if (restWeb.result == null) {
+              throw (restWeb.message!);
+            } else {
+              UserResponseModel resul = UserResponseModel.fromJson(restWeb.result as Map<String, dynamic>);
+              TbUser userResul = TbUser(global_user_logged.globalUserLogged!.idUserApp,
+                  resul.idUsuario!,
+                  resul.idPerfil!,
+                  resul.descNome!,
+                  global_user_logged.globalUserLogged!.password,
+                  resul.email!,
+                  resul.telefoneConsultor!,
+                  resul.dtUltacesso!,
+                  resul.empresa!,
+                  resul.periodoReferencia!,
+                  resul.cpf!);
+              Operation respBll = await AppScmEngenhariaMobileBll.instance.onUpdateUser(userResul);
+              if (respBll.erro) {
+                throw respBll.message!;
+              } else if (respBll.result == null) {
+                throw respBll.message!;
+              } else {
+                global_user_logged.globalUserLogged = userResul;
+                Navigator.of(context).pushNamedAndRemoveUntil(routes.menuNavigationRoute, (Route<dynamic> route) => false);
+              }
+            }
+          }
         }
       }
     } catch (error, s) {

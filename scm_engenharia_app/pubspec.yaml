@@ -101,12 +101,12 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/login_logo.png # logo negativa em branco
-    - assets/ic_whatsapp.png
-    - assets/img_error.png
-    - assets/img_integracao.png
+    - assets/imagens/login_logo.png # logo negativa em branco
+    - assets/imagens/ic_whatsapp.png
+    - assets/imagens/img_error.png
+    - assets/imagens/img_integracao.png
     - assets/img_sem_sinal.png
-    - assets/img_informacao.png
+    - assets/imagens/img_informacao.png
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
