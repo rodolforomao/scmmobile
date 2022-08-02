@@ -37,7 +37,7 @@ class SettingsState extends State<SettingsView> {
     return Scaffold(
       appBar: AppBar(
         flexibleSpace: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
@@ -52,15 +52,14 @@ class SettingsState extends State<SettingsView> {
         automaticallyImplyLeading: true,
         centerTitle: true,
         elevation: 0.0,
-        title: Text(
-          "Configurações",
+        title: const Text(
+          'Configurações',
           textAlign: TextAlign.start,
           style: TextStyle(
               fontSize: 19.0,
               color: Color(0xffFFFFFF),
-              fontFamily: "open-sans-regular"),
+              fontFamily: 'open-sans-regular'),
         ),
-        actions: <Widget>[],
       ),
       body: Container(
         alignment: Alignment.topCenter,

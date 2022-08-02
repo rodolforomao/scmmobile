@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:scm_engenharia_app/views/settings_view.dart';
 import 'package:scm_engenharia_app/views/sici_views/list_sici_sent_view.dart';
 import 'notification_views/notifications_view.dart';
+import 'settings_views/documents_view.dart';
 import 'sici_views/sici_fust_form_view.dart';
 
 class MenuNavigation extends StatefulWidget {
@@ -29,11 +30,11 @@ class _MenuNavigationState extends State<MenuNavigation> {
       case 0:
         return const ListSiciSentView();
       case 1:
-        //return new DocumentosPage();
+        return const DocumentsView();
       case 2:
 
       case 3:
-        return new NotificationsView();
+        return const NotificationsView();
       case 4:
         return new SettingsView();
       default:

@@ -108,8 +108,8 @@ class Componentes {
 
   static Future<List<Object>> OnListaGenero() async {
     List<String> listaGenero = [];
-    listaGenero.add("Selecione...");
-    listaGenero.add("Masculino");
+    listaGenero.add('Selecione...');
+    listaGenero.add('Masculino');
     listaGenero.add("Fermino");
     listaGenero.add("Outros");
     listaGenero.add("Não quero informar");
@@ -119,7 +119,7 @@ class Componentes {
   static logoffApp() async {
     try {
       Operation accessTokenBll = await  AppScmEngenhariaMobileBll.instance.onDeleteUser();
-      if (!accessTokenBll.erro) {
+      if (accessTokenBll.erro) {
         throw accessTokenBll.message!;
       } else if (accessTokenBll.result == null) {
         throw accessTokenBll.message!;

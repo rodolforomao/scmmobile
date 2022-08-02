@@ -7,7 +7,7 @@ import '../../models/operation.dart';
 import '../../web_service/servico_mobile_service.dart';
 import '../help_views/global_scaffold.dart';
 import 'package:scm_engenharia_app/help/global_user_logged.dart' as global_user_logged;
-import '../../help/navigation_service/route_paths.dart' as routes;
+
 
 
 class ChangePasswordView extends StatefulWidget {
@@ -58,10 +58,7 @@ class ChangePasswordState extends State<ChangePasswordView> {
             Operation restWeb = await ServicoMobileService.onUpdatePassword(txtControllerNewPassword.text);
             if (restWeb.erro) {
               throw (restWeb.message!);
-            } else if (restWeb.result == null) {
-              throw (restWeb.message!);
             } else {
-
               TbUser userResul = TbUser(global_user_logged.globalUserLogged!.idUserApp,
                 global_user_logged.globalUserLogged!.idUser,
                 global_user_logged.globalUserLogged!.idProfile,
@@ -72,15 +69,17 @@ class ChangePasswordState extends State<ChangePasswordView> {
                 global_user_logged.globalUserLogged!.dtLastAcess,
                 global_user_logged.globalUserLogged!.company,
                 global_user_logged.globalUserLogged!.referencePeriod,
-                global_user_logged.globalUserLogged!.cpf,);
+                global_user_logged.globalUserLogged!.cpf,
+                global_user_logged.globalUserLogged!.uf,);
               Operation respBll = await AppScmEngenhariaMobileBll.instance.onUpdateUser(userResul);
               if (respBll.erro) {
                 throw respBll.message!;
               } else if (respBll.result == null) {
                 throw respBll.message!;
               } else {
+                OnRealizandoOperacao('', false,context);
                 global_user_logged.globalUserLogged = userResul;
-                Navigator.of(context).pushNamedAndRemoveUntil(routes.menuNavigationRoute, (Route<dynamic> route) => false);
+                OnAlertaInformacaoSucesso(restWeb.message!,context);
               }
             }
           }

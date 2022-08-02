@@ -60,20 +60,19 @@ class LoginState extends State<LoginView> {
                  resul.dtUltacesso!,
                  resul.empresa!,
                  resul.periodoReferencia!,
-                 resul.cpf!);
+                 resul.cpf!,
+                 resul.uf!);
             Operation respBll = await AppScmEngenhariaMobileBll.instance.onSaveUser(userResul);
-            if (!respBll.erro) {
+            if (respBll.erro) {
               throw respBll.message!;
             } else if (respBll.result == null) {
               throw respBll.message!;
             } else {
               Navigator.of(context).pushNamedAndRemoveUntil(routes.menuNavigationRoute, (Route<dynamic> route) => false);
             }
-
             //NotificationHandler().unsubscribeFromTopic("scmengenhariaUserNLogado");
             //NotificationHandler().subscribeToTopic("nroCPF-" +Usuario.cpf);
             //NotificationHandler().subscribeToTopic("scmengenhariaUserAllLogado");
-
         }
       }
     } catch (error) {

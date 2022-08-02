@@ -16,6 +16,7 @@ class _TbUser {
   late String company;
   late String referencePeriod;
   late String cpf;
+  late String uf;
 }
 
 

@@ -1,14 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../models/quantitative_distribution_physical_accesses_service_model.dart';
+
 
 class PhysicalDistributionQuantitativeServiceView extends StatefulWidget {
 
-
+  QuantitativeDistributionPhysicalAccessesServiceModel? sDistribuicaoFisicosServicoQuantitativo;
+  PhysicalDistributionQuantitativeServiceView({Key? key, required this.sDistribuicaoFisicosServicoQuantitativo}) : super(key: key);
 
   @override
-  PhysicalDistributionQuantitativeServiceState createState() =>
-      PhysicalDistributionQuantitativeServiceState();
+  PhysicalDistributionQuantitativeServiceState createState() => PhysicalDistributionQuantitativeServiceState();
 }
 
 class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistributionQuantitativeServiceView> {

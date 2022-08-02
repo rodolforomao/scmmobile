@@ -57,7 +57,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       }
     case routes.physicalDistributionQuantitativeServiceRoute:
       {
-        return MaterialPageRoute(builder: (context) => PhysicalDistributionQuantitativeServiceView());
+        return MaterialPageRoute(builder: (context) => PhysicalDistributionQuantitativeServiceView(sDistribuicaoFisicosServicoQuantitativo: null,));
       }
     case routes.siciFustFormRoute:
       {
@@ -144,7 +144,7 @@ class RoutesPage {
 
       // Visualizações sici ----------------------------------------------------------------------------------------------------
       routes.listSiciSentRoute : (context) => const ListSiciSentView(),
-      routes.physicalDistributionQuantitativeServiceRoute : (context) => PhysicalDistributionQuantitativeServiceView(),
+      routes.physicalDistributionQuantitativeServiceRoute : (context) => PhysicalDistributionQuantitativeServiceView(sDistribuicaoFisicosServicoQuantitativo: null,),
       routes.siciFustFormRoute : (context) => SiciFustFormView(siciFileModel: null,),
 
       //Visualizações de notificação -------------------------------------------------------------------------------------------

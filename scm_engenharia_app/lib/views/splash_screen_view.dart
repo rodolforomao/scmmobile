@@ -54,7 +54,8 @@ class SplashScreenState extends State<SplashScreenView> {
                   resul.dtUltacesso!,
                   resul.empresa!,
                   resul.periodoReferencia!,
-                  resul.cpf!);
+                  resul.cpf!,
+                  resul.uf!);
               Operation respBll = await AppScmEngenhariaMobileBll.instance.onUpdateUser(userResul);
               if (respBll.erro) {
                 throw respBll.message!;

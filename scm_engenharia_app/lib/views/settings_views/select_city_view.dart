@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../../data/tb_uf_municipality.dart';
+import '../help_views/global_scaffold.dart';
+import '../help_views/global_view.dart';
 
 
 
@@ -17,44 +17,32 @@ class SelectCityView extends StatefulWidget {
 
 class SelectCityState extends State<SelectCityView>  {
 
-  List<TbUfMunicipality> ListMunicipio = [];
-  String _StatusTipoWidget = "view_realizando_busca", ErroInformacao = "";
 
-  Inc() async {
+  TypeView statusView = TypeView.viewLoading;
+  List<TbUfMunicipality> ListMunicipio = [];
+
+
+  onInc() async {
     try {
-      if(widget.sMunicipality == null)
+      if(widget.sMunicipality.isEmpty)
       {
-        setState(() {
-          _StatusTipoWidget = "view_erro_informacao";
-          ErroInformacao = "Não há  municípios selecionados";
-        });
+        throw ('Não há  municípios selecionados');
       }
-      else if(widget.sMunicipality.length == 0)
-      {
+      else {
         setState(() {
-          _StatusTipoWidget = "view_erro_informacao";
-          ErroInformacao = "Não há  municípios selecionados";
-        });
-      }
-      else
-      {
-        setState(() {
-          _StatusTipoWidget = "view_renderizar_tela";
           ListMunicipio =widget.sMunicipality;
         });
       }
     } catch (error) {
-      setState(() {
-        ErroInformacao = error.toString();
-        _StatusTipoWidget = "view_erro_informacao";
-      });
+      statusView = TypeView.viewErrorInformation;
+      GlobalScaffold.ErroInformacao = error.toString();
     }
   }
 
   @override
   void initState() {
     super.initState();
-    Inc();
+    onInc();
   }
 
   @override
@@ -66,8 +54,8 @@ class SelectCityState extends State<SelectCityView>  {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: PreferredSize(
+        preferredSize: Size.fromHeight(150.0),
         child: AppBar(
           backgroundColor: Colors.transparent,
           flexibleSpace: Container(
@@ -148,147 +136,52 @@ class SelectCityState extends State<SelectCityView>  {
               ),)
           ),
         ),
-        preferredSize: Size.fromHeight(150.0),
       ),
-      body: _TipoWidget(),);
+      body: viewType(MediaQuery.of(context).size.height),);
   }
 
-  _TipoWidget() {
-    switch (_StatusTipoWidget) {
-      case "view_realizando_busca":
-        {
-          return Container(
-              alignment: Alignment.center,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                color: Colors.white,
-              ),
-              constraints: BoxConstraints(
 
-                maxWidth: MediaQuery.of(context).size.width,
-              ),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    SizedBox(height: 30.0),
-                    Text(
-                      "Realizando busca dos municípios ...",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        decoration: TextDecoration.none,
-                        fontFamily: "avenir-lt-std-medium",
-                        fontSize: 15.0,
-                        color: Colors.black,
-                      ),
-                    ),
-                    SizedBox(height: 30.0),
-                    SizedBox(
-                      child: CircularProgressIndicator(
-                        valueColor:
-                        AlwaysStoppedAnimation<Color>(Color(0xff0071bc)),
-                      ),
-                      height: 70.0,
-                      width: 70.0,
-                    ),
-                    SizedBox(height: 20.0),
-                  ],
-                ),
-              ));
-        }
-        break;
-      case "view_renderizar_tela":
-        {
-          return Container(
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              color: Colors.white,
+  viewType(double maxHeight) {
+    switch (statusView) {
+      case TypeView.viewLoading:
+        return GlobalView.viewPerformingSearch(maxHeight,context);
+      case TypeView.viewErrorInformation:
+        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.ErroInformacao,context);
+      case TypeView.viewRenderInformation:
+        return Container(
+          width: MediaQuery.of(context).size.width,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+          ),
+          constraints: BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width,
+          ),
+          child: RefreshIndicator(
+            onRefresh: () async {
+              // OnGetCampanhas(context);
+            },
+            child: ListView.builder(
+              physics: const AlwaysScrollableScrollPhysics(),
+              scrollDirection: Axis.vertical,
+              itemCount: ListMunicipio.length,
+              itemBuilder: (BuildContext context, int index) => ListTile(
+                  onTap: () {
+                    // Navigator.pop(context,ListMunicipio[index],);
+                    Navigator.of(context).pop(ListMunicipio[index]);
+                    //Navigator.of(context).pop(context);
+                  },
+                  contentPadding: const EdgeInsets.fromLTRB(15.0, 7.0, 15.0, 7.0),
+                  title: Text(
+                    ListMunicipio[index].municipality,
+                    style: const TextStyle(
+                        fontSize: 19.0,
+                        color: Color(0xff333333),),
+                  ),
+                  trailing: const Icon(Icons.keyboard_arrow_right,
+                      color: Color(0xFF545454), size: 30.0)),
             ),
-            constraints: BoxConstraints(
-              maxWidth: MediaQuery.of(context).size.width,
-            ),
-            child: RefreshIndicator(
-              onRefresh: () async {
-                // OnGetCampanhas(context);
-              },
-              child: ListView.builder(
-                physics: const AlwaysScrollableScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                itemCount: ListMunicipio.length,
-                itemBuilder: (BuildContext context, int index) => ListTile(
-                    onTap: () {
-                      // Navigator.pop(context,ListMunicipio[index],);
-                      Navigator.of(context).pop(ListMunicipio[index]);
-                      //Navigator.of(context).pop(context);
-                    },
-                    contentPadding: EdgeInsets.fromLTRB(15.0, 7.0, 15.0, 7.0),
-                    title: Text(
-                      ListMunicipio[index].municipality,
-                      style: TextStyle(
-                          fontSize: 19.0,
-                          color: Color(0xff333333),
-                          fontFamily: "avenir-lt-std-medium"),
-                    ),
-                    trailing: Icon(Icons.keyboard_arrow_right,
-                        color: Color(0xFF545454), size: 30.0)),
-              ),
-            ),
-          );
-        }
-        break;
-      case "view_erro_informacao":
-        {
-          return Container(
-              alignment: Alignment.center,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                color: Colors.white,
-              ),
-              constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width,
-              ),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Image.asset(
-                      "assets/imagens/img_informacao.png",
-                      width: 110.0,
-                      height: 110.0,
-                      fit: BoxFit.fill,
-                    ),
-                    SizedBox(height: 45.0),
-                    Text(
-                      "Desculpe houve um problema.",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        decoration: TextDecoration.none,
-                        fontFamily: "avenir-lt-std-medium",
-                        fontSize: 20.0,
-                        color: Colors.black,
-                      ),
-                    ),
-                    SizedBox(height: 20.0),
-                    Text(
-                      ErroInformacao,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        decoration: TextDecoration.none,
-                        fontFamily: "avenir-lt-std-medium-oblique",
-                        fontSize: 15.0,
-                        color: Colors.black54,
-                      ),
-                    ),
-                    SizedBox(height: 20.0),
-                  ],
-                ),
-              ));
-        }
-        break;
+          ),
+        );
     }
   }
 }

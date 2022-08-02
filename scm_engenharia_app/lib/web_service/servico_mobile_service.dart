@@ -66,7 +66,7 @@ class ServicoMobileService {
       final respStr = await streamedResponse.stream.bytesToString();
       operacao.statusCode = streamedResponse.statusCode;
       if (streamedResponse.statusCode == 200) {
-        if (streamedResponse.stream.isEmpty == true) {
+        if (respStr.isEmpty) {
           throw (ApiRestInformation.problemOfComunication);
         }
         else
@@ -77,7 +77,7 @@ class ServicoMobileService {
           operacao.message = resp.message;
           operacao.result = resp.result;
         }
-        if (operacao.message == null) {
+        if (operacao.message == null && operacao.result == null) {
           throw ('Não foi identificado resposta');
         }
       } else {
@@ -223,7 +223,6 @@ class ServicoMobileService {
       }
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
-      var jsonResp = Componentes.removeAllHtmlTags(respStr);
       if (streamedResponse.statusCode == 200) {
         if (streamedResponse.stream.isEmpty == true) {
           throw (ApiRestInformation.problemOfComunication);
@@ -290,7 +289,7 @@ class ServicoMobileService {
     return operacao;
   }
 
-  Future<Operation> OnCadastraUsuario(String nome,String cpf,String email ,String telefone ,String telefoneWhatsapp ,String empresa,String uf) async {
+  static  Future<Operation> onRegisterUser(String nome,String cpf,String email ,String telefone ,String telefoneWhatsapp ,String empresa,String uf) async {
     Operation operacao = Operation();
     try {
       String? token = await ComponentsJWTToken.JWTTokenPadrao();
@@ -299,8 +298,7 @@ class ServicoMobileService {
         "token": token!,
       };
       http.MultipartRequest response;
-      response = http.MultipartRequest(
-          'POST', Uri.parse(Url + "/usuario/inserir_usuario_ws"));
+      response = http.MultipartRequest('POST', Uri.parse("$Url/usuario/inserir_usuario_ws"));
       response.headers.addAll(headers);
       response.fields['controllerNome'] = nome;
       response.fields['controllerCPF'] = cpf;

@@ -37,7 +37,7 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
   FocusNode? txtFocusNodeWhatsapp;
   FocusNode? txtFocusNodeNomeDaEmpresa;
 
-  List<UF> listUf = [];
+  List<Uf> listUf = [];
 
   onGetUfs() async {
     try {
@@ -54,9 +54,9 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
         else if (restWeb.result == null)
           throw (restWeb.message!);
         else {
-          ResultEnvironmentVariables result = restWeb.result as ResultEnvironmentVariables;
+          EnvironmentVariables result = restWeb.result as EnvironmentVariables;
           setState(() {
-            listUf = result.uF!;
+            listUf = result.uf!;
             statusView = TypeView.viewRenderInformation;
           });
         }

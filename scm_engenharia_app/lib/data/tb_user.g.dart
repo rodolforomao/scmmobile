@@ -20,6 +20,7 @@ class TbUser extends _TbUser with RealmEntity, RealmObject {
       String company,
       String referencePeriod,
       String cpf,
+      String uf,
       ) {
     RealmObject.set(this, 'idUserApp', idUserApp);
     RealmObject.set(this, 'idUser', idUser);
@@ -32,6 +33,7 @@ class TbUser extends _TbUser with RealmEntity, RealmObject {
     RealmObject.set(this, 'company', company);
     RealmObject.set(this, 'referencePeriod', referencePeriod);
     RealmObject.set(this, 'cpf', cpf);
+    RealmObject.set(this, 'uf', uf);
   }
 
   TbUser._();
@@ -92,6 +94,11 @@ class TbUser extends _TbUser with RealmEntity, RealmObject {
   set cpf(String value) => RealmObject.set(this, 'cpf', value);
 
   @override
+  String get uf => RealmObject.get<String>(this, 'uf') as String;
+  @override
+  set uf(String value) => RealmObject.set(this, 'uf', value);
+
+  @override
   Stream<RealmObjectChanges<TbUser>> get changes => RealmObject.getChanges<TbUser>(this);
 
   static SchemaObject get schema => _schema ??= _initSchema();
@@ -110,6 +117,7 @@ class TbUser extends _TbUser with RealmEntity, RealmObject {
       SchemaProperty('company', RealmPropertyType.string),
       SchemaProperty('referencePeriod', RealmPropertyType.string),
       SchemaProperty('cpf', RealmPropertyType.string),
+      SchemaProperty('uf', RealmPropertyType.string),
     ]);
   }
 }
