@@ -33,7 +33,7 @@ class NotificationsState extends State<NotificationsView> {
           throw (resultRest.message!);
         } else {
           setState(() {
-            listNotificationScmEngineering = resultRest.resultList!.map<NotificationScmEngineering>((json) => NotificationScmEngineering.fromJson(json)).toList();
+            listNotificationScmEngineering = resultRest.resultList.map<NotificationScmEngineering>((json) => NotificationScmEngineering.fromJson(json)).toList();
             statusView = TypeView.viewRenderInformation;
           });
         }

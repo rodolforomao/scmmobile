@@ -11,6 +11,25 @@ BuildContext? dialogContext;
 
 class GlobalView  {
 
+  static viewResponsiveGridTextField(BuildContext context,int itemCount,double maxCrossAxisExtent, List itemBuilder) {
+    return GridView.builder(
+      shrinkWrap: true,
+      itemCount: itemCount,
+      physics: const NeverScrollableScrollPhysics(),
+      padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: maxCrossAxisExtent,
+        //childAspectRatio: MediaQuery.of(context).size.width / (MediaQuery.of(context).size.height / 1.4),
+        mainAxisExtent: 55,
+        crossAxisSpacing: 20.0,
+        mainAxisSpacing: 20.0,
+      ),
+      itemBuilder: (context, index) {
+        return itemBuilder[index];
+      },
+    );
+  }
+
   static viewPerformingSearch(maxHeight, context) {
     return SingleChildScrollView(
       child: Container(

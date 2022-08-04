@@ -248,14 +248,13 @@ class ServicoMobileService {
     return operacao;
   }
 
-  Future<Operation> OnRecuperaLancamentosSici() async {
+  static Future<Operation> onRecoversSiciReleases() async {
     Operation operacao = Operation();
     try {
       String? token = await ComponentsJWTToken.JWTTokenPadrao();
       final response = await http.post(Uri.parse(Url + "/analise/recuperar_ws"),
               body: null,
               headers: {
-                //"Content-type": "multipart/form-data",
                 "token": token!,
               },
               encoding: Encoding.getByName("utf-8"))
@@ -270,11 +269,12 @@ class ServicoMobileService {
         }
         else
         {
-          Map<String, dynamic> map = jsonDecode(Componentes.removeAllHtmlTags(response.body));
+          Map<String, dynamic> map = jsonDecode(response.body);
           OperationJson resp = OperationJson.fromJson(map);
           operacao.erro = !resp.status!;
           operacao.message = resp.message;
           operacao.result = resp.result;
+          operacao.resultList = resp.result as List;
         }
         if (operacao.message == null) {
           throw ('Não foi identificado resposta');
@@ -438,7 +438,7 @@ class ServicoMobileService {
           operacao.erro = !resp.status!;
           operacao.message = resp.message;
           operacao.result = resp.result;
-          operacao.resultList = resp.result as List?;
+          operacao.resultList = resp.result as List;
         }
         if (operacao.message == null && operacao.result == null) {
           throw ('Não foi identificado resposta');

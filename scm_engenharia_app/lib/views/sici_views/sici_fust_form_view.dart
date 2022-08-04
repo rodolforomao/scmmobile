@@ -7,6 +7,7 @@ import '../../help/componentes.dart';
 import '../../models/quantitative_distribution_physical_accesses_service_model.dart';
 import '../../models/sici_file_model.dart';
 import '../help_views/global_scaffold.dart';
+import '../help_views/global_view.dart';
 
 
 class SiciFustFormView extends StatefulWidget {
@@ -64,7 +65,14 @@ class CurrencyPercentInputFormatter extends TextInputFormatter {
   }
 }
 
-class SiciFustFormState extends State<SiciFustFormView> {
+
+abstract class IsSilly {
+
+
+
+}
+
+class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
 
 
   SiciFileModel siciFileModel = SiciFileModel();
@@ -194,6 +202,34 @@ class SiciFustFormState extends State<SiciFustFormView> {
           txtControllerReferencePeriod.text = DateFormat('dd/MM/yyyy').format(DateTime.parse(widget.siciFileModel!.periodoReferencia!));
         }
 
+        // Razão social LTDA - ME.
+         txtControllerSocialReason.text = widget.siciFileModel!.razaoSocial!;
+        //Telefone Fixo:
+         txtControllerLandline.text = widget.siciFileModel!.telefoneFixo!;
+        //CNPJ:
+         txtControllerCnpj.text = widget.siciFileModel!.razaoSocial!;
+        //TELEFONE CELULAR:
+         txtControllerTelefoneMovel.text = widget.siciFileModel!.telefoneMovel!;
+        // Receita Bruta
+          txtControllerGrossRevenue.text = widget.siciFileModel!.receitaBruta!;
+        // Valor Simples
+         txtControllerSimpleValue.text = widget.siciFileModel!.simples!;
+        // Aliquota Simples %
+         txtControllerSimpleAliquot.text = widget.siciFileModel!.simplesPorc!;
+        // Valor ICMS
+         txtControllerICMSvalue.text = widget.siciFileModel!.icms!;
+        //ICMS (%)
+         txtControllerIcmsPorc.text = widget.siciFileModel!.icmsPorc!;
+        // Valor PIS
+         txtControllerPis.text = widget.siciFileModel!.pis!;
+        //PIS (%)
+         txtControllerPisPorc.text = widget.siciFileModel!.pisPorc!;
+        //Valor COFINS
+         txtControllerCofins.text = widget.siciFileModel!.cofins!;
+        // Receita Liquida
+         txtControllerNetRevenue.text = widget.siciFileModel!.receitaLiquida!;
+        // Observações Gerais
+         txtControllerGeneralObservations.text = widget.siciFileModel!.observacoes!;
 
       } else {
         siciFileModel.distribuicaoFisicosServicoQuantitativo = [];
@@ -698,7 +734,7 @@ class SiciFustFormState extends State<SiciFustFormView> {
                         textInputAction: TextInputAction.next,
                         keyboardType: TextInputType.number,
                         onSubmitted: (term) {
-                          focusNodeNetRevenue!.unfocus();
+                          focusNodeNetRevenue.unfocus();
                           FocusScope.of(context).requestFocus(focusNodeGeneralObservations);
                         },
                         inputFormatters: [
@@ -765,8 +801,8 @@ class SiciFustFormState extends State<SiciFustFormView> {
                             FocusScope.of(context).requestFocus(new FocusNode());
                             Navigator.push(
                                 context,
-                                new CupertinoPageRoute<QuantitativeDistributionPhysicalAccessesServiceModel>(
-                                    fullscreenDialog: true, builder: (BuildContext context) => new PhysicalDistributionQuantitativeServiceView(sDistribuicaoFisicosServicoQuantitativo: null))).then((value) {
+                                CupertinoPageRoute<QuantitativeDistributionPhysicalAccessesServiceModel>(
+                                    fullscreenDialog: true, builder: (BuildContext context) => PhysicalDistributionQuantitativeServiceView(sDistribuicaoFisicosServicoQuantitativo: null))).then((value) {
                               if (value != null) {
                                 if (siciFileModel.distribuicaoFisicosServicoQuantitativo!.length == 0) {
                                   value.index = 1;
@@ -805,7 +841,7 @@ class SiciFustFormState extends State<SiciFustFormView> {
                         builder: (BuildContext context) {
                           return ListView.builder(
                             scrollDirection: Axis.vertical,
-                            physics: NeverScrollableScrollPhysics(),
+                            physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemCount: siciFileModel
                                 .distribuicaoFisicosServicoQuantitativo == null ? 0 : siciFileModel.distribuicaoFisicosServicoQuantitativo!.length, itemBuilder: PhysicalDistributionServiceQuantitativeCard,
@@ -853,21 +889,401 @@ class SiciFustFormState extends State<SiciFustFormView> {
       Card(
         elevation: 0.9,
         color: Color(0xffFFFFFF),
-        child: Container(
-            alignment: Alignment.topLeft,
-            height: 700,
-            padding: const EdgeInsets.fromLTRB(20.0, 20.0, 0.0, 20.0),
-            decoration: BoxDecoration(
-              color: Color(0xffFFFFFF), //new Color.fromRGBO(255, 0, 0, 0.0),
-              borderRadius: new BorderRadius.circular(5.0),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-
-              ],
-            )),
+        child:GlobalView.viewResponsiveGridTextField(context,3,500,[
+          Flexible(
+            child: RichText(
+                textAlign: TextAlign.start,
+                softWrap: false,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                text: TextSpan(children: [
+                  TextSpan(
+                    text: 'UF' + "\n ",
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black,
+                      fontFamily: 'avenir-lt-std-roman',
+                      fontSize: 16.0,
+                    ),
+                  ),
+                  TextSpan(
+                    text: widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index].uf,
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black54,
+                      fontFamily: 'avenir-lt-std-roman',
+                      fontSize: 15.0,
+                    ),
+                  ),
+                ])),
+          ),
+          Flexible(
+            child: RichText(
+                textAlign: TextAlign.start,
+                softWrap: false,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                text: TextSpan(children: [
+                  TextSpan(
+                    text: 'Nome município' + "\n ",
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black,
+                      fontFamily: 'avenir-lt-std-roman',
+                      fontSize: 16.0,
+                    ),
+                  ),
+                  TextSpan(
+                    text: widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index].municipio,
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black54,
+                      fontFamily: 'avenir-lt-std-roman',
+                      fontSize: 15.0,
+                    ),
+                  ),
+                ])),
+          ),
+          Flexible(
+            child: RichText(
+                textAlign: TextAlign.start,
+                softWrap: false,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                text: TextSpan(children: [
+                  TextSpan(
+                    text: 'Nome tecnologia' + "\n ",
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black,
+                      fontFamily: 'avenir-lt-std-roman',
+                      fontSize: 16.0,
+                    ),
+                  ),
+                  TextSpan(
+                    text: widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index].tecnologia,
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black54,
+                      fontFamily: 'avenir-lt-std-roman',
+                      fontSize: 15.0,
+                    ),
+                  ),
+                ])),
+          ),
+          Flexible(
+            child: RichText(
+                textAlign: TextAlign.start,
+                softWrap: false,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                text: TextSpan(children: [
+                  TextSpan(
+                    text: 'Código IBGE' + "\n ",
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black,
+                      fontFamily: 'avenir-lt-std-roman',
+                      fontSize: 15.0,
+                    ),
+                  ),
+                  TextSpan(
+                    text:widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index]
+                        .cod_ibge,
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black54,
+                      fontFamily: 'avenir-lt-std-roman',
+                      fontSize: 16.0,
+                    ),
+                  ),
+                ])),
+          ),
+          Flexible(
+            child: RichText(
+                textAlign: TextAlign.start,
+                softWrap: false,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                text: TextSpan(children: [
+                  TextSpan(
+                    text: 'PF - 0 - 512 Kbps' + "\n ",
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black,
+                      fontFamily: 'avenir-lt-std-roman',
+                      fontSize: 16.0,
+                    ),
+                  ),
+                  TextSpan(
+                    text:widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index]
+                        .pf_0,
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black54,
+                      fontFamily: 'avenir-lt-std-roman',
+                      fontSize: 15.0,
+                    ),
+                  ),
+                ])),
+          ),
+          Flexible(
+            child: RichText(
+                textAlign: TextAlign.start,
+                softWrap: false,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                text: TextSpan(children: [
+                  TextSpan(
+                    text: 'PF - 512 - 2 Mbps' + "\n ",
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black,
+                      fontFamily: 'avenir-lt-std-roman',
+                      fontSize: 16.0,
+                    ),
+                  ),
+                  TextSpan(
+                    text: widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index]
+                        .pf_512,
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black54,
+                      fontFamily: 'avenir-lt-std-roman',
+                      fontSize: 15.0,
+                    ),
+                  ),
+                ])),
+          ),
+          Flexible(
+            child: RichText(
+                textAlign: TextAlign.start,
+                softWrap: false,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                text: TextSpan(children: [
+                  TextSpan(
+                    text: 'PF - 2 - 12 Mbps' + "\n ",
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black,
+                      fontFamily: 'avenir-lt-std-roman',
+                      fontSize: 16.0,
+                    ),
+                  ),
+                  TextSpan(
+                    text:widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index]
+                        .pf_2,
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black54,
+                      fontFamily: 'avenir-lt-std-roman',
+                      fontSize: 15.0,
+                    ),
+                  ),
+                ])),
+          ),
+          Flexible(
+            child: RichText(
+                textAlign: TextAlign.start,
+                softWrap: false,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                text: TextSpan(children: [
+                  TextSpan(
+                    text: 'PF - 12 - 34 Mbps' + "\n ",
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black,
+                      fontFamily: 'avenir-lt-std-roman',
+                      fontSize: 16.0,
+                    ),
+                  ),
+                  TextSpan(
+                    text:widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index]
+                        .pf_12,
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black54,
+                      fontFamily: 'avenir-lt-std-roman',
+                      fontSize: 15.0,
+                    ),
+                  ),
+                ])),
+          ),
+          Flexible(
+            child: RichText(
+                textAlign: TextAlign.start,
+                softWrap: false,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                text: TextSpan(children: [
+                  TextSpan(
+                    text: 'PF - Acima de 34 Mbps' + "\n ",
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black,
+                      fontFamily: 'avenir-lt-std-roman',
+                      fontSize: 16.0,
+                    ),
+                  ),
+                  TextSpan(
+                    text: widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index]
+                        .pf_34,
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black54,
+                      fontFamily: 'avenir-lt-std-roman',
+                      fontSize: 15.0,
+                    ),
+                  ),
+                ])),
+          ),
+          Flexible(
+            child: RichText(
+                textAlign: TextAlign.start,
+                softWrap: false,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                text: TextSpan(children: [
+                  TextSpan(
+                    text: 'PJ - 0 - 512 Kbps' + "\n ",
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black,
+                      fontFamily: 'avenir-lt-std-roman',
+                      fontSize: 16.0,
+                    ),
+                  ),
+                  TextSpan(
+                    text: widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index]
+                        .pj_0,
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black54,
+                      fontFamily: 'avenir-lt-std-roman',
+                      fontSize: 15.0,
+                    ),
+                  ),
+                ])),
+          ),
+          Flexible(
+            child: RichText(
+                textAlign: TextAlign.start,
+                softWrap: false,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                text: TextSpan(children: [
+                  TextSpan(
+                    text: 'PJ - 512 - 2 Mbps' + "\n ",
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black,
+                      fontFamily: 'avenir-lt-std-roman',
+                      fontSize: 16.0,
+                    ),
+                  ),
+                  TextSpan(
+                    text: widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index]
+                        .pj_512,
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black54,
+                      fontFamily: 'avenir-lt-std-roman',
+                      fontSize: 15.0,
+                    ),
+                  ),
+                ])),
+          ),
+          Flexible(
+            child: RichText(
+                textAlign: TextAlign.start,
+                softWrap: false,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                text: TextSpan(children: [
+                  TextSpan(
+                    text: 'PJ - 2 - 12 Mbps' + "\n ",
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black,
+                      fontFamily: 'avenir-lt-std-roman',
+                      fontSize: 16.0,
+                    ),
+                  ),
+                  TextSpan(
+                    text:widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index]
+                        .pj_2,
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black54,
+                      fontFamily: 'avenir-lt-std-roman',
+                      fontSize: 15.0,
+                    ),
+                  ),
+                ])),
+          ),
+          Flexible(
+            child: RichText(
+                textAlign: TextAlign.start,
+                softWrap: false,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                text: TextSpan(children: [
+                  TextSpan(
+                    text: 'PJ - 12 - 34 Mbps' + "\n ",
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black,
+                      fontFamily: 'avenir-lt-std-roman',
+                      fontSize: 16.0,
+                    ),
+                  ),
+                  TextSpan(
+                    text: widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index]
+                        .pj_12,
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black54,
+                      fontFamily: 'avenir-lt-std-roman',
+                      fontSize: 15.0,
+                    ),
+                  ),
+                ])),
+          ),
+          Flexible(
+            child: RichText(
+                textAlign: TextAlign.start,
+                softWrap: false,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                text: TextSpan(children: [
+                  TextSpan(
+                    text: 'PJ - Acima de 34 Mbps' + "\n ",
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black,
+                      fontFamily: 'avenir-lt-std-roman',
+                      fontSize: 16.0,
+                    ),
+                  ),
+                  TextSpan(
+                    text:widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index]
+                        .pj_34,
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black54,
+                      fontFamily: 'avenir-lt-std-roman',
+                      fontSize: 15.0,
+                    ),
+                  ),
+                ])),
+          ),
+          Divider(),
+        ].toList()),
       );
+
+
+
+
 }

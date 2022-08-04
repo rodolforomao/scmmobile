@@ -137,7 +137,7 @@ class LoginState extends State<LoginView> {
               padding: const EdgeInsets.all(8.0),
               child: Center(
                 child: Image.asset(
-                  'assets/imagens/login_logo.png',
+                  'assets/imagens/logo_white.png',
                   height: 200.0,
                   fit: BoxFit.fill,
                 ),

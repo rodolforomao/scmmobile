@@ -16,16 +16,16 @@ class AppThema {
         headline1: TextStyle(color: Colors.amber, fontSize: 72.0, fontWeight: FontWeight.bold),
         headline6: TextStyle(color: Colors.deepPurple, fontSize: 36.0, fontStyle: FontStyle.italic),
         bodyText2: TextStyle(
-          fontFamily: 'Myriad-Pro-Light',
+          fontFamily: 'avenir-lt-std-roman',
           fontWeight: FontWeight.bold,
           fontSize: 19.0,
           color: Color(0xff737373),
         ),//TextField
-        bodyText1: TextStyle(color: Colors.pink, fontSize: 14.0, fontFamily: 'Hind'),
+        bodyText1: TextStyle(color: Colors.pink, fontSize: 14.0, fontFamily: 'avenir-lt-std-roman'),
         subtitle1:TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w400,
-            fontFamily: 'Myriad-P2',
+            fontFamily: 'avenir-lt-std-roman',
             color: Color(0xFF000000)),//TextField
       ),
       inputDecorationTheme: const InputDecorationTheme(
@@ -47,22 +47,22 @@ class AppThema {
             fontWeight: FontWeight.w500,
             fontSize: 15.0,
             color:  Color(0xff093d6c),
-            fontFamily: 'Myriad-Hebrew-It-0'),
+            fontFamily: 'avenir-next-rounded-pro-regular'),
         hintStyle: TextStyle(
             fontWeight: FontWeight.w500,
             fontSize: 15.0,
             color:  Color(0xFFb8b8b8),
-            fontFamily: 'Myriad-Hebrew-It-0'),
+            fontFamily: 'avenir-next-rounded-pro-regular'),
         labelStyle: TextStyle(
             fontWeight: FontWeight.w400,
             fontSize: 17.0,
             color: Color(0xFFb8b8b8),
-            fontFamily: 'Myriad-Hebrew-Regular-0'),
+            fontFamily: 'open-sans-regular'),
         floatingLabelStyle: TextStyle(
             fontWeight: FontWeight.w400,
             fontSize: 15.0,
             color: Color(0xff50093d6c),
-            fontFamily: 'Myriad-Hebrew-Regular-0'),
+            fontFamily: 'open-sans-regular'),
         fillColor: Colors.white,
       ),
       appBarTheme: const AppBarTheme(
@@ -132,13 +132,13 @@ class AppThema {
         horizontalMargin: 30,
         dataRowHeight: 50,
         columnSpacing: 20.0,
-        headingTextStyle: TextStyle(
+        headingTextStyle: const TextStyle(
           fontFamily: 'Montserrat-Regular',
           fontWeight: FontWeight.bold,
           fontSize: 17,
           color: Color(0xff093d6c),
         ),
-        dataTextStyle: TextStyle(
+        dataTextStyle: const TextStyle(
           fontFamily: 'Montserrat-Regular',
           fontWeight: FontWeight.bold,
           fontSize: 15.0,
@@ -171,9 +171,9 @@ class AppThema {
           primary: const Color(0xFFffffff),
           textStyle: const TextStyle(
             fontWeight: FontWeight.w500,
-            fontFamily: 'Myriad-Arabic-Regular-0',
+            fontFamily: 'avenir-lt-std-roman',
             color:  Color(0xffFFFFFF),
-            fontSize: 25,
+            fontSize: 15,
           ),
           backgroundColor: const Color(0xFF7A388D),
           shape: RoundedRectangleBorder(
@@ -399,11 +399,11 @@ class AppThema {
           primary: const Color(0xFFffffff),
           textStyle: const TextStyle(
             fontWeight: FontWeight.w500,
-            fontFamily: 'Myriad-Arabic-Regular-0',
+            fontFamily: 'avenir-lt-std-roman',
             color:  Color(0xffFFFFFF),
-            fontSize: 25,
+            fontSize: 15,
           ),
-          backgroundColor: const Color(0xFF7A388D),
+          backgroundColor: const Color(0xFF2fdf84),
           shape: RoundedRectangleBorder(
             borderRadius:  BorderRadius.circular(5.0),
           ),
@@ -473,6 +473,7 @@ class StylesThemas {
         ? Color(0xff093d6c)
         : Colors.white;
   }
+
   //#region TextButton
 
 

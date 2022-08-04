@@ -27,7 +27,7 @@ Future<void> main() async {
     bool? darkModeOn = prefs.getBool('darkMode');
     print(darkModeOn);
     print('darkMode inc');
-    AppThema.themeNotifierState.value = ThemeModel(darkModeOn == true ? ThemeMode.dark : ThemeMode.light);
+    AppThema.themeNotifierState.value = ThemeModel(darkModeOn == false ? ThemeMode.dark : ThemeMode.light);
     runApp(MyApp());
   });
 }

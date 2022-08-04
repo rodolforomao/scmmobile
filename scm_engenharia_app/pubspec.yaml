@@ -49,11 +49,11 @@ dependencies:
   file_selector: ^0.9.0 #  MACOS, WEB , WINDOWS
 
   #Plugin microsoft
-  fluentui_system_icons: ^1.1.175 # ANDROID ,IOS, LINUX, MACOS, WEB, WINDOWS
+  fluentui_system_icons: ^1.1.177 # ANDROID ,IOS, LINUX, MACOS, WEB, WINDOWS
 
   #Plugin dart.dev
-  http: ^0.13.4 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
-  mockito: ^5.2.0 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  http: ^0.13.5 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  mockito: ^5.3.0 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
   intl: ^0.17.0 # ANDROID, IOS, LINUX,MACOS, WEB, WINDOWS
   html: ^0.15.0 # ANDROID, IOS, LINUX,MACOS, WEB, WINDOWS
 
@@ -73,7 +73,7 @@ dependencies:
   firebase_core: ^1.20.0 # ANDROID ,IOS, MACOS, WEB,
   firebase_crashlytics: ^2.8.6 # ANDROID ,IOS, MACOS
   firebase_messaging: ^12.0.1 # ANDROID,IOS, MACOS, WEB
-  firebase_analytics: ^9.2.1 # ANDROID,IOS,MACOS,WEB
+  firebase_analytics: ^9.3.0 # ANDROID,IOS,MACOS,WEB
 
   jaguar_jwt: ^3.0.0
 
@@ -101,7 +101,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/imagens/login_logo.png # logo negativa em branco
+    - assets/imagens/logo_white.png # logo negativa em branco
     - assets/imagens/ic_whatsapp.png
     - assets/imagens/img_error.png
     - assets/imagens/img_integracao.png
@@ -122,8 +122,19 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
+  fonts:
+    # -------------------------------------------------------------------------------  textButtonTheme
+    - family: avenir-lt-std-roman
+      fonts:
+        - asset: assets/fonts/avenir_lt/avenir-lt-std-roman.otf
+    # -------------------------------------------------------------------------------
+    - family: avenir-next-rounded-pro-regular
+      fonts:
+        - asset: assets/fonts/avenir_next/avenir-next-rounded-pro-regular.ttf
+    # -------------------------------------------------------------------------------
+
   # fonts:
-  #   - family: Schyler
+  #   - family: Schyler open-sans-regular
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf
   #       - asset: fonts/Schyler-Italic.ttf

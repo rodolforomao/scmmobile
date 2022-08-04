@@ -94,7 +94,7 @@ class SplashScreenState extends State<SplashScreenView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: const Color(0xFFF65100),
+        backgroundColor:  Colors.deepOrange,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           automaticallyImplyLeading: true,
@@ -120,7 +120,7 @@ class SplashScreenState extends State<SplashScreenView> {
                 ),
                 Center(
                   child: Image.asset(
-                    'assets/img/logo_geap_white_descricao.png',
+                    'assets/imagens/logo_white.png',
                     height: 80.0,
                     fit: BoxFit.fill,
                   ),

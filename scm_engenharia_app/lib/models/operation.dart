@@ -3,7 +3,7 @@ class Operation {
   String? message;
   late int statusCode;
   Object? result;
-  List? resultList;
+  late List resultList = [];
 }
 class OperationJson {
   late bool? status;
