@@ -1,5 +1,6 @@
 import 'package:realm/realm.dart';
 import 'package:scm_engenharia_app/data/tb_form_sici_fust.dart';
+import 'package:scm_engenharia_app/data/tb_quantitative_distribution_physical_accesses_service.dart';
 import '../models/operation.dart';
 import 'tb_uf_municipality.dart';
 import 'tb_user.dart';
@@ -535,15 +536,22 @@ class AppScmEngenhariaMobileBll {
 
   // Form Sici - Fust ---------------------------------------------------------------------------------
 
-  Future<Operation> onSaveFormSiciFust(TbFormSiciFust formSiciFust) async {
+  Future<Operation> onSaveFormSiciFust(TbFormSiciFust formSiciFust,List<TbQuantitativeDistributionPhysicalAccessesService> quantitativeDistributionPhysicalAccessesService) async {
     Operation operation = Operation();
     operation.result = null;
     operation.message = 'Operação realizada com sucesso';
     operation.erro = false;
     try {
+      int index = 0;
+      for (var prop in quantitativeDistributionPhysicalAccessesService) {
+        quantitativeDistributionPhysicalAccessesService[index].idFichaSiciApp =formSiciFust.idFichaSiciApp.toString();
+        index++;
+      }
       realm.write(() {
         realm.add<TbFormSiciFust>(formSiciFust);
+        realm.addAll<TbQuantitativeDistributionPhysicalAccessesService>(quantitativeDistributionPhysicalAccessesService);
       });
+     // onSaveDistributionQuantitativePhysicalAccessesService(quantitativeDistributionPhysicalAccessesService);
       operation.result = true;
     } catch (ex) {
       operation.erro = true;
@@ -678,14 +686,15 @@ class AppScmEngenhariaMobileBll {
 
 // DISTRIBUTION OF THE QUANTITATIVE OF PHYSICAL ACCESS IN SERVICE -------------------------------------
   
-  Future<Operation> onSaveDistributionQuantitativePhysicalAccessesService(TbUser user) async {
+  Future<Operation> onSaveDistributionQuantitativePhysicalAccessesService(List<TbQuantitativeDistributionPhysicalAccessesService> quantitativeDistributionPhysicalAccessesService) async {
     Operation operation = Operation();
     operation.result = null;
     operation.message = 'Operação realizada com sucesso';
     operation.erro = false;
     try {
+
       realm.write(() {
-        realm.add<TbUser>(user);
+        realm.addAll<TbQuantitativeDistributionPhysicalAccessesService>(quantitativeDistributionPhysicalAccessesService);
       });
       operation.result = true;
     } catch (ex) {

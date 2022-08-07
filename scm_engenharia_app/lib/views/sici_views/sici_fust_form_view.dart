@@ -2,8 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import "package:flutter/services.dart";
+import 'package:realm/realm.dart';
 import 'package:scm_engenharia_app/views/sici_views/physical_distribution_quantitative_service_view.dart';
+import '../../data/app_scm_engenharia_mobile_bll.dart';
+import '../../data/tb_form_sici_fust.dart';
+import '../../data/tb_quantitative_distribution_physical_accesses_service.dart';
 import '../../help/componentes.dart';
+import '../../models/operation.dart';
 import '../../models/quantitative_distribution_physical_accesses_service_model.dart';
 import '../../models/sici_file_model.dart';
 import '../help_views/global_scaffold.dart';
@@ -74,6 +79,8 @@ abstract class IsSilly {
 
 class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
 
+  final resulFormSiciFust = TbFormSiciFust(ObjectId(),'0','S','0','','','','','','','','','','','','','','','','','',);
+  late List<TbQuantitativeDistributionPhysicalAccessesService> quantitativeDistributionPhysicalAccessesService;
 
   SiciFileModel siciFileModel = SiciFileModel();
   List<String> Uf = [];
@@ -135,10 +142,44 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
 
    onSaveLocalDbForm()  async {
     try {
+      if (txtControllerCnpj.text.isEmpty) throw ("O campo cnpj é obrigatório");
+      resulFormSiciFust.periodoReferencia = txtControllerReferencePeriod.text;
+      resulFormSiciFust.isSincronizar = "S";
+      resulFormSiciFust.cnpj = txtControllerCnpj.text;
+      if (txtControllerSocialReason.text.isEmpty)
+        throw ("O campo Razão Social é obrigatório");
+      resulFormSiciFust.razaoSocial = txtControllerSocialReason.text;
+      if (txtControllerTelefoneMovel.text.isEmpty && txtControllerLandline.text.isEmpty) {
+        throw ("Pelo menos um campo 'Telefone' é obrigatório");
+      }
+      resulFormSiciFust.telefoneMovel = txtControllerTelefoneMovel.text;
+      resulFormSiciFust.telefoneFixo = txtControllerLandline.text;
+      resulFormSiciFust.receitaBruta = txtControllerGrossRevenue.text;
+      resulFormSiciFust.receitaLiquida = txtControllerNetRevenue.text;
+      resulFormSiciFust.simples = txtControllerSimpleValue.text;
+      resulFormSiciFust.simplesPorc = txtControllerSimpleAliquot.text;
+      resulFormSiciFust.icms = txtControllerICMSvalue.text;
+      resulFormSiciFust.icmsPorc = txtControllerIcmsPorc.text;
+      resulFormSiciFust.pis = txtControllerPis.text;
+      resulFormSiciFust.pisPorc = txtControllerPisPorc.text;
+      resulFormSiciFust.cofins = txtControllerCofins.text;
+      resulFormSiciFust.cofinsPorc = txtControllerPisPorc.text;
+      resulFormSiciFust.observacoes = txtControllerGeneralObservations.text;
+     // if (_FichaSici.distribuicaoFisicosServicoQuantitativo.length == 0) {
+     //   throw ("Distribuição do quantitativo de acessos físicos em serviço é obrigatório,favor adicionar.");
+     // }
+      Operation respFormSiciFust = await AppScmEngenhariaMobileBll.instance.onSaveFormSiciFust(resulFormSiciFust,quantitativeDistributionPhysicalAccessesService);
+      if (respFormSiciFust.erro) {
+        throw respFormSiciFust.message!;
+      } else if (respFormSiciFust.result == null) {
+        throw respFormSiciFust.message!;
+      } else {
+
+      }
 
     } catch (error) {
-     // onRealizandoOperacao('', false, context);
-     // onAlertaInformacaoSucesso(error.toString(), context);
+      OnRealizandoOperacao('', false,context);
+      OnAlertaInformacaoErro(error.toString(),context);
     }
   }
 
@@ -239,8 +280,6 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
       //Navigator.of(context, rootNavigator: true).pop();
     }
   }
-
-
 
   @override
   void initState() {
@@ -1249,8 +1288,5 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
           Divider(),
         ].toList()),
       );
-
-
-
-
+  
 }
