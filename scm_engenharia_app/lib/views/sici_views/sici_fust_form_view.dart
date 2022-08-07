@@ -272,21 +272,17 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
           automaticallyImplyLeading: true,
           elevation: 0.0,
           title: const Text(
-            "Formulário Sici - Fust",
+            'Formulário Sici - Fust',
             textAlign: TextAlign.start,
-            style: TextStyle(
-                fontSize: 19.0,
-                color: Color(0xffFFFFFF),
-                fontFamily: "open-sans-regular"),
           ),
           actions: <Widget>[
             InkWell(
                 onTap: () {
                   onSaveLocalDbForm();
                 },
-                child: Center(
+                child: const Center(
                   child: Text(
-                    'Salvar   ',
+                    ' Salvar   ',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -307,19 +303,38 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
               return Row(
                 children: <Widget>[
                   Visibility(
-                    visible: current_step == 2 ? false : true,
-                    child: FlatButton(
-                      color: Color(0xff018a8a),
-                      //`Icon` to display
+                    visible: current_step > 0 ? true : false,
+                    child: TextButton(
+                      onPressed: () async {
+                        setState(() {
+                          switch (current_step) {
+                            case 2:
+                              current_step = 1;
+                              break;
+                            case 1:
+                              current_step = 0;
+                              break;
+                          }
+                        });
+                      },
                       child: const Text(
-                        'Próximo',
+                        'Cancelar',
                         style: TextStyle(
                           fontWeight: FontWeight.w500,
-                          color: Colors.white,
+                          color: Color(0xff018a8a),
                           fontFamily: 'avenir-lt-std-roman',
                           fontSize: 15.0,
                         ),
                       ),
+                    ),
+                  ),
+                   const Padding(
+                    padding:  EdgeInsets.all(10),
+                  ),
+                  Visibility(
+                    visible: current_step == 2 ? false : true,
+                    child: FlatButton(
+                      color: Color(0xff018a8a),
                       //`Text` to display
                       onPressed: () async {
                         setState(() {
@@ -336,44 +351,18 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                       shape: new RoundedRectangleBorder(
                         borderRadius: new BorderRadius.circular(5.0),
                       ),
-                    ),
-                  ),
-                  new Padding(
-                    padding: new EdgeInsets.all(10),
-                  ),
-                  Visibility(
-                    visible: current_step > 0 ? true : false,
-                    child: FlatButton(
-                      onPressed: () async {
-                        setState(() {
-                          switch (current_step) {
-                            case 2:
-                              current_step = 1;
-                              break;
-                            case 1:
-                              current_step = 0;
-                              break;
-                          }
-                        });
-                      },
-                      child: Text(
-                        'Cancelar',
+                      //`Icon` to display
+                      child: const Text(
+                        'Próximo',
                         style: TextStyle(
                           fontWeight: FontWeight.w500,
-                          color: Color(0xff018a8a),
+                          color: Colors.white,
                           fontFamily: 'avenir-lt-std-roman',
                           fontSize: 15.0,
                         ),
                       ),
-                      textColor: Color(0xff018a8a),
-                      shape: RoundedRectangleBorder(
-                          side: BorderSide(
-                              color: Color(0xff018a8a),
-                              width: 1,
-                              style: BorderStyle.solid),
-                          borderRadius: BorderRadius.circular(5.0)),
                     ),
-                  )
+                  ),
                 ],
               );
             },
@@ -381,7 +370,7 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
               Step(
                 title: SizedBox(
                   width: MediaQuery.of(context).size.width - 90,
-                  child: Text(
+                  child: const Text(
                     "INFORMAÇÕES DA EMPRESA",
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -778,7 +767,7 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
               Step(
                 title: SizedBox(
                   width: MediaQuery.of(context).size.width - 90,
-                  child: Text(
+                  child: const Text(
                     "DISTRIBUIÇÃO DO QUANTITATIVO DE ACESSOS FÍSICOS EM SERVIÇO",
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -795,47 +784,25 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(height: 30.0),
-                      Center(
-                        child: InkWell(
-                          onTap: () async {
-                            FocusScope.of(context).requestFocus(new FocusNode());
-                            Navigator.push(
-                                context,
-                                CupertinoPageRoute<QuantitativeDistributionPhysicalAccessesServiceModel>(
-                                    fullscreenDialog: true, builder: (BuildContext context) => PhysicalDistributionQuantitativeServiceView(sDistribuicaoFisicosServicoQuantitativo: null))).then((value) {
-                              if (value != null) {
-                                if (siciFileModel.distribuicaoFisicosServicoQuantitativo!.length == 0) {
-                                  value.index = 1;
-                                  siciFileModel.distribuicaoFisicosServicoQuantitativo = [];
-                                } else
-                                  value.index = siciFileModel.distribuicaoFisicosServicoQuantitativo!.length + 1;
-                                siciFileModel.distribuicaoFisicosServicoQuantitativo!.add(value);
-                              }
-                            });
-                          },
-                          child: Container(
-                            padding: EdgeInsets.fromLTRB(0.0, 5.0, 20.0, 0.0),
-                            constraints: BoxConstraints(maxWidth: 300),
-                            width: MediaQuery.of(context).size.width,
-                            height: 45,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(3)),
-                                color: Color(0xff8854d0)),
-                            child: Text(
-                              'Adicionar',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white,
-                                fontFamily: 'avenir-lt-std-roman',
-                                fontSize: 18.0,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+                      Center(child: Padding(padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),child: TextButton(
+                        child: const Text(' Adicionar '),
+                        onPressed: () async {
+                          FocusScope.of(context).requestFocus(new FocusNode());
+                          Navigator.push(
+                              context,
+                              CupertinoPageRoute<QuantitativeDistributionPhysicalAccessesServiceModel>(
+                                  fullscreenDialog: true, builder: (BuildContext context) => PhysicalDistributionQuantitativeServiceView(sDistribuicaoFisicosServicoQuantitativo: null))).then((value) {
+                            if (value != null) {
+                              if (siciFileModel.distribuicaoFisicosServicoQuantitativo!.length == 0) {
+                                value.index = 1;
+                                siciFileModel.distribuicaoFisicosServicoQuantitativo = [];
+                              } else
+                                value.index = siciFileModel.distribuicaoFisicosServicoQuantitativo!.length + 1;
+                              siciFileModel.distribuicaoFisicosServicoQuantitativo!.add(value);
+                            }
+                          });
+                        },
+                      ),),),
                       SizedBox(height: 30.0),
                       Builder(
                         builder: (BuildContext context) {

@@ -83,7 +83,7 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
         centerTitle: true,
         elevation: 0.0,
         title: const Text(
-          "Formulário Sici - Fust",
+          'Formulário Sici - Fust',
           textAlign: TextAlign.start,
           style: TextStyle(
               fontSize: 19.0,
@@ -378,34 +378,12 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
               ],
             ),
             SizedBox(height: 30.0),
-            Center(
-              child: InkWell(
-                onTap: () async {
-                  FocusScope.of(context).requestFocus(new FocusNode());
+            Center(child: Padding(padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),child: TextButton(
+              child: const Text(' Adicionar '),
+              onPressed: () async {
 
-                },
-                child: Container(
-                  padding: EdgeInsets.fromLTRB(0.0, 5.0, 20.0, 0.0),
-                  constraints: BoxConstraints(maxWidth: 300),
-                  width: MediaQuery.of(context).size.width,
-                  height: 45,
-                  alignment: Alignment.center,
-                  decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(3)),
-                      color: Color(0xff8854d0)),
-                  child: Text(
-                    'Adicionar',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white,
-                      fontFamily: 'avenir-lt-std-roman',
-                      fontSize: 18.0,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+              },
+            ),),),
             SizedBox(height: 30.0),
           ],
         ),

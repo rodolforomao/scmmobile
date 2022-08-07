@@ -25,7 +25,7 @@ class DocumentsState extends State<DocumentsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: new Size(MediaQuery.of(context).size.width, 50.0),
+        preferredSize: Size(MediaQuery.of(context).size.width, 50.0),
         child: AppBar(
           flexibleSpace: Container(
             decoration: const BoxDecoration(
@@ -55,14 +55,14 @@ class DocumentsState extends State<DocumentsView> {
       ),
       body: Container(
         alignment: Alignment.center,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.white,
         ),
         constraints: BoxConstraints(
           minHeight: MediaQuery.of(context).size.height,
         ),
         child: SingleChildScrollView(
-          padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+          padding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
