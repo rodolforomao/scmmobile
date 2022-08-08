@@ -175,7 +175,7 @@ class AppThema {
             color:  Color(0xffFFFFFF),
             fontSize: 15,
           ),
-          backgroundColor: const Color(0xFF7A388D),
+          backgroundColor: const Color(0xff30bc8c),
           shape: RoundedRectangleBorder(
             borderRadius:  BorderRadius.circular(5.0),
           ),

@@ -111,7 +111,6 @@ class GlobalView  {
 
 }
 
-
 class OnExitApp {
   final BuildContext context;
   OnExitApp(this.context) {
