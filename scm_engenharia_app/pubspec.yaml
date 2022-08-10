@@ -62,8 +62,8 @@ dependencies:
 
   #Plugin Flutter Community
   connectivity_plus: ^2.3.6 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
-  #device_info_plus: ^4.0.1 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
-  #package_info_plus: ^1.4.3 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  #device_info_plus: ^4.0.3 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  #package_info_plus: ^1.4.3+1 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
   #share_plus: ^4.0.10 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
 
   #Plugin google
@@ -75,8 +75,9 @@ dependencies:
   firebase_messaging: ^12.0.1 # ANDROID,IOS, MACOS, WEB
   firebase_analytics: ^9.3.0 # ANDROID,IOS,MACOS,WEB
 
+  #Plugin outros
   jaguar_jwt: ^3.0.0
-
+  flutter_svg: ^1.1.3
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -107,6 +108,7 @@ flutter:
     - assets/img/img_integracao.png
     - assets/img/img_sem_sinal.png
     - assets/img/img_informacao.png
+    - assets/scm_loading.svg
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
@@ -128,9 +130,9 @@ flutter:
       fonts:
         - asset: assets/fonts/avenir_lt/avenir-lt-std-roman.otf
     # -------------------------------------------------------------------------------
-    - family: avenir-next-rounded-pro-regular
+    - family: avenir-next-rounded-pro-medium-lt
       fonts:
-        - asset: assets/fonts/avenir_next/avenir-next-rounded-pro-regular.ttf
+        - asset: assets/fonts/avenir_next/avenir-next-rounded-pro-medium-lt.ttf
     # -------------------------------------------------------------------------------
 
   # fonts:

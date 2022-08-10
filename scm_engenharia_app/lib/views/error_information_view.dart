@@ -31,19 +31,6 @@ class ErrorInformationState extends State<ErrorInformationView> {
       appBar: PreferredSize(
         preferredSize: Size(MediaQuery.of(context).size.width, 50.0),
         child: AppBar(
-          flexibleSpace: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: <Color>[
-                  Color(0xFFF65100),
-                  Color(0xFFf5821f),
-                  Color(0xFFff8c49),
-                ],
-              ),
-            ),
-          ),
           centerTitle: true,
           elevation: 0.0,
           title: const Text(

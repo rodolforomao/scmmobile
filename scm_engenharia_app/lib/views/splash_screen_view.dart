@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show TargetPlatform, kIsWeb;
+import 'package:flutter_svg/svg.dart';
 import '../data/app_scm_engenharia_mobile_bll.dart';
 import '../data/tb_user.dart';
 import '../help/navigation_service/route_paths.dart' as routes;
@@ -119,10 +120,9 @@ class SplashScreenState extends State<SplashScreenView> {
                   height: 20.0,
                 ),
                 Center(
-                  child: Image.asset(
-                    'assets/img/logo_white.png',
-                    height: 80.0,
-                    fit: BoxFit.fill,
+                  child: Theme(
+                    data: Theme.of(context).copyWith( colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Color(0xfff5821f))),
+                    child: const CircularProgressIndicator(),
                   ),
                 ),
                 const SizedBox(

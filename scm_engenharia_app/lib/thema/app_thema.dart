@@ -12,21 +12,18 @@ class AppThema {
       primaryColorLight: const Color(0xffFFFFFF),
       splashColor: const Color(0xff3F7EC1),
       iconTheme: const IconThemeData(color: Color(0xFF545454)),
-      textTheme: const TextTheme(
-        headline1: TextStyle(color: Colors.amber, fontSize: 72.0, fontWeight: FontWeight.bold),
-        headline6: TextStyle(color: Colors.deepPurple, fontSize: 36.0, fontStyle: FontStyle.italic),
-        bodyText2: TextStyle(
-          fontFamily: 'avenir-lt-std-roman',
-          fontWeight: FontWeight.bold,
-          fontSize: 19.0,
-          color: Color(0xff737373),
-        ),//TextField
-        bodyText1: TextStyle(color: Colors.pink, fontSize: 14.0, fontFamily: 'avenir-lt-std-roman'),
-        subtitle1:TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w400,
-            fontFamily: 'avenir-lt-std-roman',
-            color: Color(0xFF000000)),//TextField
+      textTheme:  const TextTheme(
+        //labelMedium,
+         headline1:TextStyle(color:Color(0xff096c40), fontSize: 72.0, fontWeight: FontWeight.bold),
+         headline2:TextStyle(color: Color(0xff6c4009), fontSize: 72.0, fontWeight: FontWeight.bold),
+         headline3:TextStyle(color: Color(0xffA3095E), fontSize: 72.0, fontWeight: FontWeight.bold),
+         headline4:TextStyle(color: Color(0xff193C70), fontSize: 72.0, fontWeight: FontWeight.bold),
+         headline5:TextStyle(color: Color(0xffB28DD1), fontSize: 72.0, fontWeight: FontWeight.bold),
+         headline6:TextStyle(color: Color(0xff6b8e23), fontSize: 72.0, fontWeight: FontWeight.bold),
+         subtitle1:TextStyle(color: Color(0xff653b10), fontSize: 72.0, fontWeight: FontWeight.bold),
+         subtitle2:TextStyle(color:  Color(0xff0c5856), fontSize: 72.0, fontWeight: FontWeight.bold),
+         bodyText1:TextStyle(color: Color(0xffe4b0aa), fontSize: 72.0, fontWeight: FontWeight.bold),
+         bodyText2:TextStyle(color: Color(0xff284521),fontSize: 72.0, fontWeight: FontWeight.bold),
       ),
       inputDecorationTheme: const InputDecorationTheme(
         focusedErrorBorder: OutlineInputBorder(
@@ -66,8 +63,8 @@ class AppThema {
         fillColor: Colors.white,
       ),
       appBarTheme: const AppBarTheme(
-        color: Color(0xff3F7EC1),
-        shadowColor: Color(0xff3F7EC1),
+        color: Color(0xFFF65100),
+        shadowColor: Color(0xFFf5821f),
         iconTheme: IconThemeData(
           color: Color(0xffFFFFFF),
         ),
@@ -76,7 +73,7 @@ class AppThema {
             fontSize: 19.0,
             fontWeight: FontWeight.w500,
             color: Color(0xffFFFFFF),
-            fontFamily: 'Myriad-Pro-SemiExt-It'),
+            fontFamily: 'venir-next-rounded-pro-medium-lt'),
       ),
       bottomAppBarTheme: const BottomAppBarTheme(
         color: Color(0xffFFFFFF),

@@ -118,7 +118,7 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
       } else if (thereisAnEnvironmentVariable.result == true) {
         Navigator.push(
             context,
-            new CupertinoPageRoute(
+            CupertinoPageRoute(
                 fullscreenDialog: true,
                 builder: (BuildContext context) =>
                 new EnvironmentVariableView())).then((value) {
@@ -246,19 +246,6 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: <Color>[
-                Color(0xFFF65100),
-                Color(0xFFf5821f),
-                Color(0xFFff8c49),
-              ],
-            ),
-          ),
-        ),
         automaticallyImplyLeading: true,
         centerTitle: true,
         elevation: 0.0,

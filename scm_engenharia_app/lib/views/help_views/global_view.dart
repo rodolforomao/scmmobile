@@ -49,10 +49,9 @@ class GlobalView  {
                 margin: const EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 15.0),
                 height: 100.0,
                 width: 100.0,
-                child: Image.asset(
-                  'assets/img/geap_loading.gif',
-                  height: 100.0,
-                  width: 100.0,
+                child: Theme(
+                  data: Theme.of(context).copyWith( colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Color(0xfff5821f))),
+                  child: const CircularProgressIndicator(),
                 ),
               ),
             ),

@@ -15,37 +15,35 @@ class AppScmEngenhariaMobileBll {
 
   late Realm realm;
   AppScmEngenhariaMobileBll() {
-    final config = Configuration.local([TbUser.schema ,TbUfMunicipality.schema]);
+    final config = Configuration.local([TbUser.schema ,TbUfMunicipality.schema ,TbUf.schema ,TbTechnology.schema ,TbFormSiciFust.schema ,TbQuantitativeDistributionPhysicalAccessesService.schema]);
     realm = Realm(config);
   }
 
   Future<Operation> onThereisAnEnvironmentVariable() async {
     Operation operation = Operation();
-    operation.result = null;
+    operation.result = false;
     operation.message = 'Operação realizada com sucesso';
     operation.erro = false;
     try {
-
       final tbUf = realm.all<TbUf>();
       final tbUfMunicipality = realm.all<TbUfMunicipality>();
       final tbTechnology = realm.all<TbTechnology>();
       if(tbUf.isEmpty)
       {
-        throw ('Não a uf cadastrados');
+        operation.result = true;
       }
-      if(tbUfMunicipality.isEmpty)
+      else if(tbUfMunicipality.isEmpty)
       {
-        throw ('Não a municípios cadastrados');
+        operation.result = true;
       }
-      if(tbTechnology.isEmpty)
+      else if (tbTechnology.isEmpty)
       {
-        throw ('Não a tecnologias cadastrados');
+        operation.result = true;
       }
-      operation.result = false;
     } catch (ex) {
       operation.erro = true;
       operation.result = true;
-      operation.message = ' , erro ' + ex.toString();
+      operation.message = 'Erro $ex';
     }
     return operation;
   }

@@ -1,5 +1,9 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import '../../data/tb_uf_municipality.dart';
+import '../../models/environment_variables.dart';
+import '../../models/operation.dart';
+import '../../web_service/servico_mobile_service.dart';
 import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
 
@@ -17,7 +21,19 @@ class EnvironmentVariableState extends State<EnvironmentVariableView>  {
 
   onInc() async {
     try {
-
+      if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+        OnAlertaInformacaoErro('Verifique sua conexão com a internet e tente novamente.',context);
+      } else {
+        Operation resultRest = await ServicoMobileService.onEnvironmentVariables();
+        if (resultRest.erro) {
+          throw (resultRest.message!);
+        } else {
+          setState(() {
+            EnvironmentVariables  result = resultRest.result as EnvironmentVariables;
+            statusView = TypeView.viewRenderInformation;
+          });
+        }
+      }
     } catch (error) {
       statusView = TypeView.viewErrorInformation;
       GlobalScaffold.ErroInformacao = error.toString();
@@ -57,16 +73,13 @@ class EnvironmentVariableState extends State<EnvironmentVariableView>  {
         centerTitle: true,
         elevation: 0.0,
         title: const Text(
-          "Variável de ambiente",
+          'Variável de ambiente',
           textAlign: TextAlign.start,
           style: TextStyle(
               fontSize: 19.0,
               color: Color(0xffFFFFFF),
               fontFamily: "open-sans-regular"),
         ),
-        actions: <Widget>[
-
-        ],
       ),
       body: viewType(MediaQuery.of(context).size.height),
     );

@@ -295,19 +295,6 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          flexibleSpace: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: <Color>[
-                  Color(0xFFF65100),
-                  Color(0xFFf5821f),
-                  Color(0xFFff8c49),
-                ],
-              ),
-            ),
-          ),
           automaticallyImplyLeading: true,
           elevation: 0.0,
           title: const Text(
