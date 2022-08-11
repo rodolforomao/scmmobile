@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
 import '../help/navigation_service/route_paths.dart' as routes;
 import 'help_views/global_view.dart';
 
@@ -11,7 +10,7 @@ class SettingsView extends StatefulWidget {
 }
 
 class SettingsState extends State<SettingsView> {
-  bool IsTemaEscuroAppOn = false, IsNotificacoesAtivarDesativada = false;
+  bool isTemaEscuroAppOn = false, isNotificacoesAtivarDesativada = false;
 
 
   @override
@@ -20,88 +19,59 @@ class SettingsState extends State<SettingsView> {
 
   }
 
-  Future<void> OnSwitchNotificacoesAtivarDesativadaChanged(bool value) async {
+  onSwitchNotificacoesAtivarDesativadaChanged(bool value) async {
     try {
       setState(() {
-        IsNotificacoesAtivarDesativada = value;
+        isNotificacoesAtivarDesativada = value;
       });
     } catch (error) {
       print(error);
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: <Color>[
-                Color(0xFFF65100),
-                Color(0xFFf5821f),
-                Color(0xFFff8c49),
-              ],
-            ),
-          ),
-        ),
         automaticallyImplyLeading: true,
         centerTitle: true,
         elevation: 0.0,
-        title: const Text(
-          'Configurações',
-          textAlign: TextAlign.start,
-          style: TextStyle(
-              fontSize: 19.0,
-              color: Color(0xffFFFFFF),
-              fontFamily: 'open-sans-regular'),
-        ),
+        title: const Text('Configurações'),
       ),
-      body: Container(
-        alignment: Alignment.topCenter,
-        decoration: BoxDecoration(
-          color: Colors.white,
-        ),
-        constraints: BoxConstraints(
-          minHeight: MediaQuery.of(context).size.height,
-        ),
-        child: SingleChildScrollView(
-          child: Column(
+      body: SingleChildScrollView(
+        child: Container(
+          alignment: Alignment.topCenter,
+          constraints: const BoxConstraints(
+              maxWidth: 600,
+              minWidth: 300
+          ),
+          child:Card(child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             textDirection: TextDirection.ltr,
             children: <Widget>[
-              SizedBox(height: 5.0),
+              const SizedBox(height: 5.0),
               ListTile(
-                contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+                contentPadding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
                 title: Text(
-                  "Notificação",
-                  style: TextStyle(
-                      fontSize: 18.0,
-                      color: Color(0xff333333),
-                      fontFamily: "avenir-lt-std-roman"),
+                  'Notificação',
+                  style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 17),
                 ),
                 leading: Container(
-                  padding: EdgeInsets.only(right: 12.0),
-                  decoration: new BoxDecoration(
-                      border: new Border(
-                          right: new BorderSide(
+                  padding: const EdgeInsets.only(right: 12.0),
+                  decoration:  const BoxDecoration(
+                      border:  Border(
+                          right:  BorderSide(
                               width: 1.0, color: Color(0xFF545454)))),
-                  child: Icon(Icons.notifications_none,
+                  child: const Icon(Icons.notifications_none,
                       color: Color(0xff9e9e9e), size: 25.0),
                 ),
                 trailing: CupertinoSwitch(
-                    onChanged: OnSwitchNotificacoesAtivarDesativadaChanged,
-                    value: IsNotificacoesAtivarDesativada == null
-                        ? false
-                        : IsNotificacoesAtivarDesativada,
-                    activeColor: Color(0xFF005a7c)),
+                    onChanged: onSwitchNotificacoesAtivarDesativadaChanged,
+                    value: isNotificacoesAtivarDesativada,
+                    activeColor: const Color(0xFF005a7c)),
               ),
-              Divider(
+              const Divider(
                 color: Color(0xffCCCCCC),
               ),
               ListTile(
@@ -110,27 +80,24 @@ class SettingsState extends State<SettingsView> {
                       routes.changePasswordRoute,
                     );
                   },
-                  contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+                  contentPadding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
                   leading: Container(
-                    padding: EdgeInsets.only(right: 12.0),
-                    decoration: new BoxDecoration(
-                        border: new Border(
-                            right: new BorderSide(
+                    padding: const EdgeInsets.only(right: 12.0),
+                    decoration: const BoxDecoration(
+                        border: Border(
+                            right: BorderSide(
                                 width: 1.0, color: Color(0xFF545454)))),
                     child:
-                    Icon(Icons.https, color: Color(0xff9e9e9e), size: 25.0),
+                    const Icon(Icons.https, color: Color(0xff9e9e9e), size: 25.0),
                   ),
                   title: Text(
-                    "Alterar senha",
-                    style: TextStyle(
-                        fontSize: 18.0,
-                        color: Color(0xff333333),
-                        fontFamily: "avenir-lt-std-roman"),
+                    'Alterar senha',
+                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 17),
                   ),
                   // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
                   trailing: Icon(Icons.keyboard_arrow_right,
                       color: Color(0xff6C757D), size: 30.0)),
-              Divider(
+              const Divider(
                 color: Color(0xffCCCCCC),
               ),
               ListTile(
@@ -151,15 +118,12 @@ class SettingsState extends State<SettingsView> {
                   ),
                   title: Text(
                     "Meu perfil",
-                    style: TextStyle(
-                        fontSize: 18.0,
-                        color: Color(0xff333333),
-                        fontFamily: "avenir-lt-std-roman"),
+                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 17),
                   ),
                   // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
                   trailing: Icon(Icons.keyboard_arrow_right,
                       color: Color(0xff6C757D), size: 30.0)),
-              Divider(
+              const Divider(
                 color: Color(0xffCCCCCC),
               ),
               ListTile(
@@ -180,47 +144,39 @@ class SettingsState extends State<SettingsView> {
                         color: Color(0xff9e9e9e), size: 24.0),
                   ),
                   title: Text(
-                    "Variável de ambiente",
-                    style: TextStyle(
-                        fontSize: 18.0,
-                        color: Color(0xff333333),
-                        fontFamily: "avenir-lt-std-roman"),
+                    'Variável de ambiente',
+                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 17),
                   ),
                   // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
                   trailing: Icon(Icons.keyboard_arrow_right,
                       color: Color(0xff6C757D), size: 30.0)),
-              Divider(
+              const Divider(
                 color: Color(0xffCCCCCC),
               ),
               ListTile(
                   onTap: () {
                     OnExitApp(context);
                   },
-                  contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+                  contentPadding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
                   leading: Container(
-                    padding: EdgeInsets.only(right: 12.0),
-                    decoration: new BoxDecoration(
-                        border: new Border(
-                            right: new BorderSide(
+                    padding: const EdgeInsets.only(right: 12.0),
+                    decoration:  const BoxDecoration(
+                        border:  Border(
+                            right:  BorderSide(
                                 width: 1.0, color: Color(0xff6C757D)))),
-                    child: Icon(Icons.exit_to_app,
+                    child: const Icon(Icons.exit_to_app,
                         color: Color(0xff9e9e9e), size: 25.0),
                   ),
                   title: Text(
-                    "Sair",
-                    style: TextStyle(
-                        fontSize: 18.0,
-                        color: Color(0xff212529),
-                        fontFamily: "avenir-lt-std-roman"),
+                    'Sair',
+                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 17),
                   ),
                   // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
-                  trailing: Icon(Icons.keyboard_arrow_right,
+                  trailing: const Icon(Icons.keyboard_arrow_right,
                       color: Color(0xff6C757D), size: 30.0)),
-              Divider(
-                color: Color(0xffCCCCCC),
-              ),
+              const SizedBox(height: 5.0),
             ],
-          ),
+          ),),
         ),
       ),
     );

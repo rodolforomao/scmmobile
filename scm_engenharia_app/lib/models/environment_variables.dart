@@ -1,13 +1,12 @@
 
-
 class EnvironmentVariables {
   List<CodIbge>? codIbge;
   List<Uf>? uf;
-  List<CustomerType>? tipoCliente;
-  List<ServiceType>? tipoAtendimento;
-  List<MediumAccessType>? tipoMeioAcesso;
-  List<TechnologyType>? tipoTecnologia;
-  List<ProductType>? tipoProduto;
+  List<TipoCliente>? tipoCliente;
+  List<TipoAtendimento>? tipoAtendimento;
+  List<TipoMeioAcesso>? tipoMeioAcesso;
+  List<TipoTecnologia>? tipoTecnologia;
+  List<TipoProduto>? tipoProduto;
 
   EnvironmentVariables(
       {this.codIbge,
@@ -32,33 +31,33 @@ class EnvironmentVariables {
       });
     }
     if (json['TipoCliente'] != null) {
-      tipoCliente = <CustomerType>[];
+      tipoCliente = <TipoCliente>[];
       json['TipoCliente'].forEach((v) {
-        tipoCliente!.add(new CustomerType.fromJson(v));
+        tipoCliente!.add(new TipoCliente.fromJson(v));
       });
     }
     if (json['TipoAtendimento'] != null) {
-      tipoAtendimento = <ServiceType>[];
+      tipoAtendimento = <TipoAtendimento>[];
       json['TipoAtendimento'].forEach((v) {
-        tipoAtendimento!.add(new ServiceType.fromJson(v));
+        tipoAtendimento!.add(new TipoAtendimento.fromJson(v));
       });
     }
     if (json['TipoMeioAcesso'] != null) {
-      tipoMeioAcesso = <MediumAccessType>[];
+      tipoMeioAcesso = <TipoMeioAcesso>[];
       json['TipoMeioAcesso'].forEach((v) {
-        tipoMeioAcesso!.add(new MediumAccessType.fromJson(v));
+        tipoMeioAcesso!.add(new TipoMeioAcesso.fromJson(v));
       });
     }
     if (json['TipoTecnologia'] != null) {
-      tipoTecnologia = <TechnologyType>[];
+      tipoTecnologia = <TipoTecnologia>[];
       json['TipoTecnologia'].forEach((v) {
-        tipoTecnologia!.add(new TechnologyType.fromJson(v));
+        tipoTecnologia!.add(new TipoTecnologia.fromJson(v));
       });
     }
     if (json['TipoProduto'] != null) {
-      tipoProduto = <ProductType>[];
+      tipoProduto = <TipoProduto>[];
       json['TipoProduto'].forEach((v) {
-        tipoProduto!.add(new ProductType.fromJson(v));
+        tipoProduto!.add(new TipoProduto.fromJson(v));
       });
     }
   }
@@ -137,13 +136,13 @@ class Uf {
   }
 }
 
-class CustomerType {
+class TipoAtendimento {
   String? id;
   String? descricao;
 
-  CustomerType({this.id, this.descricao});
+  TipoAtendimento({this.id, this.descricao});
 
-  CustomerType.fromJson(Map<String, dynamic> json) {
+  TipoAtendimento.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     descricao = json['descricao'];
   }
@@ -156,14 +155,13 @@ class CustomerType {
   }
 }
 
-class ServiceType {
+class TipoCliente {
   String? id;
   String? descricao;
 
-  ServiceType(
-      {this.id, this.descricao});
+  TipoCliente({this.id, this.descricao});
 
-  ServiceType.fromJson(Map<String, dynamic> json) {
+  TipoCliente.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     descricao = json['descricao'];
   }
@@ -176,14 +174,13 @@ class ServiceType {
   }
 }
 
-class MediumAccessType {
+class TipoMeioAcesso {
   String? id;
   String? descricao;
 
-  MediumAccessType(
-      {this.id, this.descricao});
+  TipoMeioAcesso({this.id, this.descricao});
 
-  MediumAccessType.fromJson(Map<String, dynamic> json) {
+  TipoMeioAcesso.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     descricao = json['descricao'];
   }
@@ -196,16 +193,16 @@ class MediumAccessType {
   }
 }
 
-class TechnologyType {
+class TipoTecnologia {
   String? id;
   String? descricao;
   String? idTipoMeioAcesso;
   String? idTipoProduto;
 
-  TechnologyType(
+  TipoTecnologia(
       {this.id, this.descricao, this.idTipoMeioAcesso, this.idTipoProduto});
 
-  TechnologyType.fromJson(Map<String, dynamic> json) {
+  TipoTecnologia.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     descricao = json['descricao'];
     idTipoMeioAcesso = json['id_tipo_meio_acesso'];
@@ -222,14 +219,13 @@ class TechnologyType {
   }
 }
 
-class ProductType {
+class TipoProduto {
   String? id;
   String? descricao;
 
-  ProductType(
-      {this.id, this.descricao});
+  TipoProduto({this.id, this.descricao});
 
-  ProductType.fromJson(Map<String, dynamic> json) {
+  TipoProduto.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     descricao = json['descricao'];
   }

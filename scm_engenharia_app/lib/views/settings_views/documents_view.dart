@@ -27,29 +27,11 @@ class DocumentsState extends State<DocumentsView> {
       appBar: PreferredSize(
         preferredSize: Size(MediaQuery.of(context).size.width, 50.0),
         child: AppBar(
-          flexibleSpace: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: <Color>[
-                  Color(0xFFF65100),
-                  Color(0xFFf5821f),
-                  Color(0xFFff8c49),
-                ],
-              ),
-            ),
-          ),
           automaticallyImplyLeading: false,
           centerTitle: true,
           elevation: 0.0,
           title: const Text(
-            "Documentos",
-            textAlign: TextAlign.start,
-            style: TextStyle(
-                fontSize: 19.0,
-                color: Color(0xffFFFFFF),
-                fontFamily: "open-sans-regular"),
+            'Documentos',
           ),
         ),
       ),

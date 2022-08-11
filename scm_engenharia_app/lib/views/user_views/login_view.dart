@@ -103,18 +103,6 @@ class LoginState extends State<LoginView> {
     final bool showFab = MediaQuery.of(context).viewInsets.bottom == 0.0;
     return Container(
       alignment: Alignment.center,
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: <Color>[
-            Color(0xFFF65100),
-            Color(0xFFff8c49),
-            Color(0xFFf5821f),
-            Color(0xffffba49)
-          ],
-        ),
-      ),
       constraints: BoxConstraints(
         minHeight: MediaQuery.of(context).size.height,
       ),
@@ -137,7 +125,7 @@ class LoginState extends State<LoginView> {
               padding: const EdgeInsets.all(8.0),
               child: Center(
                 child: Image.asset(
-                  'assets/imagens/logo_white.png',
+                  'assets/img/logo_white.png',
                   height: 200.0,
                   fit: BoxFit.fill,
                 ),
@@ -297,7 +285,7 @@ class LoginState extends State<LoginView> {
                   width: 40,
                   height: 40,
                   image: AssetImage(
-                    'assets/imagens/ic_whatsapp.png',
+                    'assets/img/ic_whatsapp.png',
                   ),
                   fit: BoxFit.fill,
                 ),

@@ -31,32 +31,14 @@ class ErrorInformationState extends State<ErrorInformationView> {
       appBar: PreferredSize(
         preferredSize: Size(MediaQuery.of(context).size.width, 50.0),
         child: AppBar(
-          flexibleSpace: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: <Color>[
-                  Color(0xFFF65100),
-                  Color(0xFFf5821f),
-                  Color(0xFFff8c49),
-                ],
-              ),
-            ),
-          ),
           centerTitle: true,
           elevation: 0.0,
           title: const Text(
-            "Informação",
-            textAlign: TextAlign.start,
-            style: TextStyle(
-                fontSize: 19.0,
-                color: Color(0xffFFFFFF),
-                fontFamily: "open-sans-regular"),
+            'Informação',
           ),
           actions: <Widget>[
             global_user_logged.globalUserLogged == null ? Container() :   IconButton(
-              icon: Icon(
+              icon: const Icon(
                 Icons.exit_to_app,
                 color: Colors.white,
                 size: 22,

@@ -106,29 +106,11 @@ class NotificationState extends State<NotificationView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: <Color>[
-                Color(0xFFF65100),
-                Color(0xFFf5821f),
-                Color(0xFFff8c49),
-              ],
-            ),
-          ),
-        ),
         automaticallyImplyLeading: true,
         centerTitle: true,
         elevation: 0.0,
         title: const Text(
-          "Notificação",
-          textAlign: TextAlign.start,
-          style: TextStyle(
-              fontSize: 19.0,
-              color: Color(0xffFFFFFF),
-              fontFamily: "open-sans-regular"),
+          'Notificação',
         ),
       ),
       body: viewType(MediaQuery.of(context).size.height),

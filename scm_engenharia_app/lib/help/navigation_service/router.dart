@@ -81,7 +81,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 
     case routes.environmentVariableRoute:
       {
-        return MaterialPageRoute(builder: (context) => EnvironmentVariableView(Uf: '', sMunicipality: [],));
+        return MaterialPageRoute(builder: (context) => const EnvironmentVariableView());
       }
     case routes.selectCityRoute:
       {
@@ -152,7 +152,7 @@ class RoutesPage {
       routes.notificationsRoute : (context) => NotificationsView(),
 
       //Visualizações de configurações------------------------------------------------------------------------------------------
-      routes.environmentVariableRoute : (context) => EnvironmentVariableView(Uf: '', sMunicipality: [],),
+      routes.environmentVariableRoute : (context) => EnvironmentVariableView(),
       routes.selectCityRoute : (context) => SelectCityView(Uf: '',  sMunicipality: [],),
 
       //Visualizações do usuário -----------------------------------------------------------------------------------------------

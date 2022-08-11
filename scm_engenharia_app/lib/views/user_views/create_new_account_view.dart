@@ -114,12 +114,7 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
           centerTitle: true,
           elevation: 0.0,
           title: const Text(
-            "Registrar usuário",
-            textAlign: TextAlign.start,
-            style: TextStyle(
-                fontSize: 19.0,
-                color: Color(0xffFFFFFF),
-                fontFamily: "open-sans-regular"),
+            'Registrar usuário',
           ),
         ),
         body: tipoPageView(MediaQuery.of(context).size.height),

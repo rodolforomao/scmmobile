@@ -76,11 +76,7 @@ class SelectCityState extends State<SelectCityView>  {
           elevation: 0.0,
           centerTitle: false,
           title:Text(
-            "Os municípios  " + widget.Uf,
-            style: TextStyle(
-                fontSize: 19.0,
-                color: Color(0xffFFFFFF),
-                fontFamily: "open-sans-regular"),
+            'Os municípios  ' + widget.Uf,
           ),
 
           bottom: PreferredSize(

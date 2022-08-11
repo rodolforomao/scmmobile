@@ -103,6 +103,7 @@ class ServicoMobileService {
               },
               encoding: Encoding.getByName("utf-8"))
           .timeout(const Duration(seconds: 10));
+      print(response.body);
       operacao.erro = false;
       operacao.message = "Operação realizada com sucesso";
       operacao.result = null;

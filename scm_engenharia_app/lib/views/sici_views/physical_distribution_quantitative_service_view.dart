@@ -1,11 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:realm/realm.dart';
 
+import '../../data/app_scm_engenharia_mobile_bll.dart';
+import '../../data/tb_quantitative_distribution_physical_accesses_service.dart';
+import '../../data/tb_uf.dart';
+import '../../data/tb_uf_municipality.dart';
+import '../../models/operation.dart';
 import '../../models/quantitative_distribution_physical_accesses_service_model.dart';
 import '../../models/technology_model.dart';
 import '../../models/uf_model.dart';
 import '../../models/uf_municipality_model.dart';
 import '../help_views/global_scaffold.dart';
+import '../settings_views/environment_variable_view.dart';
 
 
 class PhysicalDistributionQuantitativeServiceView extends StatefulWidget {
@@ -19,15 +26,16 @@ class PhysicalDistributionQuantitativeServiceView extends StatefulWidget {
 
 class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistributionQuantitativeServiceView> {
 
+  final quantitativeDistributionPhysicalAccessesService = TbQuantitativeDistributionPhysicalAccessesService(ObjectId(),'','','','','','','','','','','','','','','','','','','','','');
 
+  late List<TechnologyModel> ListTecnologiadb = [];
+  late  List<UfModel> ListUfdb = [];
+  late List<UfMunicipalityModel> ListUfMunicipiodb = [];
 
-
-  List<TechnologyModel> ListTecnologiadb = [];
-  List<UfModel> ListUfdb = [];
-  List<UfMunicipalityModel> ListUfMunicipiodb = [];
-  UfMunicipalityModel tbUfMunicipio = UfMunicipalityModel();
-  UfModel tbUf = UfModel();
   TechnologyModel tbTecnologia = new TechnologyModel();
+  UfModel ufModel = UfModel();
+  UfMunicipalityModel tbUfMunicipio = UfMunicipalityModel();
+
 
   String id_uf = "0";
   String id_municipio = "0";
@@ -50,11 +58,183 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
   final txtControllerPj_12 = TextEditingController();
   final txtControllerPj_34 = TextEditingController();
 
+  onAdd() async {
+    try {
+      if (id_uf == "0") {
+        throw ("O estado deve ser selecionado");
+      } else if (id_municipio == "0") {
+        throw ("O município  deve ser selecionado");
+      } else if (id_tecnologia == "0") {
+        throw ("O tecnologia  deve ser selecionado");
+      } else if ( txtControllerCod_ibge.text.isEmpty) {
+        txtControllerCod_ibge.text = '';
+      } else if ( txtControllerPf_0.text.isEmpty) {
+        txtControllerPf_0.text = '';
+      } else if ( txtControllerPf_512.text.isEmpty) {
+        txtControllerPf_512.text = '';
+      } else if ( txtControllerPf_2.text.isEmpty) {
+        txtControllerPf_2.text = '';
+      } else if ( txtControllerPf_12.text.isEmpty) {
+        txtControllerPf_12.text = '';
+      } else if (txtControllerPf_34.text.isEmpty) {
+        txtControllerPf_34.text = '';
+      } else if ( txtControllerPj_0.text.isEmpty) {
+        txtControllerPj_0.text = '';
+      } else if ( txtControllerPj_512.text.isEmpty) {
+        txtControllerPj_512.text = '';
+      } else if ( txtControllerPj_2.text.isEmpty) {
+        txtControllerPj_2.text = '';
+      } else if (txtControllerPj_12.text.isEmpty) {
+        txtControllerPj_12.text = '';
+      } else if (txtControllerPj_34.text.isEmpty) {
+        txtControllerPj_34.text = "";
+      }
+      quantitativeDistributionPhysicalAccessesService.id_uf = id_uf;
+      quantitativeDistributionPhysicalAccessesService.id_municipio = id_municipio;
+      quantitativeDistributionPhysicalAccessesService.id_tecnologia = id_tecnologia;
+
+      quantitativeDistributionPhysicalAccessesService.cod_ibge = txtControllerCod_ibge.text;
+      quantitativeDistributionPhysicalAccessesService.pf_0 =txtControllerPf_0.text;
+      quantitativeDistributionPhysicalAccessesService.pf_512 = txtControllerPf_512.text;
+      quantitativeDistributionPhysicalAccessesService.pf_2 = txtControllerPf_2.text;
+      quantitativeDistributionPhysicalAccessesService.pf_12 = txtControllerPf_12.text;
+      quantitativeDistributionPhysicalAccessesService.pf_34 = txtControllerPf_34.text;
+      quantitativeDistributionPhysicalAccessesService.pj_0 = txtControllerPj_0.text;
+      quantitativeDistributionPhysicalAccessesService.pj_512 = txtControllerPj_512.text;
+      quantitativeDistributionPhysicalAccessesService.pj_2 = txtControllerPj_2.text;
+      quantitativeDistributionPhysicalAccessesService.pj_12 = txtControllerPj_12.text;
+      quantitativeDistributionPhysicalAccessesService.pj_34 = txtControllerPj_34.text;
+      Navigator.pop(context, quantitativeDistributionPhysicalAccessesService);
+    } catch (error) {
+      OnAlertaInformacaoErro(error.toString(),context);
+    }
+  }
+
+  onInc() async {
+    try {
+      Operation thereisAnEnvironmentVariable = await AppScmEngenhariaMobileBll.instance.onThereisAnEnvironmentVariable();
+      if (thereisAnEnvironmentVariable.erro) {
+        throw (thereisAnEnvironmentVariable.message!);
+      } else if (thereisAnEnvironmentVariable.result == true) {
+        Navigator.push(
+            context,
+            CupertinoPageRoute(
+                fullscreenDialog: true,
+                builder: (BuildContext context) =>
+                new EnvironmentVariableView())).then((value) {
+          onInc();
+        });
+      } else {
+
+        ufModel.idUfApp = 0;
+        ufModel.id = '0';
+        ufModel.uf = 'Selecione...';
+
+        tbTecnologia.idTecnologiaApp = 0;
+        tbTecnologia.id = '0';
+        tbTecnologia.tecnologia = 'Selecione...';
+
+        ListTecnologiadb.add(tbTecnologia);
+        ListUfdb.add(ufModel);
+        ListUfMunicipiodb.add(tbUfMunicipio);
+
+        Operation uf = await AppScmEngenhariaMobileBll.instance.onSelectUFAll();
+        if (uf.erro) {
+          throw (uf.message!);
+        } else if (uf.result == null) {
+          throw (uf.message!);
+        } else {
+          for (var prop in uf.resultList as List<TbUf>) {
+            setState(() {
+              final ufModel = UfModel();
+              ufModel.idUfApp = prop.idUfApp as int?;
+              ufModel.id = prop.id;
+              ufModel.uf = prop.uf;
+              ListUfdb.add(ufModel);
+            });
+          }
+        }
+        Operation technology = await AppScmEngenhariaMobileBll.instance.onSelectTechnologyAll();
+        if (technology.erro) {
+          throw (technology.message!);
+        } else if (technology.result == null) {
+          throw (technology.message!);
+        } else {
+          for (var prop in technology.result as List<TbUfMunicipality>) {
+            final technologyModel = TechnologyModel();
+            technologyModel.idTecnologiaApp = prop.idMunicipalityApp as int?;
+            technologyModel.id = prop.id;
+            technologyModel.tecnologia = prop.municipality;
+            setState(() {
+              ListTecnologiadb.add(technologyModel);
+            });
+            if (prop.id == "8") {
+              tbTecnologia.idTecnologiaApp = prop.idMunicipalityApp as int?;
+              tbTecnologia.id = prop.id;
+             // tbTecnologia.tecnologia = prop.;_DistribuicaoFisicosServicoQuantitativo.id_tecnologia =  prop.id;
+              id_tecnologia = prop.id;
+              //_DistribuicaoFisicosServicoQuantitativo .tecnologia = prop.tecnologia;
+            }
+          }
+        }
+        if (widget.sDistribuicaoFisicosServicoQuantitativo == null) {
+        } else {
+         // _DistribuicaoFisicosServicoQuantitativo = widget.sDistribuicaoFisicosServicoQuantitativo;
+          UfModel resUf = ListUfdb.where((i) => i.id == widget.sDistribuicaoFisicosServicoQuantitativo?.id_uf).first;
+          ufModel.idUfApp = resUf.idUfApp;
+          ufModel.id = resUf.id;
+          ufModel.uf = resUf.uf;
+          id_uf = resUf.id!;
+          Operation municipalityModel = await AppScmEngenhariaMobileBll.instance.onSelectUfMunicipalityById(ufModel.id.toString());
+          if (municipalityModel.erro) {
+            throw (municipalityModel.message!);
+          } else if (municipalityModel.result == null) {
+            GlobalScaffold.instance.onToastInformacaoErro("Para o estado ${ ufModel.uf} não a município cadastrado");
+          } else {
+            for (var prop in municipalityModel.result as List<UfMunicipalityModel>) {
+              setState(() {
+                ListUfMunicipiodb.add(prop);
+              });
+            }
+            UfMunicipalityModel resMunicipio = ListUfMunicipiodb.where((i) =>
+            i.id == widget.sDistribuicaoFisicosServicoQuantitativo!.id_municipio).first;
+            tbUfMunicipio.idMunicipioApp = resMunicipio.idMunicipioApp;
+            tbUfMunicipio.ufId = resMunicipio.ufId;
+            tbUfMunicipio.uf = resMunicipio.uf;
+            tbUfMunicipio.id = resMunicipio.id;
+            tbUfMunicipio.municipio = resMunicipio.municipio;
+            id_municipio = resMunicipio.id!;
+          }
+
+          TechnologyModel resTecnologia = ListTecnologiadb.where((i) => i.id == widget.sDistribuicaoFisicosServicoQuantitativo!.id_tecnologia).first;
+          tbTecnologia.idTecnologiaApp = resTecnologia.idTecnologiaApp;
+          tbTecnologia.id = resTecnologia.id;
+          tbTecnologia.tecnologia = resTecnologia.tecnologia;
+          id_tecnologia = resTecnologia.id!;
+
+          txtControllerMunicipio.text = tbUfMunicipio.municipio!;
+          txtControllerCod_ibge.text = widget.sDistribuicaoFisicosServicoQuantitativo!.cod_ibge!;
+          txtControllerPf_0.text = widget.sDistribuicaoFisicosServicoQuantitativo!.pf_0!;
+          txtControllerPf_512.text = widget.sDistribuicaoFisicosServicoQuantitativo!.pf_512!;
+          txtControllerPf_2.text = widget.sDistribuicaoFisicosServicoQuantitativo!.pf_2!;
+          txtControllerPf_12.text = widget.sDistribuicaoFisicosServicoQuantitativo!.pf_12!;
+          txtControllerPf_34.text = widget.sDistribuicaoFisicosServicoQuantitativo!.pf_34!;
+          txtControllerPj_0.text = widget.sDistribuicaoFisicosServicoQuantitativo!.pj_0!;
+          txtControllerPj_512.text = widget.sDistribuicaoFisicosServicoQuantitativo!.pj_512!;
+          txtControllerPj_2.text = widget.sDistribuicaoFisicosServicoQuantitativo!.pj_2!;
+          txtControllerPj_12.text = widget.sDistribuicaoFisicosServicoQuantitativo!.pj_12!;
+          txtControllerPj_34.text = widget.sDistribuicaoFisicosServicoQuantitativo!.pj_34!;
+        }
+      }
+    } catch (error) {
+      OnAlertaInformacaoErro(error.toString(),context);
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-
+    onInc();
   }
 
   @override
@@ -66,29 +246,12 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: <Color>[
-                Color(0xFFF65100),
-                Color(0xFFf5821f),
-                Color(0xFFff8c49),
-              ],
-            ),
-          ),
-        ),
         automaticallyImplyLeading: true,
         centerTitle: true,
         elevation: 0.0,
         title: const Text(
           'Formulário Sici - Fust',
           textAlign: TextAlign.start,
-          style: TextStyle(
-              fontSize: 19.0,
-              color: Color(0xffFFFFFF),
-              fontFamily: "open-sans-regular"),
         ),
       ),
       body: SingleChildScrollView(
@@ -115,14 +278,14 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
                   color: Color(0xFF000000),
                 ),
                 iconEnabledColor: Colors.white,
-                value: tbUf,
+                value: ufModel,
                 isExpanded: true,
                 iconSize: 35,
                 items: ListUfdb.map((UfModel value) {
                   return new DropdownMenuItem<UfModel>(
                     onTap: () {
                       setState(() {
-                        tbUf = value;
+                        ufModel = value;
                         id_uf = value.id!;
                       });
                     },
@@ -381,7 +544,7 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
             Center(child: Padding(padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),child: TextButton(
               child: const Text(' Adicionar '),
               onPressed: () async {
-
+                onAdd();
               },
             ),),),
             SizedBox(height: 30.0),

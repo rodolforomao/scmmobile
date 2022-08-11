@@ -160,6 +160,7 @@ class GlobalScaffold {
 
 //--------------------------------------------------------------------------------------------------------
 
+
 class OnAlertaInformacaoErro {
   final String Mensagem;
   final BuildContext context;
@@ -170,175 +171,162 @@ class OnAlertaInformacaoErro {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8.0))),
-          child:  Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(height: 15.0),
-              Column(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8.0))),
+            child: Container(
+              constraints: const BoxConstraints(
+                minWidth: 70,
+                maxWidth: 600,
+              ),
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    "Informação",
-                    style: TextStyle(
-                        fontSize: 20.0,
-                        color: Color(0xff212529),
-                        fontFamily: "avenir-lt-std-roman"),
+                  const SizedBox(height: 15.0),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text(
+                        'Informação',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20.0,
+                            color: Color(0xff023c6a)),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const Divider(
+                        color: Colors.black12,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                        child: Text(
+                          Mensagem,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 4,
+                          softWrap: false,
+                          style: const TextStyle(
+                            fontSize: 17.0,
+                            color: Color(0xff737373),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Divider(
+                  const Divider(
                     color: Colors.black12,
                   ),
-                  Padding(padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-                    child:  Text(
-                      Mensagem,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 4,
-                      softWrap: false,
-                      style: TextStyle(
-                          fontSize: 17.0,
-                          color: Color(0xff212529),
-                          fontFamily: "avenir-lt-std-roman"),
-                    ),
-                  ),
-                ],
-              ),
-              Divider(
-                color: Colors.black12,
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
-                child: new Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    FlatButton(
-                      color: Color(0xffe84c3d),
-                      //`Icon` to display
-                      child: Text(
-                        '           OK           ',
-                        style: TextStyle(
-                            fontSize: 17.0,
-                            color: Color(0xffFFFFFF),
-                            fontFamily: "avenir-lt-std-roman"),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
+                    child:Center(child:  OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        textStyle: const TextStyle(color: Colors.white),
+                        backgroundColor: const Color(0xFFC01818),
+                        side: const BorderSide(
+                          color: Color(0xFFC01818), //Color of the border
+                        ),
                       ),
+                      child:  const Text('             OK           ', style: TextStyle(color: Colors.white), ),
                       //`Text` to display
                       onPressed: () {
                         Navigator.pop(context);
                         FocusManager.instance.primaryFocus!.unfocus();
                       },
-                      shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(5.0),
-                      ),
-                    ),
-                  ],
-                ),
+                    ),),
+                  ),
+                ],
               ),
-            ],
-          ),
-        );
+            ));
       },
     );
   }
 }
 
 class OnAlertaInformacaoSucesso {
-  final String? mensagem;
+  final String? Mensagem;
   final BuildContext context;
 
-  OnAlertaInformacaoSucesso(this.mensagem, this.context) {
+  OnAlertaInformacaoSucesso(this.Mensagem, this.context) {
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8.0))),
-          child:  Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(height: 15.0),
-              Column(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8.0))),
+            child: Container(
+              constraints: const BoxConstraints(
+                minWidth: 70,
+                maxWidth: 600,
+              ),
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    "Informação",
-                    style: TextStyle(
-                        fontSize: 20.0,
-                        color: Color(0xff212529),
-                        fontFamily: "avenir-lt-std-roman"),
+                  const SizedBox(height: 15.0),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text(
+                        'Informação',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20.0,
+                            color: Color(0xff023c6a),
+                            fontFamily: "Myriad-Pro-Light"),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const Divider(
+                        color: Colors.black12,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                        child: Text(
+                          Mensagem!,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 10,
+                          softWrap: false,
+                          style: const TextStyle(
+                            fontFamily: 'Myriad-Pro-Light',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 19.0,
+                            color: Color(0xff737373),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Divider(
+                  const Divider(
                     color: Colors.black12,
                   ),
-                  Padding(padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-                    child:  Text(
-                      mensagem.toString(),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 4,
-                      softWrap: false,
-                      style: TextStyle(
-                          fontSize: 17.0,
-                          color: Color(0xff212529),
-                          fontFamily: "avenir-lt-std-roman"),
-                    ),
-                  ),
-                ],
-              ),
-              Divider(
-                color: Colors.black12,
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
-                child: new Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    FlatButton(
-                      color: Color(0xff30bc8c),
-                      //`Icon` to display
-                      child: Text(
-                        '           OK           ',
-                        style: TextStyle(
-                            fontSize: 17.0,
-                            color: Color(0xffFFFFFF),
-                            fontFamily: "avenir-lt-std-roman"),
-                      ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
+                    child:Center(child:  OutlinedButton(
+                      child:  const Text('             OK           '),
                       //`Text` to display
                       onPressed: () {
                         Navigator.pop(context);
                         FocusManager.instance.primaryFocus!.unfocus();
                       },
-                      shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(5.0),
-                      ),
-                    ),
-                  ],
-                ),
+                    ),),
+                  ),
+                ],
               ),
-            ],
-          ),
-        );
+            ));
       },
     );
   }
 }
+
 
 class OnAlertInformation {
   final String? message;
@@ -429,7 +417,6 @@ class OnAlertInformation {
     );
   }
 }
-
 
 BuildContext? dialogContext;
 

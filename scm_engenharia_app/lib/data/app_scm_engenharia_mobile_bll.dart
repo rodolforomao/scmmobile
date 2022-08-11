@@ -1,6 +1,8 @@
 import 'package:realm/realm.dart';
 import 'package:scm_engenharia_app/data/tb_form_sici_fust.dart';
 import 'package:scm_engenharia_app/data/tb_quantitative_distribution_physical_accesses_service.dart';
+import 'package:scm_engenharia_app/data/tb_technology.dart';
+import 'package:scm_engenharia_app/data/tb_uf.dart';
 import '../models/operation.dart';
 import 'tb_uf_municipality.dart';
 import 'tb_user.dart';
@@ -10,10 +12,40 @@ class AppScmEngenhariaMobileBll {
   static late AppScmEngenhariaMobileBll instance = AppScmEngenhariaMobileBll();
 
   //---------------------------------------------------------------------------------------------------
+
   late Realm realm;
   AppScmEngenhariaMobileBll() {
-    final config = Configuration.local([TbUser.schema ,TbUfMunicipality.schema]);
+    final config = Configuration.local([TbUser.schema ,TbUfMunicipality.schema ,TbUf.schema ,TbTechnology.schema ,TbFormSiciFust.schema ,TbQuantitativeDistributionPhysicalAccessesService.schema]);
     realm = Realm(config);
+  }
+
+  Future<Operation> onThereisAnEnvironmentVariable() async {
+    Operation operation = Operation();
+    operation.result = false;
+    operation.message = 'Operação realizada com sucesso';
+    operation.erro = false;
+    try {
+      final tbUf = realm.all<TbUf>();
+      final tbUfMunicipality = realm.all<TbUfMunicipality>();
+      final tbTechnology = realm.all<TbTechnology>();
+      if(tbUf.isEmpty)
+      {
+        operation.result = true;
+      }
+      else if(tbUfMunicipality.isEmpty)
+      {
+        operation.result = true;
+      }
+      else if (tbTechnology.isEmpty)
+      {
+        operation.result = true;
+      }
+    } catch (ex) {
+      operation.erro = true;
+      operation.result = true;
+      operation.message = 'Erro $ex';
+    }
+    return operation;
   }
 
   // User ---------------------------------------------------------------------------------------------
@@ -104,14 +136,14 @@ class AppScmEngenhariaMobileBll {
 
   // Technology ---------------------------------------------------------------------------------------
 
-  Future<Operation> onSaveUpdateTechnology(TbUser user) async {
+  Future<Operation> onSaveUpdateTechnology(TbTechnology technology) async {
     Operation operation = Operation();
     operation.result = null;
     operation.message = 'Operação realizada com sucesso';
     operation.erro = false;
     try {
       realm.write(() {
-        realm.add<TbUser>(user);
+        realm.add<TbTechnology>(technology);
       });
       operation.result = true;
     } catch (ex) {
@@ -124,142 +156,81 @@ class AppScmEngenhariaMobileBll {
   Future<Operation> onSelectTechnologyAll() async {
     Operation operacao = Operation();
     try {
-      operacao.result = null;
+      operacao.result = true;
       operacao.message = 'Operação realizada com sucesso';
       operacao.erro = false;
-      final accessToken = realm.all<TbUser>();
-      if(accessToken.length > 1)
-      {
-        realm.write(() {
-          realm.deleteAll<TbUser>();
-        });
-        operacao.result = null;
-        throw ('Todos usuários foram removidos');
-      }
-      else  if(accessToken.isEmpty)
-      {
-        operacao.result = null;
-        operacao.message = 'Usuário não logado';
-      }
-      else
-      {
-        operacao.result = accessToken.first;
-      }
+      realm.write(() {
+        realm.all<TbTechnology>();
+      });
     } catch (ex) {
       operacao.erro = true;
-      operacao.message = ' , erro ' + ex.toString();
+      operacao.message = ' , erro $ex';
     }
     return operacao;
   }
 
-  Future<Operation> onSelectTechnologyBayId(String Id) async {
+  Future<Operation> onSelectTechnologyBayId(String id) async {
+    Operation operation = Operation();
+    try {
+      operation.result = null;
+      operation.message = 'Operação realizada com sucesso';
+      operation.erro = false;
+      realm.write(() {
+        realm.all<TbTechnology>().query('idTechnologyApp == $id');
+      });
+      operation.result = true;
+    } catch (ex) {
+      operation.erro = true;
+      operation.message = ' , erro $ex';
+    }
+    return operation;
+  }
+
+  Future<Operation> onDeleteAllTechnology() async {
     Operation operacao = Operation();
     try {
-      operacao.result = null;
+      operacao.result = true;
       operacao.message = 'Operação realizada com sucesso';
-      operacao.erro = false;
-      final accessToken = realm.all<TbUser>();
-      if(accessToken.length > 1)
-      {
-        realm.write(() {
-          realm.deleteAll<TbUser>();
-        });
-        operacao.result = null;
-        throw ('Todos usuários foram removidos');
-      }
-      else  if(accessToken.isEmpty)
-      {
-        operacao.result = null;
-        operacao.message = 'Usuário não logado';
-      }
-      else
-      {
-        operacao.result = accessToken.first;
-      }
+      realm.write(() {
+        realm.deleteAll<TbTechnology>();
+      });
     } catch (ex) {
       operacao.erro = true;
-      operacao.message = ' , erro ' + ex.toString();
+      operacao.message = ' , erro $ex';
     }
     return operacao;
   }
 
-  Future<Operation> onCleanTbTechnology() async {
+  Future<Operation> onDeleteTechnologyBayId(TbTechnology technology) async {
     Operation operacao = Operation();
     try {
-      operacao.result = null;
+      operacao.result = true;
       operacao.message = 'Operação realizada com sucesso';
-      operacao.erro = false;
-      final accessToken = realm.all<TbUser>();
-      if(accessToken.length > 1)
-      {
-        realm.write(() {
-          realm.deleteAll<TbUser>();
-        });
-        operacao.result = null;
-        throw ('Todos usuários foram removidos');
-      }
-      else  if(accessToken.isEmpty)
-      {
-        operacao.result = null;
-        operacao.message = 'Usuário não logado';
-      }
-      else
-      {
-        operacao.result = accessToken.first;
-      }
+      realm.write(() {
+        realm.delete(technology);
+      });
     } catch (ex) {
       operacao.erro = true;
-      operacao.message = ' , erro ' + ex.toString();
-    }
-    return operacao;
-  }
-
-  Future<Operation> onDeleteTechnologyBayId(String Id) async {
-    Operation operacao = Operation();
-    try {
-      operacao.result = null;
-      operacao.message = 'Operação realizada com sucesso';
-      operacao.erro = false;
-      final accessToken = realm.all<TbUser>();
-      if(accessToken.length > 1)
-      {
-        realm.write(() {
-          realm.deleteAll<TbUser>();
-        });
-        operacao.result = null;
-        throw ('Todos usuários foram removidos');
-      }
-      else  if(accessToken.isEmpty)
-      {
-        operacao.result = null;
-        operacao.message = 'Usuário não logado';
-      }
-      else
-      {
-        operacao.result = accessToken.first;
-      }
-    } catch (ex) {
-      operacao.erro = true;
-      operacao.message = ' , erro ' + ex.toString();
+      operacao.message = ' , erro $ex';
     }
     return operacao;
   }
 
   // Uf ----------------------------------------------------------------------------------------------
 
-  Future<Operation> onSaveUpdateUF(TbUser user) async {
+  Future<Operation> onSaveUpdateUF(TbUf uf) async {
     Operation operation = Operation();
     operation.result = null;
     operation.message = 'Operação realizada com sucesso';
     operation.erro = false;
     try {
       realm.write(() {
-        realm.add<TbUser>(user);
+        realm.add<TbUf>(uf);
       });
       operation.result = true;
     } catch (ex) {
       operation.erro = true;
-      operation.message = ' , erro ' + ex.toString();
+      operation.message = ' , erro $ex';
     }
     return operation;
   }
@@ -267,142 +238,80 @@ class AppScmEngenhariaMobileBll {
   Future<Operation> onSelectUFAll() async {
     Operation operacao = Operation();
     try {
-      operacao.result = null;
+      operacao.result = true;
       operacao.message = 'Operação realizada com sucesso';
       operacao.erro = false;
-      final accessToken = realm.all<TbUser>();
-      if(accessToken.length > 1)
-      {
-        realm.write(() {
-          realm.deleteAll<TbUser>();
-        });
-        operacao.result = null;
-        throw ('Todos usuários foram removidos');
-      }
-      else  if(accessToken.isEmpty)
-      {
-        operacao.result = null;
-        operacao.message = 'Usuário não logado';
-      }
-      else
-      {
-        operacao.result = accessToken.first;
-      }
+      realm.write(() {
+        realm.all<TbUf>();
+      });
     } catch (ex) {
       operacao.erro = true;
-      operacao.message = ' , erro ' + ex.toString();
+      operacao.message = ' , erro $ex';
     }
     return operacao;
   }
 
-  Future<Operation> onSelectUFBayId(String Id) async {
+  Future<Operation> onSelectUFBayId(String id) async {
+    Operation operation = Operation();
+    try {
+      operation.result = true;
+      operation.message = 'Operação realizada com sucesso';
+      operation.erro = false;
+      realm.write(() {
+        realm.all<TbUf>().query('idUfApp == $id');
+      });
+    } catch (ex) {
+      operation.erro = true;
+      operation.message = ' , erro $ex';
+    }
+    return operation;
+  }
+
+  Future<Operation> onDeleteAllUF() async {
     Operation operacao = Operation();
     try {
-      operacao.result = null;
+      operacao.result = true;
       operacao.message = 'Operação realizada com sucesso';
       operacao.erro = false;
-      final accessToken = realm.all<TbUser>();
-      if(accessToken.length > 1)
-      {
-        realm.write(() {
-          realm.deleteAll<TbUser>();
-        });
-        operacao.result = null;
-        throw ('Todos usuários foram removidos');
-      }
-      else  if(accessToken.isEmpty)
-      {
-        operacao.result = null;
-        operacao.message = 'Usuário não logado';
-      }
-      else
-      {
-        operacao.result = accessToken.first;
-      }
+      realm.write(() {
+        realm.deleteAll<TbUf>();
+      });
     } catch (ex) {
       operacao.erro = true;
-      operacao.message = ' , erro ' + ex.toString();
+      operacao.message = ' , erro $ex';
     }
     return operacao;
   }
 
-  Future<Operation> onCleanTbUF() async {
+  Future<Operation> onDeleteUFBayId(TbUf uf) async {
     Operation operacao = Operation();
     try {
-      operacao.result = null;
+      operacao.result = true;
       operacao.message = 'Operação realizada com sucesso';
-      operacao.erro = false;
-      final accessToken = realm.all<TbUser>();
-      if(accessToken.length > 1)
-      {
-        realm.write(() {
-          realm.deleteAll<TbUser>();
-        });
-        operacao.result = null;
-        throw ('Todos usuários foram removidos');
-      }
-      else  if(accessToken.isEmpty)
-      {
-        operacao.result = null;
-        operacao.message = 'Usuário não logado';
-      }
-      else
-      {
-        operacao.result = accessToken.first;
-      }
+      realm.write(() {
+        realm.delete(uf);
+      });
     } catch (ex) {
       operacao.erro = true;
-      operacao.message = ' , erro ' + ex.toString();
-    }
-    return operacao;
-  }
-
-  Future<Operation> onDeleteUFBayId(String Id) async {
-    Operation operacao = Operation();
-    try {
-      operacao.result = null;
-      operacao.message = 'Operação realizada com sucesso';
-      operacao.erro = false;
-      final accessToken = realm.all<TbUser>();
-      if(accessToken.length > 1)
-      {
-        realm.write(() {
-          realm.deleteAll<TbUser>();
-        });
-        operacao.result = null;
-        throw ('Todos usuários foram removidos');
-      }
-      else  if(accessToken.isEmpty)
-      {
-        operacao.result = null;
-        operacao.message = 'Usuário não logado';
-      }
-      else
-      {
-        operacao.result = accessToken.first;
-      }
-    } catch (ex) {
-      operacao.erro = true;
-      operacao.message = ' , erro ' + ex.toString();
+      operacao.message = ' , erro $ex';
     }
     return operacao;
   }
 
  // uf Municipality -----------------------------------------------------------------------------------
 
-  Future<Operation> onSaveUpdateMunicipality(TbUser user) async {
+  Future<Operation> onSaveUpdateMunicipality(TbUfMunicipality municipality) async {
     Operation operation = Operation();
-    operation.result = null;
+    operation.result = true;
     operation.message = 'Operação realizada com sucesso';
     operation.erro = false;
     try {
       realm.write(() {
-        realm.add<TbUser>(user);
+        realm.add<TbUfMunicipality>(municipality);
       });
-      operation.result = true;
     } catch (ex) {
       operation.erro = true;
-      operation.message = ' , erro ' + ex.toString();
+      operation.message = ' , erro $ex';
     }
     return operation;
   }
@@ -410,126 +319,79 @@ class AppScmEngenhariaMobileBll {
   Future<Operation> onSelectUfMunicipalityAll() async {
     Operation operacao = Operation();
     try {
-      operacao.result = null;
+      operacao.result = true;
       operacao.message = 'Operação realizada com sucesso';
       operacao.erro = false;
-      final accessToken = realm.all<TbUser>();
-      if(accessToken.length > 1)
-      {
-        realm.write(() {
-          realm.deleteAll<TbUser>();
-        });
-        operacao.result = null;
-        throw ('Todos usuários foram removidos');
-      }
-      else  if(accessToken.isEmpty)
-      {
-        operacao.result = null;
-        operacao.message = 'Usuário não logado';
-      }
-      else
-      {
-        operacao.result = accessToken.first;
-      }
+      realm.write(() {
+        realm.all<TbUfMunicipality>();
+      });
     } catch (ex) {
       operacao.erro = true;
-      operacao.message = ' , erro ' + ex.toString();
+      operacao.message = ' , erro $ex';
     }
     return operacao;
   }
 
   Future<Operation> onSelectUfMunicipalityById(String id) async {
-    Operation operacao = Operation();
-    try {
-      operacao.result = null;
-      operacao.message = 'Operação realizada com sucesso';
-      operacao.erro = false;
-      final accessToken = realm.all<TbUser>();
-      if(accessToken.length > 1)
-      {
-        realm.write(() {
-          realm.deleteAll<TbUser>();
-        });
-        operacao.result = null;
-        throw ('Todos usuários foram removidos');
-      }
-      else  if(accessToken.isEmpty)
-      {
-        operacao.result = null;
-        operacao.message = 'Usuário não logado';
-      }
-      else
-      {
-        operacao.result = accessToken.first;
-      }
-    } catch (ex) {
-      operacao.erro = true;
-      operacao.message = ' , erro ' + ex.toString();
-    }
-    return operacao;
-  }
-
-  Future<Operation> onSelectUfMunicipalityByIdUf(String ufId) async {
-    Operation operacao = Operation();
-    try {
-      operacao.result = null;
-      operacao.message = 'Operação realizada com sucesso';
-      operacao.erro = false;
-      final accessToken = realm.all<TbUser>();
-      if(accessToken.length > 1)
-      {
-        realm.write(() {
-          realm.deleteAll<TbUser>();
-        });
-        operacao.result = null;
-        throw ('Todos usuários foram removidos');
-      }
-      else  if(accessToken.isEmpty)
-      {
-        operacao.result = null;
-        operacao.message = 'Usuário não logado';
-      }
-      else
-      {
-        operacao.result = accessToken.first;
-      }
-    } catch (ex) {
-      operacao.erro = true;
-      operacao.message = ' , erro ' + ex.toString();
-    }
-    return operacao;
-  }
-
-  Future<Operation> onCleanTbUfMunicipality() async {
     Operation operation = Operation();
-    operation.result = null;
-    operation.message = 'Operação realizada com sucesso';
-    operation.erro = false;
     try {
-      realm.write(() {
-        realm.deleteAll<TbUser>();
-      });
       operation.result = true;
+      operation.message = 'Operação realizada com sucesso';
+      operation.erro = false;
+      realm.write(() {
+        realm.all<TbUfMunicipality>().query('idMunicipalityApp == $id');
+      });
     } catch (ex) {
       operation.erro = true;
-      operation.message = ' , erro ' + ex.toString();
+      operation.message = ' , erro $ex';
     }
     return operation;
   }
 
-  Future<Operation> onDeleteUfMunicipality() async {
+  Future<Operation> onSelectUfMunicipalityByIdUf(String ufId) async {
     Operation operation = Operation();
-    operation.result = null;
-    operation.message = 'Operação realizada com sucesso';
-    operation.erro = false;
     try {
-      realm.write(() {
-        realm.deleteAll<TbUser>();
-      });
       operation.result = true;
+      operation.message = 'Operação realizada com sucesso';
+      operation.erro = false;
+      realm.write(() {
+        realm.all<TbUfMunicipality>().query('id == $ufId');
+      });
     } catch (ex) {
       operation.erro = true;
-      operation.message = ' , erro ' + ex.toString();
+      operation.message = ' , erro $ex';
+    }
+    return operation;
+  }
+
+  Future<Operation> onDeleteUfMunicipalityAll() async {
+    Operation operation = Operation();
+    try {
+      operation.result = true;
+      operation.message = 'Operação realizada com sucesso';
+      operation.erro = false;
+      realm.write(() {
+        realm.deleteAll<TbUfMunicipality>();
+      });
+    } catch (ex) {
+      operation.erro = true;
+      operation.message = ' , erro $ex';
+    }
+    return operation;
+  }
+
+  Future<Operation> onDeleteUfMunicipality(TbUfMunicipality municipality) async {
+    Operation operation = Operation();
+    try {
+      operation.result = true;
+      operation.message = 'Operação realizada com sucesso';
+      operation.erro = false;
+      realm.write(() {
+        realm.delete(municipality);
+      });
+    } catch (ex) {
+      operation.erro = true;
+      operation.message = ' , erro $ex';
     }
     return operation;
   }
@@ -563,30 +425,15 @@ class AppScmEngenhariaMobileBll {
   Future<Operation> onSelectFormSiciFustId(String id) async {
     Operation operacao = Operation();
     try {
-      operacao.result = null;
+      operacao.result = true;
       operacao.message = 'Operação realizada com sucesso';
       operacao.erro = false;
-      final accessToken = realm.all<TbUser>();
-      if(accessToken.length > 1)
-      {
-        realm.write(() {
-          realm.deleteAll<TbUser>();
-        });
-        operacao.result = null;
-        throw ('Todos usuários foram removidos');
-      }
-      else  if(accessToken.isEmpty)
-      {
-        operacao.result = null;
-        operacao.message = 'Usuário não logado';
-      }
-      else
-      {
-        operacao.result = accessToken.first;
-      }
+      realm.write(() {
+        realm.all<TbFormSiciFust>();
+      });
     } catch (ex) {
       operacao.erro = true;
-      operacao.message = ' , erro ' + ex.toString();
+      operacao.message = ' , erro $ex';
     }
     return operacao;
   }
@@ -594,94 +441,33 @@ class AppScmEngenhariaMobileBll {
   Future<Operation> onSelectAll() async {
     Operation operacao = Operation();
     try {
-      operacao.result = null;
+      operacao.result = true;
       operacao.message = 'Operação realizada com sucesso';
       operacao.erro = false;
-      final accessToken = realm.all<TbUser>();
-      if(accessToken.length > 1)
-      {
-        realm.write(() {
-          realm.deleteAll<TbUser>();
-        });
-        operacao.result = null;
-        throw ('Todos usuários foram removidos');
-      }
-      else  if(accessToken.isEmpty)
-      {
-        operacao.result = null;
-        operacao.message = 'Usuário não logado';
-      }
-      else
-      {
-        operacao.result = accessToken.first;
-      }
+      realm.write(() {
+        realm.all<TbFormSiciFust>();
+      });
     } catch (ex) {
       operacao.erro = true;
-      operacao.message = ' , erro ' + ex.toString();
+      operacao.message = ' , erro $ex';
     }
     return operacao;
   }
 
-  Future<Operation> onCleanTbFormSiciFust() async {
-    Operation operacao = Operation();
+  Future<Operation> onDeleteFormSiciFustId(TbFormSiciFust formSiciFust) async {
+    Operation operation = Operation();
     try {
-      operacao.result = null;
-      operacao.message = 'Operação realizada com sucesso';
-      operacao.erro = false;
-      final accessToken = realm.all<TbUser>();
-      if(accessToken.length > 1)
-      {
-        realm.write(() {
-          realm.deleteAll<TbUser>();
-        });
-        operacao.result = null;
-        throw ('Todos usuários foram removidos');
-      }
-      else  if(accessToken.isEmpty)
-      {
-        operacao.result = null;
-        operacao.message = 'Usuário não logado';
-      }
-      else
-      {
-        operacao.result = accessToken.first;
-      }
+      operation.result = true;
+      operation.message = 'Operação realizada com sucesso';
+      operation.erro = false;
+      realm.write(() {
+        realm.delete(formSiciFust);
+      });
     } catch (ex) {
-      operacao.erro = true;
-      operacao.message = ' , erro ' + ex.toString();
+      operation.erro = true;
+      operation.message = ' , erro $ex';
     }
-    return operacao;
-  }
-
-  Future<Operation> onDeleteFormSiciFustId(String Id) async {
-    Operation operacao = Operation();
-    try {
-      operacao.result = null;
-      operacao.message = 'Operação realizada com sucesso';
-      operacao.erro = false;
-      final accessToken = realm.all<TbUser>();
-      if(accessToken.length > 1)
-      {
-        realm.write(() {
-          realm.deleteAll<TbUser>();
-        });
-        operacao.result = null;
-        throw ('Todos usuários foram removidos');
-      }
-      else  if(accessToken.isEmpty)
-      {
-        operacao.result = null;
-        operacao.message = 'Usuário não logado';
-      }
-      else
-      {
-        operacao.result = accessToken.first;
-      }
-    } catch (ex) {
-      operacao.erro = true;
-      operacao.message = ' , erro ' + ex.toString();
-    }
-    return operacao;
+    return operation;
   }
 
 // DISTRIBUTION OF THE QUANTITATIVE OF PHYSICAL ACCESS IN SERVICE -------------------------------------
@@ -704,36 +490,36 @@ class AppScmEngenhariaMobileBll {
     return operation;
   }
 
-  Future<Operation> onSelectDistributionQuantitativePhysicalAccessesServiceByIdSiciFust(int Id) async {
+  Future<Operation> onSelectDistributionQuantitativePhysicalAccessesServiceByIdSiciFust(int id) async {
     Operation operation = Operation();
-    operation.result = null;
-    operation.message = 'Operação realizada com sucesso';
-    operation.erro = false;
     try {
+      operation.result = null;
+      operation.message = 'Operação realizada com sucesso';
+      operation.erro = false;
       realm.write(() {
-        //realm.add<TbUser>(null);
+        realm.all<TbQuantitativeDistributionPhysicalAccessesService>().query('idFichaSiciApp == $id');
       });
       operation.result = true;
     } catch (ex) {
       operation.erro = true;
-      operation.message = ' , erro ' + ex.toString();
+      operation.message = ' , erro $ex';
     }
     return operation;
   }
 
-  Future<Operation> onDeleteDistributionQuantitativePhysicalAccessesService(int Id) async {
+  Future<Operation> onDeleteDistributionQuantitativePhysicalAccessesService(int id) async {
     Operation operation = Operation();
-    operation.result = null;
-    operation.message = 'Operação realizada com sucesso';
-    operation.erro = false;
     try {
+      operation.result = null;
+      operation.message = 'Operação realizada com sucesso';
+      operation.erro = false;
       realm.write(() {
-        //realm.add<TbUser>(user);
+        realm.all<TbQuantitativeDistributionPhysicalAccessesService>().query('idApp == $id');
       });
       operation.result = true;
     } catch (ex) {
       operation.erro = true;
-      operation.message = ' , erro ' + ex.toString();
+      operation.message = ' , erro $ex';
     }
     return operation;
   }
@@ -741,30 +527,14 @@ class AppScmEngenhariaMobileBll {
   Future<Operation> onCleanTbDistributionQuantitativePhysicalAccessesService() async {
     Operation operacao = Operation();
     try {
-      operacao.result = null;
+      operacao.result = true;
       operacao.message = 'Operação realizada com sucesso';
-      operacao.erro = false;
-      final accessToken = realm.all<TbUser>();
-      if(accessToken.length > 1)
-      {
-        realm.write(() {
-          realm.deleteAll<TbUser>();
-        });
-        operacao.result = null;
-        throw ('Todos usuários foram removidos');
-      }
-      else  if(accessToken.isEmpty)
-      {
-        operacao.result = null;
-        operacao.message = 'Usuário não logado';
-      }
-      else
-      {
-        operacao.result = accessToken.first;
-      }
+      realm.write(() {
+        realm.deleteAll<TbQuantitativeDistributionPhysicalAccessesService>();
+      });
     } catch (ex) {
       operacao.erro = true;
-      operacao.message = ' , erro ' + ex.toString();
+      operacao.message = ' , erro $ex';
     }
     return operacao;
   }
