@@ -61,10 +61,10 @@ dependencies:
   realm: ^0.3.1+beta # ANDROID, IOS, LINUX, MACOS, WINDOWS
 
   #Plugin Flutter Community
-  connectivity_plus: ^2.3.6 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
-  #device_info_plus: ^4.0.3 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  connectivity_plus: ^2.3.6+1 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  #device_info_plus: ^4.1.0 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
   #package_info_plus: ^1.4.3+1 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
-  #share_plus: ^4.0.10 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  #share_plus: ^4.0.10+1 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
 
   #Plugin google
   file: ^6.1.2 # ANDROID, IOS, LINUX, MACOS, WINDOWS
@@ -77,7 +77,6 @@ dependencies:
 
   #Plugin outros
   jaguar_jwt: ^3.0.0
-  flutter_svg: ^1.1.3
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -141,7 +140,16 @@ flutter:
     - family: avenir-lt-std-medium
       fonts:
         - asset: assets/fonts/avenir_lt/avenir-lt-std-medium.otf
+    # ------------------------------------------------------------------------------- inputDecorationTheme
+    - family: avenir-lt-std-book-oblique
+      fonts:
+        - asset: assets/fonts/avenir_lt/avenir-lt-std-book-oblique.otf
     # -------------------------------------------------------------------------------
+    - family: avenir-lt-std-book
+      fonts:
+        - asset: assets/fonts/avenir_lt/avenir-lt-std-book.otf
+    # -------------------------------------------------------------------------------
+
 
   # fonts:
   #   - family: Schyler open-sans-regular

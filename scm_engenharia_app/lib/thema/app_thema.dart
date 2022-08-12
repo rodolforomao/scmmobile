@@ -20,10 +20,10 @@ class AppThema {
          headline4:TextStyle(color: Color(0xff193C70), fontSize: 72.0, fontWeight: FontWeight.bold),
          headline5:TextStyle(color: Color(0xffB28DD1), fontSize: 72.0, fontWeight: FontWeight.bold),
          headline6:TextStyle(color: Color(0xff6b8e23), fontSize: 72.0, fontWeight: FontWeight.bold),
-         subtitle1:TextStyle(color:  Color(0xFF545454), fontSize: 20.0,fontFamily: 'avenir-lt-std-medium'),
-         subtitle2:TextStyle(color:  Color(0xff0c5856), fontSize: 72.0, fontWeight: FontWeight.bold),
-         bodyText1:TextStyle(color: Color(0xffe4b0aa), fontSize: 72.0, fontWeight: FontWeight.bold),
-         bodyText2:TextStyle(color: Color(0xff284521),fontSize: 72.0, fontWeight: FontWeight.bold),
+         subtitle1:TextStyle(color:  Color(0xFF393939), fontSize: 20.0,fontFamily: 'avenir-lt-std-medium'),
+         subtitle2:TextStyle(color:  Color(0xFF545454), fontSize: 20.0,fontFamily: 'avenir-lt-std-medium'),
+         bodyText1:TextStyle(color:  Color(0xFF545454), fontSize: 20.0,fontFamily: 'avenir-lt-std-medium'),
+         bodyText2:TextStyle(color:  Color(0xFF545454), fontSize: 15.0,fontFamily: 'avenir-lt-std-medium'),
       ),
       inputDecorationTheme: const InputDecorationTheme(
         focusedErrorBorder: OutlineInputBorder(
@@ -36,30 +36,30 @@ class AppThema {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(5.0)),
-          borderSide: BorderSide(color: Color(0xff093d6c), width: 1.0),
+          borderSide: BorderSide(color: Color(0xFFF65100), width: 1.0),
         ),
         contentPadding: EdgeInsets.fromLTRB(10.0, 18.0, 10.0, 16.0),
         border: OutlineInputBorder(),
         helperStyle: TextStyle(
             fontWeight: FontWeight.w500,
             fontSize: 15.0,
-            color:  Color(0xff093d6c),
-            fontFamily: 'avenir-next-rounded-pro-regular'),
+            color:  Color(0xFFF65100),
+            fontFamily: 'avenir-lt-std-book-oblique'),
         hintStyle: TextStyle(
             fontWeight: FontWeight.w500,
             fontSize: 15.0,
             color:  Color(0xFFb8b8b8),
-            fontFamily: 'avenir-next-rounded-pro-regular'),
+            fontFamily: 'avenir-lt-std-book-oblique'),
         labelStyle: TextStyle(
             fontWeight: FontWeight.w400,
             fontSize: 17.0,
             color: Color(0xFFb8b8b8),
-            fontFamily: 'open-sans-regular'),
+            fontFamily: 'avenir-lt-std-book'),
         floatingLabelStyle: TextStyle(
             fontWeight: FontWeight.w400,
             fontSize: 15.0,
             color: Color(0xff50093d6c),
-            fontFamily: 'open-sans-regular'),
+            fontFamily: 'avenir-lt-std-book'),
         fillColor: Colors.white,
       ),
       appBarTheme: const AppBarTheme(

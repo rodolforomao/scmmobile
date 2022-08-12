@@ -20,7 +20,7 @@ class GlobalView  {
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: maxCrossAxisExtent,
         //childAspectRatio: MediaQuery.of(context).size.width / (MediaQuery.of(context).size.height / 1.4),
-        mainAxisExtent: 55,
+        mainAxisExtent: 80,
         crossAxisSpacing: 20.0,
         mainAxisSpacing: 20.0,
       ),
@@ -99,6 +99,7 @@ class GlobalView  {
               child: Text(
                 errorInformation,
                 textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17),
               ),
             ),
             const SizedBox(height: 25.0),

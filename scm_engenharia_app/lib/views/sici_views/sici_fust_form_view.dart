@@ -132,6 +132,9 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
   //Valor COFINS
   final txtControllerCofins = TextEditingController();
   final focusNodeCofins  = FocusNode();
+  //Valor COFINS (%)
+  final txtControllerCofinsPorc = TextEditingController();
+  final focusNodeCofinsPorc  = FocusNode();
  // Receita Liquida
   final txtControllerNetRevenue = TextEditingController();
   final focusNodeNetRevenue  = FocusNode();
@@ -163,7 +166,7 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
       resulFormSiciFust.pis = txtControllerPis.text;
       resulFormSiciFust.pisPorc = txtControllerPisPorc.text;
       resulFormSiciFust.cofins = txtControllerCofins.text;
-      resulFormSiciFust.cofinsPorc = txtControllerPisPorc.text;
+      resulFormSiciFust.cofinsPorc = txtControllerCofinsPorc.text;
       resulFormSiciFust.observacoes = txtControllerGeneralObservations.text;
      // if (_FichaSici.distribuicaoFisicosServicoQuantitativo.length == 0) {
      //   throw ("Distribuição do quantitativo de acessos físicos em serviço é obrigatório,favor adicionar.");
@@ -333,9 +336,9 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                     child: TextButton(
                       style: TextButton.styleFrom(
                         backgroundColor: const Color(0xffdc3545),
-                        padding: const EdgeInsets.fromLTRB(15.0, 2.0, 15.0, 2.0),
-                        minimumSize: const Size(130, 47),
-                        maximumSize: const Size(130, 47),
+                        padding: const EdgeInsets.fromLTRB(5.0, 2.0, 5.0, 3.0),
+                        minimumSize: const Size(130, 40),
+                        maximumSize: const Size(130, 40),
                         textStyle: const TextStyle(
                           fontWeight: FontWeight.w500,
                           color:  Color(0xffFFFFFF),
@@ -399,112 +402,101 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
               Step(
                 title: SizedBox(
                   width: MediaQuery.of(context).size.width - 90,
-                  child: const Text(
-                    "INFORMAÇÕES DA EMPRESA",
+                  child:  Text(
+                    'INFORMAÇÕES DA EMPRESA',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     softWrap: false,
-                    style: TextStyle(
-                        fontSize: 14.0,
-                        color: Color(0xff000000),
-                        fontFamily: "open-sans-regular"),
+                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
                   ),
                 ),
-                content: Container(
-                  child: Column(
-                    children: [
-                      SizedBox(height: 20.0),
-                      TextField(
-                        onTap: () {
-                          FocusScope.of(context).requestFocus(FocusNode());
-                          onSelectedDate(context);
-                        },
-                        keyboardType: TextInputType.datetime,
-                        controller: txtControllerReferencePeriod,
-                        focusNode: focusNodeReferencePeriod,
-                        textInputAction: TextInputAction.next,
-                        onSubmitted: (term) {
-                          focusNodeReferencePeriod.unfocus();
-                          FocusScope.of(context).requestFocus(focusNodeSocialReason);
-                        },
-                        decoration: const InputDecoration(
-                          labelText: 'Período referência:',
-                          hintText: '',
-                        ),
-                        maxLength: 20,
-                      ),
-                      SizedBox(height: 20.0),
-                      TextField(
-                        keyboardType: TextInputType.datetime,
-                        controller: txtControllerSocialReason,
-                        focusNode: focusNodeSocialReason,
-                        textInputAction: TextInputAction.next,
-                        onSubmitted: (term) {
-                          focusNodeSocialReason.unfocus();
-                          FocusScope.of(context).requestFocus(focusNodeLandline);
-                        },
-                        maxLength: 100,
-                        style: TextStyle(
-                            fontSize: 17,
-                            fontFamily: 'nunito-regular',
-                            color: const Color(0xFF000000)),
-                        decoration: InputDecoration(
-                          labelText: 'Razão social:',
-                          hintText: 'Razão social LTDA - ME.',
-                        ),
-                      ),
-                      SizedBox(height: 20.0),
-                      TextField(
-                        keyboardType: TextInputType.phone,
-                        controller: txtControllerLandline,
-                        focusNode: focusNodeLandline,
-                        textInputAction: TextInputAction.next,
-                        onSubmitted: (term) {
-                          focusNodeLandline.unfocus();
-                          FocusScope.of(context).requestFocus(focusNodeCnpj);
-                        },
-                        maxLength: 100,
-                        decoration: InputDecoration(
-                          labelText: 'Telefone Fixo:',
-                          hintText: '',
-                        ),
-                      ),
-                      SizedBox(height: 20.0),
-                      TextField(
-                        keyboardType: TextInputType.number,
-                        controller: txtControllerCnpj,
-                        focusNode: focusNodeCnpj,
-                        textInputAction: TextInputAction.next,
-                        onSubmitted: (term) {
-                          focusNodeCnpj.unfocus();
-                          FocusScope.of(context).requestFocus(focusNodeTelefoneMovel);
-                        },
-                        autofocus: false,
-                        decoration: InputDecoration(
-                          labelText: 'CNPJ:',
-                          hintText: '',
-                        ),
-                      ),
-                      SizedBox(height: 20.0),
-                      TextField(
-                        keyboardType: TextInputType.number,
-                        controller: txtControllerTelefoneMovel,
-                        focusNode: focusNodeTelefoneMovel,
-                        textInputAction: TextInputAction.next,
-                        onSubmitted: (term) {
-                          focusNodeTelefoneMovel.unfocus();
-                          FocusScope.of(context).requestFocus(focusNodeGrossRevenue);
-                        },
-                        autofocus: false,
-                        decoration: InputDecoration(
-                          labelText: 'TELEFONE CELULAR:',
-                          hintText: '',
-                        ),
-                        maxLength: 20,
-                      ),
-                      SizedBox(height: 20.0),
-                    ],
+                content:  Container(
+                  constraints: const BoxConstraints(
+                    maxWidth: 1000,
                   ),
+                  child: GlobalView.viewResponsiveGridTextField(context,5,600,[
+                    TextField(
+                      onTap: () {
+                        FocusScope.of(context).requestFocus(FocusNode());
+                        onSelectedDate(context);
+                      },
+
+                      keyboardType: TextInputType.datetime,
+                      controller: txtControllerReferencePeriod,
+                      focusNode: focusNodeReferencePeriod,
+                      textInputAction: TextInputAction.next,
+                      onSubmitted: (term) {
+                        focusNodeReferencePeriod.unfocus();
+                        FocusScope.of(context).requestFocus(focusNodeSocialReason);
+                      },
+                      decoration:  const InputDecoration(
+                        labelText: 'Período referência:',
+                        hintText: '',
+                      ),
+                      maxLength: 20,
+                    ),
+                    TextField(
+                      keyboardType: TextInputType.datetime,
+                      controller: txtControllerSocialReason,
+                      focusNode: focusNodeSocialReason,
+                      textInputAction: TextInputAction.next,
+                      onSubmitted: (term) {
+                        focusNodeSocialReason.unfocus();
+                        FocusScope.of(context).requestFocus(focusNodeLandline);
+                      },
+                      maxLength: 100,
+                      decoration: const InputDecoration(
+                        labelText: 'Razão social:',
+                        hintText: 'Razão social LTDA - ME.',
+                      ),
+                    ),
+                    TextField(
+                      keyboardType: TextInputType.phone,
+                      controller: txtControllerLandline,
+                      focusNode: focusNodeLandline,
+                      textInputAction: TextInputAction.next,
+                      onSubmitted: (term) {
+                        focusNodeLandline.unfocus();
+                        FocusScope.of(context).requestFocus(focusNodeCnpj);
+                      },
+                      maxLength: 100,
+                      decoration: const InputDecoration(
+                        labelText: 'Telefone Fixo:',
+                        hintText: '',
+                      ),
+                    ),
+                    TextField(
+                      keyboardType: TextInputType.number,
+                      controller: txtControllerCnpj,
+                      focusNode: focusNodeCnpj,
+                      textInputAction: TextInputAction.next,
+                      onSubmitted: (term) {
+                        focusNodeCnpj.unfocus();
+                        FocusScope.of(context).requestFocus(focusNodeTelefoneMovel);
+                      },
+                      autofocus: false,
+                      decoration: const InputDecoration(
+                        labelText: 'CNPJ:',
+                        hintText: '',
+                      ),
+                    ),
+                    TextField(
+                      keyboardType: TextInputType.number,
+                      controller: txtControllerTelefoneMovel,
+                      focusNode: focusNodeTelefoneMovel,
+                      textInputAction: TextInputAction.next,
+                      onSubmitted: (term) {
+                        focusNodeTelefoneMovel.unfocus();
+                        FocusScope.of(context).requestFocus(focusNodeGrossRevenue);
+                      },
+                      autofocus: false,
+                      decoration: const InputDecoration(
+                        labelText: 'TELEFONE CELULAR:',
+                        hintText: '',
+                      ),
+                      maxLength: 20,
+                    ),
+                  ].toList()),
                 ),
                 state: current_step > 0 ? StepState.complete : StepState.disabled,
                 isActive: true,
@@ -512,281 +504,272 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
               Step(
                 title: SizedBox(
                   width: MediaQuery.of(context).size.width - 90,
-                  child: const Text(
+                  child:  Text(
                     'INFORMAÇÕES FINANCEIRAS',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     softWrap: false,
-                    style: TextStyle(
-                        fontSize: 14.0,
-                        color: Color(0xff000000),
-                        fontFamily: "open-sans-regular"),
+                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
                   ),
                 ),
                 content: Container(
-                  child: Column(
-                    children: [
-                      TextField(
-                        keyboardType: TextInputType.number,
-                        controller: txtControllerGrossRevenue,
-                        focusNode: focusNodeGrossRevenue,
-                        textInputAction: TextInputAction.next,
-                        onSubmitted: (term) {
-                          focusNodeGrossRevenue.unfocus();
-                          FocusScope.of(context).requestFocus(focusNodeSimpleValue);
-                        },
-                        textAlign: TextAlign.start,
-                        inputFormatters: [
-
-                        ],
-                        decoration: const InputDecoration(
-                          labelText: 'Receita Bruta',
-                          hintText: '',
-                        ),
-                        maxLength: 20,
-                      ),
-                      SizedBox(height: 20.0),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Expanded(
-                            child: TextField(
-                              keyboardType: TextInputType.number,
-                              controller: txtControllerSimpleValue,
-                              focusNode: focusNodeSimpleValue,
-                              textInputAction: TextInputAction.next,
-                              onSubmitted: (term) {
-                                focusNodeSimpleValue.unfocus();
-                                FocusScope.of(context).requestFocus(focusNodeSimpleAliquot);
-                              },
-                              textAlign: TextAlign.start,
-                              inputFormatters: [
-
-                              ],
-                              autofocus: false,
-                              decoration: const InputDecoration(
-                                labelText: 'Valor Simples',
-                                hintText: '',
-                              ),
-                              maxLength: 20,
-                            ),
-                          ),
-                          SizedBox(width: 15),
-                          Expanded(
-                            child: TextField(
-                              keyboardType: TextInputType.number,
-                              controller: txtControllerSimpleAliquot,
-                              focusNode: focusNodeSimpleAliquot,
-                              textInputAction: TextInputAction.next,
-                              onSubmitted: (term) {
-                                focusNodeSimpleAliquot.unfocus();
-                                FocusScope.of(context).requestFocus(focusNodeICMSvalue);
-                              },
-                              textAlign: TextAlign.start,
-                              inputFormatters: [
-
-                              ],
-                              autofocus: false,
-                              decoration: const InputDecoration(
-                                labelText: 'Aliquota Simples %',
-                                hintText: '',
-                              ),
-                              maxLength: 7,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 20.0),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Expanded(
-                            child: TextField(
-                              controller: txtControllerICMSvalue,
-                              focusNode: focusNodeICMSvalue,
-                              textInputAction: TextInputAction.next,
-                              keyboardType: TextInputType.number,
-                              onSubmitted: (term) {
-                                focusNodeICMSvalue.unfocus();
-                                FocusScope.of(context).requestFocus(focusNodeIcmsPorc);
-                              },
-                              textAlign: TextAlign.start,
-                              inputFormatters: [
-
-                              ],
-                              autofocus: false,
-                              decoration: InputDecoration(
-                                labelText: 'Valor ICMS',
-                                hintText: '',
-                              ),
-                              maxLength: 20,
-                            ),
-                          ),
-                          SizedBox(width: 15),
-                          Expanded(
-                            child: TextField(
-                              controller: txtControllerIcmsPorc,
-                              keyboardType: TextInputType.number,
-                              focusNode: focusNodeIcmsPorc,
-                              textInputAction: TextInputAction.next,
-                              onSubmitted: (term) {
-                                focusNodeIcmsPorc.unfocus();
-                                FocusScope.of(context).requestFocus(focusNodePis);
-                              },
-                              textAlign: TextAlign.start,
-                              inputFormatters: [
-
-                              ],
-                              decoration: InputDecoration(
-                                labelText: 'ICMS (%)',
-                                hintText: '',
-                              ),
-                              maxLength: 12,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 20.0),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Expanded(
-                            child: TextField(
-                              controller: txtControllerPis,
-                              focusNode: focusNodePis,
-                              textInputAction: TextInputAction.next,
-                              keyboardType: TextInputType.number,
-                              onSubmitted: (term) {
-                                focusNodePis.unfocus();
-                                FocusScope.of(context).requestFocus(focusNodePisPorc);
-                              },
-                              textAlign: TextAlign.start,
-                              inputFormatters: [
-
-                              ],
-                              decoration: InputDecoration(
-                                labelText: 'Valor PIS',
-                                hintText: '',
-                              ),
-                              maxLength: 20,
-                            ),
-                          ),
-                          SizedBox(width: 15),
-                          Expanded(
-                            child: TextField(
-                              controller: txtControllerPisPorc,
-                              focusNode: focusNodePisPorc,
-                              textInputAction: TextInputAction.next,
-                              keyboardType: TextInputType.number,
-                              onSubmitted: (term) {
-                                focusNodePisPorc.unfocus();
-                                FocusScope.of(context).requestFocus(focusNodeCofins);
-                              },
-                              textAlign: TextAlign.start,
-                              inputFormatters: [
-
-                              ],
-                              decoration: InputDecoration(
-                                labelText: 'PIS (%)',
-                                hintText: '',
-                              ),
-                              maxLength: 12,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 20.0),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Expanded(
-                            child: TextField(
-                              controller: txtControllerCofins,
-                              textAlign: TextAlign.start,
-                              focusNode: focusNodeCofins,
-                              textInputAction: TextInputAction.next,
-                              keyboardType: TextInputType.number,
-                              onSubmitted: (term) {
-                                focusNodeCofins.unfocus();
-                                FocusScope.of(context).requestFocus(focusNodePisPorc);
-                              },
-                              inputFormatters: [
-
-                              ],
-                              decoration: InputDecoration(
-                                labelText: 'Valor COFINS',
-                                hintText: '',
-                              ),
-                              maxLength: 20,
-                            ),
-                          ),
-                          SizedBox(width: 15),
-                          Expanded(
-                            child: TextField(
-                              controller: txtControllerPisPorc,
-                              textAlign: TextAlign.start,
-                              focusNode: focusNodePisPorc,
-                              textInputAction: TextInputAction.next,
-                              keyboardType: TextInputType.number,
-                              onSubmitted: (term) {
-                                focusNodePisPorc.unfocus();
-                                FocusScope.of(context).requestFocus(focusNodeNetRevenue);
-                              },
-                              inputFormatters: [
-
-                              ],
-                              decoration: InputDecoration(
-                                labelText: 'COFINS (%)',
-                                hintText: '',
-                              ),
-                              maxLength: 12,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 20.0),
-                      TextField(
-                        controller: txtControllerNetRevenue,
-                        textAlign: TextAlign.start,
-                        focusNode: focusNodeNetRevenue,
-                        textInputAction: TextInputAction.next,
-                        keyboardType: TextInputType.number,
-                        onSubmitted: (term) {
-                          focusNodeNetRevenue.unfocus();
-                          FocusScope.of(context).requestFocus(focusNodeGeneralObservations);
-                        },
-                        inputFormatters: [
-
-                        ],
-                        decoration: InputDecoration(
-                          labelText: 'Receita Liquida',
-                          hintText: '',
-                        ),
-                        maxLength: 20,
-                      ),
-                      SizedBox(height: 20.0),
-                      TextField(
-                        controller: txtControllerGeneralObservations,
-                        textAlign: TextAlign.start,
-                        focusNode: focusNodeGeneralObservations,
-                        textInputAction: TextInputAction.next,
-                        keyboardType: TextInputType.number,
-                        onSubmitted: (term) {
-                          focusNodeGeneralObservations.unfocus();
-                          FocusScope.of(context).requestFocus(focusNodeIcmsPorc);
-                        },
-                        inputFormatters: [
-
-                        ],
-                        decoration: InputDecoration(
-                          labelText: 'Observações Gerais',
-                          hintText: '',
-                        ),
-                        maxLength: 1500,
-                      ),
-                      SizedBox(height: 20.0),
-                    ],
+                  constraints: const BoxConstraints(
+                    maxWidth: 1000,
                   ),
+                  child:  GlobalView.viewResponsiveGridTextField(context,7,600,[
+                    TextField(
+                      keyboardType: TextInputType.number,
+                      controller: txtControllerGrossRevenue,
+                      focusNode: focusNodeGrossRevenue,
+                      textInputAction: TextInputAction.next,
+                      onSubmitted: (term) {
+                        focusNodeGrossRevenue.unfocus();
+                        FocusScope.of(context).requestFocus(focusNodeSimpleValue);
+                      },
+                      textAlign: TextAlign.start,
+                      inputFormatters: [
+
+                      ],
+                      decoration: const InputDecoration(
+                        labelText: 'Receita Bruta',
+                        hintText: '',
+                      ),
+                      maxLength: 20,
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Expanded(
+                          child: TextField(
+                            keyboardType: TextInputType.number,
+                            controller: txtControllerSimpleValue,
+                            focusNode: focusNodeSimpleValue,
+                            textInputAction: TextInputAction.next,
+                            onSubmitted: (term) {
+                              focusNodeSimpleValue.unfocus();
+                              FocusScope.of(context).requestFocus(focusNodeSimpleAliquot);
+                            },
+                            textAlign: TextAlign.start,
+                            inputFormatters: [
+
+                            ],
+                            autofocus: false,
+                            decoration: const InputDecoration(
+                              labelText: 'Valor Simples',
+                              hintText: '',
+                            ),
+                            maxLength: 20,
+                          ),
+                        ),
+                        SizedBox(width: 15),
+                        Expanded(
+                          child: TextField(
+                            keyboardType: TextInputType.number,
+                            controller: txtControllerSimpleAliquot,
+                            focusNode: focusNodeSimpleAliquot,
+                            textInputAction: TextInputAction.next,
+                            onSubmitted: (term) {
+                              focusNodeSimpleAliquot.unfocus();
+                              FocusScope.of(context).requestFocus(focusNodeICMSvalue);
+                            },
+                            textAlign: TextAlign.start,
+                            inputFormatters: [
+
+                            ],
+                            autofocus: false,
+                            decoration: const InputDecoration(
+                              labelText: 'Aliquota Simples %',
+                              hintText: '',
+                            ),
+                            maxLength: 7,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Expanded(
+                          child: TextField(
+                            controller: txtControllerICMSvalue,
+                            focusNode: focusNodeICMSvalue,
+                            textInputAction: TextInputAction.next,
+                            keyboardType: TextInputType.number,
+                            onSubmitted: (term) {
+                              focusNodeICMSvalue.unfocus();
+                              FocusScope.of(context).requestFocus(focusNodeIcmsPorc);
+                            },
+                            textAlign: TextAlign.start,
+                            inputFormatters: [
+
+                            ],
+                            autofocus: false,
+                            decoration: InputDecoration(
+                              labelText: 'Valor ICMS',
+                              hintText: '',
+                            ),
+                            maxLength: 20,
+                          ),
+                        ),
+                        SizedBox(width: 15),
+                        Expanded(
+                          child: TextField(
+                            controller: txtControllerIcmsPorc,
+                            keyboardType: TextInputType.number,
+                            focusNode: focusNodeIcmsPorc,
+                            textInputAction: TextInputAction.next,
+                            onSubmitted: (term) {
+                              focusNodeIcmsPorc.unfocus();
+                              FocusScope.of(context).requestFocus(focusNodePis);
+                            },
+                            textAlign: TextAlign.start,
+                            inputFormatters: [
+
+                            ],
+                            decoration: InputDecoration(
+                              labelText: 'ICMS (%)',
+                              hintText: '',
+                            ),
+                            maxLength: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Expanded(
+                          child: TextField(
+                            controller: txtControllerPis,
+                            focusNode: focusNodePis,
+                            textInputAction: TextInputAction.next,
+                            keyboardType: TextInputType.number,
+                            onSubmitted: (term) {
+                              focusNodePis.unfocus();
+                              FocusScope.of(context).requestFocus(focusNodePisPorc);
+                            },
+                            textAlign: TextAlign.start,
+                            inputFormatters: [
+
+                            ],
+                            decoration: InputDecoration(
+                              labelText: 'Valor PIS',
+                              hintText: '',
+                            ),
+                            maxLength: 20,
+                          ),
+                        ),
+                        SizedBox(width: 15),
+                        Expanded(
+                          child: TextField(
+                            controller: txtControllerPisPorc,
+                            focusNode: focusNodePisPorc,
+                            textInputAction: TextInputAction.next,
+                            keyboardType: TextInputType.number,
+                            onSubmitted: (term) {
+                              focusNodePisPorc.unfocus();
+                              FocusScope.of(context).requestFocus(focusNodeCofins);
+                            },
+                            textAlign: TextAlign.start,
+                            inputFormatters: [
+
+                            ],
+                            decoration: InputDecoration(
+                              labelText: 'PIS (%)',
+                              hintText: '',
+                            ),
+                            maxLength: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Expanded(
+                          child: TextField(
+                            controller: txtControllerCofins,
+                            textAlign: TextAlign.start,
+                            focusNode: focusNodeCofins,
+                            textInputAction: TextInputAction.next,
+                            keyboardType: TextInputType.number,
+                            onSubmitted: (term) {
+                              focusNodeCofins.unfocus();
+                              FocusScope.of(context).requestFocus(focusNodeCofinsPorc);
+                            },
+                            inputFormatters: [
+
+                            ],
+                            decoration: const InputDecoration(
+                              labelText: 'Valor COFINS',
+                              hintText: '',
+                            ),
+                            maxLength: 20,
+                          ),
+                        ),
+                        SizedBox(width: 15),
+                        Expanded(
+                          child: TextField(
+                            controller: txtControllerCofinsPorc,
+                            textAlign: TextAlign.start,
+                            focusNode: focusNodeCofinsPorc,
+                            textInputAction: TextInputAction.next,
+                            keyboardType: TextInputType.number,
+                            onSubmitted: (term) {
+                              focusNodeCofinsPorc.unfocus();
+                              FocusScope.of(context).requestFocus(focusNodeNetRevenue);
+                            },
+                            inputFormatters: [
+
+                            ],
+                            decoration: const InputDecoration(
+                              labelText: 'COFINS (%)',
+                              hintText: '',
+                            ),
+                            maxLength: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                    TextField(
+                      controller: txtControllerNetRevenue,
+                      textAlign: TextAlign.start,
+                      focusNode: focusNodeNetRevenue,
+                      textInputAction: TextInputAction.next,
+                      keyboardType: TextInputType.number,
+                      onSubmitted: (term) {
+                        focusNodeNetRevenue.unfocus();
+                        FocusScope.of(context).requestFocus(focusNodeGeneralObservations);
+                      },
+                      inputFormatters: [
+
+                      ],
+                      decoration: const InputDecoration(
+                        labelText: 'Receita Liquida',
+                        hintText: '',
+                      ),
+                      maxLength: 20,
+                    ),
+                    TextField(
+                      controller: txtControllerGeneralObservations,
+                      textAlign: TextAlign.start,
+                      focusNode: focusNodeGeneralObservations,
+                      textInputAction: TextInputAction.next,
+                      keyboardType: TextInputType.number,
+                      onSubmitted: (term) {
+                        focusNodeGeneralObservations.unfocus();
+                        FocusScope.of(context).requestFocus(focusNodeIcmsPorc);
+                      },
+                      inputFormatters: [
+
+                      ],
+                      decoration: const InputDecoration(
+                        labelText: 'Observações Gerais',
+                        hintText: '',
+                      ),
+                      maxLength: 1500,
+                    ),
+                  ].toList()),
                 ),
                 state: current_step > 1
                     ? StepState.complete
@@ -796,15 +779,12 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
               Step(
                 title: SizedBox(
                   width: MediaQuery.of(context).size.width - 90,
-                  child: const Text(
+                  child:  Text(
                     "DISTRIBUIÇÃO DO QUANTITATIVO DE ACESSOS FÍSICOS EM SERVIÇO",
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     softWrap: false,
-                    style: TextStyle(
-                        fontSize: 14.0,
-                        color: Color(0xff000000),
-                        fontFamily: "open-sans-regular"),
+                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
                   ),
                 ),
                 content: Container(
@@ -852,7 +832,7 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                             physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemCount: siciFileModel
-                                .distribuicaoFisicosServicoQuantitativo == null ? 0 : siciFileModel.distribuicaoFisicosServicoQuantitativo!.length, itemBuilder: PhysicalDistributionServiceQuantitativeCard,
+                                .distribuicaoFisicosServicoQuantitativo == null ? 0 : siciFileModel.distribuicaoFisicosServicoQuantitativo!.length, itemBuilder: physicalDistributionServiceQuantitativeCard,
                           );
                         },
                       ),
@@ -893,10 +873,9 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
     );
   }
 
-  Card PhysicalDistributionServiceQuantitativeCard(BuildContext context, int index) =>
+  Card physicalDistributionServiceQuantitativeCard(BuildContext context, int index) =>
       Card(
         elevation: 0.9,
-        color: Color(0xffFFFFFF),
         child:GlobalView.viewResponsiveGridTextField(context,3,500,[
           Flexible(
             child: RichText(
@@ -907,21 +886,12 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                 text: TextSpan(children: [
                   TextSpan(
                     text: 'UF' + "\n ",
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black,
-                      fontFamily: 'avenir-lt-std-roman',
-                      fontSize: 16.0,
-                    ),
+                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
+
                   ),
                   TextSpan(
                     text: widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index].uf,
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black54,
-                      fontFamily: 'avenir-lt-std-roman',
-                      fontSize: 15.0,
-                    ),
+                    style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 17),
                   ),
                 ])),
           ),
@@ -934,21 +904,11 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                 text: TextSpan(children: [
                   TextSpan(
                     text: 'Nome município' + "\n ",
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black,
-                      fontFamily: 'avenir-lt-std-roman',
-                      fontSize: 16.0,
-                    ),
+                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
                   ),
                   TextSpan(
                     text: widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index].municipio,
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black54,
-                      fontFamily: 'avenir-lt-std-roman',
-                      fontSize: 15.0,
-                    ),
+                    style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 17),
                   ),
                 ])),
           ),
@@ -961,21 +921,11 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                 text: TextSpan(children: [
                   TextSpan(
                     text: 'Nome tecnologia' + "\n ",
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black,
-                      fontFamily: 'avenir-lt-std-roman',
-                      fontSize: 16.0,
-                    ),
+                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
                   ),
                   TextSpan(
                     text: widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index].tecnologia,
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black54,
-                      fontFamily: 'avenir-lt-std-roman',
-                      fontSize: 15.0,
-                    ),
+                    style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 17),
                   ),
                 ])),
           ),
@@ -988,22 +938,12 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                 text: TextSpan(children: [
                   TextSpan(
                     text: 'Código IBGE' + "\n ",
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black,
-                      fontFamily: 'avenir-lt-std-roman',
-                      fontSize: 15.0,
-                    ),
+                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
                   ),
                   TextSpan(
                     text:widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index]
                         .cod_ibge,
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black54,
-                      fontFamily: 'avenir-lt-std-roman',
-                      fontSize: 16.0,
-                    ),
+                    style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 17),
                   ),
                 ])),
           ),
@@ -1016,22 +956,12 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                 text: TextSpan(children: [
                   TextSpan(
                     text: 'PF - 0 - 512 Kbps' + "\n ",
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black,
-                      fontFamily: 'avenir-lt-std-roman',
-                      fontSize: 16.0,
-                    ),
+                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
                   ),
                   TextSpan(
                     text:widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index]
                         .pf_0,
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black54,
-                      fontFamily: 'avenir-lt-std-roman',
-                      fontSize: 15.0,
-                    ),
+                    style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 17),
                   ),
                 ])),
           ),
@@ -1044,22 +974,12 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                 text: TextSpan(children: [
                   TextSpan(
                     text: 'PF - 512 - 2 Mbps' + "\n ",
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black,
-                      fontFamily: 'avenir-lt-std-roman',
-                      fontSize: 16.0,
-                    ),
+                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
                   ),
                   TextSpan(
                     text: widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index]
                         .pf_512,
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black54,
-                      fontFamily: 'avenir-lt-std-roman',
-                      fontSize: 15.0,
-                    ),
+                    style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 17),
                   ),
                 ])),
           ),
@@ -1072,22 +992,12 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                 text: TextSpan(children: [
                   TextSpan(
                     text: 'PF - 2 - 12 Mbps' + "\n ",
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black,
-                      fontFamily: 'avenir-lt-std-roman',
-                      fontSize: 16.0,
-                    ),
+                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
                   ),
                   TextSpan(
                     text:widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index]
                         .pf_2,
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black54,
-                      fontFamily: 'avenir-lt-std-roman',
-                      fontSize: 15.0,
-                    ),
+                    style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 17),
                   ),
                 ])),
           ),
@@ -1100,22 +1010,12 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                 text: TextSpan(children: [
                   TextSpan(
                     text: 'PF - 12 - 34 Mbps' + "\n ",
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black,
-                      fontFamily: 'avenir-lt-std-roman',
-                      fontSize: 16.0,
-                    ),
+                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
                   ),
                   TextSpan(
                     text:widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index]
                         .pf_12,
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black54,
-                      fontFamily: 'avenir-lt-std-roman',
-                      fontSize: 15.0,
-                    ),
+                    style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 17),
                   ),
                 ])),
           ),
@@ -1128,22 +1028,12 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                 text: TextSpan(children: [
                   TextSpan(
                     text: 'PF - Acima de 34 Mbps' + "\n ",
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black,
-                      fontFamily: 'avenir-lt-std-roman',
-                      fontSize: 16.0,
-                    ),
+                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
                   ),
                   TextSpan(
                     text: widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index]
                         .pf_34,
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black54,
-                      fontFamily: 'avenir-lt-std-roman',
-                      fontSize: 15.0,
-                    ),
+                    style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 17),
                   ),
                 ])),
           ),
@@ -1156,22 +1046,12 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                 text: TextSpan(children: [
                   TextSpan(
                     text: 'PJ - 0 - 512 Kbps' + "\n ",
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black,
-                      fontFamily: 'avenir-lt-std-roman',
-                      fontSize: 16.0,
-                    ),
+                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
                   ),
                   TextSpan(
                     text: widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index]
                         .pj_0,
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black54,
-                      fontFamily: 'avenir-lt-std-roman',
-                      fontSize: 15.0,
-                    ),
+                    style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 17),
                   ),
                 ])),
           ),
@@ -1184,22 +1064,12 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                 text: TextSpan(children: [
                   TextSpan(
                     text: 'PJ - 512 - 2 Mbps' + "\n ",
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black,
-                      fontFamily: 'avenir-lt-std-roman',
-                      fontSize: 16.0,
-                    ),
+                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
                   ),
                   TextSpan(
                     text: widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index]
                         .pj_512,
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black54,
-                      fontFamily: 'avenir-lt-std-roman',
-                      fontSize: 15.0,
-                    ),
+                    style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 17),
                   ),
                 ])),
           ),
@@ -1212,22 +1082,12 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                 text: TextSpan(children: [
                   TextSpan(
                     text: 'PJ - 2 - 12 Mbps' + "\n ",
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black,
-                      fontFamily: 'avenir-lt-std-roman',
-                      fontSize: 16.0,
-                    ),
+                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
                   ),
                   TextSpan(
                     text:widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index]
                         .pj_2,
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black54,
-                      fontFamily: 'avenir-lt-std-roman',
-                      fontSize: 15.0,
-                    ),
+                    style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 17),
                   ),
                 ])),
           ),
@@ -1240,22 +1100,12 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                 text: TextSpan(children: [
                   TextSpan(
                     text: 'PJ - 12 - 34 Mbps' + "\n ",
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black,
-                      fontFamily: 'avenir-lt-std-roman',
-                      fontSize: 16.0,
-                    ),
+                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
                   ),
                   TextSpan(
                     text: widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index]
                         .pj_12,
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black54,
-                      fontFamily: 'avenir-lt-std-roman',
-                      fontSize: 15.0,
-                    ),
+                    style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 17),
                   ),
                 ])),
           ),
@@ -1268,26 +1118,15 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                 text: TextSpan(children: [
                   TextSpan(
                     text: 'PJ - Acima de 34 Mbps' + "\n ",
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black,
-                      fontFamily: 'avenir-lt-std-roman',
-                      fontSize: 16.0,
-                    ),
+                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
                   ),
                   TextSpan(
-                    text:widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index]
-                        .pj_34,
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black54,
-                      fontFamily: 'avenir-lt-std-roman',
-                      fontSize: 15.0,
-                    ),
+                    text:widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index].pj_34,
+                    style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 17),
                   ),
                 ])),
           ),
-          Divider(),
+          const Divider(),
         ].toList()),
       );
   

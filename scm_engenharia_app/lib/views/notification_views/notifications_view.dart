@@ -101,7 +101,6 @@ class NotificationsState extends State<NotificationsView> {
         title: const Text(
           'Notificações',
         ),
-        actions: <Widget>[],
       ),
       body: viewType(MediaQuery.of(context).size.height),
     );
@@ -117,7 +116,7 @@ class NotificationsState extends State<NotificationsView> {
         return  SingleChildScrollView(
           child: Container(
             alignment: Alignment.center,
-            padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+            padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
             constraints: BoxConstraints(
               minHeight: MediaQuery.of(context).size.height,
             ),

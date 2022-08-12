@@ -130,7 +130,6 @@ class ProfileState extends State<ProfileView> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
-        centerTitle: true,
         elevation: 0.0,
         title: const Text(
           'Dados',
@@ -224,12 +223,12 @@ class ProfileState extends State<ProfileView> {
                       txtFocusNodeTelefoneFixo!.unfocus();
                       FocusScope.of(context).requestFocus(txtFocusNodeWhatsapp);
                     },
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Telefone fixo',
                       hintText: 'Digite telefone fixo',
                     ),
                   ),
-                  SizedBox(height: 20.0),
+                  const SizedBox(height: 20.0),
                   TextField(
                     autofocus: false,
                     keyboardType: TextInputType.number,
@@ -240,12 +239,12 @@ class ProfileState extends State<ProfileView> {
                       txtFocusNodeWhatsapp!.unfocus();
                       FocusScope.of(context).requestFocus(txtFocusNodeNomeDaEmpresa);
                     },
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Whatsapp',
                       hintText: 'Digite Whatsapp',
                     ),
                   ),
-                  SizedBox(height: 20.0),
+                  const SizedBox(height: 20.0),
                   TextField(
                     autofocus: false,
                     keyboardType: TextInputType.text,
@@ -256,12 +255,12 @@ class ProfileState extends State<ProfileView> {
                       // txtFocusNodeWhatsapp!.unfocus();
                       // FocusScope.of(context).requestFocus(txtFocusNodeNomeDaEmpresa);
                     },
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Nome da empresa',
                       hintText: 'avenir-lt-std-medium',
                     ),
                   ),
-                  SizedBox(height: 20.0),
+                  const SizedBox(height: 20.0),
                   DropdownButtonFormField<Uf>(
                     elevation: 7,
                     isExpanded: true,
@@ -296,17 +295,17 @@ class ProfileState extends State<ProfileView> {
                       });
                     },
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5.0,
                   ),
-                  SizedBox(height: 25.0),
+                  const SizedBox(height: 25.0),
                   Padding(padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),child: TextButton(
                     child: const Text(' ATUALIZAR '),
                     onPressed: () async {
                       onUpdate();
                     },
                   ),),
-                  SizedBox(height: 30.0),
+                  const SizedBox(height: 30.0),
                 ],
               ),),
           ),
