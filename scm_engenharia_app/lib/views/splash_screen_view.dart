@@ -29,7 +29,7 @@ class SplashScreenState extends State<SplashScreenView> {
         if (respUser.erro) {
           throw respUser.message!;
         } else if (respUser.result == null) {
-         Navigator.of(context).pushNamedAndRemoveUntil(routes.loginRoute, (Route<dynamic> route) => false);
+          Navigator.of(context).pushNamedAndRemoveUntil(routes.loginRoute, (Route<dynamic> route) => false);
         } else {
           global_user_logged.globalUserLogged = respUser.result as TbUser;
           if (await Connectivity().checkConnectivity() == ConnectivityResult.none)

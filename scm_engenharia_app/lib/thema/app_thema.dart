@@ -10,7 +10,7 @@ class AppThema {
       primaryColor:const Color(0xff093d6c),
       primaryColorDark: const Color(0xff000000),
       primaryColorLight: const Color(0xffFFFFFF),
-      splashColor: const Color(0xff3F7EC1),
+      splashColor: const Color(0xff093d6c),
       iconTheme: const IconThemeData(color: Color(0xFF545454)),
       textTheme:  const TextTheme(
         //labelMedium,
@@ -52,7 +52,7 @@ class AppThema {
             fontFamily: 'avenir-lt-std-book-oblique'),
         labelStyle: TextStyle(
             fontWeight: FontWeight.w400,
-            fontSize: 17.0,
+            fontSize: 15.0,
             color: Color(0xFFb8b8b8),
             fontFamily: 'avenir-lt-std-book'),
         floatingLabelStyle: TextStyle(
@@ -169,7 +169,7 @@ class AppThema {
             color:  Color(0xffFFFFFF),
             fontSize: 15,
           ),
-          backgroundColor: const Color(0xFF2fdf84),
+          backgroundColor: const Color(0xFF3F7EC1),
           shape: RoundedRectangleBorder(
             borderRadius:  BorderRadius.circular(5.0),
           ),

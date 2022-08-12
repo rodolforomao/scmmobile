@@ -32,10 +32,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => const SplashScreenView());
     case routes.errorInformationRoute:
       {
-        Map<String, dynamic> map = settings.arguments as Map<String, dynamic>;
-        String view  = map['view'].toString();
-        String error = map['error'].toString();
-        return MaterialPageRoute(builder: (context) => ErrorInformationView(informacao: error,originPage: view,));
+        final arg =  settings.arguments as Map;
+        return MaterialPageRoute(builder: (context) => ErrorInformationView(informacao: arg['error'],originPage: arg['view'],));
       }
     case routes.menuNavigationRoute:
       return MaterialPageRoute(builder: (context) => MenuNavigation());

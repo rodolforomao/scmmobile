@@ -24,19 +24,22 @@ class EnvironmentVariableState extends State<EnvironmentVariableView>  {
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
         OnAlertaInformacaoErro('Verifique sua conexão com a internet e tente novamente.',context);
       } else {
+        setState((){statusView = TypeView.viewLoading;});
         Operation resultRest = await ServicoMobileService.onEnvironmentVariables();
         if (resultRest.erro) {
           throw (resultRest.message!);
         } else {
           setState(() {
-            EnvironmentVariables  result = resultRest.result as EnvironmentVariables;
+            EnvironmentVariables resul = EnvironmentVariables.fromJson(resultRest.result as Map<String, dynamic>);
             statusView = TypeView.viewRenderInformation;
           });
         }
       }
     } catch (error) {
-      statusView = TypeView.viewErrorInformation;
-      GlobalScaffold.ErroInformacao = error.toString();
+      setState(() {
+        statusView = TypeView.viewErrorInformation;
+        GlobalScaffold.ErroInformacao = error.toString();
+      });
     }
   }
 
@@ -76,9 +79,7 @@ class EnvironmentVariableState extends State<EnvironmentVariableView>  {
       case TypeView.viewRenderInformation:
         return Container(
           width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            color: Colors.white,
-          ),
+
           constraints: BoxConstraints(
             maxWidth: MediaQuery.of(context).size.width,
           ),
@@ -99,10 +100,10 @@ class EnvironmentVariableState extends State<EnvironmentVariableView>  {
                   contentPadding: EdgeInsets.fromLTRB(15.0, 7.0, 15.0, 7.0),
                   title: Text(
                     ListMunicipio[index].municipality,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 19.0,
                         color: Color(0xff333333),
-                        fontFamily: "avenir-lt-std-medium"),
+                    ),
                   ),
                   trailing: Icon(Icons.keyboard_arrow_right,
                       color: Color(0xFF545454), size: 30.0)),

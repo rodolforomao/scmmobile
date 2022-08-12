@@ -46,8 +46,7 @@ class MyApp extends StatelessWidget {
           scaffoldMessengerKey: GlobalScaffold.instance.messangerKey,
           onGenerateRoute: router.generateRoute,
           initialRoute: routes.splashScreenRoute,
-          routes:RoutesPage.onRoutesPage(),
-          home:const SplashScreenView(),
+          //routes:RoutesPage.onRoutesPage(),
           title: 'SCM Engenharia',
           builder: (context ,child){
             return Scaffold(
@@ -75,9 +74,8 @@ class MyApp extends StatelessWidget {
           ),
           darkTheme: AppThema.darkTheme,
           themeMode: mode,
-          // navigatorObservers: <NavigatorObserver>[GlobalScaffold.observer],
-
-          //navigatorObservers: <NavigatorObserver>[observer],
+          //navigatorObservers: <NavigatorObserver>[GlobalScaffold.observer],
+          home:const SplashScreenView(),
         );
       },
     );

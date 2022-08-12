@@ -8,6 +8,9 @@ import '../../data/app_scm_engenharia_mobile_bll.dart';
 import '../../data/tb_form_sici_fust.dart';
 import '../../data/tb_quantitative_distribution_physical_accesses_service.dart';
 import '../../help/componentes.dart';
+import '../../help/formatter/cnpj_input_formatter.dart';
+import '../../help/formatter/telefone_input_formatter.dart';
+import '../../help/formatter/telefone_sem_ddd_input_formatter.dart';
 import '../../models/operation.dart';
 import '../../models/quantitative_distribution_physical_accesses_service_model.dart';
 import '../../models/sici_file_model.dart';
@@ -337,8 +340,8 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                       style: TextButton.styleFrom(
                         backgroundColor: const Color(0xffdc3545),
                         padding: const EdgeInsets.fromLTRB(5.0, 2.0, 5.0, 3.0),
-                        minimumSize: const Size(130, 40),
-                        maximumSize: const Size(130, 40),
+                        minimumSize: const Size(130, 43),
+                        maximumSize: const Size(130, 43),
                         textStyle: const TextStyle(
                           fontWeight: FontWeight.w500,
                           color:  Color(0xffFFFFFF),
@@ -358,7 +361,7 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                         });
                       },
                       child: const Text(
-                        'Cancelar'
+                        'Anterior'
                       ),
                     ),
                   ),
@@ -371,8 +374,8 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                       style: TextButton.styleFrom(
                         backgroundColor: const Color(0xff018a8a),
                         padding: const EdgeInsets.fromLTRB(15.0, 2.0, 15.0, 2.0),
-                        minimumSize: const Size(130, 47),
-                        maximumSize: const Size(130, 47),
+                        minimumSize: const Size(130, 43),
+                        maximumSize: const Size(130, 43),
                         textStyle: const TextStyle(
                           color:  Color(0xffFFFFFF),
                           fontSize: 15,
@@ -420,7 +423,6 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                         FocusScope.of(context).requestFocus(FocusNode());
                         onSelectedDate(context);
                       },
-
                       keyboardType: TextInputType.datetime,
                       controller: txtControllerReferencePeriod,
                       focusNode: focusNodeReferencePeriod,
@@ -429,6 +431,8 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                         focusNodeReferencePeriod.unfocus();
                         FocusScope.of(context).requestFocus(focusNodeSocialReason);
                       },
+                      style: const TextStyle(
+                          fontSize: 15.0),
                       decoration:  const InputDecoration(
                         labelText: 'Período referência:',
                         hintText: '',
@@ -445,6 +449,8 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                         FocusScope.of(context).requestFocus(focusNodeLandline);
                       },
                       maxLength: 100,
+                      style: const TextStyle(
+                        fontSize: 15.0),
                       decoration: const InputDecoration(
                         labelText: 'Razão social:',
                         hintText: 'Razão social LTDA - ME.',
@@ -459,7 +465,14 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                         focusNodeLandline.unfocus();
                         FocusScope.of(context).requestFocus(focusNodeCnpj);
                       },
+                      inputFormatters: [
+                        // obrigatório
+                        FilteringTextInputFormatter.digitsOnly,
+                        TelefoneInputFormatter(),
+                      ],
                       maxLength: 100,
+                      style: const TextStyle(
+                          fontSize: 15.0),
                       decoration: const InputDecoration(
                         labelText: 'Telefone Fixo:',
                         hintText: '',
@@ -474,7 +487,14 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                         focusNodeCnpj.unfocus();
                         FocusScope.of(context).requestFocus(focusNodeTelefoneMovel);
                       },
+                      inputFormatters: [
+                        // obrigatório
+                        FilteringTextInputFormatter.digitsOnly,
+                        CnpjInputFormatter(),
+                      ],
                       autofocus: false,
+                      style: const TextStyle(
+                          fontSize: 15.0),
                       decoration: const InputDecoration(
                         labelText: 'CNPJ:',
                         hintText: '',
@@ -489,7 +509,14 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                         focusNodeTelefoneMovel.unfocus();
                         FocusScope.of(context).requestFocus(focusNodeGrossRevenue);
                       },
+                      inputFormatters: [
+                        // obrigatório
+                        FilteringTextInputFormatter.digitsOnly,
+                        TelefoneInputFormatter(),
+                      ],
                       autofocus: false,
+                      style: const TextStyle(
+                          fontSize: 15.0),
                       decoration: const InputDecoration(
                         labelText: 'TELEFONE CELULAR:',
                         hintText: '',
@@ -795,7 +822,7 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                       SizedBox(height: 30.0),
                       Center(child: Padding(padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),child: TextButton(
                         style: TextButton.styleFrom(
-                          backgroundColor: const Color(0xffffc107),
+                          backgroundColor: const Color(0xFF3F7EC1),
                           padding: const EdgeInsets.fromLTRB(15.0, 2.0, 15.0, 2.0),
                           minimumSize: const Size(200, 47),
                           maximumSize: const Size(200, 47),

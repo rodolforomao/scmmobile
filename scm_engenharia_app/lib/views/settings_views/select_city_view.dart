@@ -4,7 +4,6 @@ import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
 
 
-
 class SelectCityView extends StatefulWidget {
 
   List<TbUfMunicipality> sMunicipality;
@@ -78,10 +77,9 @@ class SelectCityState extends State<SelectCityView>  {
           title:Text(
             'Os municípios  ' + widget.Uf,
           ),
-
           bottom: PreferredSize(
               preferredSize: const Size.fromHeight(0.0),
-              child: Padding(padding: EdgeInsets.fromLTRB(15.0,0.0, 15.0, 20.0),child:Theme(
+              child: Padding(padding: const EdgeInsets.fromLTRB(15.0,0.0, 15.0, 20.0),child:Theme(
                 data: Theme.of(context).copyWith(splashColor: Colors.transparent),
                 child: TextField(
                   maxLines: 1,

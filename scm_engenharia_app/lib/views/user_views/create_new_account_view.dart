@@ -49,11 +49,11 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
            statusView = TypeView.viewLoading;
         });
         Operation restWeb = await ServicoMobileService.onEnvironmentVariables();
-        if (restWeb.erro)
+        if (restWeb.erro) {
           throw (restWeb.message!);
-        else if (restWeb.result == null)
+        } else if (restWeb.result == null) {
           throw (restWeb.message!);
-        else {
+        } else {
           EnvironmentVariables result = restWeb.result as EnvironmentVariables;
           setState(() {
             listUf = result.uf!;
@@ -62,12 +62,12 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
         }
       }
     } catch (error) {
-      Map<String, dynamic> map = {};
-      map['view'] = 'CreateNewAccountView';
-      map['error'] = error;
       Navigator.of(context).pushNamed(
         routes.errorInformationRoute,
-        arguments: map,
+        arguments: {
+          'view': 'CreateNewAccountView',
+          'error': error,
+        },
       ).then((value) {
         onGetUfs();
       });
