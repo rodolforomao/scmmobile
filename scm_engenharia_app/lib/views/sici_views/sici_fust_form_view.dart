@@ -10,7 +10,8 @@ import '../../data/tb_quantitative_distribution_physical_accesses_service.dart';
 import '../../help/componentes.dart';
 import '../../help/formatter/cnpj_input_formatter.dart';
 import '../../help/formatter/telefone_input_formatter.dart';
-import '../../help/formatter/telefone_sem_ddd_input_formatter.dart';
+import '../../help/formatter/valor_input_formatter.dart';
+
 import '../../models/operation.dart';
 import '../../models/quantitative_distribution_physical_accesses_service_model.dart';
 import '../../models/sici_file_model.dart';
@@ -27,51 +28,6 @@ class SiciFustFormView extends StatefulWidget {
   SiciFustFormState createState() => SiciFustFormState();
 }
 
-class CurrencyPtBrInputFormatter extends TextInputFormatter {
-  CurrencyPtBrInputFormatter({required this.maxDigits});
-  final int maxDigits;
-
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    if (newValue.selection.baseOffset == 0) {
-      return newValue;
-    }
-
-    if (maxDigits != null && newValue.selection.baseOffset > maxDigits) {
-      return oldValue;
-    }
-
-    double value = double.parse(newValue.text);
-    final formatter = new NumberFormat("#,##0.00", "pt_BR");
-    String newText = "R\$ " + formatter.format(value / 100);
-    return newValue.copyWith(
-        text: newText,
-        selection: new TextSelection.collapsed(offset: newText.length));
-  }
-}
-
-class CurrencyPercentInputFormatter extends TextInputFormatter {
-  CurrencyPercentInputFormatter({required this.maxDigits});
-  final int maxDigits;
-
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    if (newValue.selection.baseOffset == 0) {
-      return newValue;
-    }
-
-    if (maxDigits != null && newValue.selection.baseOffset > maxDigits) {
-      return oldValue;
-    }
-
-    double value = double.parse(newValue.text);
-    final formatter = new NumberFormat("##0.00", "pt_BR");
-    String newText = formatter.format(value / 100) + "\%";
-    return newValue.copyWith(
-        text: newText,
-        selection: new TextSelection.collapsed(offset: newText.length));
-  }
-}
 
 
 abstract class IsSilly {
@@ -555,7 +511,8 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                       },
                       textAlign: TextAlign.start,
                       inputFormatters: [
-
+                        FilteringTextInputFormatter.digitsOnly,
+                        CurrencyPtBrInputFormatter()
                       ],
                       decoration: const InputDecoration(
                         labelText: 'Receita Bruta',
@@ -578,7 +535,8 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                             },
                             textAlign: TextAlign.start,
                             inputFormatters: [
-
+                              FilteringTextInputFormatter.digitsOnly,
+                              CurrencyPtBrInputFormatter()
                             ],
                             autofocus: false,
                             decoration: const InputDecoration(
@@ -601,7 +559,8 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                             },
                             textAlign: TextAlign.start,
                             inputFormatters: [
-
+                              FilteringTextInputFormatter.digitsOnly,
+                              CurrencyPercentInputFormatter()
                             ],
                             autofocus: false,
                             decoration: const InputDecoration(
@@ -628,10 +587,11 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                             },
                             textAlign: TextAlign.start,
                             inputFormatters: [
-
+                              FilteringTextInputFormatter.digitsOnly,
+                              CurrencyPtBrInputFormatter()
                             ],
                             autofocus: false,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               labelText: 'Valor ICMS',
                               hintText: '',
                             ),
@@ -651,9 +611,10 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                             },
                             textAlign: TextAlign.start,
                             inputFormatters: [
-
+                              FilteringTextInputFormatter.digitsOnly,
+                              CurrencyPercentInputFormatter()
                             ],
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               labelText: 'ICMS (%)',
                               hintText: '',
                             ),
@@ -677,9 +638,10 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                             },
                             textAlign: TextAlign.start,
                             inputFormatters: [
-
+                              FilteringTextInputFormatter.digitsOnly,
+                              CurrencyPtBrInputFormatter()
                             ],
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               labelText: 'Valor PIS',
                               hintText: '',
                             ),
@@ -699,9 +661,10 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                             },
                             textAlign: TextAlign.start,
                             inputFormatters: [
-
+                              FilteringTextInputFormatter.digitsOnly,
+                              CurrencyPercentInputFormatter()
                             ],
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               labelText: 'PIS (%)',
                               hintText: '',
                             ),
@@ -725,7 +688,8 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                               FocusScope.of(context).requestFocus(focusNodeCofinsPorc);
                             },
                             inputFormatters: [
-
+                              FilteringTextInputFormatter.digitsOnly,
+                              CurrencyPtBrInputFormatter()
                             ],
                             decoration: const InputDecoration(
                               labelText: 'Valor COFINS',
@@ -747,7 +711,8 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                               FocusScope.of(context).requestFocus(focusNodeNetRevenue);
                             },
                             inputFormatters: [
-
+                              FilteringTextInputFormatter.digitsOnly,
+                              CurrencyPercentInputFormatter()
                             ],
                             decoration: const InputDecoration(
                               labelText: 'COFINS (%)',
@@ -769,7 +734,8 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                         FocusScope.of(context).requestFocus(focusNodeGeneralObservations);
                       },
                       inputFormatters: [
-
+                        FilteringTextInputFormatter.digitsOnly,
+                        CurrencyPtBrInputFormatter()
                       ],
                       decoration: const InputDecoration(
                         labelText: 'Receita Liquida',
@@ -787,9 +753,6 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                         focusNodeGeneralObservations.unfocus();
                         FocusScope.of(context).requestFocus(focusNodeIcmsPorc);
                       },
-                      inputFormatters: [
-
-                      ],
                       decoration: const InputDecoration(
                         labelText: 'Observações Gerais',
                         hintText: '',

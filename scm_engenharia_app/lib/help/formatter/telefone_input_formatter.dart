@@ -33,20 +33,20 @@ class TelefoneInputFormatter extends TextInputFormatter {
     }
 
     if (novoTextLength >= 3) {
-      newText.write(valorNovo.text.substring(0, usedSubstringIndex = 2) + ') ');
+      newText.write('${valorNovo.text.substring(0, usedSubstringIndex = 2)}) ');
       if (valorNovo.selection.end >= 2) selectionIndex += 2;
     }
 
     if (valorNovo.text.length == 11) {
       if (novoTextLength >= 8) {
         newText
-            .write(valorNovo.text.substring(2, usedSubstringIndex = 7) + '-');
+            .write('${valorNovo.text.substring(2, usedSubstringIndex = 7)}-');
         if (valorNovo.selection.end >= 7) selectionIndex++;
       }
     } else {
       if (novoTextLength >= 7) {
         newText
-            .write(valorNovo.text.substring(2, usedSubstringIndex = 6) + '-');
+            .write('${valorNovo.text.substring(2, usedSubstringIndex = 6)}-');
         if (valorNovo.selection.end >= 6) selectionIndex++;
       }
     }
