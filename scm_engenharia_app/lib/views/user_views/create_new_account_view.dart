@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -23,6 +25,8 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
 
   late StreamSubscription<ConnectivityResult> subscription;
   TypeView statusView = TypeView.viewLoading;
+  EnvironmentVariables resulEnvironmentVariables = EnvironmentVariables();
+
   final txtControlleNomeCompleto = TextEditingController();
   final txtControllerCPF = TextEditingController();
   final txtControllerEmail = TextEditingController();
@@ -37,40 +41,19 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
   FocusNode? txtFocusNodeWhatsapp;
   FocusNode? txtFocusNodeNomeDaEmpresa;
 
-  List<Uf> listUf = [];
-
-  onGetUfs() async {
+  Uf ufModel = Uf();
+  onInc() async {
     try {
-      var connectivityResult = await (Connectivity().checkConnectivity());
-      if (connectivityResult == ConnectivityResult.none) {
-        throw 'Parece que você está sem internet 😑 !';
-      } else {
-        setState(() {
-           statusView = TypeView.viewLoading;
-        });
-        Operation restWeb = await ServicoMobileService.onEnvironmentVariables();
-        if (restWeb.erro) {
-          throw (restWeb.message!);
-        } else if (restWeb.result == null) {
-          throw (restWeb.message!);
-        } else {
-          EnvironmentVariables result = restWeb.result as EnvironmentVariables;
-          setState(() {
-            listUf = result.uf!;
-            statusView = TypeView.viewRenderInformation;
-          });
-        }
-      }
-    } catch (error) {
-      Navigator.of(context).pushNamed(
-        routes.errorInformationRoute,
-        arguments: {
-          'view': 'CreateNewAccountView',
-          'error': error,
-        },
-      ).then((value) {
-        onGetUfs();
+      setState((){statusView = TypeView.viewLoading;});
+      String response = await rootBundle.loadString('assets/variavel_de_ambiente.json');
+      setState(() {
+        resulEnvironmentVariables = EnvironmentVariables.fromJson(jsonDecode(response) as Map<String, dynamic>);
+        ufModel = resulEnvironmentVariables.uf!.first;
+        statusView = TypeView.viewRenderInformation;
       });
+
+    } catch (error) {
+      OnAlertaInformacaoErro(error.toString(),context);
     }
   }
 
@@ -78,7 +61,7 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
   @override
   void initState() {
     super.initState();
-    onGetUfs();
+    onInc();
   }
 
   @override

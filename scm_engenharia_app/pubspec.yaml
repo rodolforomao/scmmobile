@@ -107,7 +107,8 @@ flutter:
     - assets/img/img_integracao.png
     - assets/img/img_sem_sinal.png
     - assets/img/img_informacao.png
-    - assets/scm_loading.svg
+    - assets/variavel_de_ambiente.json
+
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
