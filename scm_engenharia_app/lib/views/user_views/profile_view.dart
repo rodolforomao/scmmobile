@@ -62,32 +62,34 @@ class ProfileState extends State<ProfileView> {
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
             OnAlertaInformacaoErro('Verifique sua conexão com a internet e tente novamente.',context);
           }  else {
-        if (txtControlleNomeCompleto.text.isEmpty)
+        if (txtControlleNomeCompleto.text.isEmpty) {
           throw ("Nome é obrigatório");
-        else if (txtControllerCPF.text.isEmpty)
+        } else if (txtControllerCPF.text.isEmpty) {
           throw ("CPF é obrigatório");
-        else if (txtControllerEmail.text.isEmpty)
+        } else if (txtControllerEmail.text.isEmpty) {
           throw ("Email é obrigatório");
-        else if (txtControllerTelefoneFixo.text.isEmpty)
+        } else if (txtControllerTelefoneFixo.text.isEmpty) {
           throw ("Telefone é obrigatório");
-        else if (txtControllerWhatsapp.text.isEmpty)
+        } else if (txtControllerWhatsapp.text.isEmpty) {
           throw ("Telefone Whatsapp é obrigatório");
-        else if (txtControllerNomeDaEmpresa.text.isEmpty)
+        } else if (txtControllerNomeDaEmpresa.text.isEmpty) {
           throw ("Empresa é obrigatório");
-        else if (ufModel.id!.isEmpty)
+        } else if (ufModel.id!.isEmpty) {
           throw ("UF deve ser selecionada");
+        }
         OnRealizandoOperacao('Realizando operação', true,context);
-        Operation restWeb = await ServicoMobileService.onRegisterUser(txtControlleNomeCompleto.text,txtControllerCPF.text,txtControllerEmail.text,txtControllerTelefoneFixo.text,txtControllerWhatsapp.text,txtControllerNomeDaEmpresa.text,ufModel.id!);
+        Operation restWeb = await ServicoMobileService.onRegisterUser(txtControlleNomeCompleto.text,txtControllerCPF.text,txtControllerEmail.text,txtControllerTelefoneFixo.text,txtControllerWhatsapp.text,txtControllerNomeDaEmpresa.text,ufModel.id!).whenComplete(() =>
+            OnRealizandoOperacao('', false,context)
+        );
         if (restWeb.erro || restWeb.result == null) {
           throw (restWeb.message!);
         }
         else {
-          OnRealizandoOperacao('', false,context);
           OnAlertaInformacaoSucesso(restWeb.message!,context);
         }
       }
     } catch (error) {
-      OnRealizandoOperacao('', false,context);
+
       OnAlertaInformacaoErro(error.toString(),context);
     }
   }
@@ -256,16 +258,14 @@ class ProfileState extends State<ProfileView> {
                       //focusColor: Colors.transparent,
                     ),
                     value: ufModel,
-                    items: ufList!.map(
-                          (v) => DropdownMenuItem<Uf>(
+                    items: ufList!.map((v) => DropdownMenuItem<Uf>(
                           value: v,
                           child: Text(
                             v.uf!,
                             overflow: TextOverflow.ellipsis,
                             softWrap: true,
                             maxLines: 1,
-                          )),
-                    ).toList(),
+                          )),).toList(),
                     onChanged: (newValue) {
                       setState(() {
                         ufModel = newValue!;
