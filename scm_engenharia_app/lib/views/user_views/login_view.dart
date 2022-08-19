@@ -102,7 +102,18 @@ class LoginState extends State<LoginView> {
   Widget build(BuildContext context) {
     final bool showFab = MediaQuery.of(context).viewInsets.bottom == 0.0;
     return Container(
-      alignment: Alignment.center,
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: <Color>[
+            Color(0xFFF65100),
+            Color(0xFFff8c49),
+            Color(0xFFf5821f),
+            Color(0xffffba49)
+          ],
+        ),
+      ),
       constraints: BoxConstraints(
         minHeight: MediaQuery.of(context).size.height,
       ),
@@ -119,7 +130,7 @@ class LoginState extends State<LoginView> {
               padding: const EdgeInsets.only(top: 10.0, right: 30.0, left: 30.0, bottom: 50.0),child:  Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Padding(
               padding: const EdgeInsets.all(8.0),
@@ -132,15 +143,14 @@ class LoginState extends State<LoginView> {
               ),
             ),
                 const Text(
-                  "E-mail",
+                  'E-mail',
                   style: TextStyle(
                     decoration: TextDecoration.none,
-                    fontFamily: "avenir-lt-std-roman",
                     fontSize: 15.0,
                     color: Colors.white,
                   ),
                 ),
-                Padding(child:TextField(
+                Padding(padding: const EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0),child:TextField(
                     autofocus: false,
                     keyboardType: TextInputType.emailAddress,
                     controller: txtControllerEmail,
@@ -150,10 +160,9 @@ class LoginState extends State<LoginView> {
                       focusNodeEmail!.unfocus();
                       FocusScope.of(context).requestFocus(focusNodePassword);
                     },
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 19,
-                        fontFamily: 'open-sans-regular',
-                        color: const Color(0xFF373737)),
+                        color:  Color(0xFFFFFFFF)),
                     decoration: const InputDecoration(
                         contentPadding: EdgeInsets.fromLTRB(10.0, 12.0, 10.0, 12.0),
                         focusedErrorBorder: OutlineInputBorder(
@@ -174,30 +183,24 @@ class LoginState extends State<LoginView> {
                           size: 20,
                           color: Color(0xffFFFFFF),
                         ),
-                        hintText: "Digite seu email",
+                        hintText: 'Digite seu email',
                         border: InputBorder.none,
-                        hintStyle: TextStyle(
-                            fontSize: 16.0, color: Color(0xFF90ffffff)),
-                        labelStyle: TextStyle(
-                            fontSize: 16,
-                            color: Color(0xFF90ffffff),
-                            fontFamily: 'open-sans-regular'),
-                        errorStyle: TextStyle(
-                            fontSize: 12,
-                            color: Colors.red,
-                            fontFamily: 'open-sans-regular'),
                         fillColor: Color(0xff80ff9b7b),
-                        filled: true)), padding: const EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0),),
+                        floatingLabelStyle: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 15.0,
+                            color: Color(0xff50093d6c),
+                            fontFamily: 'avenir-lt-std-book'),
+                        filled: true)),),
                 const Text(
-                  "Senha",
+                  'Senha',
                   style: TextStyle(
                     decoration: TextDecoration.none,
-                    fontFamily: "avenir-lt-std-roman",
                     fontSize: 15.0,
                     color: Colors.white,
                   ),
                 ),
-                Padding(child:TextField(
+                Padding(padding: const EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0),child:TextField(
                     autofocus: false,
                     keyboardType: TextInputType.text,
                     controller: txtControllerPassword,
@@ -206,12 +209,11 @@ class LoginState extends State<LoginView> {
                       focusNodeEmail!.unfocus();
                       onLoggingIn();
                     },
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 19,
-                        fontFamily: 'open-sans-regular',
-                        color: const Color(0xFF373737)),
+                        color:  Color(0xFFFFFFFF)),
                     obscureText: true,
-                    decoration: InputDecoration(contentPadding:
+                    decoration: const InputDecoration(contentPadding:
                         EdgeInsets.fromLTRB(10.0, 12.0, 10.0, 12.0),
                         focusedErrorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -226,31 +228,47 @@ class LoginState extends State<LoginView> {
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
                           borderSide: BorderSide(color: Colors.white, width: 0),
                         ),
-                        prefixIcon: const Icon(
+                        prefixIcon: Icon(
                           Icons.https,
                           size: 20,
-                          color: const Color(0xffFFFFFF),
+                          color: Color(0xffFFFFFF),
                         ),
-                        hintText: "Digite sua senha",
+                        hintText: 'Digite sua senha',
                         border: InputBorder.none,
-                        hintStyle: TextStyle(
-                            fontSize: 16.0, color: const Color(0xFF90ffffff)),
-                        labelStyle: TextStyle(
-                            fontSize: 16,
-                            color: Color(0xFF90ffffff),
-                            fontFamily: 'open-sans-regular'),
-                        errorStyle: TextStyle(
-                            fontSize: 12,
-                            color: Colors.red,
-                            fontFamily: 'open-sans-regular'),
                         fillColor: Color(0xff80ff9b7b),
-                        filled: true)), padding: const EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0),),
-                Padding(padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),child: TextButton(
-                  child: const Text(' LOGIN '),
-                  onPressed: () async {
-                    onLoggingIn();
-                  },
-                ),),
+                        filled: true)),),
+                const SizedBox(height: 25.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Expanded(
+                      child: Container(),
+                    ),
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: const Color(0xff8854d0),
+                        padding: const EdgeInsets.fromLTRB(5.0, 2.0, 5.0, 3.0),
+                        minimumSize: const Size(130, 46),
+                        maximumSize: const Size(130, 46),
+                        textStyle: const TextStyle(
+                          fontWeight: FontWeight.w500,
+                          color:  Color(0xffFFFFFF),
+                          fontSize: 15,
+                        ),
+                      ),
+                      child: const Padding(
+                        padding:
+                        EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5.0),
+                        child: Text(
+                          ' LOGIN ',
+                        ),
+                      ),
+                      onPressed: () async {
+                        onLoggingIn();
+                      },
+                    )
+                  ],
+                ),
                 Center(
                   child: GestureDetector(
                     onTap: () {
@@ -260,10 +278,9 @@ class LoginState extends State<LoginView> {
                       );
                     },
                     child: const Text(
-                      "Criar uma nova conta",
+                      'Criar uma nova conta',
                       style: TextStyle(
                         decoration: TextDecoration.underline,
-                        fontFamily: "avenir-lt-std-roman",
                         fontSize: 18.0,
                         color: Colors.white,
                       ),

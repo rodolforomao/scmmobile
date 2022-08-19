@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -23,6 +25,8 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
 
   late StreamSubscription<ConnectivityResult> subscription;
   TypeView statusView = TypeView.viewLoading;
+  EnvironmentVariables resulEnvironmentVariables = EnvironmentVariables();
+
   final txtControlleNomeCompleto = TextEditingController();
   final txtControllerCPF = TextEditingController();
   final txtControllerEmail = TextEditingController();
@@ -37,48 +41,65 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
   FocusNode? txtFocusNodeWhatsapp;
   FocusNode? txtFocusNodeNomeDaEmpresa;
 
-  List<Uf> listUf = [];
+  Uf ufModel = Uf();
 
-  onGetUfs() async {
+  onInc() async {
     try {
-      var connectivityResult = await (Connectivity().checkConnectivity());
-      if (connectivityResult == ConnectivityResult.none) {
-        throw 'Parece que você está sem internet 😑 !';
-      } else {
-        setState(() {
-           statusView = TypeView.viewLoading;
-        });
-        Operation restWeb = await ServicoMobileService.onEnvironmentVariables();
-        if (restWeb.erro)
-          throw (restWeb.message!);
-        else if (restWeb.result == null)
-          throw (restWeb.message!);
-        else {
-          EnvironmentVariables result = restWeb.result as EnvironmentVariables;
-          setState(() {
-            listUf = result.uf!;
-            statusView = TypeView.viewRenderInformation;
-          });
-        }
-      }
-    } catch (error) {
-      Map<String, dynamic> map = {};
-      map['view'] = 'CreateNewAccountView';
-      map['error'] = error;
-      Navigator.of(context).pushNamed(
-        routes.errorInformationRoute,
-        arguments: map,
-      ).then((value) {
-        onGetUfs();
+      setState((){statusView = TypeView.viewLoading;});
+      String response = await rootBundle.loadString('assets/variavel_de_ambiente.json');
+      setState(() {
+        resulEnvironmentVariables = EnvironmentVariables.fromJson(jsonDecode(response) as Map<String, dynamic>);
+        ufModel = resulEnvironmentVariables.uf!.first;
+        statusView = TypeView.viewRenderInformation;
       });
+
+    } catch (error) {
+      OnAlertaInformacaoErro(error.toString(),context);
     }
   }
 
+    OnSaveAccount() async {
+    try {
+      if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+        OnAlertaInformacaoErro('Verifique sua conexão com a internet e tente novamente.',context);
+      }  else {
+        if (txtControlleNomeCompleto.text.isEmpty) {
+          throw ("Nome é obrigatório");
+        } else if (txtControllerCPF.text.isEmpty) {
+          throw ("CPF é obrigatório");
+        } else if (txtControllerEmail.text.isEmpty) {
+          throw ("Email é obrigatório");
+        } else if (txtControllerTelefoneFixo.text.isEmpty) {
+          throw ("Telefone é obrigatório");
+        } else if (txtControllerWhatsapp.text.isEmpty) {
+          throw ("Telefone Whatsapp é obrigatório");
+        } else if (txtControllerNomeDaEmpresa.text.isEmpty) {
+          throw ("Empresa é obrigatório");
+        } else if (ufModel.uf!.isEmpty) {
+          throw ("UF deve ser selecionada");
+        }
+        else
+          {
+            Operation restWeb = await ServicoMobileService.onRegisterUser(txtControlleNomeCompleto.text,txtControllerCPF.text,txtControllerEmail.text,txtControllerTelefoneFixo.text,txtControllerWhatsapp.text,txtControllerNomeDaEmpresa.text,ufModel.id!).whenComplete(() =>
+                OnRealizandoOperacao('', false,context)
+            );
+            if (restWeb.erro || restWeb.result == null) {
+              throw (restWeb.message!);
+            }
+            else {
+              OnAlertaInformacaoSucesso(restWeb.message!,context);
+            }
+          }
+      }
+    } catch (error) {
+      OnAlertaInformacaoErro(error.toString(),context);
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    onGetUfs();
+    onInc();
   }
 
   @override
@@ -114,12 +135,7 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
           centerTitle: true,
           elevation: 0.0,
           title: const Text(
-            "Registrar usuário",
-            textAlign: TextAlign.start,
-            style: TextStyle(
-                fontSize: 19.0,
-                color: Color(0xffFFFFFF),
-                fontFamily: "open-sans-regular"),
+            'Registrar usuário',
           ),
         ),
         body: tipoPageView(MediaQuery.of(context).size.height),
@@ -127,22 +143,18 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
     );
   }
 
-
   tipoPageView(double maxHeight) {
     switch (statusView) {
       case TypeView.viewLoading:
         return GlobalView.viewPerformingSearch(maxHeight,context);
       case TypeView.viewRenderInformation:
         return SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+          padding: const EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 0.0),
           child: Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              const SizedBox(
-                height: 25.0,
-              ),
               const Text(
                 'Nome completo',
                 style: TextStyle(
@@ -152,58 +164,23 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
                   color: Colors.white,
                 ),
               ),
-              TextField(
+              Padding(padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 20.0),child: TextField(
                   autofocus: false,
                   keyboardType: TextInputType.text,
                   controller: txtControlleNomeCompleto,
                   focusNode: txtFocusNodeNomeCompleto,
                   textInputAction: TextInputAction.next,
-                  style: const TextStyle(
-                      fontSize: 20,
-                      fontFamily: 'avenir-lt-std-medium',
-                      color: Color(0xFF000000)),
                   onSubmitted: (term) {
                     txtFocusNodeNomeCompleto!.unfocus();
                     FocusScope.of(context).requestFocus(txtFocusNodeCPF);
                   },
                   decoration: const InputDecoration(
                       contentPadding: EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(10.0)),
-                        borderSide:
-                        BorderSide(color: Colors.white, width: 0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(10.0)),
-                        borderSide:
-                        BorderSide(color: Colors.white, width: 0.3),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(10.0)),
-                        borderSide:
-                        BorderSide(color: Colors.white, width: 0),
-                      ),
-                      hintText: "Digite seu nome completo",
                       border: InputBorder.none,
-                      hintStyle: TextStyle(
-                          fontSize: 16.0, color: Color(0xFF90ffffff)),
-                      labelStyle: TextStyle(
-                          fontSize: 16,
-                          color: Color(0xFF90ffffff),
-                          fontFamily: 'open-sans-regular'),
-                      errorStyle: TextStyle(
-                          fontSize: 12,
-                          color: Colors.red,
-                          fontFamily: 'open-sans-regular'),
                       fillColor: Color(0xff80ff9b7b),
-                      filled: true)),
+                      filled: true,
+                      hintText: 'Digite seu nome completo',
+                    )),),
               const Text(
                 "CPF",
                 style: TextStyle(
@@ -213,10 +190,7 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
                   color: Colors.white,
                 ),
               ),
-              SizedBox(
-                height: 5.0,
-              ),
-              TextField(
+              Padding(padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 20.0),child: TextField(
                   controller: txtControllerCPF,
                   focusNode: txtFocusNodeCPF,
                   textInputAction: TextInputAction.next,
@@ -230,54 +204,15 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
                     txtFocusNodeCPF!.unfocus();
                     FocusScope.of(context).requestFocus(txtFocusNodeTelefoneFixo);
                   },
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontFamily: 'avenir-lt-std-medium',
-                      color: const Color(0xFF000000)),
-                  decoration: InputDecoration(
-                      contentPadding:
-                      EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(10.0)),
-                        borderSide:
-                        BorderSide(color: Colors.white, width: 0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(10.0)),
-                        borderSide:
-                        BorderSide(color: Colors.white, width: 0.3),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(10.0)),
-                        borderSide:
-                        BorderSide(color: Colors.white, width: 0),
-                      ),
-                      hintText: "Digite seu CPF",
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(
-                          fontSize: 16.0, color: const Color(0xFF90ffffff)),
-                      labelStyle: TextStyle(
-                          fontSize: 16,
-                          color: Color(0xFF90ffffff),
-                          fontFamily: 'open-sans-regular'),
-                      errorStyle: TextStyle(
-                          fontSize: 12,
-                          color: Colors.red,
-                          fontFamily: 'open-sans-regular'),
-                      fillColor: Color(0xff80ff9b7b),
-                      filled: true)),
-              const SizedBox(
-                height: 17.0,
-              ),
+                  decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
+                    border: InputBorder.none,
+                    fillColor: Color(0xff80ff9b7b),
+                    filled: true,
+                      hintText: 'Digite seu CPF',
+                 )),),
               const Text(
-                "E-mail",
+                'E-mail',
                 style: TextStyle(
                   decoration: TextDecoration.none,
                   fontFamily: "avenir-lt-std-roman",
@@ -285,10 +220,7 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
                   color: Colors.white,
                 ),
               ),
-              const SizedBox(
-                height: 5.0,
-              ),
-              TextField(
+              Padding(padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 20.0),child: TextField(
                   autofocus: false,
                   keyboardType: TextInputType.emailAddress,
                   controller: txtControllerEmail,
@@ -298,54 +230,17 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
                     txtFocusNodeEmail!.unfocus();
                     FocusScope.of(context).requestFocus(txtFocusNodeTelefoneFixo);
                   },
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontFamily: 'avenir-lt-std-medium',
-                      color: const Color(0xFF000000)),
-                  decoration: InputDecoration(
-                      contentPadding:
-                      EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(10.0)),
-                        borderSide:
-                        BorderSide(color: Colors.white, width: 0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(10.0)),
-                        borderSide:
-                        BorderSide(color: Colors.white, width: 0.3),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(10.0)),
-                        borderSide:
-                        BorderSide(color: Colors.white, width: 0),
-                      ),
-                      hintText: "Digite seu e-mail",
+                  decoration:  const InputDecoration(
+                      hintText: 'Digite seu e-mail',
+                      contentPadding: EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
                       border: InputBorder.none,
-                      hintStyle: TextStyle(
-                          fontSize: 16.0, color: const Color(0xFF90ffffff)),
-                      labelStyle: TextStyle(
-                          fontSize: 16,
-                          color: Color(0xFF90ffffff),
-                          fontFamily: 'open-sans-regular'),
-                      errorStyle: TextStyle(
-                          fontSize: 12,
-                          color: Colors.red,
-                          fontFamily: 'open-sans-regular'),
                       fillColor: Color(0xff80ff9b7b),
-                      filled: true)),
-              SizedBox(
-                height: 17.0,
-              ),
-              Text(
-                "Telefone fixo",
+                      filled: true
+                  )
+
+              ),),
+              const Text(
+                'Telefone fixo',
                 style: TextStyle(
                   decoration: TextDecoration.none,
                   fontFamily: "avenir-lt-std-roman",
@@ -353,10 +248,7 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
                   color: Colors.white,
                 ),
               ),
-              SizedBox(
-                height: 5.0,
-              ),
-              TextField(
+              Padding(padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 20.0),child:TextField(
                   autofocus: false,
                   keyboardType: TextInputType.number,
                   controller: txtControllerTelefoneFixo,
@@ -366,54 +258,15 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
                     txtFocusNodeTelefoneFixo!.unfocus();
                     FocusScope.of(context).requestFocus(txtFocusNodeWhatsapp);
                   },
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontFamily: 'avenir-lt-std-medium',
-                      color: const Color(0xFF000000)),
-                  decoration: InputDecoration(
-                      contentPadding:
-                      EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(10.0)),
-                        borderSide:
-                        BorderSide(color: Colors.white, width: 0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(10.0)),
-                        borderSide:
-                        BorderSide(color: Colors.white, width: 0.3),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(10.0)),
-                        borderSide:
-                        BorderSide(color: Colors.white, width: 0),
-                      ),
-                      hintText: "Digite telefone fixo",
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(
-                          fontSize: 16.0, color: const Color(0xFF90ffffff)),
-                      labelStyle: TextStyle(
-                          fontSize: 16,
-                          color: Color(0xFF90ffffff),
-                          fontFamily: 'open-sans-regular'),
-                      errorStyle: TextStyle(
-                          fontSize: 12,
-                          color: Colors.red,
-                          fontFamily: 'open-sans-regular'),
-                      fillColor: Color(0xff80ff9b7b),
-                      filled: true)),
-              SizedBox(
-                height: 17.0,
-              ),
-              Text(
-                "Whatsapp",
+                  decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
+                    border: InputBorder.none,
+                    fillColor: Color(0xff80ff9b7b),
+                    filled: true,
+                      hintText: 'Digite telefone fixo',
+                    )),),
+              const Text(
+                'Whatsapp',
                 style: TextStyle(
                   decoration: TextDecoration.none,
                   fontFamily: "avenir-lt-std-roman",
@@ -421,10 +274,7 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
                   color: Colors.white,
                 ),
               ),
-              SizedBox(
-                height: 5.0,
-              ),
-              TextField(
+              Padding(padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 20.0),child: TextField(
                   autofocus: false,
                   keyboardType: TextInputType.number,
                   controller: txtControllerWhatsapp,
@@ -434,53 +284,14 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
                     txtFocusNodeWhatsapp!.unfocus();
                     FocusScope.of(context).requestFocus(txtFocusNodeNomeDaEmpresa);
                   },
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontFamily: 'avenir-lt-std-medium',
-                      color: const Color(0xFF000000)),
-                  decoration: InputDecoration(
-                      contentPadding:
-                      EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(10.0)),
-                        borderSide:
-                        BorderSide(color: Colors.white, width: 0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(10.0)),
-                        borderSide:
-                        BorderSide(color: Colors.white, width: 0.3),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(10.0)),
-                        borderSide:
-                        BorderSide(color: Colors.white, width: 0),
-                      ),
-                      hintText: "Digite Whatsapp",
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(
-                          fontSize: 16.0, color: const Color(0xFF90ffffff)),
-                      labelStyle: TextStyle(
-                          fontSize: 16,
-                          color: Color(0xFF90ffffff),
-                          fontFamily: 'open-sans-regular'),
-                      errorStyle: TextStyle(
-                          fontSize: 12,
-                          color: Colors.red,
-                          fontFamily: 'open-sans-regular'),
-                      fillColor: Color(0xff80ff9b7b),
-                      filled: true)),
-              SizedBox(
-                height: 17.0,
-              ),
-              Text(
+                  decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
+                    border: InputBorder.none,
+                    fillColor: Color(0xff80ff9b7b),
+                    filled: true,
+                      hintText: 'Digite Whatsapp',
+                     )),),
+              const Text(
                 "Nome da empresa",
                 style: TextStyle(
                   decoration: TextDecoration.none,
@@ -489,65 +300,24 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
                   color: Colors.white,
                 ),
               ),
-              SizedBox(
-                height: 5.0,
-              ),
-              TextField(
+              Padding(padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 20.0),child:  TextField(
                   autofocus: false,
                   keyboardType: TextInputType.text,
                   controller: txtControllerNomeDaEmpresa,
                   focusNode: txtFocusNodeNomeDaEmpresa,
                   textInputAction: TextInputAction.go,
                   onSubmitted: (term) {
-                   // txtFocusNodeWhatsapp!.unfocus();
-                   // FocusScope.of(context).requestFocus(txtFocusNodeNomeDaEmpresa);
+                    // txtFocusNodeWhatsapp!.unfocus();
+                    // FocusScope.of(context).requestFocus(txtFocusNodeNomeDaEmpresa);
                   },
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontFamily: 'avenir-lt-std-medium',
-                      color: const Color(0xFF000000)),
-                  decoration: InputDecoration(
-                      contentPadding:
-                      EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(10.0)),
-                        borderSide:
-                        BorderSide(color: Colors.white, width: 0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(10.0)),
-                        borderSide:
-                        BorderSide(color: Colors.white, width: 0.3),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(10.0)),
-                        borderSide:
-                        BorderSide(color: Colors.white, width: 0.3),
-                      ),
-                      hintText: "Digite o nome da empresa",
+                  decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
                       border: InputBorder.none,
-                      hintStyle: TextStyle(
-                          fontSize: 16.0, color: const Color(0xFF90ffffff)),
-                      labelStyle: TextStyle(
-                          fontSize: 16,
-                          color: Color(0xFF90ffffff),
-                          fontFamily: 'open-sans-regular'),
-                      errorStyle: TextStyle(
-                          fontSize: 12,
-                          color: Colors.red,
-                          fontFamily: 'open-sans-regular'),
                       fillColor: Color(0xff80ff9b7b),
-                      filled: true)),
-              SizedBox(height: 20.0),
-              Text(
-                "Selecione a UF",
+                      filled: true,
+                      hintText: 'Digite o nome da empresa')),),
+              const Text(
+                'Selecione a UF',
                 style: TextStyle(
                   decoration: TextDecoration.none,
                   fontFamily: "avenir-lt-std-roman",
@@ -555,40 +325,103 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
                   color: Colors.white,
                 ),
               ),
-              SizedBox(
-                height: 5.0,
-              ),
-
-              SizedBox(height: 40.0),
-              Center(
-                child: InkWell(
-                  onTap: () async {
-                    FocusManager.instance.primaryFocus?.unfocus();
-
-                  },
-                  child: Container(
-                    padding: EdgeInsets.fromLTRB(0.0, 5.0, 20.0, 0.0),
-                    constraints: BoxConstraints(maxWidth: 300),
-                    width: MediaQuery.of(context).size.width,
-                    height: 45,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(3)),
-                        color: Color(0xff8854d0)),
-                    child: Text(
-                      'REGISTRAR',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontFamily: 'avenir-lt-std-roman',
-                        fontSize: 12.0,
-                      ),
-                    ),
+              Padding(padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 20.0),child: SizedBox(
+                  height: 50.0,
+                  child: FormField<String>(
+                    builder: (FormFieldState<String> state) {
+                      return InputDecorator(
+                        decoration: InputDecoration(
+                            contentPadding:
+                            EdgeInsets.fromLTRB(10.0, 14.0, 10.0, 12.0),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(10.0)),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(10.0)),
+                              borderSide:
+                              BorderSide(color: Colors.white, width: 0),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(10.0)),
+                              borderSide: BorderSide(
+                                  color: Colors.white, width: 0.3),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(10.0)),
+                              borderSide: BorderSide(
+                                  color: Colors.white, width: 0.3),
+                            ),
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                                fontSize: 16.0,
+                                color: const Color(0xFF90ffffff)),
+                            labelStyle: TextStyle(
+                                fontSize: 16,
+                                color: Color(0xFF90ffffff),
+                                fontFamily: 'open-sans-regular'),
+                            fillColor: Color(0xff80ff9b7b),
+                            filled: true),
+                        child: Container(
+                          padding:
+                          EdgeInsets.fromLTRB(10.0, 0.0, 20.0, 0.0),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton<Uf>(
+                              hint: const Text(
+                                "Selecione ..",
+                                style: TextStyle(
+                                    fontSize: 16.0,
+                                    color: Color(0xFF90ffffff)),
+                              ),
+                              elevation: 16,
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  fontFamily: 'avenir-lt-std-medium',
+                                  color: Color(0xFF000000)),
+                              iconEnabledColor: Colors.white,
+                              iconDisabledColor: Colors.white,
+                              value: ufModel,
+                              isExpanded: true,
+                              iconSize: 35,
+                              items: resulEnvironmentVariables.uf!.map((v) => DropdownMenuItem<Uf>(
+                                  value: v,
+                                  child: Text(
+                                    v.uf!,
+                                    overflow: TextOverflow.ellipsis,
+                                    softWrap: true,
+                                    maxLines: 1,
+                                  )),).toList(),
+                              onChanged: ( newValue) {
+                                setState(() {
+                                  ufModel = newValue!;
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  )),),
+              Center(child: Padding(padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),child: TextButton(
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.fromLTRB(15.0, 2.0, 15.0, 2.0),
+                  minimumSize: const Size(200, 47),
+                  maximumSize: const Size(200, 47),
+                  textStyle: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color:  Color(0xffFFFFFF),
+                    fontSize: 15,
                   ),
                 ),
-              ),
-              SizedBox(height: 20.0),
+                child: const Text(' REGISTRAR '),
+                onPressed: () async {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  OnSaveAccount();
+                },
+              ),),),
             ],
           ),
         );

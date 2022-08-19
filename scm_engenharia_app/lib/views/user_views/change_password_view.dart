@@ -122,12 +122,7 @@ class ChangePasswordState extends State<ChangePasswordView> {
         centerTitle: true,
         elevation: 0.0,
         title: const Text(
-          "Alterar senha",
-          textAlign: TextAlign.start,
-          style: TextStyle(
-              fontSize: 19.0,
-              color: Color(0xffFFFFFF),
-              fontFamily: "open-sans-regular"),
+          'Alterar senha',
         ),),
       body:Container(
         alignment: Alignment.topCenter,

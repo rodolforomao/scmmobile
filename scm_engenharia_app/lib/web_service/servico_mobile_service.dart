@@ -103,7 +103,7 @@ class ServicoMobileService {
               },
               encoding: Encoding.getByName("utf-8"))
           .timeout(const Duration(seconds: 10));
-      print(response.body);
+
       operacao.erro = false;
       operacao.message = "Operação realizada com sucesso";
       operacao.result = null;
@@ -118,6 +118,9 @@ class ServicoMobileService {
           operacao.erro = !resp.status!;
           operacao.message = resp.message;
           operacao.result = resp.result;
+          var as = jsonEncode(resp.result);
+          operacao.result = as;
+          print(as);
         }
         if (operacao.message == null) {
           throw ('Não foi identificado resposta');

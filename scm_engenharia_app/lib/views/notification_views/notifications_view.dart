@@ -99,14 +99,8 @@ class NotificationsState extends State<NotificationsView> {
         centerTitle: true,
         elevation: 0.0,
         title: const Text(
-          "Notificações",
-          textAlign: TextAlign.start,
-          style: TextStyle(
-              fontSize: 19.0,
-              color: Color(0xffFFFFFF),
-              fontFamily: "open-sans-regular"),
+          'Notificações',
         ),
-        actions: <Widget>[],
       ),
       body: viewType(MediaQuery.of(context).size.height),
     );
@@ -122,7 +116,7 @@ class NotificationsState extends State<NotificationsView> {
         return  SingleChildScrollView(
           child: Container(
             alignment: Alignment.center,
-            padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+            padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
             constraints: BoxConstraints(
               minHeight: MediaQuery.of(context).size.height,
             ),

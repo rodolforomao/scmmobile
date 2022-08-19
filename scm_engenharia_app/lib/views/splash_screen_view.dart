@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show TargetPlatform, kIsWeb;
-import 'package:flutter_svg/svg.dart';
 import '../data/app_scm_engenharia_mobile_bll.dart';
 import '../data/tb_user.dart';
 import '../help/navigation_service/route_paths.dart' as routes;
@@ -30,7 +29,7 @@ class SplashScreenState extends State<SplashScreenView> {
         if (respUser.erro) {
           throw respUser.message!;
         } else if (respUser.result == null) {
-         Navigator.of(context).pushNamedAndRemoveUntil(routes.loginRoute, (Route<dynamic> route) => false);
+          Navigator.of(context).pushNamedAndRemoveUntil(routes.loginRoute, (Route<dynamic> route) => false);
         } else {
           global_user_logged.globalUserLogged = respUser.result as TbUser;
           if (await Connectivity().checkConnectivity() == ConnectivityResult.none)

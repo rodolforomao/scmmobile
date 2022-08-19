@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'dart:ui' as ui;
-import 'dart:io';
-import 'dart:async';
+
 import 'dart:convert';
 import '../../help/formatter/cpf_input_formatter.dart';
 import '../../models/operation.dart';
@@ -38,90 +37,72 @@ class ProfileState extends State<ProfileView> {
   FocusNode? txtFocusNodeWhatsapp;
   FocusNode? txtFocusNodeNomeDaEmpresa;
 
-  late Uf uf;
-  List<Uf> listUf = [];
+  late Uf ufModel;
+  List<Uf>? ufList;
 
-  onGetUfs() async {
+  onInc() async {
     try {
-      if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
-        OnAlertaInformacaoErro('Verifique sua conexão com a internet e tente novamente.',context);
-      }  else {
-        setState(() {
-          statusView = TypeView.viewLoading;
-        });
-        Operation restWeb = await ServicoMobileService.onEnvironmentVariables();
-        if (restWeb.erro) {
-          throw (restWeb.message!);
-        } else if (restWeb.result == null) {
-          throw (restWeb.message!);
-        } else {
-          EnvironmentVariables resul = EnvironmentVariables.fromJson(restWeb.result as Map<String, dynamic>);
-          setState(() {
-            listUf = resul.uf!;
-            uf = listUf.where((c) => c.uf == global_user_logged.globalUserLogged!.uf).first;
-            statusView = TypeView.viewRenderInformation;
-          });
-        }
-      }
-    } catch (error) {
-      Map<String, dynamic> map = {};
-      map['view'] = 'CreateNewAccountView';
-      map['error'] = error;
-      Navigator.of(context).pushNamed(
-        routes.errorInformationRoute,
-        arguments: map,
-      ).then((value) {
-        onGetUfs();
+      setState((){statusView = TypeView.viewLoading;});
+      String response = await rootBundle.loadString('assets/variavel_de_ambiente.json');
+      setState(() {
+        EnvironmentVariables  resulEnvironmentVariables = EnvironmentVariables.fromJson(jsonDecode(response) as Map<String, dynamic>);
+        ufList = resulEnvironmentVariables.uf;
+        ufModel = resulEnvironmentVariables.uf!.first;
+        ufModel = ufList!.where((c) => c.uf == global_user_logged.globalUserLogged!.uf).first;
+        statusView = TypeView.viewRenderInformation;
       });
-    }
-  }
 
-  onUpdate()
-  async {
-    try {
-      if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
-            OnAlertaInformacaoErro('Verifique sua conexão com a internet e tente novamente.',context);
-          }  else {
-        if (txtControlleNomeCompleto.text.isEmpty)
-          throw ("Nome é obrigatório");
-        else if (txtControllerCPF.text.isEmpty)
-          throw ("CPF é obrigatório");
-        else if (txtControllerEmail.text.isEmpty)
-          throw ("Email é obrigatório");
-        else if (txtControllerTelefoneFixo.text.isEmpty)
-          throw ("Telefone é obrigatório");
-        else if (txtControllerWhatsapp.text.isEmpty)
-          throw ("Telefone Whatsapp é obrigatório");
-        else if (txtControllerNomeDaEmpresa.text.isEmpty)
-          throw ("Empresa é obrigatório");
-        else if (uf.id!.isEmpty)
-          throw ("UF deve ser selecionada");
-        OnRealizandoOperacao('Realizando operação', true,context);
-        Operation restWeb = await ServicoMobileService.onRegisterUser(txtControlleNomeCompleto.text,txtControllerCPF.text,txtControllerEmail.text,txtControllerTelefoneFixo.text,txtControllerWhatsapp.text,txtControllerNomeDaEmpresa.text,uf.id!);
-        if (restWeb.erro || restWeb.result == null) {
-          throw (restWeb.message!);
-        }
-        else {
-          OnRealizandoOperacao('', false,context);
-          OnAlertaInformacaoSucesso(restWeb.message!,context);
-        }
-      }
     } catch (error) {
-      OnRealizandoOperacao('', false,context);
       OnAlertaInformacaoErro(error.toString(),context);
     }
   }
 
+  onUpdate() async {
+    try {
+      if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+            OnAlertaInformacaoErro('Verifique sua conexão com a internet e tente novamente.',context);
+          }  else {
+        if (txtControlleNomeCompleto.text.isEmpty) {
+          throw ("Nome é obrigatório");
+        } else if (txtControllerCPF.text.isEmpty) {
+          throw ("CPF é obrigatório");
+        } else if (txtControllerEmail.text.isEmpty) {
+          throw ("Email é obrigatório");
+        } else if (txtControllerTelefoneFixo.text.isEmpty) {
+          throw ("Telefone é obrigatório");
+        } else if (txtControllerWhatsapp.text.isEmpty) {
+          throw ("Telefone Whatsapp é obrigatório");
+        } else if (txtControllerNomeDaEmpresa.text.isEmpty) {
+          throw ("Empresa é obrigatório");
+        } else if (ufModel.id!.isEmpty) {
+          throw ("UF deve ser selecionada");
+        }
+        OnRealizandoOperacao('Realizando operação', true,context);
+        Operation restWeb = await ServicoMobileService.onRegisterUser(txtControlleNomeCompleto.text,txtControllerCPF.text,txtControllerEmail.text,txtControllerTelefoneFixo.text,txtControllerWhatsapp.text,txtControllerNomeDaEmpresa.text,ufModel.id!).whenComplete(() =>
+            OnRealizandoOperacao('', false,context)
+        );
+        if (restWeb.erro || restWeb.result == null) {
+          throw (restWeb.message!);
+        }
+        else {
+          OnAlertaInformacaoSucesso(restWeb.message!,context);
+        }
+      }
+    } catch (error) {
+
+      OnAlertaInformacaoErro(error.toString(),context);
+    }
+  }
 
   @override
   void initState() {
+     onInc();
      txtControlleNomeCompleto.text = global_user_logged.globalUserLogged!.name;
      txtControllerCPF.text = global_user_logged.globalUserLogged!.cpf;
      txtControllerEmail.text = global_user_logged.globalUserLogged!.email;
      txtControllerTelefoneFixo.text = global_user_logged.globalUserLogged!.telephone;
      txtControllerWhatsapp.text = global_user_logged.globalUserLogged!.password;
      txtControllerNomeDaEmpresa.text = global_user_logged.globalUserLogged!.company;
-    onGetUfs();
     super.initState();
   }
 
@@ -130,22 +111,14 @@ class ProfileState extends State<ProfileView> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
-        centerTitle: true,
         elevation: 0.0,
         title: const Text(
           'Dados',
-          textAlign: TextAlign.start,
-          style: TextStyle(
-              fontSize: 19.0,
-              color: Color(0xffFFFFFF),
-              fontFamily: "open-sans-regular"),
         ),
       ),
       body: viewType(MediaQuery.of(context).size.height),
     );
   }
-
-
 
   viewType(double maxHeight) {
     switch (statusView) {
@@ -229,12 +202,12 @@ class ProfileState extends State<ProfileView> {
                       txtFocusNodeTelefoneFixo!.unfocus();
                       FocusScope.of(context).requestFocus(txtFocusNodeWhatsapp);
                     },
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Telefone fixo',
                       hintText: 'Digite telefone fixo',
                     ),
                   ),
-                  SizedBox(height: 20.0),
+                  const SizedBox(height: 20.0),
                   TextField(
                     autofocus: false,
                     keyboardType: TextInputType.number,
@@ -245,12 +218,12 @@ class ProfileState extends State<ProfileView> {
                       txtFocusNodeWhatsapp!.unfocus();
                       FocusScope.of(context).requestFocus(txtFocusNodeNomeDaEmpresa);
                     },
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Whatsapp',
                       hintText: 'Digite Whatsapp',
                     ),
                   ),
-                  SizedBox(height: 20.0),
+                  const SizedBox(height: 20.0),
                   TextField(
                     autofocus: false,
                     keyboardType: TextInputType.text,
@@ -261,12 +234,12 @@ class ProfileState extends State<ProfileView> {
                       // txtFocusNodeWhatsapp!.unfocus();
                       // FocusScope.of(context).requestFocus(txtFocusNodeNomeDaEmpresa);
                     },
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Nome da empresa',
                       hintText: 'avenir-lt-std-medium',
                     ),
                   ),
-                  SizedBox(height: 20.0),
+                  const SizedBox(height: 20.0),
                   DropdownButtonFormField<Uf>(
                     elevation: 7,
                     isExpanded: true,
@@ -284,34 +257,43 @@ class ProfileState extends State<ProfileView> {
                       border: InputBorder.none,
                       //focusColor: Colors.transparent,
                     ),
-                    value: uf,
-                    items: listUf.map(
-                          (v) => DropdownMenuItem<Uf>(
+                    value: ufModel,
+                    items: ufList!.map((v) => DropdownMenuItem<Uf>(
                           value: v,
                           child: Text(
                             v.uf!,
                             overflow: TextOverflow.ellipsis,
                             softWrap: true,
                             maxLines: 1,
-                          )),
-                    ).toList(),
+                          )),).toList(),
                     onChanged: (newValue) {
                       setState(() {
-                        uf = newValue!;
+                        ufModel = newValue!;
                       });
                     },
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5.0,
                   ),
-                  SizedBox(height: 25.0),
-                  Padding(padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),child: TextButton(
+                  const SizedBox(height: 25.0),
+                  Center(child: Padding(padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),child: TextButton(
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.fromLTRB(15.0, 2.0, 15.0, 2.0),
+                      minimumSize: const Size(200, 47),
+                      maximumSize: const Size(200, 47),
+                      textStyle: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color:  Color(0xffFFFFFF),
+                        fontSize: 15,
+                      ),
+                    ),
                     child: const Text(' ATUALIZAR '),
                     onPressed: () async {
+                      FocusScope.of(context).requestFocus(FocusNode());
                       onUpdate();
                     },
-                  ),),
-                  SizedBox(height: 30.0),
+                  ),),),
+                  const SizedBox(height: 30.0),
                 ],
               ),),
           ),

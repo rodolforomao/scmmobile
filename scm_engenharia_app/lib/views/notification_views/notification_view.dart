@@ -110,12 +110,7 @@ class NotificationState extends State<NotificationView> {
         centerTitle: true,
         elevation: 0.0,
         title: const Text(
-          "Notificação",
-          textAlign: TextAlign.start,
-          style: TextStyle(
-              fontSize: 19.0,
-              color: Color(0xffFFFFFF),
-              fontFamily: "open-sans-regular"),
+          'Notificação',
         ),
       ),
       body: viewType(MediaQuery.of(context).size.height),

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../views/sici_views/list_sici_sent_view.dart';
 import '../../views/sici_views/physical_distribution_quantitative_service_view.dart';
+import '../../views/sici_views/select_municipality_view.dart';
 import '../../views/sici_views/sici_fust_form_view.dart';
 import '../../views/splash_screen_view.dart';
 import '/help/navigation_service/route_paths.dart' as routes;
@@ -11,7 +12,6 @@ import '../../views/notification_views/notification_view.dart';
 import '../../views/notification_views/notifications_view.dart';
 import '../../views/settings_view.dart';
 import '../../views/settings_views/environment_variable_view.dart';
-import '../../views/settings_views/select_city_view.dart';
 import '../../views/user_views/change_password_view.dart';
 import '../../views/user_views/create_new_account_view.dart';
 import '../../views/user_views/forgot_your_password_view.dart';
@@ -32,10 +32,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => const SplashScreenView());
     case routes.errorInformationRoute:
       {
-        Map<String, dynamic> map = settings.arguments as Map<String, dynamic>;
-        String view  = map['view'].toString();
-        String error = map['error'].toString();
-        return MaterialPageRoute(builder: (context) => ErrorInformationView(informacao: error,originPage: view,));
+        final arg =  settings.arguments as Map;
+        return MaterialPageRoute(builder: (context) => ErrorInformationView(informacao: arg['error'],originPage: arg['view'],));
       }
     case routes.menuNavigationRoute:
       return MaterialPageRoute(builder: (context) => MenuNavigation());
@@ -85,7 +83,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       }
     case routes.selectCityRoute:
       {
-        return MaterialPageRoute(builder: (context) =>  SelectCityView(sMunicipality: [], Uf: '',));
+        return MaterialPageRoute(builder: (context) =>  SelectMunicipalityView(sMunicipios: [],sUf:null));
       }
   //#endregion
 
@@ -153,7 +151,7 @@ class RoutesPage {
 
       //Visualizações de configurações------------------------------------------------------------------------------------------
       routes.environmentVariableRoute : (context) => EnvironmentVariableView(),
-      routes.selectCityRoute : (context) => SelectCityView(Uf: '',  sMunicipality: [],),
+      routes.selectCityRoute : (context) => SelectMunicipalityView(sMunicipios: [],sUf:null),
 
       //Visualizações do usuário -----------------------------------------------------------------------------------------------
       routes.changePasswordRoute : (context) => const ChangePasswordView(),

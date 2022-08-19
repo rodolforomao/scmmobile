@@ -1,6 +1,4 @@
 
-
-
 class EnvironmentVariables {
   List<CodIbge>? codIbge;
   List<Uf>? uf;

@@ -31,12 +31,7 @@ class DocumentsState extends State<DocumentsView> {
           centerTitle: true,
           elevation: 0.0,
           title: const Text(
-            "Documentos",
-            textAlign: TextAlign.start,
-            style: TextStyle(
-                fontSize: 19.0,
-                color: Color(0xffFFFFFF),
-                fontFamily: "open-sans-regular"),
+            'Documentos',
           ),
         ),
       ),

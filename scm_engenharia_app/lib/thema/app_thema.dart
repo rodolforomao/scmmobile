@@ -10,7 +10,7 @@ class AppThema {
       primaryColor:const Color(0xff093d6c),
       primaryColorDark: const Color(0xff000000),
       primaryColorLight: const Color(0xffFFFFFF),
-      splashColor: const Color(0xff3F7EC1),
+      splashColor: const Color(0xff093d6c),
       iconTheme: const IconThemeData(color: Color(0xFF545454)),
       textTheme:  const TextTheme(
         //labelMedium,
@@ -20,10 +20,10 @@ class AppThema {
          headline4:TextStyle(color: Color(0xff193C70), fontSize: 72.0, fontWeight: FontWeight.bold),
          headline5:TextStyle(color: Color(0xffB28DD1), fontSize: 72.0, fontWeight: FontWeight.bold),
          headline6:TextStyle(color: Color(0xff6b8e23), fontSize: 72.0, fontWeight: FontWeight.bold),
-         subtitle1:TextStyle(color: Color(0xff653b10), fontSize: 72.0, fontWeight: FontWeight.bold),
-         subtitle2:TextStyle(color:  Color(0xff0c5856), fontSize: 72.0, fontWeight: FontWeight.bold),
-         bodyText1:TextStyle(color: Color(0xffe4b0aa), fontSize: 72.0, fontWeight: FontWeight.bold),
-         bodyText2:TextStyle(color: Color(0xff284521),fontSize: 72.0, fontWeight: FontWeight.bold),
+         subtitle1:TextStyle(color:  Color(0xFF393939), fontSize: 20.0,fontFamily: 'avenir-lt-std-medium'),
+         subtitle2:TextStyle(color:  Color(0xFF545454), fontSize: 20.0,fontFamily: 'avenir-lt-std-medium'),
+         bodyText1:TextStyle(color:  Color(0xFF545454), fontSize: 20.0,fontFamily: 'avenir-lt-std-medium'),
+         bodyText2:TextStyle(color:  Color(0xFF545454), fontSize: 15.0,fontFamily: 'avenir-lt-std-medium'),
       ),
       inputDecorationTheme: const InputDecorationTheme(
         focusedErrorBorder: OutlineInputBorder(
@@ -36,30 +36,30 @@ class AppThema {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(5.0)),
-          borderSide: BorderSide(color: Color(0xff093d6c), width: 1.0),
+          borderSide: BorderSide(color: Color(0xFFF65100), width: 1.0),
         ),
         contentPadding: EdgeInsets.fromLTRB(10.0, 18.0, 10.0, 16.0),
         border: OutlineInputBorder(),
         helperStyle: TextStyle(
             fontWeight: FontWeight.w500,
             fontSize: 15.0,
-            color:  Color(0xff093d6c),
-            fontFamily: 'avenir-next-rounded-pro-regular'),
+            color:  Color(0xFFF65100),
+            fontFamily: 'avenir-lt-std-book-oblique'),
         hintStyle: TextStyle(
             fontWeight: FontWeight.w500,
             fontSize: 15.0,
             color:  Color(0xFFb8b8b8),
-            fontFamily: 'avenir-next-rounded-pro-regular'),
+            fontFamily: 'avenir-lt-std-book-oblique'),
         labelStyle: TextStyle(
             fontWeight: FontWeight.w400,
-            fontSize: 17.0,
+            fontSize: 15.0,
             color: Color(0xFFb8b8b8),
-            fontFamily: 'open-sans-regular'),
+            fontFamily: 'avenir-lt-std-book'),
         floatingLabelStyle: TextStyle(
             fontWeight: FontWeight.w400,
             fontSize: 15.0,
             color: Color(0xff50093d6c),
-            fontFamily: 'open-sans-regular'),
+            fontFamily: 'avenir-lt-std-book'),
         fillColor: Colors.white,
       ),
       appBarTheme: const AppBarTheme(
@@ -73,7 +73,7 @@ class AppThema {
             fontSize: 19.0,
             fontWeight: FontWeight.w500,
             color: Color(0xffFFFFFF),
-            fontFamily: 'venir-next-rounded-pro-medium-lt'),
+            fontFamily: 'avenir-lt-std-roman'),
       ),
       bottomAppBarTheme: const BottomAppBarTheme(
         color: Color(0xffFFFFFF),
@@ -83,17 +83,17 @@ class AppThema {
         elevation: 3,
         backgroundColor: Colors.white,
         unselectedIconTheme: IconThemeData(size: 25, color: Color(0xff6C757D)),
-        selectedIconTheme: IconThemeData(size: 28, color: Color(0xff093d6c)),
-        selectedItemColor: Color(0xff093d6c),
+        selectedIconTheme: IconThemeData(size: 28, color: Color(0xFFF65100)),
+        selectedItemColor: Color(0xFFF65100),
         unselectedItemColor: Color(0xff6C757D),
         selectedLabelStyle: TextStyle(
-          fontFamily: 'Montserrat-Regular',
+          fontFamily: 'avenir-lt-std-roman',
           fontWeight: FontWeight.bold,
           fontSize: 13.0,
-          color: Color(0xff093d6c),
+          color: Color(0xFFF65100),
         ),
         unselectedLabelStyle: TextStyle(
-          fontFamily: 'Montserrat-Regular',
+          fontFamily: 'avenir-lt-std-roman',
           fontWeight: FontWeight.w600,
           fontSize: 12.0,
           color: Color(0xff6C757D),
@@ -162,9 +162,6 @@ class AppThema {
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          padding: const EdgeInsets.fromLTRB(15.0, 2.0, 15.0, 2.0),
-          minimumSize: const Size(250, 47),
-          maximumSize: const Size(250, 47),
           primary: const Color(0xFFffffff),
           textStyle: const TextStyle(
             fontWeight: FontWeight.w500,
@@ -172,12 +169,12 @@ class AppThema {
             color:  Color(0xffFFFFFF),
             fontSize: 15,
           ),
-          backgroundColor: const Color(0xff30bc8c),
+          backgroundColor: const Color(0xFF3F7EC1),
           shape: RoundedRectangleBorder(
             borderRadius:  BorderRadius.circular(5.0),
           ),
         ),
-      ), colorScheme: ColorScheme.fromSwatch().copyWith(secondary: const Color(0xff093d6c)),
+      ), colorScheme: ColorScheme.fromSwatch().copyWith(secondary: const Color(0xFF2fdf84)),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           minimumSize: const Size(250, 47),
@@ -400,7 +397,7 @@ class AppThema {
             color:  Color(0xffFFFFFF),
             fontSize: 15,
           ),
-          backgroundColor: const Color(0xFF2fdf84),
+          backgroundColor: const Color(0xff018a8a),
           shape: RoundedRectangleBorder(
             borderRadius:  BorderRadius.circular(5.0),
           ),
