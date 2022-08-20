@@ -7,7 +7,7 @@ import 'package:scm_engenharia_app/views/sici_views/physical_distribution_quanti
 import '../../data/app_scm_engenharia_mobile_bll.dart';
 import '../../data/tb_form_sici_fust.dart';
 import '../../data/tb_quantitative_distribution_physical_accesses_service.dart';
-import '../../help/componentes.dart';
+import '../../help/components.dart';
 import '../../help/formatter/cnpj_input_formatter.dart';
 import '../../help/formatter/telefone_input_formatter.dart';
 import '../../help/formatter/valor_input_formatter.dart';
@@ -194,7 +194,7 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
 
   Inc() async {
     try {
-      Uf = await Componentes.OnlistaEstados() as List<String>;
+      Uf = await Components.OnlistaEstados() as List<String>;
       setState(() {
         UfTxt = Uf.first;
       });

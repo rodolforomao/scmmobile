@@ -4,12 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:realm/realm.dart';
 import '../../data/tb_quantitative_distribution_physical_accesses_service.dart';
+import '../../help/components.dart';
+import '../../help/formatter/cnpj_input_formatter.dart';
 import '../../models/environment_variables.dart';
 import '../../models/quantitative_distribution_physical_accesses_service_model.dart';
+import '../../models/util_model/util_dropdown_list.dart';
 import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
 import 'select_municipality_view.dart';
-
+import '../../thema/app_thema.dart';
 
 
 class PhysicalDistributionQuantitativeServiceView extends StatefulWidget {
@@ -27,6 +30,14 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
   final quantitativeDistributionPhysicalAccessesService = TbQuantitativeDistributionPhysicalAccessesService(ObjectId(),'','','','','','','','','','','','','','','','','','','','','');
   EnvironmentVariables resulEnvironmentVariables = EnvironmentVariables();
 
+  //CNPJ:
+  final txtControllerCnpj =  TextEditingController();
+  final  focusNodeCnpj = FocusNode();
+
+  late UtilDropdownList utilDropdownListMonth;
+  List<UtilDropdownList> listMonths = <UtilDropdownList>[];
+
+
 
   TipoTecnologia tbTecnologia = TipoTecnologia();
   Uf ufModel = Uf();
@@ -39,6 +50,9 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
 
   final txtControllerPis = TextEditingController();
   final focusNodePis  = FocusNode();
+
+  TextEditingController txtNumberYear = TextEditingController();
+
 
 
   final txtControllerMunicipio = TextEditingController();
@@ -125,6 +139,12 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
   @override
   void initState() {
     super.initState();
+    Future.delayed(Duration.zero, () async {
+      listMonths = <UtilDropdownList>[];
+      listMonths = await Components.onMonths();
+      utilDropdownListMonth = listMonths.first;
+
+    });
     onInc();
   }
 
@@ -164,10 +184,31 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              SizedBox(height: 20.0),
+              Padding(padding: const EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 10.0),child: TextField(
+                keyboardType: TextInputType.number,
+                controller: txtControllerCnpj,
+                focusNode: focusNodeCnpj,
+                textInputAction: TextInputAction.next,
+                onSubmitted: (term) {
+                  focusNodeCnpj.unfocus();
+                  // FocusScope.of(context).requestFocus(focusNodeTelefoneMovel);
+                },
+                inputFormatters: [
+                  // obrigatório
+                  FilteringTextInputFormatter.digitsOnly,
+                  CnpjInputFormatter(),
+                ],
+                autofocus: false,
+                style: const TextStyle(
+                    fontSize: 15.0),
+                decoration: const InputDecoration(
+                  labelText: 'CNPJ:',
+                  hintText: '',
+                ),
+              ),),
               Container(
                 height: 58.0,
-                margin: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+                margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
                 child:  DropdownButtonFormField(
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.fromLTRB(10.0, 18.0, 10.0, 16.0),
@@ -212,8 +253,71 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
                     }
                   },
                 ),),
-              SizedBox(height: 20.0),
-              Padding( padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),child:TextField(
+              Padding(padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 15.0),child:  Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      autofocus: false,
+                      keyboardType: TextInputType.number,
+                      controller: txtNumberYear,
+                      textInputAction: TextInputAction.go,
+                      inputFormatters: [
+                        // obrigatório
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(4),
+                      ],
+                      onSubmitted: (value) {
+                        FocusScope.of(context).requestFocus(FocusNode());
+                      },
+                      decoration: const InputDecoration(
+                        hintText: 'Digite Ano',
+                        labelText: 'Ano',
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 15.0,
+                  ),
+                  Expanded(
+                    child:  DropdownButtonFormField<UtilDropdownList>(
+                      elevation: 7,
+                      dropdownColor: AppThema.themeNotifierState.value.mode == ThemeMode.dark ? const Color(0xff000000) : const Color(0xffFFFFFF),
+                      isExpanded: true,
+                      isDense: true,
+                      icon: const Icon(
+                        Icons.expand_more,
+                        size: 23,
+                        color: Color(0xFFb8b8b8),
+                      ),
+                      decoration:  const InputDecoration(
+                        filled: true,
+                        labelText: 'Mês',
+                        hintText: 'Mês',
+                        //contentPadding: const EdgeInsets.fromLTRB(10.0, 18.0, 18.0, 0.0),
+                        border: InputBorder.none,
+                        //focusColor: Colors.transparent,
+                      ),
+                      value: utilDropdownListMonth,
+                      items: listMonths.map(
+                            (v) => DropdownMenuItem<UtilDropdownList>(
+                            value: v,
+                            child: Text(
+                              v.txt!,
+                              overflow: TextOverflow.ellipsis,
+                              softWrap: true,
+                              maxLines: 1,
+                            )),
+                      ).toList(),
+                      onChanged: (newValue) {
+                        setState(() {
+                          utilDropdownListMonth = newValue!;
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              )),
+              Padding( padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),child:TextField(
                 onTap: () {
                   FocusScope.of(context).requestFocus(FocusNode());
                   try {
@@ -251,189 +355,206 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
                   hintText: 'Selecione ..',
                 ),
               ),),
-              SizedBox(height: 20.0),
-              Container(
-                height: 58.0,
-                margin: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-                child:  DropdownButtonFormField(
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.fromLTRB(10.0, 18.0, 10.0, 16.0),
-                    labelText: 'Nome tecnologia',
-                    hintText: '',
-                  ),
-                  hint: Text(
-                    "Selecione ..",
-                    style: TextStyle(
-                        fontSize: 16.0,
-                        color: const Color(0xFF90ffffff)),
-                  ),
-                  elevation: 16,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontFamily: 'avenir-lt-std-medium',
-                    color: Color(0xFF000000),
-                  ),
-                  iconEnabledColor: Colors.white,
-                  value: tbTecnologia != null ? tbTecnologia : null,
-                  isExpanded: true,
-                  iconSize: 35,
-                  items:
-                  resulEnvironmentVariables.tipoTecnologia!.map((TipoTecnologia value) {
-                    return new DropdownMenuItem<TipoTecnologia>(
-                      value: value,
-                      child: Text(
-                        value.descricao!,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 19.0,
-                            color: Color(0xFF000000),
-                            fontFamily:
-                            "avenir-next-rounded-pro-regular"),
+              Padding(padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 15.0),child:  Row(
+                children: [
+                  Expanded(
+                    child:  DropdownButtonFormField<UtilDropdownList>(
+                      elevation: 7,
+                      dropdownColor: AppThema.themeNotifierState.value.mode == ThemeMode.dark ? const Color(0xff000000) : const Color(0xffFFFFFF),
+                      isExpanded: true,
+                      isDense: true,
+                      icon: const Icon(
+                        Icons.expand_more,
+                        size: 23,
+                        color: Color(0xFFb8b8b8),
                       ),
-                    );
-                  }).toList(),
-                  onChanged: (TipoTecnologia? newValue) {
+                      decoration:  const InputDecoration(
+                        filled: true,
+                        labelText: 'Tipo cliente',
+                        hintText: 'Tipo cliente',
+                        //contentPadding: const EdgeInsets.fromLTRB(10.0, 18.0, 18.0, 0.0),
+                        border: InputBorder.none,
+                        //focusColor: Colors.transparent,
+                      ),
+                      value: utilDropdownListMonth,
+                      items: listMonths.map(
+                            (v) => DropdownMenuItem<UtilDropdownList>(
+                            value: v,
+                            child: Text(
+                              v.txt!,
+                              overflow: TextOverflow.ellipsis,
+                              softWrap: true,
+                              maxLines: 1,
+                            )),
+                      ).toList(),
+                      onChanged: (newValue) {
+                        setState(() {
+                          utilDropdownListMonth = newValue!;
+                        });
+                      },
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 15.0,
+                  ),
+                  Expanded(
+                    child:  DropdownButtonFormField<UtilDropdownList>(
+                      elevation: 7,
+                      dropdownColor: AppThema.themeNotifierState.value.mode == ThemeMode.dark ? const Color(0xff000000) : const Color(0xffFFFFFF),
+                      isExpanded: true,
+                      isDense: true,
+                      icon: const Icon(
+                        Icons.expand_more,
+                        size: 23,
+                        color: Color(0xFFb8b8b8),
+                      ),
+                      decoration:  const InputDecoration(
+                        filled: true,
+                        labelText: 'Tipo de Atendimento',
+                        hintText: 'Tipo de Atendimento',
+                        //contentPadding: const EdgeInsets.fromLTRB(10.0, 18.0, 18.0, 0.0),
+                        border: InputBorder.none,
+                        //focusColor: Colors.transparent,
+                      ),
+                      value: utilDropdownListMonth,
+                      items: listMonths.map(
+                            (v) => DropdownMenuItem<UtilDropdownList>(
+                            value: v,
+                            child: Text(
+                              v.txt!,
+                              overflow: TextOverflow.ellipsis,
+                              softWrap: true,
+                              maxLines: 1,
+                            )),
+                      ).toList(),
+                      onChanged: (newValue) {
+                        setState(() {
+                          utilDropdownListMonth = newValue!;
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              )),
+              Padding(padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 15.0),child:  Row(
+                children: [
+                  Expanded(
+                    child:  DropdownButtonFormField<UtilDropdownList>(
+                      elevation: 7,
+                      dropdownColor: AppThema.themeNotifierState.value.mode == ThemeMode.dark ? const Color(0xff000000) : const Color(0xffFFFFFF),
+                      isExpanded: true,
+                      isDense: true,
+                      icon: const Icon(
+                        Icons.expand_more,
+                        size: 23,
+                        color: Color(0xFFb8b8b8),
+                      ),
+                      decoration:  const InputDecoration(
+                        filled: true,
+                        labelText: 'Tipos meio',
+                        hintText: 'Tipos meio',
+                        //contentPadding: const EdgeInsets.fromLTRB(10.0, 18.0, 18.0, 0.0),
+                        border: InputBorder.none,
+                        //focusColor: Colors.transparent,
+                      ),
+                      value: utilDropdownListMonth,
+                      items: listMonths.map(
+                            (v) => DropdownMenuItem<UtilDropdownList>(
+                            value: v,
+                            child: Text(
+                              v.txt!,
+                              overflow: TextOverflow.ellipsis,
+                              softWrap: true,
+                              maxLines: 1,
+                            )),
+                      ).toList(),
+                      onChanged: (newValue) {
+                        setState(() {
+                          utilDropdownListMonth = newValue!;
+                        });
+                      },
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 15.0,
+                  ),
+                  Expanded(
+                    child:  DropdownButtonFormField<UtilDropdownList>(
+                      elevation: 7,
+                      dropdownColor: AppThema.themeNotifierState.value.mode == ThemeMode.dark ? const Color(0xff000000) : const Color(0xffFFFFFF),
+                      isExpanded: true,
+                      isDense: true,
+                      icon: const Icon(
+                        Icons.expand_more,
+                        size: 23,
+                        color: Color(0xFFb8b8b8),
+                      ),
+                      decoration:  const InputDecoration(
+                        filled: true,
+                        labelText: 'Tipo produto',
+                        hintText: 'Tipo produto',
+                        //contentPadding: const EdgeInsets.fromLTRB(10.0, 18.0, 18.0, 0.0),
+                        border: InputBorder.none,
+                        //focusColor: Colors.transparent,
+                      ),
+                      value: utilDropdownListMonth,
+                      items: listMonths.map(
+                            (v) => DropdownMenuItem<UtilDropdownList>(
+                            value: v,
+                            child: Text(
+                              v.txt!,
+                              overflow: TextOverflow.ellipsis,
+                              softWrap: true,
+                              maxLines: 1,
+                            )),
+                      ).toList(),
+                      onChanged: (newValue) {
+                        setState(() {
+                          utilDropdownListMonth = newValue!;
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              )),
+              Padding(padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 15.0),child:   Expanded(
+                child:  DropdownButtonFormField<UtilDropdownList>(
+                  elevation: 7,
+                  dropdownColor: AppThema.themeNotifierState.value.mode == ThemeMode.dark ? const Color(0xff000000) : const Color(0xffFFFFFF),
+                  isExpanded: true,
+                  isDense: true,
+                  icon: const Icon(
+                    Icons.expand_more,
+                    size: 23,
+                    color: Color(0xFFb8b8b8),
+                  ),
+                  decoration:  const InputDecoration(
+                    filled: true,
+                    labelText: 'Nome tecnologia',
+                    hintText: 'Nome tecnologia',
+                    //contentPadding: const EdgeInsets.fromLTRB(10.0, 18.0, 18.0, 0.0),
+                    border: InputBorder.none,
+                    //focusColor: Colors.transparent,
+                  ),
+                  value: utilDropdownListMonth,
+                  items: listMonths.map(
+                        (v) => DropdownMenuItem<UtilDropdownList>(
+                        value: v,
+                        child: Text(
+                          v.txt!,
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: true,
+                          maxLines: 1,
+                        )),
+                  ).toList(),
+                  onChanged: (newValue) {
                     setState(() {
-                      tbTecnologia = newValue!;
-                      id_tecnologia = newValue.id!;
-                      //_DistribuicaoFisicosServicoQuantitativo.tecnologia = newValue.tecnologia;
+                      utilDropdownListMonth = newValue!;
                     });
                   },
                 ),
-
-              ),
-              SizedBox(height: 10.0),
-              Divider(),
-              SizedBox(height: 10.0),
-              TextField(
-                controller: txtControllerCod_ibge,
-                textAlign: TextAlign.start,
-                decoration: InputDecoration(
-                  labelText: 'Código IBGE',
-                  hintText: '',
-                ),
-                keyboardType: TextInputType.text,
-                maxLength: 500,
-              ),
-              SizedBox(height: 20.0),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Expanded(
-                    child: TextField(
-                      controller:txtControllerPf_0,
-                      textAlign: TextAlign.start,
-                      decoration: InputDecoration(
-                        labelText: 'PF - 0 - 512 Kbps',
-                        hintText: '',
-                      ),
-                      keyboardType: TextInputType.text,
-                      maxLength: 6,
-                    ),
-                  ),
-                  SizedBox(width: 15),
-                  Expanded(
-                    child: TextFormField(
-                      controller: txtControllerPf_512,
-                      textAlign: TextAlign.start,
-                      decoration: InputDecoration(
-                        labelText: 'PF - 512 - 2',
-                        hintText: '',
-                      ),
-                      keyboardType: TextInputType.text,
-                      maxLength: 6,
-                    ),
-                  ),
-                  SizedBox(width: 15),
-                  Expanded(
-                    child: TextField(
-                      controller: txtControllerPf_2,
-                      textAlign: TextAlign.start,
-                      decoration: InputDecoration(
-                        labelText: 'PF - 2 - 12',
-                        hintText: '',
-                      ),
-                      keyboardType: TextInputType.text,
-                      maxLength: 500,
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Expanded(
-                    child: TextField(
-                      controller: txtControllerPf_12,
-                      textAlign: TextAlign.start,
-                      decoration: InputDecoration(
-                        labelText: 'PF - 12 - 34 Mbps',
-                        hintText: '',
-                      ),
-                      keyboardType: TextInputType.text,
-                      maxLength: 6,
-                    ),
-                  ),
-                  SizedBox(width: 15),
-                  Expanded(
-                    child: TextField(
-                      controller: txtControllerPf_34,
-                      textAlign: TextAlign.start,
-                      decoration: InputDecoration(
-                        labelText: 'PF - Maior 34 Mbps',
-                        hintText: '',
-                      ),
-                      keyboardType: TextInputType.text,
-                      maxLength: 6,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 40.0),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Expanded(
-                    child: TextField(
-                      controller: txtControllerPj_0,
-                      textAlign: TextAlign.start,
-                      decoration: InputDecoration(
-                        labelText: 'PJ - 0 - 512 Kbps',
-                        hintText: '',
-                      ),
-                      keyboardType: TextInputType.text,
-                      maxLength: 6,
-                    ),
-                  ),
-                  SizedBox(width: 15),
-                  Expanded(
-                    child: TextField(
-                      controller: txtControllerPj_512,
-                      textAlign: TextAlign.start,
-                      decoration: InputDecoration(
-                        labelText: 'PJ - 512 - 2',
-                        hintText: '',
-                      ),
-                      keyboardType: TextInputType.text,
-                      maxLength: 6,
-                    ),
-                  ),
-                  SizedBox(width: 15),
-                  Expanded(
-                    child: TextField(
-                      controller: txtControllerPj_2,
-                      textAlign: TextAlign.start,
-                      decoration: InputDecoration(
-                        labelText: 'PJ - 2 - 12',
-                        hintText: '',
-                      ),
-                      keyboardType: TextInputType.text,
-                      maxLength: 500,
-                    ),
-                  ),
-                ],
-              ),
-              Row(
+              ),),
+              Padding(padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 15.0),child:   Row(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Expanded(
@@ -441,8 +562,8 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
                       controller: txtControllerPj_12,
                       textAlign: TextAlign.start,
                       decoration: InputDecoration(
-                        labelText: 'PJ - 12 - 34 Mbps',
-                        hintText: '',
+                        labelText: 'VELOCIDADE',
+                        hintText: 'VELOCIDADE',
                       ),
                       keyboardType: TextInputType.text,
                       maxLength: 6,
@@ -454,16 +575,15 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
                       controller: txtControllerPj_34,
                       textAlign: TextAlign.start,
                       decoration: InputDecoration(
-                        labelText: 'PJ - Maior 34 Mbps',
-                        hintText: '',
+                        labelText: 'ACESSOS',
+                        hintText: 'ACESSOS',
                       ),
                       keyboardType: TextInputType.text,
                       maxLength: 6,
                     ),
                   ),
                 ],
-              ),
-              SizedBox(height: 30.0),
+              ),),
               Center(child: Padding(padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),child: TextButton(
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.fromLTRB(15.0, 2.0, 15.0, 2.0),
@@ -481,8 +601,6 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
                   onAdd();
                 },
               ),),),
-
-              SizedBox(height: 30.0),
             ],
           ),
         );

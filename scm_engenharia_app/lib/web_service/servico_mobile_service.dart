@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../data/JWTTokenDbLocal.dart';
-import '../help/componentes.dart';
+import '../help/components.dart';
 import '../models/operation.dart';
 import '../models/sici_file_model.dart';
 
@@ -15,7 +15,7 @@ class ServicoMobileService {
   static Future<Operation> onLogin(String usuario,String password) async {
     Operation operacao = Operation();
     try {
-      String? token = await Componentes.JWTToken(usuario, password);
+      String? token = await Components.JWTToken(usuario, password);
       final response = await http
           .post(Uri.parse("$Url/login_ws"),
               headers: {
@@ -31,7 +31,7 @@ class ServicoMobileService {
         }
         else
           {
-            Map<String, dynamic> map = jsonDecode(Componentes.removeAllHtmlTags(response.body));
+            Map<String, dynamic> map = jsonDecode(Components.removeAllHtmlTags(response.body));
             OperationJson resp = OperationJson.fromJson(map);
             operacao.erro = !resp.status!;
             operacao.message = resp.message;
@@ -71,7 +71,7 @@ class ServicoMobileService {
         }
         else
         {
-          Map<String, dynamic> map = jsonDecode(Componentes.removeAllHtmlTags(respStr));
+          Map<String, dynamic> map = jsonDecode(Components.removeAllHtmlTags(respStr));
           OperationJson resp = OperationJson.fromJson(map);
           operacao.erro = !resp.status!;
           operacao.message = resp.message;
@@ -113,7 +113,7 @@ class ServicoMobileService {
         }
         else
         {
-          Map<String, dynamic> map = jsonDecode(Componentes.removeAllHtmlTags(response.body));
+          Map<String, dynamic> map = jsonDecode(Components.removeAllHtmlTags(response.body));
           OperationJson resp = OperationJson.fromJson(map);
           operacao.erro = !resp.status!;
           operacao.message = resp.message;
@@ -233,7 +233,7 @@ class ServicoMobileService {
         }
         else
         {
-          Map<String, dynamic> map = jsonDecode(Componentes.removeAllHtmlTags(respStr));
+          Map<String, dynamic> map = jsonDecode(Components.removeAllHtmlTags(respStr));
           OperationJson resp = OperationJson.fromJson(map);
           operacao.erro = !resp.status!;
           operacao.message = resp.message;
@@ -319,7 +319,7 @@ class ServicoMobileService {
         }
         else
         {
-          Map<String, dynamic> map = jsonDecode(Componentes.removeAllHtmlTags(respStr));
+          Map<String, dynamic> map = jsonDecode(Components.removeAllHtmlTags(respStr));
           OperationJson resp = OperationJson.fromJson(map);
           operacao.erro = !resp.status!;
           operacao.message = resp.message;
@@ -358,7 +358,7 @@ class ServicoMobileService {
         }
         else
         {
-          Map<String, dynamic> map = jsonDecode(Componentes.removeAllHtmlTags(respStr));
+          Map<String, dynamic> map = jsonDecode(Components.removeAllHtmlTags(respStr));
           OperationJson resp = OperationJson.fromJson(map);
           operacao.erro = !resp.status!;
           operacao.message = resp.message;
@@ -397,7 +397,7 @@ class ServicoMobileService {
         }
         else
         {
-          Map<String, dynamic> map = jsonDecode(Componentes.removeAllHtmlTags(respStr));
+          Map<String, dynamic> map = jsonDecode(Components.removeAllHtmlTags(respStr));
           OperationJson resp = OperationJson.fromJson(map);
           operacao.erro = !resp.status!;
           operacao.message = resp.message;
@@ -437,7 +437,7 @@ class ServicoMobileService {
         }
         else
         {
-          Map<String, dynamic> map = jsonDecode(Componentes.removeAllHtmlTags(Componentes.removeAllHtmlTags(respStr)));
+          Map<String, dynamic> map = jsonDecode(Components.removeAllHtmlTags(Components.removeAllHtmlTags(respStr)));
           OperationJson resp = OperationJson.fromJson(map);
           operacao.erro = !resp.status!;
           operacao.message = resp.message;

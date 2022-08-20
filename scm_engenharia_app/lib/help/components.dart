@@ -8,10 +8,11 @@ import 'package:jaguar_jwt/jaguar_jwt.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
 import '../data/app_scm_engenharia_mobile_bll.dart';
 import '../models/operation.dart';
+import '../models/util_model/util_dropdown_list.dart';
 import '../views/help_views/global_scaffold.dart';
 
 
-class Componentes {
+class Components {
 
   static String quantidadeMaxima(String Txt, int Quantidade) {
     try {
@@ -131,6 +132,25 @@ class Componentes {
     } catch (error) {
       throw (error.toString());
     }
+  }
+
+  //Meses do ano
+  static Future<List<UtilDropdownList>> onMonths() async {
+    List<UtilDropdownList> list = <UtilDropdownList>[];
+    list.add(UtilDropdownList(id: 0, txt: 'Selecione...', txtDescricao: 'Selecione...'));
+    list.add(UtilDropdownList(id: 1, txt: 'Janeiro', txtDescricao: 'Janeiro'));
+    list.add(UtilDropdownList(id: 2, txt: 'Fevereiro', txtDescricao: 'Fevereiro'));
+    list.add(UtilDropdownList(id: 3, txt: 'Março', txtDescricao: 'Março'));
+    list.add(UtilDropdownList(id: 4, txt: 'Abril', txtDescricao: 'Abril'));
+    list.add(UtilDropdownList(id: 5, txt: 'Maio', txtDescricao: 'Maio'));
+    list.add(UtilDropdownList(id: 6, txt: 'Junho', txtDescricao: 'Junho'));
+    list.add(UtilDropdownList(id: 7, txt: 'Julho', txtDescricao: 'Julho'));
+    list.add(UtilDropdownList(id: 8, txt: 'Agosto', txtDescricao: 'Agosto'));
+    list.add(UtilDropdownList(id: 9, txt: 'Setembro', txtDescricao: 'Setembro'));
+    list.add(UtilDropdownList(id: 10, txt: 'Outubro', txtDescricao: 'Outubro'));
+    list.add(UtilDropdownList(id: 11, txt: 'Novembro', txtDescricao: 'Novembro'));
+    list.add(UtilDropdownList(id: 12, txt: 'Dezembro', txtDescricao: 'Dezembro'));
+    return list;
   }
 
 }

@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
-import '../../help/componentes.dart';
+import '../../help/components.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
@@ -167,7 +167,7 @@ class OnExitApp {
                             ),
                             onPressed: () async {
                               try {
-                                Componentes.logoffApp();
+                                Components.logoffApp();
                               } catch (error) {
                                 OnRealizandoOperacao('', false, context);
                                 GlobalScaffold.instance.onToastInformacaoErro(error.toString());
