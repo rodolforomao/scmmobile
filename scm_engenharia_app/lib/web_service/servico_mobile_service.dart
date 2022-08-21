@@ -185,46 +185,6 @@ class ServicoMobileService {
       response.fields['controllerObservacoes'] =
       siciFileModel.observacoes == null ? "" : siciFileModel.observacoes!;
       int index = 1;
-      if (siciFileModel.distribuicaoFisicosServicoQuantitativo == null)
-        throw ("Distribuição do quantitativo de acessos físicos em serviço e obrigatório,favor adicionar.");
-      for (var item in siciFileModel.distribuicaoFisicosServicoQuantitativo!) {
-        print('controllerUF_' + index.toString());
-        response.fields['controllerCodIBGE_' + index.toString()] =
-            item.cod_ibge.toString() == null ? "" : item.cod_ibge.toString();
-        response.fields['controllerUF_' + index.toString()] =
-            item.id_uf.toString() == null ? "" : item.id_uf.toString();
-        response.fields['controllerMunicipio_' + index.toString()] =
-            item.id_municipio.toString() == null
-                ? ""
-                : item.id_municipio.toString();
-        response.fields['controllerTecnologia_' + index.toString()] =
-            item.id_tecnologia.toString() == null
-                ? ""
-                : item.id_tecnologia.toString();
-        response.fields['controllerCodIBGE_' + index.toString()] =
-            item.cod_ibge == null ? "" : item.cod_ibge!;
-        response.fields['controllerPF0_' + index.toString()] =
-            item.pf_0 == null ? "" : item.pf_0!;
-        response.fields['controllerPF512_' + index.toString()] =
-            item.pf_512 == null ? "" : item.pf_512!;
-        response.fields['controllerPF2_' + index.toString()] =
-            item.pf_2 == null ? "" : item.pf_2!;
-        response.fields['controllerPF12_' + index.toString()] =
-            item.pf_12 == null ? "" : item.pf_12!;
-        response.fields['controllerPF34_' + index.toString()] =
-            item.pf_34 == null ? "" : item.pf_34!;
-        response.fields['controllerPJ0_' + index.toString()] =
-            item.pj_0 == null ? "" : item.pj_0!;
-        response.fields['controllerPJ512_' + index.toString()] =
-            item.pj_512 == null ? "" : item.pj_512!;
-        response.fields['controllerPJ2_' + index.toString()] =
-            item.pj_2 == null ? "" : item.pj_2!;
-        response.fields['controllerPJ12_' + index.toString()] =
-            item.pj_12 == null ? "" : item.pj_12!;
-        response.fields['controllerPJ34_' + index.toString()] =
-            item.pj_34 == null ? "" : item.pj_34!;
-        index++;
-      }
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
       if (streamedResponse.statusCode == 200) {

@@ -11,9 +11,7 @@ import '../../help/components.dart';
 import '../../help/formatter/cnpj_input_formatter.dart';
 import '../../help/formatter/telefone_input_formatter.dart';
 import '../../help/formatter/valor_input_formatter.dart';
-
 import '../../models/operation.dart';
-import '../../models/quantitative_distribution_physical_accesses_service_model.dart';
 import '../../models/sici_file_model.dart';
 import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
@@ -27,8 +25,6 @@ class SiciFustFormView extends StatefulWidget {
   @override
   SiciFustFormState createState() => SiciFustFormState();
 }
-
-
 
 abstract class IsSilly {
 
@@ -235,7 +231,6 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
          txtControllerGeneralObservations.text = widget.siciFileModel!.observacoes!;
 
       } else {
-        siciFileModel.distribuicaoFisicosServicoQuantitativo = [];
       }
     } catch (error) {
       OnAlertaInformacaoErro(error.toString(),context);
@@ -797,14 +792,14 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                         FocusScope.of(context).requestFocus(new FocusNode());
                         Navigator.push(
                             context,
-                            CupertinoPageRoute<QuantitativeDistributionPhysicalAccessesServiceModel>(
+                            CupertinoPageRoute<TbQuantitativeDistributionPhysicalAccessesService>(
                                 fullscreenDialog: true, builder: (BuildContext context) => PhysicalDistributionQuantitativeServiceView(sDistribuicaoFisicosServicoQuantitativo: null))).then((value) {
                           if (value != null) {
                             if (quantitativeDistributionPhysicalAccessesService.isEmpty) {
-                              value.index = 1;
+                              //value.index = 1;
                               quantitativeDistributionPhysicalAccessesService = [];
                             } else {
-                              value.index = quantitativeDistributionPhysicalAccessesService.length + 1;
+                              //value.index = quantitativeDistributionPhysicalAccessesService.length + 1;
                             }
                             //quantitativeDistributionPhysicalAccessesService.add(value);
                           }
@@ -812,17 +807,7 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                       },
                     ),),),
                     SizedBox(height: 30.0),
-                    Builder(
-                      builder: (BuildContext context) {
-                        return ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: siciFileModel
-                              .distribuicaoFisicosServicoQuantitativo == null ? 0 : siciFileModel.distribuicaoFisicosServicoQuantitativo!.length, itemBuilder: physicalDistributionServiceQuantitativeCard,
-                        );
-                      },
-                    ),
+
                     SizedBox(height: 20.0),
                   ],
                 ),
@@ -859,261 +844,6 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
     );
   }
 
-  Card physicalDistributionServiceQuantitativeCard(BuildContext context, int index) =>
-      Card(
-        elevation: 0.9,
-        child:GlobalView.viewResponsiveGridTextField(context,3,500,[
-          Flexible(
-            child: RichText(
-                textAlign: TextAlign.start,
-                softWrap: false,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                text: TextSpan(children: [
-                  TextSpan(
-                    text: 'UF' + "\n ",
-                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
 
-                  ),
-                  TextSpan(
-                    text: widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index].uf,
-                    style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 17),
-                  ),
-                ])),
-          ),
-          Flexible(
-            child: RichText(
-                textAlign: TextAlign.start,
-                softWrap: false,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                text: TextSpan(children: [
-                  TextSpan(
-                    text: 'Nome município' + "\n ",
-                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
-                  ),
-                  TextSpan(
-                    text: widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index].municipio,
-                    style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 17),
-                  ),
-                ])),
-          ),
-          Flexible(
-            child: RichText(
-                textAlign: TextAlign.start,
-                softWrap: false,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                text: TextSpan(children: [
-                  TextSpan(
-                    text: 'Nome tecnologia' + "\n ",
-                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
-                  ),
-                  TextSpan(
-                    text: widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index].tecnologia,
-                    style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 17),
-                  ),
-                ])),
-          ),
-          Flexible(
-            child: RichText(
-                textAlign: TextAlign.start,
-                softWrap: false,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                text: TextSpan(children: [
-                  TextSpan(
-                    text: 'Código IBGE' + "\n ",
-                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
-                  ),
-                  TextSpan(
-                    text:widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index]
-                        .cod_ibge,
-                    style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 17),
-                  ),
-                ])),
-          ),
-          Flexible(
-            child: RichText(
-                textAlign: TextAlign.start,
-                softWrap: false,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                text: TextSpan(children: [
-                  TextSpan(
-                    text: 'PF - 0 - 512 Kbps' + "\n ",
-                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
-                  ),
-                  TextSpan(
-                    text:widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index]
-                        .pf_0,
-                    style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 17),
-                  ),
-                ])),
-          ),
-          Flexible(
-            child: RichText(
-                textAlign: TextAlign.start,
-                softWrap: false,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                text: TextSpan(children: [
-                  TextSpan(
-                    text: 'PF - 512 - 2 Mbps' + "\n ",
-                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
-                  ),
-                  TextSpan(
-                    text: widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index]
-                        .pf_512,
-                    style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 17),
-                  ),
-                ])),
-          ),
-          Flexible(
-            child: RichText(
-                textAlign: TextAlign.start,
-                softWrap: false,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                text: TextSpan(children: [
-                  TextSpan(
-                    text: 'PF - 2 - 12 Mbps' + "\n ",
-                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
-                  ),
-                  TextSpan(
-                    text:widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index]
-                        .pf_2,
-                    style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 17),
-                  ),
-                ])),
-          ),
-          Flexible(
-            child: RichText(
-                textAlign: TextAlign.start,
-                softWrap: false,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                text: TextSpan(children: [
-                  TextSpan(
-                    text: 'PF - 12 - 34 Mbps' + "\n ",
-                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
-                  ),
-                  TextSpan(
-                    text:widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index]
-                        .pf_12,
-                    style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 17),
-                  ),
-                ])),
-          ),
-          Flexible(
-            child: RichText(
-                textAlign: TextAlign.start,
-                softWrap: false,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                text: TextSpan(children: [
-                  TextSpan(
-                    text: 'PF - Acima de 34 Mbps' + "\n ",
-                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
-                  ),
-                  TextSpan(
-                    text: widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index]
-                        .pf_34,
-                    style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 17),
-                  ),
-                ])),
-          ),
-          Flexible(
-            child: RichText(
-                textAlign: TextAlign.start,
-                softWrap: false,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                text: TextSpan(children: [
-                  TextSpan(
-                    text: 'PJ - 0 - 512 Kbps' + "\n ",
-                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
-                  ),
-                  TextSpan(
-                    text: widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index]
-                        .pj_0,
-                    style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 17),
-                  ),
-                ])),
-          ),
-          Flexible(
-            child: RichText(
-                textAlign: TextAlign.start,
-                softWrap: false,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                text: TextSpan(children: [
-                  TextSpan(
-                    text: 'PJ - 512 - 2 Mbps' + "\n ",
-                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
-                  ),
-                  TextSpan(
-                    text: widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index]
-                        .pj_512,
-                    style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 17),
-                  ),
-                ])),
-          ),
-          Flexible(
-            child: RichText(
-                textAlign: TextAlign.start,
-                softWrap: false,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                text: TextSpan(children: [
-                  TextSpan(
-                    text: 'PJ - 2 - 12 Mbps' + "\n ",
-                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
-                  ),
-                  TextSpan(
-                    text:widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index]
-                        .pj_2,
-                    style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 17),
-                  ),
-                ])),
-          ),
-          Flexible(
-            child: RichText(
-                textAlign: TextAlign.start,
-                softWrap: false,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                text: TextSpan(children: [
-                  TextSpan(
-                    text: 'PJ - 12 - 34 Mbps' + "\n ",
-                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
-                  ),
-                  TextSpan(
-                    text: widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index]
-                        .pj_12,
-                    style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 17),
-                  ),
-                ])),
-          ),
-          Flexible(
-            child: RichText(
-                textAlign: TextAlign.start,
-                softWrap: false,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                text: TextSpan(children: [
-                  TextSpan(
-                    text: 'PJ - Acima de 34 Mbps' + "\n ",
-                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
-                  ),
-                  TextSpan(
-                    text:widget.siciFileModel!.distribuicaoFisicosServicoQuantitativo![index].pj_34,
-                    style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 17),
-                  ),
-                ])),
-          ),
-          const Divider(),
-        ].toList()),
-      );
   
 }

@@ -83,7 +83,6 @@ class ListSiciSentState extends State<ListSiciSentView> {
       modelSici.cofinsPorc = prop.cofinsPorc;
       modelSici.receitaLiquida = prop.receitaLiquida;
       modelSici.observacoes = prop.observacoes;
-      modelSici.distribuicaoFisicosServicoQuantitativo = prop.distribuicaoFisicosServicoQuantitativo;
       Navigator.push(
           context,
           CupertinoPageRoute(

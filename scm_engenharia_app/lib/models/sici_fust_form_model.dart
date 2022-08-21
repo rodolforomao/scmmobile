@@ -1,4 +1,4 @@
-import 'quantitative_distribution_physical_accesses_service_model.dart';
+
 
 class SiciFustFormModel {
   String? id;
@@ -49,8 +49,6 @@ class SiciFustFormModel {
   String? estadoRobo;
   String? envioLancamento;
 
- late List<QuantitativeDistributionPhysicalAccessesServiceModel>? distribuicaoFisicosServicoQuantitativo = [];
-
   SiciFustFormModel(
       { this.id,
         this.idEmpresa,
@@ -98,9 +96,7 @@ class SiciFustFormModel {
         this.estado,
         this.passo,
         this.estadoRobo,
-
-        this.envioLancamento,
-        this.distribuicaoFisicosServicoQuantitativo});
+        this.envioLancamento,});
 
   SiciFustFormModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -150,12 +146,6 @@ class SiciFustFormModel {
     passo = json['passo'];
     estadoRobo = json['estado_robo'];
     envioLancamento = json['envio_lancamento'];
-    if (json['dadosEmServicos'] != null) {
-      distribuicaoFisicosServicoQuantitativo = [];
-      json['dadosEmServicos'].forEach((v) {
-        distribuicaoFisicosServicoQuantitativo!.add(QuantitativeDistributionPhysicalAccessesServiceModel.fromJson(v));
-      });
-    }
   }
 
   Map<String, dynamic> toJson() {
@@ -207,10 +197,6 @@ class SiciFustFormModel {
     data['estado_robo'] = this.estadoRobo;
     data['envio_lancamento'] = this.envioLancamento;
 
-    if (this.distribuicaoFisicosServicoQuantitativo != null) {
-      data['dadosEmServicos'] =
-          this.distribuicaoFisicosServicoQuantitativo!.map((v) => v.toJson()).toList();
-    }
     return data;
   }
 }

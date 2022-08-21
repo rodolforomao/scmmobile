@@ -7,7 +7,6 @@ import '../../data/tb_quantitative_distribution_physical_accesses_service.dart';
 import '../../help/components.dart';
 import '../../help/formatter/cnpj_input_formatter.dart';
 import '../../models/environment_variables.dart';
-import '../../models/quantitative_distribution_physical_accesses_service_model.dart';
 import '../../models/util_model/util_dropdown_list.dart';
 import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
@@ -17,7 +16,7 @@ import '../../thema/app_thema.dart';
 
 class PhysicalDistributionQuantitativeServiceView extends StatefulWidget {
 
-  QuantitativeDistributionPhysicalAccessesServiceModel? sDistribuicaoFisicosServicoQuantitativo;
+  TbQuantitativeDistributionPhysicalAccessesService? sDistribuicaoFisicosServicoQuantitativo;
   PhysicalDistributionQuantitativeServiceView({Key? key, required this.sDistribuicaoFisicosServicoQuantitativo}) : super(key: key);
 
   @override
@@ -27,7 +26,7 @@ class PhysicalDistributionQuantitativeServiceView extends StatefulWidget {
 class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistributionQuantitativeServiceView> {
 
   TypeView statusView = TypeView.viewLoading;
-  final quantitativeDistributionPhysicalAccessesService = TbQuantitativeDistributionPhysicalAccessesService(ObjectId(),'','','','','','','','','','','','','','','','','','','','','','');
+  late var quantitativeDistributionPhysicalAccessesService = TbQuantitativeDistributionPhysicalAccessesService(ObjectId(),'','','','','','','','','','','','','','','','','','','','','','');
   EnvironmentVariables resulEnvironmentVariables = EnvironmentVariables();
 
   //CNPJ:
@@ -48,9 +47,6 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
   late TipoTecnologia technologyTypeValue;
   List<TipoProduto>? productTypeDropdownList;
   late TipoProduto productTypeValue;
-
-
-
   late CodIbge valueCodIbge;
 
   final txtNumberYear = TextEditingController();
@@ -72,6 +68,15 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
   onInc() async {
     try {
       setState((){statusView = TypeView.viewLoading;});
+      if(widget.sDistribuicaoFisicosServicoQuantitativo == null)
+        {
+          quantitativeDistributionPhysicalAccessesService = TbQuantitativeDistributionPhysicalAccessesService(ObjectId(),'','','','','','','','','','','','','','','','','','','','','','');
+        }
+      else
+        {
+          quantitativeDistributionPhysicalAccessesService = widget.sDistribuicaoFisicosServicoQuantitativo!;
+        }
+
       String response = await rootBundle.loadString('assets/variavel_de_ambiente.json');
       setState(() {
         resulEnvironmentVariables = EnvironmentVariables.fromJson(jsonDecode(response) as Map<String, dynamic>);
