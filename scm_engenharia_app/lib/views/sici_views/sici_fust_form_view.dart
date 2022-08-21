@@ -250,11 +250,12 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
     Inc();
   }
 
-  int current_step = 0;
+  int currentStep = 0;
   List<Step> spr = <Step>[];
 
   @override
   Widget build(BuildContext context) {
+    double maxHeight = GlobalView.maxHeightAppBar(context, 55);
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: true,
@@ -281,585 +282,580 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                 )),
           ],
         ),
-        body: Container(
-          constraints: BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-          ),
-          child: Stepper(
-            controlsBuilder: (BuildContext context, ControlsDetails details)
-            {
-              return Row(
-                children: <Widget>[
-                  Visibility(
-                    visible: current_step > 0 ? true : false,
-                    child: TextButton(
+        body: GlobalView.viewRenderSingleChildScrollView(maxHeight,Stepper(
+          controlsBuilder: (BuildContext context, ControlsDetails details)
+          {
+            return Row(
+              children: <Widget>[
+                Visibility(
+                  visible: currentStep > 0 ? true : false,
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: const Color(0xffdc3545),
+                      padding: const EdgeInsets.fromLTRB(5.0, 2.0, 5.0, 3.0),
+                      minimumSize: const Size(130, 43),
+                      maximumSize: const Size(130, 43),
+                      textStyle: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color:  Color(0xffFFFFFF),
+                        fontSize: 15,
+                      ),
+                    ),
+                    onPressed: () async {
+                      setState(() {
+                        switch (currentStep) {
+                          case 2:
+                            currentStep = 1;
+                            break;
+                          case 1:
+                            currentStep = 0;
+                            break;
+                        }
+                      });
+                    },
+                    child: const Text(
+                        'Anterior'
+                    ),
+                  ),
+                ),
+                const Padding(
+                  padding:  EdgeInsets.all(10),
+                ),
+                Visibility(
+                  visible: currentStep == 2 ? false : true,
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: const Color(0xff018a8a),
+                      padding: const EdgeInsets.fromLTRB(15.0, 2.0, 15.0, 2.0),
+                      minimumSize: const Size(130, 43),
+                      maximumSize: const Size(130, 43),
+                      textStyle: const TextStyle(
+                        color:  Color(0xffFFFFFF),
+                        fontSize: 15,
+                      ),
+                    ),
+                    onPressed: () async {
+                      setState(() {
+                        switch (currentStep) {
+                          case 0:
+                            currentStep = 1;
+                            break;
+                          case 1:
+                            currentStep = 2;
+                            break;
+                        }
+                      });
+                    },
+                    child: const Text(
+                        'Próximo'
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+          steps: <Step>[
+            Step(
+              title: SizedBox(
+                width: MediaQuery.of(context).size.width - 90,
+                child:  Text(
+                  'INFORMAÇÕES DA EMPRESA',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: false,
+                  style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
+                ),
+              ),
+              content:  Container(
+                constraints: const BoxConstraints(
+                  maxWidth: 1000,
+                ),
+                child: GlobalView.viewResponsiveGridTextField(context,5,600,[
+                  TextField(
+                    onTap: () {
+                      FocusScope.of(context).requestFocus(FocusNode());
+                      onSelectedDate(context);
+                    },
+                    keyboardType: TextInputType.datetime,
+                    controller: txtControllerReferencePeriod,
+                    focusNode: focusNodeReferencePeriod,
+                    textInputAction: TextInputAction.next,
+                    onSubmitted: (term) {
+                      focusNodeReferencePeriod.unfocus();
+                      FocusScope.of(context).requestFocus(focusNodeSocialReason);
+                    },
+                    style: const TextStyle(
+                        fontSize: 15.0),
+                    decoration:  const InputDecoration(
+                      labelText: 'Período referência:',
+                      hintText: '',
+                    ),
+                    maxLength: 20,
+                  ),
+                  TextField(
+                    keyboardType: TextInputType.datetime,
+                    controller: txtControllerSocialReason,
+                    focusNode: focusNodeSocialReason,
+                    textInputAction: TextInputAction.next,
+                    onSubmitted: (term) {
+                      focusNodeSocialReason.unfocus();
+                      FocusScope.of(context).requestFocus(focusNodeLandline);
+                    },
+                    maxLength: 100,
+                    style: const TextStyle(
+                        fontSize: 15.0),
+                    decoration: const InputDecoration(
+                      labelText: 'Razão social:',
+                      hintText: 'Razão social LTDA - ME.',
+                    ),
+                  ),
+                  TextField(
+                    keyboardType: TextInputType.phone,
+                    controller: txtControllerLandline,
+                    focusNode: focusNodeLandline,
+                    textInputAction: TextInputAction.next,
+                    onSubmitted: (term) {
+                      focusNodeLandline.unfocus();
+                      FocusScope.of(context).requestFocus(focusNodeCnpj);
+                    },
+                    inputFormatters: [
+                      // obrigatório
+                      FilteringTextInputFormatter.digitsOnly,
+                      TelefoneInputFormatter(),
+                    ],
+                    maxLength: 100,
+                    style: const TextStyle(
+                        fontSize: 15.0),
+                    decoration: const InputDecoration(
+                      labelText: 'Telefone Fixo:',
+                      hintText: '',
+                    ),
+                  ),
+                  TextField(
+                    keyboardType: TextInputType.number,
+                    controller: txtControllerCnpj,
+                    focusNode: focusNodeCnpj,
+                    textInputAction: TextInputAction.next,
+                    onSubmitted: (term) {
+                      focusNodeCnpj.unfocus();
+                      FocusScope.of(context).requestFocus(focusNodeTelefoneMovel);
+                    },
+                    inputFormatters: [
+                      // obrigatório
+                      FilteringTextInputFormatter.digitsOnly,
+                      CnpjInputFormatter(),
+                    ],
+                    autofocus: false,
+                    style: const TextStyle(
+                        fontSize: 15.0),
+                    decoration: const InputDecoration(
+                      labelText: 'CNPJ:',
+                      hintText: '',
+                    ),
+                  ),
+                  TextField(
+                    keyboardType: TextInputType.number,
+                    controller: txtControllerTelefoneMovel,
+                    focusNode: focusNodeTelefoneMovel,
+                    textInputAction: TextInputAction.next,
+                    onSubmitted: (term) {
+                      focusNodeTelefoneMovel.unfocus();
+                      FocusScope.of(context).requestFocus(focusNodeGrossRevenue);
+                    },
+                    inputFormatters: [
+                      // obrigatório
+                      FilteringTextInputFormatter.digitsOnly,
+                      TelefoneInputFormatter(),
+                    ],
+                    autofocus: false,
+                    style: const TextStyle(
+                        fontSize: 15.0),
+                    decoration: const InputDecoration(
+                      labelText: 'TELEFONE CELULAR:',
+                      hintText: '',
+                    ),
+                    maxLength: 20,
+                  ),
+                ].toList()),
+              ),
+              state: currentStep > 0 ? StepState.complete : StepState.disabled,
+              isActive: true,
+            ),
+            Step(
+              title: SizedBox(
+                width: MediaQuery.of(context).size.width - 90,
+                child:  Text(
+                  'INFORMAÇÕES FINANCEIRAS',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: false,
+                  style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
+                ),
+              ),
+              content: Container(
+                constraints: const BoxConstraints(
+                  maxWidth: 1000,
+                ),
+                child:  GlobalView.viewResponsiveGridTextField(context,7,600,[
+                  TextField(
+                    keyboardType: TextInputType.number,
+                    controller: txtControllerGrossRevenue,
+                    focusNode: focusNodeGrossRevenue,
+                    textInputAction: TextInputAction.next,
+                    onSubmitted: (term) {
+                      focusNodeGrossRevenue.unfocus();
+                      FocusScope.of(context).requestFocus(focusNodeSimpleValue);
+                    },
+                    textAlign: TextAlign.start,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      CurrencyPtBrInputFormatter()
+                    ],
+                    decoration: const InputDecoration(
+                      labelText: 'Receita Bruta',
+                      hintText: '',
+                    ),
+                    maxLength: 20,
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Expanded(
+                        child: TextField(
+                          keyboardType: TextInputType.number,
+                          controller: txtControllerSimpleValue,
+                          focusNode: focusNodeSimpleValue,
+                          textInputAction: TextInputAction.next,
+                          onSubmitted: (term) {
+                            focusNodeSimpleValue.unfocus();
+                            FocusScope.of(context).requestFocus(focusNodeSimpleAliquot);
+                          },
+                          textAlign: TextAlign.start,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            CurrencyPtBrInputFormatter()
+                          ],
+                          autofocus: false,
+                          decoration: const InputDecoration(
+                            labelText: 'Valor Simples',
+                            hintText: '',
+                          ),
+                          maxLength: 20,
+                        ),
+                      ),
+                      SizedBox(width: 15),
+                      Expanded(
+                        child: TextField(
+                          keyboardType: TextInputType.number,
+                          controller: txtControllerSimpleAliquot,
+                          focusNode: focusNodeSimpleAliquot,
+                          textInputAction: TextInputAction.next,
+                          onSubmitted: (term) {
+                            focusNodeSimpleAliquot.unfocus();
+                            FocusScope.of(context).requestFocus(focusNodeICMSvalue);
+                          },
+                          textAlign: TextAlign.start,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            CurrencyPercentInputFormatter()
+                          ],
+                          autofocus: false,
+                          decoration: const InputDecoration(
+                            labelText: 'Aliquota Simples %',
+                            hintText: '',
+                          ),
+                          maxLength: 7,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Expanded(
+                        child: TextField(
+                          controller: txtControllerICMSvalue,
+                          focusNode: focusNodeICMSvalue,
+                          textInputAction: TextInputAction.next,
+                          keyboardType: TextInputType.number,
+                          onSubmitted: (term) {
+                            focusNodeICMSvalue.unfocus();
+                            FocusScope.of(context).requestFocus(focusNodeIcmsPorc);
+                          },
+                          textAlign: TextAlign.start,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            CurrencyPtBrInputFormatter()
+                          ],
+                          autofocus: false,
+                          decoration: const InputDecoration(
+                            labelText: 'Valor ICMS',
+                            hintText: '',
+                          ),
+                          maxLength: 20,
+                        ),
+                      ),
+                      SizedBox(width: 15),
+                      Expanded(
+                        child: TextField(
+                          controller: txtControllerIcmsPorc,
+                          keyboardType: TextInputType.number,
+                          focusNode: focusNodeIcmsPorc,
+                          textInputAction: TextInputAction.next,
+                          onSubmitted: (term) {
+                            focusNodeIcmsPorc.unfocus();
+                            FocusScope.of(context).requestFocus(focusNodePis);
+                          },
+                          textAlign: TextAlign.start,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            CurrencyPercentInputFormatter()
+                          ],
+                          decoration: const InputDecoration(
+                            labelText: 'ICMS (%)',
+                            hintText: '',
+                          ),
+                          maxLength: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Expanded(
+                        child: TextField(
+                          controller: txtControllerPis,
+                          focusNode: focusNodePis,
+                          textInputAction: TextInputAction.next,
+                          keyboardType: TextInputType.number,
+                          onSubmitted: (term) {
+                            focusNodePis.unfocus();
+                            FocusScope.of(context).requestFocus(focusNodePisPorc);
+                          },
+                          textAlign: TextAlign.start,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            CurrencyPtBrInputFormatter()
+                          ],
+                          decoration: const InputDecoration(
+                            labelText: 'Valor PIS',
+                            hintText: '',
+                          ),
+                          maxLength: 20,
+                        ),
+                      ),
+                      SizedBox(width: 15),
+                      Expanded(
+                        child: TextField(
+                          controller: txtControllerPisPorc,
+                          focusNode: focusNodePisPorc,
+                          textInputAction: TextInputAction.next,
+                          keyboardType: TextInputType.number,
+                          onSubmitted: (term) {
+                            focusNodePisPorc.unfocus();
+                            FocusScope.of(context).requestFocus(focusNodeCofins);
+                          },
+                          textAlign: TextAlign.start,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            CurrencyPercentInputFormatter()
+                          ],
+                          decoration: const InputDecoration(
+                            labelText: 'PIS (%)',
+                            hintText: '',
+                          ),
+                          maxLength: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Expanded(
+                        child: TextField(
+                          controller: txtControllerCofins,
+                          textAlign: TextAlign.start,
+                          focusNode: focusNodeCofins,
+                          textInputAction: TextInputAction.next,
+                          keyboardType: TextInputType.number,
+                          onSubmitted: (term) {
+                            focusNodeCofins.unfocus();
+                            FocusScope.of(context).requestFocus(focusNodeCofinsPorc);
+                          },
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            CurrencyPtBrInputFormatter()
+                          ],
+                          decoration: const InputDecoration(
+                            labelText: 'Valor COFINS',
+                            hintText: '',
+                          ),
+                          maxLength: 20,
+                        ),
+                      ),
+                      SizedBox(width: 15),
+                      Expanded(
+                        child: TextField(
+                          controller: txtControllerCofinsPorc,
+                          textAlign: TextAlign.start,
+                          focusNode: focusNodeCofinsPorc,
+                          textInputAction: TextInputAction.next,
+                          keyboardType: TextInputType.number,
+                          onSubmitted: (term) {
+                            focusNodeCofinsPorc.unfocus();
+                            FocusScope.of(context).requestFocus(focusNodeNetRevenue);
+                          },
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            CurrencyPercentInputFormatter()
+                          ],
+                          decoration: const InputDecoration(
+                            labelText: 'COFINS (%)',
+                            hintText: '',
+                          ),
+                          maxLength: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                  TextField(
+                    controller: txtControllerNetRevenue,
+                    textAlign: TextAlign.start,
+                    focusNode: focusNodeNetRevenue,
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.number,
+                    onSubmitted: (term) {
+                      focusNodeNetRevenue.unfocus();
+                      FocusScope.of(context).requestFocus(focusNodeGeneralObservations);
+                    },
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      CurrencyPtBrInputFormatter()
+                    ],
+                    decoration: const InputDecoration(
+                      labelText: 'Receita Liquida',
+                      hintText: '',
+                    ),
+                    maxLength: 20,
+                  ),
+                  TextField(
+                    controller: txtControllerGeneralObservations,
+                    textAlign: TextAlign.start,
+                    focusNode: focusNodeGeneralObservations,
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.number,
+                    onSubmitted: (term) {
+                      focusNodeGeneralObservations.unfocus();
+                      FocusScope.of(context).requestFocus(focusNodeIcmsPorc);
+                    },
+                    decoration: const InputDecoration(
+                      labelText: 'Observações Gerais',
+                      hintText: '',
+                    ),
+                    maxLength: 1500,
+                  ),
+                ].toList()),
+              ),
+              state: currentStep > 1
+                  ? StepState.complete
+                  : StepState.disabled,
+              isActive: true,
+            ),
+            Step(
+              title: SizedBox(
+                width: MediaQuery.of(context).size.width - 90,
+                child:  Text(
+                  "DISTRIBUIÇÃO DO QUANTITATIVO DE ACESSOS FÍSICOS EM SERVIÇO",
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: false,
+                  style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
+                ),
+              ),
+              content: Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 30.0),
+                    Center(child: Padding(padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),child: TextButton(
                       style: TextButton.styleFrom(
-                        backgroundColor: const Color(0xffdc3545),
-                        padding: const EdgeInsets.fromLTRB(5.0, 2.0, 5.0, 3.0),
-                        minimumSize: const Size(130, 43),
-                        maximumSize: const Size(130, 43),
+                        backgroundColor: const Color(0xFF3F7EC1),
+                        padding: const EdgeInsets.fromLTRB(15.0, 2.0, 15.0, 2.0),
+                        minimumSize: const Size(200, 47),
+                        maximumSize: const Size(200, 47),
                         textStyle: const TextStyle(
                           fontWeight: FontWeight.w500,
                           color:  Color(0xffFFFFFF),
                           fontSize: 15,
                         ),
                       ),
+                      child: const Text(' Adicionar '),
                       onPressed: () async {
-                        setState(() {
-                          switch (current_step) {
-                            case 2:
-                              current_step = 1;
-                              break;
-                            case 1:
-                              current_step = 0;
-                              break;
-                          }
-                        });
-                      },
-                      child: const Text(
-                        'Anterior'
-                      ),
-                    ),
-                  ),
-                   const Padding(
-                    padding:  EdgeInsets.all(10),
-                  ),
-                  Visibility(
-                    visible: current_step == 2 ? false : true,
-                    child: TextButton(
-                      style: TextButton.styleFrom(
-                        backgroundColor: const Color(0xff018a8a),
-                        padding: const EdgeInsets.fromLTRB(15.0, 2.0, 15.0, 2.0),
-                        minimumSize: const Size(130, 43),
-                        maximumSize: const Size(130, 43),
-                        textStyle: const TextStyle(
-                          color:  Color(0xffFFFFFF),
-                          fontSize: 15,
-                        ),
-                      ),
-                      onPressed: () async {
-                        setState(() {
-                          switch (current_step) {
-                            case 0:
-                              current_step = 1;
-                              break;
-                            case 1:
-                              current_step = 2;
-                              break;
-                          }
-                        });
-                      },
-                      child: const Text(
-                          'Próximo'
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            },
-            steps: <Step>[
-              Step(
-                title: SizedBox(
-                  width: MediaQuery.of(context).size.width - 90,
-                  child:  Text(
-                    'INFORMAÇÕES DA EMPRESA',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    softWrap: false,
-                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
-                  ),
-                ),
-                content:  Container(
-                  constraints: const BoxConstraints(
-                    maxWidth: 1000,
-                  ),
-                  child: GlobalView.viewResponsiveGridTextField(context,5,600,[
-                    TextField(
-                      onTap: () {
-                        FocusScope.of(context).requestFocus(FocusNode());
-                        onSelectedDate(context);
-                      },
-                      keyboardType: TextInputType.datetime,
-                      controller: txtControllerReferencePeriod,
-                      focusNode: focusNodeReferencePeriod,
-                      textInputAction: TextInputAction.next,
-                      onSubmitted: (term) {
-                        focusNodeReferencePeriod.unfocus();
-                        FocusScope.of(context).requestFocus(focusNodeSocialReason);
-                      },
-                      style: const TextStyle(
-                          fontSize: 15.0),
-                      decoration:  const InputDecoration(
-                        labelText: 'Período referência:',
-                        hintText: '',
-                      ),
-                      maxLength: 20,
-                    ),
-                    TextField(
-                      keyboardType: TextInputType.datetime,
-                      controller: txtControllerSocialReason,
-                      focusNode: focusNodeSocialReason,
-                      textInputAction: TextInputAction.next,
-                      onSubmitted: (term) {
-                        focusNodeSocialReason.unfocus();
-                        FocusScope.of(context).requestFocus(focusNodeLandline);
-                      },
-                      maxLength: 100,
-                      style: const TextStyle(
-                        fontSize: 15.0),
-                      decoration: const InputDecoration(
-                        labelText: 'Razão social:',
-                        hintText: 'Razão social LTDA - ME.',
-                      ),
-                    ),
-                    TextField(
-                      keyboardType: TextInputType.phone,
-                      controller: txtControllerLandline,
-                      focusNode: focusNodeLandline,
-                      textInputAction: TextInputAction.next,
-                      onSubmitted: (term) {
-                        focusNodeLandline.unfocus();
-                        FocusScope.of(context).requestFocus(focusNodeCnpj);
-                      },
-                      inputFormatters: [
-                        // obrigatório
-                        FilteringTextInputFormatter.digitsOnly,
-                        TelefoneInputFormatter(),
-                      ],
-                      maxLength: 100,
-                      style: const TextStyle(
-                          fontSize: 15.0),
-                      decoration: const InputDecoration(
-                        labelText: 'Telefone Fixo:',
-                        hintText: '',
-                      ),
-                    ),
-                    TextField(
-                      keyboardType: TextInputType.number,
-                      controller: txtControllerCnpj,
-                      focusNode: focusNodeCnpj,
-                      textInputAction: TextInputAction.next,
-                      onSubmitted: (term) {
-                        focusNodeCnpj.unfocus();
-                        FocusScope.of(context).requestFocus(focusNodeTelefoneMovel);
-                      },
-                      inputFormatters: [
-                        // obrigatório
-                        FilteringTextInputFormatter.digitsOnly,
-                        CnpjInputFormatter(),
-                      ],
-                      autofocus: false,
-                      style: const TextStyle(
-                          fontSize: 15.0),
-                      decoration: const InputDecoration(
-                        labelText: 'CNPJ:',
-                        hintText: '',
-                      ),
-                    ),
-                    TextField(
-                      keyboardType: TextInputType.number,
-                      controller: txtControllerTelefoneMovel,
-                      focusNode: focusNodeTelefoneMovel,
-                      textInputAction: TextInputAction.next,
-                      onSubmitted: (term) {
-                        focusNodeTelefoneMovel.unfocus();
-                        FocusScope.of(context).requestFocus(focusNodeGrossRevenue);
-                      },
-                      inputFormatters: [
-                        // obrigatório
-                        FilteringTextInputFormatter.digitsOnly,
-                        TelefoneInputFormatter(),
-                      ],
-                      autofocus: false,
-                      style: const TextStyle(
-                          fontSize: 15.0),
-                      decoration: const InputDecoration(
-                        labelText: 'TELEFONE CELULAR:',
-                        hintText: '',
-                      ),
-                      maxLength: 20,
-                    ),
-                  ].toList()),
-                ),
-                state: current_step > 0 ? StepState.complete : StepState.disabled,
-                isActive: true,
-              ),
-              Step(
-                title: SizedBox(
-                  width: MediaQuery.of(context).size.width - 90,
-                  child:  Text(
-                    'INFORMAÇÕES FINANCEIRAS',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    softWrap: false,
-                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
-                  ),
-                ),
-                content: Container(
-                  constraints: const BoxConstraints(
-                    maxWidth: 1000,
-                  ),
-                  child:  GlobalView.viewResponsiveGridTextField(context,7,600,[
-                    TextField(
-                      keyboardType: TextInputType.number,
-                      controller: txtControllerGrossRevenue,
-                      focusNode: focusNodeGrossRevenue,
-                      textInputAction: TextInputAction.next,
-                      onSubmitted: (term) {
-                        focusNodeGrossRevenue.unfocus();
-                        FocusScope.of(context).requestFocus(focusNodeSimpleValue);
-                      },
-                      textAlign: TextAlign.start,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        CurrencyPtBrInputFormatter()
-                      ],
-                      decoration: const InputDecoration(
-                        labelText: 'Receita Bruta',
-                        hintText: '',
-                      ),
-                      maxLength: 20,
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Expanded(
-                          child: TextField(
-                            keyboardType: TextInputType.number,
-                            controller: txtControllerSimpleValue,
-                            focusNode: focusNodeSimpleValue,
-                            textInputAction: TextInputAction.next,
-                            onSubmitted: (term) {
-                              focusNodeSimpleValue.unfocus();
-                              FocusScope.of(context).requestFocus(focusNodeSimpleAliquot);
-                            },
-                            textAlign: TextAlign.start,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly,
-                              CurrencyPtBrInputFormatter()
-                            ],
-                            autofocus: false,
-                            decoration: const InputDecoration(
-                              labelText: 'Valor Simples',
-                              hintText: '',
-                            ),
-                            maxLength: 20,
-                          ),
-                        ),
-                        SizedBox(width: 15),
-                        Expanded(
-                          child: TextField(
-                            keyboardType: TextInputType.number,
-                            controller: txtControllerSimpleAliquot,
-                            focusNode: focusNodeSimpleAliquot,
-                            textInputAction: TextInputAction.next,
-                            onSubmitted: (term) {
-                              focusNodeSimpleAliquot.unfocus();
-                              FocusScope.of(context).requestFocus(focusNodeICMSvalue);
-                            },
-                            textAlign: TextAlign.start,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly,
-                              CurrencyPercentInputFormatter()
-                            ],
-                            autofocus: false,
-                            decoration: const InputDecoration(
-                              labelText: 'Aliquota Simples %',
-                              hintText: '',
-                            ),
-                            maxLength: 7,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Expanded(
-                          child: TextField(
-                            controller: txtControllerICMSvalue,
-                            focusNode: focusNodeICMSvalue,
-                            textInputAction: TextInputAction.next,
-                            keyboardType: TextInputType.number,
-                            onSubmitted: (term) {
-                              focusNodeICMSvalue.unfocus();
-                              FocusScope.of(context).requestFocus(focusNodeIcmsPorc);
-                            },
-                            textAlign: TextAlign.start,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly,
-                              CurrencyPtBrInputFormatter()
-                            ],
-                            autofocus: false,
-                            decoration: const InputDecoration(
-                              labelText: 'Valor ICMS',
-                              hintText: '',
-                            ),
-                            maxLength: 20,
-                          ),
-                        ),
-                        SizedBox(width: 15),
-                        Expanded(
-                          child: TextField(
-                            controller: txtControllerIcmsPorc,
-                            keyboardType: TextInputType.number,
-                            focusNode: focusNodeIcmsPorc,
-                            textInputAction: TextInputAction.next,
-                            onSubmitted: (term) {
-                              focusNodeIcmsPorc.unfocus();
-                              FocusScope.of(context).requestFocus(focusNodePis);
-                            },
-                            textAlign: TextAlign.start,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly,
-                              CurrencyPercentInputFormatter()
-                            ],
-                            decoration: const InputDecoration(
-                              labelText: 'ICMS (%)',
-                              hintText: '',
-                            ),
-                            maxLength: 12,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Expanded(
-                          child: TextField(
-                            controller: txtControllerPis,
-                            focusNode: focusNodePis,
-                            textInputAction: TextInputAction.next,
-                            keyboardType: TextInputType.number,
-                            onSubmitted: (term) {
-                              focusNodePis.unfocus();
-                              FocusScope.of(context).requestFocus(focusNodePisPorc);
-                            },
-                            textAlign: TextAlign.start,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly,
-                              CurrencyPtBrInputFormatter()
-                            ],
-                            decoration: const InputDecoration(
-                              labelText: 'Valor PIS',
-                              hintText: '',
-                            ),
-                            maxLength: 20,
-                          ),
-                        ),
-                        SizedBox(width: 15),
-                        Expanded(
-                          child: TextField(
-                            controller: txtControllerPisPorc,
-                            focusNode: focusNodePisPorc,
-                            textInputAction: TextInputAction.next,
-                            keyboardType: TextInputType.number,
-                            onSubmitted: (term) {
-                              focusNodePisPorc.unfocus();
-                              FocusScope.of(context).requestFocus(focusNodeCofins);
-                            },
-                            textAlign: TextAlign.start,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly,
-                              CurrencyPercentInputFormatter()
-                            ],
-                            decoration: const InputDecoration(
-                              labelText: 'PIS (%)',
-                              hintText: '',
-                            ),
-                            maxLength: 12,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Expanded(
-                          child: TextField(
-                            controller: txtControllerCofins,
-                            textAlign: TextAlign.start,
-                            focusNode: focusNodeCofins,
-                            textInputAction: TextInputAction.next,
-                            keyboardType: TextInputType.number,
-                            onSubmitted: (term) {
-                              focusNodeCofins.unfocus();
-                              FocusScope.of(context).requestFocus(focusNodeCofinsPorc);
-                            },
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly,
-                              CurrencyPtBrInputFormatter()
-                            ],
-                            decoration: const InputDecoration(
-                              labelText: 'Valor COFINS',
-                              hintText: '',
-                            ),
-                            maxLength: 20,
-                          ),
-                        ),
-                        SizedBox(width: 15),
-                        Expanded(
-                          child: TextField(
-                            controller: txtControllerCofinsPorc,
-                            textAlign: TextAlign.start,
-                            focusNode: focusNodeCofinsPorc,
-                            textInputAction: TextInputAction.next,
-                            keyboardType: TextInputType.number,
-                            onSubmitted: (term) {
-                              focusNodeCofinsPorc.unfocus();
-                              FocusScope.of(context).requestFocus(focusNodeNetRevenue);
-                            },
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly,
-                              CurrencyPercentInputFormatter()
-                            ],
-                            decoration: const InputDecoration(
-                              labelText: 'COFINS (%)',
-                              hintText: '',
-                            ),
-                            maxLength: 12,
-                          ),
-                        ),
-                      ],
-                    ),
-                    TextField(
-                      controller: txtControllerNetRevenue,
-                      textAlign: TextAlign.start,
-                      focusNode: focusNodeNetRevenue,
-                      textInputAction: TextInputAction.next,
-                      keyboardType: TextInputType.number,
-                      onSubmitted: (term) {
-                        focusNodeNetRevenue.unfocus();
-                        FocusScope.of(context).requestFocus(focusNodeGeneralObservations);
-                      },
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        CurrencyPtBrInputFormatter()
-                      ],
-                      decoration: const InputDecoration(
-                        labelText: 'Receita Liquida',
-                        hintText: '',
-                      ),
-                      maxLength: 20,
-                    ),
-                    TextField(
-                      controller: txtControllerGeneralObservations,
-                      textAlign: TextAlign.start,
-                      focusNode: focusNodeGeneralObservations,
-                      textInputAction: TextInputAction.next,
-                      keyboardType: TextInputType.number,
-                      onSubmitted: (term) {
-                        focusNodeGeneralObservations.unfocus();
-                        FocusScope.of(context).requestFocus(focusNodeIcmsPorc);
-                      },
-                      decoration: const InputDecoration(
-                        labelText: 'Observações Gerais',
-                        hintText: '',
-                      ),
-                      maxLength: 1500,
-                    ),
-                  ].toList()),
-                ),
-                state: current_step > 1
-                    ? StepState.complete
-                    : StepState.disabled,
-                isActive: true,
-              ),
-              Step(
-                title: SizedBox(
-                  width: MediaQuery.of(context).size.width - 90,
-                  child:  Text(
-                    "DISTRIBUIÇÃO DO QUANTITATIVO DE ACESSOS FÍSICOS EM SERVIÇO",
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    softWrap: false,
-                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
-                  ),
-                ),
-                content: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(height: 30.0),
-                      Center(child: Padding(padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),child: TextButton(
-                        style: TextButton.styleFrom(
-                          backgroundColor: const Color(0xFF3F7EC1),
-                          padding: const EdgeInsets.fromLTRB(15.0, 2.0, 15.0, 2.0),
-                          minimumSize: const Size(200, 47),
-                          maximumSize: const Size(200, 47),
-                          textStyle: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                            color:  Color(0xffFFFFFF),
-                            fontSize: 15,
-                          ),
-                        ),
-                        child: const Text(' Adicionar '),
-                        onPressed: () async {
-                          FocusScope.of(context).requestFocus(new FocusNode());
-                          Navigator.push(
-                              context,
-                              CupertinoPageRoute<QuantitativeDistributionPhysicalAccessesServiceModel>(
-                                  fullscreenDialog: true, builder: (BuildContext context) => PhysicalDistributionQuantitativeServiceView(sDistribuicaoFisicosServicoQuantitativo: null))).then((value) {
-                            if (value != null) {
-                              if (quantitativeDistributionPhysicalAccessesService.isEmpty) {
-                                value.index = 1;
-                                quantitativeDistributionPhysicalAccessesService = [];
-                              } else {
-                                value.index = quantitativeDistributionPhysicalAccessesService.length + 1;
-                              }
-                              //quantitativeDistributionPhysicalAccessesService.add(value);
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                        Navigator.push(
+                            context,
+                            CupertinoPageRoute<QuantitativeDistributionPhysicalAccessesServiceModel>(
+                                fullscreenDialog: true, builder: (BuildContext context) => PhysicalDistributionQuantitativeServiceView(sDistribuicaoFisicosServicoQuantitativo: null))).then((value) {
+                          if (value != null) {
+                            if (quantitativeDistributionPhysicalAccessesService.isEmpty) {
+                              value.index = 1;
+                              quantitativeDistributionPhysicalAccessesService = [];
+                            } else {
+                              value.index = quantitativeDistributionPhysicalAccessesService.length + 1;
                             }
-                          });
-                        },
-                      ),),),
-                      SizedBox(height: 30.0),
-                      Builder(
-                        builder: (BuildContext context) {
-                          return ListView.builder(
-                            scrollDirection: Axis.vertical,
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: siciFileModel
-                                .distribuicaoFisicosServicoQuantitativo == null ? 0 : siciFileModel.distribuicaoFisicosServicoQuantitativo!.length, itemBuilder: physicalDistributionServiceQuantitativeCard,
-                          );
-                        },
-                      ),
-                      SizedBox(height: 20.0),
-                    ],
-                  ),
+                            //quantitativeDistributionPhysicalAccessesService.add(value);
+                          }
+                        });
+                      },
+                    ),),),
+                    SizedBox(height: 30.0),
+                    Builder(
+                      builder: (BuildContext context) {
+                        return ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: siciFileModel
+                              .distribuicaoFisicosServicoQuantitativo == null ? 0 : siciFileModel.distribuicaoFisicosServicoQuantitativo!.length, itemBuilder: physicalDistributionServiceQuantitativeCard,
+                        );
+                      },
+                    ),
+                    SizedBox(height: 20.0),
+                  ],
                 ),
-                isActive: true,
               ),
-            ],
-            type:  StepperType.vertical,
-            currentStep: current_step,
-            onStepTapped: (step) {
-              setState(() {
-                current_step = step;
-              });
-            },
-            onStepContinue: () {
-              setState(() {
-                if (current_step < spr.length - 1) {
-                  current_step = current_step + 1;
-                } else {
-                  current_step = 0;
-                }
-              });
-            },
-            onStepCancel: () {
-              setState(() {
-                if (current_step > 0) {
-                  current_step = current_step - 1;
-                } else {
-                  current_step = 0;
-                }
-              });
-            },
-          ),
-        )
+              isActive: true,
+            ),
+          ],
+          type:  StepperType.vertical,
+          currentStep: currentStep,
+          onStepTapped: (step) {
+            setState(() {
+              currentStep = step;
+            });
+          },
+          onStepContinue: () {
+            setState(() {
+              if (currentStep < spr.length - 1) {
+                currentStep = currentStep + 1;
+              } else {
+                currentStep = 0;
+              }
+            });
+          },
+          onStepCancel: () {
+            setState(() {
+              if (currentStep > 0) {
+                currentStep = currentStep - 1;
+              } else {
+                currentStep = 0;
+              }
+            });
+          },
+        ),context),
     );
   }
 

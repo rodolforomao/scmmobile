@@ -27,94 +27,43 @@ class PhysicalDistributionQuantitativeServiceView extends StatefulWidget {
 class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistributionQuantitativeServiceView> {
 
   TypeView statusView = TypeView.viewLoading;
-  final quantitativeDistributionPhysicalAccessesService = TbQuantitativeDistributionPhysicalAccessesService(ObjectId(),'','','','','','','','','','','','','','','','','','','','','');
+  final quantitativeDistributionPhysicalAccessesService = TbQuantitativeDistributionPhysicalAccessesService(ObjectId(),'','','','','','','','','','','','','','','','','','','','','','');
   EnvironmentVariables resulEnvironmentVariables = EnvironmentVariables();
 
   //CNPJ:
   final txtControllerCnpj =  TextEditingController();
   final  focusNodeCnpj = FocusNode();
 
-  late UtilDropdownList utilDropdownListMonth;
   List<UtilDropdownList> listMonths = <UtilDropdownList>[];
+  late UtilDropdownList utilDropdownListMonth;
+  List<Uf>? ufDropdownList;
+  late Uf ufValue;
+  List<TipoCliente>? customerTypeDropdownList;
+  late TipoCliente customerTypeValue;
+  List<TipoAtendimento>? serviceTypeDropdownList;
+  late TipoAtendimento serviceTypeValue;
+  List<TipoMeioAcesso>? mediumAccessTypeDropdownList;
+  late TipoMeioAcesso  mediumAccessTypeValue;
+  List<TipoTecnologia>? technologyTypeDropdownList;
+  late TipoTecnologia technologyTypeValue;
+  List<TipoProduto>? productTypeDropdownList;
+  late TipoProduto productTypeValue;
 
 
 
-  TipoTecnologia tbTecnologia = TipoTecnologia();
-  Uf ufModel = Uf();
-  CodIbge codIbge = CodIbge();
+  late CodIbge valueCodIbge;
 
+  final txtNumberYear = TextEditingController();
+  final txtCounty = TextEditingController();
+  final txtControllerVelocity = TextEditingController();
+  final txtControllerAccesses = TextEditingController();
 
-  String id_uf = "0";
-  String id_municipio = "0";
-  String id_tecnologia = "0";
-
-  final txtControllerPis = TextEditingController();
-  final focusNodePis  = FocusNode();
-
-  TextEditingController txtNumberYear = TextEditingController();
-
-
-
-  final txtControllerMunicipio = TextEditingController();
-  final txtControllerCod_ibge = TextEditingController();
-  final txtControllerPf_0 = TextEditingController();
-  final txtControllerPf_512 = TextEditingController();
-  final txtControllerPf_2 = TextEditingController();
-  final txtControllerPf_12 = TextEditingController();
-  final txtControllerPf_34 = TextEditingController();
-  final txtControllerPj_0 = TextEditingController();
-  final txtControllerPj_512 = TextEditingController();
-  final txtControllerPj_2 = TextEditingController();
-  final txtControllerPj_12 = TextEditingController();
-  final txtControllerPj_34 = TextEditingController();
+  FocusNode? txtFocusNodeVelocity;
+  FocusNode? txtFocusNodeAccesses;
 
   onAdd() async {
     try {
-      if (id_uf == "0") {
-        throw ("O estado deve ser selecionado");
-      } else if (id_municipio == "0") {
-        throw ("O município  deve ser selecionado");
-      } else if (id_tecnologia == "0") {
-        throw ("O tecnologia  deve ser selecionado");
-      } else if ( txtControllerCod_ibge.text.isEmpty) {
-        txtControllerCod_ibge.text = '';
-      } else if ( txtControllerPf_0.text.isEmpty) {
-        txtControllerPf_0.text = '';
-      } else if ( txtControllerPf_512.text.isEmpty) {
-        txtControllerPf_512.text = '';
-      } else if ( txtControllerPf_2.text.isEmpty) {
-        txtControllerPf_2.text = '';
-      } else if ( txtControllerPf_12.text.isEmpty) {
-        txtControllerPf_12.text = '';
-      } else if (txtControllerPf_34.text.isEmpty) {
-        txtControllerPf_34.text = '';
-      } else if ( txtControllerPj_0.text.isEmpty) {
-        txtControllerPj_0.text = '';
-      } else if ( txtControllerPj_512.text.isEmpty) {
-        txtControllerPj_512.text = '';
-      } else if ( txtControllerPj_2.text.isEmpty) {
-        txtControllerPj_2.text = '';
-      } else if (txtControllerPj_12.text.isEmpty) {
-        txtControllerPj_12.text = '';
-      } else if (txtControllerPj_34.text.isEmpty) {
-        txtControllerPj_34.text = "";
-      }
-      quantitativeDistributionPhysicalAccessesService.id_uf = id_uf;
-      quantitativeDistributionPhysicalAccessesService.id_municipio = id_municipio;
-      quantitativeDistributionPhysicalAccessesService.id_tecnologia = id_tecnologia;
 
-      quantitativeDistributionPhysicalAccessesService.cod_ibge = txtControllerCod_ibge.text;
-      quantitativeDistributionPhysicalAccessesService.pf_0 =txtControllerPf_0.text;
-      quantitativeDistributionPhysicalAccessesService.pf_512 = txtControllerPf_512.text;
-      quantitativeDistributionPhysicalAccessesService.pf_2 = txtControllerPf_2.text;
-      quantitativeDistributionPhysicalAccessesService.pf_12 = txtControllerPf_12.text;
-      quantitativeDistributionPhysicalAccessesService.pf_34 = txtControllerPf_34.text;
-      quantitativeDistributionPhysicalAccessesService.pj_0 = txtControllerPj_0.text;
-      quantitativeDistributionPhysicalAccessesService.pj_512 = txtControllerPj_512.text;
-      quantitativeDistributionPhysicalAccessesService.pj_2 = txtControllerPj_2.text;
-      quantitativeDistributionPhysicalAccessesService.pj_12 = txtControllerPj_12.text;
-      quantitativeDistributionPhysicalAccessesService.pj_34 = txtControllerPj_34.text;
-      Navigator.pop(context, quantitativeDistributionPhysicalAccessesService);
     } catch (error) {
       OnAlertaInformacaoErro(error.toString(),context);
     }
@@ -126,8 +75,24 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
       String response = await rootBundle.loadString('assets/variavel_de_ambiente.json');
       setState(() {
         resulEnvironmentVariables = EnvironmentVariables.fromJson(jsonDecode(response) as Map<String, dynamic>);
-        ufModel = resulEnvironmentVariables.uf!.first;
-        tbTecnologia = resulEnvironmentVariables.tipoTecnologia!.first;
+         ufDropdownList = resulEnvironmentVariables.uf;
+         ufValue = ufDropdownList!.first;
+
+        customerTypeDropdownList = resulEnvironmentVariables.tipoCliente;
+        customerTypeValue = customerTypeDropdownList!.first;
+
+        serviceTypeDropdownList = resulEnvironmentVariables.tipoAtendimento;
+        serviceTypeValue  = serviceTypeDropdownList!.first;
+
+        mediumAccessTypeDropdownList = resulEnvironmentVariables.tipoMeioAcesso;
+        mediumAccessTypeValue  = mediumAccessTypeDropdownList!.first;
+
+        technologyTypeDropdownList = resulEnvironmentVariables.tipoTecnologia;
+        technologyTypeValue   = technologyTypeDropdownList!.first;
+
+        productTypeDropdownList = resulEnvironmentVariables.tipoProduto;
+        productTypeValue   = productTypeDropdownList!.first;
+
         statusView = TypeView.viewRenderInformation;
       });
 
@@ -155,20 +120,23 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
 
   @override
   Widget build(BuildContext context) {
+    double maxHeight = GlobalView.maxHeightAppBar(context, 55);
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: true,
-        centerTitle: true,
-        elevation: 0.0,
-        title: const Text(
-          'Formulário Sici - Fust',
-          textAlign: TextAlign.start,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(55.0),
+        child: AppBar(
+          automaticallyImplyLeading: true,
+          centerTitle: true,
+          elevation: 0.0,
+          title: const Text(
+            'Formulário Sici - Fust',
+            textAlign: TextAlign.start,
+          ),
         ),
       ),
-      body: viewType(MediaQuery.of(context).size.height),
+      body: viewType(maxHeight),
     );
   }
-
 
   viewType(double maxHeight) {
     switch (statusView) {
@@ -177,9 +145,10 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
       case TypeView.viewErrorInformation:
         return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.ErroInformacao,context);
       case TypeView.viewRenderInformation:
-        return  SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
-          child: Column(
+        return GlobalView.viewRenderSingleChildScrollView(maxHeight,Container( padding: const EdgeInsets.fromLTRB(15.0, 30.0, 15.0, 0.0),
+            constraints: const BoxConstraints(
+              maxWidth: 1000,
+            ), child: Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -206,53 +175,41 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
                   hintText: '',
                 ),
               ),),
-              Container(
-                height: 58.0,
-                margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
-                child:  DropdownButtonFormField(
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.fromLTRB(10.0, 18.0, 10.0, 16.0),
-                    labelText: 'UF',
-                    hintText: '',
-                  ),
-                  elevation: 16,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontFamily: 'avenir-lt-std-medium',
-                    color: Color(0xFF000000),
-                  ),
-                  iconEnabledColor: Colors.white,
-                  value: ufModel,
-                  isExpanded: true,
-                  iconSize: 35,
-                  items: resulEnvironmentVariables.uf!.map((Uf value) {
-                    return DropdownMenuItem<Uf>(
-                      onTap: () {
-                        setState(() {
-                          ufModel = value;
-                          id_uf = value.id!;
-                        });
-                      },
-                      value: value,
+              Padding(padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 15.0),child:   DropdownButtonFormField<Uf>(
+                elevation: 7,
+                dropdownColor: AppThema.themeNotifierState.value.mode == ThemeMode.dark ? const Color(0xff000000) : const Color(0xffFFFFFF),
+                isExpanded: true,
+                isDense: true,
+                icon: const Icon(
+                  Icons.expand_more,
+                  size: 23,
+                  color: Color(0xFFb8b8b8),
+                ),
+                decoration:  const InputDecoration(
+                  filled: true,
+                  labelText: 'Mês',
+                  hintText: 'Mês',
+                  //contentPadding: const EdgeInsets.fromLTRB(10.0, 18.0, 18.0, 0.0),
+                  border: InputBorder.none,
+                  //focusColor: Colors.transparent,
+                ),
+                value: ufValue,
+                items: ufDropdownList!.map(
+                      (v) => DropdownMenuItem<Uf>(
+                      value: v,
                       child: Text(
-                        value.uf!,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 19.0,
-                            color: Color(0xFF000000),
-                            fontFamily:
-                            "avenir-next-rounded-pro-regular"),
-                      ),
-                    );
-                  }).toList(),
-                  onChanged: (Uf? newValue) async {
-                    try {
-
-                    } catch (error) {
-
-                    }
-                  },
-                ),),
+                        v.uf!,
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: true,
+                        maxLines: 1,
+                      )),
+                ).toList(),
+                onChanged: (newValue) {
+                  setState(() {
+                    ufValue = newValue!;
+                  });
+                },
+              ),),
               Padding(padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 15.0),child:  Row(
                 children: [
                   Expanded(
@@ -321,31 +278,31 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
                 onTap: () {
                   FocusScope.of(context).requestFocus(FocusNode());
                   try {
-                 if (codIbge.id == '0') {
-                   throw ('A uf deve ser selecionado');
-                 } else
-                  {
-                    final codIbges = resulEnvironmentVariables.codIbge!.where((i) => i.idUf == ufModel.id).toList();
-                    codIbge = CodIbge();
-                    Navigator.of(context, rootNavigator: false).push(
-                      CupertinoPageRoute<CodIbge>(
-                        maintainState: false,
-                        fullscreenDialog: true,
-                        builder: (BuildContext context) =>
-                            SelectMunicipalityView(sMunicipios:codIbges,sUf:ufModel),
-                      ),
-                    ).then((value) {
-                      if(value != null)
-                      {
-                        setState((){codIbge = value;});
-                        txtControllerMunicipio.text = value.descricao!;
-                      }
-                    });
-                  }
+                    if (valueCodIbge.id == '0') {
+                      throw ('A uf deve ser selecionado');
+                    } else
+                    {
+                      final codIbges = resulEnvironmentVariables.codIbge!.where((i) => i.idUf == ufValue.id).toList();
+                      valueCodIbge = CodIbge();
+                      Navigator.of(context, rootNavigator: false).push(
+                        CupertinoPageRoute<CodIbge>(
+                          maintainState: false,
+                          fullscreenDialog: true,
+                          builder: (BuildContext context) =>
+                              SelectMunicipalityView(sMunicipios:codIbges,sUf:ufValue),
+                        ),
+                      ).then((value) {
+                        if(value != null)
+                        {
+                          setState((){valueCodIbge = value;});
+                          txtCounty.text = value.descricao!;
+                        }
+                      });
+                    }
                   } catch (error) {
                     OnAlertaInformacaoErro(error.toString(),context);
                   }},
-                controller: txtControllerMunicipio,
+                controller: txtCounty,
                 autofocus: false,
                 keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.done,
@@ -358,7 +315,7 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
               Padding(padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 15.0),child:  Row(
                 children: [
                   Expanded(
-                    child:  DropdownButtonFormField<UtilDropdownList>(
+                    child:  DropdownButtonFormField<TipoCliente>(
                       elevation: 7,
                       dropdownColor: AppThema.themeNotifierState.value.mode == ThemeMode.dark ? const Color(0xff000000) : const Color(0xffFFFFFF),
                       isExpanded: true,
@@ -376,20 +333,19 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
                         border: InputBorder.none,
                         //focusColor: Colors.transparent,
                       ),
-                      value: utilDropdownListMonth,
-                      items: listMonths.map(
-                            (v) => DropdownMenuItem<UtilDropdownList>(
-                            value: v,
-                            child: Text(
-                              v.txt!,
-                              overflow: TextOverflow.ellipsis,
-                              softWrap: true,
-                              maxLines: 1,
-                            )),
+                      value: customerTypeValue == null ? customerTypeValue : customerTypeDropdownList!.where( (i) => i.id == customerTypeValue.id).first,
+                      items: customerTypeDropdownList!.map((v) => DropdownMenuItem<TipoCliente>(
+                          value: v,
+                          child: Text(
+                            v.descricao!,
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: true,
+                            maxLines: 1,
+                          )),
                       ).toList(),
                       onChanged: (newValue) {
                         setState(() {
-                          utilDropdownListMonth = newValue!;
+                          customerTypeValue = newValue!;
                         });
                       },
                     ),
@@ -398,7 +354,7 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
                     width: 15.0,
                   ),
                   Expanded(
-                    child:  DropdownButtonFormField<UtilDropdownList>(
+                    child:  DropdownButtonFormField<TipoAtendimento>(
                       elevation: 7,
                       dropdownColor: AppThema.themeNotifierState.value.mode == ThemeMode.dark ? const Color(0xff000000) : const Color(0xffFFFFFF),
                       isExpanded: true,
@@ -416,12 +372,12 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
                         border: InputBorder.none,
                         //focusColor: Colors.transparent,
                       ),
-                      value: utilDropdownListMonth,
-                      items: listMonths.map(
-                            (v) => DropdownMenuItem<UtilDropdownList>(
+                      value: serviceTypeValue,
+                      items: serviceTypeDropdownList!.map(
+                            (v) => DropdownMenuItem<TipoAtendimento>(
                             value: v,
                             child: Text(
-                              v.txt!,
+                              v.descricao!,
                               overflow: TextOverflow.ellipsis,
                               softWrap: true,
                               maxLines: 1,
@@ -429,7 +385,7 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
                       ).toList(),
                       onChanged: (newValue) {
                         setState(() {
-                          utilDropdownListMonth = newValue!;
+                          serviceTypeValue = newValue!;
                         });
                       },
                     ),
@@ -439,7 +395,7 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
               Padding(padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 15.0),child:  Row(
                 children: [
                   Expanded(
-                    child:  DropdownButtonFormField<UtilDropdownList>(
+                    child:  DropdownButtonFormField<TipoMeioAcesso>(
                       elevation: 7,
                       dropdownColor: AppThema.themeNotifierState.value.mode == ThemeMode.dark ? const Color(0xff000000) : const Color(0xffFFFFFF),
                       isExpanded: true,
@@ -457,12 +413,12 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
                         border: InputBorder.none,
                         //focusColor: Colors.transparent,
                       ),
-                      value: utilDropdownListMonth,
-                      items: listMonths.map(
-                            (v) => DropdownMenuItem<UtilDropdownList>(
+                      value: mediumAccessTypeValue,
+                      items: mediumAccessTypeDropdownList!.map(
+                            (v) => DropdownMenuItem<TipoMeioAcesso>(
                             value: v,
                             child: Text(
-                              v.txt!,
+                              v.descricao!,
                               overflow: TextOverflow.ellipsis,
                               softWrap: true,
                               maxLines: 1,
@@ -470,7 +426,7 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
                       ).toList(),
                       onChanged: (newValue) {
                         setState(() {
-                          utilDropdownListMonth = newValue!;
+                          mediumAccessTypeValue = newValue!;
                         });
                       },
                     ),
@@ -479,7 +435,7 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
                     width: 15.0,
                   ),
                   Expanded(
-                    child:  DropdownButtonFormField<UtilDropdownList>(
+                    child:  DropdownButtonFormField<TipoProduto>(
                       elevation: 7,
                       dropdownColor: AppThema.themeNotifierState.value.mode == ThemeMode.dark ? const Color(0xff000000) : const Color(0xffFFFFFF),
                       isExpanded: true,
@@ -497,12 +453,12 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
                         border: InputBorder.none,
                         //focusColor: Colors.transparent,
                       ),
-                      value: utilDropdownListMonth,
-                      items: listMonths.map(
-                            (v) => DropdownMenuItem<UtilDropdownList>(
+                      value: productTypeValue,
+                      items: productTypeDropdownList!.map(
+                            (v) => DropdownMenuItem<TipoProduto>(
                             value: v,
                             child: Text(
-                              v.txt!,
+                              v.descricao!,
                               overflow: TextOverflow.ellipsis,
                               softWrap: true,
                               maxLines: 1,
@@ -510,7 +466,7 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
                       ).toList(),
                       onChanged: (newValue) {
                         setState(() {
-                          utilDropdownListMonth = newValue!;
+                          productTypeValue = newValue!;
                         });
                       },
                     ),
@@ -518,7 +474,7 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
                 ],
               )),
               Padding(padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 15.0),child:   Expanded(
-                child:  DropdownButtonFormField<UtilDropdownList>(
+                child:  DropdownButtonFormField<TipoTecnologia>(
                   elevation: 7,
                   dropdownColor: AppThema.themeNotifierState.value.mode == ThemeMode.dark ? const Color(0xff000000) : const Color(0xffFFFFFF),
                   isExpanded: true,
@@ -536,12 +492,12 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
                     border: InputBorder.none,
                     //focusColor: Colors.transparent,
                   ),
-                  value: utilDropdownListMonth,
-                  items: listMonths.map(
-                        (v) => DropdownMenuItem<UtilDropdownList>(
+                  value: technologyTypeValue,
+                  items: technologyTypeDropdownList!.map(
+                        (v) => DropdownMenuItem<TipoTecnologia>(
                         value: v,
                         child: Text(
-                          v.txt!,
+                          v.descricao!,
                           overflow: TextOverflow.ellipsis,
                           softWrap: true,
                           maxLines: 1,
@@ -549,7 +505,7 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
                   ).toList(),
                   onChanged: (newValue) {
                     setState(() {
-                      utilDropdownListMonth = newValue!;
+                      technologyTypeValue = newValue!;
                     });
                   },
                 ),
@@ -559,26 +515,37 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
                 children: <Widget>[
                   Expanded(
                     child: TextField(
-                      controller: txtControllerPj_12,
+                      autofocus: false,
+                      keyboardType: TextInputType.number,
+                      controller: txtControllerVelocity,
                       textAlign: TextAlign.start,
-                      decoration: InputDecoration(
+                      focusNode: txtFocusNodeVelocity,
+                      onSubmitted: (term) {
+                        txtFocusNodeVelocity!.unfocus();
+                        FocusScope.of(context).requestFocus(txtFocusNodeAccesses);
+                      },
+                      decoration: const InputDecoration(
                         labelText: 'VELOCIDADE',
                         hintText: 'VELOCIDADE',
                       ),
-                      keyboardType: TextInputType.text,
                       maxLength: 6,
                     ),
                   ),
-                  SizedBox(width: 15),
+                  const SizedBox(width: 15),
                   Expanded(
                     child: TextField(
-                      controller: txtControllerPj_34,
+                      controller: txtControllerAccesses,
                       textAlign: TextAlign.start,
-                      decoration: InputDecoration(
+                      keyboardType: TextInputType.number,
+                      focusNode: txtFocusNodeAccesses,
+                      onSubmitted: (term) {
+                        txtFocusNodeAccesses!.unfocus();
+                        onAdd();
+                      },
+                      decoration: const InputDecoration(
                         labelText: 'ACESSOS',
                         hintText: 'ACESSOS',
                       ),
-                      keyboardType: TextInputType.text,
                       maxLength: 6,
                     ),
                   ),
@@ -602,8 +569,7 @@ class PhysicalDistributionQuantitativeServiceState extends State<PhysicalDistrib
                 },
               ),),),
             ],
-          ),
-        );
+          ),),context);
     }
   }
 }
