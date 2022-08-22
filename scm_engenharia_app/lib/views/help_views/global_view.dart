@@ -1,16 +1,9 @@
-import 'dart:io';
-import 'package:flutter/cupertino.dart';
-import '../../help/componentes.dart';
+import '../../help/components.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
-import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
-
 import 'global_scaffold.dart';
 
-BuildContext? dialogContext;
-
 class GlobalView  {
-
   static viewResponsiveGridTextField(BuildContext context,int itemCount,double maxCrossAxisExtent, List itemBuilder) {
     return GridView.builder(
       shrinkWrap: true,
@@ -109,6 +102,23 @@ class GlobalView  {
     );
   }
 
+  static viewRenderSingleChildScrollView(maxHeight,child, context) {
+    return SingleChildScrollView(
+      child: Container(
+        alignment: Alignment.topCenter,
+        width: MediaQuery.of(context).size.width,
+        constraints: BoxConstraints(
+          minHeight: maxHeight,
+          maxWidth: MediaQuery.of(context).size.width,
+        ),
+        child: child,
+      ),
+    );
+  }
+
+  static maxHeightAppBar(BuildContext context,double height) {
+    return (MediaQuery.of(context).size.height - height) - MediaQuery.of(context).padding.top;
+  }
 }
 
 class OnExitApp {
@@ -167,7 +177,7 @@ class OnExitApp {
                             ),
                             onPressed: () async {
                               try {
-                                Componentes.logoffApp();
+                                Components.logoffApp();
                               } catch (error) {
                                 OnRealizandoOperacao('', false, context);
                                 GlobalScaffold.instance.onToastInformacaoErro(error.toString());

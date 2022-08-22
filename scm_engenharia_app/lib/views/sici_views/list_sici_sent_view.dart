@@ -1,5 +1,4 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import '../../models/operation.dart';
@@ -8,7 +7,6 @@ import '../../models/sici_fust_form_model.dart';
 import '../../web_service/servico_mobile_service.dart';
 import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
-import 'sici_fust_form_view.dart';
 
 
 class ListSiciSentView extends StatefulWidget {
@@ -38,7 +36,7 @@ class ListSiciSentState extends State<ListSiciSentView> {
             List<SiciFustFormModel> RespSiciFustFormList  = resultRest.resultList.map<SiciFustFormModel>((json) => SiciFustFormModel.fromJson(json)).toList();
             if (RespSiciFustFormList.isNotEmpty) {
               for (var prop in RespSiciFustFormList) {
-                if (siciFustFormList.where((f) => f.idLancamento.startsWith(prop.idLancamento)).isNotEmpty) {
+                if (siciFustFormList.where((f) => f.id!.startsWith(prop.id!)).isNotEmpty) {
                   // A ficha  ja esta salva no dispositivo
                 } else {
                   siciFustFormList.add(prop);
@@ -64,7 +62,7 @@ class ListSiciSentState extends State<ListSiciSentView> {
       SiciFileModel modelSici = SiciFileModel();
       modelSici.idFichaSiciApp = 0;
       modelSici.idEmpresa = prop.idEmpresa;
-      modelSici.isSincronizar = "N";
+      modelSici.isSincronizar = 'N';
       modelSici.idLancamento = prop.idLancamento;
       modelSici.periodoReferencia = prop.periodoReferencia;
       modelSici.razaoSocial = prop.razaoSocial;
@@ -83,19 +81,11 @@ class ListSiciSentState extends State<ListSiciSentView> {
       modelSici.cofinsPorc = prop.cofinsPorc;
       modelSici.receitaLiquida = prop.receitaLiquida;
       modelSici.observacoes = prop.observacoes;
-      modelSici.distribuicaoFisicosServicoQuantitativo = prop.distribuicaoFisicosServicoQuantitativo;
-      Navigator.push(
-          context,
-          CupertinoPageRoute(
-            builder: (context) =>
-                SiciFustFormView(
-                    siciFileModel:modelSici),
-          ));
+
     } catch (error) {
       OnAlertaInformacaoErro(error.toString(),context);
     }
   }
-
 
   @override
   void initState() {
@@ -226,7 +216,7 @@ class ListSiciSentState extends State<ListSiciSentView> {
                 const SizedBox(
                   height: 9.0,
                 ),
-                siciFustFormList[index].isSincronizar == "S"
+                siciFustFormList[index].icms == "S"
                     ? Container(
                   alignment: Alignment.bottomCenter,
                   height: 80,

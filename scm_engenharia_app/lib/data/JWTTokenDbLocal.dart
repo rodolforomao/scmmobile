@@ -1,6 +1,6 @@
 import 'package:jaguar_jwt/jaguar_jwt.dart';
 import 'package:scm_engenharia_app/models/operation.dart';
-import '../help/componentes.dart';
+import '../help/components.dart';
 import 'app_scm_engenharia_mobile_bll.dart';
 import 'tb_user.dart';
 
@@ -12,7 +12,7 @@ class ComponentsJWTToken {
       if (loggedInuser.erro) {
         throw loggedInuser.message!;
       } else if (loggedInuser.result == null) {
-        return Componentes.JWTTokenPadrao();
+        return Components.JWTTokenPadrao();
       } else {
         TbUser respUser =  loggedInuser.result as TbUser;
         String key =

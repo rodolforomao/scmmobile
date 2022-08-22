@@ -1,12 +1,12 @@
-import 'quantitative_distribution_physical_accesses_service_model.dart';
-
 class SiciFustFormModel {
   String? id;
   String? idEmpresa;
   String? idUsuarioCliente;
   String? idUsuarioConsultor;
   String? periodoReferencia;
-  String isSincronizar = "N";
+  String? ultimaAlteracao;
+  String? idUsuarioUltimaAlteracao;
+  String? status;
   String? razaoSocial;
   String? cnpj;
   String? telefoneFixo;
@@ -23,7 +23,7 @@ class SiciFustFormModel {
   String? cofins;
   String? cofinsPorc;
   String? observacoes;
-  String idLancamento = "0";
+  String? idLancamento;
   String? idUsuario;
   String? iDPERFIL;
   String? cODISENHA;
@@ -38,26 +38,29 @@ class SiciFustFormModel {
   String? empresa;
   String? idUf;
   String? aprovado;
-  String? tELEFONEWHATSAPP;
+  Null? tELEFONEWHATSAPP;
   String? codValidacao;
   String? validacaoEmail;
   String? excluido;
   String? bloqueado;
   String? idEstado;
-  String? estado;
-  String? passo;
-  String? estadoRobo;
+  String? descricao;
+  String? idProximo;
+  String? nomeCliente;
+  String? nomeConsultor;
   String? envioLancamento;
-
- late List<QuantitativeDistributionPhysicalAccessesServiceModel>? distribuicaoFisicosServicoQuantitativo = [];
+  String? estado;
+  List<DadosEmServicos>? dadosEmServicos;
 
   SiciFustFormModel(
-      { this.id,
+      {this.id,
         this.idEmpresa,
         this.idUsuarioCliente,
         this.idUsuarioConsultor,
         this.periodoReferencia,
-        required this.isSincronizar,
+        this.ultimaAlteracao,
+        this.idUsuarioUltimaAlteracao,
+        this.status,
         this.razaoSocial,
         this.cnpj,
         this.telefoneFixo,
@@ -74,7 +77,7 @@ class SiciFustFormModel {
         this.cofins,
         this.cofinsPorc,
         this.observacoes,
-        required this.idLancamento,
+        this.idLancamento,
         this.idUsuario,
         this.iDPERFIL,
         this.cODISENHA,
@@ -95,21 +98,24 @@ class SiciFustFormModel {
         this.excluido,
         this.bloqueado,
         this.idEstado,
-        this.estado,
-        this.passo,
-        this.estadoRobo,
-
+        this.descricao,
+        this.idProximo,
+        this.nomeCliente,
+        this.nomeConsultor,
         this.envioLancamento,
-        this.distribuicaoFisicosServicoQuantitativo});
+        this.estado,
+        this.dadosEmServicos});
 
   SiciFustFormModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     idEmpresa = json['id_empresa'];
     idUsuarioCliente = json['id_usuario_cliente'];
     idUsuarioConsultor = json['id_usuario_consultor'];
-    periodoReferencia = json['periodo_referencia']  ?? "";
-    isSincronizar = json['isSincronizar']  ?? "N";
-    razaoSocial = json['razao_social'] ?? "utyui";
+    periodoReferencia = json['periodo_referencia'];
+    ultimaAlteracao = json['ultima_alteracao'];
+    idUsuarioUltimaAlteracao = json['id_usuario_ultima_alteracao'];
+    status = json['status'];
+    razaoSocial = json['razao_social'];
     cnpj = json['cnpj'];
     telefoneFixo = json['telefone_fixo'];
     telefoneMovel = json['telefone_movel'];
@@ -124,7 +130,7 @@ class SiciFustFormModel {
     pisPorc = json['pisPorc'];
     cofins = json['cofins'];
     cofinsPorc = json['cofinsPorc'];
-    observacoes = json['observacoes'] ?? "";
+    observacoes = json['observacoes'];
     idLancamento = json['id_lancamento'];
     idUsuario = json['id_usuario'];
     iDPERFIL = json['ID_PERFIL'];
@@ -146,14 +152,16 @@ class SiciFustFormModel {
     excluido = json['excluido'];
     bloqueado = json['bloqueado'];
     idEstado = json['id_estado'];
-    estado = json['estado'];
-    passo = json['passo'];
-    estadoRobo = json['estado_robo'];
+    descricao = json['descricao'];
+    idProximo = json['id_proximo'];
+    nomeCliente = json['nome_cliente'];
+    nomeConsultor = json['nome_consultor'];
     envioLancamento = json['envio_lancamento'];
+    estado = json['estado'];
     if (json['dadosEmServicos'] != null) {
-      distribuicaoFisicosServicoQuantitativo = [];
+      dadosEmServicos = <DadosEmServicos>[];
       json['dadosEmServicos'].forEach((v) {
-        distribuicaoFisicosServicoQuantitativo!.add(QuantitativeDistributionPhysicalAccessesServiceModel.fromJson(v));
+        dadosEmServicos!.add(new DadosEmServicos.fromJson(v));
       });
     }
   }
@@ -165,6 +173,9 @@ class SiciFustFormModel {
     data['id_usuario_cliente'] = this.idUsuarioCliente;
     data['id_usuario_consultor'] = this.idUsuarioConsultor;
     data['periodo_referencia'] = this.periodoReferencia;
+    data['ultima_alteracao'] = this.ultimaAlteracao;
+    data['id_usuario_ultima_alteracao'] = this.idUsuarioUltimaAlteracao;
+    data['status'] = this.status;
     data['razao_social'] = this.razaoSocial;
     data['cnpj'] = this.cnpj;
     data['telefone_fixo'] = this.telefoneFixo;
@@ -202,20 +213,72 @@ class SiciFustFormModel {
     data['excluido'] = this.excluido;
     data['bloqueado'] = this.bloqueado;
     data['id_estado'] = this.idEstado;
-    data['estado'] = this.estado;
-    data['passo'] = this.passo;
-    data['estado_robo'] = this.estadoRobo;
+    data['descricao'] = this.descricao;
+    data['id_proximo'] = this.idProximo;
+    data['nome_cliente'] = this.nomeCliente;
+    data['nome_consultor'] = this.nomeConsultor;
     data['envio_lancamento'] = this.envioLancamento;
-
-    if (this.distribuicaoFisicosServicoQuantitativo != null) {
+    data['estado'] = this.estado;
+    if (this.dadosEmServicos != null) {
       data['dadosEmServicos'] =
-          this.distribuicaoFisicosServicoQuantitativo!.map((v) => v.toJson()).toList();
+          this.dadosEmServicos!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
+class DadosEmServicos {
+  String? idLancamento;
+  String? codIbge;
+  String? uf;
+  String? tipoCliente;
+  String? tipoAtendimento;
+  String? tipoAcesso;
+  String? tecnologia;
+  String? tipoProduto;
+  String? velocidade;
+  String? quantidadeAcesso;
 
+  DadosEmServicos(
+      {this.idLancamento,
+        this.codIbge,
+        this.uf,
+        this.tipoCliente,
+        this.tipoAtendimento,
+        this.tipoAcesso,
+        this.tecnologia,
+        this.tipoProduto,
+        this.velocidade,
+        this.quantidadeAcesso});
+
+  DadosEmServicos.fromJson(Map<String, dynamic> json) {
+    idLancamento = json['id_lancamento'];
+    codIbge = json['cod_ibge'];
+    uf = json['uf'];
+    tipoCliente = json['tipo_cliente'];
+    tipoAtendimento = json['tipo_atendimento'];
+    tipoAcesso = json['tipo_acesso'];
+    tecnologia = json['tecnologia'];
+    tipoProduto = json['tipo_produto'];
+    velocidade = json['velocidade'];
+    quantidadeAcesso = json['quantidade_acesso'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id_lancamento'] = this.idLancamento;
+    data['cod_ibge'] = this.codIbge;
+    data['uf'] = this.uf;
+    data['tipo_cliente'] = this.tipoCliente;
+    data['tipo_atendimento'] = this.tipoAtendimento;
+    data['tipo_acesso'] = this.tipoAcesso;
+    data['tecnologia'] = this.tecnologia;
+    data['tipo_produto'] = this.tipoProduto;
+    data['velocidade'] = this.velocidade;
+    data['quantidade_acesso'] = this.quantidadeAcesso;
+    return data;
+  }
+}
 
 
 

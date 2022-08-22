@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../views/sici_views/list_sici_sent_view.dart';
-import '../../views/sici_views/physical_distribution_quantitative_service_view.dart';
+import '../../views/sici_views/data_in_services_view.dart';
 import '../../views/sici_views/select_municipality_view.dart';
 import '../../views/sici_views/sici_fust_form_view.dart';
 import '../../views/splash_screen_view.dart';
@@ -55,7 +55,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       }
     case routes.physicalDistributionQuantitativeServiceRoute:
       {
-        return MaterialPageRoute(builder: (context) => PhysicalDistributionQuantitativeServiceView(sDistribuicaoFisicosServicoQuantitativo: null,));
+        return MaterialPageRoute(builder: (context) => DataInServicesView(sDadosEmServicos: null,));
       }
     case routes.siciFustFormRoute:
       {
@@ -142,7 +142,7 @@ class RoutesPage {
 
       // Visualizações sici ----------------------------------------------------------------------------------------------------
       routes.listSiciSentRoute : (context) => const ListSiciSentView(),
-      routes.physicalDistributionQuantitativeServiceRoute : (context) => PhysicalDistributionQuantitativeServiceView(sDistribuicaoFisicosServicoQuantitativo: null,),
+      routes.physicalDistributionQuantitativeServiceRoute : (context) => DataInServicesView(sDadosEmServicos: null,),
       routes.siciFustFormRoute : (context) => SiciFustFormView(siciFileModel: null,),
 
       //Visualizações de notificação -------------------------------------------------------------------------------------------

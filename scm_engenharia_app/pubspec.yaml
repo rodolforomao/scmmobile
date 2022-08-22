@@ -58,11 +58,11 @@ dependencies:
   html: ^0.15.0 # ANDROID, IOS, LINUX,MACOS, WEB, WINDOWS
 
   #Plugin tekartik.com
-  realm: ^0.3.1+beta # ANDROID, IOS, LINUX, MACOS, WINDOWS
+  realm: ^0.3.2+beta # ANDROID, IOS, LINUX, MACOS, WINDOWS
 
   #Plugin Flutter Community
   connectivity_plus: ^2.3.6+1 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
-  #device_info_plus: ^4.1.0 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  device_info_plus: ^4.1.2 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
   #package_info_plus: ^1.4.3+1 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
   #share_plus: ^4.0.10+1 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
 
@@ -70,10 +70,10 @@ dependencies:
   file: ^6.1.2 # ANDROID, IOS, LINUX, MACOS, WINDOWS
 
   #Plugin firebase
-  firebase_core: ^1.20.0 # ANDROID ,IOS, MACOS, WEB,
-  firebase_crashlytics: ^2.8.6 # ANDROID ,IOS, MACOS
-  firebase_messaging: ^12.0.1 # ANDROID,IOS, MACOS, WEB
-  firebase_analytics: ^9.3.0 # ANDROID,IOS,MACOS,WEB
+  firebase_core: ^1.21.0 # ANDROID ,IOS, MACOS, WEB,
+  firebase_crashlytics: ^2.8.8 # ANDROID ,IOS, MACOS
+  firebase_messaging: ^12.0.3 # ANDROID,IOS, MACOS, WEB
+  firebase_analytics: ^9.3.2 # ANDROID,IOS,MACOS,WEB
 
   #Plugin outros
   jaguar_jwt: ^3.0.0

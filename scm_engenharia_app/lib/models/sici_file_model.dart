@@ -1,4 +1,3 @@
-import 'package:scm_engenharia_app/models/quantitative_distribution_physical_accesses_service_model.dart';
 
 class SiciFileModel {
   int? idFichaSiciApp;
@@ -22,8 +21,6 @@ class SiciFileModel {
   String? cofinsPorc;
   String? receitaLiquida;
   String? observacoes;
-  List<QuantitativeDistributionPhysicalAccessesServiceModel>?
-      distribuicaoFisicosServicoQuantitativo;
   SiciFileModel({
     this.idFichaSiciApp = 0,
     this.idEmpresa,
@@ -46,7 +43,6 @@ class SiciFileModel {
     this.cofinsPorc,
     this.receitaLiquida,
     this.observacoes,
-    this.distribuicaoFisicosServicoQuantitativo,
   });
 
   SiciFileModel.fromJson(Map<String, dynamic> json) {
