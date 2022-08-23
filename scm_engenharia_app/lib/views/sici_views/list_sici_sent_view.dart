@@ -38,6 +38,7 @@ class ListSiciSentState extends State<ListSiciSentView> {
               for (var prop in RespSiciFustFormList) {
                 if (siciFustFormList.where((f) => f.id!.startsWith(prop.id!)).isNotEmpty) {
                   // A ficha  ja esta salva no dispositivo
+                  continue;
                 } else {
                   siciFustFormList.add(prop);
                 }

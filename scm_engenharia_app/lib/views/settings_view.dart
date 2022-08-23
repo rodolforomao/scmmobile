@@ -88,14 +88,14 @@ class SettingsState extends State<SettingsView> {
                             right: BorderSide(
                                 width: 1.0, color: Color(0xFF545454)))),
                     child:
-                    const Icon(Icons.https, color: Color(0xff9e9e9e), size: 25.0),
+                    const Icon(Icons.https_outlined, color: Color(0xff9e9e9e), size: 25.0),
                   ),
                   title: Text(
                     'Alterar senha',
                     style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 17),
                   ),
                   // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
-                  trailing: Icon(Icons.keyboard_arrow_right,
+                  trailing: const Icon(Icons.keyboard_arrow_right,
                       color: Color(0xff6C757D), size: 30.0)),
               const Divider(
                 color: Color(0xffCCCCCC),
@@ -106,41 +106,41 @@ class SettingsState extends State<SettingsView> {
                       routes.perfilRoute,
                     );
                   },
-                  contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+                  contentPadding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
                   leading: Container(
-                    padding: EdgeInsets.only(right: 12.0),
-                    decoration: new BoxDecoration(
-                        border: new Border(
-                            right: new BorderSide(
+                    padding: const EdgeInsets.only(right: 12.0),
+                    decoration: const BoxDecoration(
+                        border: Border(
+                            right: BorderSide(
                                 width: 1.0, color: Color(0xFF545454)))),
-                    child: Icon(Icons.perm_identity,
+                    child: const Icon(Icons.perm_identity,
                         color: Color(0xff9e9e9e), size: 25.0),
                   ),
                   title: Text(
-                    "Meu perfil",
+                    'Meu perfil',
                     style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 17),
                   ),
                   // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
-                  trailing: Icon(Icons.keyboard_arrow_right,
+                  trailing: const Icon(Icons.keyboard_arrow_right,
                       color: Color(0xff6C757D), size: 30.0)),
               const Divider(
                 color: Color(0xffCCCCCC),
               ),
               ListTile(
                   onTap: () {
-                    FocusScope.of(context).requestFocus(new FocusNode());
+                    FocusScope.of(context).requestFocus(FocusNode());
                     Navigator.of(context).pushNamed(
                       routes.environmentVariableRoute,
                     );
                   },
-                  contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+                  contentPadding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
                   leading: Container(
-                    padding: EdgeInsets.only(right: 12.0),
-                    decoration: new BoxDecoration(
-                        border: new Border(
-                            right: new BorderSide(
+                    padding: const EdgeInsets.only(right: 12.0),
+                    decoration: const BoxDecoration(
+                        border: Border(
+                            right: BorderSide(
                                 width: 1.0, color: Color(0xFF545454)))),
-                    child: Icon(Icons.compare,
+                    child: const Icon(Icons.compare_outlined,
                         color: Color(0xff9e9e9e), size: 24.0),
                   ),
                   title: Text(
@@ -148,7 +148,34 @@ class SettingsState extends State<SettingsView> {
                     style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 17),
                   ),
                   // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
-                  trailing: Icon(Icons.keyboard_arrow_right,
+                  trailing: const Icon(Icons.keyboard_arrow_right,
+                      color: Color(0xff6C757D), size: 30.0)),
+              const Divider(
+                color: Color(0xffCCCCCC),
+              ),
+              ListTile(
+                  onTap: () {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    Navigator.of(context).pushNamed(
+                      routes.aboutAppRoute,
+                    );
+                  },
+                  contentPadding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+                  leading: Container(
+                    padding: const EdgeInsets.only(right: 12.0),
+                    decoration: const BoxDecoration(
+                        border: Border(
+                            right: BorderSide(
+                                width: 1.0, color: Color(0xFF545454)))),
+                    child: const Icon(Icons.info_outline_rounded,
+                        color: Color(0xff9e9e9e), size: 24.0),
+                  ),
+                  title: Text(
+                    'Sobre',
+                    style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 17),
+                  ),
+                  // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
+                  trailing: const Icon(Icons.keyboard_arrow_right,
                       color: Color(0xff6C757D), size: 30.0)),
               const Divider(
                 color: Color(0xffCCCCCC),

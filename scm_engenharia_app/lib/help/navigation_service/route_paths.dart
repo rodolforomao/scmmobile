@@ -23,3 +23,4 @@ const String errorInformationRoute = 'informação-de-erro';
 const String menuNavigationRoute = 'navegação-do-menu';
 const String settingsRoute = 'definições';
 const String splashScreenRoute = 'tela-de-abertura';
+const String aboutAppRoute= 'sobre';

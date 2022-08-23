@@ -63,8 +63,8 @@ dependencies:
   #Plugin Flutter Community
   connectivity_plus: ^2.3.6+1 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
   device_info_plus: ^4.1.2 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
-  #package_info_plus: ^1.4.3+1 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
-  #share_plus: ^4.0.10+1 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  package_info_plus: ^1.4.3+1 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  share_plus: ^4.0.10+1 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
 
   #Plugin google
   file: ^6.1.2 # ANDROID, IOS, LINUX, MACOS, WINDOWS

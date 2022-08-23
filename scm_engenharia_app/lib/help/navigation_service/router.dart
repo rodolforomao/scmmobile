@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../../views/about_app_view.dart';
 import '../../views/sici_views/list_sici_sent_view.dart';
 import '../../views/sici_views/data_in_services_view.dart';
 import '../../views/sici_views/select_municipality_view.dart';
@@ -44,7 +45,13 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         builder: (BuildContext context) =>
             const SettingsView(),
       );
-
+    case routes.aboutAppRoute:
+      return CupertinoPageRoute(
+        maintainState: false,
+        fullscreenDialog: true,
+        builder: (BuildContext context) =>
+        const AboutAppView(),
+      );
   //#endregion
 
   //#region  Visualizações sici
