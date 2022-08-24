@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import '../data/JWTTokenDbLocal.dart';
 import '../help/components.dart';
 import '../models/operation.dart';
-import '../models/sici_file_model.dart';
+import '../models/output/sici_file_model.dart';
 
 class ServicoMobileService {
   static const Url = "http://sici.scmengenharia.com.br";
@@ -140,7 +140,7 @@ class ServicoMobileService {
     try {
 
       operacao.erro = false;
-      operacao.message = "Operação realizada com sucesso";
+      operacao.message = 'Operação realizada com sucesso';
       operacao.result = null;
       String? token = await ComponentsJWTToken.JWTTokenPadrao();
       Map<String, String> headers = {
@@ -148,14 +148,13 @@ class ServicoMobileService {
         "token": token!,
       };
       http.MultipartRequest response;
-      response = new http.MultipartRequest('POST', Uri.parse(Url + "/analise/lancamento_ws"));
+      response = http.MultipartRequest('POST', Uri.parse("$Url/analise/lancamento_ws"));
       response.headers.addAll(headers);
       response.fields['controllerPeriodoReferencia'] = (siciFileModel.periodoReferencia == null ? "" : siciFileModel.periodoReferencia)!;
       response.fields['controllerRazaoSocial'] = (siciFileModel.razaoSocial == null ? "" : siciFileModel.razaoSocial)!;
       response.fields['controllerTelefoneFixo'] = siciFileModel.telefoneFixo == null ? "" : siciFileModel.telefoneFixo!;
-      response.fields['controllerCNPJ'] =
-      siciFileModel.cnpj == null ? "" : siciFileModel.cnpj!;response.fields['controllerTelefoneCelular'] =
-      siciFileModel.telefoneMovel == null ? "" : siciFileModel.telefoneMovel!;
+      response.fields['controllerCNPJ'] = siciFileModel.cnpj == null ? "" : siciFileModel.cnpj!;
+      response.fields['controllerTelefoneCelular'] = siciFileModel.telefoneMovel == null ? "" : siciFileModel.telefoneMovel!;
       response.fields['controllerReceitaBruta'] = siciFileModel.receitaBruta == null ? "" : siciFileModel.receitaBruta!;
       response.fields['controllerAliqSimples'] = siciFileModel.simples == null ? "" : siciFileModel.simples!;
       response.fields['controllerAliqSimplesPorc'] = siciFileModel.simplesPorc == null ? "" : siciFileModel.simplesPorc!;
@@ -165,8 +164,8 @@ class ServicoMobileService {
       response.fields['controllerPISPorc'] = siciFileModel.pisPorc == null ? "" : siciFileModel.pisPorc!;
       response.fields['controllerCOFINS'] = siciFileModel.cofins == null ? "" : siciFileModel.cofins!;
       response.fields['controllerCOFINSPorc'] = siciFileModel.cofinsPorc == null ? "" : siciFileModel.cofinsPorc!;
-      response.fields['controllerReceitaLiquida'] = siciFileModel.receitaLiquida == null ? "" : siciFileModel.receitaLiquida!;response.fields['controllerObservacoes'] =
-      siciFileModel.observacoes == null ? "" : siciFileModel.observacoes!;
+      response.fields['controllerReceitaLiquida'] = siciFileModel.receitaLiquida == null ? "" : siciFileModel.receitaLiquida!;
+      response.fields['controllerObservacoes'] = siciFileModel.observacoes ?? '';
       int index = 1;
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
@@ -287,7 +286,7 @@ class ServicoMobileService {
       String? token = await ComponentsJWTToken.JWTTokenPadrao();
       Map<String, String> headers = {
         'Content-Type': 'application/json; charset=utf-8',
-        "token": token!,
+        'token': token!,
       };
       http.MultipartRequest response;
       response = new http.MultipartRequest('POST', Uri.parse(Url + "/notificacoes/Notificacoes_ws/recuperarNotificacao_ws"));

@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../models/InfoApp.dart';
+import '../models/info_app.dart';
 import '../web_service/servico_mobile_service.dart';
 import 'help_views/global_view.dart';
 

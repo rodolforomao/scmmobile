@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import '../../models/environment_variables.dart';
+import '../../models/output/environment_variables.dart';
 import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
 import 'package:flutter/services.dart';

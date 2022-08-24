@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import '../../models/environment_variables.dart';
+import '../../models/output/environment_variables.dart';
 import '../../models/operation.dart';
 import '../../web_service/servico_mobile_service.dart';
 import '../help_views/global_scaffold.dart';

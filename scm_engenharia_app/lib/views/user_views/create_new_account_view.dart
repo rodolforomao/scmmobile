@@ -8,7 +8,7 @@ import 'dart:io';
 import 'dart:async';
 import '../../help/formatter/cpf_input_formatter.dart';
 import '../../models/operation.dart';
-import '../../models/environment_variables.dart';
+import '../../models/output/environment_variables.dart';
 import '../../web_service/servico_mobile_service.dart';
 import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';

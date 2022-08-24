@@ -12,8 +12,8 @@ import '../../help/formatter/cnpj_input_formatter.dart';
 import '../../help/formatter/telefone_input_formatter.dart';
 import '../../help/formatter/valor_input_formatter.dart';
 import '../../models/operation.dart';
-import '../../models/sici_file_model.dart';
-import '../../models/sici_fust_form_model.dart';
+import '../../models/output/sici_file_model.dart';
+import '../../models/output/sici_fust_form_model.dart';
 import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
 
