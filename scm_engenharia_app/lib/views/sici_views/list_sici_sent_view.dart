@@ -1,9 +1,12 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:scm_engenharia_app/views/sici_views/sici_fust_form_view.dart';
 import 'dart:async';
 import '../../models/operation.dart';
-import '../../models/output/sici_file_model.dart';
-import '../../models/output/sici_fust_form_model.dart';
+import '../../models/input/sici_fust_form_model.dart';
+import '../../models/output/sici_fust_model.dart';
+import '../../models/parse_resp_json_to_view.dart';
 import '../../web_service/servico_mobile_service.dart';
 import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
@@ -17,10 +20,9 @@ class ListSiciSentView extends StatefulWidget {
 
 class ListSiciSentState extends State<ListSiciSentView> {
 
-  List<SiciFustFormModel> siciFustFormList = [];
+  List<SiciFileModel> siciFileModelList = [];
   late StreamSubscription<ConnectivityResult> subscription;
   TypeView statusView = TypeView.viewLoading;
-
 
   onRestWeb() async {
   //  OnRealizandoOperacao("Web: Buscando lançamentos", true);
@@ -32,19 +34,13 @@ class ListSiciSentState extends State<ListSiciSentView> {
         if (resultRest.erro) {
           throw (resultRest.message!);
         } else {
-          setState(() {
+          setState(() async {
             List<SiciFustFormModel> RespSiciFustFormList  = resultRest.resultList.map<SiciFustFormModel>((json) => SiciFustFormModel.fromJson(json)).toList();
-            if (RespSiciFustFormList.isNotEmpty) {
-              for (var prop in RespSiciFustFormList) {
-                if (siciFustFormList.where((f) => f.id!.startsWith(prop.id!)).isNotEmpty) {
-                  // A ficha  ja esta salva no dispositivo
-                  continue;
-                } else {
-                  siciFustFormList.add(prop);
-                }
+            siciFileModelList = await  ParseRespJsonToView.parseSiciFustFormModelToSiciFileList(RespSiciFustFormList);
+            if(siciFileModelList.isEmpty)
+              {
+                throw ('Não é possível converter as informações');
               }
-            }
-
             statusView = TypeView.viewRenderInformation;
           });
         }
@@ -57,31 +53,15 @@ class ListSiciSentState extends State<ListSiciSentView> {
     }
   }
 
-  onVisualizar(SiciFustFormModel prop ) {
+  onVisualizar(SiciFileModel? prop ) {
     //  OnRealizandoOperacao("Web: Buscando lançamentos", true);
     try {
-      SiciFileModel modelSici = SiciFileModel();
-      modelSici.idFichaSiciApp = 0;
-      modelSici.idEmpresa = prop.idEmpresa;
-      modelSici.isSincronizar = 'N';
-      modelSici.idLancamento = prop.idLancamento;
-      modelSici.periodoReferencia = prop.periodoReferencia;
-      modelSici.razaoSocial = prop.razaoSocial;
-      modelSici.telefoneFixo = prop.telefoneFixo;
-      modelSici.cnpj = prop.cnpj;
-      modelSici.telefoneMovel = prop.telefoneMovel;
-      modelSici.receitaBruta = prop.receitaBruta;
-      //ModelFichaSici.idFinanceiro  = prop.idFinanceiro; Não tem
-      modelSici.simples = prop.simples;
-      modelSici.simplesPorc = prop.simplesPorc;
-      modelSici.icms = prop.icms;
-      modelSici.icmsPorc = prop.icmsPorc;
-      modelSici.pis = prop.pis;
-      modelSici.pisPorc = prop.pisPorc;
-      modelSici.cofins = prop.cofins;
-      modelSici.cofinsPorc = prop.cofinsPorc;
-      modelSici.receitaLiquida = prop.receitaLiquida;
-      modelSici.observacoes = prop.observacoes;
+      Navigator.push(
+          context,
+          CupertinoPageRoute(
+            builder: (context) =>
+                SiciFustFormView(siciFileModel:prop),
+          ));
 
     } catch (error) {
       OnAlertaInformacaoErro(error.toString(),context);
@@ -142,7 +122,7 @@ class ListSiciSentState extends State<ListSiciSentView> {
             ),
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
-            itemCount: siciFustFormList.length,
+            itemCount: siciFileModelList.length,
             itemBuilder: (BuildContext context, int index) => Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.max,
@@ -170,7 +150,7 @@ class ListSiciSentState extends State<ListSiciSentView> {
                                      ),
                                 ),
                                 TextSpan(
-                                  text: siciFustFormList[index].periodoReferencia,
+                                  text: siciFileModelList[index].periodoReferencia,
                                   style: const TextStyle(
                                       fontSize: 20.0,
                                       color: Color(0xff333333),
@@ -184,7 +164,7 @@ class ListSiciSentState extends State<ListSiciSentView> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            siciFustFormList[index].razaoSocial.toString(),
+                            siciFileModelList[index].razaoSocial.toString(),
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                             softWrap: false,
@@ -201,7 +181,7 @@ class ListSiciSentState extends State<ListSiciSentView> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child:Text(
-                            siciFustFormList[index].observacoes.toString(),
+                            siciFileModelList[index].observacoes.toString(),
                             overflow: TextOverflow.ellipsis,
                             maxLines: 2,
                             softWrap: false,
@@ -217,7 +197,7 @@ class ListSiciSentState extends State<ListSiciSentView> {
                 const SizedBox(
                   height: 9.0,
                 ),
-                siciFustFormList[index].icms == "S"
+                siciFileModelList[index].icms == "S"
                     ? Container(
                   alignment: Alignment.bottomCenter,
                   height: 80,
@@ -438,8 +418,7 @@ class ListSiciSentState extends State<ListSiciSentView> {
                         //width: MediaQuery.of(context).size.width / 3,
                         child: InkWell(
                           onTap: () {
-                            onVisualizar(siciFustFormList[index]);
-
+                            onVisualizar(siciFileModelList[index]);
                           },
                           child: Column(
                             mainAxisSize: MainAxisSize.max,

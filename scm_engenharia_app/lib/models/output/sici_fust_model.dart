@@ -50,7 +50,7 @@ class SiciFustFormModel {
   String? nomeConsultor;
   String? envioLancamento;
   String? estado;
-  List<DadosEmServicos>? dadosEmServicos;
+  List<DadosEmServicosFormModel>? dadosEmServicosFormModel;
 
   SiciFustFormModel(
       {this.id,
@@ -104,7 +104,7 @@ class SiciFustFormModel {
         this.nomeConsultor,
         this.envioLancamento,
         this.estado,
-        this.dadosEmServicos});
+        this.dadosEmServicosFormModel});
 
   SiciFustFormModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -159,9 +159,9 @@ class SiciFustFormModel {
     envioLancamento = json['envio_lancamento'];
     estado = json['estado'];
     if (json['dadosEmServicos'] != null) {
-      dadosEmServicos = <DadosEmServicos>[];
+      dadosEmServicosFormModel = <DadosEmServicosFormModel>[];
       json['dadosEmServicos'].forEach((v) {
-        dadosEmServicos!.add(new DadosEmServicos.fromJson(v));
+        dadosEmServicosFormModel!.add(new DadosEmServicosFormModel.fromJson(v));
       });
     }
   }
@@ -219,15 +219,15 @@ class SiciFustFormModel {
     data['nome_consultor'] = this.nomeConsultor;
     data['envio_lancamento'] = this.envioLancamento;
     data['estado'] = this.estado;
-    if (this.dadosEmServicos != null) {
+    if (this.dadosEmServicosFormModel != null) {
       data['dadosEmServicos'] =
-          this.dadosEmServicos!.map((v) => v.toJson()).toList();
+          this.dadosEmServicosFormModel!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
-class DadosEmServicos {
+class DadosEmServicosFormModel {
   String? idLancamento;
   String? codIbge;
   String? uf;
@@ -239,7 +239,7 @@ class DadosEmServicos {
   String? velocidade;
   String? quantidadeAcesso;
 
-  DadosEmServicos(
+  DadosEmServicosFormModel(
       {this.idLancamento,
         this.codIbge,
         this.uf,
@@ -251,7 +251,7 @@ class DadosEmServicos {
         this.velocidade,
         this.quantidadeAcesso});
 
-  DadosEmServicos.fromJson(Map<String, dynamic> json) {
+  DadosEmServicosFormModel.fromJson(Map<String, dynamic> json) {
     idLancamento = json['id_lancamento'];
     codIbge = json['cod_ibge'];
     uf = json['uf'];

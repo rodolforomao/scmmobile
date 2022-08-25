@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import '../data/JWTTokenDbLocal.dart';
 import '../help/components.dart';
 import '../models/operation.dart';
-import '../models/output/sici_file_model.dart';
+import '../models/input/sici_fust_form_model.dart';
 
 class ServicoMobileService {
   static const Url = "http://sici.scmengenharia.com.br";

@@ -2,12 +2,11 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:realm/realm.dart';
-import '../../data/tb_quantitative_distribution_physical_accesses_service.dart';
 import '../../help/components.dart';
 import '../../help/formatter/cnpj_input_formatter.dart';
+import '../../models/input/sici_fust_form_model.dart';
 import '../../models/output/environment_variables.dart';
-import '../../models/output/sici_fust_form_model.dart';
+
 import '../../models/util_model/util_dropdown_list.dart';
 import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
@@ -36,19 +35,18 @@ class DataInServicesState extends State<DataInServicesView> {
   List<UtilDropdownList> listMonths = <UtilDropdownList>[];
   late UtilDropdownList utilDropdownListMonth;
   List<Uf>? ufDropdownList;
-  late Uf ufValue;
+  Uf ufValue = Uf();
   List<TipoCliente>? customerTypeDropdownList;
-  late TipoCliente customerTypeValue;
+  TipoCliente customerTypeValue = TipoCliente();
   List<TipoAtendimento>? serviceTypeDropdownList;
-  late TipoAtendimento serviceTypeValue;
+  TipoAtendimento serviceTypeValue = TipoAtendimento();
   List<TipoMeioAcesso>? mediumAccessTypeDropdownList;
-  late TipoMeioAcesso  mediumAccessTypeValue;
+  TipoMeioAcesso mediumAccessTypeValue = TipoMeioAcesso();
   List<TipoTecnologia>? technologyTypeDropdownList;
-  late TipoTecnologia technologyTypeValue;
+  TipoTecnologia technologyTypeValue = TipoTecnologia();
   List<TipoProduto>? productTypeDropdownList;
-  late TipoProduto productTypeValue;
-  late CodIbge valueCodIbge;
-
+  TipoProduto productTypeValue = TipoProduto();
+  CodIbge valueCodIbge = CodIbge();
   final txtNumberYear = TextEditingController();
   final txtCounty = TextEditingController();
   final txtControllerVelocity = TextEditingController();
@@ -68,39 +66,65 @@ class DataInServicesState extends State<DataInServicesView> {
   onInc() async {
     try {
       setState((){statusView = TypeView.viewLoading;});
+      String response = await rootBundle.loadString('assets/variavel_de_ambiente.json');
+      setState(() {
+        resulEnvironmentVariables = EnvironmentVariables.fromJson(jsonDecode(response) as Map<String, dynamic>);
+        ufDropdownList = resulEnvironmentVariables.uf;
+        ufValue.id = '0';
+        ufValue.uf = 'SELECIONE...';
+        ufDropdownList!.add(ufValue);
+        ufValue = ufDropdownList!.last;
+       //-------------------------------------------------------------------------------------------------------------------
+        customerTypeDropdownList = resulEnvironmentVariables.tipoCliente;
+        customerTypeValue.id ='0';
+        customerTypeValue.descricao = 'SELECIONE...';
+        customerTypeDropdownList!.add(customerTypeValue);
+        customerTypeValue = customerTypeDropdownList!.last;
+      //-------------------------------------------------------------------------------------------------------------------
+        serviceTypeDropdownList = resulEnvironmentVariables.tipoAtendimento;
+        serviceTypeValue.id ='0';
+        serviceTypeValue.descricao = 'SELECIONE...';
+        serviceTypeDropdownList!.add(serviceTypeValue);
+        serviceTypeValue  = serviceTypeDropdownList!.last;
+       //-------------------------------------------------------------------------------------------------------------------
+        mediumAccessTypeDropdownList = resulEnvironmentVariables.tipoMeioAcesso;
+        mediumAccessTypeValue.id ='0';
+        mediumAccessTypeValue.descricao = 'SELECIONE...';
+        mediumAccessTypeDropdownList!.add(mediumAccessTypeValue);
+        mediumAccessTypeValue  = mediumAccessTypeDropdownList!.last;
+       //-------------------------------------------------------------------------------------------------------------------
+        technologyTypeDropdownList = resulEnvironmentVariables.tipoTecnologia;
+        technologyTypeValue.id  ='0';
+        technologyTypeValue.descricao = 'SELECIONE...';
+        technologyTypeValue.idTipoMeioAcesso  ='0';
+        technologyTypeValue.idTipoProduto  ='0';
+        technologyTypeDropdownList!.add(technologyTypeValue);
+        technologyTypeValue   = technologyTypeDropdownList!.last;
+       //-------------------------------------------------------------------------------------------------------------------
+        productTypeDropdownList = resulEnvironmentVariables.tipoProduto;
+        productTypeValue.id ='0';
+        productTypeValue.descricao = 'SELECIONE...';
+        productTypeDropdownList!.add(productTypeValue);
+        productTypeValue   = productTypeDropdownList!.last;
+        statusView = TypeView.viewRenderInformation;
+      });
       if(widget.sDadosEmServicos == null)
         {
 
         }
       else
         {
-
+          ufValue = ufDropdownList!.where((i) => i.uf!.toUpperCase() == widget.sDadosEmServicos!.uf!.toUpperCase()).first;
+          valueCodIbge = resulEnvironmentVariables.codIbge!.where((i) => i.codIbge == widget.sDadosEmServicos!.codIbge).first;
+          customerTypeValue = resulEnvironmentVariables.tipoCliente!.where((i) => i.descricao == widget.sDadosEmServicos!.tipoCliente).first;
+          serviceTypeValue = resulEnvironmentVariables.tipoAtendimento!.where((i) => i.descricao == widget.sDadosEmServicos!.tipoAtendimento).first;
+          mediumAccessTypeValue = resulEnvironmentVariables.tipoMeioAcesso!.where((i) => i.descricao == widget.sDadosEmServicos!.tipoAcesso).first;
+          technologyTypeValue = resulEnvironmentVariables.tipoTecnologia!.where((i) => i.descricao == widget.sDadosEmServicos!.tecnologia).first;
+          productTypeValue = resulEnvironmentVariables.tipoProduto!.where((i) => i.descricao == widget.sDadosEmServicos!.tipoProduto).first;
+          txtCounty.text = valueCodIbge.descricao!;
+          txtControllerVelocity.text = widget.sDadosEmServicos!.velocidade!;
+          txtControllerAccesses.text = widget.sDadosEmServicos!.quantidadeAcesso!;
         }
-
-      String response = await rootBundle.loadString('assets/variavel_de_ambiente.json');
-      setState(() {
-        resulEnvironmentVariables = EnvironmentVariables.fromJson(jsonDecode(response) as Map<String, dynamic>);
-         ufDropdownList = resulEnvironmentVariables.uf;
-         ufValue = ufDropdownList!.first;
-
-        customerTypeDropdownList = resulEnvironmentVariables.tipoCliente;
-        customerTypeValue = customerTypeDropdownList!.first;
-
-        serviceTypeDropdownList = resulEnvironmentVariables.tipoAtendimento;
-        serviceTypeValue  = serviceTypeDropdownList!.first;
-
-        mediumAccessTypeDropdownList = resulEnvironmentVariables.tipoMeioAcesso;
-        mediumAccessTypeValue  = mediumAccessTypeDropdownList!.first;
-
-        technologyTypeDropdownList = resulEnvironmentVariables.tipoTecnologia;
-        technologyTypeValue   = technologyTypeDropdownList!.first;
-
-        productTypeDropdownList = resulEnvironmentVariables.tipoProduto;
-        productTypeValue   = productTypeDropdownList!.first;
-
-        statusView = TypeView.viewRenderInformation;
-      });
-
     } catch (error) {
       OnAlertaInformacaoErro(error.toString(),context);
     }

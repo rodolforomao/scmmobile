@@ -11,16 +11,15 @@ import '../../help/components.dart';
 import '../../help/formatter/cnpj_input_formatter.dart';
 import '../../help/formatter/telefone_input_formatter.dart';
 import '../../help/formatter/valor_input_formatter.dart';
+import '../../models/input/sici_fust_form_model.dart';
 import '../../models/operation.dart';
-import '../../models/output/sici_file_model.dart';
-import '../../models/output/sici_fust_form_model.dart';
+import '../../models/output/sici_fust_model.dart';
 import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
 
 
 class SiciFustFormView extends StatefulWidget {
-  SiciFustFormModel? siciFileModel;
-
+  SiciFileModel? siciFileModel;
   SiciFustFormView({ Key? key, required this.siciFileModel}) : super(key: key);
 
   @override
@@ -38,7 +37,7 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
   final resulFormSiciFust = TbFormSiciFust(ObjectId(),'0','S','0','','','','','','','','','','','','','','','','','',);
   late List<TbQuantitativeDistributionPhysicalAccessesService> quantitativeDistributionPhysicalAccessesService;
 
-  SiciFustFormModel siciFileModel = SiciFustFormModel();
+  SiciFileModel siciFileModel = SiciFileModel();
   List<String> Uf = [];
   late String UfTxt;
 
@@ -859,21 +858,321 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
 
   Card dataInServicesCard(BuildContext context, int index) => Card(
     elevation: 0.9,
-    color: Color(0xffFFFFFF),
     child: Container(
         alignment: Alignment.topLeft,
-        height: 700,
-        padding: EdgeInsets.fromLTRB(20.0, 20.0, 0.0, 20.0),
-        decoration: new BoxDecoration(
-          color: Color(0xffFFFFFF), //new Color.fromRGBO(255, 0, 0, 0.0),
-          borderRadius: new BorderRadius.circular(5.0),
+        height: 450,
+        padding: const EdgeInsets.fromLTRB(20.0, 20.0, 0.0, 20.0),
+        decoration: BoxDecoration(
+          color: const Color(0xffFFFFFF), //new Color.fromRGBO(255, 0, 0, 0.0),
+          borderRadius: BorderRadius.circular(5.0),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            Flexible(
+              child: RichText(
+                  textAlign: TextAlign.start,
+                  softWrap: false,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  text: TextSpan(children: [
+                    const TextSpan(
+                      text: 'UF' + "\n ",
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        color: Colors.black,
+                        fontSize: 16.0,
+                      ),
+                    ),
+                    TextSpan(
+                      text: siciFileModel.dadosEmServicos![index].uf,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.normal,
+                        color: Colors.black54,
+                        fontSize: 15.0,
+                      ),
+                    ),
+                  ])),
+            ),
+            const SizedBox(height: 10.0),
+            Flexible(
+              child: RichText(
+                  textAlign: TextAlign.start,
+                  softWrap: false,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  text: TextSpan(children: [
+                    const TextSpan(
+                      text: 'Tipo cliente' + "\n ",
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        color: Colors.black,
+                        fontSize: 16.0,
+                      ),
+                    ),
+                    TextSpan(
+                      text: siciFileModel.dadosEmServicos![index].tipoCliente,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.normal,
+                        color: Colors.black54,
+                        fontSize: 15.0,
+                      ),
+                    ),
+                  ])),
+            ),
+            const SizedBox(height: 10.0),
+            Flexible(
+              child: RichText(
+                  textAlign: TextAlign.start,
+                  softWrap: false,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  text: TextSpan(children: [
+                    const TextSpan(
+                      text: 'Tipo de Atendimento' + "\n ",
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        color: Colors.black,
+                        fontSize: 16.0,
+                      ),
+                    ),
+                    TextSpan(
+                      text: siciFileModel.dadosEmServicos![index].tipoAtendimento,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.normal,
+                        color: Colors.black54,
+                        fontSize: 15.0,
+                      ),
+                    ),
+                  ])),
+            ),
+            const SizedBox(height: 10.0),
+            Flexible(
+              child: RichText(
+                  textAlign: TextAlign.start,
+                  softWrap: false,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  text: TextSpan(children: [
+                    const TextSpan(
+                      text: 'Tipo acesso' + "\n ",
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        color: Colors.black,
+                        fontSize: 15.0,
+                      ),
+                    ),
+                    TextSpan(
+                      text: siciFileModel.dadosEmServicos![index].tipoAcesso,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.normal,
+                        color: Colors.black54,
+                        fontSize: 16.0,
+                      ),
+                    ),
+                  ])),
+            ),
+            const SizedBox(height: 10.0),
+            Flexible(
+              child: RichText(
+                  textAlign: TextAlign.start,
+                  softWrap: false,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  text: TextSpan(children: [
+                    const TextSpan(
+                      text: 'Tecnologia' + "\n ",
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        color: Colors.black,
+                        fontSize: 16.0,
+                      ),
+                    ),
+                    TextSpan(
+                      text: siciFileModel.dadosEmServicos![index].tecnologia,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.normal,
+                        color: Colors.black54,
+                        fontSize: 15.0,
+                      ),
+                    ),
+                  ])),
+            ),
+            const SizedBox(height: 10.0),
+            Flexible(
+              child: RichText(
+                  textAlign: TextAlign.start,
+                  softWrap: false,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  text: TextSpan(children: [
+                    const TextSpan(
+                      text: 'Tipo produto' + "\n ",
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        color: Colors.black,
+                        fontSize: 16.0,
+                      ),
+                    ),
+                    TextSpan(
+                      text: siciFileModel.dadosEmServicos![index].tipoProduto,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.normal,
+                        color: Colors.black54,
+                        fontSize: 15.0,
+                      ),
+                    ),
+                  ])),
+            ),
+            const SizedBox(height: 10.0),
+            Flexible(
+              child: RichText(
+                  textAlign: TextAlign.start,
+                  softWrap: false,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  text: TextSpan(children: [
+                    const TextSpan(
+                      text: 'Velocidade' + "\n ",
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        color: Colors.black,
+                        fontSize: 16.0,
+                      ),
+                    ),
+                    TextSpan(
+                      text: siciFileModel.dadosEmServicos![index].velocidade,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.normal,
+                        color: Colors.black54,
+                        fontSize: 15.0,
+                      ),
+                    ),
+                  ])),
+            ),
+            const SizedBox(height: 10.0),
+            const Divider(),
+            SizedBox(
+              height: 40,
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  TextButton.icon(
+                    style: TextButton.styleFrom(
+                      minimumSize: const Size(150, 40),
+                      maximumSize: const Size(150, 40),
+                      backgroundColor:  const Color(0xff00A5B2),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                    ),
+                    icon: Icon(
+                      Icons.visibility,
+                      color: Colors.white,
+                    ),
+                    //`Icon` to display
+                    label: const Text('Visualizar',
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      softWrap: false,
+                    ),
+                    //`Text` to display
+                    onPressed: () {
+                      FocusScope.of(context).requestFocus(FocusNode());
+                      Navigator.push(
+                          context,
+                          CupertinoPageRoute<DadosEmServicos>(
+                              fullscreenDialog: true, builder: (BuildContext context) => DataInServicesView(sDadosEmServicos: siciFileModel.dadosEmServicos![index]))).then((value) {
+                        if (value != null) {
+                          if (quantitativeDistributionPhysicalAccessesService.isEmpty) {
+                            //value.index = 1;
+                            quantitativeDistributionPhysicalAccessesService = [];
+                          } else {
+                            //value.index = quantitativeDistributionPhysicalAccessesService.length + 1;
+                          }
+                          //quantitativeDistributionPhysicalAccessesService.add(value);
+                        }
+                      });
+                    },
+                  ),
+                  const SizedBox(width: 10.0),
+                  TextButton.icon(
+                    style: TextButton.styleFrom(
+                      minimumSize: const Size(150, 40),
+                      maximumSize: const Size(150, 40),
+                      backgroundColor: Colors.red,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                    ),
+                    icon: const Icon(
+                      Icons.delete_outline,
+                      color: Colors.white,
+                    ),
+                    //`Icon` to display
+                    label: const Text('Remover',
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      softWrap: false,
+                    ),
+                    //`Text` to display
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return Dialog(
+                              child: Padding(
+                                padding: EdgeInsets.all(25.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.fromLTRB(
+                                          0.0, 10.0, 0.0, 15.0),
+                                      height: 50.0,
+                                      child: const Text(
+                                        "Deseja realmente remover ?",
+                                        textAlign: TextAlign.start,
+                                        softWrap: false,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            fontFamily: 'open-sans-regular',
+                                            fontSize: 17.0,
+                                            color: Color(0xFF000000)),
+                                      ),
+                                    ),
+                                    Container(
+                                      margin: const EdgeInsets.fromLTRB(
+                                          0.0, 10.0, 0.0, 15.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: <Widget>[
 
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ));
+                        },
+                      );
+                    },
+                  ),
+                  const SizedBox(width: 10.0),
+                ],
+              ),
+            ),
           ],
         )),
   );
