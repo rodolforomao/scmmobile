@@ -135,7 +135,7 @@ class ServicoMobileService {
     return operacao;
   }
 
-  Future<Operation> OnRealizarLancamentosSici(SiciFileModel siciFileModel) async {
+  static Future<Operation> onMakeReleasesSici(SiciFileModel siciFileModel) async {
     Operation operacao = Operation();
     try {
 
@@ -167,6 +167,18 @@ class ServicoMobileService {
       response.fields['controllerReceitaLiquida'] = siciFileModel.receitaLiquida == null ? "" : siciFileModel.receitaLiquida!;
       response.fields['controllerObservacoes'] = siciFileModel.observacoes ?? '';
       int index = 1;
+      for (var item in siciFileModel.dadosEmServicos!.toList()) {
+        response.fields['cod_ibge_$index'] = item.codIbge ?? '';
+        response.fields['uf_$index'] = item.uf ?? '';
+        response.fields['tipo_cliente_$index'] = item.tipoCliente ?? '';
+        response.fields['tipo_atendimento_$index'] = item.tipoAtendimento ?? '';
+        response.fields['tipo_acesso_$index'] = item.tipoAcesso ?? '';
+        response.fields['tecnologia_$index'] = item.tecnologia ?? '';
+        response.fields['tipo_produto_$index'] = item.tipoProduto ?? '';
+        response.fields['velocidade_$index'] = item.velocidade ?? '';
+        response.fields['quantidade_acesso_$index'] = item.quantidadeAcesso ?? '';
+        index++;
+      }
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
       if (streamedResponse.statusCode == 200) {

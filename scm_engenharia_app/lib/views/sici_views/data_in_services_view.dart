@@ -216,8 +216,8 @@ class DataInServicesState extends State<DataInServicesView> {
                 ),
                 decoration:  const InputDecoration(
                   filled: true,
-                  labelText: 'Mês',
-                  hintText: 'Mês',
+                  labelText: 'Estado',
+                  hintText: 'Estado',
                   //contentPadding: const EdgeInsets.fromLTRB(10.0, 18.0, 18.0, 0.0),
                   border: InputBorder.none,
                   //focusColor: Colors.transparent,

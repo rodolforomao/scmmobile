@@ -418,7 +418,8 @@ class ListSiciSentState extends State<ListSiciSentView> {
                         //width: MediaQuery.of(context).size.width / 3,
                         child: InkWell(
                           onTap: () {
-                            onVisualizar(siciFileModelList[index]);
+                           onVisualizar(siciFileModelList[index]);
+                           // ServicoMobileService.onMakeReleasesSici(siciFileModelList[index]);
                           },
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
