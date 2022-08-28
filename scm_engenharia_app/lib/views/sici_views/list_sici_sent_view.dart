@@ -23,6 +23,8 @@ class ListSiciSentState extends State<ListSiciSentView> {
   List<SiciFileModel> siciFileModelList = [];
   late StreamSubscription<ConnectivityResult> subscription;
   TypeView statusView = TypeView.viewLoading;
+  final txtControllerVelocity = TextEditingController();
+  final txtCorporateName = TextEditingController();
 
   onRestWeb() async {
   //  OnRealizandoOperacao("Web: Buscando lançamentos", true);
@@ -35,8 +37,8 @@ class ListSiciSentState extends State<ListSiciSentView> {
           throw (resultRest.message!);
         } else {
           setState(() async {
-            List<SiciFustFormModel> RespSiciFustFormList  = resultRest.resultList.map<SiciFustFormModel>((json) => SiciFustFormModel.fromJson(json)).toList();
-            siciFileModelList = await  ParseRespJsonToView.parseSiciFustFormModelToSiciFileList(RespSiciFustFormList);
+            List<SiciFustFormModel> respSiciFustFormList  = resultRest.resultList.map<SiciFustFormModel>((json) => SiciFustFormModel.fromJson(json)).toList();
+            siciFileModelList = await  ParseRespJsonToView.parseSiciFustFormModelToSiciFileList(respSiciFustFormList);
             if(siciFileModelList.isEmpty)
               {
                 throw ('Não é possível converter as informações');
@@ -93,11 +95,85 @@ class ListSiciSentState extends State<ListSiciSentView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: true,
-        centerTitle: true,
-        elevation: 0.0,
-        title: const Text('Sici/Fust Enviados - Período'),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(140.0),
+        child:  AppBar(
+          automaticallyImplyLeading: true,
+          centerTitle: true,
+          elevation: 0.0,
+          title: const Text('Sici/Fust Enviados - Período'),
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(0.0),
+            child: Container(
+              width: double.infinity,
+              constraints:  const BoxConstraints(
+                maxWidth: 900,
+              ),
+              padding: const EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 15.0),
+              child:  Row(
+                children: [
+                  Flexible(
+                    flex: 6,
+                    fit: FlexFit.tight,
+                    child: Theme(
+                      data: Theme.of(context).copyWith(splashColor: Colors.transparent),
+                      child: TextField(
+                        enableInteractiveSelection: true,
+                        keyboardType: TextInputType.text,
+                        controller: txtCorporateName,
+                        textInputAction: TextInputAction.go,
+                        maxLines: 1,
+                        style: const TextStyle(
+                          fontSize: 20.0,
+                          color: Color(0xffFFFFFF),
+                        ),
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: const Color(0xff70FFFFFF),
+                          hintStyle: const TextStyle(fontSize: 14.0, color: Color(0xff80FFFFFF)),
+                          hintText: 'Razão social',
+                          contentPadding: const EdgeInsets.fromLTRB(10.0, 9.0, 10.0, 11.0),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                            const BorderSide(color: Colors.white, width: 0.5),
+                            borderRadius: BorderRadius.circular(25.7),
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Colors.transparent, width: 0.9),
+                            borderRadius: BorderRadius.circular(25.7),
+                          ),
+                        ),
+                        onSubmitted: (value) {
+                          FocusScope.of(context).requestFocus(FocusNode());
+
+                        },
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 5.0,
+                  ),
+                  Flexible(
+                    flex: 1,
+                    fit: FlexFit.tight,
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.search_outlined,
+                        color: Colors.white,
+                      ),
+                      iconSize: 30,
+                      onPressed: () {
+                        FocusScope.of(context).requestFocus(FocusNode());
+
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
       ),
       body: viewType(MediaQuery.of(context).size.height),
     );

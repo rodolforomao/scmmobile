@@ -6,7 +6,6 @@ import '../../help/components.dart';
 import '../../help/formatter/cnpj_input_formatter.dart';
 import '../../models/input/sici_fust_form_model.dart';
 import '../../models/output/environment_variables.dart';
-
 import '../../models/util_model/util_dropdown_list.dart';
 import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
@@ -49,8 +48,10 @@ class DataInServicesState extends State<DataInServicesView> {
   CodIbge valueCodIbge = CodIbge();
   final txtNumberYear = TextEditingController();
   final txtCounty = TextEditingController();
+
   final txtControllerVelocity = TextEditingController();
   final txtControllerAccesses = TextEditingController();
+  final txtMunicipalityName  = TextEditingController();
 
   FocusNode? txtFocusNodeVelocity;
   FocusNode? txtFocusNodeAccesses;
@@ -106,7 +107,6 @@ class DataInServicesState extends State<DataInServicesView> {
         productTypeValue.descricao = 'SELECIONE...';
         productTypeDropdownList!.add(productTypeValue);
         productTypeValue   = productTypeDropdownList!.last;
-        statusView = TypeView.viewRenderInformation;
       });
       if(widget.sDadosEmServicos == null)
         {
@@ -125,6 +125,7 @@ class DataInServicesState extends State<DataInServicesView> {
           txtControllerVelocity.text = widget.sDadosEmServicos!.velocidade!;
           txtControllerAccesses.text = widget.sDadosEmServicos!.quantidadeAcesso!;
         }
+      setState((){statusView = TypeView.viewRenderInformation;});
     } catch (error) {
       OnAlertaInformacaoErro(error.toString(),context);
     }
@@ -137,7 +138,6 @@ class DataInServicesState extends State<DataInServicesView> {
       listMonths = <UtilDropdownList>[];
       listMonths = await Components.onMonths();
       utilDropdownListMonth = listMonths.first;
-
     });
     onInc();
   }
@@ -149,7 +149,7 @@ class DataInServicesState extends State<DataInServicesView> {
 
   @override
   Widget build(BuildContext context) {
-    double maxHeight = GlobalView.maxHeightAppBar(context, 55);
+    double maxHeight = GlobalView.maxHeightAppBar(context, 140);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(55.0),
@@ -307,8 +307,8 @@ class DataInServicesState extends State<DataInServicesView> {
                 onTap: () {
                   FocusScope.of(context).requestFocus(FocusNode());
                   try {
-                    if (valueCodIbge.id == '0') {
-                      throw ('A uf deve ser selecionado');
+                    if (ufValue.id == '0') {
+                      throw ('UF deve ser selecionado');
                     } else
                     {
                       final codIbges = resulEnvironmentVariables.codIbge!.where((i) => i.idUf == ufValue.id).toList();
@@ -337,8 +337,8 @@ class DataInServicesState extends State<DataInServicesView> {
                 textInputAction: TextInputAction.done,
                 textAlign: TextAlign.start,
                 decoration: const InputDecoration(
-                  labelText: 'Selecione ..',
-                  hintText: 'Selecione ..',
+                  labelText: 'O código IBGE..',
+                  hintText: 'O código IBGE..',
                 ),
               ),),
               Padding(padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 15.0),child:  Row(
@@ -502,47 +502,46 @@ class DataInServicesState extends State<DataInServicesView> {
                   ),
                 ],
               )),
-              Padding(padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 15.0),child:   Expanded(
-                child:  DropdownButtonFormField<TipoTecnologia>(
-                  elevation: 7,
-                  dropdownColor: AppThema.themeNotifierState.value.mode == ThemeMode.dark ? const Color(0xff000000) : const Color(0xffFFFFFF),
-                  isExpanded: true,
-                  isDense: true,
-                  icon: const Icon(
-                    Icons.expand_more,
-                    size: 23,
-                    color: Color(0xFFb8b8b8),
-                  ),
-                  decoration:  const InputDecoration(
-                    filled: true,
-                    labelText: 'Nome tecnologia',
-                    hintText: 'Nome tecnologia',
-                    //contentPadding: const EdgeInsets.fromLTRB(10.0, 18.0, 18.0, 0.0),
-                    border: InputBorder.none,
-                    //focusColor: Colors.transparent,
-                  ),
-                  value: technologyTypeValue,
-                  items: technologyTypeDropdownList!.map(
-                        (v) => DropdownMenuItem<TipoTecnologia>(
-                        value: v,
-                        child: Text(
-                          v.descricao!,
-                          overflow: TextOverflow.ellipsis,
-                          softWrap: true,
-                          maxLines: 1,
-                        )),
-                  ).toList(),
-                  onChanged: (newValue) {
-                    setState(() {
-                      technologyTypeValue = newValue!;
-                    });
-                  },
+              Padding(padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 15.0),child:DropdownButtonFormField<TipoTecnologia>(
+                elevation: 7,
+                dropdownColor: AppThema.themeNotifierState.value.mode == ThemeMode.dark ? const Color(0xff000000) : const Color(0xffFFFFFF),
+                isExpanded: true,
+                isDense: true,
+                icon: const Icon(
+                  Icons.expand_more,
+                  size: 23,
+                  color: Color(0xFFb8b8b8),
                 ),
+                decoration:  const InputDecoration(
+                  filled: true,
+                  labelText: 'Nome tecnologia',
+                  hintText: 'Nome tecnologia',
+                  //contentPadding: const EdgeInsets.fromLTRB(10.0, 18.0, 18.0, 0.0),
+                  border: InputBorder.none,
+                  //focusColor: Colors.transparent,
+                ),
+                value: technologyTypeValue,
+                items: technologyTypeDropdownList!.map(
+                      (v) => DropdownMenuItem<TipoTecnologia>(
+                      value: v,
+                      child: Text(
+                        v.descricao!,
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: true,
+                        maxLines: 1,
+                      )),
+                ).toList(),
+                onChanged: (newValue) {
+                  setState(() {
+                    technologyTypeValue = newValue!;
+                  });
+                },
               ),),
               Padding(padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 15.0),child:   Row(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Expanded(
+                    flex:1,
                     child: TextField(
                       autofocus: false,
                       keyboardType: TextInputType.number,
@@ -562,6 +561,7 @@ class DataInServicesState extends State<DataInServicesView> {
                   ),
                   const SizedBox(width: 15),
                   Expanded(
+                      flex:1,
                     child: TextField(
                       controller: txtControllerAccesses,
                       textAlign: TextAlign.start,

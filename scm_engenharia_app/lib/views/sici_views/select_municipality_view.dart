@@ -17,7 +17,7 @@ class SelectMunicipalityView extends StatefulWidget {
 class SelectMunicipalityState extends State<SelectMunicipalityView>  {
 
   TypeView statusView = TypeView.viewLoading;
-
+  final txtMunicipalityName  = TextEditingController();
   onInc() async {
     try {
       setState((){statusView = TypeView.viewLoading;});
@@ -48,11 +48,85 @@ class SelectMunicipalityState extends State<SelectMunicipalityView>  {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: true,
-        centerTitle: true,
-        elevation: 0.0,
-        title:  Text('Municípios do estado de ${widget.sUf!.uf}',),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(140.0),
+        child:  AppBar(
+          automaticallyImplyLeading: true,
+          centerTitle: true,
+          elevation: 0.0,
+          title:  Text('Municípios do estado ${widget.sUf!.uf}',),
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(0.0),
+            child: Container(
+              width: double.infinity,
+              constraints:  const BoxConstraints(
+                maxWidth: 900,
+              ),
+              padding: const EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 15.0),
+              child:  Row(
+                children: [
+                  Flexible(
+                    flex: 6,
+                    fit: FlexFit.tight,
+                    child: Theme(
+                      data: Theme.of(context).copyWith(splashColor: Colors.transparent),
+                      child: TextField(
+                        enableInteractiveSelection: true,
+                        keyboardType: TextInputType.text,
+                        controller: txtMunicipalityName,
+                        textInputAction: TextInputAction.go,
+                        maxLines: 1,
+                        style: const TextStyle(
+                          fontSize: 20.0,
+                          color: Color(0xffFFFFFF),
+                        ),
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: const Color(0xff70FFFFFF),
+                          hintStyle: TextStyle(fontSize: 14.0, color: const Color(0xff80FFFFFF)),
+                          hintText: 'Nome do município',
+                          contentPadding: const EdgeInsets.fromLTRB(10.0, 9.0, 10.0, 11.0),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                            const BorderSide(color: Colors.white, width: 0.5),
+                            borderRadius: BorderRadius.circular(25.7),
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Colors.transparent, width: 0.9),
+                            borderRadius: BorderRadius.circular(25.7),
+                          ),
+                        ),
+                        onSubmitted: (value) {
+                          FocusScope.of(context).requestFocus(FocusNode());
+
+                        },
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 5.0,
+                  ),
+                  Flexible(
+                    flex: 1,
+                    fit: FlexFit.tight,
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.search_outlined,
+                        color: Colors.white,
+                      ),
+                      iconSize: 30,
+                      onPressed: () {
+                        FocusScope.of(context).requestFocus(FocusNode());
+
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
       ),
       body: viewType(MediaQuery.of(context).size.height),
     );
