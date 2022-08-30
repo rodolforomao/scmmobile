@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import '../../models/output/environment_variables.dart';
 import '../../models/operation.dart';
 import '../../web_service/servico_mobile_service.dart';
@@ -18,28 +20,21 @@ class EnvironmentVariableState extends State<EnvironmentVariableView>  {
 
   TypeView statusView = TypeView.viewLoading;
 
-  onIncOld() async {
+  onEnvironmentVariables() async {
     try {
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
         OnAlertaInformacaoErro('Verifique sua conexão com a internet e tente novamente.',context);
       } else {
-        setState((){statusView = TypeView.viewLoading;});
-        final String response = await rootBundle.loadString('assets/variavel_de_ambiente.json');
-        Operation resultRest = await ServicoMobileService.onEnvironmentVariables();
+        OnRealizandoOperacao('Realizando operação', true,context);
+        Operation resultRest = await ServicoMobileService.onEnvironmentVariables().whenComplete(() =>  OnRealizandoOperacao('', false,context));
         if (resultRest.erro) {
           throw (resultRest.message!);
         } else {
-          setState(() {
-            EnvironmentVariables resul = EnvironmentVariables.fromJson(response as Map<String, dynamic>);
-            statusView = TypeView.viewRenderInformation;
-          });
+          write(resultRest.result.toString());
         }
       }
     } catch (error) {
-      setState(() {
-        statusView = TypeView.viewErrorInformation;
-        GlobalScaffold.ErroInformacao = error.toString();
-      });
+      OnAlertaInformacaoErro(error.toString(),context);
     }
   }
 
@@ -56,6 +51,20 @@ class EnvironmentVariableState extends State<EnvironmentVariableView>  {
         statusView = TypeView.viewErrorInformation;
         GlobalScaffold.ErroInformacao = error.toString();
       });
+    }
+  }
+
+
+//gravar/substituir dados em um arquivo de texto
+  write(String content) async {
+    try {
+      OnRealizandoOperacao('Gravando Dados', true,context);
+      final directory = await getApplicationDocumentsDirectory();
+      final File file = File('${directory.path}/variavel_de_ambiente.json');
+      await file.writeAsString(content);
+      OnRealizandoOperacao('', false,context);
+    } catch (error) {
+      OnAlertaInformacaoErro(error.toString(),context);
     }
   }
 
@@ -111,7 +120,7 @@ class EnvironmentVariableState extends State<EnvironmentVariableView>  {
                 ),
                 SizedBox(height: 30.0),
                 Text(
-                  "variáveis de ambiente",
+                    'variáveis de ambiente',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     decoration: TextDecoration.none,
@@ -145,7 +154,7 @@ class EnvironmentVariableState extends State<EnvironmentVariableView>  {
                   child: const Text(' ATUALIZAR '),
                   onPressed: () async {
                     FocusScope.of(context).requestFocus(FocusNode());
-
+                    onEnvironmentVariables();
                   },
                 ),),),
                 SizedBox(height: 20.0),

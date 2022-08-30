@@ -1,6 +1,5 @@
 import 'package:realm/realm.dart';
 import 'package:scm_engenharia_app/data/tb_form_sici_fust.dart';
-import 'package:scm_engenharia_app/data/tb_quantitative_distribution_physical_accesses_service.dart';
 import '../models/operation.dart';
 import 'tb_user.dart';
 
@@ -12,7 +11,7 @@ class AppScmEngenhariaMobileBll {
 
   late Realm realm;
   AppScmEngenhariaMobileBll() {
-    final config = Configuration.local([TbUser.schema ,TbFormSiciFust.schema ,TbQuantitativeDistributionPhysicalAccessesService.schema],schemaVersion: 2);
+    final config = Configuration.local([TbUser.schema ,TbFormSiciFust.schema],schemaVersion: 3);
     realm = Realm(config);
   }
 
@@ -106,31 +105,40 @@ class AppScmEngenhariaMobileBll {
 
   // Form Sici - Fust ---------------------------------------------------------------------------------
 
-  Future<Operation> onSaveFormSiciFust(TbFormSiciFust formSiciFust,List<TbQuantitativeDistributionPhysicalAccessesService> quantitativeDistributionPhysicalAccessesService) async {
+  Future<Operation> onSaveFormSiciFust(TbFormSiciFust formSiciFust) async {
     Operation operation = Operation();
     operation.result = null;
     operation.message = 'Operação realizada com sucesso';
     operation.erro = false;
     try {
-      int index = 0;
-      for (var prop in quantitativeDistributionPhysicalAccessesService) {
-        quantitativeDistributionPhysicalAccessesService[index].idFichaSiciApp =formSiciFust.idFichaSiciApp.toString();
-        index++;
-      }
       realm.write(() {
         realm.add<TbFormSiciFust>(formSiciFust);
-        realm.addAll<TbQuantitativeDistributionPhysicalAccessesService>(quantitativeDistributionPhysicalAccessesService);
       });
-     // onSaveDistributionQuantitativePhysicalAccessesService(quantitativeDistributionPhysicalAccessesService);
       operation.result = true;
     } catch (ex) {
       operation.erro = true;
-      operation.message = ' , erro ' + ex.toString();
+      operation.message = 'Erro $ex';
     }
     return operation;
   }
 
-  Future<Operation> onSelectFormSiciFustId(String id) async {
+  Future<Operation> onSelectFormSiciFustIdApp(String idFormSiciFustApp) async {
+    Operation operacao = Operation();
+    try {
+      operacao.result = true;
+      operacao.message = 'Operação realizada com sucesso';
+      operacao.erro = false;
+      realm.write(() {
+        realm.all<TbFormSiciFust>();
+      });
+    } catch (ex) {
+      operacao.erro = true;
+      operacao.message = ' , erro $ex';
+    }
+    return operacao;
+  }
+
+  Future<Operation> onSelectFormSiciFustIdRecord(String idRecord) async {
     Operation operacao = Operation();
     try {
       operacao.result = true;
@@ -178,72 +186,4 @@ class AppScmEngenhariaMobileBll {
     return operation;
   }
 
-// DISTRIBUTION OF THE QUANTITATIVE OF PHYSICAL ACCESS IN SERVICE -------------------------------------
-  
-  Future<Operation> onSaveDistributionQuantitativePhysicalAccessesService(List<TbQuantitativeDistributionPhysicalAccessesService> quantitativeDistributionPhysicalAccessesService) async {
-    Operation operation = Operation();
-    operation.result = null;
-    operation.message = 'Operação realizada com sucesso';
-    operation.erro = false;
-    try {
-
-      realm.write(() {
-        realm.addAll<TbQuantitativeDistributionPhysicalAccessesService>(quantitativeDistributionPhysicalAccessesService);
-      });
-      operation.result = true;
-    } catch (ex) {
-      operation.erro = true;
-      operation.message = ' , erro ' + ex.toString();
-    }
-    return operation;
-  }
-
-  Future<Operation> onSelectDistributionQuantitativePhysicalAccessesServiceByIdSiciFust(int id) async {
-    Operation operation = Operation();
-    try {
-      operation.result = null;
-      operation.message = 'Operação realizada com sucesso';
-      operation.erro = false;
-      realm.write(() {
-        realm.all<TbQuantitativeDistributionPhysicalAccessesService>().query('idFichaSiciApp == $id');
-      });
-      operation.result = true;
-    } catch (ex) {
-      operation.erro = true;
-      operation.message = ' , erro $ex';
-    }
-    return operation;
-  }
-
-  Future<Operation> onDeleteDistributionQuantitativePhysicalAccessesService(int id) async {
-    Operation operation = Operation();
-    try {
-      operation.result = null;
-      operation.message = 'Operação realizada com sucesso';
-      operation.erro = false;
-      realm.write(() {
-        realm.all<TbQuantitativeDistributionPhysicalAccessesService>().query('idApp == $id');
-      });
-      operation.result = true;
-    } catch (ex) {
-      operation.erro = true;
-      operation.message = ' , erro $ex';
-    }
-    return operation;
-  }
-
-  Future<Operation> onCleanTbDistributionQuantitativePhysicalAccessesService() async {
-    Operation operacao = Operation();
-    try {
-      operacao.result = true;
-      operacao.message = 'Operação realizada com sucesso';
-      realm.write(() {
-        realm.deleteAll<TbQuantitativeDistributionPhysicalAccessesService>();
-      });
-    } catch (ex) {
-      operacao.erro = true;
-      operacao.message = ' , erro $ex';
-    }
-    return operacao;
-  }
 }

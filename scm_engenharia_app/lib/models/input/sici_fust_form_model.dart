@@ -3,7 +3,7 @@ class SiciFileModel {
   int? idFichaSiciApp;
   String? idEmpresa;
   String? isSincronizar;
-  String? idLancamento;
+  String? id;
   String? periodoReferencia;
   String? razaoSocial;
   String? telefoneFixo;
@@ -26,7 +26,7 @@ class SiciFileModel {
     this.idFichaSiciApp = 0,
     this.idEmpresa,
     this.isSincronizar,
-    this.idLancamento,
+    this.id,
     this.periodoReferencia,
     this.razaoSocial,
     this.telefoneFixo,
@@ -51,7 +51,7 @@ class SiciFileModel {
     idFichaSiciApp = json['idFichaSiciApp'];
     idEmpresa = json['idEmpresa'];
     isSincronizar = json['isSincronizar'];
-    idLancamento = json['idLancamento'];
+    id = json['id'];
     periodoReferencia = json['periodoReferencia'];
     razaoSocial = json['razaoSocial'];
     telefoneFixo = json['telefoneFixo'];
@@ -82,7 +82,7 @@ class SiciFileModel {
     data['idFichaSiciApp'] = this.idFichaSiciApp;
     data['idEmpresa'] = this.idEmpresa == null ? "" : this.idEmpresa;
     data['isSincronizar'] = this.isSincronizar == null ? "" : this.isSincronizar;
-    data['idLancamento'] = this.idLancamento == null ? "" : this.idLancamento;
+    data['idLancamento'] = this.id == null ? "" : this.id;
     data['periodoReferencia'] = this.periodoReferencia == null ? "" : this.periodoReferencia;
     data['razaoSocial'] = this.razaoSocial == null ? "" : this.razaoSocial;
     data['telefoneFixo'] = this.telefoneFixo == null ? "" : this.telefoneFixo;

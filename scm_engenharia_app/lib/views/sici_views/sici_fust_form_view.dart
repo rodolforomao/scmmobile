@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -6,14 +8,15 @@ import 'package:realm/realm.dart';
 import 'package:scm_engenharia_app/views/sici_views/data_in_services_view.dart';
 import '../../data/app_scm_engenharia_mobile_bll.dart';
 import '../../data/tb_form_sici_fust.dart';
-import '../../data/tb_quantitative_distribution_physical_accesses_service.dart';
 import '../../help/components.dart';
 import '../../help/formatter/cnpj_input_formatter.dart';
 import '../../help/formatter/telefone_input_formatter.dart';
 import '../../help/formatter/valor_input_formatter.dart';
+import '../../models/input/input_sici_fust_form.dart';
 import '../../models/input/sici_fust_form_model.dart';
 import '../../models/operation.dart';
 import '../../models/output/sici_fust_model.dart';
+import '../../models/parse_resp_json_to_view.dart';
 import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
 
@@ -34,10 +37,8 @@ abstract class IsSilly {
 
 class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
 
-  final resulFormSiciFust = TbFormSiciFust(ObjectId(),'0','S','0','','','','','','','','','','','','','','','','','',);
-  late List<TbQuantitativeDistributionPhysicalAccessesService> quantitativeDistributionPhysicalAccessesService;
+  InputSiciFustForm inputSiciFustForm = InputSiciFustForm();
 
-  SiciFileModel siciFileModel = SiciFileModel();
   List<String> Uf = [];
   late String UfTxt;
 
@@ -100,43 +101,46 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
 
    onSaveLocalDbForm()  async {
     try {
-      if (txtControllerCnpj.text.isEmpty) throw ("O campo cnpj é obrigatório");
-      resulFormSiciFust.periodoReferencia = txtControllerReferencePeriod.text;
-      resulFormSiciFust.isSincronizar = "S";
-      resulFormSiciFust.cnpj = txtControllerCnpj.text;
+
+      if (txtControllerCnpj.text.isEmpty) throw ('O campo cnpj é obrigatório');
+      inputSiciFustForm.periodoReferencia = txtControllerReferencePeriod.text;
+      inputSiciFustForm.cnpj = txtControllerCnpj.text;
       if (txtControllerSocialReason.text.isEmpty)
         throw ("O campo Razão Social é obrigatório");
-      resulFormSiciFust.razaoSocial = txtControllerSocialReason.text;
+      inputSiciFustForm.razaoSocial = txtControllerSocialReason.text;
       if (txtControllerTelefoneMovel.text.isEmpty && txtControllerLandline.text.isEmpty) {
         throw ("Pelo menos um campo 'Telefone' é obrigatório");
       }
-      resulFormSiciFust.telefoneMovel = txtControllerTelefoneMovel.text;
-      resulFormSiciFust.telefoneFixo = txtControllerLandline.text;
-      resulFormSiciFust.receitaBruta = txtControllerGrossRevenue.text;
-      resulFormSiciFust.receitaLiquida = txtControllerNetRevenue.text;
-      resulFormSiciFust.simples = txtControllerSimpleValue.text;
-      resulFormSiciFust.simplesPorc = txtControllerSimpleAliquot.text;
-      resulFormSiciFust.icms = txtControllerICMSvalue.text;
-      resulFormSiciFust.icmsPorc = txtControllerIcmsPorc.text;
-      resulFormSiciFust.pis = txtControllerPis.text;
-      resulFormSiciFust.pisPorc = txtControllerPisPorc.text;
-      resulFormSiciFust.cofins = txtControllerCofins.text;
-      resulFormSiciFust.cofinsPorc = txtControllerCofinsPorc.text;
-      resulFormSiciFust.observacoes = txtControllerGeneralObservations.text;
-     // if (_FichaSici.distribuicaoFisicosServicoQuantitativo.length == 0) {
-     //   throw ("Distribuição do quantitativo de acessos físicos em serviço é obrigatório,favor adicionar.");
-     // }
-      Operation respFormSiciFust = await AppScmEngenhariaMobileBll.instance.onSaveFormSiciFust(resulFormSiciFust,quantitativeDistributionPhysicalAccessesService);
+      inputSiciFustForm.telefoneMovel = txtControllerTelefoneMovel.text;
+      inputSiciFustForm.telefoneFixo = txtControllerLandline.text;
+      inputSiciFustForm.receitaBruta = txtControllerGrossRevenue.text;
+      inputSiciFustForm.receitaLiquida = txtControllerNetRevenue.text;
+      inputSiciFustForm.simples = txtControllerSimpleValue.text;
+      inputSiciFustForm.simplesPorc = txtControllerSimpleAliquot.text;
+      inputSiciFustForm.icms = txtControllerICMSvalue.text;
+      inputSiciFustForm.icmsPorc = txtControllerIcmsPorc.text;
+      inputSiciFustForm.pis = txtControllerPis.text;
+      inputSiciFustForm.pisPorc = txtControllerPisPorc.text;
+      inputSiciFustForm.cofins = txtControllerCofins.text;
+      inputSiciFustForm.cofinsPorc = txtControllerCofinsPorc.text;
+      inputSiciFustForm.observacoes = txtControllerGeneralObservations.text;
+       if (inputSiciFustForm.dadosEmServicos!.length == 0) {
+         throw ("Distribuição do quantitativo de acessos físicos em serviço é obrigatório,favor adicionar.");
+       }
+      OnRealizandoOperacao('Realizando operação', true,context);
+       var sd = inputSiciFustForm.toJson();
+      TbFormSiciFust formSiciFust = TbFormSiciFust(ObjectId(),inputSiciFustForm.id!,jsonEncode(inputSiciFustForm.toJson()));
+      Operation respFormSiciFust = await AppScmEngenhariaMobileBll.instance.onSaveFormSiciFust(formSiciFust).whenComplete(() => OnRealizandoOperacao('', false,context));
       if (respFormSiciFust.erro) {
         throw respFormSiciFust.message!;
       } else if (respFormSiciFust.result == null) {
         throw respFormSiciFust.message!;
       } else {
-
+        OnAlertaInformacaoSucesso(respFormSiciFust.message,context);
       }
 
     } catch (error) {
-      OnRealizandoOperacao('', false,context);
+
       OnAlertaInformacaoErro(error.toString(),context);
     }
   }
@@ -195,7 +199,7 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
         UfTxt = Uf.first;
       });
       if (widget.siciFileModel != null) {
-        siciFileModel = widget.siciFileModel!;
+        inputSiciFustForm  = await ParseRespModel.parseRespSiciFileModelToInputSiciFustForm(widget.siciFileModel!);
         if (widget.siciFileModel!.periodoReferencia!.isNotEmpty) {
           selectedDate = DateTime.parse(widget.siciFileModel!.periodoReferencia!);
           txtControllerReferencePeriod.text = DateFormat('dd/MM/yyyy').format(DateTime.parse(widget.siciFileModel!.periodoReferencia!));
@@ -229,7 +233,6 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
          txtControllerNetRevenue.text = widget.siciFileModel!.receitaLiquida!;
         // Observações Gerais
          txtControllerGeneralObservations.text = widget.siciFileModel!.observacoes!;
-
       } else {
       }
     } catch (error) {
@@ -792,16 +795,18 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                         FocusScope.of(context).requestFocus(new FocusNode());
                         Navigator.push(
                             context,
-                            CupertinoPageRoute<TbQuantitativeDistributionPhysicalAccessesService>(
-                                fullscreenDialog: true, builder: (BuildContext context) => DataInServicesView(sDadosEmServicos: null))).then((value) {
+                            CupertinoPageRoute<InputDadosEmServicos>(
+                                fullscreenDialog: true, builder: (BuildContext context) => DataInServicesView(sInputDadosEmServicos: null))).then((value) {
                           if (value != null) {
-                            if (quantitativeDistributionPhysicalAccessesService.isEmpty) {
-                              //value.index = 1;
-                              quantitativeDistributionPhysicalAccessesService = [];
-                            } else {
-                              //value.index = quantitativeDistributionPhysicalAccessesService.length + 1;
+                            if(inputSiciFustForm.dadosEmServicos!.isEmpty)
+                            {
+                              inputSiciFustForm.dadosEmServicos = [];
+                              inputSiciFustForm.dadosEmServicos!.add(value);
                             }
-                            //quantitativeDistributionPhysicalAccessesService.add(value);
+                            else
+                              {
+                                inputSiciFustForm.dadosEmServicos!.add(value);
+                              }
                           }
                         });
                       },
@@ -811,9 +816,9 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                       builder: (BuildContext context) {
                         return ListView.builder(
                           scrollDirection: Axis.vertical,
-                          physics: NeverScrollableScrollPhysics(),
+                          physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
-                          itemCount: siciFileModel.dadosEmServicos == null ? 0 : siciFileModel.dadosEmServicos!.length,
+                          itemCount: inputSiciFustForm.dadosEmServicos == null ? 0 : inputSiciFustForm.dadosEmServicos!.length,
                           itemBuilder:
                           dataInServicesCard,
                         );
@@ -887,7 +892,7 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                       ),
                     ),
                     TextSpan(
-                      text: siciFileModel.dadosEmServicos![index].uf,
+                      text: inputSiciFustForm.dadosEmServicos![index].uf,
                       style: const TextStyle(
                         fontWeight: FontWeight.normal,
                         color: Colors.black54,
@@ -913,7 +918,7 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                       ),
                     ),
                     TextSpan(
-                      text: siciFileModel.dadosEmServicos![index].tipoCliente,
+                      text: inputSiciFustForm.dadosEmServicos![index].tipoCliente,
                       style: const TextStyle(
                         fontWeight: FontWeight.normal,
                         color: Colors.black54,
@@ -939,7 +944,7 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                       ),
                     ),
                     TextSpan(
-                      text: siciFileModel.dadosEmServicos![index].tipoAtendimento,
+                      text: inputSiciFustForm.dadosEmServicos![index].tipoAtendimento,
                       style: const TextStyle(
                         fontWeight: FontWeight.normal,
                         color: Colors.black54,
@@ -965,7 +970,7 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                       ),
                     ),
                     TextSpan(
-                      text: siciFileModel.dadosEmServicos![index].tipoAcesso,
+                      text: inputSiciFustForm.dadosEmServicos![index].tipoAcesso,
                       style: const TextStyle(
                         fontWeight: FontWeight.normal,
                         color: Colors.black54,
@@ -991,7 +996,7 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                       ),
                     ),
                     TextSpan(
-                      text: siciFileModel.dadosEmServicos![index].tecnologia,
+                      text: inputSiciFustForm.dadosEmServicos![index].tecnologia,
                       style: const TextStyle(
                         fontWeight: FontWeight.normal,
                         color: Colors.black54,
@@ -1017,7 +1022,7 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                       ),
                     ),
                     TextSpan(
-                      text: siciFileModel.dadosEmServicos![index].tipoProduto,
+                      text: inputSiciFustForm.dadosEmServicos![index].tipoProduto,
                       style: const TextStyle(
                         fontWeight: FontWeight.normal,
                         color: Colors.black54,
@@ -1043,7 +1048,7 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                       ),
                     ),
                     TextSpan(
-                      text: siciFileModel.dadosEmServicos![index].velocidade,
+                      text: inputSiciFustForm.dadosEmServicos![index].velocidade,
                       style: const TextStyle(
                         fontWeight: FontWeight.normal,
                         color: Colors.black54,
@@ -1069,7 +1074,7 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                         borderRadius: BorderRadius.circular(5.0),
                       ),
                     ),
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.visibility,
                       color: Colors.white,
                     ),
@@ -1084,16 +1089,10 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                       FocusScope.of(context).requestFocus(FocusNode());
                       Navigator.push(
                           context,
-                          CupertinoPageRoute<DadosEmServicos>(
-                              fullscreenDialog: true, builder: (BuildContext context) => DataInServicesView(sDadosEmServicos: siciFileModel.dadosEmServicos![index]))).then((value) {
+                          CupertinoPageRoute<InputDadosEmServicos>(
+                              fullscreenDialog: true, builder: (BuildContext context) => DataInServicesView(sInputDadosEmServicos: inputSiciFustForm.dadosEmServicos![index]))).then((value) {
                         if (value != null) {
-                          if (quantitativeDistributionPhysicalAccessesService.isEmpty) {
-                            //value.index = 1;
-                            quantitativeDistributionPhysicalAccessesService = [];
-                          } else {
-                            //value.index = quantitativeDistributionPhysicalAccessesService.length + 1;
-                          }
-                          //quantitativeDistributionPhysicalAccessesService.add(value);
+
                         }
                       });
                     },
@@ -1125,40 +1124,98 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                         barrierDismissible: false,
                         builder: (BuildContext context) {
                           return Dialog(
-                              child: Padding(
-                                padding: EdgeInsets.all(25.0),
+                              child: Container(
+                                padding: const EdgeInsets.all(25.0),
+                                constraints: const BoxConstraints(
+                                  minWidth: 70,
+                                  maxWidth: 450,
+                                ),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Container(
-                                      margin: const EdgeInsets.fromLTRB(
-                                          0.0, 10.0, 0.0, 15.0),
+                                      margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
                                       height: 50.0,
                                       child: const Text(
-                                        "Deseja realmente remover ?",
+                                        'Deseja realmente remover ?',
                                         textAlign: TextAlign.start,
                                         softWrap: false,
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                            fontFamily: 'open-sans-regular',
-                                            fontSize: 17.0,
-                                            color: Color(0xFF000000)),
+                                          fontSize: 16.0,
+                                          color: Color(0xFF000000),
+                                        ),
                                       ),
                                     ),
                                     Container(
-                                      margin: const EdgeInsets.fromLTRB(
-                                          0.0, 10.0, 0.0, 15.0),
+                                      constraints: const BoxConstraints(
+                                        maxWidth: 400,
+                                      ),
+                                      margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
                                       child: Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
                                         mainAxisSize: MainAxisSize.max,
                                         children: <Widget>[
+                                          Expanded(
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(left: 14.0),
+                                              child:  OutlinedButton(
+                                                style: TextButton.styleFrom(
+                                                  backgroundColor: const Color(0xFFffffff),
+                                                  side: const BorderSide(
+                                                    color: Color(0xFF3F7EC1), //Color of the border
+                                                  ),
+                                                  minimumSize: const Size(130, 43),
+                                                  maximumSize: const Size(130, 43),
+                                                  textStyle: const TextStyle(
+                                                    color:  Color(0xffFFFFFF),
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                                onPressed: () async {
+                                                  try {
 
+                                                  } catch (error) {
+                                                    GlobalScaffold.instance.onToastInformacaoErro(error.toString());
+                                                  }
+                                                },
+                                                child: const Text('  Sim  ',
+                                                    style: TextStyle(
+                                                      color: Color(0xFF3F7EC1),
+                                                    )),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(left: 14.0),
+                                              child: OutlinedButton(
+                                                style: TextButton.styleFrom(
+                                                  minimumSize: const Size(130, 43),
+                                                  maximumSize: const Size(130, 43),
+                                                  textStyle: const TextStyle(
+                                                    color:  Color(0xffFFFFFF),
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                                onPressed: () async {
+                                                  try {
+                                                    Navigator.pop(context);
+                                                  } catch (error) {
+                                                    GlobalScaffold.instance.onToastInformacaoErro(error.toString());
+                                                  }
+                                                },
+                                                child: const Text('  Não  ',
+                                                    style: TextStyle(
+                                                      color: Color(0xFFffffff),
+                                                    )),
+                                              ),
+                                            ),
+                                          ),
                                         ],
                                       ),
                                     ),

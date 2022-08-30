@@ -18,6 +18,8 @@ class SelectMunicipalityState extends State<SelectMunicipalityView>  {
 
   TypeView statusView = TypeView.viewLoading;
   final txtMunicipalityName  = TextEditingController();
+  List<CodIbge> listMunicipios = [];
+
   onInc() async {
     try {
       setState((){statusView = TypeView.viewLoading;});
@@ -37,6 +39,9 @@ class SelectMunicipalityState extends State<SelectMunicipalityView>  {
   @override
   void initState() {
     super.initState();
+    setState(() {
+      listMunicipios = widget.sMunicipios;
+    });
     onInc();
   }
 
@@ -97,9 +102,20 @@ class SelectMunicipalityState extends State<SelectMunicipalityView>  {
                             borderRadius: BorderRadius.circular(25.7),
                           ),
                         ),
-                        onSubmitted: (value) {
-                          FocusScope.of(context).requestFocus(FocusNode());
-
+                        onChanged: (value) {
+                          setState(() {
+                            listMunicipios = widget.sMunicipios.where((element) => element.descricao!.toLowerCase().contains(txtMunicipalityName.text.toLowerCase())).toList();
+                            if(listMunicipios.isEmpty)
+                              {
+                                setState(() {
+                                  statusView = TypeView.viewErrorInformation;
+                                  GlobalScaffold.ErroInformacao = 'Não a registro para esta solicitação';
+                                });
+                              }
+                            else  {
+                              setState(() {statusView = TypeView.viewRenderInformation;});
+                            }
+                          });
                         },
                       ),
                     ),
@@ -118,7 +134,20 @@ class SelectMunicipalityState extends State<SelectMunicipalityView>  {
                       iconSize: 30,
                       onPressed: () {
                         FocusScope.of(context).requestFocus(FocusNode());
-
+                        setState(() {
+                          listMunicipios = widget.sMunicipios.where((element) => element.descricao!.toLowerCase().contains(txtMunicipalityName.text.toLowerCase())).toList();
+                          if(listMunicipios.isEmpty)
+                          {
+                            setState(() {
+                              statusView = TypeView.viewErrorInformation;
+                              GlobalScaffold.ErroInformacao = 'Não a registro para esta solicitação';
+                            });
+                          }
+                          else
+                            {
+                              setState(() {statusView = TypeView.viewRenderInformation;});
+                            }
+                        });
                       },
                     ),
                   ),
@@ -151,7 +180,7 @@ class SelectMunicipalityState extends State<SelectMunicipalityView>  {
             child: ListView.builder(
               physics: const AlwaysScrollableScrollPhysics(),
               scrollDirection: Axis.vertical,
-              itemCount: widget.sMunicipios.length,
+              itemCount: listMunicipios.length,
               itemBuilder: (BuildContext context, int index) => ListTile(
                   onTap: () {
                     Navigator.of(context).pop(widget.sMunicipios[index]);
@@ -168,7 +197,7 @@ class SelectMunicipalityState extends State<SelectMunicipalityView>  {
                           style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
                         ),
                         TextSpan(
-                          text: widget.sMunicipios[index].codIbge.toString(),
+                          text: listMunicipios[index].codIbge.toString(),
                           style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 13),
                         ),
                       ])),
@@ -183,7 +212,7 @@ class SelectMunicipalityState extends State<SelectMunicipalityView>  {
                           style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
                         ),
                         TextSpan(
-                          text: widget.sMunicipios[index].descricao.toString(),
+                          text: listMunicipios[index].descricao.toString(),
                           style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 13),
                         ),
                       ])),

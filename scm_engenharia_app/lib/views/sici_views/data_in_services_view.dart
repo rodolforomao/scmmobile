@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../help/components.dart';
 import '../../help/formatter/cnpj_input_formatter.dart';
-import '../../models/input/sici_fust_form_model.dart';
+import '../../models/input/input_sici_fust_form.dart';
 import '../../models/output/environment_variables.dart';
 import '../../models/util_model/util_dropdown_list.dart';
 import '../help_views/global_scaffold.dart';
@@ -15,8 +15,8 @@ import '../../thema/app_thema.dart';
 
 class DataInServicesView extends StatefulWidget {
 
-  DadosEmServicos? sDadosEmServicos;
-  DataInServicesView({Key? key, required this.sDadosEmServicos}) : super(key: key);
+  InputDadosEmServicos? sInputDadosEmServicos;
+  DataInServicesView({Key? key, required this.sInputDadosEmServicos}) : super(key: key);
 
   @override
   DataInServicesState createState() => DataInServicesState();
@@ -58,7 +58,31 @@ class DataInServicesState extends State<DataInServicesView> {
 
   onAdd() async {
     try {
-
+      InputDadosEmServicos sInput =   InputDadosEmServicos();
+      sInput.idLancamento = widget.sInputDadosEmServicos!.idLancamento;
+      if(valueCodIbge.descricao != 'SELECIONE...') {
+        sInput.codIbge = valueCodIbge.descricao;
+      }
+      if(ufValue.uf != 'SELECIONE...') {
+        sInput.uf = customerTypeValue.descricao;
+      }
+      if(customerTypeValue.descricao != 'SELECIONE...') {
+        sInput.tipoCliente = customerTypeValue.descricao;
+      }
+      if(serviceTypeValue.descricao != 'SELECIONE...') {
+        sInput.tipoAtendimento = serviceTypeValue.descricao;
+      }
+      if(mediumAccessTypeValue.descricao != 'SELECIONE...') {
+        sInput.tipoAcesso = productTypeValue.descricao;
+      }
+      if( technologyTypeValue.descricao != 'SELECIONE...') {
+        sInput.tecnologia = productTypeValue.descricao;
+      }
+      if(productTypeValue.descricao != 'SELECIONE...') {
+        sInput.tipoProduto = productTypeValue.descricao;
+      }
+      sInput.velocidade = txtControllerVelocity.text;
+      sInput.quantidadeAcesso = txtControllerAccesses.text;
     } catch (error) {
       OnAlertaInformacaoErro(error.toString(),context);
     }
@@ -106,24 +130,24 @@ class DataInServicesState extends State<DataInServicesView> {
         productTypeValue.id ='0';
         productTypeValue.descricao = 'SELECIONE...';
         productTypeDropdownList!.add(productTypeValue);
-        productTypeValue   = productTypeDropdownList!.last;
+        productTypeValue = productTypeDropdownList!.last;
       });
-      if(widget.sDadosEmServicos == null)
+      if(widget.sInputDadosEmServicos == null)
         {
 
         }
       else
         {
-          ufValue = ufDropdownList!.where((i) => i.uf!.toUpperCase() == widget.sDadosEmServicos!.uf!.toUpperCase()).first;
-          valueCodIbge = resulEnvironmentVariables.codIbge!.where((i) => i.codIbge == widget.sDadosEmServicos!.codIbge).first;
-          customerTypeValue = resulEnvironmentVariables.tipoCliente!.where((i) => i.descricao == widget.sDadosEmServicos!.tipoCliente).first;
-          serviceTypeValue = resulEnvironmentVariables.tipoAtendimento!.where((i) => i.descricao == widget.sDadosEmServicos!.tipoAtendimento).first;
-          mediumAccessTypeValue = resulEnvironmentVariables.tipoMeioAcesso!.where((i) => i.descricao == widget.sDadosEmServicos!.tipoAcesso).first;
-          technologyTypeValue = resulEnvironmentVariables.tipoTecnologia!.where((i) => i.descricao == widget.sDadosEmServicos!.tecnologia).first;
-          productTypeValue = resulEnvironmentVariables.tipoProduto!.where((i) => i.descricao == widget.sDadosEmServicos!.tipoProduto).first;
+          ufValue = ufDropdownList!.where((i) => i.uf!.toUpperCase() == widget.sInputDadosEmServicos!.uf!.toUpperCase()).first;
+          valueCodIbge = resulEnvironmentVariables.codIbge!.where((i) => i.codIbge == widget.sInputDadosEmServicos!.codIbge).first;
+          customerTypeValue = resulEnvironmentVariables.tipoCliente!.where((i) => i.descricao == widget.sInputDadosEmServicos!.tipoCliente).first;
+          serviceTypeValue = resulEnvironmentVariables.tipoAtendimento!.where((i) => i.descricao == widget.sInputDadosEmServicos!.tipoAtendimento).first;
+          mediumAccessTypeValue = resulEnvironmentVariables.tipoMeioAcesso!.where((i) => i.descricao == widget.sInputDadosEmServicos!.tipoAcesso).first;
+          technologyTypeValue = resulEnvironmentVariables.tipoTecnologia!.where((i) => i.descricao == widget.sInputDadosEmServicos!.tecnologia).first;
+          productTypeValue = resulEnvironmentVariables.tipoProduto!.where((i) => i.descricao == widget.sInputDadosEmServicos!.tipoProduto).first;
           txtCounty.text = valueCodIbge.descricao!;
-          txtControllerVelocity.text = widget.sDadosEmServicos!.velocidade!;
-          txtControllerAccesses.text = widget.sDadosEmServicos!.quantidadeAcesso!;
+          txtControllerVelocity.text = widget.sInputDadosEmServicos!.velocidade!;
+          txtControllerAccesses.text = widget.sInputDadosEmServicos!.quantidadeAcesso!;
         }
       setState((){statusView = TypeView.viewRenderInformation;});
     } catch (error) {
@@ -137,7 +161,9 @@ class DataInServicesState extends State<DataInServicesView> {
     Future.delayed(Duration.zero, () async {
       listMonths = <UtilDropdownList>[];
       listMonths = await Components.onMonths();
-      utilDropdownListMonth = listMonths.first;
+      setState(() {
+        utilDropdownListMonth = listMonths.first;
+      });
     });
     onInc();
   }
@@ -324,7 +350,7 @@ class DataInServicesState extends State<DataInServicesView> {
                         if(value != null)
                         {
                           setState((){valueCodIbge = value;});
-                          txtCounty.text = value.descricao!;
+                          txtCounty.text = value.codIbge!;
                         }
                       });
                     }
