@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import '../../models/output/environment_variables.dart';
+import '../../models/output/output_environment_variables_model.dart';
 import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
 import 'package:flutter/services.dart';
@@ -25,7 +25,7 @@ class SelectMunicipalityState extends State<SelectMunicipalityView>  {
       setState((){statusView = TypeView.viewLoading;});
       String response = await rootBundle.loadString('assets/variavel_de_ambiente.json');
       setState(()  {
-        EnvironmentVariables resul = EnvironmentVariables.fromJson(jsonDecode(response) as Map<String, dynamic>);
+        OutputEnvironmentVariablesModel resul = OutputEnvironmentVariablesModel.fromJson(jsonDecode(response) as Map<String, dynamic>);
         statusView = TypeView.viewRenderInformation;
       });
     } catch (error) {

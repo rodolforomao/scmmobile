@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -12,17 +11,14 @@ import '../../help/components.dart';
 import '../../help/formatter/cnpj_input_formatter.dart';
 import '../../help/formatter/telefone_input_formatter.dart';
 import '../../help/formatter/valor_input_formatter.dart';
-import '../../models/input/input_sici_fust_form.dart';
-import '../../models/input/sici_fust_form_model.dart';
+import '../../models/input/input_sici_fust_form_model.dart';
 import '../../models/operation.dart';
-import '../../models/output/sici_fust_model.dart';
-import '../../models/parse_resp_json_to_view.dart';
 import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
 
 
 class SiciFustFormView extends StatefulWidget {
-  SiciFileModel? siciFileModel;
+  InputSiciFileModel? siciFileModel;
   SiciFustFormView({ Key? key, required this.siciFileModel}) : super(key: key);
 
   @override
@@ -37,7 +33,7 @@ abstract class IsSilly {
 
 class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
 
-  InputSiciFustForm inputSiciFustForm = InputSiciFustForm();
+  InputSiciFileModel inputSiciFustForm = InputSiciFileModel();
 
   List<String> Uf = [];
   late String UfTxt;
@@ -199,7 +195,7 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
         UfTxt = Uf.first;
       });
       if (widget.siciFileModel != null) {
-        inputSiciFustForm  = await ParseRespModel.parseRespSiciFileModelToInputSiciFustForm(widget.siciFileModel!);
+        inputSiciFustForm  = widget.siciFileModel!;
         if (widget.siciFileModel!.periodoReferencia!.isNotEmpty) {
           selectedDate = DateTime.parse(widget.siciFileModel!.periodoReferencia!);
           txtControllerReferencePeriod.text = DateFormat('dd/MM/yyyy').format(DateTime.parse(widget.siciFileModel!.periodoReferencia!));
@@ -795,7 +791,7 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                         FocusScope.of(context).requestFocus(new FocusNode());
                         Navigator.push(
                             context,
-                            CupertinoPageRoute<InputDadosEmServicos>(
+                            CupertinoPageRoute<InputDadosEmServicosModel>(
                                 fullscreenDialog: true, builder: (BuildContext context) => DataInServicesView(sInputDadosEmServicos: null))).then((value) {
                           if (value != null) {
                             if(inputSiciFustForm.dadosEmServicos!.isEmpty)
@@ -1089,7 +1085,7 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                       FocusScope.of(context).requestFocus(FocusNode());
                       Navigator.push(
                           context,
-                          CupertinoPageRoute<InputDadosEmServicos>(
+                          CupertinoPageRoute<InputDadosEmServicosModel>(
                               fullscreenDialog: true, builder: (BuildContext context) => DataInServicesView(sInputDadosEmServicos: inputSiciFustForm.dadosEmServicos![index]))).then((value) {
                         if (value != null) {
 

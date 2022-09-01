@@ -1,5 +1,5 @@
 
-class EnvironmentVariables {
+class OutputEnvironmentVariablesModel {
   List<CodIbge>? codIbge;
   List<Uf>? uf;
   List<TipoCliente>? tipoCliente;
@@ -8,7 +8,7 @@ class EnvironmentVariables {
   List<TipoTecnologia>? tipoTecnologia;
   List<TipoProduto>? tipoProduto;
 
-  EnvironmentVariables(
+  OutputEnvironmentVariablesModel(
       {this.codIbge,
         this.uf,
         this.tipoCliente,
@@ -17,7 +17,7 @@ class EnvironmentVariables {
         this.tipoTecnologia,
         this.tipoProduto});
 
-  EnvironmentVariables.fromJson(Map<String, dynamic> json) {
+  OutputEnvironmentVariablesModel.fromJson(Map<String, dynamic> json) {
     if (json['CodIbge'] != null) {
       codIbge = <CodIbge>[];
       json['CodIbge'].forEach((v) {

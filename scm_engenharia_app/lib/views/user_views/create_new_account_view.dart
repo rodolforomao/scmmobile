@@ -8,7 +8,7 @@ import 'dart:io';
 import 'dart:async';
 import '../../help/formatter/cpf_input_formatter.dart';
 import '../../models/operation.dart';
-import '../../models/output/environment_variables.dart';
+import '../../models/output/output_environment_variables_model.dart';
 import '../../web_service/servico_mobile_service.dart';
 import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
@@ -25,7 +25,7 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
 
   late StreamSubscription<ConnectivityResult> subscription;
   TypeView statusView = TypeView.viewLoading;
-  EnvironmentVariables resulEnvironmentVariables = EnvironmentVariables();
+  OutputEnvironmentVariablesModel resulEnvironmentVariables = OutputEnvironmentVariablesModel();
 
   final txtControlleNomeCompleto = TextEditingController();
   final txtControllerCPF = TextEditingController();
@@ -48,7 +48,7 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
       setState((){statusView = TypeView.viewLoading;});
       String response = await rootBundle.loadString('assets/variavel_de_ambiente.json');
       setState(() {
-        resulEnvironmentVariables = EnvironmentVariables.fromJson(jsonDecode(response) as Map<String, dynamic>);
+        resulEnvironmentVariables = OutputEnvironmentVariablesModel.fromJson(jsonDecode(response) as Map<String, dynamic>);
         ufModel = resulEnvironmentVariables.uf!.first;
         statusView = TypeView.viewRenderInformation;
       });

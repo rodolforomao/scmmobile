@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import '../data/JWTTokenDbLocal.dart';
 import '../help/components.dart';
 import '../models/operation.dart';
-import '../models/input/sici_fust_form_model.dart';
+import '../models/input/input_sici_fust_form_model.dart';
 
 class ServicoMobileService {
   static const Url = "http://sici.scmengenharia.com.br";
@@ -20,9 +20,9 @@ class ServicoMobileService {
           .post(Uri.parse("$Url/login_ws"),
               headers: {
                 //"Content-type": "multipart/form-data",
-                "token": token!,
+                'token': token!,
               },
-              encoding: Encoding.getByName("utf-8"))
+              encoding: Encoding.getByName('utf-8'))
           .timeout(const Duration(seconds: 10));
       operacao.statusCode = response.statusCode;
       if (response.statusCode == 200) {
@@ -56,10 +56,10 @@ class ServicoMobileService {
       String? token = await ComponentsJWTToken.JWTTokenPadrao();
       Map<String, String> headers = {
         'Content-Type': 'application/json; charset=utf-8',
-        "token": token!,
+        'token': token!,
       };
       http.MultipartRequest response;
-      response = http.MultipartRequest('POST', Uri.parse(Url + "/usuario/alterar_senha_ws"));
+      response = http.MultipartRequest('POST', Uri.parse("$Url/usuario/alterar_senha_ws"));
       response.headers.addAll(headers);
       response.fields['nova_senha'] = senha;
       var streamedResponse = await response.send();
@@ -95,7 +95,7 @@ class ServicoMobileService {
     try {
       String? token = await ComponentsJWTToken.JWTTokenPadrao();
       final response = await http
-          .post(Uri.parse(Url + "/analise/Analise/recuperarVariaveisAmbiente_ws"),
+          .post(Uri.parse("$Url/analise/Analise/recuperarVariaveisAmbiente_ws"),
               body: null,
               headers: {
                 //"Content-type": "multipart/form-data",
@@ -135,7 +135,7 @@ class ServicoMobileService {
     return operacao;
   }
 
-  static Future<Operation> onMakeReleasesSici(SiciFileModel siciFileModel) async {
+  static Future<Operation> onMakeReleasesSici(InputSiciFileModel siciFileModel) async {
     Operation operacao = Operation();
     try {
 
@@ -210,15 +210,15 @@ class ServicoMobileService {
     Operation operacao = Operation();
     try {
       String? token = await ComponentsJWTToken.JWTTokenPadrao();
-      final response = await http.post(Uri.parse(Url + "/analise/recuperar_ws"),
+      final response = await http.post(Uri.parse("$Url/analise/recuperar_ws"),
               body: null,
               headers: {
-                "token": token!,
+                'token': token!,
               },
-              encoding: Encoding.getByName("utf-8"))
+              encoding: Encoding.getByName('utf-8'))
           .timeout(const Duration(seconds: 10));
       operacao.erro = false;
-      operacao.message = "Operação realizada com sucesso";
+      operacao.message = 'Operação realizada com sucesso';
       operacao.result = null;
       operacao.statusCode = response.statusCode;
       if (response.statusCode == 200) {
@@ -301,7 +301,7 @@ class ServicoMobileService {
         'token': token!,
       };
       http.MultipartRequest response;
-      response = new http.MultipartRequest('POST', Uri.parse(Url + "/notificacoes/Notificacoes_ws/recuperarNotificacao_ws"));
+      response = http.MultipartRequest('POST', Uri.parse("$Url/notificacoes/Notificacoes_ws/recuperarNotificacao_ws"));
       response.headers.addAll(headers);
       response.fields['id'] = IdNotificacao;
       var streamedResponse = await response.send();
@@ -340,7 +340,7 @@ class ServicoMobileService {
         "token": token!,
       };
       http.MultipartRequest response;
-      response = http.MultipartRequest('POST', Uri.parse(Url + "/notificacoes/Notificacoes_ws/recuperarNotificacao_ws"));
+      response = http.MultipartRequest('POST', Uri.parse("$Url/notificacoes/Notificacoes_ws/recuperarNotificacao_ws"));
       response.headers.addAll(headers);
       response.fields['id'] = idNotificacao;
       var streamedResponse = await response.send();

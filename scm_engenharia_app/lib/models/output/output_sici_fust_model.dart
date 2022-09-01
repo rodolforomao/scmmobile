@@ -1,4 +1,4 @@
-class SiciFustFormModel {
+class OutputSiciFustFormModel {
   String? id;
   String? idEmpresa;
   String? idUsuarioCliente;
@@ -50,9 +50,9 @@ class SiciFustFormModel {
   String? nomeConsultor;
   String? envioLancamento;
   String? estado;
-  List<DadosEmServicosFormModel>? dadosEmServicosFormModel;
+  List<OutputDadosEmServicosFormModel>? dadosEmServicosFormModel;
 
-  SiciFustFormModel(
+  OutputSiciFustFormModel(
       {this.id,
         this.idEmpresa,
         this.idUsuarioCliente,
@@ -106,7 +106,7 @@ class SiciFustFormModel {
         this.estado,
         this.dadosEmServicosFormModel});
 
-  SiciFustFormModel.fromJson(Map<String, dynamic> json) {
+  OutputSiciFustFormModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     idEmpresa = json['id_empresa'];
     idUsuarioCliente = json['id_usuario_cliente'];
@@ -159,9 +159,9 @@ class SiciFustFormModel {
     envioLancamento = json['envio_lancamento'];
     estado = json['estado'];
     if (json['dadosEmServicos'] != null) {
-      dadosEmServicosFormModel = <DadosEmServicosFormModel>[];
+      dadosEmServicosFormModel = <OutputDadosEmServicosFormModel>[];
       json['dadosEmServicos'].forEach((v) {
-        dadosEmServicosFormModel!.add(new DadosEmServicosFormModel.fromJson(v));
+        dadosEmServicosFormModel!.add(OutputDadosEmServicosFormModel.fromJson(v));
       });
     }
   }
@@ -227,7 +227,7 @@ class SiciFustFormModel {
   }
 }
 
-class DadosEmServicosFormModel {
+class OutputDadosEmServicosFormModel {
   String? idLancamento;
   String? codIbge;
   String? uf;
@@ -239,7 +239,7 @@ class DadosEmServicosFormModel {
   String? velocidade;
   String? quantidadeAcesso;
 
-  DadosEmServicosFormModel(
+  OutputDadosEmServicosFormModel(
       {this.idLancamento,
         this.codIbge,
         this.uf,
@@ -251,7 +251,7 @@ class DadosEmServicosFormModel {
         this.velocidade,
         this.quantidadeAcesso});
 
-  DadosEmServicosFormModel.fromJson(Map<String, dynamic> json) {
+  OutputDadosEmServicosFormModel.fromJson(Map<String, dynamic> json) {
     idLancamento = json['id_lancamento'];
     codIbge = json['cod_ibge'];
     uf = json['uf'];

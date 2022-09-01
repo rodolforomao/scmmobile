@@ -1,8 +1,8 @@
 
-
-class InputSiciFustForm {
+class InputSiciFileModel {
   int? idFichaSiciApp;
   String? idEmpresa;
+  String? isSincronizar;
   String? id;
   String? periodoReferencia;
   String? razaoSocial;
@@ -21,10 +21,11 @@ class InputSiciFustForm {
   String? cofinsPorc;
   String? receitaLiquida;
   String? observacoes;
-  List<InputDadosEmServicos>? dadosEmServicos;
-  InputSiciFustForm({
+  List<InputDadosEmServicosModel>? dadosEmServicos;
+  InputSiciFileModel({
     this.idFichaSiciApp = 0,
     this.idEmpresa,
+    this.isSincronizar,
     this.id,
     this.periodoReferencia,
     this.razaoSocial,
@@ -46,9 +47,10 @@ class InputSiciFustForm {
     this.dadosEmServicos
   });
 
-  InputSiciFustForm.fromJson(Map<String, dynamic> json) {
+  InputSiciFileModel.fromJson(Map<String, dynamic> json) {
     idFichaSiciApp = json['idFichaSiciApp'];
     idEmpresa = json['idEmpresa'];
+    isSincronizar = json['isSincronizar'];
     id = json['id'];
     periodoReferencia = json['periodoReferencia'];
     razaoSocial = json['razaoSocial'];
@@ -68,17 +70,18 @@ class InputSiciFustForm {
     receitaLiquida = json['receitaLiquida'];
     observacoes = json['observacoes'];
     if (json['dadosEmServicos'] != null) {
-      dadosEmServicos = <InputDadosEmServicos>[];
+      dadosEmServicos = <InputDadosEmServicosModel>[];
       json['dadosEmServicos'].forEach((v) {
-        dadosEmServicos!.add(new InputDadosEmServicos.fromJson(v));
+        dadosEmServicos!.add(InputDadosEmServicosModel.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['idFichaSiciApp'] = idFichaSiciApp;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['idFichaSiciApp'] = this.idFichaSiciApp;
     data['idEmpresa'] = this.idEmpresa == null ? "" : this.idEmpresa;
+    data['isSincronizar'] = this.isSincronizar == null ? "" : this.isSincronizar;
     data['idLancamento'] = this.id == null ? "" : this.id;
     data['periodoReferencia'] = this.periodoReferencia == null ? "" : this.periodoReferencia;
     data['razaoSocial'] = this.razaoSocial == null ? "" : this.razaoSocial;
@@ -105,7 +108,7 @@ class InputSiciFustForm {
   }
 }
 
-class InputDadosEmServicos {
+class InputDadosEmServicosModel {
   String? idLancamento;
   String? codIbge;
   String? uf;
@@ -117,7 +120,7 @@ class InputDadosEmServicos {
   String? velocidade;
   String? quantidadeAcesso;
 
-  InputDadosEmServicos(
+  InputDadosEmServicosModel(
       {this.idLancamento,
         this.codIbge,
         this.uf,
@@ -129,7 +132,7 @@ class InputDadosEmServicos {
         this.velocidade,
         this.quantidadeAcesso});
 
-  InputDadosEmServicos.fromJson(Map<String, dynamic> json) {
+  InputDadosEmServicosModel.fromJson(Map<String, dynamic> json) {
     idLancamento = json['id_lancamento'];
     codIbge = json['cod_ibge'];
     uf = json['uf'];

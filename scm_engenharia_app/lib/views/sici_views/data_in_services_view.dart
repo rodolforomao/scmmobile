@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../help/components.dart';
 import '../../help/formatter/cnpj_input_formatter.dart';
-import '../../models/input/input_sici_fust_form.dart';
-import '../../models/output/environment_variables.dart';
+import '../../models/input/input_sici_fust_form_model.dart';
+import '../../models/output/output_environment_variables_model.dart';
 import '../../models/util_model/util_dropdown_list.dart';
 import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
@@ -14,8 +14,7 @@ import '../../thema/app_thema.dart';
 
 
 class DataInServicesView extends StatefulWidget {
-
-  InputDadosEmServicos? sInputDadosEmServicos;
+  InputDadosEmServicosModel? sInputDadosEmServicos;
   DataInServicesView({Key? key, required this.sInputDadosEmServicos}) : super(key: key);
 
   @override
@@ -25,7 +24,7 @@ class DataInServicesView extends StatefulWidget {
 class DataInServicesState extends State<DataInServicesView> {
 
   TypeView statusView = TypeView.viewLoading;
-  EnvironmentVariables resulEnvironmentVariables = EnvironmentVariables();
+  OutputEnvironmentVariablesModel resulEnvironmentVariables = OutputEnvironmentVariablesModel();
 
   //CNPJ:
   final txtControllerCnpj =  TextEditingController();
@@ -58,7 +57,7 @@ class DataInServicesState extends State<DataInServicesView> {
 
   onAdd() async {
     try {
-      InputDadosEmServicos sInput =   InputDadosEmServicos();
+      InputDadosEmServicosModel sInput =   InputDadosEmServicosModel();
       sInput.idLancamento = widget.sInputDadosEmServicos!.idLancamento;
       if(valueCodIbge.descricao != 'SELECIONE...') {
         sInput.codIbge = valueCodIbge.descricao;
@@ -93,7 +92,7 @@ class DataInServicesState extends State<DataInServicesView> {
       setState((){statusView = TypeView.viewLoading;});
       String response = await rootBundle.loadString('assets/variavel_de_ambiente.json');
       setState(() {
-        resulEnvironmentVariables = EnvironmentVariables.fromJson(jsonDecode(response) as Map<String, dynamic>);
+        resulEnvironmentVariables = OutputEnvironmentVariablesModel.fromJson(jsonDecode(response) as Map<String, dynamic>);
         ufDropdownList = resulEnvironmentVariables.uf;
         ufValue.id = '0';
         ufValue.uf = 'SELECIONE...';

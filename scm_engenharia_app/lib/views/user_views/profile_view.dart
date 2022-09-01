@@ -7,7 +7,7 @@ import 'dart:ui' as ui;
 import 'dart:convert';
 import '../../help/formatter/cpf_input_formatter.dart';
 import '../../models/operation.dart';
-import '../../models/output/environment_variables.dart';
+import '../../models/output/output_environment_variables_model.dart';
 import '../../web_service/servico_mobile_service.dart';
 import '../help_views/global_scaffold.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
@@ -45,7 +45,7 @@ class ProfileState extends State<ProfileView> {
       setState((){statusView = TypeView.viewLoading;});
       String response = await rootBundle.loadString('assets/variavel_de_ambiente.json');
       setState(() {
-        EnvironmentVariables  resulEnvironmentVariables = EnvironmentVariables.fromJson(jsonDecode(response) as Map<String, dynamic>);
+        OutputEnvironmentVariablesModel  resulEnvironmentVariables = OutputEnvironmentVariablesModel.fromJson(jsonDecode(response) as Map<String, dynamic>);
         ufList = resulEnvironmentVariables.uf;
         ufModel = resulEnvironmentVariables.uf!.first;
         ufModel = ufList!.where((c) => c.uf == global_user_logged.globalUserLogged!.uf).first;

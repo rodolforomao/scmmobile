@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:scm_engenharia_app/views/sici_views/sici_fust_form_view.dart';
 import 'dart:async';
 import '../../models/operation.dart';
-import '../../models/input/sici_fust_form_model.dart';
-import '../../models/output/sici_fust_model.dart';
+import '../../models/input/input_sici_fust_form_model.dart';
+import '../../models/output/output_sici_fust_model.dart';
 import '../../models/parse_resp_json_to_view.dart';
 import '../../web_service/servico_mobile_service.dart';
 import '../help_views/global_scaffold.dart';
@@ -20,7 +20,7 @@ class ListSiciSentView extends StatefulWidget {
 
 class ListSiciSentState extends State<ListSiciSentView> {
 
-  List<SiciFileModel> siciFileModelList = [];
+  List<InputSiciFileModel> siciFileModelList = [];
   late StreamSubscription<ConnectivityResult> subscription;
   TypeView statusView = TypeView.viewLoading;
   final txtControllerVelocity = TextEditingController();
@@ -37,7 +37,7 @@ class ListSiciSentState extends State<ListSiciSentView> {
           throw (resultRest.message!);
         } else {
           setState(() async {
-            List<SiciFustFormModel> respSiciFustFormList  = resultRest.resultList.map<SiciFustFormModel>((json) => SiciFustFormModel.fromJson(json)).toList();
+            List<OutputSiciFustFormModel> respSiciFustFormList  = resultRest.resultList.map<OutputSiciFustFormModel>((json) => OutputSiciFustFormModel.fromJson(json)).toList();
             siciFileModelList = await  ParseRespJsonToView.parseSiciFustFormModelToSiciFileList(respSiciFustFormList);
             if(siciFileModelList.isEmpty)
               {
@@ -55,7 +55,7 @@ class ListSiciSentState extends State<ListSiciSentView> {
     }
   }
 
-  onVisualizar(SiciFileModel? prop ) {
+  onVisualizar(InputSiciFileModel? prop ) {
     //  OnRealizandoOperacao("Web: Buscando lançamentos", true);
     try {
       Navigator.push(

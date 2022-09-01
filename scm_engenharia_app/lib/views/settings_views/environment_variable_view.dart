@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import '../../models/output/environment_variables.dart';
+import '../../models/output/output_environment_variables_model.dart';
 import '../../models/operation.dart';
 import '../../web_service/servico_mobile_service.dart';
 import '../help_views/global_scaffold.dart';
@@ -43,7 +43,7 @@ class EnvironmentVariableState extends State<EnvironmentVariableView>  {
       setState((){statusView = TypeView.viewLoading;});
       String response = await rootBundle.loadString('assets/variavel_de_ambiente.json');
       setState(()  {
-        EnvironmentVariables resul = EnvironmentVariables.fromJson(jsonDecode(response) as Map<String, dynamic>);
+        OutputEnvironmentVariablesModel resul = OutputEnvironmentVariablesModel.fromJson(jsonDecode(response) as Map<String, dynamic>);
         statusView = TypeView.viewRenderInformation;
       });
     } catch (error) {
