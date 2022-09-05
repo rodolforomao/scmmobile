@@ -197,7 +197,7 @@ class DataInServicesState extends State<DataInServicesView> {
       case TypeView.viewLoading:
         return GlobalView.viewPerformingSearch(maxHeight,context);
       case TypeView.viewErrorInformation:
-        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.ErroInformacao,context);
+        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
       case TypeView.viewRenderInformation:
         return GlobalView.viewRenderSingleChildScrollView(maxHeight,Container( padding: const EdgeInsets.fromLTRB(15.0, 30.0, 15.0, 0.0),
             constraints: const BoxConstraints(

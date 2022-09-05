@@ -299,7 +299,7 @@ class ProfileState extends State<ProfileView> {
           ),
         );
       case TypeView.viewErrorInformation:
-        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.ErroInformacao,context);
+        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
     }
   }
 }

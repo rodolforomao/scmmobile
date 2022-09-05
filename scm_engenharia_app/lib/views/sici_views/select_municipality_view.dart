@@ -31,7 +31,7 @@ class SelectMunicipalityState extends State<SelectMunicipalityView>  {
     } catch (error) {
       setState(() {
         statusView = TypeView.viewErrorInformation;
-        GlobalScaffold.ErroInformacao = error.toString();
+        GlobalScaffold.erroInformacao = error.toString();
       });
     }
   }
@@ -88,7 +88,7 @@ class SelectMunicipalityState extends State<SelectMunicipalityView>  {
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: const Color(0xff70FFFFFF),
-                          hintStyle: TextStyle(fontSize: 14.0, color: const Color(0xff80FFFFFF)),
+                          hintStyle: const TextStyle(fontSize: 14.0, color: Color(0xff80FFFFFF)),
                           hintText: 'Nome do município',
                           contentPadding: const EdgeInsets.fromLTRB(10.0, 9.0, 10.0, 11.0),
                           focusedBorder: OutlineInputBorder(
@@ -109,7 +109,7 @@ class SelectMunicipalityState extends State<SelectMunicipalityView>  {
                               {
                                 setState(() {
                                   statusView = TypeView.viewErrorInformation;
-                                  GlobalScaffold.ErroInformacao = 'Não a registro para esta solicitação';
+                                  GlobalScaffold.erroInformacao = 'Não a registro para esta solicitação';
                                 });
                               }
                             else  {
@@ -140,7 +140,7 @@ class SelectMunicipalityState extends State<SelectMunicipalityView>  {
                           {
                             setState(() {
                               statusView = TypeView.viewErrorInformation;
-                              GlobalScaffold.ErroInformacao = 'Não a registro para esta solicitação';
+                              GlobalScaffold.erroInformacao = 'Não a registro para esta solicitação';
                             });
                           }
                           else
@@ -166,7 +166,7 @@ class SelectMunicipalityState extends State<SelectMunicipalityView>  {
       case TypeView.viewLoading:
         return GlobalView.viewPerformingSearch(maxHeight,context);
       case TypeView.viewErrorInformation:
-        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.ErroInformacao,context);
+        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
       case TypeView.viewRenderInformation:
         return Container(
           width: MediaQuery.of(context).size.width,

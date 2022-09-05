@@ -49,7 +49,7 @@ class EnvironmentVariableState extends State<EnvironmentVariableView>  {
     } catch (error) {
       setState(() {
         statusView = TypeView.viewErrorInformation;
-        GlobalScaffold.ErroInformacao = error.toString();
+        GlobalScaffold.erroInformacao = error.toString();
       });
     }
   }
@@ -99,7 +99,7 @@ class EnvironmentVariableState extends State<EnvironmentVariableView>  {
       case TypeView.viewLoading:
         return GlobalView.viewPerformingSearch(maxHeight,context);
       case TypeView.viewErrorInformation:
-        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.ErroInformacao,context);
+        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
       case TypeView.viewRenderInformation:
         return  SingleChildScrollView(
           child: Container(

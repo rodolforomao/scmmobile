@@ -426,7 +426,7 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
           ),
         );
       case TypeView.viewErrorInformation:
-        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.ErroInformacao,context);
+        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
     }
   }
 }

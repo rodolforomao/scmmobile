@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scm_engenharia_app/views/sici_views/sici_fust_form_view.dart';
 import 'dart:async';
+import '../../data/app_scm_engenharia_mobile_bll.dart';
+import '../../data/tb_form_sici_fust.dart';
 import '../../models/operation.dart';
 import '../../models/input/input_sici_fust_form_model.dart';
 import '../../models/output/output_sici_fust_model.dart';
@@ -20,42 +24,152 @@ class ListSiciSentView extends StatefulWidget {
 
 class ListSiciSentState extends State<ListSiciSentView> {
 
-  List<InputSiciFileModel> siciFileModelList = [];
+  List<InputSiciFileModel> siciFileModelAllList = [];
+  List<InputSiciFileModel> siciFileModelUpdateList = [];
   late StreamSubscription<ConnectivityResult> subscription;
   TypeView statusView = TypeView.viewLoading;
-  final txtControllerVelocity = TextEditingController();
-  final txtCorporateName = TextEditingController();
+  final txtSocialReason = TextEditingController();
+
 
   onRestWeb() async {
-  //  OnRealizandoOperacao("Web: Buscando lançamentos", true);
     try {
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
         throw ('Verifique sua conexão com a internet e tente novamente.');
       } else {
-        Operation resultRest = await ServicoMobileService.onRecoversSiciReleases();
+        OnRealizandoOperacao('Web: Buscando lançamentos',true,context);
+        Operation resultRest = await ServicoMobileService.onRecoversSiciReleases().whenComplete(() => OnRealizandoOperacao('', false,context));
         if (resultRest.erro) {
           throw (resultRest.message!);
         } else {
-          setState(() async {
-            List<OutputSiciFustFormModel> respSiciFustFormList  = resultRest.resultList.map<OutputSiciFustFormModel>((json) => OutputSiciFustFormModel.fromJson(json)).toList();
-            siciFileModelList = await  ParseRespJsonToView.parseSiciFustFormModelToSiciFileList(respSiciFustFormList);
-            if(siciFileModelList.isEmpty)
+          List<OutputSiciFustFormModel> respSiciFustFormList  = resultRest.resultList.map<OutputSiciFustFormModel>((json) => OutputSiciFustFormModel.fromJson(json)).toList();
+          List<OutputSiciFustFormModel> respNewSiciFustFormList = [];
+          respNewSiciFustFormList = respSiciFustFormList;
+          if (respSiciFustFormList.isNotEmpty) {
+            for (var prop in respSiciFustFormList) {
+              if (siciFileModelAllList.where((f) => f.id!.startsWith(prop.id!)).isNotEmpty)
               {
-                throw ('Não é possível converter as informações');
+                //respNewSiciFustFormList.removeWhere((item) => item.id == prop.id!);
               }
-            statusView = TypeView.viewRenderInformation;
-          });
+              else
+              {
+                // A ficha  ja esta salva no dispositivo
+              }
+            }
+            List<InputSiciFileModel>  siciFileModelAllResp = await  ParseRespJsonToView.parseSiciFustFormModelToSiciFileList(respNewSiciFustFormList);
+            setState(()  {
+              siciFileModelAllList.addAll(siciFileModelAllResp);
+              siciFileModelUpdateList.addAll(siciFileModelAllResp);
+              statusView = TypeView.viewRenderInformation;
+            });
+          }
         }
       }
     } catch (error) {
+      print(error);
+      OnAlertaInformacaoErro(error.toString(),context);
+    }
+  }
+
+  onRestDb() async {
+    try {
+      Operation respUser = await AppScmEngenhariaMobileBll.instance.onSelectFormSiciFustAll();
+      if (respUser.erro) {
+        throw respUser.message!;
+      } else if (respUser.result != null) {
+        List<TbFormSiciFust> res =  respUser.result as  List<TbFormSiciFust>;
+        siciFileModelAllList = await  ParseRespJsonToView.parseDbLOcalSiciFustFormModelToSiciFileList(res);
+        siciFileModelUpdateList = siciFileModelAllList;
+        if(siciFileModelAllList.isEmpty)
+        {
+          throw ('Não é possível converter as informações');
+        }
+        setState(() {statusView = TypeView.viewRenderInformation;});
+        onRestWeb();
+      } else {
+        setState(() {
+          statusView = TypeView.viewErrorInformation;
+          GlobalScaffold.erroInformacao = 'Não há registros salvos no celular';
+        });
+        onRestWeb();
+      }
+    } catch (error, s) {
       setState(() {
         statusView = TypeView.viewErrorInformation;
-        GlobalScaffold.ErroInformacao = error.toString();
+        GlobalScaffold.erroInformacao = error.toString();
       });
     }
   }
 
-  onVisualizar(InputSiciFileModel? prop ) {
+  selectPopupMenuButton() =>
+      PopupMenuButton(
+        icon: const Icon(Icons.filter_list, color: Color(0xFFFFFFFF), size: 25),
+        onSelected: (value) async {
+          try {
+
+          } catch (error) {
+            GlobalScaffold.instance.onToastInformacaoErro(error.toString());
+          }
+        },
+        itemBuilder: (cxt) =>
+        [
+          PopupMenuItem(
+            value: 3,
+            child: Container(
+              width: 180,
+              alignment: Alignment.center,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: const <Widget>[
+                  Icon(Icons.file_upload_outlined,
+                      size: 23, color: Color(0xFF424242)),
+                  SizedBox(width: 10.0),
+                  Expanded(
+                    child: Text(
+                      'Upload',
+                      style: TextStyle(
+                          fontSize: 16.0,
+                          color: Color(0xFF424242),
+                          fontFamily: "avenir-lt-std-medium"),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          PopupMenuItem(
+            value: 4,
+            child: Container(
+              alignment: Alignment.center,
+              width: 180,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: const <Widget>[
+                  Icon(Icons.file_download_outlined,
+                      size: 23, color: Color(0xFF424242)),
+                  SizedBox(width: 10.0),
+                  Expanded(
+                    child: Text(
+                      'Download',
+                      textAlign: TextAlign.start,
+                      softWrap: false,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          fontSize: 16.0,
+                          color: Color(0xFF424242),
+                          fontFamily: "avenir-lt-std-medium"),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      );
+
+  onToview(InputSiciFileModel? prop) {
     //  OnRealizandoOperacao("Web: Buscando lançamentos", true);
     try {
       Navigator.push(
@@ -73,8 +187,7 @@ class ListSiciSentState extends State<ListSiciSentView> {
   @override
   void initState() {
     super.initState();
-    onRestWeb();
-
+    onRestDb();
     Future.delayed(Duration.zero, () {
 
     });
@@ -102,6 +215,9 @@ class ListSiciSentState extends State<ListSiciSentView> {
           centerTitle: true,
           elevation: 0.0,
           title: const Text('Sici/Fust Enviados - Período'),
+          actions: [
+            selectPopupMenuButton()
+          ],
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(0.0),
             child: Container(
@@ -120,7 +236,7 @@ class ListSiciSentState extends State<ListSiciSentView> {
                       child: TextField(
                         enableInteractiveSelection: true,
                         keyboardType: TextInputType.text,
-                        controller: txtCorporateName,
+                        controller: txtSocialReason,
                         textInputAction: TextInputAction.go,
                         maxLines: 1,
                         style: const TextStyle(
@@ -129,8 +245,8 @@ class ListSiciSentState extends State<ListSiciSentView> {
                         ),
                         decoration: InputDecoration(
                           filled: true,
-                          fillColor: const Color(0xff70FFFFFF),
-                          hintStyle: const TextStyle(fontSize: 14.0, color: Color(0xff80FFFFFF)),
+                          fillColor: const Color(0xff70ffffff),
+                          hintStyle: const TextStyle(fontSize: 14.0, color: Color(0xff80ffffff)),
                           hintText: 'Razão social',
                           contentPadding: const EdgeInsets.fromLTRB(10.0, 9.0, 10.0, 11.0),
                           focusedBorder: OutlineInputBorder(
@@ -144,6 +260,21 @@ class ListSiciSentState extends State<ListSiciSentView> {
                             borderRadius: BorderRadius.circular(25.7),
                           ),
                         ),
+                        onChanged: (value) {
+                          setState(() {
+                            siciFileModelAllList = siciFileModelUpdateList.where((element) => element.razaoSocial!.toLowerCase().contains(txtSocialReason.text.toLowerCase())).toList();
+                            if(siciFileModelAllList.isEmpty)
+                            {
+                              setState(() {
+                                statusView = TypeView.viewErrorInformation;
+                                GlobalScaffold.erroInformacao = 'Não a registro para esta solicitação';
+                              });
+                            }
+                            else  {
+                              setState(() {statusView = TypeView.viewRenderInformation;});
+                            }
+                          });
+                        },
                         onSubmitted: (value) {
                           FocusScope.of(context).requestFocus(FocusNode());
 
@@ -165,7 +296,19 @@ class ListSiciSentState extends State<ListSiciSentView> {
                       iconSize: 30,
                       onPressed: () {
                         FocusScope.of(context).requestFocus(FocusNode());
-
+                        setState(() {
+                          siciFileModelAllList = siciFileModelUpdateList.where((element) => element.razaoSocial!.toLowerCase().contains(txtSocialReason.text.toLowerCase())).toList();
+                          if(siciFileModelAllList.isEmpty)
+                          {
+                            setState(() {
+                              statusView = TypeView.viewErrorInformation;
+                              GlobalScaffold.erroInformacao = 'Não a registro para esta solicitação';
+                            });
+                          }
+                          else  {
+                            setState(() {statusView = TypeView.viewRenderInformation;});
+                          }
+                        });
                       },
                     ),
                   ),
@@ -184,7 +327,7 @@ class ListSiciSentState extends State<ListSiciSentView> {
       case TypeView.viewLoading:
         return GlobalView.viewPerformingSearch(maxHeight,context);
       case TypeView.viewErrorInformation:
-        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.ErroInformacao,context);
+        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
       case TypeView.viewRenderInformation:
         return  RefreshIndicator(
           onRefresh: () async {
@@ -198,7 +341,7 @@ class ListSiciSentState extends State<ListSiciSentView> {
             ),
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
-            itemCount: siciFileModelList.length,
+            itemCount: siciFileModelAllList.length,
             itemBuilder: (BuildContext context, int index) => Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.max,
@@ -226,7 +369,7 @@ class ListSiciSentState extends State<ListSiciSentView> {
                                      ),
                                 ),
                                 TextSpan(
-                                  text: siciFileModelList[index].periodoReferencia,
+                                  text: siciFileModelAllList[index].periodoReferencia,
                                   style: const TextStyle(
                                       fontSize: 20.0,
                                       color: Color(0xff333333),
@@ -240,7 +383,7 @@ class ListSiciSentState extends State<ListSiciSentView> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            siciFileModelList[index].razaoSocial.toString(),
+                            siciFileModelAllList[index].razaoSocial.toString(),
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                             softWrap: false,
@@ -257,7 +400,7 @@ class ListSiciSentState extends State<ListSiciSentView> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child:Text(
-                            siciFileModelList[index].observacoes.toString(),
+                            siciFileModelAllList[index].observacoes.toString(),
                             overflow: TextOverflow.ellipsis,
                             maxLines: 2,
                             softWrap: false,
@@ -273,19 +416,19 @@ class ListSiciSentState extends State<ListSiciSentView> {
                 const SizedBox(
                   height: 9.0,
                 ),
-                siciFileModelList[index].icms == "S"
+                siciFileModelAllList[index].idFichaSiciApp != ''
                     ? Container(
                   alignment: Alignment.bottomCenter,
                   height: 80,
-                  color: Color(0xffFFFFFF),
+                  color: const Color(0xffFFFFFF),
                   width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
+                  padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
                       Container(
-                        color: Color(0xffFFFFFF),
+                        color: const Color(0xffFFFFFF),
                         child: InkWell(
                           onTap: () async {
 
@@ -294,8 +437,8 @@ class ListSiciSentState extends State<ListSiciSentView> {
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Icon(Icons.file_upload,
+                            children: const <Widget>[
+                              Icon(Icons.file_upload_outlined,
                                   size: 25, color: Color(0xFF4caf50)),
                               SizedBox(height: 10.0),
                               Text(
@@ -310,11 +453,11 @@ class ListSiciSentState extends State<ListSiciSentView> {
                           ),
                         ),
                       ),
-                      VerticalDivider(
+                      const VerticalDivider(
                         color: Color(0xFF000000),
                       ),
                       Container(
-                        color: Color(0xffFFFFFF),
+                        color: const Color(0xffFFFFFF),
                         //width: MediaQuery.of(context).size.width / 3,
                         child: InkWell(
                           onTap: () {
@@ -323,71 +466,103 @@ class ListSiciSentState extends State<ListSiciSentView> {
                               barrierDismissible: false,
                               builder: (BuildContext context) {
                                 return Dialog(
-                                    child: new Padding(
-                                      padding: EdgeInsets.all(25.0),
+                                    child: Container(
+                                      padding: const EdgeInsets.all(25.0),
+                                      constraints: const BoxConstraints(
+                                        minWidth: 70,
+                                        maxWidth: 450,
+                                      ),
                                       child: Column(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           Container(
-                                            margin: EdgeInsets.fromLTRB(
-                                                0.0, 10.0, 0.0, 15.0),
+                                            margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
                                             height: 50.0,
-                                            child: new Text(
+                                            child: const Text(
                                               'Deseja realmente remover ?',
                                               textAlign: TextAlign.start,
                                               softWrap: false,
                                               maxLines: 2,
-                                              overflow:
-                                              TextOverflow.ellipsis,
+                                              overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
-                                                  fontFamily:
-                                                  'open-sans-regular',
-                                                  fontSize: 17.0,
-                                                  color: Color(0xFF000000)),
+                                                fontSize: 16.0,
+                                                color: Color(0xFF000000),
+                                              ),
                                             ),
                                           ),
                                           Container(
-                                            margin: EdgeInsets.fromLTRB(
-                                                0.0, 10.0, 0.0, 15.0),
-                                            child: new Row(
-                                              mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                              mainAxisSize:
-                                              MainAxisSize.max,
+                                            constraints: const BoxConstraints(
+                                              maxWidth: 400,
+                                            ),
+                                            margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              mainAxisSize: MainAxisSize.max,
                                               children: <Widget>[
-
-                                                SizedBox(width: 15.0),
-                                                FlatButton(
-                                                  color: Color(0xff018a8a),
-                                                  //`Icon` to display
-                                                  child: Text('Não',
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                        FontWeight.w500,
-                                                        fontFamily:
-                                                        'avenir-lt-std-roman',
-                                                        color: Color(
-                                                            0xffFFFFFF),
-                                                        fontSize: 16.0,
-                                                      )),
-                                                  //`Text` to display
-                                                  onPressed: () {
-                                                    Navigator.of(context,
-                                                        rootNavigator:
-                                                        true)
-                                                        .pop('dialog');
-                                                  },
-                                                  shape:
-                                                  new RoundedRectangleBorder(
-                                                    borderRadius:
-                                                    new BorderRadius
-                                                        .circular(5.0),
+                                                Expanded(
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.only(left: 14.0),
+                                                    child:  OutlinedButton(
+                                                      style: TextButton.styleFrom(
+                                                        backgroundColor: const Color(0xFFffffff),
+                                                        side: const BorderSide(
+                                                          color: Color(0xFF3F7EC1), //Color of the border
+                                                        ),
+                                                        minimumSize: const Size(130, 43),
+                                                        maximumSize: const Size(130, 43),
+                                                        textStyle: const TextStyle(
+                                                          color:  Color(0xffFFFFFF),
+                                                          fontSize: 15,
+                                                        ),
+                                                      ),
+                                                      onPressed: () async {
+                                                        try {
+                                                       Operation respUser = await AppScmEngenhariaMobileBll.instance.onDeleteFormSiciFustId(siciFileModelAllList[index].idFichaSiciApp.toString());
+                                                        if (respUser.erro || respUser.result == null) {
+                                                             throw respUser.message!;
+                                                         } else {
+                                                          siciFileModelAllList.remove(siciFileModelAllList[index]);
+                                                          Navigator.pop(context);
+                                                        }
+                                                        } catch (error) {
+                                                          GlobalScaffold.instance.onToastInformacaoErro(error.toString());
+                                                          Navigator.pop(context);
+                                                        }
+                                                      },
+                                                      child: const Text('  Sim  ',
+                                                          style: TextStyle(
+                                                            color: Color(0xFF3F7EC1),
+                                                          )),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.only(left: 14.0),
+                                                    child: OutlinedButton(
+                                                      style: TextButton.styleFrom(
+                                                        minimumSize: const Size(130, 43),
+                                                        maximumSize: const Size(130, 43),
+                                                        textStyle: const TextStyle(
+                                                          color:  Color(0xffFFFFFF),
+                                                          fontSize: 15,
+                                                        ),
+                                                      ),
+                                                      onPressed: () async {
+                                                        try {
+                                                          Navigator.pop(context);
+                                                        } catch (error) {
+                                                          GlobalScaffold.instance.onToastInformacaoErro(error.toString());
+                                                        }
+                                                      },
+                                                      child: const Text('  Não  ',
+                                                          style: TextStyle(
+                                                            color: Color(0xFFffffff),
+                                                          )),
+                                                    ),
                                                   ),
                                                 ),
                                               ],
@@ -402,8 +577,8 @@ class ListSiciSentState extends State<ListSiciSentView> {
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Icon(Icons.delete_outline,
+                            children: const <Widget>[
+                              Icon(Icons.delete_outlined,
                                   size: 25, color: Color(0xfff44336)),
                               SizedBox(height: 10.0),
                               Text(
@@ -418,21 +593,21 @@ class ListSiciSentState extends State<ListSiciSentView> {
                           ),
                         ),
                       ),
-                      VerticalDivider(
+                      const VerticalDivider(
                         color: Color(0xFF000000),
                       ),
                       Container(
-                        color: Color(0xffFFFFFF),
+                        color: const Color(0xffFFFFFF),
                         //width: MediaQuery.of(context).size.width / 3,
                         child: InkWell(
                           onTap: () {
-
+                            onToview(siciFileModelAllList[index]);
                           },
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: const <Widget>[
-                              Icon(Icons.visibility,
+                              Icon(Icons.visibility_outlined,
                                   size: 25, color: Color(0xFFffc107)),
                               SizedBox(height: 10.0),
                               Text(
@@ -453,25 +628,25 @@ class ListSiciSentState extends State<ListSiciSentView> {
                     : Container(
                   alignment: Alignment.bottomCenter,
                   height: 80,
-                  color: Color(0xffFFFFFF),
+                  color: const Color(0xffFFFFFF),
                   width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
+                  padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
                       Container(
-                        color: Color(0xffFFFFFF),
+                        color: const Color(0xffFFFFFF),
                         //width: MediaQuery.of(context).size.width / 3,
                         child: InkWell(
                           onTap: () async {
-
+                            onToview(siciFileModelAllList[index]);
                           },
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Icon(Icons.file_download,
+                            children: const <Widget>[
+                              Icon(Icons.file_download_outlined,
                                   size: 25, color: Color(0xFF4caf50)),
                               SizedBox(height: 10.0),
                               Text(
@@ -486,22 +661,21 @@ class ListSiciSentState extends State<ListSiciSentView> {
                           ),
                         ),
                       ),
-                      VerticalDivider(
+                      const VerticalDivider(
                         color: Color(0xFF000000),
                       ),
                       Container(
-                        color: Color(0xffFFFFFF),
+                        color: const Color(0xffFFFFFF),
                         //width: MediaQuery.of(context).size.width / 3,
                         child: InkWell(
                           onTap: () {
-                           onVisualizar(siciFileModelList[index]);
-                           // ServicoMobileService.onMakeReleasesSici(siciFileModelList[index]);
+                            onToview(siciFileModelAllList[index]);
                           },
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: const <Widget>[
-                              Icon(Icons.visibility,
+                              Icon(Icons.visibility_outlined,
                                   size: 25, color: Color(0xFFffc107)),
                               SizedBox(height: 10.0),
                               Text(

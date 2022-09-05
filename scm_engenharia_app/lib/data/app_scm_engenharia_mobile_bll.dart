@@ -16,7 +16,6 @@ class AppScmEngenhariaMobileBll {
   }
 
 
-
   // User ---------------------------------------------------------------------------------------------
 
   Future<Operation> onSaveUser(TbUser user) async {
@@ -31,7 +30,7 @@ class AppScmEngenhariaMobileBll {
       operation.result = true;
     } catch (ex) {
       operation.erro = true;
-      operation.message = ' , erro ' + ex.toString();
+      operation.message = 'Erro $ex';
     }
     return operation;
   }
@@ -48,7 +47,7 @@ class AppScmEngenhariaMobileBll {
       operation.result = true;
     } catch (ex) {
       operation.erro = true;
-      operation.message = ' , erro ' + ex.toString();
+      operation.message = 'Erro $ex';
     }
     return operation;
   }
@@ -65,40 +64,40 @@ class AppScmEngenhariaMobileBll {
       operation.result = true;
     } catch (ex) {
       operation.erro = true;
-      operation.message = ' , erro ' + ex.toString();
+      operation.message = 'Erro $ex';
     }
     return operation;
   }
 
   Future<Operation> onSelectUser() async {
-    Operation operacao = Operation();
+    Operation operation = Operation();
     try {
-      operacao.result = null;
-      operacao.message = 'Operação realizada com sucesso';
-      operacao.erro = false;
+      operation.result = null;
+      operation.message = 'Operação realizada com sucesso';
+      operation.erro = false;
       final accessToken = realm.all<TbUser>();
       if(accessToken.length > 1)
         {
           realm.write(() {
             realm.deleteAll<TbUser>();
           });
-          operacao.result = null;
+          operation.result = null;
           throw ('Todos usuários foram removidos');
         }
       else  if(accessToken.isEmpty)
         {
-          operacao.result = null;
-          operacao.message = 'Usuário não logado';
+          operation.result = null;
+          operation.message = 'Usuário não logado';
         }
       else
       {
-        operacao.result = accessToken.first;
+        operation.result = accessToken.first;
       }
     } catch (ex) {
-      operacao.erro = true;
-      operacao.message = ' , erro ' + ex.toString();
+      operation.erro = true;
+      operation.message = 'Erro $ex';
     }
-    return operacao;
+    return operation;
   }
 
 
@@ -113,6 +112,23 @@ class AppScmEngenhariaMobileBll {
     try {
       realm.write(() {
         realm.add<TbFormSiciFust>(formSiciFust);
+      });
+      operation.result = true;
+    } catch (ex) {
+      operation.erro = true;
+      operation.message = 'Erro $ex';
+    }
+    return operation;
+  }
+
+  Future<Operation> onUpdateFormSiciFust(TbFormSiciFust formSiciFust) async {
+    Operation operation = Operation();
+    operation.result = null;
+    operation.message = 'Operação realizada com sucesso';
+    operation.erro = false;
+    try {
+      realm.write(() {
+        formSiciFust;
       });
       operation.result = true;
     } catch (ex) {
@@ -154,34 +170,41 @@ class AppScmEngenhariaMobileBll {
     return operacao;
   }
 
-  Future<Operation> onSelectAll() async {
-    Operation operacao = Operation();
-    try {
-      operacao.result = true;
-      operacao.message = 'Operação realizada com sucesso';
-      operacao.erro = false;
-      realm.write(() {
-        realm.all<TbFormSiciFust>();
-      });
-    } catch (ex) {
-      operacao.erro = true;
-      operacao.message = ' , erro $ex';
-    }
-    return operacao;
-  }
-
-  Future<Operation> onDeleteFormSiciFustId(TbFormSiciFust formSiciFust) async {
+  Future<Operation> onSelectFormSiciFustAll() async {
     Operation operation = Operation();
     try {
       operation.result = true;
       operation.message = 'Operação realizada com sucesso';
       operation.erro = false;
+      final formSici = realm.all<TbFormSiciFust>().toList();
+      if(formSici.isEmpty)
+        {
+          operation.result = null;
+        }
+      else
+        {
+          operation.result = formSici;
+        }
+    } catch (ex) {
+      operation.erro = true;
+      operation.message = 'Erro $ex';
+    }
+    return operation;
+  }
+
+  Future<Operation> onDeleteFormSiciFustId(String idFormSiciFust) async {
+    Operation operation = Operation();
+    try {
+      operation.result = true;
+      operation.message = 'Operação realizada com sucesso';
+      operation.erro = false;
+      final formSici = realm.query<TbFormSiciFust>('idFormSiciFustApp == $idFormSiciFust').first;
       realm.write(() {
-        realm.delete(formSiciFust);
+        realm.delete(formSici);
       });
     } catch (ex) {
       operation.erro = true;
-      operation.message = ' , erro $ex';
+      operation.message = 'Erro $ex';
     }
     return operation;
   }

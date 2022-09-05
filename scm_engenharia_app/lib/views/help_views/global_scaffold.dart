@@ -10,7 +10,7 @@ class GlobalScaffold {
 
   int selectedPageBottomNavigationIndex = 0;
   String selectedPageView = '';
-  static String ErroInformacao = 'Ops! Algo de errado aconteceu? Não se preocupe, vou te ajudar a resolver!';
+  static String erroInformacao = 'Ops! Algo de errado aconteceu? Não se preocupe, vou te ajudar a resolver!';
   static  Map<String, dynamic> map = {};
 
   onToastInformacaoErro(String mensagem) {
@@ -24,7 +24,7 @@ class GlobalScaffold {
         overflow: TextOverflow.ellipsis,
         maxLines: 2,
         softWrap: false,
-        style: TextStyle(
+        style: const TextStyle(
             fontSize: 15.0,
             color: Color(0xffFFFFFF),
             fontFamily: 'avenir-lt-medium'),
@@ -46,7 +46,7 @@ class GlobalScaffold {
         overflow: TextOverflow.ellipsis,
         maxLines: 2,
         softWrap: false,
-        style: TextStyle(
+        style: const TextStyle(
             fontSize: 15.0,
             color: Color(0xffFFFFFF),
             fontFamily: "avenir-lt-medium"),
@@ -337,81 +337,77 @@ class OnAlertInformation {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8.0))),
-          child:  Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(height: 15.0),
-              Column(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8.0))),
+            child: Container(
+              constraints: const BoxConstraints(
+                minWidth: 70,
+                maxWidth: 600,
+              ),
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    "Informação",
-                    style: TextStyle(
-                        fontSize: 20.0,
-                        color: Color(0xff212529),
-                        fontFamily: "avenir-lt-std-roman"),
+                  const SizedBox(height: 15.0),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text(
+                        'Informação',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20.0,
+                            color: Color(0xff023c6a),
+                            fontFamily: "Myriad-Pro-Light"),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const Divider(
+                        color: Colors.black12,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                        child: Text(
+                          message!,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 10,
+                          softWrap: false,
+                          style: const TextStyle(
+                            fontFamily: 'Myriad-Pro-Light',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 19.0,
+                            color: Color(0xff737373),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Divider(
+                  const Divider(
                     color: Colors.black12,
                   ),
-                  Padding(padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-                    child:  Text(
-                      message.toString(),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 4,
-                      softWrap: false,
-                      style: TextStyle(
-                          fontSize: 17.0,
-                          color: Color(0xff212529),
-                          fontFamily: "avenir-lt-std-roman"),
-                    ),
-                  ),
-                ],
-              ),
-              Divider(
-                color: Colors.black12,
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
-                child: new Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    FlatButton(
-                      color: Color(0xff30bc8c),
-                      //`Icon` to display
-                      child: Text(
-                        '           OK           ',
-                        style: TextStyle(
-                            fontSize: 17.0,
-                            color: Color(0xffFFFFFF),
-                            fontFamily: "avenir-lt-std-roman"),
-                      ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
+                    child:Center(child:  OutlinedButton(
+                      child:  const Text('             OK           ' ,  style:  TextStyle(
+
+                        fontWeight: FontWeight.bold,
+                        fontSize: 19.0,
+                        color: Colors.white,
+                      ),),
                       //`Text` to display
                       onPressed: () {
                         Navigator.pop(context);
                         FocusManager.instance.primaryFocus!.unfocus();
                       },
-                      shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(5.0),
-                      ),
-                    ),
-                  ],
-                ),
+                    ),),
+                  ),
+                ],
               ),
-            ],
-          ),
-        );
+            ));
       },
     );
   }

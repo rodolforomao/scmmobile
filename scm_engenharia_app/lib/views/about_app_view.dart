@@ -1,14 +1,11 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../models/info_app.dart';
-import '../web_service/servico_mobile_service.dart';
 import 'help_views/global_view.dart';
 
 
@@ -107,7 +104,7 @@ class AboutAppState extends State<AboutAppView> {
           ),
         ),
       ),
-      body: GlobalView.viewRenderSingleChildScrollView(
+      body: Padding(padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0), child: GlobalView.viewRenderSingleChildScrollView(
           MediaQuery.of(context).size.height,
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -295,7 +292,7 @@ class AboutAppState extends State<AboutAppView> {
               const SizedBox(height: 20.0),
             ],
           ),
-          context),
+          context),),
     );
   }
 

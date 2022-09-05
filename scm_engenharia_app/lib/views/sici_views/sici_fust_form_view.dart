@@ -161,31 +161,6 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
         txtControllerReferencePeriod.text = DateFormat('dd/MM/yyyy').format(DateTime(picked.year, picked.month, 1));
       });
     }
-
-    // DateTime selectedDate = DateTime.parse("01-07-2020");
-
-    // showMonthPicker(
-    //   context: context,
-    //   firstDate: DateTime(DateTime.now().year - 2, 5),
-    //   lastDate: DateTime(DateTime.now().year, 9),
-    //   initialDate: selectedDate ?? DateTime.parse("01-07-2020"),
-    //   locale: Locale("us"),
-    // ).then((date) {
-    //   if (date != null) {
-    //     setState(() {
-    //       selectedDate = date;
-    //     });
-    //   }
-    // });
-
-    // if (selectedDate != null && selectedDate != _DataSelecionada) {
-    //   setState(() {
-    //     _DataSelecionada =
-    //         DateTime(selectedDate.year, selectedDate.month - 1, 1);
-    //     _TxtControllerPeriodoReferencia.text = DateFormat('dd/MM/yyyy')
-    //         .format(DateTime(selectedDate.year, selectedDate.month, 1));
-    //   });
-    // }
   }
 
   Inc() async {
@@ -276,7 +251,7 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                 )),
           ],
         ),
-        body: GlobalView.viewRenderSingleChildScrollView(maxHeight,Stepper(
+        body: Padding(padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0), child: GlobalView.viewRenderSingleChildScrollView(maxHeight,Stepper(
           controlsBuilder: (BuildContext context, ControlsDetails details)
           {
             return Row(
@@ -800,9 +775,9 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
                               inputSiciFustForm.dadosEmServicos!.add(value);
                             }
                             else
-                              {
-                                inputSiciFustForm.dadosEmServicos!.add(value);
-                              }
+                            {
+                              inputSiciFustForm.dadosEmServicos!.add(value);
+                            }
                           }
                         });
                       },
@@ -852,7 +827,7 @@ class SiciFustFormState extends State<SiciFustFormView> implements IsSilly {
               }
             });
           },
-        ),context),
+        ),context),),
     );
   }
 

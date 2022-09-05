@@ -1,16 +1,21 @@
+import 'dart:convert';
+
+import '../data/tb_form_sici_fust.dart';
 import 'input/input_sici_fust_form_model.dart';
 import 'output/output_sici_fust_model.dart';
 
 class ParseRespJsonToView{
+
   static Future<List<InputSiciFileModel>> parseSiciFustFormModelToSiciFileList(List<OutputSiciFustFormModel>  siciFustFormModel) async{
     try {
       List<InputSiciFileModel> respSiciFileModel = <InputSiciFileModel>[];
       for (var prop in siciFustFormModel) {
-        InputSiciFileModel addprop = new InputSiciFileModel();
-        addprop.idFichaSiciApp = 0;
+        InputSiciFileModel addprop = InputSiciFileModel();
+        addprop.idFichaSiciApp = '';
         addprop.idEmpresa = prop.idEmpresa;
-        addprop.isSincronizar = "N";
         addprop.id = prop.id;
+        addprop.idUsuarioConsultor = prop.idUsuarioConsultor;
+        addprop.idUsuarioCliente = prop.idUsuarioCliente;
         addprop.periodoReferencia = prop.periodoReferencia;
         addprop.razaoSocial = prop.razaoSocial;
         addprop.telefoneFixo = prop.telefoneFixo;
@@ -32,6 +37,7 @@ class ParseRespJsonToView{
         for (var propDadosEmServicos in prop.dadosEmServicosFormModel!.toList()) {
           InputDadosEmServicosModel addPropDadosEmServicos = InputDadosEmServicosModel();
           addPropDadosEmServicos.idLancamento = propDadosEmServicos.idLancamento;
+          addPropDadosEmServicos.idSiciFile =  addprop.id;
           addPropDadosEmServicos.codIbge = propDadosEmServicos.codIbge;
           addPropDadosEmServicos.uf  = propDadosEmServicos.uf;
           addPropDadosEmServicos.tipoCliente = propDadosEmServicos.tipoCliente;
@@ -49,7 +55,22 @@ class ParseRespJsonToView{
       }
       return respSiciFileModel;
     } catch (error) {
-      throw ('erro $error');
+      throw ('Erro $error');
+    }
+  }
+
+  static Future<List<InputSiciFileModel>> parseDbLOcalSiciFustFormModelToSiciFileList(List<TbFormSiciFust> siciFustFormModel) async{
+    try {
+      List<InputSiciFileModel> respSiciFileModel = <InputSiciFileModel>[];
+      for (var prop in siciFustFormModel) {
+        InputSiciFileModel resul = InputSiciFileModel.fromJson(jsonDecode(prop.result) as Map<String, dynamic>);
+        resul.idFichaSiciApp = prop.idFichaSiciApp.toString();
+        resul.idRegistro = prop.idRegistro;
+        respSiciFileModel.add(resul);
+      }
+      return respSiciFileModel;
+    } catch (error) {
+      throw ('Erro $error');
     }
   }
 }

@@ -1,8 +1,10 @@
 
 class InputSiciFileModel {
-  int? idFichaSiciApp;
+  String? idFichaSiciApp;
+  String? idRegistro;
   String? idEmpresa;
-  String? isSincronizar;
+  String? idUsuarioCliente;
+  String? idUsuarioConsultor;
   String? id;
   String? periodoReferencia;
   String? razaoSocial;
@@ -23,10 +25,12 @@ class InputSiciFileModel {
   String? observacoes;
   List<InputDadosEmServicosModel>? dadosEmServicos;
   InputSiciFileModel({
-    this.idFichaSiciApp = 0,
+    this.idFichaSiciApp = '',
+    this.idRegistro,
     this.idEmpresa,
-    this.isSincronizar,
     this.id,
+    this.idUsuarioCliente,
+    this.idUsuarioConsultor,
     this.periodoReferencia,
     this.razaoSocial,
     this.telefoneFixo,
@@ -48,27 +52,29 @@ class InputSiciFileModel {
   });
 
   InputSiciFileModel.fromJson(Map<String, dynamic> json) {
-    idFichaSiciApp = json['idFichaSiciApp'];
-    idEmpresa = json['idEmpresa'];
-    isSincronizar = json['isSincronizar'];
-    id = json['id'];
-    periodoReferencia = json['periodoReferencia'];
-    razaoSocial = json['razaoSocial'];
-    telefoneFixo = json['telefoneFixo'];
-    cnpj = json['cnpj'];
-    telefoneMovel = json['telefoneMovel'];
-    receitaBruta = json['receitaBruta'];
-    idFinanceiro = json['idFinanceiro'];
-    simples = json['simples'];
-    simplesPorc = json['simplesPorc'];
-    icms = json['icms'];
-    icmsPorc = json['icmsPorc'];
-    pis = json['pis'];
-    pisPorc = json['pisPorc'];
-    cofins = json['cofins'];
-    cofinsPorc = json['cofinsPorc'];
-    receitaLiquida = json['receitaLiquida'];
-    observacoes = json['observacoes'];
+    idFichaSiciApp = json['idFichaSiciApp'].toString();
+    idRegistro = json['idRegistro'].toString();
+    idEmpresa = json['idEmpresa'].toString();
+    id = json['id'].toString();
+    idUsuarioCliente = json['id_usuario_cliente'].toString();
+    idUsuarioConsultor = json['id_usuario_consultor'].toString();
+    periodoReferencia = json['periodoReferencia'].toString();
+    razaoSocial = json['razaoSocial'].toString();
+    telefoneFixo = json['telefoneFixo'].toString();
+    cnpj = json['cnpj'].toString();
+    telefoneMovel = json['telefoneMovel'].toString();
+    receitaBruta = json['receitaBruta'].toString();
+    idFinanceiro = json['idFinanceiro'].toString();
+    simples = json['simples'].toString();
+    simplesPorc = json['simplesPorc'].toString();
+    icms = json['icms'].toString();
+    icmsPorc = json['icmsPorc'].toString();
+    pis = json['pis'].toString();
+    pisPorc = json['pisPorc'].toString();
+    cofins = json['cofins'].toString();
+    cofinsPorc = json['cofinsPorc'].toString();
+    receitaLiquida = json['receitaLiquida'].toString();
+    observacoes = json['observacoes'].toString();
     if (json['dadosEmServicos'] != null) {
       dadosEmServicos = <InputDadosEmServicosModel>[];
       json['dadosEmServicos'].forEach((v) {
@@ -78,28 +84,30 @@ class InputSiciFileModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['idFichaSiciApp'] = this.idFichaSiciApp;
-    data['idEmpresa'] = this.idEmpresa == null ? "" : this.idEmpresa;
-    data['isSincronizar'] = this.isSincronizar == null ? "" : this.isSincronizar;
-    data['idLancamento'] = this.id == null ? "" : this.id;
-    data['periodoReferencia'] = this.periodoReferencia == null ? "" : this.periodoReferencia;
-    data['razaoSocial'] = this.razaoSocial == null ? "" : this.razaoSocial;
-    data['telefoneFixo'] = this.telefoneFixo == null ? "" : this.telefoneFixo;
-    data['cnpj'] = this.cnpj == null ? "" : this.cnpj;
-    data['telefoneMovel'] = this.telefoneMovel == null ? "" : this.telefoneMovel;
-    data['receitaBruta'] = this.receitaBruta == null ? "" : this.receitaBruta;
-    data['idFinanceiro'] = this.idFinanceiro == null ? "" : this.idFinanceiro;
-    data['simples'] = this.simples == null ? "" : this.simples;
-    data['simplesPorc'] = this.simplesPorc == null ? "" : this.simplesPorc;
-    data['icms'] = this.icms == null ? "" : this.icms;
-    data['icmsPorc'] = this.icmsPorc == null ? "" : this.icmsPorc;
-    data['pis'] = this.pis == null ? "" : this.pis;
-    data['pisPorc'] = this.pisPorc == null ? "" : this.pisPorc;
-    data['cofins'] = this.cofins == null ? "" : this.cofins;
-    data['cofinsPorc'] = this.cofinsPorc == null ? "" : this.cofinsPorc;
-    data['receitaLiquida'] = this.receitaLiquida == null ? "" : this.receitaLiquida;
-    data['observacoes'] = this.observacoes == null ? "" : this.observacoes;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['idFichaSiciApp'] = idFichaSiciApp  ?? '';
+    data['idRegistro'] = idRegistro  ?? '';
+    data['idEmpresa'] = idEmpresa  ?? '';
+    data['id'] = id ?? '';
+    data['idUsuarioCliente'] = idUsuarioCliente ?? '';
+    data['idUsuarioConsultor'] = idUsuarioConsultor ?? '';
+    data['periodoReferencia'] = periodoReferencia ?? '';
+    data['razaoSocial'] = razaoSocial ?? '';
+    data['telefoneFixo'] = telefoneFixo ?? '';
+    data['cnpj'] = cnpj  ?? '';
+    data['telefoneMovel'] = telefoneMovel ?? '';
+    data['receitaBruta'] = receitaBruta  ?? '';
+    data['idFinanceiro'] = idFinanceiro  ?? '';
+    data['simples'] = simples  ?? '';
+    data['simplesPorc'] = simplesPorc  ?? '';
+    data['icms'] = icms  ?? '';
+    data['icmsPorc'] = icmsPorc  ?? '';
+    data['pis'] = pis  ?? '';
+    data['pisPorc'] = pisPorc  ?? '';
+    data['cofins'] = cofins  ?? '';
+    data['cofinsPorc'] = cofinsPorc  ?? '';
+    data['receitaLiquida'] = receitaLiquida  ?? '';
+    data['observacoes'] = observacoes  ?? '';
     if (this.dadosEmServicos != null) {
       data['dadosEmServicos'] =
           this.dadosEmServicos!.map((v) => v.toJson()).toList();
@@ -110,6 +118,7 @@ class InputSiciFileModel {
 
 class InputDadosEmServicosModel {
   String? idLancamento;
+  String? idSiciFile;
   String? codIbge;
   String? uf;
   String? tipoCliente;
@@ -121,7 +130,9 @@ class InputDadosEmServicosModel {
   String? quantidadeAcesso;
 
   InputDadosEmServicosModel(
-      {this.idLancamento,
+      {
+        this.idLancamento,
+        this.idSiciFile,
         this.codIbge,
         this.uf,
         this.tipoCliente,
@@ -133,30 +144,32 @@ class InputDadosEmServicosModel {
         this.quantidadeAcesso});
 
   InputDadosEmServicosModel.fromJson(Map<String, dynamic> json) {
-    idLancamento = json['id_lancamento'];
-    codIbge = json['cod_ibge'];
+    idLancamento = json['idLancamento'];
+    idSiciFile = json['idSiciFile'];
+    codIbge = json['codIbge'];
     uf = json['uf'];
-    tipoCliente = json['tipo_cliente'];
-    tipoAtendimento = json['tipo_atendimento'];
-    tipoAcesso = json['tipo_acesso'];
+    tipoCliente = json['tipoCliente'];
+    tipoAtendimento = json['tipoAtendimento'];
+    tipoAcesso = json['tipoAcesso'];
     tecnologia = json['tecnologia'];
-    tipoProduto = json['tipo_produto'];
+    tipoProduto = json['tipoProduto'];
     velocidade = json['velocidade'];
-    quantidadeAcesso = json['quantidade_acesso'];
+    quantidadeAcesso = json['quantidadeAcesso'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id_lancamento'] = this.idLancamento;
-    data['cod_ibge'] = this.codIbge;
-    data['uf'] = this.uf;
-    data['tipo_cliente'] = this.tipoCliente;
-    data['tipo_atendimento'] = this.tipoAtendimento;
-    data['tipo_acesso'] = this.tipoAcesso;
-    data['tecnologia'] = this.tecnologia;
-    data['tipo_produto'] = this.tipoProduto;
-    data['velocidade'] = this.velocidade;
-    data['quantidade_acesso'] = this.quantidadeAcesso;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['idLancamento'] = idLancamento;
+    data['idSiciFile'] = idSiciFile;
+    data['codIbge'] = codIbge;
+    data['uf'] = uf;
+    data['tipoCliente'] = tipoCliente;
+    data['tipoAtendimento'] = tipoAtendimento;
+    data['tipoAcesso'] = tipoAcesso;
+    data['tecnologia'] = tecnologia;
+    data['tipoProduto'] = tipoProduto;
+    data['velocidade'] = velocidade;
+    data['quantidadeAcesso'] = quantidadeAcesso;
     return data;
   }
 }

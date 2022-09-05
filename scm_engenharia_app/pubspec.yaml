@@ -40,7 +40,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
 
   cupertino_icons: ^1.0.5 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
-  animations: ^2.0.3 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  animations: ^2.0.4 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
   image_picker: ^0.8.5+3  # ANDROID, IOS, WEB
   path_provider: ^2.0.11 # ANDROID, IOS, LINUX, MACOS, WINDOWS
   shared_preferences: ^2.0.15 # ANDROID, IOS, LINUX, MACOS, WEB
@@ -49,7 +49,7 @@ dependencies:
   file_selector: ^0.9.0 #  MACOS, WEB , WINDOWS
 
   #Plugin microsoft
-  fluentui_system_icons: ^1.1.177 # ANDROID ,IOS, LINUX, MACOS, WEB, WINDOWS
+  fluentui_system_icons: ^1.1.178 # ANDROID ,IOS, LINUX, MACOS, WEB, WINDOWS
 
   #Plugin dart.dev
   http: ^0.13.5 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
@@ -58,7 +58,7 @@ dependencies:
   html: ^0.15.0 # ANDROID, IOS, LINUX,MACOS, WEB, WINDOWS
 
   #Plugin tekartik.com
-  realm: ^0.3.2+beta # ANDROID, IOS, LINUX, MACOS, WINDOWS
+  realm: ^0.4.0+beta # ANDROID, IOS, LINUX, MACOS, WINDOWS
 
   #Plugin Flutter Community
   connectivity_plus: ^2.3.6+1 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
@@ -70,10 +70,10 @@ dependencies:
   file: ^6.1.2 # ANDROID, IOS, LINUX, MACOS, WINDOWS
 
   #Plugin firebase
-  firebase_core: ^1.21.0 # ANDROID ,IOS, MACOS, WEB,
-  firebase_crashlytics: ^2.8.8 # ANDROID ,IOS, MACOS
-  firebase_messaging: ^12.0.3 # ANDROID,IOS, MACOS, WEB
-  firebase_analytics: ^9.3.2 # ANDROID,IOS,MACOS,WEB
+  firebase_core: ^1.21.1 # ANDROID ,IOS, MACOS, WEB,
+  firebase_crashlytics: ^2.8.9 # ANDROID ,IOS, MACOS
+  firebase_messaging: ^13.0.0 # ANDROID,IOS, MACOS, WEB
+  firebase_analytics: ^9.3.3 # ANDROID,IOS,MACOS,WEB
 
   #Plugin outros
   jaguar_jwt: ^3.0.0
