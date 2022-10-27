@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="br.com.scmengenharia.scmapp.scm_engenharia_app">
+    package="br.com.scmengenharia.dici">
    <application
         android:label="scm_engenharia_app"
         android:name="${applicationName}"

@@ -1,199 +1,115 @@
-import 'dart:io';
-import 'dart:math';
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:scm_engenharia_app/views/help_views/global_scaffold.dart';
-import 'package:scm_engenharia_app/views/splash_screen_view.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'help/navigation_service/router.dart';
-import 'thema/app_thema.dart';
-import 'package:scm_engenharia_app/help/navigation_service/route_paths.dart' as routes;
-import 'package:scm_engenharia_app/help/navigation_service/router.dart' as router;
 
-final navigatorKey = GlobalKey<NavigatorState>();
-class MyHttpOverrides extends HttpOverrides{
-  @override
-  HttpClient createHttpClient(SecurityContext? context){
-    return super.createHttpClient(context)..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
-  }
-}
-
-Future<void> main() async {
-  HttpOverrides.global = MyHttpOverrides();
-  WidgetsFlutterBinding.ensureInitialized();
-  //NotificationHandler().initializeFcmNotification();
-
-  SharedPreferences.getInstance().then((prefs) {
-    bool? darkModeOn = prefs.getBool('darkMode');
-    print(darkModeOn);
-    print('darkMode inc');
-    AppThema.themeNotifierState.value = ThemeModel(darkModeOn == false ? ThemeMode.dark : ThemeMode.light);
-    runApp(MyApp());
-  });
+void main() {
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<ThemeModel>(
-      valueListenable:  AppThema.themeNotifierState,
-      builder: (_, model, __) {
-        final mode = model.mode;
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          navigatorKey: GlobalScaffold.instance.navigatorKey,
-          scaffoldMessengerKey: GlobalScaffold.instance.messangerKey,
-          onGenerateRoute: router.generateRoute,
-          initialRoute: routes.splashScreenRoute,
-          //routes:RoutesPage.onRoutesPage(),
-          title: 'SCM Engenharia',
-          builder: (context ,child){
-            return Scaffold(
-              key: GlobalScaffold.instance.globalKey,
-              body: child,
-            );
-          },
-          localizationsDelegates: const [
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: const [Locale('pt', 'BR')],
-          theme: AppThema.lightTheme.copyWith(
-            pageTransitionsTheme:  const PageTransitionsTheme(
-              builders: {
-                TargetPlatform.android: SharedAxisPageTransitionsBuilder(
-                  transitionType: SharedAxisTransitionType.horizontal,
-                ),
-                TargetPlatform.iOS: SharedAxisPageTransitionsBuilder(
-                  transitionType: SharedAxisTransitionType.horizontal,
-                ),
-              },
-            ),
-          ),
-          darkTheme: AppThema.darkTheme,
-          themeMode: mode,
-          //navigatorObservers: <NavigatorObserver>[GlobalScaffold.observer],
-          home:const SplashScreenView(),
-        );
-      },
-    );
-  }
-}
-
-
-
-class MyAppp extends StatelessWidget {
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
+        // This is the theme of your application.
+        //
+        // Try running your application with "flutter run". You'll see the
+        // application has a blue toolbar. Then, without quitting the app, try
+        // changing the primarySwatch below to Colors.green and then invoke
+        // "hot reload" (press "r" in the console where you ran "flutter run",
+        // or simply save your changes to "hot reload" in a Flutter IDE).
+        // Notice that the counter didn't reset back to zero; the application
+        // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({super.key, required this.title});
+
+  // This widget is the home page of your application. It is stateful, meaning
+  // that it has a State object (defined below) that contains fields that affect
+  // how it looks.
+
+  // This class is the configuration for the state. It holds the values (in this
+  // case the title) provided by the parent (in this case the App widget) and
+  // used by the build method of the State. Fields in a Widget subclass are
+  // always marked "final".
 
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  /// Set default number of rows to be displayed per page
-  var _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
-  int nextRecords = 1;
+  int _counter = 0;
+
+  void _incrementCounter() {
+    setState(() {
+      // This call to setState tells the Flutter framework that something has
+      // changed in this State, which causes it to rerun the build method below
+      // so that the display can reflect the updated values. If we changed
+      // _counter without calling setState(), then the build method would not be
+      // called again, and so nothing would appear to happen.
+      _counter++;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    // This method is rerun every time setState is called, for instance as done
+    // by the _incrementCounter method above.
+    //
+    // The Flutter framework has been optimized to make rerunning build methods
+    // fast, so that you can just rebuild anything that needs updating rather
+    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
+        // Here we take the value from the MyHomePage object that was created by
+        // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: SingleChildScrollView(
-        child: PaginatedDataTable(
-          rowsPerPage: _rowsPerPage,
-          source: RowSource(),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.refresh),
-              onPressed: () {
-                setState(() {
-
-                });
-              },
+      body: Center(
+        // Center is a layout widget. It takes a single child and positions it
+        // in the middle of the parent.
+        child: Column(
+          // Column is also a layout widget. It takes a list of children and
+          // arranges them vertically. By default, it sizes itself to fit its
+          // children horizontally, and tries to be as tall as its parent.
+          //
+          // Invoke "debug painting" (press "p" in the console, choose the
+          // "Toggle Debug Paint" action from the Flutter Inspector in Android
+          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
+          // to see the wireframe for each widget.
+          //
+          // Column has various properties to control how it sizes itself and
+          // how it positions its children. Here we use mainAxisAlignment to
+          // center the children vertically; the main axis here is the vertical
+          // axis because Columns are vertical (the cross axis would be
+          // horizontal).
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text(
+              'You have pushed the button this many times:',
             ),
-          ],
-          onPageChanged: (int? n) {
-            /// value of n is the number of rows displayed so far
-            setState(() {
-              if (n != null) {
-                debugPrint('onRowsPerPageChanged $_rowsPerPage ${RowSource()._rowCount - n}');
-
-                /// Update rowsPerPage if the remaining count is less than the default rowsPerPage
-                if (RowSource()._rowCount - n < _rowsPerPage)
-                 {
-                   _rowsPerPage = RowSource()._rowCount - n;
-                   /// else, restore default rowsPerPage value
-                 }
-                else
-                  {
-                    _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
-                  }
-              } else
-                {
-                  _rowsPerPage = 0;
-                }
-            });
-          },
-          columns: [
-            DataColumn(
-              label: Text(
-                'Foo',
-                style: TextStyle(fontStyle: FontStyle.italic),
-              ),
-            ),
-            DataColumn(
-              label: Text(
-                'Bar',
-                style: TextStyle(fontStyle: FontStyle.italic),
-              ),
+            Text(
+              '$_counter',
+              style: Theme.of(context).textTheme.headline4,
             ),
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
+      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
-}
-
-class RowSource extends DataTableSource {
-  final _rowCount = 41;
-
-  @override
-  DataRow? getRow(int index) {
-    if (index < _rowCount) {
-      return DataRow(cells: <DataCell>[
-        DataCell(Text('Foo $index')),
-        DataCell(Text('Bar $index'))
-      ]);
-    } else
-      return null;
-  }
-
-  @override
-  bool get isRowCountApproximate => true;
-
-  @override
-  int get rowCount => _rowCount;
-
-  @override
-  int get selectedRowCount => 0;
 }

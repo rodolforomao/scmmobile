@@ -1,6 +1,6 @@
 # scm_engenharia_app
 
-A SCM Engenharia oferece consultoria especializada sobre legislação, regulamentação e fiscalização da atividade no setor de telecomunicação
+Aplicativo mobile da empresa SCM Engenharia
 
 ## Getting Started
 
