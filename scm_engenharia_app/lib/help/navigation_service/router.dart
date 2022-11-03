@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../../views/inicio_view.dart';
 import '../../views/splash_screen_view.dart';
 import '/help/navigation_service/route_paths.dart' as routes;
 import '../../views/error_information_view.dart';
@@ -31,9 +32,14 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       }
     case routes.splashScreenRoute:
       return MaterialPageRoute(builder: (context) => const SplashScreenView());
-
-
-
+    case routes.inicioRoute:
+      return MaterialPageRoute(builder: (context) => const InicioView());
+    case routes.loginRoute:
+      return MaterialPageRoute(builder: (context) => const LoginView());
+    case routes.createNewAccountRoute:
+      return MaterialPageRoute(builder: (context) => const CreateNewAccountView());
+    case routes.forgotYourPasswordRoute:
+      return MaterialPageRoute(builder: (context) => const ForgotYourPasswordView());
   //Erro
     default:
       {

@@ -87,7 +87,8 @@ class SplashScreenState extends State<SplashScreenView> {
   {
     super.initState();
     Future(() {
-       onInc();
+      Navigator.of(context).pushNamedAndRemoveUntil(routes.inicioRoute, (Route<dynamic> route) => false);
+       //onInc();
     });
   }
 
@@ -127,7 +128,7 @@ class SplashScreenState extends State<SplashScreenView> {
                   ),
                   Center(
                     child: Image.asset(
-                      'assets/img/logo_white.png',
+                      'assets/img/logo_white_vertical.png',
                       height: 80.0,
                       fit: BoxFit.fill,
                     ),

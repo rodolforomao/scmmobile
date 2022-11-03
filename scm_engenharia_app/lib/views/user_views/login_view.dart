@@ -1,5 +1,6 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:realm/realm.dart';
@@ -23,7 +24,7 @@ class LoginState extends State<LoginView> {
 
   final txtControllerEmail = TextEditingController();
   final txtControllerPassword= TextEditingController();
-
+  bool switchValueDarkMode=true;
   FocusNode? focusNodeEmail;
   FocusNode? focusNodePassword;
 
@@ -107,215 +108,238 @@ class LoginState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    final bool showFab = MediaQuery.of(context).viewInsets.bottom == 0.0;
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: <Color>[
-            Color(0xFFF65100),
-            Color(0xFFff8c49),
-            Color(0xFFf5821f),
-            Color(0xffffba49)
-          ],
-        ),
-      ),
-      constraints: BoxConstraints(
-        minHeight: MediaQuery.of(context).size.height,
-      ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Container(
-          alignment: Alignment.center,
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
-            child: Container( constraints: const BoxConstraints(
-              minWidth: 200,
-              maxWidth: 800,
-            ),
-              padding: const EdgeInsets.only(top: 10.0, right: 30.0, left: 30.0, bottom: 50.0),child:  Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Center(
-                child: Image.asset(
-                  'assets/img/logo_white.png',
-                  height: 200.0,
-                  fit: BoxFit.fill,
-                ),
-              ),
-            ),
-                const Text(
-                  'E-mail',
-                  style: TextStyle(
-                    decoration: TextDecoration.none,
-                    fontSize: 15.0,
-                    color: Colors.white,
-                  ),
-                ),
-                Padding(padding: const EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0),child:TextField(
-                    autofocus: false,
-                    keyboardType: TextInputType.emailAddress,
-                    controller: txtControllerEmail,
-                    focusNode: focusNodeEmail,
-                    textInputAction: TextInputAction.next,
-                    onSubmitted: (term) {
-                      focusNodeEmail!.unfocus();
-                      FocusScope.of(context).requestFocus(focusNodePassword);
-                    },
-                    style: const TextStyle(
-                        fontSize: 19,
-                        color:  Color(0xFFFFFFFF)),
-                    decoration: const InputDecoration(
-                        contentPadding: EdgeInsets.fromLTRB(10.0, 12.0, 10.0, 12.0),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(color: Colors.white, width: 0),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide:
-                          BorderSide(color: Colors.white, width: 0.3),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(color: Colors.white, width: 0),
-                        ),
-                        prefixIcon: Icon(
-                          Icons.email,
-                          size: 20,
-                          color: Color(0xffFFFFFF),
-                        ),
-                        hintText: 'Digite seu email',
-                        border: InputBorder.none,
-                        fillColor: Color(0xff80ff9b7b),
-                        floatingLabelStyle: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 15.0,
-                            color: Color(0xff50093d6c),
-                            fontFamily: 'avenir-lt-std-book'),
-                        filled: true)),),
-                const Text(
-                  'Senha',
-                  style: TextStyle(
-                    decoration: TextDecoration.none,
-                    fontSize: 15.0,
-                    color: Colors.white,
-                  ),
-                ),
-                Padding(padding: const EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0),child:TextField(
-                    autofocus: false,
-                    keyboardType: TextInputType.text,
-                    controller: txtControllerPassword,
-                    textInputAction: TextInputAction.go,
-                    onSubmitted: (term) {
-                      focusNodeEmail!.unfocus();
-                      onLoggingIn();
-                    },
-                    style: const TextStyle(
-                        fontSize: 19,
-                        color:  Color(0xFFFFFFFF)),
-                    obscureText: true,
-                    decoration: const InputDecoration(contentPadding:
-                        EdgeInsets.fromLTRB(10.0, 12.0, 10.0, 12.0),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(color: Colors.white, width: 0),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide:
-                          BorderSide(color: Colors.white, width: 0.3),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(color: Colors.white, width: 0),
-                        ),
-                        prefixIcon: Icon(
-                          Icons.https,
-                          size: 20,
-                          color: Color(0xffFFFFFF),
-                        ),
-                        hintText: 'Digite sua senha',
-                        border: InputBorder.none,
-                        fillColor: Color(0xff80ff9b7b),
-                        filled: true)),),
-                const SizedBox(height: 25.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Expanded(
-                      child: Container(),
-                    ),
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        backgroundColor: const Color(0xff8854d0),
-                        padding: const EdgeInsets.fromLTRB(5.0, 2.0, 5.0, 3.0),
-                        minimumSize: const Size(130, 46),
-                        maximumSize: const Size(130, 46),
-                        textStyle: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                          color:  Color(0xffFFFFFF),
-                          fontSize: 15,
-                        ),
-                      ),
-                      child: const Padding(
-                        padding:
-                        EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5.0),
-                        child: Text(
-                          ' LOGIN ',
-                        ),
-                      ),
-                      onPressed: () async {
-                        onLoggingIn();
-                      },
-                    )
-                  ],
-                ),
-                Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      FocusScope.of(context).requestFocus(FocusNode());
-                      Navigator.of(context).pushNamed(
-                        routes.createNewAccountRoute,
-                      );
-                    },
-                    child: const Text(
-                      'Criar uma nova conta',
-                      style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        fontSize: 18.0,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),),
+    return Scaffold(
+      backgroundColor: Colors.white,
+     appBar: AppBar(
+       backgroundColor: Colors.transparent,
+       leading:  const BackButton(
+         color: Colors.black,
+       ),
+       centerTitle: true,
+       toolbarHeight: 120,
+       actions: [
+         Padding(padding: const EdgeInsets.fromLTRB(20.0,50.0,20.0,10.0), child: Image.asset(
+             'assets/img/logo-smc-fundo-branco.png',
+             height: 20,
+             fit: BoxFit.fill,
+             colorBlendMode: BlendMode.dstIn
+         ),)
+       ],
+     ),
+      body:SingleChildScrollView(
+        padding: const EdgeInsets.only(top: 10.0, right: 20.0, left: 20.0, bottom: 10.0),
+        child: Container(
+          constraints:  BoxConstraints(
+            minHeight: 500,
+            maxWidth: MediaQuery.of(context).size.width,
           ),
-        ),
-        floatingActionButton: showFab
-            ? FloatingActionButton(
-                elevation: 0.0,
-                backgroundColor: Colors.transparent,
-                onPressed: () {
-                  GlobalScaffold.instance.onRedirectUri(Uri.parse('https://api.whatsapp.com/send?phone=5561982205225'));
+          alignment: Alignment.center,
+          width: MediaQuery.of(context).size.width,
+          child:  Container(constraints: const BoxConstraints(
+            maxWidth: 1000,
+          ),child:  Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Padding( padding: const EdgeInsets.fromLTRB(10,10,10,10) ,child: RichText(
+                  textAlign: TextAlign.start,
+                  softWrap: false,
+                  maxLines: 4,
+                  overflow: TextOverflow.ellipsis,
+                  text: TextSpan(children: [
+                    TextSpan(
+                      text: 'Olá, \r\n',
+                      style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 22,color:  Colors.black54,),
+                    ),
+                    TextSpan(
+                      text: 'digite seu e-mail e senha',
+                      style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 22,color:  Colors.black54,),
+                    ),
+                  ])),),
+              Padding(padding: const EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0),child:TextField(
+                  autofocus: false,
+                  keyboardType: TextInputType.emailAddress,
+                  controller: txtControllerEmail,
+                  focusNode: focusNodeEmail,
+                  textInputAction: TextInputAction.next,
+                  onSubmitted: (term) {
+                    focusNodeEmail!.unfocus();
+                    FocusScope.of(context).requestFocus(focusNodePassword);
+                  },
+                  style: const TextStyle(
+                      fontSize: 20,
+                      fontFamily: 'Poppins-Regular',
+                      fontWeight: FontWeight.w100,
+                      color: Color(0xFF323232)),
+                  decoration: const InputDecoration(
+                    contentPadding:  EdgeInsets.fromLTRB(10, 10, 10, 4),
+                    filled: true,
+                    fillColor: Color(0xFFf5f5f5),
+                    labelText: "e-mail",
+                    hintText: "Digite seu e-mail",
+                    hintStyle: TextStyle(
+                        fontSize: 12,
+                        fontFamily: 'Poppins-Medium',
+                        fontWeight: FontWeight.w200,
+                        color:  Colors.black54),
+                    labelStyle: TextStyle(
+                        fontSize: 13,
+                        fontFamily: 'Poppins-Medium',
+                        fontWeight: FontWeight.w200,
+                        color:  Colors.black54),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black87),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xFFF65100),),
+                    ),
+                  )),),
+              Padding(padding: const EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0),child:TextField(
+                autofocus: false,
+                keyboardType: TextInputType.text,
+                controller: txtControllerPassword,
+                textInputAction: TextInputAction.go,
+                onSubmitted: (term) {
+                  focusNodeEmail!.unfocus();
+                  onLoggingIn();
                 },
-                child: const Image(
-                  width: 40,
-                  height: 40,
-                  image: AssetImage(
-                    'assets/img/ic_whatsapp.png',
+                style: const TextStyle(
+                    fontSize: 20,
+                    fontFamily: 'Poppins-Regular',
+                    fontWeight: FontWeight.w100,
+                    color: Color(0xFF323232)),
+                obscureText: true,
+                decoration: const InputDecoration(
+                  contentPadding:  EdgeInsets.fromLTRB(10, 10, 10, 4),
+                  filled: true,
+                  fillColor: Color(0xFFf5f5f5),
+                  labelText: "senha",
+                  hintText: "Digite sua senha",
+                  hintStyle: TextStyle(
+                      fontSize: 19,
+                      fontFamily: 'Poppins-Medium',
+                      fontWeight: FontWeight.w200,
+                      color:  Colors.black54),
+                  labelStyle: TextStyle(
+                      fontSize: 13,
+                      fontFamily: 'Poppins-Medium',
+                      fontWeight: FontWeight.w200,
+                      color:  Colors.black54),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black87),
                   ),
-                  fit: BoxFit.fill,
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFFF65100),),
+                  ),
+                ),),),
+              const SizedBox(height: 25.0),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    const Text(
+                      'lembre-me',
+                      style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'Poppins-Medium',
+                          fontWeight: FontWeight.w200,
+                          color:  Colors.black54),
+                    ),
+                    const SizedBox(
+                      width: 15.0,
+                    ),
+                    SizedBox(
+                      height: 40,
+                      width: 40,
+                      child: Transform.scale(
+                        transformHitTests: false,
+                        scale: .6,
+                        child: Center(child:CupertinoSwitch(
+
+                          trackColor: const Color(0xff3F7EC1),
+                          activeColor: const Color(0xff303e7ec1),
+                          value: switchValueDarkMode,
+                          onChanged: (value) {
+
+                          },
+                        ),),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 15.0,
+                    ),
+                  ]),
+              const SizedBox(height: 25.0),
+              ElevatedButton(
+                style: TextButton.styleFrom(
+                  shape: BeveledRectangleBorder(
+                    borderRadius: BorderRadius.circular(3.0),
+                  ),
+                  elevation: 0,
+                  backgroundColor: const Color(0xffef7d00),
+                  padding: const EdgeInsets.fromLTRB(5.0, 3.0, 5.0, 3.0),
+                  minimumSize: const Size(350, 50),
+                  maximumSize: const Size(350, 50),
+                  textStyle: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color:  Color(0xffFFFFFF),
+                    fontSize: 15,
+                  ),
                 ),
-              )
-            : null,
-      ),
+                child: const Padding(
+                  padding:
+                  EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5.0),
+                  child: Text(
+                    'Acessar',
+                    style:  TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+                onPressed: () async {
+
+                },
+              ),
+              const SizedBox(height: 25.0),
+              ElevatedButton(
+                style: TextButton.styleFrom(
+                  shape: BeveledRectangleBorder(
+                      borderRadius: BorderRadius.circular(3.0),
+                      side: BorderSide(color:  Color(0xffef7d00),)
+                  ),
+                  elevation: 0,
+                  backgroundColor:  Colors.white,
+                  padding: const EdgeInsets.fromLTRB(5.0, 3.0, 5.0, 3.0),
+                  minimumSize: const Size(350, 50),
+                  maximumSize: const Size(350, 50),
+                  textStyle: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color:  Color(0xffFFFFFF),
+                    fontSize: 15,
+                  ),
+                ),
+                child: const Padding(
+                  padding:
+                  EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5.0),
+                  child: Text(
+                    'Esqueci minha senha',
+                    style:  TextStyle(
+                      fontWeight: FontWeight.w400,
+                      color:  Color(0xffef7d00),
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+                onPressed: () async {
+                  Navigator.of(context).pushNamed(
+                    routes.forgotYourPasswordRoute,
+                  );
+                },
+              ),
+            ],
+          ),),),),
     );
   }
 }

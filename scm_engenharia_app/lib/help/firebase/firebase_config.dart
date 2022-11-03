@@ -29,7 +29,7 @@ class DefaultFirebaseConfig {
       // Android
       return const FirebaseOptions(
         appId: '1:903936319018:android:6561a6cc93335c71186d53',
-        apiKey: 'AIzaSyAFfZBri1grL4KGaxWvFc6Q1A-59f7Y4A4',
+        apiKey: 'AIzaSyCuh0iIHS7FQbk4ynaH6Ia4NEugFqX9uP4',
         projectId: 'app-scm',
         messagingSenderId: '903936319018',
         androidClientId: '903936319018-5mo9ndlsgcst0eb4uia3vf451tukatb6.apps.googleusercontent.com',

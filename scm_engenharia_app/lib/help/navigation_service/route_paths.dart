@@ -16,6 +16,7 @@ const String changePasswordRoute = 'mudar-senha';
 const String createNewAccountRoute = 'criar-nova-conta';
 const String forgotYourPasswordRoute = 'esqueceu-sua-senha';
 const String loginRoute = 'login';
+const String inicioRoute = 'início';
 const String perfilRoute = 'profile';
 
 //outros ------------------------------------------------------------------------------------------------------------------

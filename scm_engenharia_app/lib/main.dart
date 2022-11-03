@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 import 'package:animations/animations.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -11,7 +10,6 @@ import 'package:scm_engenharia_app/views/help_views/global_scaffold.dart';
 import 'package:scm_engenharia_app/views/splash_screen_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'help/firebase/firebase_config.dart';
-import 'help/navigation_service/router.dart';
 import 'thema/app_thema.dart';
 import 'package:scm_engenharia_app/help/navigation_service/route_paths.dart' as routes;
 import 'package:scm_engenharia_app/help/navigation_service/router.dart' as router;
@@ -25,10 +23,12 @@ class MyHttpOverrides extends HttpOverrides{
 }
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
   if(!Platform.isWindows && !Platform.isLinux)
   {
     await Firebase.initializeApp(
+      name: 'App SCM',
       options: DefaultFirebaseConfig.currentPlatform,
     );
     // Defina o gerenciador de mensagens em segundo plano desde o início, como uma função de nível superior nomeada

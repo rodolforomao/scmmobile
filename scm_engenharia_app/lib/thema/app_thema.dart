@@ -13,17 +13,10 @@ class AppThema {
       splashColor: const Color(0xff093d6c),
       iconTheme: const IconThemeData(color: Color(0xFF545454)),
       textTheme:  const TextTheme(
-        //labelMedium,
-         headline1:TextStyle(color:Color(0xff096c40), fontSize: 72.0, fontWeight: FontWeight.bold),
-         headline2:TextStyle(color: Color(0xff6c4009), fontSize: 72.0, fontWeight: FontWeight.bold),
-         headline3:TextStyle(color: Color(0xffA3095E), fontSize: 72.0, fontWeight: FontWeight.bold),
-         headline4:TextStyle(color: Color(0xff193C70), fontSize: 72.0, fontWeight: FontWeight.bold),
-         headline5:TextStyle(color: Color(0xffB28DD1), fontSize: 72.0, fontWeight: FontWeight.bold),
-         headline6:TextStyle(color: Color(0xff6b8e23), fontSize: 72.0, fontWeight: FontWeight.bold),
-         subtitle1:TextStyle(color:  Color(0xFF393939), fontSize: 20.0,fontFamily: 'avenir-lt-std-medium'),
-         subtitle2:TextStyle(color:  Color(0xFF545454), fontSize: 20.0,fontFamily: 'avenir-lt-std-medium'),
-         bodyText1:TextStyle(color:  Color(0xFF545454), fontSize: 20.0,fontFamily: 'avenir-lt-std-medium'),
-         bodyText2:TextStyle(color:  Color(0xFF545454), fontSize: 15.0,fontFamily: 'avenir-lt-std-medium'),
+       bodyText1: TextStyle(
+         fontFamily: 'Poppins-Light',
+         fontSize: 13.0,
+       ),
       ),
       inputDecorationTheme: const InputDecorationTheme(
         focusedErrorBorder: OutlineInputBorder(
@@ -44,22 +37,22 @@ class AppThema {
             fontWeight: FontWeight.w500,
             fontSize: 15.0,
             color:  Color(0xFFF65100),
-            fontFamily: 'avenir-lt-std-book-oblique'),
+            fontFamily: 'Poppins-Medium'),
         hintStyle: TextStyle(
             fontWeight: FontWeight.w500,
             fontSize: 15.0,
             color:  Color(0xFFb8b8b8),
-            fontFamily: 'avenir-lt-std-book-oblique'),
+            fontFamily: 'Poppins-Medium'),
         labelStyle: TextStyle(
             fontWeight: FontWeight.w400,
             fontSize: 15.0,
             color: Color(0xFFb8b8b8),
-            fontFamily: 'avenir-lt-std-book'),
+            fontFamily: 'Poppins-Medium'),
         floatingLabelStyle: TextStyle(
             fontWeight: FontWeight.w400,
             fontSize: 15.0,
             color: Color(0xff50093d6c),
-            fontFamily: 'avenir-lt-std-book'),
+            fontFamily: 'Poppins-Medium'),
         fillColor: Colors.white,
       ),
       appBarTheme: const AppBarTheme(
@@ -165,7 +158,7 @@ class AppThema {
           primary: const Color(0xFFffffff),
           textStyle: const TextStyle(
             fontWeight: FontWeight.w500,
-            fontFamily: 'avenir-lt-std-roman',
+            fontFamily: 'Poppins-Regular',
             color:  Color(0xffFFFFFF),
             fontSize: 15,
           ),
@@ -182,7 +175,7 @@ class AppThema {
           textStyle: const TextStyle(
             fontWeight: FontWeight.normal,
             fontSize: 25.0,
-            fontFamily: 'Myriad-Arabic-Regular-0',
+            fontFamily: 'Poppins-Regular',
             color: Color(0xFFffffff),
           ),
           side: const BorderSide(
@@ -200,11 +193,9 @@ class AppThema {
         style: ElevatedButton.styleFrom(
           minimumSize: const Size(300, 47),
           maximumSize: const Size(300, 47),
-          primary: const Color(0xFF7A388D),
-          onPrimary: Colors.white,
           textStyle: const TextStyle(
             fontWeight: FontWeight.normal,
-            fontFamily: 'Myriad-Arabic-Regular-0',
+            fontFamily: 'Poppins-Regular',
             color: Color(0xffFFFFFF),
             fontSize: 25.0,
           ),

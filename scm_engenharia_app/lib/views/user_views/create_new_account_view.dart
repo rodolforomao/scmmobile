@@ -23,7 +23,10 @@ class CreateNewAccountView extends StatefulWidget {
 
 class CreateNewAccountState extends State<CreateNewAccountView> {
 
-  late StreamSubscription<ConnectivityResult> subscription;
+  static List<String> friendsList = [];
+
+  late TextEditingController _nameController;
+
   TypeView statusView = TypeView.viewLoading;
   OutputEnvironmentVariablesModel resulEnvironmentVariables = OutputEnvironmentVariablesModel();
 
@@ -99,7 +102,10 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
   @override
   void initState() {
     super.initState();
-    onInc();
+    _nameController =  TextEditingController();
+    // upon creation, copy the starting count to the current count
+    fieldCount = 1;
+    //onInc();
   }
 
   @override
@@ -109,39 +115,331 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
   }
 
   @override
+  void didUpdateWidget(CreateNewAccountView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: <Color>[
-            Color(0xFFF65100),
-            Color(0xFFff8c49),
-            Color(0xFFf5821f),
-            Color(0xffffba49)
-          ],
-        ),
-      ),
-      constraints: BoxConstraints(
-        minHeight: MediaQuery.of(context).size.height,
-      ),
-      child: Scaffold(
+    // generate the list of TextFields
+    final List<Widget> children = _buildList();
+    // append an 'add player' button to the end of the list
+    children.add(
+        Padding(padding: const EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0),child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            IconButton(
+              onPressed: (){
+                // when adding a player, we only need to inc the fieldCount, because the _buildList()
+                // will handle the creation of the new TextEditingController
+                setState(() {
+                  fieldCount++;
+                });
+              },
+              icon: Icon(Icons.add ,color: Color(0xffef7d00),),
+            ),
+          ],),)
+
+    );
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
         backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          automaticallyImplyLeading: true,
-          centerTitle: true,
-          elevation: 0.0,
-          title: const Text(
-            'Registrar usuário',
-          ),
+        leading:  const BackButton(
+          color: Colors.black,
         ),
-        body: tipoPageView(MediaQuery.of(context).size.height),
+        centerTitle: true,
+        toolbarHeight: 120,
+        actions: [
+          Padding(padding: const EdgeInsets.fromLTRB(20.0,50.0,20.0,10.0), child: Image.asset(
+              'assets/img/logo-smc-fundo-branco.png',
+              height: 20,
+              fit: BoxFit.fill,
+              colorBlendMode: BlendMode.dstIn
+          ),)
+        ],
       ),
+      body:SingleChildScrollView(
+        padding: const EdgeInsets.only(top: 10.0, right: 20.0, left: 20.0, bottom: 10.0),
+        child: Container(
+          constraints:  BoxConstraints(
+            minHeight: 500,
+            maxWidth: MediaQuery.of(context).size.width,
+          ),
+          alignment: Alignment.center,
+          width: MediaQuery.of(context).size.width,
+          child:  Container(constraints: const BoxConstraints(
+            maxWidth: 1000,
+          ),child:  Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Padding( padding: const EdgeInsets.fromLTRB(10,10,10,10) ,child:     Text('nava conta',style:Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 22,color:  Colors.black54,),),),
+              Padding(padding: const EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0),child:TextField(
+                  autofocus: false,
+                  keyboardType: TextInputType.emailAddress,
+                  controller: txtControllerEmail,
+                  textInputAction: TextInputAction.next,
+                  onSubmitted: (term) {
+
+                  },
+                  style: const TextStyle(
+                      fontSize: 20,
+                      fontFamily: 'Poppins-Regular',
+                      fontWeight: FontWeight.w100,
+                      color: Color(0xFF323232)),
+                  decoration: const InputDecoration(
+                    contentPadding:  EdgeInsets.fromLTRB(10, 10, 10, 4),
+                    filled: true,
+                    fillColor: Color(0xFFf5f5f5),
+                    labelText: "nome",
+                    hintText: "Digite seu nome",
+                    hintStyle: TextStyle(
+                        fontSize: 12,
+                        fontFamily: 'Poppins-Medium',
+                        fontWeight: FontWeight.w200,
+                        color:  Colors.black54),
+                    labelStyle: TextStyle(
+                        fontSize: 13,
+                        fontFamily: 'Poppins-Medium',
+                        fontWeight: FontWeight.w200,
+                        color:  Colors.black54),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black87),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xFFF65100),),
+                    ),
+                  )),),
+              Padding(padding: const EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0),child:TextField(
+                  autofocus: false,
+                  keyboardType: TextInputType.emailAddress,
+                  controller: txtControllerEmail,
+                  textInputAction: TextInputAction.next,
+                  onSubmitted: (term) {
+
+                  },
+                  style: const TextStyle(
+                      fontSize: 20,
+                      fontFamily: 'Poppins-Regular',
+                      fontWeight: FontWeight.w100,
+                      color: Color(0xFF323232)),
+                  decoration: const InputDecoration(
+                    contentPadding:  EdgeInsets.fromLTRB(10, 10, 10, 4),
+                    filled: true,
+                    fillColor: Color(0xFFf5f5f5),
+                    labelText: "e-mail",
+                    hintText: "Digite seu e-mail",
+                    hintStyle: TextStyle(
+                        fontSize: 12,
+                        fontFamily: 'Poppins-Medium',
+                        fontWeight: FontWeight.w200,
+                        color:  Colors.black54),
+                    labelStyle: TextStyle(
+                        fontSize: 13,
+                        fontFamily: 'Poppins-Medium',
+                        fontWeight: FontWeight.w200,
+                        color:  Colors.black54),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black87),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xFFF65100),),
+                    ),
+                  )),),
+              Padding(padding: const EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0),child:TextField(
+                  autofocus: false,
+                  keyboardType: TextInputType.emailAddress,
+                  controller: txtControllerEmail,
+                  textInputAction: TextInputAction.next,
+                  onSubmitted: (term) {
+
+                  },
+                  style: const TextStyle(
+                      fontSize: 20,
+                      fontFamily: 'Poppins-Regular',
+                      fontWeight: FontWeight.w100,
+                      color: Color(0xFF323232)),
+                  decoration: const InputDecoration(
+                    contentPadding:  EdgeInsets.fromLTRB(10, 10, 10, 4),
+                    filled: true,
+                    fillColor: Color(0xFFf5f5f5),
+                    labelText: "cpf",
+                    hintText: "Digite seu cpf",
+                    hintStyle: TextStyle(
+                        fontSize: 12,
+                        fontFamily: 'Poppins-Medium',
+                        fontWeight: FontWeight.w200,
+                        color:  Colors.black54),
+                    labelStyle: TextStyle(
+                        fontSize: 13,
+                        fontFamily: 'Poppins-Medium',
+                        fontWeight: FontWeight.w200,
+                        color:  Colors.black54),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black87),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xFFF65100),),
+                    ),
+                  )),),
+              Card(child: Padding( padding: const EdgeInsets.fromLTRB(15.0,10.0,15.0,10.0),child:  Column(children: [
+                Padding(padding: const EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0),child:TextField(
+                    autofocus: false,
+                    keyboardType: TextInputType.emailAddress,
+                    controller: txtControllerEmail,
+                    textInputAction: TextInputAction.next,
+                    onSubmitted: (term) {
+
+                    },
+                    style: const TextStyle(
+                        fontSize: 20,
+                        fontFamily: 'Poppins-Regular',
+                        fontWeight: FontWeight.w100,
+                        color: Color(0xFF323232)),
+                    decoration: const InputDecoration(
+                      contentPadding:  EdgeInsets.fromLTRB(10, 10, 10, 4),
+                      filled: true,
+                      fillColor: Color(0xFFf5f5f5),
+                      labelText: "Senha",
+                      hintText: "Digite seu senha",
+                      hintStyle: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'Poppins-Medium',
+                          fontWeight: FontWeight.w200,
+                          color:  Colors.black54),
+                      labelStyle: TextStyle(
+                          fontSize: 13,
+                          fontFamily: 'Poppins-Medium',
+                          fontWeight: FontWeight.w200,
+                          color:  Colors.black54),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black87),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xFFF65100),),
+                      ),
+                    )),),
+                Padding(padding: const EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0),child:TextField(
+                    autofocus: false,
+                    keyboardType: TextInputType.emailAddress,
+                    controller: txtControllerEmail,
+                    textInputAction: TextInputAction.next,
+                    onSubmitted: (term) {
+
+                    },
+                    style: const TextStyle(
+                        fontSize: 20,
+                        fontFamily: 'Poppins-Regular',
+                        fontWeight: FontWeight.w100,
+                        color: Color(0xFF323232)),
+                    decoration: const InputDecoration(
+                      contentPadding:  EdgeInsets.fromLTRB(10, 10, 10, 4),
+                      filled: true,
+                      fillColor: Color(0xFFf5f5f5),
+                      labelText: "confirme sua senha",
+                      hintText: "Confirme sua senha",
+                      hintStyle: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'Poppins-Medium',
+                          fontWeight: FontWeight.w200,
+                          color:  Colors.black54),
+                      labelStyle: TextStyle(
+                          fontSize: 13,
+                          fontFamily: 'Poppins-Medium',
+                          fontWeight: FontWeight.w200,
+                          color:  Colors.black54),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black87),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xFFF65100),),
+                      ),
+                    )),),
+              ],),),),
+              Padding(padding: const EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0),child:TextField(
+                  autofocus: false,
+                  keyboardType: TextInputType.emailAddress,
+                  controller: txtControllerEmail,
+                  textInputAction: TextInputAction.next,
+                  onSubmitted: (term) {
+
+                  },
+                  style: const TextStyle(
+                      fontSize: 20,
+                      fontFamily: 'Poppins-Regular',
+                      fontWeight: FontWeight.w100,
+                      color: Color(0xFF323232)),
+                  decoration: const InputDecoration(
+                    contentPadding:  EdgeInsets.fromLTRB(10, 10, 10, 4),
+                    filled: true,
+                    fillColor: Color(0xFFf5f5f5),
+                    labelText: "cnpj",
+                    hintText: "Digite seu cnpj",
+                    hintStyle: TextStyle(
+                        fontSize: 12,
+                        fontFamily: 'Poppins-Medium',
+                        fontWeight: FontWeight.w200,
+                        color:  Colors.black54),
+                    labelStyle: TextStyle(
+                        fontSize: 13,
+                        fontFamily: 'Poppins-Medium',
+                        fontWeight: FontWeight.w200,
+                        color:  Colors.black54),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black87),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xFFF65100),),
+                    ),
+                  )),),
+              ListView(
+                padding: const EdgeInsets.all(10),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                children: children,
+              ),
+              const SizedBox(height: 25.0),
+              ElevatedButton(
+                style: TextButton.styleFrom(
+                  shape: BeveledRectangleBorder(
+                    borderRadius: BorderRadius.circular(3.0),
+                  ),
+                  elevation: 0,
+                  backgroundColor: const Color(0xffef7d00),
+                  padding: const EdgeInsets.fromLTRB(5.0, 3.0, 5.0, 3.0),
+                  minimumSize: const Size(350, 50),
+                  maximumSize: const Size(350, 50),
+                  textStyle: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color:  Color(0xffFFFFFF),
+                    fontSize: 15,
+                  ),
+                ),
+                child: const Padding(
+                  padding:
+                  EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5.0),
+                  child: Text(
+                    'Recuperar senha',
+                    style:  TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+                onPressed: () async {
+
+                },
+              ),
+              const SizedBox(height: 25.0),
+            ],
+          ),),),),
     );
   }
+
 
   tipoPageView(double maxHeight) {
     switch (statusView) {
@@ -429,4 +727,104 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
         return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
     }
   }
+
+
+  //region ADD CNPjs
+
+  int fieldCount = 0;
+  int nextIndex = 0;
+  // you must keep track of the TextEditingControllers if you want the values to persist correctly
+  List<TextEditingController> controllers = <TextEditingController>[];
+
+  // create the list of TextFields, based off the list of TextControllers
+  List<Widget> _buildList() {
+    int i;
+    // fill in keys if the list is not long enough (in case we added one)
+    if (controllers.length < fieldCount) {
+      for (i = controllers.length; i < fieldCount; i++) {
+        controllers.add(TextEditingController());
+      }
+    }
+
+    i = 0;
+    // cycle through the controllers, and recreate each, one per available controller
+    return controllers.map<Widget>((TextEditingController controller) {
+      int displayNumber = i + 1;i++;
+      return TextField(
+          autofocus: false,
+          keyboardType: TextInputType.emailAddress,
+          controller: txtControllerEmail,
+          textInputAction: TextInputAction.next,
+          onSubmitted: (term) {
+
+          },
+          style: const TextStyle(
+              fontSize: 20,
+              fontFamily: 'Poppins-Regular',
+              fontWeight: FontWeight.w100,
+              color: Color(0xFF323232)),
+          decoration:  InputDecoration(
+            counterText: "",
+            suffixIcon: IconButton(
+              icon: const Icon(Icons.clear),
+              onPressed: () {
+                // when removing a TextField, you must do two things:
+                // 1. decrement the number of controllers you should have (fieldCount)
+                // 2. actually remove this field's controller from the list of controllers
+                setState(() {
+                  fieldCount--;
+                  controllers.remove(controller);
+                });
+              },
+            ),
+            contentPadding:  EdgeInsets.fromLTRB(10, 10, 10, 4),
+            filled: true,
+            fillColor: Color(0xFFf5f5f5),
+            labelText: "cnpj $displayNumber",
+            hintText: "Digite seu cnpj",
+            hintStyle: TextStyle(
+                fontSize: 12,
+                fontFamily: 'Poppins-Medium',
+                fontWeight: FontWeight.w200,
+                color:  Colors.black54),
+            labelStyle: TextStyle(
+                fontSize: 13,
+                fontFamily: 'Poppins-Medium',
+                fontWeight: FontWeight.w200,
+                color:  Colors.black54),
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.black87),
+            ),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Color(0xFFF65100),),
+            ),
+          ));
+      return TextField(
+        controller: controller,
+        maxLength: 20,
+        decoration: InputDecoration(
+          labelText: "Player $displayNumber",
+          counterText: "",
+          prefixIcon: const Icon(Icons.person),
+          suffixIcon: IconButton(
+            icon: Icon(Icons.clear),
+            onPressed: () {
+              // when removing a TextField, you must do two things:
+              // 1. decrement the number of controllers you should have (fieldCount)
+              // 2. actually remove this field's controller from the list of controllers
+              setState(() {
+                fieldCount--;
+                controllers.remove(controller);
+              });
+            },
+          ),
+        ),
+      );
+    }).toList(); // convert to a list
+  }
+
+//endregion
 }
+
+
+
