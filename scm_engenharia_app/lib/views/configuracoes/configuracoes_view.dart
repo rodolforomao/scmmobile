@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
 
@@ -13,8 +14,16 @@ class ConfiguracoesState extends State<Configuracoesview> {
 
 
   final txtControllerEmail = TextEditingController();
-
-
+  bool isTemaEscuroAppOn = false, isNotificacoesAtivarDesativada = false;
+  onSwitchNotificacoesAtivarDesativadaChanged(bool value) async {
+    try {
+      setState(() {
+        isNotificacoesAtivarDesativada = value;
+      });
+    } catch (error) {
+      print(error);
+    }
+  }
 
   @override
   void initState() {
@@ -46,116 +55,171 @@ class ConfiguracoesState extends State<Configuracoesview> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Configurações'),
-        toolbarHeight: 120,
-        flexibleSpace: Image(
+        title: const Text('Configurações'),
+        toolbarHeight: 80,
+        flexibleSpace: const Image(
           image: AssetImage('assets/img/fundo_tela_configuracoes.png'),
           fit: BoxFit.cover,
         ),
         backgroundColor: Colors.transparent,
       ),
-      body:SingleChildScrollView(
-        padding: const EdgeInsets.only(top: 10.0, right: 20.0, left: 20.0, bottom: 10.0),
-        child: Container(
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.only(top: 10.0, right: 10.0, left: 10.0, bottom: 10.0),
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+         elevation: 5,
+          child: Container(
+            padding: const EdgeInsets.only(top: 10.0, right: 15.0, left: 15.0, bottom: 10.0),
           constraints:  BoxConstraints(
             minHeight: 500,
             maxWidth: MediaQuery.of(context).size.width,
           ),
           alignment: Alignment.center,
           width: MediaQuery.of(context).size.width,
-          child:  Container(constraints: const BoxConstraints(
-            maxWidth: 1000,
-          ),child:  Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+          height: MediaQuery.of(context).size.height -140,
+          child:  Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            textDirection: TextDirection.ltr,
             children: <Widget>[
-              Padding( padding: const EdgeInsets.fromLTRB(10,10,10,10) ,child: RichText(
-                  textAlign: TextAlign.start,
-                  softWrap: false,
-                  maxLines: 4,
-                  overflow: TextOverflow.ellipsis,
-                  text: TextSpan(children: [
-                    TextSpan(
-                      text: 'Esqueceu sua senha , \r\n',
-                      style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 22,color:  Colors.black54,),
-                    ),
-                    TextSpan(
-                      text: 'insira seu email e clique em “recuperar senha”',
-                      style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 22,color:  Colors.black54,),
-                    ),
-                  ])),),
-              Padding(padding: const EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0),child:TextField(
-                  autofocus: false,
-                  keyboardType: TextInputType.emailAddress,
-                  controller: txtControllerEmail,
-                  textInputAction: TextInputAction.next,
-                  onSubmitted: (term) {
-
-                  },
-                  style: const TextStyle(
-                      fontSize: 20,
+              Padding(padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),child:  ListTile(
+                contentPadding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+                title: const Text(
+                  'Notificação',
+                  style: TextStyle(
+                      fontSize: 18,
                       fontFamily: 'Poppins-Regular',
                       fontWeight: FontWeight.w100,
                       color: Color(0xFF323232)),
-                  decoration: const InputDecoration(
-                    contentPadding:  EdgeInsets.fromLTRB(10, 10, 10, 4),
-                    filled: true,
-                    fillColor: Color(0xFFf5f5f5),
-                    labelText: "e-mail",
-                    hintText: "Digite seu e-mail",
-                    hintStyle: TextStyle(
-                        fontSize: 12,
-                        fontFamily: 'Poppins-Medium',
-                        fontWeight: FontWeight.w200,
-                        color:  Colors.black54),
-                    labelStyle: TextStyle(
-                        fontSize: 13,
-                        fontFamily: 'Poppins-Medium',
-                        fontWeight: FontWeight.w200,
-                        color:  Colors.black54),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black87),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFFF65100),),
-                    ),
-                  )),),
-              const SizedBox(height: 25.0),
-              ElevatedButton(
-                style: TextButton.styleFrom(
-                  shape: BeveledRectangleBorder(
-                    borderRadius: BorderRadius.circular(3.0),
-                  ),
-                  elevation: 0,
-                  backgroundColor: const Color(0xffef7d00),
-                  padding: const EdgeInsets.fromLTRB(5.0, 3.0, 5.0, 3.0),
-                  minimumSize: const Size(350, 50),
-                  maximumSize: const Size(350, 50),
-                  textStyle: const TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color:  Color(0xffFFFFFF),
-                    fontSize: 15,
+                ),
+                leading: Container(
+                  padding: const EdgeInsets.only(right: 12.0),
+                  child: const Icon(Icons.notifications_none,
+                      color: Color(0xff9e9e9e), size: 25.0),
+                ),
+                trailing:  SizedBox(
+                  height: 50,
+                  width: 50,
+                  child: Transform.scale(
+                    transformHitTests: false,
+                    scale: .7,
+                    child: Center(child:CupertinoSwitch(
+                      trackColor: const Color(0xff303e7ec1),
+                      activeColor: const Color(0xff3F7EC1),
+                      value: isNotificacoesAtivarDesativada,
+                      onChanged: (value) {
+                        setState(() {
+                          isNotificacoesAtivarDesativada = value;
+                        });
+                      },
+                    ),),
                   ),
                 ),
-                child: const Padding(
-                  padding:
-                  EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5.0),
-                  child: Text(
-                    'Recuperar senha',
-                    style:  TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 20,
-                    ),
-                  ),
+              ),),
+              Padding(padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),child:ListTile(
+                onTap: () {
+                  Navigator.of(context).pushNamed(
+                    routes.alterarSenhaRoute,
+                  );
+                },
+                contentPadding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+                leading: Container(
+                  padding: const EdgeInsets.only(right: 12.0),
+                  child:
+                  const Icon(Icons.https_outlined, color: Color(0xff9e9e9e), size: 25.0),
                 ),
-                onPressed: () async {
+                title: const Text(
+                  'Alterar senha',
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontFamily: 'Poppins-Regular',
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFF323232)),
+                ),),),
+              Padding(padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),child:ListTile(
+                onTap: () {
+                  Navigator.of(context).pushNamed(
+                    routes.perfilRoute,
+                  );
+                },
+                contentPadding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+                leading: Container(
+                  padding: const EdgeInsets.only(right: 12.0),
+                  child: const Icon(Icons.perm_identity,
+                      color: Color(0xff9e9e9e), size: 25.0),
+                ),
+                title: const Text(
+                  'Meu perfil',
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontFamily: 'Poppins-Regular',
+                      fontWeight: FontWeight.w100,
+                      color: Color(0xFF323232)),
+                ),),),
+              Padding(padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),child: ListTile(
+                onTap: () {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  Navigator.of(context).pushNamed(
+                    routes.variaveisDeAmbienteRoute,
+                  );
+                },
+                contentPadding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+                leading: Container(
+                  padding: const EdgeInsets.only(right: 12.0),
+                  child: const Icon(Icons.compare_outlined,
+                      color: Color(0xff9e9e9e), size: 24.0),
+                ),
+                title: const Text(
+                  'Variável de ambiente',
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontFamily: 'Poppins-Regular',
+                      fontWeight: FontWeight.w100,
+                      color: Color(0xFF323232)),
+                ),),),
+              Padding(padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),child:  ListTile(
+                onTap: () {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  Navigator.of(context).pushNamed(
+                    routes.sobreRoute,
+                  );
+                },
+                contentPadding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+                leading: Container(
+                  padding: const EdgeInsets.only(right: 12.0),
+                  child: const Icon(Icons.info_outline_rounded,
+                      color: Color(0xff9e9e9e), size: 24.0),
+                ),
+                title: const Text(
+                  'Sobre',
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontFamily: 'Poppins-Regular',
+                      fontWeight: FontWeight.w100,
+                      color: Color(0xFF323232)),
+                ),),),
+              Padding(padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),child: ListTile(
+                onTap: () {
 
                 },
-              ),
-              const SizedBox(height: 25.0),
+                contentPadding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+                leading: Container(
+                  padding: const EdgeInsets.only(right: 12.0),
+                  child: const Icon(Icons.exit_to_app,
+                      color: Color(0xff9e9e9e), size: 25.0),
+                ),
+                title: const Text(
+                  'Sair',
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontFamily: 'Poppins-Regular',
+                      fontWeight: FontWeight.w100,
+                      color: Color(0xFF323232)),
+                ),),),
             ],
-          ),),),),
+          )),),),
     );
   }
 

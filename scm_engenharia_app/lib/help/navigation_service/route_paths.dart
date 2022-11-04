@@ -17,9 +17,12 @@ const String createNewAccountRoute = 'criar-nova-conta';
 const String forgotYourPasswordRoute = 'esqueceu-sua-senha';
 const String loginRoute = 'login';
 const String inicioRoute = 'início';
-const String perfilRoute = 'profile';
 //Configurações  ----------------------------------------------------------------------------------------------------------
 const String configuracoesRoute = 'configurações';
+const String alterarSenhaRoute = 'alterar-senha';
+const String perfilRoute = 'profile';
+const String variaveisDeAmbienteRoute = 'variáveis-de-ambiente';
+const String sobreRoute = 'sobre';
 //outros ------------------------------------------------------------------------------------------------------------------
 const String errorInformationRoute = 'informação-de-erro';
 const String menuNavigationRoute = 'navegação-do-menu';

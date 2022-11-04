@@ -18,6 +18,10 @@ class AppThema {
          fontSize: 13.0,
        ),
       ),
+      listTileTheme: const ListTileThemeData(
+        selectedColor:Color(0xffef7d00),
+          contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+      ),
       inputDecorationTheme: const InputDecorationTheme(
         contentPadding:  EdgeInsets.fromLTRB(10, 10, 10, 4),
         filled: true,
@@ -48,9 +52,9 @@ class AppThema {
         elevation: 0,
         titleTextStyle: TextStyle(
             fontSize: 19.0,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w100,
             color: Color(0xffFFFFFF),
-            fontFamily: 'avenir-lt-std-roman'),
+            fontFamily: 'Poppins-Medium'),
       ),
       bottomAppBarTheme: const BottomAppBarTheme(
         color: Color(0xffFFFFFF),

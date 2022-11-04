@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../../views/configuracoes/alterar_senha_view.dart';
 import '../../views/configuracoes/configuracoes_view.dart';
+import '../../views/configuracoes/perfil_view.dart';
+import '../../views/configuracoes/sobre_view.dart';
+import '../../views/configuracoes/variaveis_de_ambiente_view.dart';
 import '../../views/inicio_view.dart';
 import '../../views/splash_screen_view.dart';
 import '/help/navigation_service/route_paths.dart' as routes;
@@ -44,6 +48,14 @@ Route<dynamic> generateRoute(RouteSettings settings) {
   //Configurações
     case routes.configuracoesRoute:
       return MaterialPageRoute(builder: (context) => const Configuracoesview());
+    case routes.alterarSenhaRoute:
+      return MaterialPageRoute(builder: (context) => const AlterarSenhaView());
+    case routes.perfilRoute:
+      return MaterialPageRoute(builder: (context) => const PerfilView());
+    case routes.variaveisDeAmbienteRoute:
+      return MaterialPageRoute(builder: (context) => const VariaveisDeAmbienteView());
+    case routes.sobreRoute:
+      return MaterialPageRoute(builder: (context) => const SobreView());
   //Erro
     default:
       {
