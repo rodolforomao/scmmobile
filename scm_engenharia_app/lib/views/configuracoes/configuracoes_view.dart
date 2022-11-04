@@ -3,7 +3,8 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
-
+import '../help_views/global_view.dart';
+import 'package:scm_engenharia_app/models/global_user_logged.dart' as global_user_logged;
 class Configuracoesview extends StatefulWidget {
   const Configuracoesview({Key? key}) : super(key: key);
   @override
@@ -79,11 +80,16 @@ class ConfiguracoesState extends State<Configuracoesview> {
           alignment: Alignment.center,
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height -140,
-          child:  Column(
+          child:  SingleChildScrollView(child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             textDirection: TextDirection.ltr,
             children: <Widget>[
+              Padding(padding: const EdgeInsets.fromLTRB(20.0, 25.0, 20.0, 10.0),child: Text(
+                'Configurações',
+                style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 20,color:  Colors.black, fontWeight: FontWeight.w600,),
+              ),),
+              const Padding(padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 20.0),child: Divider(color:Colors.black54),),
               Padding(padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),child:  ListTile(
                 contentPadding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
                 title: const Text(
@@ -202,7 +208,10 @@ class ConfiguracoesState extends State<Configuracoesview> {
                 ),),),
               Padding(padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),child: ListTile(
                 onTap: () {
-
+                  if(global_user_logged.globalUserLogged != null)
+                  {
+                    OnExitApp(context,global_user_logged.globalUserLogged!.cpf);
+                  }
                 },
                 contentPadding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
                 leading: Container(
@@ -219,7 +228,7 @@ class ConfiguracoesState extends State<Configuracoesview> {
                       color: Color(0xFF323232)),
                 ),),),
             ],
-          )),),),
+          ),)),),),
     );
   }
 

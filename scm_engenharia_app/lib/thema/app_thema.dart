@@ -150,7 +150,7 @@ class AppThema {
             color:  Color(0xffFFFFFF),
             fontSize: 15,
           ),
-          backgroundColor: const Color(0xFF3F7EC1),
+          backgroundColor: const Color(0xFFef7d00),
           shape: RoundedRectangleBorder(
             borderRadius:  BorderRadius.circular(5.0),
           ),
@@ -167,11 +167,11 @@ class AppThema {
             color: Color(0xFFffffff),
           ),
           side: const BorderSide(
-            color: Color(0xFF3F7EC1), //Color of the border
+            color: Color(0xFFef7d00), //Color of the border
             style: BorderStyle.solid, //Style of the border
             width: 1.0, //width of the border
           ),
-          backgroundColor: Color(0xFF3F7EC1),
+          backgroundColor: Color(0xFFef7d00),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5.0),
           ),

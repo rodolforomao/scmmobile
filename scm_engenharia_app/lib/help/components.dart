@@ -1,14 +1,19 @@
 import 'dart:async';
+import 'dart:io';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:jaguar_jwt/jaguar_jwt.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
 import '../data/app_scm_engenharia_mobile_bll.dart';
+import '../models/info_app.dart';
 import '../models/operation.dart';
 import '../models/util_model/util_dropdown_list.dart';
 import '../views/help_views/global_scaffold.dart';
@@ -160,7 +165,116 @@ class Components {
     return list;
   }
 
+  static Future<InfoApp> onInfo() async {
 
+    try {
+      InfoApp infoApp = InfoApp();
+      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+      PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      if(GlobalScaffold.position != null)
+      {
+        infoApp.latitude  = GlobalScaffold.position!.latitude.toString();
+        infoApp.longitude = GlobalScaffold.position!.longitude.toString();
+      }
+      else
+      {
+        infoApp.latitude = '';
+        infoApp.longitude= '';
+      }
+      infoApp.appName = packageInfo.appName;
+      infoApp.buildNumber  = packageInfo.buildNumber.isEmpty ? packageInfo.version : packageInfo.buildNumber;
+      infoApp.version = packageInfo.version.replaceAll('.', '');
+      infoApp.dataAcesso = DateTime.now().toString();
+      if(kIsWeb)
+      {
+        WebBrowserInfo webBrowserInfo = await deviceInfo.webBrowserInfo;
+        infoApp.device = webBrowserInfo.userAgent;
+        infoApp.appName = 'GEAP Prestador';
+        infoApp.buildNumber  = packageInfo.buildNumber;
+        infoApp.version = packageInfo.version;
+      }
+      else if(Platform.isAndroid)
+      {
+        AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+        infoApp.idProduct = androidInfo.bootloader  ?? '';
+        infoApp.idDevice = androidInfo.id ?? '';
+        infoApp.buildNumber = packageInfo.version;
+        infoApp.version = packageInfo.buildNumber;
+        infoApp.deviceVersion = '${androidInfo.brand} - ${androidInfo.model}';
+        infoApp.device = 'Android';
+      }
+      else if(Platform.isIOS)
+      {
+        IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+        infoApp.idProduct = iosInfo.identifierForVendor  ?? '';
+        infoApp.idDevice = iosInfo.identifierForVendor ?? '';
+        infoApp.deviceVersion = iosInfo.utsname.machine ?? '';
+        infoApp.device = 'IOS';
+        infoApp.version = packageInfo.version ?? '';
+        infoApp.buildNumber = packageInfo.buildNumber ?? '';
+
+      }
+      else if(Platform.isMacOS) {
+        MacOsDeviceInfo macOsInfo = await deviceInfo.macOsInfo;
+        infoApp.idProduct = macOsInfo.systemGUID ?? '';
+        infoApp.idDevice = macOsInfo.systemGUID ?? '';
+        infoApp.deviceVersion = macOsInfo.model ?? '';
+        infoApp.device = 'MacOs';
+        infoApp.version = packageInfo.version ?? '';
+        infoApp.buildNumber = packageInfo.buildNumber ?? '';
+      } else if(Platform.isLinux) {
+        infoApp.device =  'linux';
+      } else if(Platform.isWindows) {
+        WindowsDeviceInfo windowsInfo = await deviceInfo.windowsInfo;
+        infoApp.idProduct = windowsInfo.productId ?? '';
+        infoApp.idDevice = windowsInfo.deviceId ?? '';
+        infoApp.idDevice = infoApp.idDevice!.replaceAll('{', '').replaceAll('}', '');
+        infoApp.deviceVersion = windowsInfo.productName ?? '';
+        infoApp.device = 'Windows';
+      } else if(Platform.isFuchsia) {
+        infoApp.device =  'fuchsia';
+      } else {
+        infoApp.device = 'outros';
+      }
+      return infoApp;
+    } catch (error) {
+      throw 'Erro de exceção : $error';
+    }
+  }
+
+  static Future<Position?> onDeterminarPosicao() async {
+    try {
+      LocationPermission permission;
+      // Teste se os serviços de localização estão habilitados.
+      if (!await Geolocator.isLocationServiceEnabled()) {
+        // Os serviços de localização não estão habilitados, não continue
+        // acessando a posição e solicitando aos usuários do
+        // App para habilitar os serviços de localização.
+        throw 'Os serviços de localização estão desativados.';
+      }
+      permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          // As permissões são negadas, da próxima vez você pode tentar
+          // solicitando permissões novamente (também é onde
+          // shouldShowRequestPermissionRationale do Android
+          // retornou verdadeiro. De acordo com as diretrizes do Android
+          // seu aplicativo deve mostrar uma IU explicativa agora.
+          throw 'As permissões de localização foram negadas';
+        }
+      }
+      if (permission == LocationPermission.deniedForever) {
+        // As permissões são negadas para sempre, manuseie apropriadamente.
+        throw 'As permissões de localização são negadas permanentemente, não podemos solicitar permissões.';
+      }
+      // Quando chegamos aqui, as permissões são concedidas e podemos
+      // continue acessando a posição do dispositivo.
+      return await Geolocator.getCurrentPosition();
+    } catch (error) {
+      return null;
+    }
+  }
 
 }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class GlobalScaffold {
@@ -11,6 +12,8 @@ class GlobalScaffold {
   int selectedPageBottomNavigationIndex = 0;
   String selectedPageView = '';
   static String erroInformacao = 'Ops! Algo de errado aconteceu? Não se preocupe, vou te ajudar a resolver!';
+  static Position? position;
+
   static  Map<String, dynamic> map = {};
 
   onToastInformacaoErro(String mensagem) {
