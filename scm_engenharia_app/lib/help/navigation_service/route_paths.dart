@@ -18,7 +18,8 @@ const String forgotYourPasswordRoute = 'esqueceu-sua-senha';
 const String loginRoute = 'login';
 const String inicioRoute = 'início';
 const String perfilRoute = 'profile';
-
+//Configurações  ----------------------------------------------------------------------------------------------------------
+const String configuracoesRoute = 'configurações';
 //outros ------------------------------------------------------------------------------------------------------------------
 const String errorInformationRoute = 'informação-de-erro';
 const String menuNavigationRoute = 'navegação-do-menu';

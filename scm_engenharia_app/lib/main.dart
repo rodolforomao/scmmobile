@@ -88,7 +88,7 @@ class MyApp extends StatelessWidget {
               },
             ),
           ),
-          darkTheme: AppThema.darkTheme,
+          darkTheme: AppThema.lightTheme,
           themeMode: mode,
           //navigatorObservers: <NavigatorObserver>[GlobalScaffold.observer],
           home:const SplashScreenView(),

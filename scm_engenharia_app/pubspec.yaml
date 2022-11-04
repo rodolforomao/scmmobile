@@ -110,6 +110,10 @@ flutter:
     - assets/img/img_sem_sinal.png
     - assets/img/img_informacao.png
     - assets/img/img_background.png
+    - assets/img/fundo_tela_configuracoes.png
+    - assets/variavel_de_ambiente.json
+
+
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

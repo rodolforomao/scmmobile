@@ -24,7 +24,7 @@ class LoginState extends State<LoginView> {
 
   final txtControllerEmail = TextEditingController();
   final txtControllerPassword= TextEditingController();
-  bool switchValueDarkMode=true;
+  bool switchValueDarkMode=false;
   FocusNode? focusNodeEmail;
   FocusNode? focusNodePassword;
 
@@ -173,27 +173,8 @@ class LoginState extends State<LoginView> {
                       fontWeight: FontWeight.w100,
                       color: Color(0xFF323232)),
                   decoration: const InputDecoration(
-                    contentPadding:  EdgeInsets.fromLTRB(10, 10, 10, 4),
-                    filled: true,
-                    fillColor: Color(0xFFf5f5f5),
                     labelText: "e-mail",
                     hintText: "Digite seu e-mail",
-                    hintStyle: TextStyle(
-                        fontSize: 12,
-                        fontFamily: 'Poppins-Medium',
-                        fontWeight: FontWeight.w200,
-                        color:  Colors.black54),
-                    labelStyle: TextStyle(
-                        fontSize: 13,
-                        fontFamily: 'Poppins-Medium',
-                        fontWeight: FontWeight.w200,
-                        color:  Colors.black54),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black87),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFFF65100),),
-                    ),
                   )),),
               Padding(padding: const EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0),child:TextField(
                 autofocus: false,
@@ -211,27 +192,9 @@ class LoginState extends State<LoginView> {
                     color: Color(0xFF323232)),
                 obscureText: true,
                 decoration: const InputDecoration(
-                  contentPadding:  EdgeInsets.fromLTRB(10, 10, 10, 4),
-                  filled: true,
-                  fillColor: Color(0xFFf5f5f5),
                   labelText: "senha",
                   hintText: "Digite sua senha",
-                  hintStyle: TextStyle(
-                      fontSize: 19,
-                      fontFamily: 'Poppins-Medium',
-                      fontWeight: FontWeight.w200,
-                      color:  Colors.black54),
-                  labelStyle: TextStyle(
-                      fontSize: 13,
-                      fontFamily: 'Poppins-Medium',
-                      fontWeight: FontWeight.w200,
-                      color:  Colors.black54),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black87),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFF65100),),
-                  ),
+
                 ),),),
               const SizedBox(height: 25.0),
               Row(
@@ -256,12 +219,13 @@ class LoginState extends State<LoginView> {
                         transformHitTests: false,
                         scale: .6,
                         child: Center(child:CupertinoSwitch(
-
-                          trackColor: const Color(0xff3F7EC1),
-                          activeColor: const Color(0xff303e7ec1),
+                          trackColor: const Color(0xff303e7ec1),
+                          activeColor: const Color(0xff3F7EC1),
                           value: switchValueDarkMode,
                           onChanged: (value) {
-
+                            setState(() {
+                              switchValueDarkMode = value;
+                            });
                           },
                         ),),
                       ),
@@ -334,7 +298,8 @@ class LoginState extends State<LoginView> {
                 ),
                 onPressed: () async {
                   Navigator.of(context).pushNamed(
-                    routes.forgotYourPasswordRoute,
+                    //routes.forgotYourPasswordRoute,
+                    routes.configuracoesRoute,
                   );
                 },
               ),
