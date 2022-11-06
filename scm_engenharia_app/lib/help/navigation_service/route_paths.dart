@@ -24,6 +24,16 @@ const String perfilRoute = 'profile';
 const String variaveisDeAmbienteRoute = 'variáveis-de-ambiente';
 const String sobreRoute = 'sobre';
 //outros ------------------------------------------------------------------------------------------------------------------
+const String analiseRoute = 'análise';
+const String alertasRoute = 'alertas';
+const String recibosRoute = 'recibos';
+const String documentosRoute = 'documentos';
+const String empresasRoute = 'empresas';
+const String usuarioRoute = 'usuário';
+const String notificacoesRoute = 'notificações';
+
+//outros ------------------------------------------------------------------------------------------------------------------
+const String dashboardRoute = 'dashboard';
 const String errorInformationRoute = 'informação-de-erro';
 const String menuNavigationRoute = 'navegação-do-menu';
 const String settingsRoute = 'definições';

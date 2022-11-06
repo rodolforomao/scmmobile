@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
 import '../../models/operation.dart';
 import '../../models/notification_models/notification_model.dart';
+import '../../thema/app_thema.dart';
 import '../../web_service/servico_mobile_service.dart';
 import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
@@ -105,12 +106,18 @@ class NotificationState extends State<NotificacaoDetalhesView> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: true,
-        centerTitle: true,
-        elevation: 0.0,
-        title: const Text(
-          'Notificação',
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(55.0),
+        child: AppBar(
+          centerTitle: true,
+          flexibleSpace: Container(
+            decoration: StylesThemas.boxDecorationAppBar,
+          ),
+          title: const Text(
+            'Notificação',
+          ),
+          toolbarHeight: 50,
+          backgroundColor: Colors.transparent,
         ),
       ),
       body: viewType(MediaQuery.of(context).size.height),

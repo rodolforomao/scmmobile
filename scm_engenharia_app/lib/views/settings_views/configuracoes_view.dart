@@ -3,6 +3,8 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
+import '../../thema/app_thema.dart';
+import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
 import 'package:scm_engenharia_app/models/global_user_logged.dart' as global_user_logged;
 class Configuracoesview extends StatefulWidget {
@@ -13,7 +15,7 @@ class Configuracoesview extends StatefulWidget {
 
 class ConfiguracoesState extends State<Configuracoesview> {
 
-
+  TypeView statusView = TypeView.viewLoading;
   final txtControllerEmail = TextEditingController();
   bool isTemaEscuroAppOn = false, isNotificacoesAtivarDesativada = false;
   onSwitchNotificacoesAtivarDesativadaChanged(bool value) async {
@@ -30,17 +32,8 @@ class ConfiguracoesState extends State<Configuracoesview> {
   void initState() {
     super.initState();
 
-    Future.delayed(Duration.zero, () async {
-      var connectivityResult = await (Connectivity().checkConnectivity());
-      if (connectivityResult == ConnectivityResult.none) {
-        setState(() {
-
-        });
-      } else {
-        setState(() {
-
-        });
-      }
+    setState(() {
+      statusView = TypeView.viewRenderInformation;
     });
   }
 
@@ -55,14 +48,19 @@ class ConfiguracoesState extends State<Configuracoesview> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text('Configurações'),
-        toolbarHeight: 80,
-        flexibleSpace: const Image(
-          image: AssetImage('assets/img/fundo_tela_configuracoes.png'),
-          fit: BoxFit.cover,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(55.0),
+        child: AppBar(
+          centerTitle: true,
+          flexibleSpace: Container(
+            decoration: StylesThemas.boxDecorationAppBar,
+          ),
+          title: const Text(
+            'Configurações',
+          ),
+          toolbarHeight: 50,
+          backgroundColor: Colors.transparent,
         ),
-        backgroundColor: Colors.transparent,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(top: 10.0, right: 10.0, left: 10.0, bottom: 10.0),

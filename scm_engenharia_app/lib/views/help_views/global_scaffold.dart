@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../help/navigation_service/route_paths.dart' as routes;
+
 
 class GlobalScaffold {
   static final GlobalScaffold instance = GlobalScaffold();
@@ -9,8 +11,31 @@ class GlobalScaffold {
   final scaffoldKeyMenuDrawer = GlobalKey<ScaffoldState>();
   final globalKey = GlobalKey<ScaffoldState>();
 
+  late String selectedPageView = routes.dashboardRoute;
+
+  static Color colorSelectedPageView(String value) {
+    if(GlobalScaffold.instance.selectedPageView == value)
+    {
+      return Color(0xffeaeaea);
+    }
+    else
+    {
+      return Colors.transparent;
+    }
+  }
+
+  static Color colorTextIconSelectedPageView(String value) {
+    if(GlobalScaffold.instance.selectedPageView == value)
+    {
+      return Color(0xffd56921);
+    }
+    else
+    {
+      return Color(0xff6C757D);
+    }
+  }
+
   int selectedPageBottomNavigationIndex = 0;
-  String selectedPageView = '';
   static String erroInformacao = 'Ops! Algo de errado aconteceu? Não se preocupe, vou te ajudar a resolver!';
   static Position? position;
 
@@ -211,10 +236,7 @@ class OnAlertaInformacaoErro {
                           overflow: TextOverflow.ellipsis,
                           maxLines: 4,
                           softWrap: false,
-                          style: const TextStyle(
-                            fontSize: 17.0,
-                            color: Color(0xff737373),
-                          ),
+                            style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 12,color:  Colors.black87, fontWeight: FontWeight.w500,)
                         ),
                       ),
                     ],
@@ -442,34 +464,28 @@ class OnRealizandoOperacao {
         builder: (BuildContext context) {
           dialogContext = context;
           return Dialog(
-            child: new Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.max,
               children: [
                 Container(
-                  margin: const EdgeInsets.only(
-                      left: 10.0, top: 20.0, bottom: 20.0, right: 10.0),
+                  margin: const EdgeInsets.only(left: 10.0, top: 20.0, bottom: 20.0, right: 10.0),
                   child: Theme(
-                    data: Theme.of(context).copyWith(
-                      accentColor: Color(0xff018a8a),
-                    ),
-                    child: new CircularProgressIndicator(),
-                  ),
+              data: Theme.of(context).copyWith( colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Color(0xfff5821f))),
+          child: const CircularProgressIndicator(),
+          ),
                 ),
                 Expanded(
                   child: Container(
-                    margin: EdgeInsets.only(
+                    margin: const EdgeInsets.only(
                         left: 10.0, top: 20.0, bottom: 20.0, right: 5.0),
                     child: Text(
                       txtInformacao,
                       softWrap: true,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          fontSize: 17.0,
-                          color: Color(0xff212529),
-                          fontFamily: "open-sans-regular"),
+                        style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 15,color:  Colors.black54, fontWeight: FontWeight.w600,)
                     ),
                   ),
                 ),

@@ -212,25 +212,17 @@ class StylesThemas {
 
   static BoxDecoration boxDecorationAppBar =
   AppThema.themeNotifierState.value.mode == ThemeMode.light
-      ? const BoxDecoration(
-    gradient: LinearGradient(
-      begin: Alignment.centerLeft,
-      end: Alignment.centerRight,
-      colors: <Color>[
-        Color(0xff15335A),
-        Color(0xff437DC0),
-      ],
-    ),
+      ?  const BoxDecoration(
+      image: DecorationImage(
+        image: AssetImage('assets/img/fundo_tela_configuracoes.png'),
+        fit: BoxFit.fill,
+      )
   )
-      : const BoxDecoration(
-    gradient: LinearGradient(
-      begin: Alignment.centerLeft,
-      end: Alignment.centerRight,
-      colors: <Color>[
-        Color(0xff333333),
-        Color(0xff333333),
-      ],
-    ),
+      : const  BoxDecoration(
+      image: DecorationImage(
+        image: AssetImage('assets/img/fundo_tela_configuracoes.png'),
+        fit: BoxFit.fill,
+      )
   );
 
   static TextStyle textStyleMenu(double fontSize) {

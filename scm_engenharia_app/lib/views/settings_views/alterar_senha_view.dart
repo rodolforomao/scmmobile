@@ -5,6 +5,7 @@ import '../../data/app_scm_engenharia_mobile_bll.dart';
 import '../../data/tb_user.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
 import '../../models/operation.dart';
+import '../../thema/app_thema.dart';
 import '../../web_service/servico_mobile_service.dart';
 import '../help_views/global_scaffold.dart';
 import 'package:scm_engenharia_app/models/global_user_logged.dart' as global_user_logged;
@@ -108,14 +109,19 @@ class AlterarSenhaState extends State<AlterarSenhaView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text('Configurações'),
-        toolbarHeight: 80,
-        flexibleSpace: const Image(
-          image: AssetImage('assets/img/fundo_tela_configuracoes.png'),
-          fit: BoxFit.cover,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(55.0),
+        child: AppBar(
+          centerTitle: false,
+          flexibleSpace: Container(
+            decoration: StylesThemas.boxDecorationAppBar,
+          ),
+          title: const Text(
+            'Configurações',
+          ),
+          toolbarHeight: 50,
+          backgroundColor: Colors.transparent,
         ),
-        backgroundColor: Colors.transparent,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(top: 10.0, right: 10.0, left: 10.0, bottom: 10.0),
