@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../../views/configuracoes/alterar_senha_view.dart';
-import '../../views/configuracoes/configuracoes_view.dart';
-import '../../views/configuracoes/perfil_view.dart';
-import '../../views/configuracoes/sobre_view.dart';
-import '../../views/configuracoes/variaveis_de_ambiente_view.dart';
+import '../../views/settings/alterar_senha_view.dart';
+import '../../views/settings/configuracoes_view.dart';
+import '../../views/settings/perfil_view.dart';
+import '../../views/settings/sobre_view.dart';
+import '../../views/settings/variaveis_de_ambiente_view.dart';
 import '../../views/inicio_view.dart';
 import '../../views/splash_screen_view.dart';
 import '/help/navigation_service/route_paths.dart' as routes;
@@ -34,6 +34,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case routes.errorInformationRoute:
       {
         return MaterialPageRoute(builder: (context) => ErrorInformationView(map: map,));
+      }
+    case routes.menuNavigationRoute:
+      {
+        return MaterialPageRoute(builder: (context) =>  MenuNavigation());
       }
     case routes.splashScreenRoute:
       return MaterialPageRoute(builder: (context) => const SplashScreenView());

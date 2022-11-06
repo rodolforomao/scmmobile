@@ -1,14 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../thema/app_thema.dart';
+import 'help_views/global_scaffold.dart';
+
 
 class MenuNavigation extends StatefulWidget {
 
   @override
-  _MenuNavigationState createState() => _MenuNavigationState();
+  MenuNavigationState createState() => MenuNavigationState();
 }
 
-class _MenuNavigationState extends State<MenuNavigation> {
+class MenuNavigationState extends State<MenuNavigation> {
   int selectedView = 0;
 
   @override
@@ -41,57 +44,66 @@ class _MenuNavigationState extends State<MenuNavigation> {
 
   @override
   Widget build(BuildContext context) {
+    double maxHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      key: GlobalScaffold.instance.scaffoldKeyMenuDrawer,
       body: onSelectedPage(),
-      bottomNavigationBar: Theme(
-        data: Theme.of(context).copyWith(
-            canvasColor: Colors.white,
-            primaryColor: const Color(0xffa55eea),
-            textTheme: Theme.of(context).textTheme.copyWith(caption: const TextStyle(color: Color(0xff6C757D),))
-        ),
-        child: BottomNavigationBar(
-          elevation: 9.0,
-          type: BottomNavigationBarType.fixed,
-          currentIndex: selectedView,
-          items: const [
-             BottomNavigationBarItem(
-              icon: Icon(Icons.format_list_bulleted, size: 26),
-              label: "Sici/Fust",
+      onDrawerChanged: (change) {
+        setState(() {
+
+        });
+      },
+      drawer: Drawer(
+        child: Column(
+          children: <Widget>[
+            Container(
+              padding: const EdgeInsets.fromLTRB(0.0, 40.0, 0.0, 20.0),
+              color: AppThema.themeNotifierState.value.mode == ThemeMode.dark ? const Color(0xff203e7ec1) : const Color(0xff3F7EC1),
+              height: 200,
+              width: MediaQuery.of(context).size.width,
+              constraints: const BoxConstraints(minHeight: 200, maxHeight: 200),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children:  <Widget>[
+
+                ],
+              ),
             ),
-             BottomNavigationBarItem(
-              icon:  Icon(Icons.wysiwyg, size: 24),
-              label:"Documentos",
-            ),
-             BottomNavigationBarItem(
-              icon:  Icon(Icons.settings, size: 0),
-              label: '',
-            ),
-             BottomNavigationBarItem(
-              icon:  Icon(Icons.notifications_active_outlined, size: 24),
-              label: "Notificações ",
-            ),
-             BottomNavigationBarItem(
-              icon:  Icon(Icons.settings, size: 24),
-              label: 'Configuração',
+            SizedBox(
+              height: maxHeight-200,
+              child: SingleChildScrollView(
+                controller: ScrollController(),
+                scrollDirection: Axis.vertical,
+                padding: const EdgeInsets.all(0.0),
+                child: Column(
+                  children: <Widget>[
+                   
+                  ],
+                ),
+              ),
             ),
           ],
-          onTap: (int index) {
-            setState(() => selectedView = index);
-          },
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: SizedBox(
-        height: 65.0,
-        width: 65.0,
-        child: FittedBox(
-          child: FloatingActionButton(
-            elevation: 10,
-            backgroundColor: const Color(0xffa55eea),
-            child: const Icon(Icons.add, size: 25),
+      bottomNavigationBar: BottomAppBar(
+        elevation: 0,
+        child:Container(
+          alignment: Alignment.bottomLeft,
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/img/fundo_tela_configuracoes.png'), fit: BoxFit.cover)),
+          height: 50,
+          padding: const EdgeInsets.fromLTRB(10.0, 2.0, 10.0, 5.0),
+          constraints: const BoxConstraints(
+            minWidth: 50,
+            maxWidth: 100,
+          ),
+          child:  IconButton(
+            icon: const Icon(Icons.menu, size:25, color: Color(0xFFFFFFFF)),
+            tooltip: 'Menu',
             onPressed: () {
-
+              GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openDrawer();
             },
           ),
         ),

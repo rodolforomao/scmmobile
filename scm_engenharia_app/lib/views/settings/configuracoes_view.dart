@@ -216,8 +216,7 @@ class ConfiguracoesState extends State<Configuracoesview> {
                 contentPadding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
                 leading: Container(
                   padding: const EdgeInsets.only(right: 12.0),
-                  child: const Icon(Icons.exit_to_app,
-                      color: Color(0xff9e9e9e), size: 25.0),
+                  child: const Icon(Icons.exit_to_app, color: Color(0xff9e9e9e), size: 25.0),
                 ),
                 title: const Text(
                   'Sair',

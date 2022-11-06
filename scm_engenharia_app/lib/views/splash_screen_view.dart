@@ -9,6 +9,7 @@ import '../models/operation.dart';
 import 'package:scm_engenharia_app/models/global_user_logged.dart' as global_user_logged;
 import '../models/user_response_model.dart';
 import '../web_service/servico_mobile_service.dart';
+import 'help_views/global_scaffold.dart';
 
 class SplashScreenView extends StatefulWidget {
   const SplashScreenView({Key? key}) : super(key: key);
@@ -29,12 +30,12 @@ class SplashScreenState extends State<SplashScreenView> {
         if (respUser.erro) {
           throw respUser.message!;
         } else if (respUser.result == null) {
-          Navigator.of(context).pushNamedAndRemoveUntil(routes.loginRoute, (Route<dynamic> route) => false);
+          GlobalScaffold.instance.navigatorKey.currentState?.pushNamedAndRemoveUntil(routes.inicioRoute, (Route<dynamic> route) => false);
         } else {
           global_user_logged.globalUserLogged = respUser.result as TbUser;
-          if (await Connectivity().checkConnectivity() == ConnectivityResult.none)
+          if (await Connectivity().checkConnectivity() != ConnectivityResult.none)
           {
-            Navigator.of(context).pushNamedAndRemoveUntil(routes.menuNavigationRoute, (Route<dynamic> route) => false);
+            GlobalScaffold.instance.navigatorKey.currentState?.pushNamedAndRemoveUntil(routes.menuNavigationRoute, (Route<dynamic> route) => false);
           }
           else {
             Operation restWeb = await ServicoMobileService.onLogin(global_user_logged.globalUserLogged!.email,global_user_logged.globalUserLogged!.password);
@@ -56,14 +57,14 @@ class SplashScreenState extends State<SplashScreenView> {
                   resul.periodoReferencia!,
                   resul.cpf!,
                   resul.uf!);
-              Operation respBll = await AppScmEngenhariaMobileBll.instance.onUpdateUser(userResul);
+              Operation respBll = await AppScmEngenhariaMobileBll.instance.onUpdateUser(userResul.idUserApp,userResul);
               if (respBll.erro) {
                 throw respBll.message!;
               } else if (respBll.result == null) {
                 throw respBll.message!;
               } else {
                 global_user_logged.globalUserLogged = userResul;
-                Navigator.of(context).pushNamedAndRemoveUntil(routes.menuNavigationRoute, (Route<dynamic> route) => false);
+                GlobalScaffold.instance.navigatorKey.currentState?.pushNamedAndRemoveUntil(routes.menuNavigationRoute, (Route<dynamic> route) => false);
               }
             }
           }
@@ -87,8 +88,8 @@ class SplashScreenState extends State<SplashScreenView> {
   {
     super.initState();
     Future(() {
-      Navigator.of(context).pushNamedAndRemoveUntil(routes.inicioRoute, (Route<dynamic> route) => false);
-       //onInc();
+       //Navigator.of(context).pushNamedAndRemoveUntil(routes.inicioRoute, (Route<dynamic> route) => false);
+       onInc();
     });
   }
 

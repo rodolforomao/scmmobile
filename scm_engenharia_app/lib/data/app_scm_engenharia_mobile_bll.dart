@@ -24,10 +24,10 @@ class AppScmEngenhariaMobileBll {
     operation.message = 'Operação realizada com sucesso';
     operation.erro = false;
     try {
-      realm.write(() {
-        realm.add<TbUser>(user);
+      TbUser respUser = realm.write<TbUser>(() {
+        return realm.add<TbUser>(user);
       });
-      operation.result = true;
+      operation.result = respUser;
     } catch (ex) {
       operation.erro = true;
       operation.message = 'Erro $ex';
@@ -35,16 +35,39 @@ class AppScmEngenhariaMobileBll {
     return operation;
   }
 
-  Future<Operation> onUpdateUser(TbUser user) async {
+  Future<Operation> onUpdateUser(ObjectId idUserApp,TbUser user) async {
     Operation operation = Operation();
     operation.result = null;
     operation.message = 'Operação realizada com sucesso';
     operation.erro = false;
     try {
-      realm.write(() {
-        user;
-      });
-      operation.result = true;
+      TbUser? updateUser = realm.find<TbUser>(idUserApp);
+      if(!updateUser!.isValid)
+      {
+        throw ('Não foi possível identificar as informações no seu dispositivo');
+      }
+      else
+        {
+          realm.write(() {
+            updateUser.idUser = user.idUser;
+            updateUser.idProfile = user.idProfile;
+            updateUser.name = user.name;
+            updateUser.password = user.password;
+            updateUser.email = user.email;
+            updateUser.telephone = user.telephone;
+            updateUser.dtLastAcess = user.dtLastAcess;
+            updateUser.company = user.company;
+            updateUser.referencePeriod = user.referencePeriod;
+            updateUser.cpf = user.cpf;
+            updateUser.uf = user.uf;
+          });
+          TbUser? respUpdate = realm.find<TbUser>(idUserApp);
+          if(!updateUser.isValid)
+          {
+            throw ('Não foi possível identificar as informações no seu dispositivo');
+          }
+          operation.result = respUpdate;
+        }
     } catch (ex) {
       operation.erro = true;
       operation.message = 'Erro $ex';

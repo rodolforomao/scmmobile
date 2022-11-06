@@ -71,7 +71,7 @@ class ChangePasswordState extends State<ChangePasswordView> {
                 global_user_logged.globalUserLogged!.referencePeriod,
                 global_user_logged.globalUserLogged!.cpf,
                 global_user_logged.globalUserLogged!.uf,);
-              Operation respBll = await AppScmEngenhariaMobileBll.instance.onUpdateUser(userResul);
+              Operation respBll = await AppScmEngenhariaMobileBll.instance.onUpdateUser(global_user_logged.globalUserLogged!.idUserApp ,userResul);
               if (respBll.erro) {
                 throw respBll.message!;
               } else if (respBll.result == null) {

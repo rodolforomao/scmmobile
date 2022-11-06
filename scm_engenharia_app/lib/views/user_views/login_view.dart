@@ -71,15 +71,16 @@ class LoginState extends State<LoginView> {
             } else if (respBll.result == null) {
               throw respBll.message!;
             } else {
-              Navigator.of(context).pushNamedAndRemoveUntil(routes.menuNavigationRoute, (Route<dynamic> route) => false);
-            }
-            if (global_user_logged.globalUserLogged!.isValid)
-            {
-              if (defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.macOS || defaultTargetPlatform == TargetPlatform.android) {
-                await FirebaseMessaging.instance.subscribeToTopic('NroCPF-${userResul.cpf}' ?? 'ScmEngenhariaLogadoAll');
-                await FirebaseMessaging.instance.subscribeToTopic('ScmEngenhariaLogadoAll');
-                await FirebaseMessaging.instance.unsubscribeFromTopic('ScmEngenhariaNLogadoAll');
+              global_user_logged.globalUserLogged =  respBll.result as TbUser;
+              if (global_user_logged.globalUserLogged!.isValid)
+              {
+                if (defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.macOS || defaultTargetPlatform == TargetPlatform.android) {
+                  await FirebaseMessaging.instance.subscribeToTopic('NroCPF-${userResul.cpf}' ?? 'ScmEngenhariaLogadoAll');
+                  await FirebaseMessaging.instance.subscribeToTopic('ScmEngenhariaLogadoAll');
+                  await FirebaseMessaging.instance.unsubscribeFromTopic('ScmEngenhariaNLogadoAll');
+                }
               }
+              GlobalScaffold.instance.navigatorKey.currentState?.pushNamedAndRemoveUntil(routes.menuNavigationRoute, (Route<dynamic> route) => false);
             }
         }
       }
@@ -263,7 +264,7 @@ class LoginState extends State<LoginView> {
                   ),
                 ),
                 onPressed: () async {
-
+                  onLoggingIn();
                 },
               ),
               const SizedBox(height: 25.0),
