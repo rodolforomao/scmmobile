@@ -5,8 +5,10 @@ import 'financial_views/recibos_view.dart';
 import 'help_views/global_scaffold.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
 import 'package:scm_engenharia_app/models/global_user_logged.dart' as global_user_logged;
+import 'help_views/global_view.dart';
 import 'notifications_views/alertas_view.dart';
 import 'notifications_views/notificacoes_view.dart';
+import 'others_view/analises_view.dart';
 import 'settings_views/configuracoes_view.dart';
 import 'user_views/usuarios_view.dart';
 class MenuNavigation extends StatefulWidget {
@@ -20,6 +22,8 @@ class MenuNavigationState extends State<MenuNavigation> {
   @override
   void initState() {
     super.initState();
+    setState(() =>  GlobalScaffold.instance.selectedPageView = routes.analiseRoute);
+    GlobalScaffold.colorSelectedPageView(routes.analiseRoute);
   }
 
   @override
@@ -29,8 +33,8 @@ class MenuNavigationState extends State<MenuNavigation> {
 
   onSelectedPage() {
     switch (GlobalScaffold.instance.selectedPageView) {
-      case routes.dashboardRoute:
-        return const Text("Error");
+      case routes.analiseRoute:
+        return const AnalisesView();
       case routes.alertasRoute:
         return const AlertasView();
       case routes.recibosRoute:
@@ -110,7 +114,7 @@ class MenuNavigationState extends State<MenuNavigation> {
               ),
             ),
             SizedBox(
-              height: maxHeight-200,
+              height: maxHeight-260,
               child: SingleChildScrollView(
                 controller: ScrollController(),
                 scrollDirection: Axis.vertical,
@@ -268,15 +272,153 @@ class MenuNavigationState extends State<MenuNavigation> {
                             else
                               Icon(Icons.inventory_2_outlined,color: GlobalScaffold.colorTextIconSelectedPageView(routes.documentosRoute), size: 22.0),
                             const SizedBox(width: 15.0),
-                            Flexible(
-                              child: Text(
-                                'documentos',
-                                overflow: TextOverflow.visible,
-                                maxLines: 1,
-                                softWrap: false,
-                                style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.documentosRoute)),
-                              ),
-                            )
+                            ExpansionTile(
+                                leading: Icon(Icons.expand_more_outlined),
+                                title: Text(
+                                  'documentos',
+                                  overflow: TextOverflow.visible,
+                                  maxLines: 1,
+                                  softWrap: false,
+                                  style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.documentosRoute)),
+                                ),
+                                children: [
+                                  SizedBox(
+                                    height: 50,
+                                    child: InkWell(
+                                      onTap: () {
+                                        setState(() =>  GlobalScaffold.instance.selectedPageView = routes.analiseRoute);
+                                        GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
+                                        GlobalScaffold.colorSelectedPageView(routes.analiseRoute);
+                                      }, // Handle your callback
+                                      child: Container(
+                                        alignment: Alignment.centerLeft,
+                                        height: 50,
+                                        padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                                        margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                                        child: Row(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: <Widget>[
+                                            Flexible(
+                                              child: Text(
+                                                'contratos',
+                                                overflow: TextOverflow.visible,
+                                                maxLines: 1,
+                                                softWrap: false,
+                                                style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:Color(0xff6C757D)),
+                                              ),
+                                            ),
+                                            const SizedBox(width: 15.0),
+                                            IconButton(
+                                              icon: const Icon(
+                                                Icons.exit_to_app,
+                                                color:Color(0xff6C757D),
+                                                size: 22,
+                                              ),
+                                              onPressed: () {
+                                                if(global_user_logged.globalUserLogged != null)
+                                                {
+                                                  OnExitApp(context,global_user_logged.globalUserLogged!.cpf);
+                                                }
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 50,
+                                    child: InkWell(
+                                      onTap: () {
+                                        setState(() =>  GlobalScaffold.instance.selectedPageView = routes.analiseRoute);
+                                        GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
+                                        GlobalScaffold.colorSelectedPageView(routes.analiseRoute);
+                                      }, // Handle your callback
+                                      child: Container(
+                                        alignment: Alignment.centerLeft,
+                                        height: 50,
+                                        padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                                        margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                                        child: Row(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: <Widget>[
+                                            Flexible(
+                                              child: Text(
+                                                'certidões',
+                                                overflow: TextOverflow.visible,
+                                                maxLines: 1,
+                                                softWrap: false,
+                                                style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:Color(0xff6C757D)),
+                                              ),
+                                            ),
+                                            const SizedBox(width: 15.0),
+                                            IconButton(
+                                              icon: const Icon(
+                                                Icons.exit_to_app,
+                                                color:Color(0xff6C757D),
+                                                size: 22,
+                                              ),
+                                              onPressed: () {
+                                                if(global_user_logged.globalUserLogged != null)
+                                                {
+                                                  OnExitApp(context,global_user_logged.globalUserLogged!.cpf);
+                                                }
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 50,
+                                    child: InkWell(
+                                      onTap: () {
+                                        setState(() =>  GlobalScaffold.instance.selectedPageView = routes.analiseRoute);
+                                        GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
+                                        GlobalScaffold.colorSelectedPageView(routes.analiseRoute);
+                                      }, // Handle your callback
+                                      child: Container(
+                                        alignment: Alignment.centerLeft,
+                                        height: 50,
+                                        padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                                        margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                                        child: Row(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: <Widget>[
+                                            Flexible(
+                                              child: Text(
+                                                'recibos ',
+                                                overflow: TextOverflow.visible,
+                                                maxLines: 1,
+                                                softWrap: false,
+                                                style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:Color(0xff6C757D)),
+                                              ),
+                                            ),
+                                            const SizedBox(width: 15.0),
+                                            IconButton(
+                                              icon: const Icon(
+                                                Icons.exit_to_app,
+                                                color:Color(0xff6C757D),
+                                                size: 22,
+                                              ),
+                                              onPressed: () {
+                                                if(global_user_logged.globalUserLogged != null)
+                                                {
+                                                  OnExitApp(context,global_user_logged.globalUserLogged!.cpf);
+                                                }
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ] ),
+
                           ],
                         ),
                       ),
@@ -449,6 +591,51 @@ class MenuNavigationState extends State<MenuNavigation> {
                 ),
               ),
             ),
+            Padding( padding: const EdgeInsets.only(top: 10.0),child: SizedBox(
+              height: 50,
+              child: InkWell(
+                onTap: () {
+                  setState(() =>  GlobalScaffold.instance.selectedPageView = routes.analiseRoute);
+                  GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
+                  GlobalScaffold.colorSelectedPageView(routes.analiseRoute);
+                }, // Handle your callback
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  height: 50,
+                  padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                  margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Flexible(
+                        child: Text(
+                          'Logout',
+                          overflow: TextOverflow.visible,
+                          maxLines: 1,
+                          softWrap: false,
+                          style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:Color(0xff6C757D)),
+                        ),
+                      ),
+                      const SizedBox(width: 15.0),
+                      IconButton(
+                        icon: const Icon(
+                          Icons.exit_to_app,
+                          color:Color(0xff6C757D),
+                          size: 22,
+                        ),
+                        onPressed: () {
+                          if(global_user_logged.globalUserLogged != null)
+                          {
+                            OnExitApp(context,global_user_logged.globalUserLogged!.cpf);
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),),
           ],
         ),
       ),
@@ -458,7 +645,7 @@ class MenuNavigationState extends State<MenuNavigation> {
           alignment: Alignment.bottomLeft,
           decoration: const BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage('assets/img/fundo_tela_configuracoes.png'), fit: BoxFit.cover)),
+                  image: AssetImage('assets/img/fundo_tela_configuracoes_bottom.png'), fit: BoxFit.cover)),
           height: 50,
           padding: const EdgeInsets.fromLTRB(10.0, 2.0, 10.0, 5.0),
           constraints: const BoxConstraints(

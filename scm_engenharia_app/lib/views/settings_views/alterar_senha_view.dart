@@ -112,7 +112,7 @@ class AlterarSenhaState extends State<AlterarSenhaView> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(55.0),
         child: AppBar(
-          centerTitle: false,
+          centerTitle: true,
           flexibleSpace: Container(
             decoration: StylesThemas.boxDecorationAppBar,
           ),

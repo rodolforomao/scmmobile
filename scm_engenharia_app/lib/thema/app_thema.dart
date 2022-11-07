@@ -214,7 +214,7 @@ class StylesThemas {
   AppThema.themeNotifierState.value.mode == ThemeMode.light
       ?  const BoxDecoration(
       image: DecorationImage(
-        image: AssetImage('assets/img/fundo_tela_configuracoes.png'),
+        image: AssetImage('assets/img/fundo_tela_configuracoes_top.png'),
         fit: BoxFit.fill,
       )
   )

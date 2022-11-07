@@ -7,6 +7,7 @@ import '../../help/formatter/cpf_input_formatter.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
 import '../../models/operation.dart';
 import '../../models/output/output_environment_variables_model.dart';
+import '../../thema/app_thema.dart';
 import '../../web_service/servico_mobile_service.dart';
 import '../help_views/global_scaffold.dart';
 import 'package:scm_engenharia_app/models/global_user_logged.dart' as global_user_logged;
@@ -116,14 +117,19 @@ class PerfilState extends State<PerfilView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text('Configurações'),
-        toolbarHeight: 80,
-        flexibleSpace: const Image(
-          image: AssetImage('assets/img/fundo_tela_configuracoes.png'),
-          fit: BoxFit.cover,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(55.0),
+        child: AppBar(
+          centerTitle: true,
+          flexibleSpace: Container(
+            decoration: StylesThemas.boxDecorationAppBar,
+          ),
+          title: const Text(
+            'Configurações',
+          ),
+          toolbarHeight: 50,
+          backgroundColor: Colors.transparent,
         ),
-        backgroundColor: Colors.transparent,
       ),
       body: viewType(MediaQuery.of(context).size.height),
     );

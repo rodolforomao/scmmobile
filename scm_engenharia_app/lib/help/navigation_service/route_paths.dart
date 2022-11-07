@@ -34,6 +34,7 @@ const String notificacoesRoute = 'notificações';
 
 //outros ------------------------------------------------------------------------------------------------------------------
 const String dashboardRoute = 'dashboard';
+const String analisesRoute = 'análises';
 const String errorInformationRoute = 'informação-de-erro';
 const String menuNavigationRoute = 'navegação-do-menu';
 const String settingsRoute = 'definições';

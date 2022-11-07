@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../views/inicio_view.dart';
+import '../../views/others_view/analises_view.dart';
 import '../../views/settings_views/alterar_senha_view.dart';
 import '../../views/settings_views/configuracoes_view.dart';
 import '../../views/settings_views/perfil_view.dart';
@@ -52,6 +53,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => const CreateNewAccountView());
     case routes.forgotYourPasswordRoute:
       return MaterialPageRoute(builder: (context) => const ForgotYourPasswordView());
+    case routes.analisesRoute:
+      return MaterialPageRoute(builder: (context) => const AnalisesView());
   //Configurações
     case routes.configuracoesRoute:
       return MaterialPageRoute(builder: (context) => const Configuracoesview());
@@ -63,6 +66,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => const VariaveisDeAmbienteView());
     case routes.sobreRoute:
       return MaterialPageRoute(builder: (context) => const SobreView());
+
+
+
   //Erro
     default:
       {
