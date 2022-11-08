@@ -67,7 +67,8 @@ class MenuNavigationState extends State<MenuNavigation> {
         });
       },
       drawer: Drawer(
-        child: Column(
+        child:SingleChildScrollView(
+          child:  Column(
           children: <Widget>[
             Container(
               padding: const EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 10.0),
@@ -113,484 +114,473 @@ class MenuNavigationState extends State<MenuNavigation> {
                 ],
               ),
             ),
-            SizedBox(
-              height: maxHeight-260,
-              child: SingleChildScrollView(
-                controller: ScrollController(),
-                scrollDirection: Axis.vertical,
-                padding: const EdgeInsets.all(0.0),
-                child: Column(
-                  children: <Widget>[
-                    Padding( padding: const EdgeInsets.only(top: 10.0),child:InkWell(
-                      onTap: () {
-                        setState(() =>  GlobalScaffold.instance.selectedPageView = routes.analiseRoute);
-                        GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
-                        GlobalScaffold.colorSelectedPageView(routes.analiseRoute);
-                      }, // Handle your callback
-                      child: Container(
-                        alignment: Alignment.centerRight,
-                        height: 50,
-                        padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
-                        margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-                        decoration: BoxDecoration(
-                            color: GlobalScaffold.colorSelectedPageView(routes.analiseRoute),
-                            borderRadius:  const BorderRadius.only(
-                              topLeft: Radius.circular(10.0),
-                              topRight: Radius.circular(10.0),
-                              bottomLeft: Radius.circular(10.0),
-                              bottomRight: Radius.circular(10.0),
-                            )),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            if (GlobalScaffold.instance.selectedPageView == routes.analiseRoute)
-                              Icon(Icons.search_outlined,color:GlobalScaffold.colorTextIconSelectedPageView(routes.analiseRoute), size: 20.0)
-                            else
-                              Icon(Icons.search_rounded,color: GlobalScaffold.colorTextIconSelectedPageView(routes.analiseRoute), size: 22.0),
-                            const SizedBox(width: 15.0),
-                            Flexible(
-                              child: Text(
-                                'análise',
-                                overflow: TextOverflow.visible,
-                                maxLines: 1,
-                                softWrap: false,
-                                style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.analiseRoute)),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
+            Padding( padding: const EdgeInsets.only(top: 10.0),child:InkWell(
+              onTap: () {
+                setState(() =>  GlobalScaffold.instance.selectedPageView = routes.analiseRoute);
+                GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
+                GlobalScaffold.colorSelectedPageView(routes.analiseRoute);
+              }, // Handle your callback
+              child: Container(
+                alignment: Alignment.centerRight,
+                height: 50,
+                padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                decoration: BoxDecoration(
+                    color: GlobalScaffold.colorSelectedPageView(routes.analiseRoute),
+                    borderRadius:  const BorderRadius.only(
+                      topLeft: Radius.circular(10.0),
+                      topRight: Radius.circular(10.0),
+                      bottomLeft: Radius.circular(10.0),
+                      bottomRight: Radius.circular(10.0),
                     )),
-                    Padding( padding: const EdgeInsets.only(top: 10.0),child:InkWell(
-                      onTap: () {
-                        setState(() =>  GlobalScaffold.instance.selectedPageView = routes.alertasRoute);
-                        GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
-                        GlobalScaffold.colorSelectedPageView(routes.alertasRoute);
-                      }, // Handle your callback
-                      child: Container(
-                        alignment: Alignment.centerRight,
-                        height: 50,
-                        padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
-                        margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-                        decoration: BoxDecoration(
-                            color: GlobalScaffold.colorSelectedPageView(routes.alertasRoute),
-                            borderRadius:  const BorderRadius.only(
-                              topLeft: Radius.circular(10.0),
-                              topRight: Radius.circular(10.0),
-                              bottomLeft: Radius.circular(10.0),
-                              bottomRight: Radius.circular(10.0),
-                            )),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            if (GlobalScaffold.instance.selectedPageView == routes.alertasRoute)
-                              Icon(Icons.warning_outlined,color:GlobalScaffold.colorTextIconSelectedPageView(routes.alertasRoute), size: 20.0)
-                            else
-                              Icon(Icons.warning_amber_rounded,color: GlobalScaffold.colorTextIconSelectedPageView(routes.alertasRoute), size: 22.0),
-                            const SizedBox(width: 15.0),
-                            Flexible(
-                              child: Text(
-                                'alertas',
-                                overflow: TextOverflow.visible,
-                                maxLines: 1,
-                                softWrap: false,
-                                style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.alertasRoute)),
-                              ),
-                            )
-                          ],
-                        ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    if (GlobalScaffold.instance.selectedPageView == routes.analiseRoute)
+                      Icon(Icons.search_outlined,color:GlobalScaffold.colorTextIconSelectedPageView(routes.analiseRoute), size: 20.0)
+                    else
+                      Icon(Icons.search_rounded,color: GlobalScaffold.colorTextIconSelectedPageView(routes.analiseRoute), size: 22.0),
+                    const SizedBox(width: 15.0),
+                    Flexible(
+                      child: Text(
+                        'análise',
+                        overflow: TextOverflow.visible,
+                        maxLines: 1,
+                        softWrap: false,
+                        style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.analiseRoute)),
                       ),
-                    ),),
-                    Padding( padding: const EdgeInsets.only(top: 10.0),child:InkWell(
-                      onTap: () {
-                        setState(() =>  GlobalScaffold.instance.selectedPageView = routes.recibosRoute);
-                        GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
-                        GlobalScaffold.colorSelectedPageView(routes.recibosRoute);
-                      }, // Handle your callback
-                      child: Container(
-                        alignment: Alignment.centerRight,
-                        height: 50,
-                        padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
-                        margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-                        decoration: BoxDecoration(
-                            color: GlobalScaffold.colorSelectedPageView(routes.recibosRoute),
-                            borderRadius:  const BorderRadius.only(
-                              topLeft: Radius.circular(10.0),
-                              topRight: Radius.circular(10.0),
-                              bottomLeft: Radius.circular(10.0),
-                              bottomRight: Radius.circular(10.0),
-                            )),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            if (GlobalScaffold.instance.selectedPageView == routes.recibosRoute)
-                              Icon(Icons.description_rounded,color:GlobalScaffold.colorTextIconSelectedPageView(routes.recibosRoute), size: 20.0)
-                            else
-                              Icon(Icons.description_outlined,color: GlobalScaffold.colorTextIconSelectedPageView(routes.recibosRoute), size: 22.0),
-                            const SizedBox(width: 15.0),
-                            Flexible(
-                              child: Text(
-                                'recibos',
-                                overflow: TextOverflow.visible,
-                                maxLines: 1,
-                                softWrap: false,
-                                style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.recibosRoute)),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),),
-                    Padding( padding: const EdgeInsets.only(top: 10.0),child:InkWell(
-                      onTap: () {
-                        setState(() =>  GlobalScaffold.instance.selectedPageView = routes.documentosRoute);
-                        GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
-                        GlobalScaffold.colorSelectedPageView(routes.documentosRoute);
-                      }, // Handle your callback
-                      child: Container(
-                        alignment: Alignment.centerRight,
-                        height: 50,
-                        padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
-                        margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-                        decoration: BoxDecoration(
-                            color: GlobalScaffold.colorSelectedPageView(routes.documentosRoute),
-                            borderRadius:  const BorderRadius.only(
-                              topLeft: Radius.circular(10.0),
-                              topRight: Radius.circular(10.0),
-                              bottomLeft: Radius.circular(10.0),
-                              bottomRight: Radius.circular(10.0),
-                            )),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            if (GlobalScaffold.instance.selectedPageView == routes.documentosRoute)
-                              Icon(Icons.inventory_2_rounded,color:GlobalScaffold.colorTextIconSelectedPageView(routes.documentosRoute), size: 20.0)
-                            else
-                              Icon(Icons.inventory_2_outlined,color: GlobalScaffold.colorTextIconSelectedPageView(routes.documentosRoute), size: 22.0),
-                            const SizedBox(width: 15.0),
-                            ExpansionTile(
-                                leading: Icon(Icons.expand_more_outlined),
-                                title: Text(
-                                  'documentos',
-                                  overflow: TextOverflow.visible,
-                                  maxLines: 1,
-                                  softWrap: false,
-                                  style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.documentosRoute)),
-                                ),
-                                children: [
-                                  SizedBox(
-                                    height: 50,
-                                    child: InkWell(
-                                      onTap: () {
-                                        setState(() =>  GlobalScaffold.instance.selectedPageView = routes.analiseRoute);
-                                        GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
-                                        GlobalScaffold.colorSelectedPageView(routes.analiseRoute);
-                                      }, // Handle your callback
-                                      child: Container(
-                                        alignment: Alignment.centerLeft,
-                                        height: 50,
-                                        padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
-                                        margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-                                        child: Row(
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          mainAxisAlignment: MainAxisAlignment.end,
-                                          children: <Widget>[
-                                            Flexible(
-                                              child: Text(
-                                                'contratos',
-                                                overflow: TextOverflow.visible,
-                                                maxLines: 1,
-                                                softWrap: false,
-                                                style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:Color(0xff6C757D)),
-                                              ),
-                                            ),
-                                            const SizedBox(width: 15.0),
-                                            IconButton(
-                                              icon: const Icon(
-                                                Icons.exit_to_app,
-                                                color:Color(0xff6C757D),
-                                                size: 22,
-                                              ),
-                                              onPressed: () {
-                                                if(global_user_logged.globalUserLogged != null)
-                                                {
-                                                  OnExitApp(context,global_user_logged.globalUserLogged!.cpf);
-                                                }
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 50,
-                                    child: InkWell(
-                                      onTap: () {
-                                        setState(() =>  GlobalScaffold.instance.selectedPageView = routes.analiseRoute);
-                                        GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
-                                        GlobalScaffold.colorSelectedPageView(routes.analiseRoute);
-                                      }, // Handle your callback
-                                      child: Container(
-                                        alignment: Alignment.centerLeft,
-                                        height: 50,
-                                        padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
-                                        margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-                                        child: Row(
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          mainAxisAlignment: MainAxisAlignment.end,
-                                          children: <Widget>[
-                                            Flexible(
-                                              child: Text(
-                                                'certidões',
-                                                overflow: TextOverflow.visible,
-                                                maxLines: 1,
-                                                softWrap: false,
-                                                style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:Color(0xff6C757D)),
-                                              ),
-                                            ),
-                                            const SizedBox(width: 15.0),
-                                            IconButton(
-                                              icon: const Icon(
-                                                Icons.exit_to_app,
-                                                color:Color(0xff6C757D),
-                                                size: 22,
-                                              ),
-                                              onPressed: () {
-                                                if(global_user_logged.globalUserLogged != null)
-                                                {
-                                                  OnExitApp(context,global_user_logged.globalUserLogged!.cpf);
-                                                }
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 50,
-                                    child: InkWell(
-                                      onTap: () {
-                                        setState(() =>  GlobalScaffold.instance.selectedPageView = routes.analiseRoute);
-                                        GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
-                                        GlobalScaffold.colorSelectedPageView(routes.analiseRoute);
-                                      }, // Handle your callback
-                                      child: Container(
-                                        alignment: Alignment.centerLeft,
-                                        height: 50,
-                                        padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
-                                        margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-                                        child: Row(
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          mainAxisAlignment: MainAxisAlignment.end,
-                                          children: <Widget>[
-                                            Flexible(
-                                              child: Text(
-                                                'recibos ',
-                                                overflow: TextOverflow.visible,
-                                                maxLines: 1,
-                                                softWrap: false,
-                                                style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:Color(0xff6C757D)),
-                                              ),
-                                            ),
-                                            const SizedBox(width: 15.0),
-                                            IconButton(
-                                              icon: const Icon(
-                                                Icons.exit_to_app,
-                                                color:Color(0xff6C757D),
-                                                size: 22,
-                                              ),
-                                              onPressed: () {
-                                                if(global_user_logged.globalUserLogged != null)
-                                                {
-                                                  OnExitApp(context,global_user_logged.globalUserLogged!.cpf);
-                                                }
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ] ),
-
-                          ],
-                        ),
-                      ),
-                    ),),
-                    Padding( padding: const EdgeInsets.only(top: 10.0),child: InkWell(
-                      onTap: () {
-                        setState(() =>  GlobalScaffold.instance.selectedPageView = routes.empresasRoute);
-                        GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
-                        GlobalScaffold.colorSelectedPageView(routes.empresasRoute);
-                      }, // Handle your callback
-                      child: Container(
-                        alignment: Alignment.centerRight,
-                        height: 50,
-                        padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
-                        margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-                        decoration: BoxDecoration(
-                            color: GlobalScaffold.colorSelectedPageView(routes.empresasRoute),
-                            borderRadius:  const BorderRadius.only(
-                              topLeft: Radius.circular(10.0),
-                              topRight: Radius.circular(10.0),
-                              bottomLeft: Radius.circular(10.0),
-                              bottomRight: Radius.circular(10.0),
-                            )),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            if (GlobalScaffold.instance.selectedPageView == routes.empresasRoute)
-                              Icon(Icons.business_rounded,color:GlobalScaffold.colorTextIconSelectedPageView(routes.empresasRoute), size: 20.0)
-                            else
-                              Icon(Icons.business_outlined,color: GlobalScaffold.colorTextIconSelectedPageView(routes.empresasRoute), size: 22.0),
-                            const SizedBox(width: 15.0),
-                            Flexible(
-                              child: Text(
-                                'empresas',
-                                overflow: TextOverflow.visible,
-                                maxLines: 1,
-                                softWrap: false,
-                                style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.empresasRoute)),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),),
-                    Padding( padding: const EdgeInsets.only(top: 10.0),child: InkWell(
-                      onTap: () {
-                        setState(() =>  GlobalScaffold.instance.selectedPageView = routes.usuarioRoute);
-                        GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
-                        GlobalScaffold.colorSelectedPageView(routes.usuarioRoute);
-                      }, // Handle your callback
-                      child: Container(
-                        alignment: Alignment.centerRight,
-                        height: 50,
-                        padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
-                        margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-                        decoration: BoxDecoration(
-                            color: GlobalScaffold.colorSelectedPageView(routes.usuarioRoute),
-                            borderRadius:  const BorderRadius.only(
-                              topLeft: Radius.circular(10.0),
-                              topRight: Radius.circular(10.0),
-                              bottomLeft: Radius.circular(10.0),
-                              bottomRight: Radius.circular(10.0),
-                            )),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            if (GlobalScaffold.instance.selectedPageView == routes.usuarioRoute)
-                              Icon(Icons.person_rounded,color:GlobalScaffold.colorTextIconSelectedPageView(routes.usuarioRoute), size: 20.0)
-                            else
-                              Icon(Icons.person_outlined,color: GlobalScaffold.colorTextIconSelectedPageView(routes.usuarioRoute), size: 22.0),
-                            const SizedBox(width: 15.0),
-                            Flexible(
-                              child: Text(
-                                'usuários',
-                                overflow: TextOverflow.visible,
-                                maxLines: 1,
-                                softWrap: false,
-                                style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.usuarioRoute)),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),),
-                    Padding( padding: const EdgeInsets.only(top: 10.0),child: InkWell(
-                      onTap: () {
-                        setState(() =>  GlobalScaffold.instance.selectedPageView = routes.notificacoesRoute);
-                        GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
-                        GlobalScaffold.colorSelectedPageView(routes.notificacoesRoute);
-                      }, // Handle your callback
-                      child: Container(
-                        alignment: Alignment.centerRight,
-                        height: 50,
-                        padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
-                        margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-                        decoration: BoxDecoration(
-                            color: GlobalScaffold.colorSelectedPageView(routes.notificacoesRoute),
-                            borderRadius:  const BorderRadius.only(
-                              topLeft: Radius.circular(10.0),
-                              topRight: Radius.circular(10.0),
-                              bottomLeft: Radius.circular(10.0),
-                              bottomRight: Radius.circular(10.0),
-                            )),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            if (GlobalScaffold.instance.selectedPageView == routes.notificacoesRoute)
-                              Icon(Icons.message_rounded,color:GlobalScaffold.colorTextIconSelectedPageView(routes.notificacoesRoute), size: 20.0)
-                            else
-                              Icon(Icons.message_outlined,color: GlobalScaffold.colorTextIconSelectedPageView(routes.notificacoesRoute), size: 22.0),
-                            const SizedBox(width: 15.0),
-                            Flexible(
-                              child: Text(
-                                'notificações',
-                                overflow: TextOverflow.visible,
-                                maxLines: 1,
-                                softWrap: false,
-                                style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.notificacoesRoute)),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),),
-                    Padding( padding: const EdgeInsets.only(top: 10.0),child: InkWell(
-                      onTap: () {
-                        setState(() =>  GlobalScaffold.instance.selectedPageView = routes.configuracoesRoute);
-                        GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
-                        GlobalScaffold.colorSelectedPageView(routes.configuracoesRoute);
-                      }, // Handle your callback
-                      child: Container(
-                        alignment: Alignment.centerRight,
-                        height: 50,
-                        padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
-                        margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-                        decoration: BoxDecoration(
-                            color: GlobalScaffold.colorSelectedPageView(routes.configuracoesRoute),
-                            borderRadius:  const BorderRadius.only(
-                              topLeft: Radius.circular(10.0),
-                              topRight: Radius.circular(10.0),
-                              bottomLeft: Radius.circular(10.0),
-                              bottomRight: Radius.circular(10.0),
-                            )),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            if (GlobalScaffold.instance.selectedPageView == routes.configuracoesRoute)
-                              Icon(Icons.settings_rounded,color:GlobalScaffold.colorTextIconSelectedPageView(routes.configuracoesRoute), size: 20.0)
-                            else
-                              Icon(Icons.settings_outlined,color: GlobalScaffold.colorTextIconSelectedPageView(routes.configuracoesRoute), size: 22.0),
-                            const SizedBox(width: 15.0),
-                            Flexible(
-                              child: Text(
-                                'configurações',
-                                overflow: TextOverflow.visible,
-                                maxLines: 1,
-                                softWrap: false,
-                                style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.configuracoesRoute)),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),),
+                    )
                   ],
                 ),
               ),
-            ),
+            )),
+            Padding( padding: const EdgeInsets.only(top: 10.0),child:InkWell(
+              onTap: () {
+                setState(() =>  GlobalScaffold.instance.selectedPageView = routes.alertasRoute);
+                GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
+                GlobalScaffold.colorSelectedPageView(routes.alertasRoute);
+              }, // Handle your callback
+              child: Container(
+                alignment: Alignment.centerRight,
+                height: 50,
+                padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                decoration: BoxDecoration(
+                    color: GlobalScaffold.colorSelectedPageView(routes.alertasRoute),
+                    borderRadius:  const BorderRadius.only(
+                      topLeft: Radius.circular(10.0),
+                      topRight: Radius.circular(10.0),
+                      bottomLeft: Radius.circular(10.0),
+                      bottomRight: Radius.circular(10.0),
+                    )),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    if (GlobalScaffold.instance.selectedPageView == routes.alertasRoute)
+                      Icon(Icons.warning_outlined,color:GlobalScaffold.colorTextIconSelectedPageView(routes.alertasRoute), size: 20.0)
+                    else
+                      Icon(Icons.warning_amber_rounded,color: GlobalScaffold.colorTextIconSelectedPageView(routes.alertasRoute), size: 22.0),
+                    const SizedBox(width: 15.0),
+                    Flexible(
+                      child: Text(
+                        'alertas',
+                        overflow: TextOverflow.visible,
+                        maxLines: 1,
+                        softWrap: false,
+                        style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.alertasRoute)),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),),
+            Padding( padding: const EdgeInsets.only(top: 10.0),child:InkWell(
+              onTap: () {
+                setState(() =>  GlobalScaffold.instance.selectedPageView = routes.recibosRoute);
+                GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
+                GlobalScaffold.colorSelectedPageView(routes.recibosRoute);
+              }, // Handle your callback
+              child: Container(
+                alignment: Alignment.centerRight,
+                height: 50,
+                padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                decoration: BoxDecoration(
+                    color: GlobalScaffold.colorSelectedPageView(routes.recibosRoute),
+                    borderRadius:  const BorderRadius.only(
+                      topLeft: Radius.circular(10.0),
+                      topRight: Radius.circular(10.0),
+                      bottomLeft: Radius.circular(10.0),
+                      bottomRight: Radius.circular(10.0),
+                    )),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    if (GlobalScaffold.instance.selectedPageView == routes.recibosRoute)
+                      Icon(Icons.description_rounded,color:GlobalScaffold.colorTextIconSelectedPageView(routes.recibosRoute), size: 20.0)
+                    else
+                      Icon(Icons.description_outlined,color: GlobalScaffold.colorTextIconSelectedPageView(routes.recibosRoute), size: 22.0),
+                    const SizedBox(width: 15.0),
+                    Flexible(
+                      child: Text(
+                        'recibos',
+                        overflow: TextOverflow.visible,
+                        maxLines: 1,
+                        softWrap: false,
+                        style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.recibosRoute)),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),),
+            Padding( padding: const EdgeInsets.only(top: 10.0),child:InkWell(
+              onTap: () {
+                setState(() =>  GlobalScaffold.instance.selectedPageView = routes.documentosRoute);
+                GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
+                GlobalScaffold.colorSelectedPageView(routes.documentosRoute);
+              }, // Handle your callback
+              child: Container(
+                alignment: Alignment.centerRight,
+
+                padding: const EdgeInsets.fromLTRB(10.0, 10.0, 0.0, 0.0),
+                margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                decoration: BoxDecoration(
+                    color: Colors.amber,
+                   // color: GlobalScaffold.colorSelectedPageView(routes.documentosRoute),
+                    borderRadius:  const BorderRadius.only(
+                      topLeft: Radius.circular(10.0),
+                      topRight: Radius.circular(10.0),
+                      bottomLeft: Radius.circular(10.0),
+                      bottomRight: Radius.circular(10.0),
+                    )),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    if (GlobalScaffold.instance.selectedPageView == routes.documentosRoute)
+                      Padding( padding: const EdgeInsets.fromLTRB(10.0, 20.0, 0.0, 0.0),child:   Icon(Icons.inventory_2_rounded,color:GlobalScaffold.colorTextIconSelectedPageView(routes.documentosRoute), size: 20.0),)
+                    else
+                      Padding( padding: const EdgeInsets.fromLTRB(10.0, 10.0, 0.0, 0.0),child:   Icon(Icons.inventory_2_outlined,color:GlobalScaffold.colorTextIconSelectedPageView(routes.documentosRoute), size: 20.0),),
+                    const SizedBox(width: 10.0),
+                    Expanded(child:  ExpansionTile(
+                        title: Text(
+                          'documentos',
+                          overflow: TextOverflow.visible,
+                          maxLines: 1,
+                          softWrap: false,
+                          style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.documentosRoute)),
+                        ),
+                        children: [
+                          SizedBox(
+                            height: 50,
+                            child: InkWell(
+                              onTap: () {
+                                setState(() =>  GlobalScaffold.instance.selectedPageView = routes.analiseRoute);
+                                GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
+                                GlobalScaffold.colorSelectedPageView(routes.analiseRoute);
+                              }, // Handle your callback
+                              child: Container(
+                                alignment: Alignment.centerLeft,
+                                height: 50,
+                                padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                                margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.picture_as_pdf_outlined,
+                                        color:Color(0xff6C757D),
+                                        size: 22,
+                                      ),
+                                      onPressed: () {
+                                        if(global_user_logged.globalUserLogged != null)
+                                        {
+                                          OnExitApp(context,global_user_logged.globalUserLogged!.cpf);
+                                        }
+                                      },
+                                    ),
+                                    const SizedBox(width: 15.0),
+                                    Flexible(
+                                      child: Text(
+                                        'contratos',
+                                        overflow: TextOverflow.visible,
+                                        maxLines: 1,
+                                        softWrap: false,
+                                        style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:Color(0xff6C757D)),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 50,
+                            child: InkWell(
+                              onTap: () {
+                                setState(() =>  GlobalScaffold.instance.selectedPageView = routes.analiseRoute);
+                                GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
+                                GlobalScaffold.colorSelectedPageView(routes.analiseRoute);
+                              }, // Handle your callback
+                              child: Container(
+                                alignment: Alignment.centerLeft,
+                                height: 50,
+                                padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                                margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.picture_as_pdf_outlined,
+                                        color:Color(0xff6C757D),
+                                        size: 22,
+                                      ),
+                                      onPressed: () {
+                                        if(global_user_logged.globalUserLogged != null)
+                                        {
+                                          OnExitApp(context,global_user_logged.globalUserLogged!.cpf);
+                                        }
+                                      },
+                                    ),
+                                    const SizedBox(width: 15.0),
+                                    Flexible(
+                                      child: Text(
+                                        'certidões',
+                                        overflow: TextOverflow.visible,
+                                        maxLines: 1,
+                                        softWrap: false,
+                                        style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:Color(0xff6C757D)),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 50,
+                            child: InkWell(
+                              onTap: () {
+                                setState(() =>  GlobalScaffold.instance.selectedPageView = routes.analiseRoute);
+                                GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
+                                GlobalScaffold.colorSelectedPageView(routes.analiseRoute);
+                              }, // Handle your callback
+                              child: Container(
+                                alignment: Alignment.centerLeft,
+                                height: 50,
+                                padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                                margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.picture_as_pdf_outlined,
+                                        color:Color(0xff6C757D),
+                                        size: 22,
+                                      ),
+                                      onPressed: () {
+                                        if(global_user_logged.globalUserLogged != null)
+                                        {
+                                          OnExitApp(context,global_user_logged.globalUserLogged!.cpf);
+                                        }
+                                      },
+                                    ),
+                                    const SizedBox(width: 15.0),
+                                    Flexible(
+                                      child: Text(
+                                        'recibos ',
+                                        overflow: TextOverflow.visible,
+                                        maxLines: 1,
+                                        softWrap: false,
+                                        style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:Color(0xff6C757D)),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                        ] ))
+                   ,
+                  ],
+                ),
+              ),
+            ),),
+            Padding( padding: const EdgeInsets.only(top: 10.0),child: InkWell(
+              onTap: () {
+                setState(() =>  GlobalScaffold.instance.selectedPageView = routes.empresasRoute);
+                GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
+                GlobalScaffold.colorSelectedPageView(routes.empresasRoute);
+              }, // Handle your callback
+              child: Container(
+                alignment: Alignment.centerRight,
+                height: 50,
+                padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                decoration: BoxDecoration(
+                    color: GlobalScaffold.colorSelectedPageView(routes.empresasRoute),
+                    borderRadius:  const BorderRadius.only(
+                      topLeft: Radius.circular(10.0),
+                      topRight: Radius.circular(10.0),
+                      bottomLeft: Radius.circular(10.0),
+                      bottomRight: Radius.circular(10.0),
+                    )),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    if (GlobalScaffold.instance.selectedPageView == routes.empresasRoute)
+                      Icon(Icons.business_rounded,color:GlobalScaffold.colorTextIconSelectedPageView(routes.empresasRoute), size: 20.0)
+                    else
+                      Icon(Icons.business_outlined,color: GlobalScaffold.colorTextIconSelectedPageView(routes.empresasRoute), size: 22.0),
+                    const SizedBox(width: 15.0),
+                    Flexible(
+                      child: Text(
+                        'empresas',
+                        overflow: TextOverflow.visible,
+                        maxLines: 1,
+                        softWrap: false,
+                        style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.empresasRoute)),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),),
+            Padding( padding: const EdgeInsets.only(top: 10.0),child: InkWell(
+              onTap: () {
+                setState(() =>  GlobalScaffold.instance.selectedPageView = routes.usuarioRoute);
+                GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
+                GlobalScaffold.colorSelectedPageView(routes.usuarioRoute);
+              }, // Handle your callback
+              child: Container(
+                alignment: Alignment.centerRight,
+                height: 50,
+                padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                decoration: BoxDecoration(
+                    color: GlobalScaffold.colorSelectedPageView(routes.usuarioRoute),
+                    borderRadius:  const BorderRadius.only(
+                      topLeft: Radius.circular(10.0),
+                      topRight: Radius.circular(10.0),
+                      bottomLeft: Radius.circular(10.0),
+                      bottomRight: Radius.circular(10.0),
+                    )),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    if (GlobalScaffold.instance.selectedPageView == routes.usuarioRoute)
+                      Icon(Icons.person_rounded,color:GlobalScaffold.colorTextIconSelectedPageView(routes.usuarioRoute), size: 20.0)
+                    else
+                      Icon(Icons.person_outlined,color: GlobalScaffold.colorTextIconSelectedPageView(routes.usuarioRoute), size: 22.0),
+                    const SizedBox(width: 15.0),
+                    Flexible(
+                      child: Text(
+                        'usuários',
+                        overflow: TextOverflow.visible,
+                        maxLines: 1,
+                        softWrap: false,
+                        style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.usuarioRoute)),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),),
+            Padding( padding: const EdgeInsets.only(top: 10.0),child: InkWell(
+              onTap: () {
+                setState(() =>  GlobalScaffold.instance.selectedPageView = routes.notificacoesRoute);
+                GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
+                GlobalScaffold.colorSelectedPageView(routes.notificacoesRoute);
+              }, // Handle your callback
+              child: Container(
+                alignment: Alignment.centerRight,
+                height: 50,
+                padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                decoration: BoxDecoration(
+                    color: GlobalScaffold.colorSelectedPageView(routes.notificacoesRoute),
+                    borderRadius:  const BorderRadius.only(
+                      topLeft: Radius.circular(10.0),
+                      topRight: Radius.circular(10.0),
+                      bottomLeft: Radius.circular(10.0),
+                      bottomRight: Radius.circular(10.0),
+                    )),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    if (GlobalScaffold.instance.selectedPageView == routes.notificacoesRoute)
+                      Icon(Icons.message_rounded,color:GlobalScaffold.colorTextIconSelectedPageView(routes.notificacoesRoute), size: 20.0)
+                    else
+                      Icon(Icons.message_outlined,color: GlobalScaffold.colorTextIconSelectedPageView(routes.notificacoesRoute), size: 22.0),
+                    const SizedBox(width: 15.0),
+                    Flexible(
+                      child: Text(
+                        'notificações',
+                        overflow: TextOverflow.visible,
+                        maxLines: 1,
+                        softWrap: false,
+                        style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.notificacoesRoute)),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),),
+            Padding( padding: const EdgeInsets.only(top: 10.0),child: InkWell(
+              onTap: () {
+                setState(() =>  GlobalScaffold.instance.selectedPageView = routes.configuracoesRoute);
+                GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
+                GlobalScaffold.colorSelectedPageView(routes.configuracoesRoute);
+              }, // Handle your callback
+              child: Container(
+                alignment: Alignment.centerRight,
+                height: 50,
+                padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                decoration: BoxDecoration(
+                    color: GlobalScaffold.colorSelectedPageView(routes.configuracoesRoute),
+                    borderRadius:  const BorderRadius.only(
+                      topLeft: Radius.circular(10.0),
+                      topRight: Radius.circular(10.0),
+                      bottomLeft: Radius.circular(10.0),
+                      bottomRight: Radius.circular(10.0),
+                    )),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    if (GlobalScaffold.instance.selectedPageView == routes.configuracoesRoute)
+                      Icon(Icons.settings_rounded,color:GlobalScaffold.colorTextIconSelectedPageView(routes.configuracoesRoute), size: 20.0)
+                    else
+                      Icon(Icons.settings_outlined,color: GlobalScaffold.colorTextIconSelectedPageView(routes.configuracoesRoute), size: 22.0),
+                    const SizedBox(width: 15.0),
+                    Flexible(
+                      child: Text(
+                        'configurações',
+                        overflow: TextOverflow.visible,
+                        maxLines: 1,
+                        softWrap: false,
+                        style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.configuracoesRoute)),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),),
+
             Padding( padding: const EdgeInsets.only(top: 10.0),child: SizedBox(
               height: 50,
               child: InkWell(
@@ -637,7 +627,7 @@ class MenuNavigationState extends State<MenuNavigation> {
               ),
             ),),
           ],
-        ),
+        ),),
       ),
       bottomNavigationBar: BottomAppBar(
         elevation: 0,
