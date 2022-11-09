@@ -15,13 +15,13 @@ import '../help_views/global_view.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
 
 
-class CreateNewAccountView extends StatefulWidget {
-  const CreateNewAccountView({Key? key}) : super(key: key);
+class CriarNovaContaView extends StatefulWidget {
+  const CriarNovaContaView({Key? key}) : super(key: key);
   @override
   CreateNewAccountState createState() => CreateNewAccountState();
 }
 
-class CreateNewAccountState extends State<CreateNewAccountView> {
+class CreateNewAccountState extends State<CriarNovaContaView> {
 
   static List<String> friendsList = [];
 
@@ -115,7 +115,7 @@ class CreateNewAccountState extends State<CreateNewAccountView> {
   }
 
   @override
-  void didUpdateWidget(CreateNewAccountView oldWidget) {
+  void didUpdateWidget(CriarNovaContaView oldWidget) {
     super.didUpdateWidget(oldWidget);
   }
 

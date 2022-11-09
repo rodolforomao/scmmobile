@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../views/documents_views/certidoes_view.dart';
+import '../../views/documents_views/contratos_view.dart';
+import '../../views/documents_views/recibos_view.dart';
+import '../../views/financial_views/recibos_view.dart';
 import '../../views/inicio_view.dart';
 import '../../views/others_view/analises_view.dart';
 import '../../views/settings_views/alterar_senha_view.dart';
@@ -11,8 +15,8 @@ import '/help/navigation_service/route_paths.dart' as routes;
 import '../../views/error_information_view.dart';
 import '../../views/menu_navigation.dart';
 import '../../views/settings_view.dart';
-import '../../views/user_views/change_password_view.dart';
-import '../../views/user_views/create_new_account_view.dart';
+
+import '../../views/user_views/criar_nova_conta_view.dart';
 import '../../views/user_views/forgot_your_password_view.dart';
 import '../../views/user_views/login_view.dart';
 import '../../views/user_views/profile_view.dart';
@@ -50,11 +54,20 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case routes.loginRoute:
       return MaterialPageRoute(builder: (context) => const LoginView());
     case routes.createNewAccountRoute:
-      return MaterialPageRoute(builder: (context) => const CreateNewAccountView());
+      return MaterialPageRoute(builder: (context) => const CriarNovaContaView());
     case routes.forgotYourPasswordRoute:
       return MaterialPageRoute(builder: (context) => const ForgotYourPasswordView());
     case routes.analisesRoute:
       return MaterialPageRoute(builder: (context) => const AnalisesView());
+    case routes.recibosRoute:
+      return MaterialPageRoute(builder: (context) => const RecibosView());
+  //Documentos
+    case routes.certidoesRoute:
+      return MaterialPageRoute(builder: (context) => const CertidoesView());
+    case routes.contratosRoute:
+      return MaterialPageRoute(builder: (context) => const ContratosView());
+    case routes.recibosDocumentosRoute:
+      return MaterialPageRoute(builder: (context) => const RecibosDocumentosView());
   //Configurações
     case routes.configuracoesRoute:
       return MaterialPageRoute(builder: (context) => const Configuracoesview());
@@ -66,9 +79,6 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => const VariaveisDeAmbienteView());
     case routes.sobreRoute:
       return MaterialPageRoute(builder: (context) => const SobreView());
-
-
-
   //Erro
     default:
       {
@@ -101,8 +111,7 @@ class RoutesPage {
 
 
       //Visualizações do usuário -----------------------------------------------------------------------------------------------
-      routes.changePasswordRoute : (context) => const ChangePasswordView(),
-      routes.createNewAccountRoute : (context) => const CreateNewAccountView(),
+      routes.changePasswordRoute : (context) => const AlterarSenhaView(),
       routes.forgotYourPasswordRoute : (context) => const ForgotYourPasswordView(),
       routes.loginRoute : (context) => const LoginView(),
       routes.perfilRoute : (context) => const ProfileView(),

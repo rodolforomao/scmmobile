@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'business_views/empresas_view.dart';
+import 'documents_views/certidoes_view.dart';
+import 'documents_views/contratos_view.dart';
 import 'documents_views/documents_view.dart';
+import 'documents_views/recibos_view.dart';
 import 'financial_views/recibos_view.dart';
 import 'help_views/global_scaffold.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
@@ -18,6 +21,7 @@ class MenuNavigation extends StatefulWidget {
 
 class MenuNavigationState extends State<MenuNavigation> {
 
+  bool documentosExpanded = false;
 
   @override
   void initState() {
@@ -37,10 +41,18 @@ class MenuNavigationState extends State<MenuNavigation> {
         return const AnalisesView();
       case routes.alertasRoute:
         return const AlertasView();
-      case routes.recibosRoute:
-        return const RecibosView();
       case routes.empresasRoute:
         return const EmpresasView();
+      case routes.recibosRoute:
+        return const RecibosView();
+        //----------------------------
+      case routes.certidoesRoute:
+        return const CertidoesView();
+      case routes.contratosRoute:
+        return const ContratosView();
+      case routes.recibosDocumentosRoute:
+        return const RecibosDocumentosView();
+       //----------------------------
       case routes.documentosRoute:
         return const DocumentsView();
       case routes.usuarioRoute:
@@ -72,9 +84,9 @@ class MenuNavigationState extends State<MenuNavigation> {
           children: <Widget>[
             Container(
               padding: const EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 10.0),
-              height: 200,
+              height: 100,
               width: MediaQuery.of(context).size.width,
-              constraints: const BoxConstraints(minHeight: 200, maxHeight: 200),
+              constraints: const BoxConstraints(minHeight: 100, maxHeight: 100),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -83,37 +95,136 @@ class MenuNavigationState extends State<MenuNavigation> {
                     global_user_logged.globalUserLogged!.name,
                     style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 20,color:  Colors.black, fontWeight: FontWeight.w600,),
                   ),),
-                  const Padding(padding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 10.0),child: Divider(color:Colors.black54),),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      IconButton(
-                        icon: const Icon(
-                          Icons.add,
-                          color:  Colors.black,
-                          size: 22,
-                        ),
-                        onPressed: () {
+                ],
+              ),
+            ),
+            const Padding(padding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 10.0),child: Divider(color:Colors.black54),),
+            Container(
+              padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+              margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+              decoration: BoxDecoration(
+                  color: GlobalScaffold.colorSelectedPageView(routes.documentosRoute),
+                  borderRadius:  const BorderRadius.only(
+                    topLeft: Radius.circular(10.0),
+                    topRight: Radius.circular(10.0),
+                    bottomLeft: Radius.circular(10.0),
+                    bottomRight: Radius.circular(10.0),
+                  )),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Padding( padding: const EdgeInsets.fromLTRB(3.0, 15.0, 0.0, 0.0),child:   Icon(Icons.add,color:GlobalScaffold.colorTextIconSelectedPageView(routes.documentosRoute), size: 20.0),),
+                  Expanded(child: Theme(
+                    data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                    child: ExpansionTile(
+                        collapsedIconColor: Color(0xff6C757D),
+                        iconColor: Color(0xffd56921),
+                        collapsedTextColor: Color(0xff6C757D),
+                        textColor: Color(0xffd56921),
+                        initiallyExpanded:documentosExpanded,
+                        onExpansionChanged: (val) {
+                          setState(() {
 
+                          });
                         },
-                      ),
-                      const SizedBox(width: 15.0),
-                      Flexible(
-                        child: Text(
+                        title: Text(
                           'Lançamentos - Sici',
                           overflow: TextOverflow.visible,
                           maxLines: 1,
                           softWrap: false,
-                          style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.recibosRoute)),
+                          style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17),
                         ),
-                      )
-                    ],
-                  ),
-                  const Padding(padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 0.0),child: Divider(color:Colors.black54),),
+                        children: [
+                          SizedBox(
+                            height: 40,
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+
+                                });
+                                GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
+                              }, // Handle your callback
+                              child: Container(
+                                alignment: Alignment.centerLeft,
+                                height: 50,
+                                padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                                margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                                decoration: const BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(10.0),
+                                      topRight: Radius.circular(10.0),
+                                      bottomLeft: Radius.circular(10.0),
+                                      bottomRight: Radius.circular(10.0),
+                                    )),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    const Icon(Icons.add,color: Color(0xff6C757D), size: 18.0),
+                                    const SizedBox(width: 15.0),
+                                    Flexible(
+                                      child: Text(
+                                        'Novo lançamento',
+                                        overflow: TextOverflow.visible,
+                                        maxLines: 1,
+                                        softWrap: false,
+                                        style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 15, color:Color(0xff6C757D)),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 60,
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  GlobalScaffold.instance.selectedPageView = routes.certidoesRoute;
+                                  documentosExpanded = true;
+                                });
+                                GlobalScaffold.colorSelectedPageView(routes.certidoesRoute);
+                              }, // Handle your callback
+                              child: Container(
+                                alignment: Alignment.centerLeft,
+                                height: 60,
+                                padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                                margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                                decoration: const BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(10.0),
+                                      topRight: Radius.circular(10.0),
+                                      bottomLeft: Radius.circular(10.0),
+                                      bottomRight: Radius.circular(10.0),
+                                    )),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    const Icon(Icons.skip_next_outlined,color: Color(0xff6C757D), size: 18.0),
+                                    const SizedBox(width: 15.0),
+                                    Flexible(
+                                      child: Text(
+                                        'lancamentos com\r\nbase no mês anterior',
+                                        overflow: TextOverflow.visible,
+                                        maxLines: 2,
+                                        softWrap: false,
+                                        style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 15, color:Color(0xff6C757D)),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                        ] ),
+                  )),
                 ],
               ),
             ),
+            const Padding(padding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 10.0),child: Divider(color:Colors.black54),),
             Padding( padding: const EdgeInsets.only(top: 10.0),child:InkWell(
               onTap: () {
                 setState(() =>  GlobalScaffold.instance.selectedPageView = routes.analiseRoute);
@@ -237,36 +348,38 @@ class MenuNavigationState extends State<MenuNavigation> {
                 ),
               ),
             ),),
-            Padding( padding: const EdgeInsets.only(top: 10.0),child:InkWell(
-              onTap: () {
-                setState(() =>  GlobalScaffold.instance.selectedPageView = routes.documentosRoute);
-                GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
-                GlobalScaffold.colorSelectedPageView(routes.documentosRoute);
-              }, // Handle your callback
-              child: Container(
-                alignment: Alignment.centerRight,
-
-                padding: const EdgeInsets.fromLTRB(10.0, 10.0, 0.0, 0.0),
-                margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-                decoration: BoxDecoration(
-                    color: Colors.amber,
-                   // color: GlobalScaffold.colorSelectedPageView(routes.documentosRoute),
-                    borderRadius:  const BorderRadius.only(
-                      topLeft: Radius.circular(10.0),
-                      topRight: Radius.circular(10.0),
-                      bottomLeft: Radius.circular(10.0),
-                      bottomRight: Radius.circular(10.0),
-                    )),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    if (GlobalScaffold.instance.selectedPageView == routes.documentosRoute)
-                      Padding( padding: const EdgeInsets.fromLTRB(10.0, 20.0, 0.0, 0.0),child:   Icon(Icons.inventory_2_rounded,color:GlobalScaffold.colorTextIconSelectedPageView(routes.documentosRoute), size: 20.0),)
-                    else
-                      Padding( padding: const EdgeInsets.fromLTRB(10.0, 10.0, 0.0, 0.0),child:   Icon(Icons.inventory_2_outlined,color:GlobalScaffold.colorTextIconSelectedPageView(routes.documentosRoute), size: 20.0),),
-                    const SizedBox(width: 10.0),
-                    Expanded(child:  ExpansionTile(
+            Container(
+              padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+              margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+              decoration: BoxDecoration(
+                  color: GlobalScaffold.colorSelectedPageView(routes.documentosRoute),
+                  borderRadius:  const BorderRadius.only(
+                    topLeft: Radius.circular(10.0),
+                    topRight: Radius.circular(10.0),
+                    bottomLeft: Radius.circular(10.0),
+                    bottomRight: Radius.circular(10.0),
+                  )),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  if (GlobalScaffold.instance.selectedPageView == routes.documentosRoute)
+                    Padding( padding: const EdgeInsets.fromLTRB(3.0, 15.0, 0.0, 0.0),child:   Icon(Icons.inventory_2_rounded,color:GlobalScaffold.colorTextIconSelectedPageView(routes.documentosRoute), size: 20.0),)
+                  else
+                    Padding( padding: const EdgeInsets.fromLTRB(3.0, 15.0, 0.0, 0.0),child:   Icon(Icons.inventory_2_outlined,color:GlobalScaffold.colorTextIconSelectedPageView(routes.documentosRoute), size: 20.0),),
+                  Expanded(child: Theme(
+                    data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                    child: ExpansionTile(
+                        collapsedIconColor: Color(0xff6C757D),
+                        iconColor: Color(0xffd56921),
+                        initiallyExpanded:documentosExpanded,
+                        onExpansionChanged: (val) {
+                          setState(() {
+                            GlobalScaffold.instance.selectedPageView = routes.documentosRoute;
+                            documentosExpanded = val;
+                          });
+                          GlobalScaffold.colorSelectedPageView(routes.documentosRoute);
+                        },
                         title: Text(
                           'documentos',
                           overflow: TextOverflow.visible,
@@ -276,35 +389,37 @@ class MenuNavigationState extends State<MenuNavigation> {
                         ),
                         children: [
                           SizedBox(
-                            height: 50,
+                            height: 40,
                             child: InkWell(
                               onTap: () {
-                                setState(() =>  GlobalScaffold.instance.selectedPageView = routes.analiseRoute);
+                                setState(() {
+                                  GlobalScaffold.instance.selectedPageView = routes.contratosRoute;
+                                  documentosExpanded = true;
+                                });
                                 GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
-                                GlobalScaffold.colorSelectedPageView(routes.analiseRoute);
+                                GlobalScaffold.colorSelectedPageView(routes.contratosRoute);
                               }, // Handle your callback
                               child: Container(
                                 alignment: Alignment.centerLeft,
                                 height: 50,
                                 padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
                                 margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                                decoration: BoxDecoration(
+                                    color: GlobalScaffold.colorSelectedPageView(routes.contratosRoute),
+                                    borderRadius:  const BorderRadius.only(
+                                      topLeft: Radius.circular(10.0),
+                                      topRight: Radius.circular(10.0),
+                                      bottomLeft: Radius.circular(10.0),
+                                      bottomRight: Radius.circular(10.0),
+                                    )),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: <Widget>[
-                                    IconButton(
-                                      icon: const Icon(
-                                        Icons.picture_as_pdf_outlined,
-                                        color:Color(0xff6C757D),
-                                        size: 22,
-                                      ),
-                                      onPressed: () {
-                                        if(global_user_logged.globalUserLogged != null)
-                                        {
-                                          OnExitApp(context,global_user_logged.globalUserLogged!.cpf);
-                                        }
-                                      },
-                                    ),
+                                    if (GlobalScaffold.instance.selectedPageView == routes.contratosRoute)
+                                      Icon(Icons.picture_as_pdf_rounded,color:GlobalScaffold.colorTextIconSelectedPageView(routes.contratosRoute), size: 18.0)
+                                    else
+                                      Icon(Icons.picture_as_pdf_outlined,color: GlobalScaffold.colorTextIconSelectedPageView(routes.contratosRoute), size: 20.0),
                                     const SizedBox(width: 15.0),
                                     Flexible(
                                       child: Text(
@@ -312,7 +427,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                                         overflow: TextOverflow.visible,
                                         maxLines: 1,
                                         softWrap: false,
-                                        style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:Color(0xff6C757D)),
+                                        style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 15, color:GlobalScaffold.colorTextIconSelectedPageView(routes.contratosRoute)),
                                       ),
                                     ),
                                   ],
@@ -321,35 +436,36 @@ class MenuNavigationState extends State<MenuNavigation> {
                             ),
                           ),
                           SizedBox(
-                            height: 50,
+                            height: 40,
                             child: InkWell(
                               onTap: () {
-                                setState(() =>  GlobalScaffold.instance.selectedPageView = routes.analiseRoute);
-                                GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
-                                GlobalScaffold.colorSelectedPageView(routes.analiseRoute);
+                                setState(() {
+                                  GlobalScaffold.instance.selectedPageView = routes.certidoesRoute;
+                                  documentosExpanded = true;
+                                });
+                                GlobalScaffold.colorSelectedPageView(routes.certidoesRoute);
                               }, // Handle your callback
                               child: Container(
                                 alignment: Alignment.centerLeft,
                                 height: 50,
                                 padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
                                 margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                                decoration: BoxDecoration(
+                                    color: GlobalScaffold.colorSelectedPageView(routes.certidoesRoute),
+                                    borderRadius:  const BorderRadius.only(
+                                      topLeft: Radius.circular(10.0),
+                                      topRight: Radius.circular(10.0),
+                                      bottomLeft: Radius.circular(10.0),
+                                      bottomRight: Radius.circular(10.0),
+                                    )),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: <Widget>[
-                                    IconButton(
-                                      icon: const Icon(
-                                        Icons.picture_as_pdf_outlined,
-                                        color:Color(0xff6C757D),
-                                        size: 22,
-                                      ),
-                                      onPressed: () {
-                                        if(global_user_logged.globalUserLogged != null)
-                                        {
-                                          OnExitApp(context,global_user_logged.globalUserLogged!.cpf);
-                                        }
-                                      },
-                                    ),
+                                    if (GlobalScaffold.instance.selectedPageView == routes.certidoesRoute)
+                                      Icon(Icons.picture_as_pdf_rounded,color:GlobalScaffold.colorTextIconSelectedPageView(routes.certidoesRoute), size: 18.0)
+                                    else
+                                      Icon(Icons.picture_as_pdf_outlined,color: GlobalScaffold.colorTextIconSelectedPageView(routes.certidoesRoute), size: 20.0),
                                     const SizedBox(width: 15.0),
                                     Flexible(
                                       child: Text(
@@ -357,7 +473,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                                         overflow: TextOverflow.visible,
                                         maxLines: 1,
                                         softWrap: false,
-                                        style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:Color(0xff6C757D)),
+                                        style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 15, color:GlobalScaffold.colorTextIconSelectedPageView(routes.certidoesRoute)),
                                       ),
                                     ),
                                   ],
@@ -366,35 +482,36 @@ class MenuNavigationState extends State<MenuNavigation> {
                             ),
                           ),
                           SizedBox(
-                            height: 50,
+                            height: 40,
                             child: InkWell(
                               onTap: () {
-                                setState(() =>  GlobalScaffold.instance.selectedPageView = routes.analiseRoute);
-                                GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
-                                GlobalScaffold.colorSelectedPageView(routes.analiseRoute);
+                                setState(() {
+                                  GlobalScaffold.instance.selectedPageView = routes.recibosDocumentosRoute;
+                                  documentosExpanded = true;
+                                });
+                                GlobalScaffold.colorSelectedPageView(routes.recibosDocumentosRoute);
                               }, // Handle your callback
                               child: Container(
                                 alignment: Alignment.centerLeft,
-                                height: 50,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                    color: GlobalScaffold.colorSelectedPageView(routes.recibosDocumentosRoute),
+                                    borderRadius:  const BorderRadius.only(
+                                      topLeft: Radius.circular(5.0),
+                                      topRight: Radius.circular(5.0),
+                                      bottomLeft: Radius.circular(5.0),
+                                      bottomRight: Radius.circular(5.0),
+                                    )),
                                 padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
-                                margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                                margin: const EdgeInsets.fromLTRB(20.0, 0.0, 10.0, 0.0),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: <Widget>[
-                                    IconButton(
-                                      icon: const Icon(
-                                        Icons.picture_as_pdf_outlined,
-                                        color:Color(0xff6C757D),
-                                        size: 22,
-                                      ),
-                                      onPressed: () {
-                                        if(global_user_logged.globalUserLogged != null)
-                                        {
-                                          OnExitApp(context,global_user_logged.globalUserLogged!.cpf);
-                                        }
-                                      },
-                                    ),
+                                    if (GlobalScaffold.instance.selectedPageView == routes.recibosDocumentosRoute)
+                                      Icon(Icons.picture_as_pdf_rounded,color:GlobalScaffold.colorTextIconSelectedPageView(routes.recibosDocumentosRoute), size: 18.0)
+                                    else
+                                      Icon(Icons.picture_as_pdf_outlined,color: GlobalScaffold.colorTextIconSelectedPageView(routes.recibosDocumentosRoute), size: 20.0),
                                     const SizedBox(width: 15.0),
                                     Flexible(
                                       child: Text(
@@ -402,7 +519,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                                         overflow: TextOverflow.visible,
                                         maxLines: 1,
                                         softWrap: false,
-                                        style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:Color(0xff6C757D)),
+                                        style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 15, color:GlobalScaffold.colorTextIconSelectedPageView(routes.recibosDocumentosRoute)),
                                       ),
                                     ),
                                   ],
@@ -410,12 +527,11 @@ class MenuNavigationState extends State<MenuNavigation> {
                               ),
                             ),
                           )
-                        ] ))
-                   ,
-                  ],
-                ),
+                        ] ),
+                  )),
+                ],
               ),
-            ),),
+            ),
             Padding( padding: const EdgeInsets.only(top: 10.0),child: InkWell(
               onTap: () {
                 setState(() =>  GlobalScaffold.instance.selectedPageView = routes.empresasRoute);
@@ -580,17 +696,17 @@ class MenuNavigationState extends State<MenuNavigation> {
                 ),
               ),
             ),),
-
-            Padding( padding: const EdgeInsets.only(top: 10.0),child: SizedBox(
+            SizedBox(
               height: 50,
               child: InkWell(
                 onTap: () {
-                  setState(() =>  GlobalScaffold.instance.selectedPageView = routes.analiseRoute);
-                  GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
-                  GlobalScaffold.colorSelectedPageView(routes.analiseRoute);
+                  if(global_user_logged.globalUserLogged != null)
+                  {
+                    OnExitApp(context,global_user_logged.globalUserLogged!.cpf);
+                  }
                 }, // Handle your callback
                 child: Container(
-                  alignment: Alignment.centerLeft,
+                  alignment: Alignment.bottomLeft,
                   height: 50,
                   padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
                   margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
@@ -608,24 +724,12 @@ class MenuNavigationState extends State<MenuNavigation> {
                         ),
                       ),
                       const SizedBox(width: 15.0),
-                      IconButton(
-                        icon: const Icon(
-                          Icons.exit_to_app,
-                          color:Color(0xff6C757D),
-                          size: 22,
-                        ),
-                        onPressed: () {
-                          if(global_user_logged.globalUserLogged != null)
-                          {
-                            OnExitApp(context,global_user_logged.globalUserLogged!.cpf);
-                          }
-                        },
-                      ),
+                      const Icon(Icons.exit_to_app,color:Color(0xff6C757D), size: 22.0)
                     ],
                   ),
                 ),
               ),
-            ),),
+            ),
           ],
         ),),
       ),

@@ -23,15 +23,18 @@ const String alterarSenhaRoute = 'alterar-senha';
 const String perfilRoute = 'profile';
 const String variaveisDeAmbienteRoute = 'variáveis-de-ambiente';
 const String sobreRoute = 'sobre';
+//Documentos --------------------------------------------------------------------------------------------------------------
+const String contratosRoute = 'contratos';
+const String certidoesRoute = 'certidões';
+const String recibosDocumentosRoute = 'recibos-documentos';
 //outros ------------------------------------------------------------------------------------------------------------------
 const String analiseRoute = 'análise';
 const String alertasRoute = 'alertas';
-const String recibosRoute = 'recibos';
 const String documentosRoute = 'documentos';
 const String empresasRoute = 'empresas';
 const String usuarioRoute = 'usuário';
 const String notificacoesRoute = 'notificações';
-
+const String recibosRoute = 'recibos';
 //outros ------------------------------------------------------------------------------------------------------------------
 const String dashboardRoute = 'dashboard';
 const String analisesRoute = 'análises';
