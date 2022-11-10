@@ -10,6 +10,7 @@ import '../../views/settings_views/configuracoes_view.dart';
 import '../../views/settings_views/perfil_view.dart';
 import '../../views/settings_views/sobre_view.dart';
 import '../../views/settings_views/variaveis_de_ambiente_view.dart';
+import '../../views/sici_views/formulario_sici_fust_view.dart';
 import '../../views/splash_screen_view.dart';
 import '/help/navigation_service/route_paths.dart' as routes;
 import '../../views/error_information_view.dart';
@@ -61,6 +62,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => const AnalisesView());
     case routes.recibosRoute:
       return MaterialPageRoute(builder: (context) => const RecibosView());
+  //Formulario Sici
+    case routes.formularioSiciFustRoute:
+      return MaterialPageRoute(builder: (context) => FormularioSiciFustView(siciFileModel: null,));
   //Documentos
     case routes.certidoesRoute:
       return MaterialPageRoute(builder: (context) => const CertidoesView());

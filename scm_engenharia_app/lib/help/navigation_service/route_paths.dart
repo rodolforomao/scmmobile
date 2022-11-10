@@ -27,6 +27,8 @@ const String sobreRoute = 'sobre';
 const String contratosRoute = 'contratos';
 const String certidoesRoute = 'certidões';
 const String recibosDocumentosRoute = 'recibos-documentos';
+//Formulario Sici ---------------------------------------------------------------------------------------------------------
+const String formularioSiciFustRoute = ' formulario-sici-fust';
 //outros ------------------------------------------------------------------------------------------------------------------
 const String analiseRoute = 'análise';
 const String alertasRoute = 'alertas';

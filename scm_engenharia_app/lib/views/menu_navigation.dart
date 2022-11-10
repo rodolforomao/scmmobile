@@ -140,9 +140,9 @@ class MenuNavigationState extends State<MenuNavigation> {
                             height: 40,
                             child: InkWell(
                               onTap: () {
-                                setState(() {
-
-                                });
+                                Navigator.of(context).pushNamed(
+                                  routes.formularioSiciFustRoute,
+                                );
                                 GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
                               }, // Handle your callback
                               child: Container(
