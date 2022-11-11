@@ -13,6 +13,11 @@ class AppThema {
       splashColor: const Color(0xff093d6c),
       iconTheme: const IconThemeData(color: Color(0xFF545454)),
       textTheme:  const TextTheme(
+        subtitle1: TextStyle(
+            fontSize: 15.0,
+            fontWeight: FontWeight.w100,
+            color: Color(0xff000000),
+            fontFamily: 'Poppins-Medium'),
        bodyText1: TextStyle(
          fontFamily: 'Poppins-Light',
          fontSize: 13.0,

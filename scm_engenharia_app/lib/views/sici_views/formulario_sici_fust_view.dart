@@ -267,14 +267,13 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                 visible: currentStep > 0 ? true : false,
                 child: TextButton(
                   style: TextButton.styleFrom(
-                    backgroundColor: const Color(0xffdc3545),
+                    backgroundColor: const Color(0xff888888),
                     padding: const EdgeInsets.fromLTRB(5.0, 2.0, 5.0, 3.0),
                     minimumSize: const Size(130, 43),
                     maximumSize: const Size(130, 43),
                     textStyle: const TextStyle(
-                      fontWeight: FontWeight.w500,
                       color:  Color(0xffFFFFFF),
-                      fontSize: 15,
+                      fontSize: 13,
                     ),
                   ),
                   onPressed: () async {
@@ -301,13 +300,13 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                 visible: currentStep == 2 ? false : true,
                 child: TextButton(
                   style: TextButton.styleFrom(
-                    backgroundColor: const Color(0xff018a8a),
+                    backgroundColor: const Color(0xffef7d00),
                     padding: const EdgeInsets.fromLTRB(15.0, 2.0, 15.0, 2.0),
                     minimumSize: const Size(130, 43),
                     maximumSize: const Size(130, 43),
                     textStyle: const TextStyle(
                       color:  Color(0xffFFFFFF),
-                      fontSize: 15,
+                      fontSize: 13,
                     ),
                   ),
                   onPressed: () async {
@@ -335,11 +334,11 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
             title: SizedBox(
               width: MediaQuery.of(context).size.width - 90,
               child:  Text(
-                'INFORMAÇÕES DA EMPRESA',
+                'informações da empresa',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 softWrap: false,
-                style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
+                style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 17),
               ),
             ),
             content:  Container(
@@ -356,12 +355,15 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                   controller: txtControllerReferencePeriod,
                   focusNode: focusNodeReferencePeriod,
                   textInputAction: TextInputAction.next,
+                  style: const TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'Poppins-Regular',
+                      fontWeight: FontWeight.w100,
+                      color: Color(0xFF323232)),
                   onSubmitted: (term) {
                     focusNodeReferencePeriod.unfocus();
                     FocusScope.of(context).requestFocus(focusNodeSocialReason);
                   },
-                  style: const TextStyle(
-                      fontSize: 15.0),
                   decoration:  const InputDecoration(
                     labelText: 'Período referência:',
                     hintText: '',
@@ -379,7 +381,10 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                   },
                   maxLength: 100,
                   style: const TextStyle(
-                      fontSize: 15.0),
+                      fontSize: 16,
+                      fontFamily: 'Poppins-Regular',
+                      fontWeight: FontWeight.w100,
+                      color: Color(0xFF323232)),
                   decoration: const InputDecoration(
                     labelText: 'Razão social:',
                     hintText: 'Razão social LTDA - ME.',
@@ -401,7 +406,10 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                   ],
                   maxLength: 100,
                   style: const TextStyle(
-                      fontSize: 15.0),
+                      fontSize: 16,
+                      fontFamily: 'Poppins-Regular',
+                      fontWeight: FontWeight.w100,
+                      color: Color(0xFF323232)),
                   decoration: const InputDecoration(
                     labelText: 'Telefone Fixo:',
                     hintText: '',
@@ -423,7 +431,10 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                   ],
                   autofocus: false,
                   style: const TextStyle(
-                      fontSize: 15.0),
+                      fontSize: 16,
+                      fontFamily: 'Poppins-Regular',
+                      fontWeight: FontWeight.w100,
+                      color: Color(0xFF323232)),
                   decoration: const InputDecoration(
                     labelText: 'CNPJ:',
                     hintText: '',
@@ -445,7 +456,10 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                   ],
                   autofocus: false,
                   style: const TextStyle(
-                      fontSize: 15.0),
+                      fontSize: 16,
+                      fontFamily: 'Poppins-Regular',
+                      fontWeight: FontWeight.w100,
+                      color: Color(0xFF323232)),
                   decoration: const InputDecoration(
                     labelText: 'TELEFONE CELULAR:',
                     hintText: '',
@@ -461,7 +475,7 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
             title: SizedBox(
               width: MediaQuery.of(context).size.width - 90,
               child:  Text(
-                'INFORMAÇÕES FINANCEIRAS',
+                'informações financeiras',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 softWrap: false,
@@ -478,6 +492,11 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                   controller: txtControllerGrossRevenue,
                   focusNode: focusNodeGrossRevenue,
                   textInputAction: TextInputAction.next,
+                  style: const TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'Poppins-Regular',
+                      fontWeight: FontWeight.w100,
+                      color: Color(0xFF323232)),
                   onSubmitted: (term) {
                     focusNodeGrossRevenue.unfocus();
                     FocusScope.of(context).requestFocus(focusNodeSimpleValue);
@@ -502,6 +521,11 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                         controller: txtControllerSimpleValue,
                         focusNode: focusNodeSimpleValue,
                         textInputAction: TextInputAction.next,
+                        style: const TextStyle(
+                            fontSize: 16,
+                            fontFamily: 'Poppins-Regular',
+                            fontWeight: FontWeight.w100,
+                            color: Color(0xFF323232)),
                         onSubmitted: (term) {
                           focusNodeSimpleValue.unfocus();
                           FocusScope.of(context).requestFocus(focusNodeSimpleAliquot);
@@ -526,6 +550,11 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                         controller: txtControllerSimpleAliquot,
                         focusNode: focusNodeSimpleAliquot,
                         textInputAction: TextInputAction.next,
+                        style: const TextStyle(
+                            fontSize: 16,
+                            fontFamily: 'Poppins-Regular',
+                            fontWeight: FontWeight.w100,
+                            color: Color(0xFF323232)),
                         onSubmitted: (term) {
                           focusNodeSimpleAliquot.unfocus();
                           FocusScope.of(context).requestFocus(focusNodeICMSvalue);
@@ -554,6 +583,11 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                         focusNode: focusNodeICMSvalue,
                         textInputAction: TextInputAction.next,
                         keyboardType: TextInputType.number,
+                        style: const TextStyle(
+                            fontSize: 16,
+                            fontFamily: 'Poppins-Regular',
+                            fontWeight: FontWeight.w100,
+                            color: Color(0xFF323232)),
                         onSubmitted: (term) {
                           focusNodeICMSvalue.unfocus();
                           FocusScope.of(context).requestFocus(focusNodeIcmsPorc);
@@ -578,6 +612,11 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                         keyboardType: TextInputType.number,
                         focusNode: focusNodeIcmsPorc,
                         textInputAction: TextInputAction.next,
+                        style: const TextStyle(
+                            fontSize: 16,
+                            fontFamily: 'Poppins-Regular',
+                            fontWeight: FontWeight.w100,
+                            color: Color(0xFF323232)),
                         onSubmitted: (term) {
                           focusNodeIcmsPorc.unfocus();
                           FocusScope.of(context).requestFocus(focusNodePis);
@@ -605,6 +644,11 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                         focusNode: focusNodePis,
                         textInputAction: TextInputAction.next,
                         keyboardType: TextInputType.number,
+                        style: const TextStyle(
+                            fontSize: 16,
+                            fontFamily: 'Poppins-Regular',
+                            fontWeight: FontWeight.w100,
+                            color: Color(0xFF323232)),
                         onSubmitted: (term) {
                           focusNodePis.unfocus();
                           FocusScope.of(context).requestFocus(focusNodePisPorc);
@@ -628,6 +672,11 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                         focusNode: focusNodePisPorc,
                         textInputAction: TextInputAction.next,
                         keyboardType: TextInputType.number,
+                        style: const TextStyle(
+                            fontSize: 16,
+                            fontFamily: 'Poppins-Regular',
+                            fontWeight: FontWeight.w100,
+                            color: Color(0xFF323232)),
                         onSubmitted: (term) {
                           focusNodePisPorc.unfocus();
                           FocusScope.of(context).requestFocus(focusNodeCofins);
@@ -656,6 +705,11 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                         focusNode: focusNodeCofins,
                         textInputAction: TextInputAction.next,
                         keyboardType: TextInputType.number,
+                        style: const TextStyle(
+                            fontSize: 16,
+                            fontFamily: 'Poppins-Regular',
+                            fontWeight: FontWeight.w100,
+                            color: Color(0xFF323232)),
                         onSubmitted: (term) {
                           focusNodeCofins.unfocus();
                           FocusScope.of(context).requestFocus(focusNodeCofinsPorc);
@@ -679,6 +733,11 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                         focusNode: focusNodeCofinsPorc,
                         textInputAction: TextInputAction.next,
                         keyboardType: TextInputType.number,
+                        style: const TextStyle(
+                            fontSize: 16,
+                            fontFamily: 'Poppins-Regular',
+                            fontWeight: FontWeight.w100,
+                            color: Color(0xFF323232)),
                         onSubmitted: (term) {
                           focusNodeCofinsPorc.unfocus();
                           FocusScope.of(context).requestFocus(focusNodeNetRevenue);
@@ -702,6 +761,11 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                   focusNode: focusNodeNetRevenue,
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.number,
+                  style: const TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'Poppins-Regular',
+                      fontWeight: FontWeight.w100,
+                      color: Color(0xFF323232)),
                   onSubmitted: (term) {
                     focusNodeNetRevenue.unfocus();
                     FocusScope.of(context).requestFocus(focusNodeGeneralObservations);
@@ -722,6 +786,11 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                   focusNode: focusNodeGeneralObservations,
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.number,
+                  style: const TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'Poppins-Regular',
+                      fontWeight: FontWeight.w100,
+                      color: Color(0xFF323232)),
                   onSubmitted: (term) {
                     focusNodeGeneralObservations.unfocus();
                     FocusScope.of(context).requestFocus(focusNodeIcmsPorc);
@@ -743,7 +812,7 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
             title: SizedBox(
               width: MediaQuery.of(context).size.width - 90,
               child:  Text(
-                'DADOS EM SERVIÇOS',
+                'dados em serviços',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 softWrap: false,
@@ -755,22 +824,20 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: 30.0),
+                  const SizedBox(height: 30.0),
                   Center(child: Padding(padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),child: TextButton(
                     style: TextButton.styleFrom(
-                      backgroundColor: const Color(0xFF3F7EC1),
                       padding: const EdgeInsets.fromLTRB(15.0, 2.0, 15.0, 2.0),
                       minimumSize: const Size(200, 47),
                       maximumSize: const Size(200, 47),
                       textStyle: const TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color:  Color(0xffFFFFFF),
+                        color:  Color(0xffef7d00),
                         fontSize: 15,
                       ),
                     ),
                     child: const Text(' Adicionar '),
                     onPressed: () async {
-                      FocusScope.of(context).requestFocus(new FocusNode());
+                      FocusScope.of(context).requestFocus(FocusNode());
                       Navigator.push(
                           context,
                           CupertinoPageRoute<InputDadosEmServicosModel>(

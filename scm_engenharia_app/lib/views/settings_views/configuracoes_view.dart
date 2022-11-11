@@ -75,7 +75,7 @@ class ConfiguracoesState extends State<Configuracoesview> {
             minHeight: 500,
             maxWidth: MediaQuery.of(context).size.width,
           ),
-          alignment: Alignment.center,
+          alignment: Alignment.topCenter,
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height -140,
           child:  SingleChildScrollView(child: Column(

@@ -214,6 +214,11 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
                 controller: txtControllerCnpj,
                 focusNode: focusNodeCnpj,
                 textInputAction: TextInputAction.next,
+                style: const TextStyle(
+                    fontSize: 16,
+                    fontFamily: 'Poppins-Regular',
+                    fontWeight: FontWeight.w100,
+                    color: Color(0xFF323232)),
                 onSubmitted: (term) {
                   focusNodeCnpj.unfocus();
                   // FocusScope.of(context).requestFocus(focusNodeTelefoneMovel);
@@ -224,8 +229,6 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
                   CnpjInputFormatter(),
                 ],
                 autofocus: false,
-                style: const TextStyle(
-                    fontSize: 15.0),
                 decoration: const InputDecoration(
                   labelText: 'CNPJ:',
                   hintText: '',
@@ -258,6 +261,12 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
                         overflow: TextOverflow.ellipsis,
                         softWrap: true,
                         maxLines: 1,
+                        style: const TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'Poppins-Regular',
+                      fontWeight: FontWeight.w100,
+                      color: Color(0xFF323232)),
+
                       )),
                 ).toList(),
                 onChanged: (newValue) {
@@ -274,6 +283,11 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
                       keyboardType: TextInputType.number,
                       controller: txtNumberYear,
                       textInputAction: TextInputAction.go,
+                      style: const TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'Poppins-Regular',
+                          fontWeight: FontWeight.w100,
+                          color: Color(0xFF323232)),
                       inputFormatters: [
                         // obrigatório
                         FilteringTextInputFormatter.digitsOnly,
@@ -319,6 +333,12 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
                               overflow: TextOverflow.ellipsis,
                               softWrap: true,
                               maxLines: 1,
+                              style: const TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'Poppins-Regular',
+                      fontWeight: FontWeight.w100,
+                      color: Color(0xFF323232)),
+
                             )),
                       ).toList(),
                       onChanged: (newValue) {
@@ -363,6 +383,11 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
                 keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.done,
                 textAlign: TextAlign.start,
+                style: const TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'Poppins-Regular',
+                      fontWeight: FontWeight.w100,
+                      color: Color(0xFF323232)),
                 decoration: const InputDecoration(
                   labelText: 'O código IBGE..',
                   hintText: 'O código IBGE..',
@@ -397,6 +422,11 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
                             overflow: TextOverflow.ellipsis,
                             softWrap: true,
                             maxLines: 1,
+                            style: const TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'Poppins-Regular',
+                      fontWeight: FontWeight.w100,
+                      color: Color(0xFF323232)),
                           )),
                       ).toList(),
                       onChanged: (newValue) {
@@ -437,6 +467,11 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
                               overflow: TextOverflow.ellipsis,
                               softWrap: true,
                               maxLines: 1,
+                              style: const TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'Poppins-Regular',
+                      fontWeight: FontWeight.w100,
+                      color: Color(0xFF323232)),
                             )),
                       ).toList(),
                       onChanged: (newValue) {
@@ -478,7 +513,11 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
                               overflow: TextOverflow.ellipsis,
                               softWrap: true,
                               maxLines: 1,
-                            )),
+                             style: const TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'Poppins-Regular',
+                      fontWeight: FontWeight.w100,
+                      color: Color(0xFF323232)),)),
                       ).toList(),
                       onChanged: (newValue) {
                         setState(() {
@@ -518,6 +557,11 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
                               overflow: TextOverflow.ellipsis,
                               softWrap: true,
                               maxLines: 1,
+                              style: const TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'Poppins-Regular',
+                      fontWeight: FontWeight.w100,
+                      color: Color(0xFF323232)),
                             )),
                       ).toList(),
                       onChanged: (newValue) {
@@ -543,7 +587,6 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
                   filled: true,
                   labelText: 'Nome tecnologia',
                   hintText: 'Nome tecnologia',
-                  //contentPadding: const EdgeInsets.fromLTRB(10.0, 18.0, 18.0, 0.0),
                   border: InputBorder.none,
                   //focusColor: Colors.transparent,
                 ),
@@ -553,6 +596,11 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
                       value: v,
                       child: Text(
                         v.descricao!,
+                        style: const TextStyle(
+                            fontSize: 16,
+                            fontFamily: 'Poppins-Regular',
+                            fontWeight: FontWeight.w100,
+                            color: Color(0xFF323232)),
                         overflow: TextOverflow.ellipsis,
                         softWrap: true,
                         maxLines: 1,
@@ -575,6 +623,11 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
                       controller: txtControllerVelocity,
                       textAlign: TextAlign.start,
                       focusNode: txtFocusNodeVelocity,
+                       style: const TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'Poppins-Regular',
+                      fontWeight: FontWeight.w100,
+                      color: Color(0xFF323232)),
                       onSubmitted: (term) {
                         txtFocusNodeVelocity!.unfocus();
                         FocusScope.of(context).requestFocus(txtFocusNodeAccesses);
@@ -594,6 +647,11 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
                       textAlign: TextAlign.start,
                       keyboardType: TextInputType.number,
                       focusNode: txtFocusNodeAccesses,
+                      style: const TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'Poppins-Regular',
+                          fontWeight: FontWeight.w100,
+                          color: Color(0xFF323232)),
                       onSubmitted: (term) {
                         txtFocusNodeAccesses!.unfocus();
                         onAdd();
