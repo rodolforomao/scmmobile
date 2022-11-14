@@ -14,3 +14,14 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+
+## Building Windows
+-- Building Windows (error Nuget.exe not found, trying to download or use cached version.)
+Install nuget.exe
+https://www.nuget.org/downloads
+
+2- Add PATH
+
+3- Restart Android Studio
+##

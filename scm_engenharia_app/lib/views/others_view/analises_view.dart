@@ -19,7 +19,6 @@ class AnalisesView extends StatefulWidget {
 class AnalisesState extends State<AnalisesView> {
 
   List<NotificationScmEngineering> listNotificationScmEngineering = [];
-  late StreamSubscription<ConnectivityResult> subscription;
   TypeView statusView = TypeView.viewLoading;
 
   onGetListUsuarios() async {
@@ -58,7 +57,7 @@ class AnalisesState extends State<AnalisesView> {
         throw ('Verifique sua conexão com a internet e tente novamente.');
       }
       else {
-        onGetListUsuarios();
+        //onGetListUsuarios();
       }
     } catch (error) {
       GlobalScaffold.map['view'] = 'UsuariosView';
@@ -77,13 +76,13 @@ class AnalisesState extends State<AnalisesView> {
     super.initState();
     setState(() {
       statusView = TypeView.viewRenderInformation;
+      GlobalScaffold.erroInformacao = "Análises";
     });
   }
 
   @override
   void dispose() {
     super.dispose();
-    subscription.cancel();
   }
 
   Widget build(BuildContext context) {

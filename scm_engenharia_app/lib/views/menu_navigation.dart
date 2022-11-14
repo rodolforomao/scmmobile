@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'business_views/empresas_view.dart';
 import 'documents_views/certidoes_view.dart';
@@ -21,7 +22,7 @@ class MenuNavigation extends StatefulWidget {
 
 class MenuNavigationState extends State<MenuNavigation> {
 
-  bool documentosExpanded = false;
+  bool documentosExpanded = false ,lancamentosSiciExpanded = false;
 
   @override
   void initState() {
@@ -46,6 +47,7 @@ class MenuNavigationState extends State<MenuNavigation> {
       case routes.recibosRoute:
         return const RecibosView();
         //----------------------------
+    //----------------------------
       case routes.certidoesRoute:
         return const CertidoesView();
       case routes.contratosRoute:
@@ -65,7 +67,6 @@ class MenuNavigationState extends State<MenuNavigation> {
         return const Text('Error');
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +104,7 @@ class MenuNavigationState extends State<MenuNavigation> {
               padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
               margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
               decoration: BoxDecoration(
-                  color: GlobalScaffold.colorSelectedPageView(routes.documentosRoute),
+                  color: GlobalScaffold.colorSelectedPageView(routes.lancamentosRoute),
                   borderRadius:  const BorderRadius.only(
                     topLeft: Radius.circular(10.0),
                     topRight: Radius.circular(10.0),
@@ -114,18 +115,19 @@ class MenuNavigationState extends State<MenuNavigation> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  Padding( padding: const EdgeInsets.fromLTRB(3.0, 15.0, 0.0, 0.0),child:   Icon(Icons.add,color:GlobalScaffold.colorTextIconSelectedPageView(routes.documentosRoute), size: 20.0),),
+                  Padding(padding: const EdgeInsets.fromLTRB(3.0, 15.0, 0.0, 0.0),child:   Icon(Icons.add,color:GlobalScaffold.colorTextIconSelectedPageView(routes.lancamentosRoute), size: 20.0),),
                   Expanded(child: Theme(
                     data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
                     child: ExpansionTile(
-                        collapsedIconColor: Color(0xff6C757D),
+                        key: GlobalKey(),
+                       // collapsedIconColor: Color(0xff6C757D),
                         iconColor: Color(0xffd56921),
-                        collapsedTextColor: Color(0xff6C757D),
-                        textColor: Color(0xffd56921),
-                        initiallyExpanded:documentosExpanded,
+                        initiallyExpanded:lancamentosSiciExpanded,
                         onExpansionChanged: (val) {
                           setState(() {
-
+                            GlobalScaffold.instance.selectedPageView = routes.lancamentosRoute;
+                            lancamentosSiciExpanded = val;
+                            documentosExpanded = false;
                           });
                         },
                         title: Text(
@@ -133,15 +135,19 @@ class MenuNavigationState extends State<MenuNavigation> {
                           overflow: TextOverflow.visible,
                           maxLines: 1,
                           softWrap: false,
-                          style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17),
+                          style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.lancamentosRoute)),
                         ),
                         children: [
                           SizedBox(
                             height: 40,
                             child: InkWell(
                               onTap: () {
+                                setState(() {
+                                  GlobalScaffold.instance.selectedPageView = routes.lancamentoSiciFustRoute;
+                                  lancamentosSiciExpanded = true;
+                                });
                                 Navigator.of(context).pushNamed(
-                                  routes.formularioSiciFustRoute,
+                                  routes.lancamentoSiciFustRoute,
                                 );
                                 GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
                               }, // Handle your callback
@@ -150,7 +156,8 @@ class MenuNavigationState extends State<MenuNavigation> {
                                 height: 50,
                                 padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
                                 margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-                                decoration: const BoxDecoration(
+                                decoration:  BoxDecoration(
+                                    color: GlobalScaffold.colorSelectedPageView(routes.lancamentoSiciFustRoute),
                                     borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(10.0),
                                       topRight: Radius.circular(10.0),
@@ -161,7 +168,59 @@ class MenuNavigationState extends State<MenuNavigation> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: <Widget>[
-                                    const Icon(Icons.add,color: Color(0xff6C757D), size: 18.0),
+                                    if (GlobalScaffold.instance.selectedPageView == routes.lancamentoSiciFustRoute)
+                                      Icon(Icons.list_rounded,color:GlobalScaffold.colorTextIconSelectedPageView(routes.lancamentoSiciFustRoute), size: 18.0)
+                                    else
+                                      Icon(Icons.list_outlined,color: GlobalScaffold.colorTextIconSelectedPageView(routes.lancamentoSiciFustRoute), size: 20.0),
+                                    const SizedBox(width: 15.0),
+                                    Flexible(
+                                      child: Text(
+                                        'lançamentos',
+                                        overflow: TextOverflow.visible,
+                                        maxLines: 1,
+                                        softWrap: false,
+                                        style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 15, color:GlobalScaffold.colorTextIconSelectedPageView(routes.lancamentoSiciFustRoute)),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 40,
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  GlobalScaffold.instance.selectedPageView = routes.formularioSiciFustRoute;
+                                  lancamentosSiciExpanded = true;
+                                });
+                                Navigator.of(context).pushNamed(
+                                  routes.formularioSiciFustRoute,
+                                );
+                                GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
+                              }, // Handle your callback
+                              child: Container(
+                                alignment: Alignment.centerLeft,
+                                height: 50,
+                                padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                                margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                                decoration:  BoxDecoration(
+                                    color: GlobalScaffold.colorSelectedPageView(routes.formularioSiciFustRoute),
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(10.0),
+                                      topRight: Radius.circular(10.0),
+                                      bottomLeft: Radius.circular(10.0),
+                                      bottomRight: Radius.circular(10.0),
+                                    )),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    if (GlobalScaffold.instance.selectedPageView == routes.formularioSiciFustRoute)
+                                      Icon(Icons.add_rounded,color:GlobalScaffold.colorTextIconSelectedPageView(routes.formularioSiciFustRoute), size: 18.0)
+                                    else
+                                      Icon(Icons.add_outlined,color: GlobalScaffold.colorTextIconSelectedPageView(routes.formularioSiciFustRoute), size: 20.0),
                                     const SizedBox(width: 15.0),
                                     Flexible(
                                       child: Text(
@@ -169,7 +228,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                                         overflow: TextOverflow.visible,
                                         maxLines: 1,
                                         softWrap: false,
-                                        style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 15, color:Color(0xff6C757D)),
+                                        style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 15, color:GlobalScaffold.colorTextIconSelectedPageView(routes.formularioSiciFustRoute)),
                                       ),
                                     ),
                                   ],
@@ -182,10 +241,13 @@ class MenuNavigationState extends State<MenuNavigation> {
                             child: InkWell(
                               onTap: () {
                                 setState(() {
-                                  GlobalScaffold.instance.selectedPageView = routes.certidoesRoute;
-                                  documentosExpanded = true;
+                                  GlobalScaffold.instance.selectedPageView = routes.formularioSiciFustRoute;
+                                  lancamentosSiciExpanded = true;
                                 });
-                                GlobalScaffold.colorSelectedPageView(routes.certidoesRoute);
+                                Navigator.of(context).pushNamed(
+                                  routes.formularioSiciFustRoute,
+                                );
+                                GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
                               }, // Handle your callback
                               child: Container(
                                 alignment: Alignment.centerLeft,
@@ -370,6 +432,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                   Expanded(child: Theme(
                     data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
                     child: ExpansionTile(
+                        key: GlobalKey(),
                         collapsedIconColor: Color(0xff6C757D),
                         iconColor: Color(0xffd56921),
                         initiallyExpanded:documentosExpanded,
@@ -377,6 +440,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                           setState(() {
                             GlobalScaffold.instance.selectedPageView = routes.documentosRoute;
                             documentosExpanded = val;
+                            lancamentosSiciExpanded = false;
                           });
                           GlobalScaffold.colorSelectedPageView(routes.documentosRoute);
                         },

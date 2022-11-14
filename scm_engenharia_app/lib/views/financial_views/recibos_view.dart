@@ -18,7 +18,7 @@ class RecibosView extends StatefulWidget {
 class RecibosState extends State<RecibosView> {
 
   List<NotificationScmEngineering> listNotificationScmEngineering = [];
-  TypeView statusView = TypeView.viewLoading;
+  TypeView statusView = TypeView.viewErrorInformation;
 
   onGetListUsuarios() async {
     try {
@@ -75,6 +75,7 @@ class RecibosState extends State<RecibosView> {
     super.initState();
     setState(() {
       statusView = TypeView.viewRenderInformation;
+      GlobalScaffold.erroInformacao = "Recibos";
     });
     //onInc();
   }

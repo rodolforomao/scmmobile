@@ -4,9 +4,11 @@ class AppThema {
   static final themeNotifierState = ValueNotifier<ThemeModel>(ThemeModel(ThemeMode.light));
 
   static ThemeData lightTheme = ThemeData(
-      canvasColor: const Color(0xffFFFFFF),
       scaffoldBackgroundColor: const Color(0xffFFFFFF),
       backgroundColor: const Color(0xffFFFFFF),
+
+      canvasColor: const Color(0xffFFFFFF),
+
       primaryColor:const Color(0xff093d6c),
       primaryColorDark: const Color(0xff000000),
       primaryColorLight: const Color(0xffFFFFFF),
