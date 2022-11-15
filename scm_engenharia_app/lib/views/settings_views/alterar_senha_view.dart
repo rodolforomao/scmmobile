@@ -29,7 +29,7 @@ class AlterarSenhaState extends State<AlterarSenhaView> {
   onUpdatePassword() async {
     try {
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
-        OnAlertaInformacaoErro('Verifique sua conexão com a internet e tente novamente.',context);
+        GlobalScaffold.instance.onToastInternetConnection();
       } else {
         if (txtControlleraPassword.text.isEmpty)
         {
@@ -53,7 +53,7 @@ class AlterarSenhaState extends State<AlterarSenhaView> {
         }
         else
         {
-          OnRealizandoOperacao('Realizando operação', true,context);
+          OnRealizandoOperacao('Realizando operação',context);
           Operation restWeb = await ServicoMobileService.onUpdatePassword(txtControllerNewPassword.text);
           if (restWeb.erro) {
             throw (restWeb.message!);
@@ -76,16 +76,16 @@ class AlterarSenhaState extends State<AlterarSenhaView> {
             } else if (respBll.result == null) {
               throw respBll.message!;
             } else {
-              OnRealizandoOperacao('', false,context);
+              OnRealizandoOperacao('',context);
               global_user_logged.globalUserLogged = userResul;
-              OnAlertaInformacaoSucesso(restWeb.message!,context);
+              OnAlertSuccess(restWeb.message!);
             }
           }
         }
       }
     } catch (error) {
-      OnRealizandoOperacao('', false,context);
-      OnAlertaInformacaoErro(error.toString(),context);
+      OnRealizandoOperacao('',context);
+      OnAlertError(error.toString());
     }
   }
 

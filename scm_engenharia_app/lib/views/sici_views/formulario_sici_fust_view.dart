@@ -124,21 +124,21 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
       if (inputSiciFustForm.dadosEmServicos!.length == 0) {
         throw ("Distribuição do quantitativo de acessos físicos em serviço é obrigatório,favor adicionar.");
       }
-      OnRealizandoOperacao('Realizando operação', true,context);
+      OnRealizandoOperacao('Realizando operação',context);
       var sd = inputSiciFustForm.toJson();
       TbFormSiciFust formSiciFust = TbFormSiciFust(ObjectId(),inputSiciFustForm.id!,jsonEncode(inputSiciFustForm.toJson()));
-      Operation respFormSiciFust = await AppScmEngenhariaMobileBll.instance.onSaveFormSiciFust(formSiciFust).whenComplete(() => OnRealizandoOperacao('', false,context));
+      Operation respFormSiciFust = await AppScmEngenhariaMobileBll.instance.onSaveFormSiciFust(formSiciFust).whenComplete(() => OnRealizandoOperacao('',context));
       if (respFormSiciFust.erro) {
         throw respFormSiciFust.message!;
       } else if (respFormSiciFust.result == null) {
         throw respFormSiciFust.message!;
       } else {
-        OnAlertaInformacaoSucesso(respFormSiciFust.message,context);
+        OnAlertSuccess(respFormSiciFust.message);
       }
 
     } catch (error) {
 
-      OnAlertaInformacaoErro(error.toString(),context);
+      OnAlertError(error.toString());
     }
   }
 
@@ -208,7 +208,7 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
       } else {
       }
     } catch (error) {
-      OnAlertaInformacaoErro(error.toString(),context);
+      OnAlertError(error.toString());
       //Navigator.of(context, rootNavigator: true).pop();
     }
   }
@@ -248,7 +248,7 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
-                      fontFamily: 'avenir-lt-std-roman',
+                      fontFamily: 'Poppins-Regular',
                       fontSize: 15.0,
                     ),
                   ),
@@ -258,7 +258,7 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
           backgroundColor: Colors.transparent,
         ),
       ),
-      body: Padding(padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0), child: GlobalView.viewRenderSingleChildScrollView(maxHeight,Stepper(
+      body: GlobalView.viewRenderSingleChildScrollView(maxHeight,Stepper(
         controlsBuilder: (BuildContext context, ControlsDetails details)
         {
           return Row(
@@ -288,9 +288,11 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                       }
                     });
                   },
-                  child: const Text(
-                      'Anterior'
-                  ),
+                  child:  const Text(
+                      'Anterior',
+                      style: TextStyle(
+                      color:  Color(0xffFFFFFF),
+                       fontSize: 13,),),
                 ),
               ),
               const Padding(
@@ -321,8 +323,12 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                       }
                     });
                   },
-                  child: const Text(
-                      'Próximo'
+                  child: Text(
+                      'Próximo',
+                      style: TextStyle(
+        color:  Color(0xffFFFFFF),
+        fontSize: 13,
+        ),
                   ),
                 ),
               ),
@@ -828,14 +834,17 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                   Center(child: Padding(padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),child: TextButton(
                     style: TextButton.styleFrom(
                       padding: const EdgeInsets.fromLTRB(15.0, 2.0, 15.0, 2.0),
-                      minimumSize: const Size(200, 47),
-                      maximumSize: const Size(200, 47),
+                      minimumSize: const Size(200, 45),
+                      maximumSize: const Size(200, 45),
                       textStyle: const TextStyle(
                         color:  Color(0xffef7d00),
                         fontSize: 15,
                       ),
                     ),
-                    child: const Text(' Adicionar '),
+                    child: const Text(' Adicionar ' , style: TextStyle(
+                      color:  Color(0xffFFFFFF),
+                      fontSize: 13,
+                    ),),
                     onPressed: () async {
                       FocusScope.of(context).requestFocus(FocusNode());
                       Navigator.push(
@@ -901,7 +910,7 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
             }
           });
         },
-      ),context),),
+      ),context),
     );
   }
 
@@ -1225,7 +1234,7 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                                                   try {
 
                                                   } catch (error) {
-                                                    GlobalScaffold.instance.onToastInformacaoErro(error.toString());
+                                                    GlobalScaffold.instance.onToastError(error.toString());
                                                   }
                                                 },
                                                 child: const Text('  Sim  ',
@@ -1251,7 +1260,7 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                                                   try {
                                                     Navigator.pop(context);
                                                   } catch (error) {
-                                                    GlobalScaffold.instance.onToastInformacaoErro(error.toString());
+                                                    GlobalScaffold.instance.onToastError(error.toString());
                                                   }
                                                 },
                                                 child: const Text('  Não  ',

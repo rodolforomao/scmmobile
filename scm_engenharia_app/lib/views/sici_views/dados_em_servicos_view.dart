@@ -83,7 +83,7 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
       sInput.velocidade = txtControllerVelocity.text;
       sInput.quantidadeAcesso = txtControllerAccesses.text;
     } catch (error) {
-      OnAlertaInformacaoErro(error.toString(),context);
+      OnAlertError(error.toString());
     }
   }
 
@@ -150,7 +150,7 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
         }
       setState((){statusView = TypeView.viewRenderInformation;});
     } catch (error) {
-      OnAlertaInformacaoErro(error.toString(),context);
+      OnAlertError(error.toString());
     }
   }
 
@@ -376,7 +376,7 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
                       });
                     }
                   } catch (error) {
-                    OnAlertaInformacaoErro(error.toString(),context);
+                    OnAlertError(error.toString());
                   }},
                 controller: txtCounty,
                 autofocus: false,

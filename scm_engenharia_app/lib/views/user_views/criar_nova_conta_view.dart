@@ -57,14 +57,14 @@ class CreateNewAccountState extends State<CriarNovaContaView> {
       });
 
     } catch (error) {
-      OnAlertaInformacaoErro(error.toString(),context);
+      OnAlertError(error.toString());
     }
   }
 
     OnSaveAccount() async {
     try {
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
-        OnAlertaInformacaoErro('Verifique sua conexão com a internet e tente novamente.',context);
+        OnAlertError('Verifique sua conexão com a internet e tente novamente.');
       }  else {
         if (txtControlleNomeCompleto.text.isEmpty) {
           throw ("Nome é obrigatório");
@@ -84,18 +84,18 @@ class CreateNewAccountState extends State<CriarNovaContaView> {
         else
           {
             Operation restWeb = await ServicoMobileService.onRegisterUser(txtControlleNomeCompleto.text,txtControllerCPF.text,txtControllerEmail.text,txtControllerTelefoneFixo.text,txtControllerWhatsapp.text,txtControllerNomeDaEmpresa.text,ufModel.id!).whenComplete(() =>
-                OnRealizandoOperacao('', false,context)
+                OnRealizandoOperacao('',context)
             );
             if (restWeb.erro || restWeb.result == null) {
               throw (restWeb.message!);
             }
             else {
-              OnAlertaInformacaoSucesso(restWeb.message!,context);
+              OnAlertSuccess(restWeb.message!);
             }
           }
       }
     } catch (error) {
-      OnAlertaInformacaoErro(error.toString(),context);
+      OnAlertError(error.toString());
     }
   }
 

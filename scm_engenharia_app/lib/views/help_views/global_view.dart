@@ -9,7 +9,7 @@ class GlobalView  {
       shrinkWrap: true,
       itemCount: itemCount,
       physics: const NeverScrollableScrollPhysics(),
-      padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+      padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 15.0),
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: maxCrossAxisExtent,
         //childAspectRatio: MediaQuery.of(context).size.width / (MediaQuery.of(context).size.height / 1.4),
@@ -131,86 +131,116 @@ class OnExitApp {
       builder: (BuildContext context) {
         return Dialog(
           child: Container(
-            padding: const EdgeInsets.all(25.0),
+            padding: const EdgeInsets.all(20.0),
             constraints: const BoxConstraints(
               minWidth: 70,
               maxWidth: 450,
             ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
+              textDirection: TextDirection.ltr,
               children: [
-                Container(
-                  margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
-                  height: 50.0,
-                  child: const Text(
-                    'Deseja realmente sair?',
-                    textAlign: TextAlign.start,
-                    softWrap: false,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      color: Color(0xFF000000),
+                Padding(padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 6.0),child: Text(
+                  'Configurações',
+                  style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 12,color:  Colors.black, fontWeight: FontWeight.w600,),
+                ),),
+                const Padding(padding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 10.0),child: Divider(color:Colors.black54),),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
+                      height: 40.0,
+                      child: const Text(
+                        'Deseja realmente sair?',
+                        textAlign: TextAlign.start,
+                        softWrap: false,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          color: Color(0xFF000000),
+                            fontFamily: 'Poppins-Medium'
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                Container(
-                  constraints: const BoxConstraints(
-                    maxWidth: 400,
-                  ),
-                  margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 14.0),
-                          child:  OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              backgroundColor: const Color(0xFFffffff),
-                              side: const BorderSide(
-                                color: Color(0xFF3F7EC1), //Color of the border
+                    Container(
+                      constraints: const BoxConstraints(
+                        maxWidth: 400,
+                      ),
+                      margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 14.0),
+                              child: OutlinedButton(
+                                style: OutlinedButton.styleFrom(
+                                  minimumSize: const Size(250, 45),
+                                  maximumSize: const Size(250, 45),
+                                  side: const BorderSide(
+                                    color: Color(0xFF828282), //Color of the border
+                                    style: BorderStyle.solid, //Style of the border
+                                    width: 1.0, //width of the border
+                                  ),
+                                  backgroundColor: Color(0xFF828282),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(7.0),
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  try {
+                                    Components.logoffApp(cpf);
+                                  } catch (error) {
+                                    OnRealizandoOperacao('',context);
+                                    GlobalScaffold.instance.onToastError(error.toString());
+                                  }
+                                },
+                                child: const Text('  Sim  ',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 15.0,
+                                      fontFamily: 'Poppins-Regular',
+                                      color: Color(0xFFffffff),
+                                    )),
                               ),
                             ),
-                            onPressed: () async {
-                              try {
-                                Components.logoffApp(cpf);
-                              } catch (error) {
-                                OnRealizandoOperacao('', false, context);
-                                GlobalScaffold.instance.onToastInformacaoErro(error.toString());
-                              }
-                            },
-                            child: const Text('  Sim  ',
-                                style: TextStyle(
-                                  color: Color(0xFF3F7EC1),
-                                )),
                           ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 14.0),
-                          child: OutlinedButton(
-                            onPressed: () async {
-                              try {
-                                Navigator.pop(context);
-                              } catch (error) {
-                                GlobalScaffold.instance.onToastInformacaoErro(error.toString());
-                              }
-                            },
-                            child: const Text('  Não  ',
-                                style: TextStyle(
-                                  color: Color(0xFFffffff),
-                                )),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 14.0),
+                              child: OutlinedButton(
+                                style: OutlinedButton.styleFrom(
+                                  minimumSize: const Size(250, 45),
+                                  maximumSize: const Size(250, 45),
+                                ),
+                                onPressed: () async {
+                                  try {
+                                    Navigator.pop(context);
+                                  } catch (error) {
+                                    GlobalScaffold.instance.onToastError(error.toString());
+                                  }
+                                },
+                                child: const Text('  Não  ',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 15.0,
+                                      fontFamily: 'Poppins-Regular',
+                                      color: Color(0xFFffffff),
+                                    )),
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ],
             ),

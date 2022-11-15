@@ -26,10 +26,10 @@ class VariaveisDeAmbienteState extends State<VariaveisDeAmbienteView> {
   onEnvironmentVariables() async {
     try {
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
-        OnAlertaInformacaoErro('Verifique sua conexão com a internet e tente novamente.',context);
+        GlobalScaffold.instance.onToastInternetConnection();
       } else {
-        OnRealizandoOperacao('Realizando operação', true,context);
-        Operation resultRest = await ServicoMobileService.onEnvironmentVariables().whenComplete(() =>  OnRealizandoOperacao('', false,context));
+        OnRealizandoOperacao('Realizando operação',context);
+        Operation resultRest = await ServicoMobileService.onEnvironmentVariables().whenComplete(() =>  OnRealizandoOperacao('',context));
         if (resultRest.erro) {
           throw (resultRest.message!);
         } else {
@@ -37,7 +37,7 @@ class VariaveisDeAmbienteState extends State<VariaveisDeAmbienteView> {
         }
       }
     } catch (error) {
-      OnAlertaInformacaoErro(error.toString(),context);
+      OnAlertError(error.toString());
     }
   }
 
@@ -60,13 +60,13 @@ class VariaveisDeAmbienteState extends State<VariaveisDeAmbienteView> {
 //gravar/substituir dados em um arquivo de texto
   write(String content) async {
     try {
-      OnRealizandoOperacao('Gravando Dados', true,context);
+      OnRealizandoOperacao('Gravando Dados',context);
       final directory = await getApplicationDocumentsDirectory();
       final File file = File('${directory.path}/variavel_de_ambiente.json');
       await file.writeAsString(content);
-      OnRealizandoOperacao('', false,context);
+      OnRealizandoOperacao('',context);
     } catch (error) {
-      OnAlertaInformacaoErro(error.toString(),context);
+      OnAlertError(error.toString());
     }
   }
 

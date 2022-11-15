@@ -24,7 +24,7 @@ class AnalisesState extends State<AnalisesView> {
   onGetListUsuarios() async {
     try {
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
-        GlobalScaffold.instance.onToastConexaoInternet();
+        GlobalScaffold.instance.onToastInternetConnection();
       } else {
         statusView = TypeView.viewLoading;
         Operation resultRest = await ServicoMobileService.onGetListNotificationByCpf(global_user_logged.globalUserLogged!.cpf);
@@ -41,7 +41,7 @@ class AnalisesState extends State<AnalisesView> {
       setState(() {
         if (listNotificationScmEngineering.isNotEmpty) {
           statusView = TypeView.viewRenderInformation;
-          OnAlertaInformacaoErro(error.toString(), context);
+          OnAlertError(error.toString());
         } else {
           statusView = TypeView.viewErrorInformation;
           GlobalScaffold.erroInformacao = error.toString();

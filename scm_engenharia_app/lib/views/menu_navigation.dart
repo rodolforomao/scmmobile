@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'business_views/empresas_view.dart';
 import 'documents_views/certidoes_view.dart';
@@ -15,6 +14,8 @@ import 'notifications_views/notificacoes_view.dart';
 import 'others_view/analises_view.dart';
 import 'settings_views/configuracoes_view.dart';
 import 'user_views/usuarios_view.dart';
+
+
 class MenuNavigation extends StatefulWidget {
   @override
   MenuNavigationState createState() => MenuNavigationState();
@@ -34,6 +35,31 @@ class MenuNavigationState extends State<MenuNavigation> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    switch (GlobalScaffold.instance.selectedPageView) {
+      case routes.lancamentosRoute:
+        {
+          setState(() =>  GlobalScaffold.instance.selectedPageView = routes.lancamentosRoute);
+          GlobalScaffold.colorSelectedPageView(routes.lancamentosRoute);
+        }
+        break;
+      case routes.lancamentoSiciFustRoute:
+        {
+          setState(() =>  GlobalScaffold.instance.selectedPageView = routes.lancamentoSiciFustRoute);
+          GlobalScaffold.colorSelectedPageView(routes.lancamentoSiciFustRoute);
+        }
+        break;
+      case routes.formularioSiciFustRoute:
+        {
+          setState(() =>  GlobalScaffold.instance.selectedPageView = routes.formularioSiciFustRoute);
+          GlobalScaffold.colorSelectedPageView(routes.formularioSiciFustRoute);
+        }
+        break;
+    }
+    super.didChangeDependencies();
   }
 
   onSelectedPage() {
@@ -148,7 +174,11 @@ class MenuNavigationState extends State<MenuNavigation> {
                                 });
                                 Navigator.of(context).pushNamed(
                                   routes.lancamentoSiciFustRoute,
-                                );
+                                ).then((value) {
+                                  setState(() =>  GlobalScaffold.instance.selectedPageView = routes.analiseRoute);
+                                  GlobalScaffold.colorSelectedPageView(routes.analiseRoute);
+                                  GlobalScaffold.instance.selectedPageView = routes.lancamentosRoute;
+                                });
                                 GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
                               }, // Handle your callback
                               child: Container(
@@ -158,7 +188,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                                 margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
                                 decoration:  BoxDecoration(
                                     color: GlobalScaffold.colorSelectedPageView(routes.lancamentoSiciFustRoute),
-                                    borderRadius: BorderRadius.only(
+                                    borderRadius: const BorderRadius.only(
                                       topLeft: Radius.circular(10.0),
                                       topRight: Radius.circular(10.0),
                                       bottomLeft: Radius.circular(10.0),
@@ -772,7 +802,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                 child: Container(
                   alignment: Alignment.bottomLeft,
                   height: 50,
-                  padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                  padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 20.0),
                   margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,

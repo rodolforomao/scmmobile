@@ -27,7 +27,7 @@ class NotificationState extends State<NotificacaoDetalhesView> {
   onGetNotificationById() async {
     try {
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
-        OnAlertaInformacaoErro('Verifique sua conexão com a internet e tente novamente.',context);
+        GlobalScaffold.instance.onToastInternetConnection();
       } else {
         setState(() {
           statusView = TypeView.viewLoading;
@@ -52,7 +52,7 @@ class NotificationState extends State<NotificacaoDetalhesView> {
       setState(() {
         if (notificationScmEngineering.titulo!.isEmpty) {
           statusView = TypeView.viewRenderInformation;
-          OnAlertaInformacaoErro(error.toString(), context);
+          OnAlertError(error.toString());
         } else {
           statusView = TypeView.viewErrorInformation;
           GlobalScaffold.erroInformacao = error.toString();

@@ -189,7 +189,7 @@ class SettingsState extends State<SettingsView> {
                     }
                     else
                       {
-                        GlobalScaffold.instance.onToastInformacaoErro('Não foi possível  identificar o usuario logado');
+                        GlobalScaffold.instance.onToastError('Não foi possível  identificar o usuario logado');
                       }
                   },
                   contentPadding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),

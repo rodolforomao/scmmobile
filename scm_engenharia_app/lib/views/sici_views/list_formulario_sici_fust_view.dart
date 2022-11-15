@@ -37,8 +37,8 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
         throw ('Verifique sua conexão com a internet e tente novamente.');
       } else {
-        OnRealizandoOperacao('Web: Buscando lançamentos',true,context);
-        Operation resultRest = await ServicoMobileService.onRecoversSiciReleases().whenComplete(() => OnRealizandoOperacao('', false,context));
+        OnRealizandoOperacao('Web: Buscando lançamentos',context);
+        Operation resultRest = await ServicoMobileService.onRecoversSiciReleases().whenComplete(() => OnRealizandoOperacao('',context));
         if (resultRest.erro) {
           throw (resultRest.message!);
         } else {
@@ -66,8 +66,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
         }
       }
     } catch (error) {
-      print(error);
-      OnAlertaInformacaoErro(error.toString(),context);
+      OnAlertError(error.toString());
     }
   }
 
@@ -108,7 +107,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
           try {
 
           } catch (error) {
-            GlobalScaffold.instance.onToastInformacaoErro(error.toString());
+            GlobalScaffold.instance.onToastError(error.toString());
           }
         },
         itemBuilder: (cxt) =>
@@ -131,7 +130,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                       style: TextStyle(
                           fontSize: 16.0,
                           color: Color(0xFF424242),
-                          fontFamily: "avenir-lt-std-medium"),
+                          fontFamily: "Poppins-Medium"),
                     ),
                   ),
                 ],
@@ -160,7 +159,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                       style: TextStyle(
                           fontSize: 16.0,
                           color: Color(0xFF424242),
-                          fontFamily: "avenir-lt-std-medium"),
+                          fontFamily: "Poppins-Medium"),
                     ),
                   ),
                 ],
@@ -181,7 +180,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
           ));
 
     } catch (error) {
-      OnAlertaInformacaoErro(error.toString(),context);
+      OnAlertError(error.toString());
     }
   }
 
@@ -244,9 +243,10 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                         textInputAction: TextInputAction.go,
                         maxLines: 1,
                         style: const TextStyle(
-                          fontSize: 20.0,
-                          color: Color(0xffFFFFFF),
-                        ),
+                            fontSize: 16,
+                            fontFamily: 'Poppins-Regular',
+                            fontWeight: FontWeight.w100,
+                            color: Color(0xFFffffff)),
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: const Color(0xff70ffffff),
@@ -451,7 +451,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                                     fontWeight: FontWeight.w500,
                                     fontSize: 15.0,
                                     color: Color(0xFF4caf50),
-                                    fontFamily: 'avenir-lt-std-roman'),
+                                    fontFamily: 'Poppins-Regular'),
                               ),
                             ],
                           ),
@@ -532,7 +532,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                                                           Navigator.pop(context);
                                                         }
                                                         } catch (error) {
-                                                          GlobalScaffold.instance.onToastInformacaoErro(error.toString());
+                                                          GlobalScaffold.instance.onToastError(error.toString());
                                                           Navigator.pop(context);
                                                         }
                                                       },
@@ -559,7 +559,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                                                         try {
                                                           Navigator.pop(context);
                                                         } catch (error) {
-                                                          GlobalScaffold.instance.onToastInformacaoErro(error.toString());
+                                                          GlobalScaffold.instance.onToastError(error.toString());
                                                         }
                                                       },
                                                       child: const Text('  Não  ',
@@ -591,7 +591,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                                     fontWeight: FontWeight.w500,
                                     fontSize: 15.0,
                                     color: Color(0xfff44336),
-                                    fontFamily: 'avenir-lt-std-roman'),
+                                    fontFamily: 'Poppins-Regular'),
                               ),
                             ],
                           ),
@@ -659,7 +659,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                                     fontWeight: FontWeight.w500,
                                     fontSize: 15.0,
                                     color: Color(0xFF4caf50),
-                                    fontFamily: "avenir-lt-std-roman"),
+                                    fontFamily: "Poppins-Regular"),
                               ),
                             ],
                           ),
@@ -688,7 +688,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                                     fontWeight: FontWeight.w500,
                                     fontSize: 15.0,
                                     color: Color(0xFFffc107),
-                                    fontFamily: "avenir-lt-std-roman"),
+                                    fontFamily: "Poppins-Regular"),
                               ),
                             ],
                           ),

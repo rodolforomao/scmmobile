@@ -1,5 +1,3 @@
-import 'dart:async';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../help/components.dart';
@@ -21,8 +19,6 @@ class SobreState extends State<SobreView> {
   TypeView statusView = TypeView.viewLoading;
   InfoApp infoApp = InfoApp();
 
-
-
   onSendEmail() async {
     try {
       final Uri params = Uri(
@@ -33,7 +29,7 @@ class SobreState extends State<SobreView> {
       );
       launchUrl(params);
     } catch (error) {
-      GlobalScaffold.instance.onToastInformacaoErro(error.toString());
+      GlobalScaffold.instance.onToastError(error.toString());
     }
   }
 
@@ -67,7 +63,6 @@ class SobreState extends State<SobreView> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,7 +84,6 @@ class SobreState extends State<SobreView> {
       body: viewType(MediaQuery.of(context).size.height),
     );
   }
-
 
   viewType(double maxHeight) {
     switch (statusView) {
@@ -124,9 +118,9 @@ class SobreState extends State<SobreView> {
                         style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 20,color:  Colors.black, fontWeight: FontWeight.w600,),
                       ),),
                       const Padding(padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 20.0),child: Divider(color:Colors.black54),),
-                      Center(child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         textDirection: TextDirection.ltr,
                         children: <Widget>[
                           Padding( padding: const EdgeInsets.only(top: 20.0, bottom: 10.0) ,child:RichText(
@@ -141,7 +135,7 @@ class SobreState extends State<SobreView> {
                                 ),
                                 TextSpan(
                                     text: '  ${infoApp.appName!}  ',
-                                    style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 20,color: Color(0xff437DC0))
+                                    style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 20,color: Color(0xff262626))
                                 ),
                               ])),),
                           Padding( padding: const EdgeInsets.only(top: 10.0, bottom: 10.0) ,child: RichText(
@@ -156,7 +150,7 @@ class SobreState extends State<SobreView> {
                                 ),
                                 TextSpan(
                                     text: '  ${infoApp.buildNumber!}  ',
-                                    style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 20,color: Color(0xff437DC0))
+                                    style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 20,color: Color(0xff262626))
                                 ),
                               ])),),
                           Padding( padding: const EdgeInsets.only(top: 10.0, bottom: 10.0) ,child: InkWell(
@@ -172,7 +166,7 @@ class SobreState extends State<SobreView> {
                                   ),
                                   TextSpan(
                                       text: '  ${infoApp.version!}  ',
-                                      style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 20,color: Color(0xff437DC0))
+                                      style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 20,color: Color(0xff262626))
                                   ),
                                 ])),
                             onTap: () async {
@@ -191,7 +185,7 @@ class SobreState extends State<SobreView> {
                                 ),
                                 TextSpan(
                                     text: '  ${infoApp.deviceVersion!}  ',
-                                    style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 20,color: Color(0xff437DC0))
+                                    style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 20,color: Color(0xff262626))
                                 ),
                               ])),),
                           Padding( padding: const EdgeInsets.only(top: 10.0, bottom: 10.0) ,child:  RichText(
@@ -206,7 +200,7 @@ class SobreState extends State<SobreView> {
                                 ),
                                 TextSpan(
                                     text: '  ${infoApp.idDevice!}  ',
-                                    style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 20,color: Color(0xff437DC0))
+                                    style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 20,color: Color(0xff262626))
                                 ),
                               ])),),
                           Center(child: Container(
@@ -241,7 +235,6 @@ class SobreState extends State<SobreView> {
                                         padding: const EdgeInsets.fromLTRB(15.0, 2.0, 15.0, 2.0),
                                         minimumSize: const Size(250, 47),
                                         maximumSize: const Size(250, 47),
-
                                         shape: RoundedRectangleBorder(
                                           borderRadius:  BorderRadius.circular(5.0),
                                         ),
@@ -251,6 +244,8 @@ class SobreState extends State<SobreView> {
                                       },
                                       label:  const Text(' Enviar comentário ', style:  TextStyle(
                                         fontWeight: FontWeight.w500,
+                                        fontFamily: 'Poppins-Regular',
+                                        color: Color(0xFFffffff),
                                       ),),
                                       icon: const Padding(
                                         padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
@@ -267,7 +262,7 @@ class SobreState extends State<SobreView> {
                             ),
                           ),)
                         ],
-                      ),),
+                      ),
                     ],
                   ),)),));
     }

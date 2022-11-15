@@ -6,21 +6,54 @@ class AppThema {
   static ThemeData lightTheme = ThemeData(
       scaffoldBackgroundColor: const Color(0xffFFFFFF),
       backgroundColor: const Color(0xffFFFFFF),
-
+      primarySwatch: Colors.red,
       canvasColor: const Color(0xffFFFFFF),
-
       primaryColor:const Color(0xff093d6c),
       primaryColorDark: const Color(0xff000000),
       primaryColorLight: const Color(0xffFFFFFF),
       splashColor: const Color(0xff093d6c),
       iconTheme: const IconThemeData(color: Color(0xFF545454)),
       textTheme:  const TextTheme(
+        headline1: TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 20.0,
+            color: Color(0xff606060),
+            fontFamily: "MyriadPro-SemiCn"),
+        headline2: TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 15.0,
+            color: Color(0xff979797),
+            fontFamily: "MyriadPro-SemiCnIt"),
+        headline3: TextStyle(
+            fontSize: 13.0,
+            color: Color(0xff15335A),
+            fontFamily:
+            "Myriad-Pro-SemiExt-It"),
+        //Título-------------------------------------------------------
+        headline4: TextStyle(
+          color: Color(0xff3F4143),
+          fontWeight: FontWeight.w500,
+          fontSize: 17.0,
+          fontFamily: 'Poppins-Medium',),
+        //ShowDialog---------------------------------------------------
+        headline5: TextStyle(
+            fontSize: 25.0,
+            fontWeight: FontWeight.w500,
+            color: Colors.black87,
+            fontFamily: 'Myriad-Pro-SemiExt'),
+        headline6:TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 13.0,
+            color: Color(0xff737373),
+            fontFamily:
+            "Myriad-Pro-Light"),
+        //--------------------------------------------------------------
         subtitle1: TextStyle(
             fontSize: 15.0,
             fontWeight: FontWeight.w100,
             color: Color(0xff000000),
             fontFamily: 'Poppins-Medium'),
-       bodyText1: TextStyle(
+        bodyText1: TextStyle(
          fontFamily: 'Poppins-Light',
          fontSize: 13.0,
        ),
@@ -150,7 +183,6 @@ class AppThema {
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          primary: const Color(0xFFffffff),
           textStyle: const TextStyle(
             fontWeight: FontWeight.w500,
             fontFamily: 'Poppins-Regular',
@@ -165,8 +197,8 @@ class AppThema {
       ), colorScheme: ColorScheme.fromSwatch().copyWith(secondary: const Color(0xFF2fdf84)),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          minimumSize: const Size(250, 47),
-          maximumSize: const Size(250, 47),
+          minimumSize: const Size(250, 45),
+          maximumSize: const Size(250, 45),
           textStyle: const TextStyle(
             fontWeight: FontWeight.normal,
             fontSize: 25.0,
@@ -211,8 +243,6 @@ class AppThema {
             bottomRight: Radius.circular(10)),
       ),)
   );
-
-
 }
 
 class StylesThemas {

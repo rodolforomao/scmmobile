@@ -26,7 +26,7 @@ class NotificationsState extends State<NotificationsView> {
   onGetListNotificationByCpf() async {
     try {
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
-        throw ('Verifique sua conexão com a internet e tente novamente.');
+        GlobalScaffold.instance.onToastInternetConnection();
       } else {
         statusView = TypeView.viewLoading;
         Operation resultRest = await ServicoMobileService.onGetListNotificationByCpf(global_user_logged.globalUserLogged!.cpf);
@@ -43,7 +43,7 @@ class NotificationsState extends State<NotificationsView> {
       setState(() {
         if (listNotificationScmEngineering.isNotEmpty) {
           statusView = TypeView.viewRenderInformation;
-          OnAlertaInformacaoErro(error.toString(), context);
+          OnAlertError(error.toString());
         } else {
           statusView = TypeView.viewErrorInformation;
           GlobalScaffold.erroInformacao = error.toString();

@@ -138,7 +138,7 @@ class Components {
             await FirebaseMessaging.instance.unsubscribeFromTopic('ScmEngenhariaLogadoAll');
             await FirebaseMessaging.instance.subscribeToTopic('ScmEngenhariaNLogadoAll');
           }
-          Navigator.of(GlobalScaffold.instance.navigatorKey.currentContext!).pushNamedAndRemoveUntil(routes.loginRoute, (Route<dynamic> route) => false);
+          Navigator.of(GlobalScaffold.instance.navigatorKey.currentContext!).pushNamedAndRemoveUntil(routes.splashScreenRoute, (Route<dynamic> route) => false);
         });
       }
     } catch (error) {

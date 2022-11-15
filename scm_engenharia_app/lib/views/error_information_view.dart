@@ -14,8 +14,6 @@ class ErrorInformationView extends StatefulWidget {
 
 class ErrorInformationState extends State<ErrorInformationView> {
 
-
-
   selecionarPopupMenuButton() => PopupMenuButton(
     icon: const Icon(Icons.more_vert, color: Color(0xFFFFFFFF), size: 25),
     onSelected: (value) async {
@@ -36,7 +34,7 @@ class ErrorInformationState extends State<ErrorInformationView> {
             break;
         }
       } catch (error) {
-        GlobalScaffold.instance.onToastInformacaoErro(error.toString());
+        GlobalScaffold.instance.onToastError(error.toString());
       }
     },
     itemBuilder: (cxt) => [

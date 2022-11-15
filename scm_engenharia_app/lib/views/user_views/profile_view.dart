@@ -53,14 +53,14 @@ class ProfileState extends State<ProfileView> {
       });
 
     } catch (error) {
-      OnAlertaInformacaoErro(error.toString(),context);
+      OnAlertError(error.toString());
     }
   }
 
   onUpdate() async {
     try {
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
-            OnAlertaInformacaoErro('Verifique sua conexão com a internet e tente novamente.',context);
+        GlobalScaffold.instance.onToastInternetConnection();
           }  else {
         if (txtControlleNomeCompleto.text.isEmpty) {
           throw ("Nome é obrigatório");
@@ -77,20 +77,19 @@ class ProfileState extends State<ProfileView> {
         } else if (ufModel.id!.isEmpty) {
           throw ("UF deve ser selecionada");
         }
-        OnRealizandoOperacao('Realizando operação', true,context);
+        OnRealizandoOperacao('Realizando operação',context);
         Operation restWeb = await ServicoMobileService.onRegisterUser(txtControlleNomeCompleto.text,txtControllerCPF.text,txtControllerEmail.text,txtControllerTelefoneFixo.text,txtControllerWhatsapp.text,txtControllerNomeDaEmpresa.text,ufModel.id!).whenComplete(() =>
-            OnRealizandoOperacao('', false,context)
+            OnRealizandoOperacao('',context)
         );
         if (restWeb.erro || restWeb.result == null) {
           throw (restWeb.message!);
         }
         else {
-          OnAlertaInformacaoSucesso(restWeb.message!,context);
+          OnAlertSuccess(restWeb.message!);
         }
       }
     } catch (error) {
-
-      OnAlertaInformacaoErro(error.toString(),context);
+      OnAlertError(error.toString());
     }
   }
 

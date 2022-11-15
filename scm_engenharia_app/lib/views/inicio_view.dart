@@ -10,6 +10,8 @@ import 'dart:async';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
+import 'help_views/global_scaffold.dart';
+
 
 
 class InicioView extends StatefulWidget {
@@ -175,7 +177,7 @@ class InicioState extends State<InicioView>  {
             children: [
               GestureDetector(
                 onTap: () {
-                  print("Click event on Container");
+                  GlobalScaffold.instance.onToastInformation("Click event on Container ");
                 },
                 child: Column(
                   children:  <Widget>[
@@ -186,7 +188,7 @@ class InicioState extends State<InicioView>  {
               ),
               GestureDetector(
                 onTap: () {
-                  print("Click event on Container");
+                  GlobalScaffold.instance.onToastInternetConnection();
                 },
                 child: Column(
                   children: <Widget>[

@@ -35,7 +35,7 @@ class LoginState extends State<LoginView> {
   onLoggingIn() async {
     try {
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
-        OnAlertaInformacaoErro('Verifique sua conexão com a internet e tente novamente.',context);
+        GlobalScaffold.instance.onToastInternetConnection();
       } else {
         if (txtControllerEmail.text.isEmpty)
           {
@@ -45,7 +45,7 @@ class LoginState extends State<LoginView> {
          {
            throw ("Senha é obrigatória");
          }
-        OnRealizandoOperacao('Realizando operação', true,context);
+        OnRealizandoOperacao('Realizando operação',context);
         Operation restWeb = await ServicoMobileService.onLogin(txtControllerEmail.text, txtControllerPassword.text);
         if (restWeb.erro) {
           throw (restWeb.message!);
@@ -85,8 +85,8 @@ class LoginState extends State<LoginView> {
         }
       }
     } catch (error) {
-      OnRealizandoOperacao('', false,context);
-      OnAlertaInformacaoErro(error.toString(),context);
+      OnRealizandoOperacao('',context);
+      OnAlertError(error.toString());
     }
   }
 
