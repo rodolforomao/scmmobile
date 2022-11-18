@@ -182,8 +182,8 @@ class OnExitApp {
                               padding: const EdgeInsets.only(left: 14.0),
                               child: OutlinedButton(
                                 style: OutlinedButton.styleFrom(
-                                  minimumSize: const Size(250, 45),
-                                  maximumSize: const Size(250, 45),
+                                  minimumSize: const Size(250, 44),
+                                  maximumSize: const Size(250, 44),
                                   side: const BorderSide(
                                     color: Color(0xFF828282), //Color of the border
                                     style: BorderStyle.solid, //Style of the border

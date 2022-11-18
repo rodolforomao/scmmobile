@@ -68,7 +68,7 @@ class ForgotYourPasswordState extends State<ForgotYourPasswordView> {
             minHeight: 500,
             maxWidth: MediaQuery.of(context).size.width,
           ),
-          alignment: Alignment.center,
+          alignment: Alignment.topCenter,
           width: MediaQuery.of(context).size.width,
           child:  Container(constraints: const BoxConstraints(
             maxWidth: 1000,
@@ -152,6 +152,7 @@ class ForgotYourPasswordState extends State<ForgotYourPasswordView> {
                     'Recuperar senha',
                     style:  TextStyle(
                       fontWeight: FontWeight.w400,
+                      color:  Color(0xffFFFFFF),
                       fontSize: 20,
                     ),
                   ),

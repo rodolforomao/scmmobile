@@ -31,7 +31,7 @@ class AppThema {
             "Myriad-Pro-SemiExt-It"),
         //Título-------------------------------------------------------
         headline4: TextStyle(
-          color: Color(0xff3F4143),
+          color: Color(0xff979797),
           fontWeight: FontWeight.w500,
           fontSize: 17.0,
           fontFamily: 'Poppins-Medium',),

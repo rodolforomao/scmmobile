@@ -338,7 +338,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
 
           },
           child: ListView.separated(
-            padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+            padding: const EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 15.0),
             separatorBuilder: (context, index) => const Divider(
               color:  Color(0xffCCCCCC),
             ),

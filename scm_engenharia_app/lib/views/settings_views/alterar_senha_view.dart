@@ -136,7 +136,7 @@ class AlterarSenhaState extends State<AlterarSenhaView> {
                 minHeight: 500,
                 maxWidth: MediaQuery.of(context).size.width,
               ),
-              alignment: Alignment.center,
+              alignment: Alignment.topCenter,
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height -140,
               child: SingleChildScrollView(child:  Column(
@@ -226,7 +226,11 @@ class AlterarSenhaState extends State<AlterarSenhaView> {
                           fontSize: 15,
                         ),
                       ),
-                      child: const Text(' ATUALIZAR '),
+                      child: const Text(' ATUALIZAR ' ,style:  TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontFamily: 'Poppins-Regular',
+                        color: Color(0xFFffffff),
+                      ),),
                       onPressed: () async {
                         FocusScope.of(context).requestFocus(FocusNode());
                         onUpdatePassword();
