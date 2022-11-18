@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:intl/intl.dart';
+
 import '../data/tb_form_sici_fust.dart';
 import 'input/input_sici_fust_form_model.dart';
 import 'output/output_sici_fust_model.dart';
@@ -16,7 +18,10 @@ class ParseRespJsonToView{
         addprop.id = prop.id;
         addprop.idUsuarioConsultor = prop.idUsuarioConsultor;
         addprop.idUsuarioCliente = prop.idUsuarioCliente;
-        addprop.periodoReferencia = prop.periodoReferencia;
+        if (prop.periodoReferencia!.isNotEmpty) {
+          DateTime  selectedDate = DateTime.parse(prop.periodoReferencia!);
+          addprop.periodoReferencia = DateFormat("dd/MM/yyyy").format(selectedDate);
+        }
         addprop.razaoSocial = prop.razaoSocial;
         addprop.telefoneFixo = prop.telefoneFixo;
         addprop.cnpj = prop.cnpj;

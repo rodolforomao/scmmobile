@@ -53,8 +53,8 @@ dependencies:
   #Plugin Flutter Community
   connectivity_plus: ^3.0.2 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
   device_info_plus: ^8.0.0  # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
-  package_info_plus: ^3.0.1 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
-  share_plus: ^6.2.0 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  package_info_plus: ^3.0.2 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  share_plus: ^6.3.0 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
 
   #Plugin dart.dev
   http: ^0.13.5 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
@@ -69,7 +69,7 @@ dependencies:
   firebase_analytics: ^10.0.5 # ANDROID,IOS,MACOS,WEB
 
   # realm
-  realm: ^0.7.0+rc # ANDROID, IOS, LINUX, MACOS, WINDOWS
+  realm: ^0.8.0+rc # ANDROID, IOS, LINUX, MACOS, WINDOWS
 
   #Plugin google
   file: ^6.1.4 # ANDROID, IOS, LINUX, MACOS, WINDOWS

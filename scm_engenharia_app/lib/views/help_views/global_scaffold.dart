@@ -744,7 +744,9 @@ class OnRealizandoOperacao {
                 margin: const EdgeInsets.only(left: 10.0, top: 20.0, bottom: 20.0, right: 10.0),
                 child: Theme(
                   data: Theme.of(context).copyWith( colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Color(0xfff5821f))),
-                  child: const CircularProgressIndicator(),
+                  child: const  CircularProgressIndicator(
+                    valueColor:AlwaysStoppedAnimation<Color>(Colors.red),
+                  ),
                 ),
               ),
                     Expanded(
@@ -756,7 +758,7 @@ class OnRealizandoOperacao {
                           softWrap: true,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style: Theme.of(GlobalScaffold.instance.navigatorKey.currentContext!).textTheme.headline4?.copyWith(fontSize: 15, color: const Color(0xff093d6c),),
+                          style: Theme.of(GlobalScaffold.instance.navigatorKey.currentContext!).textTheme.headline4?.copyWith(fontSize: 15,),
                         ),
                       ),
                     ),

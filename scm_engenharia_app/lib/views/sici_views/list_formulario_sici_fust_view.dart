@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,10 +26,9 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
 
   List<InputSiciFileModel> siciFileModelAllList = [];
   List<InputSiciFileModel> siciFileModelUpdateList = [];
-  late StreamSubscription<ConnectivityResult> subscription;
+
   TypeView statusView = TypeView.viewLoading;
   final txtSocialReason = TextEditingController();
-
 
   onRestWeb() async {
     try {
@@ -177,8 +175,9 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
           CupertinoPageRoute(
             builder: (context) =>
                 FormularioSiciFustView(siciFileModel:prop),
-          ));
-
+          )).then((value) {
+        onRestDb();
+      });
     } catch (error) {
       OnAlertError(error.toString());
     }
@@ -420,216 +419,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                 const SizedBox(
                   height: 9.0,
                 ),
-                siciFileModelAllList[index].idFichaSiciApp != ''
-                    ? Container(
-                  alignment: Alignment.bottomCenter,
-                  height: 80,
-                  color: const Color(0xffFFFFFF),
-                  width: MediaQuery.of(context).size.width,
-                  padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      Container(
-                        color: const Color(0xffFFFFFF),
-                        child: InkWell(
-                          onTap: () async {
-
-                            Future.delayed(Duration.zero, () async {});
-                          },
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const <Widget>[
-                              Icon(Icons.file_upload_outlined,
-                                  size: 25, color: Color(0xFF4caf50)),
-                              SizedBox(height: 10.0),
-                              Text(
-                                'Upload',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 15.0,
-                                    color: Color(0xFF4caf50),
-                                    fontFamily: 'Poppins-Regular'),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const VerticalDivider(
-                        color: Color(0xFF000000),
-                      ),
-                      Container(
-                        color: const Color(0xffFFFFFF),
-                        //width: MediaQuery.of(context).size.width / 3,
-                        child: InkWell(
-                          onTap: () {
-                            showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (BuildContext context) {
-                                return Dialog(
-                                    child: Container(
-                                      padding: const EdgeInsets.all(25.0),
-                                      constraints: const BoxConstraints(
-                                        minWidth: 70,
-                                        maxWidth: 450,
-                                      ),
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Container(
-                                            margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
-                                            height: 50.0,
-                                            child: const Text(
-                                              'Deseja realmente remover ?',
-                                              textAlign: TextAlign.start,
-                                              softWrap: false,
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                fontSize: 16.0,
-                                                color: Color(0xFF000000),
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            constraints: const BoxConstraints(
-                                              maxWidth: 400,
-                                            ),
-                                            margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              mainAxisSize: MainAxisSize.max,
-                                              children: <Widget>[
-                                                Expanded(
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.only(left: 14.0),
-                                                    child:  OutlinedButton(
-                                                      style: TextButton.styleFrom(
-                                                        backgroundColor: const Color(0xFFffffff),
-                                                        side: const BorderSide(
-                                                          color: Color(0xFF3F7EC1), //Color of the border
-                                                        ),
-                                                        minimumSize: const Size(130, 43),
-                                                        maximumSize: const Size(130, 43),
-                                                        textStyle: const TextStyle(
-                                                          color:  Color(0xffFFFFFF),
-                                                          fontSize: 15,
-                                                        ),
-                                                      ),
-                                                      onPressed: () async {
-                                                        try {
-                                                       Operation respUser = await AppScmEngenhariaMobileBll.instance.onDeleteFormSiciFustId(siciFileModelAllList[index].idFichaSiciApp.toString());
-                                                        if (respUser.erro || respUser.result == null) {
-                                                             throw respUser.message!;
-                                                         } else {
-                                                          siciFileModelAllList.remove(siciFileModelAllList[index]);
-                                                          Navigator.pop(context);
-                                                        }
-                                                        } catch (error) {
-                                                          GlobalScaffold.instance.onToastError(error.toString());
-                                                          Navigator.pop(context);
-                                                        }
-                                                      },
-                                                      child: const Text('  Sim  ',
-                                                          style: TextStyle(
-                                                            color: Color(0xFF3F7EC1),
-                                                          )),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.only(left: 14.0),
-                                                    child: OutlinedButton(
-                                                      style: TextButton.styleFrom(
-                                                        minimumSize: const Size(130, 43),
-                                                        maximumSize: const Size(130, 43),
-                                                        textStyle: const TextStyle(
-                                                          color:  Color(0xffFFFFFF),
-                                                          fontSize: 15,
-                                                        ),
-                                                      ),
-                                                      onPressed: () async {
-                                                        try {
-                                                          Navigator.pop(context);
-                                                        } catch (error) {
-                                                          GlobalScaffold.instance.onToastError(error.toString());
-                                                        }
-                                                      },
-                                                      child: const Text('  Não  ',
-                                                          style: TextStyle(
-                                                            color: Color(0xFFffffff),
-                                                          )),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ));
-                              },
-                            );
-                          },
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const <Widget>[
-                              Icon(Icons.delete_outlined,
-                                  size: 25, color: Color(0xfff44336)),
-                              SizedBox(height: 10.0),
-                              Text(
-                                'Remover',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 15.0,
-                                    color: Color(0xfff44336),
-                                    fontFamily: 'Poppins-Regular'),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const VerticalDivider(
-                        color: Color(0xFF000000),
-                      ),
-                      Container(
-                        color: const Color(0xffFFFFFF),
-                        //width: MediaQuery.of(context).size.width / 3,
-                        child: InkWell(
-                          onTap: () {
-                            onToview(siciFileModelAllList[index]);
-                          },
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const <Widget>[
-                              Icon(Icons.visibility_outlined,
-                                  size: 25, color: Color(0xFFffc107)),
-                              SizedBox(height: 10.0),
-                              Text(
-                                'Visualizar',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 15.0,
-                                    color: Color(0xFFffc107),
-                                   ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-                    : Container(
+                Container(
                   alignment: Alignment.bottomCenter,
                   height: 80,
                   color: const Color(0xffFFFFFF),
@@ -668,6 +458,153 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                       const VerticalDivider(
                         color: Color(0xFF000000),
                       ),
+                      if( siciFileModelAllList[index].idFichaSiciApp!.isNotEmpty)...[
+                        Container(
+                          color: const Color(0xffFFFFFF),
+                          //width: MediaQuery.of(context).size.width / 3,
+                          child: InkWell(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (BuildContext context) {
+                                  return Dialog(
+                                      child: Container(
+                                        padding: const EdgeInsets.all(25.0),
+                                        constraints: const BoxConstraints(
+                                          minWidth: 70,
+                                          maxWidth: 450,
+                                        ),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Container(
+                                              margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
+                                              height: 50.0,
+                                              child: const Text(
+                                                'Deseja realmente remover ?',
+                                                textAlign: TextAlign.start,
+                                                softWrap: false,
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                  fontSize: 16.0,
+                                                  color: Color(0xFF000000),
+                                                ),
+                                              ),
+                                            ),
+                                            Container(
+                                              constraints: const BoxConstraints(
+                                                maxWidth: 400,
+                                              ),
+                                              margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                mainAxisSize: MainAxisSize.max,
+                                                children: <Widget>[
+                                                  Expanded(
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.only(left: 14.0),
+                                                      child:  OutlinedButton(
+                                                        style: TextButton.styleFrom(
+                                                          backgroundColor: const Color(0xFFffffff),
+                                                          side: const BorderSide(
+                                                            color: Color(0xffef7d00), //Color of the border
+                                                          ),
+                                                          minimumSize: const Size(130, 43),
+                                                          maximumSize: const Size(130, 43),
+                                                          textStyle: const TextStyle(
+                                                            color:  Color(0xffFFFFFF),
+                                                            fontSize: 15,
+                                                          ),
+                                                        ),
+                                                        onPressed: () async {
+                                                          try {
+                                                            Operation respUser = await AppScmEngenhariaMobileBll().onDeleteFormSiciFustId(siciFileModelAllList[index].idFichaSiciApp.toString());
+                                                            if (respUser.erro || respUser.result == null) {
+                                                              throw respUser.message!;
+                                                            } else {
+                                                              setState(() {
+                                                                print(index);
+                                                                siciFileModelAllList.remove(siciFileModelAllList[index]);
+                                                                //siciFileModelUpdateList.remove(siciFileModelUpdateList[index]);
+                                                              });
+                                                              Navigator.pop(context);
+                                                              GlobalScaffold.instance.onToastSuccess(respUser.message!);
+                                                            }
+                                                          } catch (error) {
+                                                            GlobalScaffold.instance.onToastError(error.toString());
+                                                            Navigator.pop(context);
+                                                          }
+                                                        },
+                                                        child: const Text('  Sim  ',
+                                                            style: TextStyle(
+                                                              color: Color(0xffef7d00),
+                                                            )),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.only(left: 14.0),
+                                                      child: OutlinedButton(
+                                                        style: TextButton.styleFrom(
+                                                          minimumSize: const Size(130, 43),
+                                                          maximumSize: const Size(130, 43),
+                                                          textStyle: const TextStyle(
+                                                            color:  Color(0xffFFFFFF),
+                                                            fontSize: 15,
+                                                          ),
+                                                        ),
+                                                        onPressed: () async {
+                                                          try {
+                                                            Navigator.pop(context);
+                                                          } catch (error) {
+                                                            GlobalScaffold.instance.onToastError(error.toString());
+                                                          }
+                                                        },
+                                                        child: const Text('  Não  ',
+                                                            style: TextStyle(
+                                                              color: Color(0xFFffffff),
+                                                            )),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ));
+                                },
+                              );
+                            },
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const <Widget>[
+                                Icon(Icons.delete_outlined,
+                                    size: 25, color: Color(0xfff44336)),
+                                SizedBox(height: 10.0),
+                                Text(
+                                  'Remover',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 15.0,
+                                      color: Color(0xfff44336),
+                                      fontFamily: 'Poppins-Regular'),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const VerticalDivider(
+                          color: Color(0xFF000000),
+                        ),
+                      ],
                       Container(
                         color: const Color(0xffFFFFFF),
                         //width: MediaQuery.of(context).size.width / 3,

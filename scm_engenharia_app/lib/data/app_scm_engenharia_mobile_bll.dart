@@ -2,6 +2,7 @@ import 'package:realm/realm.dart';
 import 'package:scm_engenharia_app/data/tb_form_sici_fust.dart';
 import '../models/operation.dart';
 import 'tb_user.dart';
+import 'package:collection/collection.dart';
 
 class AppScmEngenhariaMobileBll {
 
@@ -133,10 +134,10 @@ class AppScmEngenhariaMobileBll {
     operation.message = 'Operação realizada com sucesso';
     operation.erro = false;
     try {
-      realm.write(() {
-        realm.add<TbFormSiciFust>(formSiciFust);
+      TbFormSiciFust authorizationSso = realm.write<TbFormSiciFust>(() {
+        return  realm.add<TbFormSiciFust>(formSiciFust);
       });
-      operation.result = true;
+      operation.result = authorizationSso;
     } catch (ex) {
       operation.erro = true;
       operation.message = 'Erro $ex';
@@ -144,16 +145,55 @@ class AppScmEngenhariaMobileBll {
     return operation;
   }
 
-  Future<Operation> onUpdateFormSiciFust(TbFormSiciFust formSiciFust) async {
+  Future<Operation> onUpdateFormSiciFust(String idFormSiciFust , TbFormSiciFust formSiciFust) async {
     Operation operation = Operation();
     operation.result = null;
     operation.message = 'Operação realizada com sucesso';
     operation.erro = false;
     try {
+      TbFormSiciFust? updateFormSiciFust = realm.find<TbFormSiciFust>(ObjectId.fromHexString(idFormSiciFust));
+      if(updateFormSiciFust!.result.isEmpty)
+      {
+        throw ('Não foi possível identificar as informações no seu dispositivo');
+      }
       realm.write(() {
-        formSiciFust;
+        updateFormSiciFust.idRegistro = formSiciFust.idRegistro;
+        updateFormSiciFust.result = formSiciFust.result;
       });
-      operation.result = true;
+      operation.result = updateFormSiciFust;
+    } catch (ex) {
+      operation.erro = true;
+      operation.message = 'Erro $ex';
+    }
+    return operation;
+  }
+
+  Future<Operation> onSaveUpdateFormSiciFust(String idFormSiciFust , TbFormSiciFust formSiciFust) async {
+    Operation operation = Operation();
+    operation.result = null;
+    operation.message = 'Operação realizada com sucesso';
+    operation.erro = false;
+    try {
+      if(idFormSiciFust.isEmpty)
+        {
+          TbFormSiciFust resp = realm.write<TbFormSiciFust>(() {
+            return  realm.add<TbFormSiciFust>(formSiciFust);
+          });
+          operation.result = resp;
+        }
+      else
+        {
+          TbFormSiciFust? updateFormSiciFust = realm.find<TbFormSiciFust>(ObjectId.fromHexString(idFormSiciFust));
+          if(updateFormSiciFust!.result.isEmpty)
+          {
+            throw ('Não foi possível identificar as informações no seu dispositivo');
+          }
+          realm.write(() {
+            updateFormSiciFust.idRegistro = formSiciFust.idRegistro;
+            updateFormSiciFust.result = formSiciFust.result;
+          });
+          operation.result = updateFormSiciFust;
+        }
     } catch (ex) {
       operation.erro = true;
       operation.message = 'Erro $ex';
@@ -218,13 +258,21 @@ class AppScmEngenhariaMobileBll {
   Future<Operation> onDeleteFormSiciFustId(String idFormSiciFust) async {
     Operation operation = Operation();
     try {
-      operation.result = true;
+      ObjectId id =   ObjectId.fromHexString(idFormSiciFust);
       operation.message = 'Operação realizada com sucesso';
       operation.erro = false;
-      final formSici = realm.query<TbFormSiciFust>('idFormSiciFustApp == $idFormSiciFust').first;
-      realm.write(() {
-        realm.delete(formSici);
-      });
+      final formSici  = realm.all<TbFormSiciFust>().firstWhereOrNull((element) => element.idFichaSiciApp == ObjectId.fromHexString(idFormSiciFust));
+      if(formSici != null)
+      {
+        realm.write(() {
+          realm.delete(formSici);
+        });
+        operation.result = true;
+      }
+      else
+      {
+        throw ('Não foi possivel identificar o formulário');
+      }
     } catch (ex) {
       operation.erro = true;
       operation.message = 'Erro $ex';

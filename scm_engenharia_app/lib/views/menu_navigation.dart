@@ -13,6 +13,7 @@ import 'notifications_views/alertas_view.dart';
 import 'notifications_views/notificacoes_view.dart';
 import 'others_view/analises_view.dart';
 import 'settings_views/configuracoes_view.dart';
+import 'sici_views/list_formulario_sici_fust_view.dart';
 import 'user_views/usuarios_view.dart';
 
 
@@ -177,7 +178,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                                 ).then((value) {
                                   setState(() =>  GlobalScaffold.instance.selectedPageView = routes.analiseRoute);
                                   GlobalScaffold.colorSelectedPageView(routes.analiseRoute);
-                                  GlobalScaffold.instance.selectedPageView = routes.lancamentosRoute;
+                                  lancamentosSiciExpanded = false;
                                 });
                                 GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
                               }, // Handle your callback
@@ -227,7 +228,11 @@ class MenuNavigationState extends State<MenuNavigation> {
                                 });
                                 Navigator.of(context).pushNamed(
                                   routes.formularioSiciFustRoute,
-                                );
+                                ).then((value) {
+                                  setState(() =>  GlobalScaffold.instance.selectedPageView = routes.analiseRoute);
+                                  GlobalScaffold.colorSelectedPageView(routes.analiseRoute);
+                                  lancamentosSiciExpanded = false;
+                                });
                                 GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
                               }, // Handle your callback
                               child: Container(
@@ -237,7 +242,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                                 margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
                                 decoration:  BoxDecoration(
                                     color: GlobalScaffold.colorSelectedPageView(routes.formularioSiciFustRoute),
-                                    borderRadius: BorderRadius.only(
+                                    borderRadius: const BorderRadius.only(
                                       topLeft: Radius.circular(10.0),
                                       topRight: Radius.circular(10.0),
                                       bottomLeft: Radius.circular(10.0),
@@ -276,7 +281,11 @@ class MenuNavigationState extends State<MenuNavigation> {
                                 });
                                 Navigator.of(context).pushNamed(
                                   routes.formularioSiciFustRoute,
-                                );
+                                ).then((value) {
+                                  setState(() =>  GlobalScaffold.instance.selectedPageView = routes.analiseRoute);
+                                  GlobalScaffold.colorSelectedPageView(routes.analiseRoute);
+                                  lancamentosSiciExpanded = false;
+                                });
                                 GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
                               }, // Handle your callback
                               child: Container(

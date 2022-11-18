@@ -232,7 +232,7 @@ class AppThema {
       floatingActionButtonTheme: const FloatingActionButtonThemeData( backgroundColor: Color(0xff3F7EC1)),
       scrollbarTheme: ScrollbarThemeData(
           thickness: MaterialStateProperty.all(10),
-          thumbColor: MaterialStateProperty.all(Colors.blue),
+          thumbColor: MaterialStateProperty.all(Colors.black12),
           radius: const Radius.circular(10),
           minThumbLength: 100),
       cardTheme: const CardTheme(color: Color(0xffFFFFFF),elevation: 2),

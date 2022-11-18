@@ -89,14 +89,15 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "br.com.scmengenharia.dici" "\0"
-            VALUE "FileDescription", "scm_engenharia_app" "\0"
-            VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "scm_engenharia_app" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2022 br.com.scmengenharia.dici. All rights reserved." "\0"
-            VALUE "OriginalFilename", "scm_engenharia_app.exe" "\0"
-            VALUE "ProductName", "scm_engenharia_app" "\0"
-            VALUE "ProductVersion", VERSION_AS_STRING "\0"
+             VALUE "CompanyName", "SCM Engenharia" "\0"
+             VALUE "FileDescription", "Aplicativo mobile da empresa SCM Engenharia" "\0"
+             VALUE "FileVersion", "1" "\0"
+             VALUE "SpecialBuild", "1.0.0" "\0"
+             VALUE "ProductVersion", "1.0.0" "\0"
+             VALUE "InternalName", "br.com.scmengenharia.dici" "\0"
+             VALUE "LegalCopyright", "Copyright (C) 2022 scmengenharia.com.br All rights reserved." "\0"
+             VALUE "OriginalFilename", "scmengenharia.exe" "\0"
+             VALUE "ProductName", "SCM Engenharia" "\0"
         END
     END
     BLOCK "VarFileInfo"

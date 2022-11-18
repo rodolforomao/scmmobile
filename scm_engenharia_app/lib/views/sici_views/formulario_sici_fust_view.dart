@@ -98,12 +98,12 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
 
   onSaveLocalDbForm()  async {
     try {
-
       if (txtControllerCnpj.text.isEmpty) throw ('O campo cnpj é obrigatório');
       inputSiciFustForm.periodoReferencia = txtControllerReferencePeriod.text;
       inputSiciFustForm.cnpj = txtControllerCnpj.text;
-      if (txtControllerSocialReason.text.isEmpty)
+      if (txtControllerSocialReason.text.isEmpty) {
         throw ("O campo Razão Social é obrigatório");
+      }
       inputSiciFustForm.razaoSocial = txtControllerSocialReason.text;
       if (txtControllerTelefoneMovel.text.isEmpty && txtControllerLandline.text.isEmpty) {
         throw ("Pelo menos um campo 'Telefone' é obrigatório");
@@ -124,20 +124,32 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
       if (inputSiciFustForm.dadosEmServicos!.length == 0) {
         throw ("Distribuição do quantitativo de acessos físicos em serviço é obrigatório,favor adicionar.");
       }
-      OnRealizandoOperacao('Realizando operação',context);
-      var sd = inputSiciFustForm.toJson();
-      TbFormSiciFust formSiciFust = TbFormSiciFust(ObjectId(),inputSiciFustForm.id!,jsonEncode(inputSiciFustForm.toJson()));
-      Operation respFormSiciFust = await AppScmEngenhariaMobileBll.instance.onSaveFormSiciFust(formSiciFust).whenComplete(() => OnRealizandoOperacao('',context));
-      if (respFormSiciFust.erro) {
-        throw respFormSiciFust.message!;
-      } else if (respFormSiciFust.result == null) {
-        throw respFormSiciFust.message!;
-      } else {
-        OnAlertSuccess(respFormSiciFust.message);
-      }
-
+      else
+        {
+          GlobalScaffold.instance.onToastPerformingOperation('Realizando operação');
+          TbFormSiciFust formSiciFust;
+          if(inputSiciFustForm.idFichaSiciApp!.isEmpty)
+            {
+              formSiciFust = TbFormSiciFust(ObjectId(),inputSiciFustForm.id!,jsonEncode(inputSiciFustForm.toJson()));
+            }
+          else
+            {
+              formSiciFust = TbFormSiciFust(ObjectId.fromHexString(inputSiciFustForm.idFichaSiciApp!),inputSiciFustForm.id!,jsonEncode(inputSiciFustForm.toJson()));
+            }
+          Operation respFormSiciFust = await AppScmEngenhariaMobileBll.instance.onSaveUpdateFormSiciFust(inputSiciFustForm.idFichaSiciApp!,formSiciFust).whenComplete(() => GlobalScaffold.instance.onHideCurrentSnackBar());
+          if (respFormSiciFust.erro) {
+            throw respFormSiciFust.message!;
+          } else if (respFormSiciFust.result == null) {
+            throw respFormSiciFust.message!;
+          } else {
+            GlobalScaffold.instance.onHideCurrentSnackBar();
+            TbFormSiciFust repTbFormSiciFust = respFormSiciFust.result as TbFormSiciFust;
+            inputSiciFustForm.idFichaSiciApp = repTbFormSiciFust.idFichaSiciApp.toString();
+            OnAlertSuccess(respFormSiciFust.message);
+          }
+        }
     } catch (error) {
-
+      GlobalScaffold.instance.onHideCurrentSnackBar();
       OnAlertError(error.toString());
     }
   }
@@ -173,10 +185,9 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
       if (widget.siciFileModel != null) {
         inputSiciFustForm  = widget.siciFileModel!;
         if (widget.siciFileModel!.periodoReferencia!.isNotEmpty) {
-          selectedDate = DateTime.parse(widget.siciFileModel!.periodoReferencia!);
-          txtControllerReferencePeriod.text = DateFormat('dd/MM/yyyy').format(DateTime.parse(widget.siciFileModel!.periodoReferencia!));
+           selectedDate = DateFormat("dd/MM/yyyy").parse(widget.siciFileModel!.periodoReferencia!);
+          txtControllerReferencePeriod.text = DateFormat('dd/MM/yyyy').format(selectedDate);
         }
-
         // Razão social LTDA - ME.
         txtControllerSocialReason.text = widget.siciFileModel!.razaoSocial!;
         //Telefone Fixo:
@@ -919,7 +930,11 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
     elevation: 0.9,
     child: Container(
         alignment: Alignment.topLeft,
-        height: 450,
+        height: 470,
+        constraints: const BoxConstraints(
+          minWidth: 200,
+          maxWidth: 600,
+        ),
         padding: const EdgeInsets.fromLTRB(20.0, 20.0, 0.0, 20.0),
         decoration: BoxDecoration(
           color: const Color(0xffFFFFFF), //new Color.fromRGBO(255, 0, 0, 0.0),
@@ -930,7 +945,7 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Flexible(
+            Padding(padding: const EdgeInsets.fromLTRB(0.0,10.0,0.0,5.0),child: Flexible(
               child: RichText(
                   textAlign: TextAlign.start,
                   softWrap: false,
@@ -954,9 +969,8 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                       ),
                     ),
                   ])),
-            ),
-            const SizedBox(height: 10.0),
-            Flexible(
+            ),),
+            Padding(padding: const EdgeInsets.fromLTRB(0.0,5.0,0.0,5.0),child: Flexible(
               child: RichText(
                   textAlign: TextAlign.start,
                   softWrap: false,
@@ -980,9 +994,8 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                       ),
                     ),
                   ])),
-            ),
-            const SizedBox(height: 10.0),
-            Flexible(
+            ),),
+            Padding(padding: const EdgeInsets.fromLTRB(0.0,5.0,0.0,5.0),child:  Flexible(
               child: RichText(
                   textAlign: TextAlign.start,
                   softWrap: false,
@@ -1006,9 +1019,8 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                       ),
                     ),
                   ])),
-            ),
-            const SizedBox(height: 10.0),
-            Flexible(
+            ),),
+            Padding(padding: const EdgeInsets.fromLTRB(0.0,5.0,0.0,5.0),child: Flexible(
               child: RichText(
                   textAlign: TextAlign.start,
                   softWrap: false,
@@ -1032,9 +1044,8 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                       ),
                     ),
                   ])),
-            ),
-            const SizedBox(height: 10.0),
-            Flexible(
+            ),),
+            Padding(padding: const EdgeInsets.fromLTRB(0.0,5.0,0.0,5.0),child: Flexible(
               child: RichText(
                   textAlign: TextAlign.start,
                   softWrap: false,
@@ -1058,9 +1069,8 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                       ),
                     ),
                   ])),
-            ),
-            const SizedBox(height: 10.0),
-            Flexible(
+            ),),
+            Padding(padding: const EdgeInsets.fromLTRB(0.0,5.0,0.0,5.0),child: Flexible(
               child: RichText(
                   textAlign: TextAlign.start,
                   softWrap: false,
@@ -1084,9 +1094,8 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                       ),
                     ),
                   ])),
-            ),
-            const SizedBox(height: 10.0),
-            Flexible(
+            ),),
+            Padding(padding: const EdgeInsets.fromLTRB(0.0,5.0,0.0,5.0),child: Flexible(
               child: RichText(
                   textAlign: TextAlign.start,
                   softWrap: false,
@@ -1110,8 +1119,7 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                       ),
                     ),
                   ])),
-            ),
-            const SizedBox(height: 10.0),
+            ),),
             const Divider(),
             SizedBox(
               height: 40,
@@ -1123,7 +1131,7 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                     style: TextButton.styleFrom(
                       minimumSize: const Size(150, 40),
                       maximumSize: const Size(150, 40),
-                      backgroundColor:  const Color(0xff00A5B2),
+
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5.0),
                       ),
@@ -1137,6 +1145,9 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                       softWrap: false,
+                      style:  TextStyle(
+                        color: Colors.white
+                      ),
                     ),
                     //`Text` to display
                     onPressed: () {
@@ -1170,6 +1181,9 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                       softWrap: false,
+                      style:  TextStyle(
+                          color: Colors.white
+                      ),
                     ),
                     //`Text` to display
                     onPressed: () {
@@ -1192,16 +1206,13 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                                     Container(
                                       margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
                                       height: 50.0,
-                                      child: const Text(
+                                      child:  Text(
                                         'Deseja realmente remover ?',
                                         textAlign: TextAlign.start,
                                         softWrap: false,
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          fontSize: 16.0,
-                                          color: Color(0xFF000000),
-                                        ),
+                                        style: Theme.of(GlobalScaffold.instance.navigatorKey.currentContext!).textTheme.headline4?.copyWith(fontSize: 15, color: const Color(0xff737373),fontWeight: FontWeight.w100,),
                                       ),
                                     ),
                                     Container(
@@ -1221,7 +1232,7 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                                                 style: TextButton.styleFrom(
                                                   backgroundColor: const Color(0xFFffffff),
                                                   side: const BorderSide(
-                                                    color: Color(0xFF3F7EC1), //Color of the border
+                                                    color: Color(0xffef7d00), //Color of the border
                                                   ),
                                                   minimumSize: const Size(130, 43),
                                                   maximumSize: const Size(130, 43),
@@ -1239,7 +1250,7 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                                                 },
                                                 child: const Text('  Sim  ',
                                                     style: TextStyle(
-                                                      color: Color(0xFF3F7EC1),
+                                                      color: Color(0xffef7d00),
                                                     )),
                                               ),
                                             ),
