@@ -63,10 +63,10 @@ dependencies:
   html: ^0.15.0 # ANDROID, IOS, LINUX,MACOS, WEB, WINDOWS
 
   #Plugin firebase
-  firebase_core: ^2.2.0 # ANDROID ,IOS, MACOS, WEB,
-  firebase_crashlytics: ^3.0.5 # ANDROID ,IOS, MACOS
-  firebase_messaging: ^14.1.0  # ANDROID,IOS, MACOS, WEB
-  firebase_analytics: ^10.0.5 # ANDROID,IOS,MACOS,WEB
+  firebase_core: ^2.3.0 # ANDROID ,IOS, MACOS, WEB,
+  firebase_crashlytics: ^3.0.6 # ANDROID ,IOS, MACOS
+  firebase_messaging: ^14.1.1  # ANDROID,IOS, MACOS, WEB
+  firebase_analytics: ^10.0.6 # ANDROID,IOS,MACOS,WEB
 
   # realm
   realm: ^0.8.0+rc # ANDROID, IOS, LINUX, MACOS, WINDOWS

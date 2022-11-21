@@ -269,7 +269,13 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
           backgroundColor: Colors.transparent,
         ),
       ),
-      body: GlobalView.viewRenderSingleChildScrollView(maxHeight,Stepper(
+      body: Align( alignment: Alignment.topCenter,child: Container(
+        alignment: Alignment.topCenter,
+        constraints:  const BoxConstraints(
+            minHeight: 500,
+            maxWidth: 1000
+        ),
+        child: GlobalView.viewRenderSingleChildScrollView(maxHeight,Stepper(
         controlsBuilder: (BuildContext context, ControlsDetails details)
         {
           return Row(
@@ -300,10 +306,10 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                     });
                   },
                   child:  const Text(
-                      'Anterior',
-                      style: TextStyle(
+                    'Anterior',
+                    style: TextStyle(
                       color:  Color(0xffFFFFFF),
-                       fontSize: 13,),),
+                      fontSize: 13,),),
                 ),
               ),
               const Padding(
@@ -334,12 +340,7 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                       }
                     });
                   },
-                  child: Text(
-                      'Próximo',
-                      style: TextStyle(
-        color:  Color(0xffFFFFFF),
-        fontSize: 13,
-        ),
+                  child: const Text('Próximo', style: TextStyle(color:  Color(0xffFFFFFF), fontSize: 13,),
                   ),
                 ),
               ),
@@ -903,6 +904,7 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
             currentStep = step;
           });
         },
+        elevation: 8,
         onStepContinue: () {
           setState(() {
             if (currentStep < spr.length - 1) {
@@ -921,7 +923,7 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
             }
           });
         },
-      ),context),
+      ),context),),),
     );
   }
 
@@ -1121,180 +1123,182 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                   ])),
             ),),
             const Divider(),
-            SizedBox(
-              height: 40,
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  TextButton.icon(
-                    style: TextButton.styleFrom(
-                      minimumSize: const Size(150, 40),
-                      maximumSize: const Size(150, 40),
+            if (inputSiciFustForm.idFichaSiciApp!.isNotEmpty) ...[
+              SizedBox(
+                height: 40,
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    TextButton.icon(
+                      style: TextButton.styleFrom(
+                        minimumSize: const Size(150, 40),
+                        maximumSize: const Size(150, 40),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                      ),
+                      icon: const Icon(
+                        Icons.visibility,
+                        color: Colors.white,
+                      ),
+                      //`Icon` to display
+                      label: const Text('Visualizar',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        softWrap: false,
+                        style:  TextStyle(
+                            color: Colors.white
+                        ),
+                      ),
+                      //`Text` to display
+                      onPressed: () {
+                        FocusScope.of(context).requestFocus(FocusNode());
+                        Navigator.push(
+                            context,
+                            CupertinoPageRoute<InputDadosEmServicosModel>(
+                                fullscreenDialog: true, builder: (BuildContext context) => DadosEmServicosView(sInputDadosEmServicos: inputSiciFustForm.dadosEmServicos![index]))).then((value) {
+                          if (value != null) {
 
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.0),
+                          }
+                        });
+                      },
+                    ),
+                    const SizedBox(width: 10.0),
+                    TextButton.icon(
+                      style: TextButton.styleFrom(
+                        minimumSize: const Size(150, 40),
+                        maximumSize: const Size(150, 40),
+                        backgroundColor: Colors.red,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
                       ),
-                    ),
-                    icon: const Icon(
-                      Icons.visibility,
-                      color: Colors.white,
-                    ),
-                    //`Icon` to display
-                    label: const Text('Visualizar',
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                      softWrap: false,
-                      style:  TextStyle(
-                        color: Colors.white
+                      icon: const Icon(
+                        Icons.delete_outline,
+                        color: Colors.white,
                       ),
-                    ),
-                    //`Text` to display
-                    onPressed: () {
-                      FocusScope.of(context).requestFocus(FocusNode());
-                      Navigator.push(
-                          context,
-                          CupertinoPageRoute<InputDadosEmServicosModel>(
-                              fullscreenDialog: true, builder: (BuildContext context) => DadosEmServicosView(sInputDadosEmServicos: inputSiciFustForm.dadosEmServicos![index]))).then((value) {
-                        if (value != null) {
+                      //`Icon` to display
+                      label: const Text('Remover',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        softWrap: false,
+                        style:  TextStyle(
+                            color: Colors.white
+                        ),
+                      ),
+                      //`Text` to display
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) {
+                            return Dialog(
+                                child: Container(
+                                  padding: const EdgeInsets.all(25.0),
+                                  constraints: const BoxConstraints(
+                                    minWidth: 70,
+                                    maxWidth: 450,
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Container(
+                                        margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
+                                        height: 50.0,
+                                        child:  Text(
+                                          'Deseja realmente remover ?',
+                                          textAlign: TextAlign.start,
+                                          softWrap: false,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: Theme.of(GlobalScaffold.instance.navigatorKey.currentContext!).textTheme.headline4?.copyWith(fontSize: 15, color: const Color(0xff737373),fontWeight: FontWeight.w100,),
+                                        ),
+                                      ),
+                                      Container(
+                                        constraints: const BoxConstraints(
+                                          maxWidth: 400,
+                                        ),
+                                        margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: <Widget>[
+                                            Expanded(
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(left: 14.0),
+                                                child:  OutlinedButton(
+                                                  style: TextButton.styleFrom(
+                                                    backgroundColor: const Color(0xFFffffff),
+                                                    side: const BorderSide(
+                                                      color: Color(0xffef7d00), //Color of the border
+                                                    ),
+                                                    minimumSize: const Size(130, 43),
+                                                    maximumSize: const Size(130, 43),
+                                                    textStyle: const TextStyle(
+                                                      color:  Color(0xffFFFFFF),
+                                                      fontSize: 15,
+                                                    ),
+                                                  ),
+                                                  onPressed: () async {
+                                                    try {
 
-                        }
-                      });
-                    },
-                  ),
-                  const SizedBox(width: 10.0),
-                  TextButton.icon(
-                    style: TextButton.styleFrom(
-                      minimumSize: const Size(150, 40),
-                      maximumSize: const Size(150, 40),
-                      backgroundColor: Colors.red,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                    ),
-                    icon: const Icon(
-                      Icons.delete_outline,
-                      color: Colors.white,
-                    ),
-                    //`Icon` to display
-                    label: const Text('Remover',
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                      softWrap: false,
-                      style:  TextStyle(
-                          color: Colors.white
-                      ),
-                    ),
-                    //`Text` to display
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (BuildContext context) {
-                          return Dialog(
-                              child: Container(
-                                padding: const EdgeInsets.all(25.0),
-                                constraints: const BoxConstraints(
-                                  minWidth: 70,
-                                  maxWidth: 450,
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Container(
-                                      margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
-                                      height: 50.0,
-                                      child:  Text(
-                                        'Deseja realmente remover ?',
-                                        textAlign: TextAlign.start,
-                                        softWrap: false,
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: Theme.of(GlobalScaffold.instance.navigatorKey.currentContext!).textTheme.headline4?.copyWith(fontSize: 15, color: const Color(0xff737373),fontWeight: FontWeight.w100,),
-                                      ),
-                                    ),
-                                    Container(
-                                      constraints: const BoxConstraints(
-                                        maxWidth: 400,
-                                      ),
-                                      margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: <Widget>[
-                                          Expanded(
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(left: 14.0),
-                                              child:  OutlinedButton(
-                                                style: TextButton.styleFrom(
-                                                  backgroundColor: const Color(0xFFffffff),
-                                                  side: const BorderSide(
-                                                    color: Color(0xffef7d00), //Color of the border
-                                                  ),
-                                                  minimumSize: const Size(130, 43),
-                                                  maximumSize: const Size(130, 43),
-                                                  textStyle: const TextStyle(
-                                                    color:  Color(0xffFFFFFF),
-                                                    fontSize: 15,
-                                                  ),
+                                                    } catch (error) {
+                                                      GlobalScaffold.instance.onToastError(error.toString());
+                                                    }
+                                                  },
+                                                  child: const Text('  Sim  ',
+                                                      style: TextStyle(
+                                                        color: Color(0xffef7d00),
+                                                      )),
                                                 ),
-                                                onPressed: () async {
-                                                  try {
-
-                                                  } catch (error) {
-                                                    GlobalScaffold.instance.onToastError(error.toString());
-                                                  }
-                                                },
-                                                child: const Text('  Sim  ',
-                                                    style: TextStyle(
-                                                      color: Color(0xffef7d00),
-                                                    )),
                                               ),
                                             ),
-                                          ),
-                                          Expanded(
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(left: 14.0),
-                                              child: OutlinedButton(
-                                                style: TextButton.styleFrom(
-                                                  minimumSize: const Size(130, 43),
-                                                  maximumSize: const Size(130, 43),
-                                                  textStyle: const TextStyle(
-                                                    color:  Color(0xffFFFFFF),
-                                                    fontSize: 15,
+                                            Expanded(
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(left: 14.0),
+                                                child: OutlinedButton(
+                                                  style: TextButton.styleFrom(
+                                                    minimumSize: const Size(130, 43),
+                                                    maximumSize: const Size(130, 43),
+                                                    textStyle: const TextStyle(
+                                                      color:  Color(0xffFFFFFF),
+                                                      fontSize: 15,
+                                                    ),
                                                   ),
+                                                  onPressed: () async {
+                                                    try {
+                                                      Navigator.pop(context);
+                                                    } catch (error) {
+                                                      GlobalScaffold.instance.onToastError(error.toString());
+                                                    }
+                                                  },
+                                                  child: const Text('  Não  ',
+                                                      style: TextStyle(
+                                                        color: Color(0xFFffffff),
+                                                      )),
                                                 ),
-                                                onPressed: () async {
-                                                  try {
-                                                    Navigator.pop(context);
-                                                  } catch (error) {
-                                                    GlobalScaffold.instance.onToastError(error.toString());
-                                                  }
-                                                },
-                                                child: const Text('  Não  ',
-                                                    style: TextStyle(
-                                                      color: Color(0xFFffffff),
-                                                    )),
                                               ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ));
-                        },
-                      );
-                    },
-                  ),
-                  const SizedBox(width: 10.0),
-                ],
+                                    ],
+                                  ),
+                                ));
+                          },
+                        );
+                      },
+                    ),
+                    const SizedBox(width: 10.0),
+                  ],
+                ),
               ),
-            ),
+            ]
+
           ],
         )),
   );

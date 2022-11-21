@@ -292,6 +292,83 @@ class ServicoMobileService {
     return operacao;
   }
 
+  static Future<Operation> onListUser() async {
+    Operation operacao = Operation();
+    try {
+      String? token = await ComponentsJWTToken.JWTTokenPadrao();
+      Map<String, String> headers = {
+        'Content-Type': 'application/json; charset=utf-8',
+        'token': token!,
+      };
+      http.MultipartRequest response;
+      response = http.MultipartRequest('POST', Uri.parse("$Url/notificacoes/Notificacoes_ws/recuperarNotificacao_ws"));
+      response.headers.addAll(headers);
+      var streamedResponse = await response.send();
+      final respStr = await streamedResponse.stream.bytesToString();
+      if (streamedResponse.statusCode == 200) {
+        if (streamedResponse.stream.isEmpty == true) {
+          throw (ApiRestInformation.problemOfComunication);
+        }
+        else
+        {
+          Map<String, dynamic> map = jsonDecode(Components.removeAllHtmlTags(respStr));
+          OperationJson resp = OperationJson.fromJson(map);
+          operacao.erro = !resp.status!;
+          operacao.message = resp.message;
+          operacao.result = resp.result;
+        }
+        if (operacao.message == null) {
+          throw ('Não foi identificado resposta');
+        }
+      } else {
+        operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(streamedResponse.statusCode, streamedResponse.stream.toString());
+      }
+    } catch (e) {
+      operacao.erro = true;
+      operacao.message = e.toString();
+    }
+    return operacao;
+  }
+
+  static Future<Operation> onUserId(String idUser) async {
+    Operation operacao = Operation();
+    try {
+      String? token = await ComponentsJWTToken.JWTTokenPadrao();
+      Map<String, String> headers = {
+        'Content-Type': 'application/json; charset=utf-8',
+        'token': token!,
+      };
+      http.MultipartRequest response;
+      response = http.MultipartRequest('POST', Uri.parse("$Url/notificacoes/Notificacoes_ws/recuperarNotificacao_ws"));
+      response.headers.addAll(headers);
+      response.fields['id'] = idUser;
+      var streamedResponse = await response.send();
+      final respStr = await streamedResponse.stream.bytesToString();
+      if (streamedResponse.statusCode == 200) {
+        if (streamedResponse.stream.isEmpty == true) {
+          throw (ApiRestInformation.problemOfComunication);
+        }
+        else
+        {
+          Map<String, dynamic> map = jsonDecode(Components.removeAllHtmlTags(respStr));
+          OperationJson resp = OperationJson.fromJson(map);
+          operacao.erro = !resp.status!;
+          operacao.message = resp.message;
+          operacao.result = resp.result;
+        }
+        if (operacao.message == null) {
+          throw ('Não foi identificado resposta');
+        }
+      } else {
+        operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(streamedResponse.statusCode, streamedResponse.stream.toString());
+      }
+    } catch (e) {
+      operacao.erro = true;
+      operacao.message = e.toString();
+    }
+    return operacao;
+  }
+
   static Future<Operation> onRecuperaNotificacaoPeloId(String IdNotificacao) async {
     Operation operacao = Operation();
     try {
@@ -383,6 +460,89 @@ class ServicoMobileService {
       response.headers.addAll(headers);
       response.fields['cpf'] = cpf;
       var streamedResponse = await response.send();
+      final respStr = await streamedResponse.stream.bytesToString();
+      operacao.statusCode = streamedResponse.statusCode;
+      if (streamedResponse.statusCode == 200) {
+        if (respStr.isEmpty) {
+          throw (ApiRestInformation.problemOfComunication);
+        }
+        else
+        {
+          Map<String, dynamic> map = jsonDecode(Components.removeAllHtmlTags(Components.removeAllHtmlTags(respStr)));
+          OperationJson resp = OperationJson.fromJson(map);
+          operacao.erro = !resp.status!;
+          operacao.message = resp.message;
+          operacao.result = resp.result;
+          operacao.resultList = resp.result as List;
+        }
+        if (operacao.message == null && operacao.result == null) {
+          throw ('Não foi identificado resposta');
+        }
+      } else {
+        operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(streamedResponse.statusCode, streamedResponse.stream.toString());
+      }
+    } catch (e) {
+      operacao.erro = true;
+      operacao.message = e.toString();
+    }
+    return operacao;
+  }
+
+  static Future<Operation> onGetDocumentsList() async {
+    Operation operacao = Operation();
+    try {
+      String? token = await ComponentsJWTToken.JWTTokenPadrao();
+      Map<String, String> headers = {
+        'Content-Type': 'application/json; charset=utf-8',
+        "token": token!,
+      };
+      http.MultipartRequest response;
+      response = http.MultipartRequest('POST', Uri.parse("$Url/lancamento/recuperar_lista_documentos_ws"));
+      response.headers.addAll(headers);
+      var streamedResponse = await response.send();
+      final respStr = await streamedResponse.stream.bytesToString();
+      operacao.statusCode = streamedResponse.statusCode;
+      if (streamedResponse.statusCode == 200) {
+        if (respStr.isEmpty) {
+          throw (ApiRestInformation.problemOfComunication);
+        }
+        else
+        {
+          Map<String, dynamic> map = jsonDecode(Components.removeAllHtmlTags(Components.removeAllHtmlTags(respStr)));
+          OperationJson resp = OperationJson.fromJson(map);
+          operacao.erro = !resp.status!;
+          operacao.message = resp.message;
+          operacao.result = resp.result;
+          operacao.resultList = resp.result as List;
+        }
+        if (operacao.message == null && operacao.result == null) {
+          throw ('Não foi identificado resposta');
+        }
+      } else {
+        operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(streamedResponse.statusCode, streamedResponse.stream.toString());
+      }
+    } catch (e) {
+      operacao.erro = true;
+      operacao.message = e.toString();
+    }
+    return operacao;
+  }
+
+  static Future<Operation> onDocumentsById(String idDocumento) async {
+    Operation operacao = Operation();
+    try {
+      String? token = await ComponentsJWTToken.JWTTokenPadrao();
+      Map<String, String> headers = {
+        'Content-Type': 'application/json; charset=utf-8',
+        "token": token!,
+      };
+      http.MultipartRequest response;
+      response = http.MultipartRequest('POST', Uri.parse("$Url/recibos/download_arquivo_ws"));
+      response.headers.addAll(headers);
+      response.fields['id'] = idDocumento;
+      var streamedResponse = await response.send();
+
+
       final respStr = await streamedResponse.stream.bytesToString();
       operacao.statusCode = streamedResponse.statusCode;
       if (streamedResponse.statusCode == 200) {

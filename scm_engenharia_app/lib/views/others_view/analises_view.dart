@@ -75,8 +75,8 @@ class AnalisesState extends State<AnalisesView> {
   void initState() {
     super.initState();
     setState(() {
-      statusView = TypeView.viewRenderInformation;
-      GlobalScaffold.erroInformacao = "Análises";
+      statusView = TypeView.viewErrorInformation;
+      GlobalScaffold.erroInformacao = 'Análises';
     });
   }
 

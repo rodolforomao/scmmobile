@@ -8,10 +8,10 @@ class AppThema {
       backgroundColor: const Color(0xffFFFFFF),
       primarySwatch: Colors.red,
       canvasColor: const Color(0xffFFFFFF),
-      primaryColor:const Color(0xff093d6c),
+      primaryColor:const Color(0xFFF65100),
       primaryColorDark: const Color(0xff000000),
       primaryColorLight: const Color(0xffFFFFFF),
-      splashColor: const Color(0xff093d6c),
+      splashColor: const Color(0xFFF65100),
       iconTheme: const IconThemeData(color: Color(0xFF545454)),
       textTheme:  const TextTheme(
         headline1: TextStyle(
@@ -241,7 +241,14 @@ class AppThema {
         borderRadius: BorderRadius.only(
             topRight: Radius.circular(10),
             bottomRight: Radius.circular(10)),
-      ),)
+      ),),
+      popupMenuTheme: const PopupMenuThemeData(
+        textStyle: TextStyle(
+            fontWeight: FontWeight.w200,
+            fontSize: 16.0,
+            color: Color(0xFF424242),
+            fontFamily: "Poppins-Medium"),
+      )
   );
 }
 

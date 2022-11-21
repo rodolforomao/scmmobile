@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'business_views/empresas_view.dart';
 import 'documents_views/certidoes_view.dart';
 import 'documents_views/contratos_view.dart';
-import 'documents_views/documents_view.dart';
 import 'documents_views/recibos_view.dart';
 import 'financial_views/recibos_view.dart';
 import 'help_views/global_scaffold.dart';
@@ -13,7 +12,6 @@ import 'notifications_views/alertas_view.dart';
 import 'notifications_views/notificacoes_view.dart';
 import 'others_view/analises_view.dart';
 import 'settings_views/configuracoes_view.dart';
-import 'sici_views/list_formulario_sici_fust_view.dart';
 import 'user_views/usuarios_view.dart';
 
 
@@ -82,8 +80,6 @@ class MenuNavigationState extends State<MenuNavigation> {
       case routes.recibosDocumentosRoute:
         return const RecibosDocumentosView();
        //----------------------------
-      case routes.documentosRoute:
-        return const DocumentsView();
       case routes.usuarioRoute:
         return const UsuariosView();
       case routes.notificacoesRoute:

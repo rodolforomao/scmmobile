@@ -676,7 +676,7 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
                     fontSize: 15,
                   ),
                 ),
-                child: const Text(' Adicionar '),
+                child: const Text(' Adicionar ' , style: TextStyle( color: Colors.white), ),
                 onPressed: () async {
                   FocusScope.of(context).requestFocus(FocusNode());
                   onAdd();
