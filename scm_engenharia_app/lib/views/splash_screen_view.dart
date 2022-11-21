@@ -1,10 +1,14 @@
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart' show TargetPlatform, kIsWeb;
+import 'package:flutter/foundation.dart' show TargetPlatform, defaultTargetPlatform, kIsWeb;
+import 'package:flutter/scheduler.dart';
 import '../data/app_scm_engenharia_mobile_bll.dart';
 import '../data/tb_user.dart';
+import '../help/components.dart';
 import '../help/navigation_service/route_paths.dart' as routes;
+import '../help/responsive.dart';
 import '../models/operation.dart';
 import 'package:scm_engenharia_app/models/global_user_logged.dart' as global_user_logged;
 import '../models/user_response_model.dart';
@@ -63,6 +67,11 @@ class SplashScreenState extends State<SplashScreenView> {
               } else if (respBll.result == null) {
                 throw respBll.message!;
               } else {
+                if (defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.macOS || defaultTargetPlatform == TargetPlatform.android) {
+                  SchedulerBinding.instance.addPostFrameCallback((_) async {
+                    await FirebaseAnalytics.instance.setUserId(id: userResul.cpf);
+                  });
+                }
                 global_user_logged.globalUserLogged = userResul;
                 GlobalScaffold.instance.navigatorKey.currentState?.pushNamedAndRemoveUntil(routes.menuNavigationRoute, (Route<dynamic> route) => false);
               }
@@ -86,11 +95,18 @@ class SplashScreenState extends State<SplashScreenView> {
   @override
   void initState()
   {
+    // TODO: implement initState
     super.initState();
-    Future(() {
-       //Navigator.of(context).pushNamedAndRemoveUntil(routes.inicioRoute, (Route<dynamic> route) => false);
-       onInc();
-    });
+    try {
+      onInc();
+      Future.delayed(Duration.zero, () async {
+        PaintingBinding.instance.imageCache.clear();
+        Responsive().setMinHeightView(context);
+        GlobalScaffold.position = await Components.onDeterminarPosicao();
+      });
+    } catch (error) {
+      GlobalScaffold.instance.onToastError(error.toString());
+    }
   }
 
   @override

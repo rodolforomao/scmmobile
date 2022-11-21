@@ -1,4 +1,5 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -75,6 +76,7 @@ class LoginState extends State<LoginView> {
               if (global_user_logged.globalUserLogged!.isValid)
               {
                 if (defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.macOS || defaultTargetPlatform == TargetPlatform.android) {
+                  await FirebaseAnalytics.instance.setUserId(id: userResul.cpf);
                   await FirebaseMessaging.instance.subscribeToTopic('NroCPF-${userResul.cpf}' ?? 'ScmEngenhariaLogadoAll');
                   await FirebaseMessaging.instance.subscribeToTopic('ScmEngenhariaLogadoAll');
                   await FirebaseMessaging.instance.unsubscribeFromTopic('ScmEngenhariaNLogadoAll');

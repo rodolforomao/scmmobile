@@ -38,26 +38,6 @@ class MenuNavigationState extends State<MenuNavigation> {
 
   @override
   void didChangeDependencies() {
-    switch (GlobalScaffold.instance.selectedPageView) {
-      case routes.lancamentosRoute:
-        {
-          setState(() =>  GlobalScaffold.instance.selectedPageView = routes.lancamentosRoute);
-          GlobalScaffold.colorSelectedPageView(routes.lancamentosRoute);
-        }
-        break;
-      case routes.lancamentoSiciFustRoute:
-        {
-          setState(() =>  GlobalScaffold.instance.selectedPageView = routes.lancamentoSiciFustRoute);
-          GlobalScaffold.colorSelectedPageView(routes.lancamentoSiciFustRoute);
-        }
-        break;
-      case routes.formularioSiciFustRoute:
-        {
-          setState(() =>  GlobalScaffold.instance.selectedPageView = routes.formularioSiciFustRoute);
-          GlobalScaffold.colorSelectedPageView(routes.formularioSiciFustRoute);
-        }
-        break;
-    }
     super.didChangeDependencies();
   }
 
@@ -332,7 +312,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                       ],
                     ),
                   ),
-                  const Padding(padding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 10.0),child: Divider(color:Colors.black54),),
+                   /*   const Padding(padding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 10.0),child: Divider(color:Colors.black54),),
                   Padding( padding: const EdgeInsets.only(top: 10.0),child:InkWell(
                     onTap: () {
                       setState(() =>  GlobalScaffold.instance.selectedPageView = routes.analiseRoute);
@@ -455,7 +435,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                         ],
                       ),
                     ),
-                  ),),
+                  ),),*/
                   Container(
                     padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
                     margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
@@ -498,7 +478,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                                 style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.documentosRoute)),
                               ),
                               children: [
-                                SizedBox(
+    /*   SizedBox(
                                   height: 40,
                                   child: InkWell(
                                     onTap: () {
@@ -590,7 +570,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                                       ),
                                     ),
                                   ),
-                                ),
+                                ),*/
                                 SizedBox(
                                   height: 40,
                                   child: InkWell(
@@ -642,7 +622,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                       ],
                     ),
                   ),
-                  Padding( padding: const EdgeInsets.only(top: 10.0),child: InkWell(
+                  /*Padding( padding: const EdgeInsets.only(top: 10.0),child: InkWell(
                     onTap: () {
                       setState(() =>  GlobalScaffold.instance.selectedPageView = routes.empresasRoute);
                       GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
@@ -723,7 +703,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                         ],
                       ),
                     ),
-                  ),),
+                  ),),*/
                   Padding( padding: const EdgeInsets.only(top: 10.0),child: InkWell(
                     onTap: () {
                       setState(() =>  GlobalScaffold.instance.selectedPageView = routes.notificacoesRoute);

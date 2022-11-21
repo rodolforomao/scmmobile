@@ -21,7 +21,9 @@ samples, guidance on mobile development, and a full API reference.
 Install nuget.exe
 https://www.nuget.org/downloads
 
-2- Add PATH
+1- Colocar o  nuget.exe em uma path Ex: C:\Flutter\tools
+
+2- add nuget.exe variáveis do sistema  (PATH) 
 
 3- Restart Android Studio
 ##
