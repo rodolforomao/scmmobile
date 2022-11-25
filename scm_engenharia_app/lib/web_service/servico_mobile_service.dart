@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 import '../data/JWTTokenDbLocal.dart';
 import '../help/components.dart';
 import '../models/operation.dart';
@@ -541,22 +544,21 @@ class ServicoMobileService {
       response.headers.addAll(headers);
       response.fields['id'] = idDocumento;
       var streamedResponse = await response.send();
-
-
-      final respStr = await streamedResponse.stream.bytesToString();
+      var responseData = await streamedResponse.stream.toBytes();
+      var responseToString = String.fromCharCodes(responseData);
+      final bytes = utf8.encode(responseToString);
+      final base64Str = base64.encode(bytes);
+      print(base64Str);
       operacao.statusCode = streamedResponse.statusCode;
       if (streamedResponse.statusCode == 200) {
-        if (respStr.isEmpty) {
+        if (responseToString.isEmpty) {
           throw (ApiRestInformation.problemOfComunication);
         }
         else
         {
-          Map<String, dynamic> map = jsonDecode(Components.removeAllHtmlTags(Components.removeAllHtmlTags(respStr)));
-          OperationJson resp = OperationJson.fromJson(map);
-          operacao.erro = !resp.status!;
-          operacao.message = resp.message;
-          operacao.result = resp.result;
-          operacao.resultList = resp.result as List;
+          operacao.erro = false;
+          operacao.message = "Operação realizada com sucesso";
+          operacao.result = responseToString;
         }
         if (operacao.message == null && operacao.result == null) {
           throw ('Não foi identificado resposta');
