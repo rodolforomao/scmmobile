@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:scm_engenharia_app/models/global_user_logged.dart' as global_user_logged;
+import '../thema/app_thema.dart';
 import 'help_views/global_scaffold.dart';
 import 'dart:async';
 import 'help_views/global_view.dart';
 
-class ErrorInformationView extends StatefulWidget {
+class ErroInformacaoView extends StatefulWidget {
   Map<String, dynamic> map;
-  ErrorInformationView({Key? key, required this.map, }) : super(key: key);
-
+  ErroInformacaoView({Key? key, required this.map, }) : super(key: key);
   @override
   ErrorInformationState createState() => ErrorInformationState();
 }
 
-class ErrorInformationState extends State<ErrorInformationView> {
+class ErrorInformationState extends State<ErroInformacaoView> {
 
   selecionarPopupMenuButton() => PopupMenuButton(
     icon: const Icon(Icons.more_vert, color: Color(0xFFFFFFFF), size: 25),
@@ -65,9 +65,7 @@ class ErrorInformationState extends State<ErrorInformationView> {
   void initState() {
     super.initState();
     Future(() {
-     // final arg = ModalRoute.of(context)!.settings.arguments as Map;
-     // informacao = arg['view'];
-     // originPage = arg['error'];
+
     });
   }
 
@@ -81,10 +79,9 @@ class ErrorInformationState extends State<ErrorInformationView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Informação'),
-        toolbarHeight: 60,
-        flexibleSpace: const Image(
-          image: AssetImage('assets/img/fundo_tela_configuracoes.png'),
-          fit: BoxFit.cover,
+        toolbarHeight: 55,
+        flexibleSpace: Container(
+          decoration: StylesThemas.boxDecorationAppBar,
         ),
         backgroundColor: Colors.transparent,
         actions: <Widget>[

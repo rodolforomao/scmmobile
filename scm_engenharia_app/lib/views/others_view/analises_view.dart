@@ -54,13 +54,17 @@ class AnalisesState extends State<AnalisesView> {
     try {
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none)
       {
-        throw ('Verifique sua conexão com a internet e tente novamente.');
+        GlobalScaffold.instance.navigatorKey.currentState?.pushNamed(
+          routes.erroInternetRoute,
+        ).then((value) async {
+          onInc();
+        });
       }
       else {
         //onGetListUsuarios();
       }
     } catch (error) {
-      GlobalScaffold.map['view'] = 'UsuariosView';
+      GlobalScaffold.map['view'] = routes.analiseRoute;
       GlobalScaffold.map['error'] = error.toString();
       Navigator.of(context).pushNamed(
         routes.errorInformationRoute,

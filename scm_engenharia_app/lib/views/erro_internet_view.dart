@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import '../../help/responsive.dart';
+import '../thema/app_thema.dart';
 import 'help_views/global_scaffold.dart';
 
 
@@ -27,12 +28,7 @@ class ErroInternetState extends State<ErroInternetView> {
   @override
   void initState() {
     super.initState();
-    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      if (result != ConnectivityResult.none) {
-        Navigator.of(context).pop();
-      }
-    });
-    onInc();
+
   }
 
   @override
@@ -45,10 +41,13 @@ class ErroInternetState extends State<ErroInternetView> {
   Widget build(BuildContext context) {
     double maxHeight = maxHeightAppBar(context, 55);
     return Scaffold(
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(55.0),
-          child: AppBar(
-            title: const Text('Internet. Conexão. Caiu'),),
+        appBar: AppBar(
+          title: const Text('Internet. Conexão. Caiu'),
+          toolbarHeight: 55,
+          flexibleSpace: Container(
+            decoration: StylesThemas.boxDecorationAppBar,
+          ),
+          backgroundColor: Colors.transparent,
         ),
         body: SingleChildScrollView(
           child: Container(
@@ -80,11 +79,34 @@ class ErroInternetState extends State<ErroInternetView> {
                      style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 20),
                   ),),
                    Padding( padding: const EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 0.0),child: TextButton(
-                    child: const Padding( padding: EdgeInsets.fromLTRB(15.0, 2.0, 15.0, 2.0), child: Text(' TENTE NOVAMENTE ',),),
-                    onPressed: () async {
-                      GlobalScaffold.instance.onToastInternetConnection();
-                    },
-                  ),),
+                     style: TextButton.styleFrom(
+                       elevation: 0,
+                       backgroundColor: Color(0xffef7d00),
+                       padding: const EdgeInsets.fromLTRB(5.0, 3.0, 5.0, 3.0),
+                       minimumSize: const Size(350, 50),
+                       maximumSize: const Size(350, 50),
+                       textStyle: const TextStyle(
+                         fontWeight: FontWeight.w500,
+                         color:  Color(0xffFFFFFF),
+                         fontSize: 15,
+                       ),
+                     ),
+                     child: const Padding(
+                       padding:
+                       EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5.0),
+                       child: Text(
+                         'TENTE NOVAMENTE',
+                         style:  TextStyle(
+                           fontWeight: FontWeight.w400,
+                           color:  Colors.white,
+                           fontSize: 20,
+                         ),
+                       ),
+                     ),
+                     onPressed: () async {
+                       GlobalScaffold.instance.onToastInternetConnection();
+                     },
+                   ),),
                 ],
               )),
         )

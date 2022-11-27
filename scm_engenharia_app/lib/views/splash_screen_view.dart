@@ -80,9 +80,10 @@ class SplashScreenState extends State<SplashScreenView> {
         }
       }
     } catch (error, s) {
-      Map<String, dynamic> map = {};
-      map['view'] = 'SplashScreenView';
-      map['error'] = error;
+      Map<String, dynamic> map = {
+        'view': routes.splashScreenRoute,
+        'error': error
+      };
       Navigator.of(context).pushNamed(
         routes.errorInformationRoute,
         arguments: map,

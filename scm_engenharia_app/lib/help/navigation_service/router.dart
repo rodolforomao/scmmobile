@@ -39,10 +39,6 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       {
         return MaterialPageRoute(builder: (context) => const SplashScreenView());
       }
-    case routes.errorInformationRoute:
-      {
-        return MaterialPageRoute(builder: (context) => ErrorInformationView(map: map,));
-      }
     case routes.menuNavigationRoute:
       {
         return MaterialPageRoute(builder: (context) =>  MenuNavigation());
@@ -96,6 +92,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         builder: (BuildContext context) =>
         const ErroInternetView(),
       );
+    case routes.errorInformationRoute:
+      {
+        return MaterialPageRoute(builder: (context) => ErroInformacaoView(map: map,));
+      }
   //Erro
     default:
       {
@@ -103,7 +103,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           'view': 'Não Identificado',
           'error': 'Sem caminho para ${settings.name}'
         };
-        return MaterialPageRoute(builder: (context) => ErrorInformationView(map: map,));
+        return MaterialPageRoute(builder: (context) => ErroInformacaoView(map: map,));
       }
 
   }
@@ -113,7 +113,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 class RoutesPage {
   static Map<String, WidgetBuilder> onRoutesPage() {
     Map<String, WidgetBuilder>? pages = {
-      routes.errorInformationRoute : (context) => ErrorInformationView(map: {}),
+      routes.errorInformationRoute : (context) => ErroInformacaoView(map: {}),
       routes.menuNavigationRoute : (context) => MenuNavigation(),
       routes.settingsRoute : (context) => const SettingsView(),
       routes.splashScreenRoute : (context) => const SplashScreenView(),

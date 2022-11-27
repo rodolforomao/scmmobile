@@ -274,7 +274,7 @@ class LoginState extends State<LoginView> {
                 style: TextButton.styleFrom(
                   shape: BeveledRectangleBorder(
                       borderRadius: BorderRadius.circular(3.0),
-                      side: BorderSide(color:  Color(0xffef7d00),)
+                      side: const BorderSide(color:  Color(0xffef7d00),)
                   ),
                   elevation: 0,
                   backgroundColor:  Colors.white,
