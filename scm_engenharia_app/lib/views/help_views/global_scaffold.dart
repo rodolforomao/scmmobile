@@ -40,21 +40,20 @@ class GlobalScaffold {
   static String erroInformacao = 'Ops! Algo de errado aconteceu? Não se preocupe, vou te ajudar a resolver!';
   static Position? position;
 
-  onToastUpdateApp(String mensagem) {
+  onToastRedirectUriApp(String mensagem ,Uri url) {
     onHideCurrentSnackBar();
     FocusScope.of(navigatorKey.currentState!.context).requestFocus(FocusNode());
     messangerKey.currentState!.showSnackBar( SnackBar(
         width: 700,
+        duration: const Duration(minutes: 1),
         behavior: SnackBarBehavior.floating,
         elevation: 0,
-        backgroundColor: const Color(0xfffff3a5),
+        backgroundColor: const Color(0xffccf8e4),
         action: SnackBarAction(
           label: 'VER',
-          textColor:const Color(0xfff8ab3a),
+          textColor:const Color(0xff2ecd8f),
           onPressed: () {
-            GlobalScaffold.instance.navigatorKey.currentState?.pushNamed(
-              routes.sobreRoute,
-            );
+            onRedirectUriApp(url);
           },
         ),
         shape: const RoundedRectangleBorder(
@@ -72,7 +71,7 @@ class GlobalScaffold {
             children: [
               const Icon(
                 Icons.warning_amber,
-                color: Color(0xfff8ab3a),
+                color: Color(0xff2ecd8f),
                 size: 30,
               ),
               const SizedBox(
@@ -85,7 +84,7 @@ class GlobalScaffold {
                   maxLines: 2,
                   softWrap: false,
                   textAlign: TextAlign.center,
-                  style: Theme.of(navigatorKey.currentState!.context).textTheme.headline4?.copyWith(fontSize: 13, color: const Color(0xfff8ab3a),),
+                  style: Theme.of(navigatorKey.currentState!.context).textTheme.headline4?.copyWith(fontSize: 13, color: const Color(0xff2ecd8f),),
                 ),
               ),
             ],

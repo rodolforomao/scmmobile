@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -11,6 +12,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:jaguar_jwt/jaguar_jwt.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:path_provider/path_provider.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
 import '../data/app_scm_engenharia_mobile_bll.dart';
 import '../models/info_app.dart';
@@ -33,6 +35,24 @@ class Components {
       {}
     }
     return Txt;
+  }
+
+  static String? dateFormatDDMMYYYY(String date) {
+    try {
+      if(date.isEmpty)
+       {
+         DateTime now = DateTime.now();
+         String formattedDate = DateFormat('dd/MM/yyyy').format(now);
+         return formattedDate;
+       }
+      else
+        {
+          DateTime  selectedDate = DateTime.parse(date);
+          return  DateFormat("dd/MM/yyyy").format(selectedDate).toString();
+        }
+    } catch (error) {
+      throw (error.toString());
+    }
   }
 
   static String? JWTToken(String User, String password) {
@@ -276,6 +296,37 @@ class Components {
     }
   }
 
+  static downloadCompartilharArquivos(String? arquivo,String nomeArquivo,String titulo,String tipo,String tipoArquivo) async {
+    final bytes = utf8.encode(arquivo!);
+    String arquivoNome = nomeArquivo + DateTime.now().millisecondsSinceEpoch.toString();
+    switch (tipo) {
+      case 'Download':
+        {
+          if (kIsWeb) {
+
+          }
+          else
+          {
+            String dir = (await getApplicationDocumentsDirectory()).path;
+            //if (Platform.isAndroid) {
+            //  dir = "/storage/emulated/0/Download";
+           // }
+            await Directory(dir).create(recursive: true);
+            File files = File("$dir/$arquivoNome$tipoArquivo");
+            await files.parent.create(recursive: true);
+            files.writeAsBytes(bytes, mode: FileMode.write, flush: true).then((File file) async {
+              GlobalScaffold.instance.onToastRedirectUriApp('Download concluído com sucesso.\r\n$dir',files.uri);
+            });
+          }
+        }
+        break;
+      case 'Compartilhar':
+        {
+
+        }
+        break;
+    }
+  }
 }
 
 class CurrencyInputFormatter extends TextInputFormatter {

@@ -40,6 +40,8 @@ const String empresasRoute = 'empresas';
 const String usuarioRoute = 'usuário';
 const String notificacoesRoute = 'notificações';
 const String recibosRoute = 'recibos';
+const String erroInternetRoute = 'erro-internet';
+
 //outros ------------------------------------------------------------------------------------------------------------------
 const String dashboardRoute = 'dashboard';
 const String analisesRoute = 'análises';

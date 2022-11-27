@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import '../../help/components.dart';
 import '../../models/operation.dart';
 import '../../models/notification_models/notification_model.dart';
 import '../../thema/app_thema.dart';
@@ -22,6 +23,7 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> {
   TypeView statusTypeView = TypeView.viewLoading;
   late List mapDocumentos = [];
   late bool isSearching = false;
+
   onGetDocumentsList() async {
     try {
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
@@ -61,7 +63,7 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> {
         if (resultRest.erro) {
           throw (resultRest.message!);
         } else {
-          OnAlertSuccess(resultRest.message);
+          Components.downloadCompartilharArquivos(resultRest.result.toString(), 'recibo_', 'Recibo', 'Download','.pdf');
         }
       }
     } catch (error) {
@@ -73,13 +75,17 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> {
     try {
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none)
       {
-        throw ('Verifique sua conexão com a internet e tente novamente.');
+        GlobalScaffold.instance.navigatorKey.currentState?.pushNamed(
+          routes.erroInternetRoute,
+        ).then((value) async {
+          onInc();
+        });
       }
       else {
         onGetDocumentsList();
       }
     } catch (error) {
-      GlobalScaffold.map['view'] = 'UsuariosView';
+      GlobalScaffold.map['view'] = routes.recibosRoute;
       GlobalScaffold.map['error'] = error.toString();
       Navigator.of(context).pushNamed(
         routes.errorInformationRoute,
@@ -286,7 +292,7 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> {
                                 style: Theme.of(context).textTheme.headline1?.copyWith(fontSize: 17),
                               ),
                               TextSpan(
-                                text: mapDocumentos[index]['periodo_referencia'] ?? '',
+                                text: Components.dateFormatDDMMYYYY(mapDocumentos[index]['periodo_referencia'])  ?? '',
                                 style: Theme.of(context).textTheme.headline2?.copyWith(fontSize: 15),
                               ),
                             ])),),

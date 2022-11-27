@@ -190,37 +190,6 @@ class SettingsState extends State<SettingsView> {
                       // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
                       trailing: const Icon(Icons.keyboard_arrow_right,
                           color: Color(0xff6C757D), size: 30.0)),
-                  const Divider(
-                    color: Color(0xffCCCCCC),
-                  ),
-                  ListTile(
-                      onTap: () {
-                        if (global_user_logged.globalUserLogged!.isValid)
-                        {
-                          OnExitApp(context,global_user_logged.globalUserLogged!.cpf);
-                        }
-                        else
-                        {
-                          GlobalScaffold.instance.onToastError('Não foi possível  identificar o usuario logado');
-                        }
-                      },
-                      contentPadding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
-                      leading: Container(
-                        padding: const EdgeInsets.only(right: 12.0),
-                        decoration:  const BoxDecoration(
-                            border:  Border(
-                                right:  BorderSide(
-                                    width: 1.0, color: Color(0xff6C757D)))),
-                        child: const Icon(Icons.exit_to_app,
-                            color: Color(0xff9e9e9e), size: 25.0),
-                      ),
-                      title: Text(
-                        'Sair',
-                        style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 17),
-                      ),
-                      // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
-                      trailing: const Icon(Icons.keyboard_arrow_right,
-                          color: Color(0xff6C757D), size: 30.0)),
                   const SizedBox(height: 5.0),
                 ],
               ),),),),

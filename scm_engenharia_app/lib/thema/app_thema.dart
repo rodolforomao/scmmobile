@@ -18,17 +18,17 @@ class AppThema {
             fontWeight: FontWeight.w500,
             fontSize: 20.0,
             color: Color(0xff606060),
-            fontFamily: "MyriadPro-SemiCn"),
+            fontFamily: "Poppins-Regular"),
         headline2: TextStyle(
             fontWeight: FontWeight.w500,
             fontSize: 15.0,
             color: Color(0xff979797),
-            fontFamily: "MyriadPro-SemiCnIt"),
+            fontFamily: "Poppins-Regular"),
         headline3: TextStyle(
             fontSize: 13.0,
             color: Color(0xff15335A),
             fontFamily:
-            "Myriad-Pro-SemiExt-It"),
+            "Poppins-Regular"),
         //Título-------------------------------------------------------
         headline4: TextStyle(
           color: Color(0xff979797),

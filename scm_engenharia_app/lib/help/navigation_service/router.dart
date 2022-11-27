@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../views/documents_views/certidoes_view.dart';
 import '../../views/documents_views/contratos_view.dart';
 import '../../views/documents_views/recibos_view.dart';
+import '../../views/erro_internet_view.dart';
 import '../../views/financial_views/recibos_view.dart';
 import '../../views/inicio_view.dart';
 import '../../views/others_view/analises_view.dart';
@@ -86,6 +88,14 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => const VariaveisDeAmbienteView());
     case routes.sobreRoute:
       return MaterialPageRoute(builder: (context) => const SobreView());
+  //outros
+    case routes.erroInternetRoute:
+      return CupertinoPageRoute(
+        maintainState: false,
+        fullscreenDialog: true,
+        builder: (BuildContext context) =>
+        const ErroInternetView(),
+      );
   //Erro
     default:
       {

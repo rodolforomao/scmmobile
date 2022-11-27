@@ -546,9 +546,6 @@ class ServicoMobileService {
       var streamedResponse = await response.send();
       var responseData = await streamedResponse.stream.toBytes();
       var responseToString = String.fromCharCodes(responseData);
-      final bytes = utf8.encode(responseToString);
-      final base64Str = base64.encode(bytes);
-      print(base64Str);
       operacao.statusCode = streamedResponse.statusCode;
       if (streamedResponse.statusCode == 200) {
         if (responseToString.isEmpty) {
