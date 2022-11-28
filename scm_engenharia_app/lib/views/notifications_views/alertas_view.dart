@@ -53,19 +53,29 @@ class RecibosState extends State<AlertasView> {
     try {
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none)
       {
-        throw ('Verifique sua conexão com a internet e tente novamente.');
+        GlobalScaffold.instance.navigatorKey.currentState?.pushNamed(routes.erroInternetRoute,).then((value) async {
+          if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+            GlobalScaffold.instance.navigatorKey.currentState?.pushNamedAndRemoveUntil(routes.splashScreenRoute, (Route<dynamic> route) => false);
+          }
+          else
+          {
+            onInc();
+          }
+        });
       }
       else {
         //onGetListUsuarios();
       }
     } catch (error) {
-      GlobalScaffold.map['view'] = 'UsuariosView';
-      GlobalScaffold.map['error'] = error.toString();
+      GlobalScaffold.map = {
+        'view': routes.alertasRoute,
+        'error': error
+      };
       Navigator.of(context).pushNamed(
         routes.errorInformationRoute,
         arguments: GlobalScaffold.map,
       ).then((value) {
-        onInc();
+        GlobalScaffold.instance.navigatorKey.currentState?.pushNamedAndRemoveUntil(routes.splashScreenRoute, (Route<dynamic> route) => false);
       });
     }
   }

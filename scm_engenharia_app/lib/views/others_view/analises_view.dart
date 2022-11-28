@@ -57,20 +57,28 @@ class AnalisesState extends State<AnalisesView> {
         GlobalScaffold.instance.navigatorKey.currentState?.pushNamed(
           routes.erroInternetRoute,
         ).then((value) async {
-          onInc();
+          if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+            GlobalScaffold.instance.navigatorKey.currentState?.pushNamedAndRemoveUntil(routes.splashScreenRoute, (Route<dynamic> route) => false);
+          }
+          else
+          {
+            onInc();
+          }
         });
       }
       else {
         //onGetListUsuarios();
       }
     } catch (error) {
-      GlobalScaffold.map['view'] = routes.analiseRoute;
-      GlobalScaffold.map['error'] = error.toString();
+      GlobalScaffold.map = {
+        'view': routes.alertasRoute,
+        'error': error
+      };
       Navigator.of(context).pushNamed(
         routes.errorInformationRoute,
         arguments: GlobalScaffold.map,
       ).then((value) {
-        onInc();
+        GlobalScaffold.instance.navigatorKey.currentState?.pushNamedAndRemoveUntil(routes.splashScreenRoute, (Route<dynamic> route) => false);
       });
     }
   }

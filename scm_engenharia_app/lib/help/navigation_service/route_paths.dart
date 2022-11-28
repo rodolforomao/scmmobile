@@ -3,9 +3,6 @@ const String listSiciSentRoute = 'lista-sici-enviada';
 const String physicalDistributionQuantitativeServiceRoute = 'serviço-distribuição-quantitativa-física';
 const String siciFustFormRoute = 'sici-fust-form';
 
-//Visualizações de notificação -------------------------------------------------------------------------------------------
-const String notificationRoute = 'notificação';
-const String notificationsRoute = 'notificações';
 
 //Visualizações de configurações------------------------------------------------------------------------------------------
 const String environmentVariableRoute = 'variável-de-ambiente';
@@ -31,14 +28,15 @@ const String recibosDocumentosRoute = 'recibos-documentos';
 const String formularioSiciFustRoute = 'formulario-sici-fust';
 const String lancamentoSiciFustRoute = 'lancamento-sici-fust';
 const String lancamentosRoute = 'lancamentos';
-
+//Notificações ------------------------------------------------------------------------------------------------------------
+const String notificacoesRoute = 'notificações';
+const String notificacaoRoute = 'notificação';
 //outros ------------------------------------------------------------------------------------------------------------------
 const String analiseRoute = 'análise';
 const String alertasRoute = 'alertas';
 const String documentosRoute = 'documentos';
 const String empresasRoute = 'empresas';
 const String usuarioRoute = 'usuário';
-const String notificacoesRoute = 'notificações';
 const String recibosRoute = 'recibos';
 const String erroInternetRoute = 'erro-internet';
 

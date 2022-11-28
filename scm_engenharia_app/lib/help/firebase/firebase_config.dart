@@ -18,12 +18,12 @@ class DefaultFirebaseConfig {
     } else if (Platform.isIOS || Platform.isMacOS) {
       // iOS and MacOS
       return const FirebaseOptions(
-        appId: '1:589397434520:ios:9fea924cbc6113584af0ed',
-        apiKey: 'AIzaSyA8jxsFWpmphsew4r6Z593UECkdzEKU0nI',
-        projectId: 'geap-portal-prestador',
-        messagingSenderId: '589397434520',
-        iosBundleId: 'br.org.geap.portal.prestador',
-        iosClientId: 'com.googleusercontent.apps.589397434520-k4nsjt1hr6e691gnsq45eh96tqigrfi8',
+        appId: '1:903936319018:ios:26acf1d4d3e67df3186d53',
+        apiKey: 'AIzaSyDUN99Krs9w0Tb9cZ3JqZhuqJL5fwOVhws',
+        projectId: 'br.com.scmengenharia.dici',
+        messagingSenderId: '903936319018',
+        iosBundleId: 'br.com.scmengenharia.dici',
+        iosClientId: 'com.googleusercontent.apps.903936319018-a086hdddnoasbpd2bmphp8r7c8p47ha7',
       );
     } else {
       // Android

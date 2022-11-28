@@ -15,6 +15,21 @@ For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
+Adicione a variável do Flutter conforme você instalou a SDK no C:
+Ex: C:\flutter\bin
+Correção: Meu Computado > Propriedade >
+Configuração avançada do sistema >
+Variáveis de Ambiente >
+Selecione a variavel Patch >
+Editar >
+## Building Android
+
+Adicionar  key.properties
+Em [project]/android
+
+Mapear key.properties -  Ex: D:\GitHub\scmmobile\build_android\ScmEngenharia.jks
+
+##
 
 ## Building Windows
 -- Building Windows (error Nuget.exe not found, trying to download or use cached version.)

@@ -65,26 +65,29 @@ class NotificationState extends State<NotificacaoDetalhesView> {
     try {
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none)
       {
-        GlobalScaffold.map['view'] = 'NotificationView';
-        GlobalScaffold.map['error'] = 'Verifique sua conexão com a internet e tente novamente.';
-        Navigator.of(context).pushNamed(
-          routes.errorInformationRoute,
-          arguments: GlobalScaffold.map,
-        ).then((value) {
-          onInc();
+        GlobalScaffold.instance.navigatorKey.currentState?.pushNamed(routes.erroInternetRoute,).then((value) async {
+          if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+            GlobalScaffold.instance.navigatorKey.currentState?.pushNamedAndRemoveUntil(routes.splashScreenRoute, (Route<dynamic> route) => false);
+          }
+          else
+          {
+            onInc();
+          }
         });
       }
       else {
         onGetNotificationById();
       }
     } catch (error) {
-      GlobalScaffold.map['view'] = 'NotificationView';
-      GlobalScaffold.map['error'] = 'Verifique sua conexão com a internet e tente novamente.';
+      GlobalScaffold.map = {
+        'view': routes.notificacaoRoute,
+        'error': error
+      };
       Navigator.of(context).pushNamed(
         routes.errorInformationRoute,
         arguments: GlobalScaffold.map,
       ).then((value) {
-        onInc();
+        GlobalScaffold.instance.navigatorKey.currentState?.pushNamedAndRemoveUntil(routes.splashScreenRoute, (Route<dynamic> route) => false);
       });
     }
   }
