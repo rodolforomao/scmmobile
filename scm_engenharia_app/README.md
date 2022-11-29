@@ -42,3 +42,6 @@ https://www.nuget.org/downloads
 
 3- Restart Android Studio
 ##
+
+
+pod install --repo-update
