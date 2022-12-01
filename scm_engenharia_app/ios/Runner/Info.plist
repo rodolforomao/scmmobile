@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Scm Engenharia App</string>
+	<string>Scm&#Engenharia</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -47,5 +47,18 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>UIBackgroundModes</key>
+    <array>
+        <string>fetch</string>
+    	<string>remote-notification</string>
+    </array>
+	<key>NSPhotoLibraryUsageDescription</key>
+    <string>O app solicita dados de acesso ao armazenamento para que você possa enviar anexos para a Scm Engenharia.</string>
+    <key>NSCameraUsageDescription</key>
+    <string>O app Geap solicita dados de acesso a câmera para que você possa enviar anexos para a Scm Engenharia.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+    <string>Este aplicativo precisa de acesso ao local quando aberto.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>Este aplicativo precisa de acesso à localização quando estiver em segundo plano.</string>
 </dict>
 </plist>
