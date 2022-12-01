@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show TargetPlatform, defaultTargetPlatform, kIsWeb;
 import 'package:flutter/scheduler.dart';
@@ -69,7 +68,7 @@ class SplashScreenState extends State<SplashScreenView> {
               } else {
                 if (defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.macOS || defaultTargetPlatform == TargetPlatform.android) {
                   SchedulerBinding.instance.addPostFrameCallback((_) async {
-                    await FirebaseAnalytics.instance.setUserId(id: userResul.cpf);
+                    //await FirebaseAnalytics.instance.setUserId(id: userResul.cpf);
                   });
                 }
                 global_user_logged.globalUserLogged = userResul;
