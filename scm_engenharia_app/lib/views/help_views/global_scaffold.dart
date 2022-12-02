@@ -302,46 +302,57 @@ class GlobalScaffold {
   }
 
   onToastPerformingOperation(String mensagem) {
+    onHideCurrentSnackBar();
     FocusScope.of(navigatorKey.currentState!.context).requestFocus(FocusNode());
-    final snackBar = SnackBar(
-      width: 600,
-      duration: const Duration(minutes: 2),
-      onVisible: () {},
-      content: Container(
-        constraints: const BoxConstraints(
-          minWidth: 70,
-          maxWidth: 600,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            const SizedBox(
-              height: 30.0,
-              width: 30.0,
-              child: CircularProgressIndicator(
-                valueColor:  AlwaysStoppedAnimation<Color>(Color(0xff093d6c)),
+    messangerKey.currentState!.showSnackBar( SnackBar(
+        width: 700,
+        behavior: SnackBarBehavior.floating,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10))),
+        content: Container(
+          constraints: const BoxConstraints(
+            minWidth: 70,
+            maxWidth: 600,
+          ),
+          decoration: BoxDecoration(
+            color: const Color(0xffffffff),
+            borderRadius: BorderRadius.circular(10.0),
+            border: Border.all(color: Color(0xffef7d00),
+              width: 0.5,
+            ),
+          ),
+          padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10 , top: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              const SizedBox(
+                height: 30.0,
+                width: 30.0,
+                child: CircularProgressIndicator(
+                  valueColor:  AlwaysStoppedAnimation<Color>(Color(0xffef7d00)),
+                ),
               ),
-            ),
-            const SizedBox(
-              width: 20.0,
-            ),
-            Flexible(
-              child: Text(
-                mensagem,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
-                softWrap: false,
-                textAlign: TextAlign.center,
-                style: Theme.of(navigatorKey.currentState!.context).textTheme.headline4?.copyWith(fontSize: 20),
+              const SizedBox(
+                width: 15.0,
               ),
-            ),
-          ],
-        ),
-      ),
-    );
-    messangerKey.currentState!.showSnackBar(snackBar);
+              Flexible(
+                child: Text(
+                  mensagem,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 3,
+                  softWrap: false,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(navigatorKey.currentState!.context).textTheme.headline4?.copyWith(fontSize: 13, color: const Color(0xff858585),),
+                ),
+              ),
+            ],
+          ),
+        )
+    ));
   }
 
   onRedirectUri(Uri url) async {

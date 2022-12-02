@@ -58,12 +58,15 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
   onAdd() async {
     try {
       InputDadosEmServicosModel sInput =   InputDadosEmServicosModel();
-      sInput.idLancamento = widget.sInputDadosEmServicos!.idLancamento;
+      if( widget.sInputDadosEmServicos != null)
+        {
+          sInput.idLancamento = widget.sInputDadosEmServicos!.idLancamento;
+        }
       if(valueCodIbge.descricao != 'SELECIONE...') {
         sInput.codIbge = valueCodIbge.descricao;
       }
       if(ufValue.uf != 'SELECIONE...') {
-        sInput.uf = customerTypeValue.descricao;
+        sInput.uf = ufValue.uf;
       }
       if(customerTypeValue.descricao != 'SELECIONE...') {
         sInput.tipoCliente = customerTypeValue.descricao;
@@ -72,16 +75,17 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
         sInput.tipoAtendimento = serviceTypeValue.descricao;
       }
       if(mediumAccessTypeValue.descricao != 'SELECIONE...') {
-        sInput.tipoAcesso = productTypeValue.descricao;
+        sInput.tipoAcesso = mediumAccessTypeValue.descricao;
       }
       if( technologyTypeValue.descricao != 'SELECIONE...') {
-        sInput.tecnologia = productTypeValue.descricao;
+        sInput.tecnologia = technologyTypeValue.descricao;
       }
       if(productTypeValue.descricao != 'SELECIONE...') {
         sInput.tipoProduto = productTypeValue.descricao;
       }
       sInput.velocidade = txtControllerVelocity.text;
       sInput.quantidadeAcesso = txtControllerAccesses.text;
+      Navigator.pop(context, sInput);
     } catch (error) {
       OnAlertError(error.toString());
     }

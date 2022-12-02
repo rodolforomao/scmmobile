@@ -16,7 +16,7 @@ import '../../thema/app_thema.dart';
 import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
 import 'dados_em_servicos_view.dart';
-
+import '../../help/navigation_service/route_paths.dart' as routes;
 
 class FormularioSiciFustView extends StatefulWidget {
   InputSiciFileModel? siciFileModel;
@@ -121,20 +121,16 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
       inputSiciFustForm.cofins = txtControllerCofins.text;
       inputSiciFustForm.cofinsPorc = txtControllerCofinsPorc.text;
       inputSiciFustForm.observacoes = txtControllerGeneralObservations.text;
-      if (inputSiciFustForm.dadosEmServicos!.length == 0) {
-        throw ("Distribuição do quantitativo de acessos físicos em serviço é obrigatório,favor adicionar.");
+      if (inputSiciFustForm.dadosEmServicos!.isEmpty) {
+        throw ('Distribuição do quantitativo de acessos físicos em serviço é obrigatório,favor adicionar.');
       }
       else
         {
           GlobalScaffold.instance.onToastPerformingOperation('Realizando operação');
-          TbFormSiciFust formSiciFust;
-          if(inputSiciFustForm.idFichaSiciApp!.isEmpty)
+          var formSiciFust = TbFormSiciFust(ObjectId(),inputSiciFustForm.id ?? "",jsonEncode(inputSiciFustForm.toJson() ?? ""));
+          if(inputSiciFustForm.idFichaSiciApp!.isNotEmpty)
             {
-              formSiciFust = TbFormSiciFust(ObjectId(),inputSiciFustForm.id!,jsonEncode(inputSiciFustForm.toJson()));
-            }
-          else
-            {
-              formSiciFust = TbFormSiciFust(ObjectId.fromHexString(inputSiciFustForm.idFichaSiciApp!),inputSiciFustForm.id!,jsonEncode(inputSiciFustForm.toJson()));
+              formSiciFust = TbFormSiciFust(ObjectId.fromHexString(inputSiciFustForm.idFichaSiciApp!),inputSiciFustForm.id ?? "",jsonEncode(inputSiciFustForm.toJson() ?? ""));
             }
           Operation respFormSiciFust = await AppScmEngenhariaMobileBll.instance.onSaveUpdateFormSiciFust(inputSiciFustForm.idFichaSiciApp!,formSiciFust).whenComplete(() => GlobalScaffold.instance.onHideCurrentSnackBar());
           if (respFormSiciFust.erro) {
@@ -142,10 +138,8 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
           } else if (respFormSiciFust.result == null) {
             throw respFormSiciFust.message!;
           } else {
-            GlobalScaffold.instance.onHideCurrentSnackBar();
-            TbFormSiciFust repTbFormSiciFust = respFormSiciFust.result as TbFormSiciFust;
-            inputSiciFustForm.idFichaSiciApp = repTbFormSiciFust.idFichaSiciApp.toString();
-            OnAlertSuccess(respFormSiciFust.message);
+            GlobalScaffold.instance.onToastSuccess(respFormSiciFust.message!);
+            GlobalScaffold.instance.navigatorKey.currentState?.pushNamedAndRemoveUntil(routes.menuNavigationRoute, (Route<dynamic> route) => false);
           }
         }
     } catch (error) {
@@ -176,7 +170,7 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
     }
   }
 
-  Inc() async {
+  onInc() async {
     try {
       Uf = await Components.OnlistaEstados() as List<String>;
       setState(() {
@@ -228,7 +222,7 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
   void initState() {
     super.initState();
     txtControllerReferencePeriod.text =  DateFormat('dd/MM/yyyy').format(DateTime(DateTime.now().year, DateTime.now().month - 1));
-    Inc();
+    onInc();
   }
 
   int currentStep = 0;
@@ -269,101 +263,97 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
           backgroundColor: Colors.transparent,
         ),
       ),
-      body: Align( alignment: Alignment.topCenter,child: Container(
+      body: Align( alignment: Alignment.topCenter ,child: Container(
         alignment: Alignment.topCenter,
         constraints:  const BoxConstraints(
-            minHeight: 500,
-            maxWidth: 1000
+          maxWidth: 1000,
         ),
         child: GlobalView.viewRenderSingleChildScrollView(maxHeight,Stepper(
-        controlsBuilder: (BuildContext context, ControlsDetails details)
-        {
-          return Row(
-            children: <Widget>[
-              Visibility(
-                visible: currentStep > 0 ? true : false,
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                    backgroundColor: const Color(0xff888888),
-                    padding: const EdgeInsets.fromLTRB(5.0, 2.0, 5.0, 3.0),
-                    minimumSize: const Size(130, 43),
-                    maximumSize: const Size(130, 43),
-                    textStyle: const TextStyle(
-                      color:  Color(0xffFFFFFF),
-                      fontSize: 13,
+          physics: const ClampingScrollPhysics(),
+          controlsBuilder: (BuildContext context, ControlsDetails details)
+          {
+            return Row(
+              children: <Widget>[
+                Visibility(
+                  visible: currentStep > 0 ? true : false,
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: const Color(0xff888888),
+                      padding: const EdgeInsets.fromLTRB(5.0, 2.0, 5.0, 3.0),
+                      minimumSize: const Size(130, 43),
+                      maximumSize: const Size(130, 43),
+                      textStyle: const TextStyle(
+                        color:  Color(0xffFFFFFF),
+                        fontSize: 13,
+                      ),
                     ),
-                  ),
-                  onPressed: () async {
-                    setState(() {
-                      switch (currentStep) {
-                        case 2:
-                          currentStep = 1;
-                          break;
-                        case 1:
-                          currentStep = 0;
-                          break;
-                      }
-                    });
-                  },
-                  child:  const Text(
-                    'Anterior',
-                    style: TextStyle(
-                      color:  Color(0xffFFFFFF),
-                      fontSize: 13,),),
-                ),
-              ),
-              const Padding(
-                padding:  EdgeInsets.all(10),
-              ),
-              Visibility(
-                visible: currentStep == 2 ? false : true,
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                    backgroundColor: const Color(0xffef7d00),
-                    padding: const EdgeInsets.fromLTRB(15.0, 2.0, 15.0, 2.0),
-                    minimumSize: const Size(130, 43),
-                    maximumSize: const Size(130, 43),
-                    textStyle: const TextStyle(
-                      color:  Color(0xffFFFFFF),
-                      fontSize: 13,
-                    ),
-                  ),
-                  onPressed: () async {
-                    setState(() {
-                      switch (currentStep) {
-                        case 0:
-                          currentStep = 1;
-                          break;
-                        case 1:
-                          currentStep = 2;
-                          break;
-                      }
-                    });
-                  },
-                  child: const Text('Próximo', style: TextStyle(color:  Color(0xffFFFFFF), fontSize: 13,),
+                    onPressed: () async {
+                      setState(() {
+                        switch (currentStep) {
+                          case 2:
+                            currentStep = 1;
+                            break;
+                          case 1:
+                            currentStep = 0;
+                            break;
+                        }
+                      });
+                    },
+                    child:  const Text(
+                      'Anterior',
+                      style: TextStyle(
+                        color:  Color(0xffFFFFFF),
+                        fontSize: 13,),),
                   ),
                 ),
+                const Padding(
+                  padding:  EdgeInsets.all(10),
+                ),
+                Visibility(
+                  visible: currentStep == 2 ? false : true,
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: const Color(0xffef7d00),
+                      padding: const EdgeInsets.fromLTRB(15.0, 2.0, 15.0, 2.0),
+                      minimumSize: const Size(130, 43),
+                      maximumSize: const Size(130, 43),
+                      textStyle: const TextStyle(
+                        color:  Color(0xffFFFFFF),
+                        fontSize: 13,
+                      ),
+                    ),
+                    onPressed: () async {
+                      setState(() {
+                        switch (currentStep) {
+                          case 0:
+                            currentStep = 1;
+                            break;
+                          case 1:
+                            currentStep = 2;
+                            break;
+                        }
+                      });
+                    },
+                    child: const Text('Próximo', style: TextStyle(color:  Color(0xffFFFFFF), fontSize: 13,),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+          steps: <Step>[
+            Step(
+              title: SizedBox(
+                width: MediaQuery.of(context).size.width - 90,
+                child:  Text(
+                  'informações da empresa',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: false,
+                  style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 17),
+                ),
               ),
-            ],
-          );
-        },
-        steps: <Step>[
-          Step(
-            title: SizedBox(
-              width: MediaQuery.of(context).size.width - 90,
-              child:  Text(
-                'informações da empresa',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                softWrap: false,
-                style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 17),
-              ),
-            ),
-            content:  Container(
-              constraints: const BoxConstraints(
-                maxWidth: 1000,
-              ),
-              child: GlobalView.viewResponsiveGridTextField(context,5,600,[
+              content: GlobalView.viewResponsiveGridTextField(context,5,600,[
                 TextField(
                   onTap: () {
                     FocusScope.of(context).requestFocus(FocusNode());
@@ -485,26 +475,21 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                   maxLength: 20,
                 ),
               ].toList()),
+              state: currentStep > 0 ? StepState.complete : StepState.disabled,
+              isActive: true,
             ),
-            state: currentStep > 0 ? StepState.complete : StepState.disabled,
-            isActive: true,
-          ),
-          Step(
-            title: SizedBox(
-              width: MediaQuery.of(context).size.width - 90,
-              child:  Text(
-                'informações financeiras',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                softWrap: false,
-                style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
+            Step(
+              title: SizedBox(
+                width: MediaQuery.of(context).size.width - 90,
+                child:  Text(
+                  'informações financeiras',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: false,
+                  style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
+                ),
               ),
-            ),
-            content: Container(
-              constraints: const BoxConstraints(
-                maxWidth: 1000,
-              ),
-              child:  GlobalView.viewResponsiveGridTextField(context,7,600,[
+              content:GlobalView.viewResponsiveGridTextField(context,7,600,[
                 TextField(
                   keyboardType: TextInputType.number,
                   controller: txtControllerGrossRevenue,
@@ -820,25 +805,23 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                   maxLength: 1500,
                 ),
               ].toList()),
+              state: currentStep > 1
+                  ? StepState.complete
+                  : StepState.disabled,
+              isActive: true,
             ),
-            state: currentStep > 1
-                ? StepState.complete
-                : StepState.disabled,
-            isActive: true,
-          ),
-          Step(
-            title: SizedBox(
-              width: MediaQuery.of(context).size.width - 90,
-              child:  Text(
-                'dados em serviços',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                softWrap: false,
-                style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
+            Step(
+              title: SizedBox(
+                width: MediaQuery.of(context).size.width - 90,
+                child:  Text(
+                  'dados em serviços',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: false,
+                  style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
+                ),
               ),
-            ),
-            content: Container(
-              child: Column(
+              content: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -859,12 +842,9 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                     ),),
                     onPressed: () async {
                       FocusScope.of(context).requestFocus(FocusNode());
-                      Navigator.push(
-                          context,
-                          CupertinoPageRoute<InputDadosEmServicosModel>(
-                              fullscreenDialog: true, builder: (BuildContext context) => DadosEmServicosView(sInputDadosEmServicos: null))).then((value) {
+                      Navigator.push(context, CupertinoPageRoute<InputDadosEmServicosModel>(fullscreenDialog: true, builder: (BuildContext context) => DadosEmServicosView(sInputDadosEmServicos: null))).then((value) {
                         if (value != null) {
-                          if(inputSiciFustForm.dadosEmServicos!.isEmpty)
+                          if(inputSiciFustForm.dadosEmServicos == null)
                           {
                             inputSiciFustForm.dadosEmServicos = [];
                             inputSiciFustForm.dadosEmServicos!.add(value);
@@ -877,7 +857,7 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                       });
                     },
                   ),),),
-                  SizedBox(height: 30.0),
+                  const SizedBox(height: 30.0),
                   Builder(
                     builder: (BuildContext context) {
                       return ListView.builder(
@@ -890,49 +870,47 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                       );
                     },
                   ),
-                  SizedBox(height: 20.0),
+                  const SizedBox(height: 20.0),
                 ],
               ),
+              isActive: true,
             ),
-            isActive: true,
-          ),
-        ],
-        type:  StepperType.vertical,
-        currentStep: currentStep,
-        onStepTapped: (step) {
-          setState(() {
-            currentStep = step;
-          });
-        },
-        elevation: 8,
-        onStepContinue: () {
-          setState(() {
-            if (currentStep < spr.length - 1) {
-              currentStep = currentStep + 1;
-            } else {
-              currentStep = 0;
-            }
-          });
-        },
-        onStepCancel: () {
-          setState(() {
-            if (currentStep > 0) {
-              currentStep = currentStep - 1;
-            } else {
-              currentStep = 0;
-            }
-          });
-        },
-      ),context),),),
+          ],
+          type:  StepperType.vertical,
+          currentStep: currentStep,
+          onStepTapped: (step) {
+            setState(() {
+              currentStep = step;
+            });
+          },
+          elevation: 8,
+          onStepContinue: () {
+            setState(() {
+              if (currentStep < spr.length - 1) {
+                currentStep = currentStep + 1;
+              } else {
+                currentStep = 0;
+              }
+            });
+          },
+          onStepCancel: () {
+            setState(() {
+              if (currentStep > 0) {
+                currentStep = currentStep - 1;
+              } else {
+                currentStep = 0;
+              }
+            });
+          },
+        ),context),),),
     );
   }
-
 
   Card dataInServicesCard(BuildContext context, int index) => Card(
     elevation: 0.9,
     child: Container(
         alignment: Alignment.topLeft,
-        height: 470,
+        height: 475,
         constraints: const BoxConstraints(
           minWidth: 200,
           maxWidth: 600,
@@ -1030,7 +1008,7 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                   overflow: TextOverflow.ellipsis,
                   text: TextSpan(children: [
                     const TextSpan(
-                      text: 'Tipo acesso' + "\n ",
+                      text: 'Tipo acesso' "\n ",
                       style: TextStyle(
                         fontWeight: FontWeight.normal,
                         color: Colors.black,
@@ -1105,7 +1083,7 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                   overflow: TextOverflow.ellipsis,
                   text: TextSpan(children: [
                     const TextSpan(
-                      text: 'Velocidade' + "\n ",
+                      text: 'Velocidade' "\n ",
                       style: TextStyle(
                         fontWeight: FontWeight.normal,
                         color: Colors.black,
@@ -1123,13 +1101,14 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                   ])),
             ),),
             const Divider(),
-            if (inputSiciFustForm.idFichaSiciApp!.isNotEmpty) ...[
-              SizedBox(
-                height: 40,
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
+            const SizedBox(height: 10.0),
+            SizedBox(
+              height: 40,
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  if (inputSiciFustForm.idFichaSiciApp!.isNotEmpty) ...[
                     TextButton.icon(
                       style: TextButton.styleFrom(
                         minimumSize: const Size(150, 40),
@@ -1159,147 +1138,152 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                             CupertinoPageRoute<InputDadosEmServicosModel>(
                                 fullscreenDialog: true, builder: (BuildContext context) => DadosEmServicosView(sInputDadosEmServicos: inputSiciFustForm.dadosEmServicos![index]))).then((value) {
                           if (value != null) {
-
+                            setState(() {
+                              inputSiciFustForm.dadosEmServicos!.insert(index, value);
+                            });
+                            //int index =  inputSiciFustForm.dadosEmServicos!.indexWhere((i) => i.idSiciFile == value.idSiciFile);
+                            //inputSiciFustForm.dadosEmServicos!.removeAt(index);
                           }
                         });
                       },
                     ),
                     const SizedBox(width: 10.0),
-                    TextButton.icon(
-                      style: TextButton.styleFrom(
-                        minimumSize: const Size(150, 40),
-                        maximumSize: const Size(150, 40),
-                        backgroundColor: Colors.red,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-                      ),
-                      icon: const Icon(
-                        Icons.delete_outline,
-                        color: Colors.white,
-                      ),
-                      //`Icon` to display
-                      label: const Text('Remover',
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        softWrap: false,
-                        style:  TextStyle(
-                            color: Colors.white
-                        ),
-                      ),
-                      //`Text` to display
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (BuildContext context) {
-                            return Dialog(
-                                child: Container(
-                                  padding: const EdgeInsets.all(25.0),
-                                  constraints: const BoxConstraints(
-                                    minWidth: 70,
-                                    maxWidth: 450,
-                                  ),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Container(
-                                        margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
-                                        height: 50.0,
-                                        child:  Text(
-                                          'Deseja realmente remover ?',
-                                          textAlign: TextAlign.start,
-                                          softWrap: false,
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: Theme.of(GlobalScaffold.instance.navigatorKey.currentContext!).textTheme.headline4?.copyWith(fontSize: 15, color: const Color(0xff737373),fontWeight: FontWeight.w100,),
-                                        ),
-                                      ),
-                                      Container(
-                                        constraints: const BoxConstraints(
-                                          maxWidth: 400,
-                                        ),
-                                        margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: <Widget>[
-                                            Expanded(
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(left: 14.0),
-                                                child:  OutlinedButton(
-                                                  style: TextButton.styleFrom(
-                                                    backgroundColor: const Color(0xFFffffff),
-                                                    side: const BorderSide(
-                                                      color: Color(0xffef7d00), //Color of the border
-                                                    ),
-                                                    minimumSize: const Size(130, 43),
-                                                    maximumSize: const Size(130, 43),
-                                                    textStyle: const TextStyle(
-                                                      color:  Color(0xffFFFFFF),
-                                                      fontSize: 15,
-                                                    ),
-                                                  ),
-                                                  onPressed: () async {
-                                                    try {
-
-                                                    } catch (error) {
-                                                      GlobalScaffold.instance.onToastError(error.toString());
-                                                    }
-                                                  },
-                                                  child: const Text('  Sim  ',
-                                                      style: TextStyle(
-                                                        color: Color(0xffef7d00),
-                                                      )),
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(left: 14.0),
-                                                child: OutlinedButton(
-                                                  style: TextButton.styleFrom(
-                                                    minimumSize: const Size(130, 43),
-                                                    maximumSize: const Size(130, 43),
-                                                    textStyle: const TextStyle(
-                                                      color:  Color(0xffFFFFFF),
-                                                      fontSize: 15,
-                                                    ),
-                                                  ),
-                                                  onPressed: () async {
-                                                    try {
-                                                      Navigator.pop(context);
-                                                    } catch (error) {
-                                                      GlobalScaffold.instance.onToastError(error.toString());
-                                                    }
-                                                  },
-                                                  child: const Text('  Não  ',
-                                                      style: TextStyle(
-                                                        color: Color(0xFFffffff),
-                                                      )),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ));
-                          },
-                        );
-                      },
-                    ),
-                    const SizedBox(width: 10.0),
                   ],
-                ),
+                  TextButton.icon(
+                    style: TextButton.styleFrom(
+                      minimumSize: const Size(150, 40),
+                      maximumSize: const Size(150, 40),
+                      backgroundColor: Colors.red,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                    ),
+                    icon: const Icon(
+                      Icons.delete_outline,
+                      color: Colors.white,
+                    ),
+                    //`Icon` to display
+                    label: const Text('Remover',
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      softWrap: false,
+                      style:  TextStyle(
+                          color: Colors.white
+                      ),
+                    ),
+                    //`Text` to display
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return Dialog(
+                              child: Container(
+                                padding: const EdgeInsets.all(25.0),
+                                constraints: const BoxConstraints(
+                                  minWidth: 70,
+                                  maxWidth: 450,
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
+                                      height: 50.0,
+                                      child:  Text(
+                                        'Deseja realmente remover ?',
+                                        textAlign: TextAlign.start,
+                                        softWrap: false,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: Theme.of(GlobalScaffold.instance.navigatorKey.currentContext!).textTheme.headline4?.copyWith(fontSize: 15, color: const Color(0xff737373),fontWeight: FontWeight.w100,),
+                                      ),
+                                    ),
+                                    Container(
+                                      constraints: const BoxConstraints(
+                                        maxWidth: 400,
+                                      ),
+                                      margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: <Widget>[
+                                          Expanded(
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(left: 14.0),
+                                              child:  OutlinedButton(
+                                                style: TextButton.styleFrom(
+                                                  backgroundColor: const Color(0xFFffffff),
+                                                  side: const BorderSide(
+                                                    color: Color(0xffef7d00), //Color of the border
+                                                  ),
+                                                  minimumSize: const Size(130, 43),
+                                                  maximumSize: const Size(130, 43),
+                                                  textStyle: const TextStyle(
+                                                    color:  Color(0xffFFFFFF),
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                                onPressed: () async {
+                                                  try {
+                                                    setState(() {
+                                                      inputSiciFustForm.dadosEmServicos!.removeAt(index);
+                                                    });
+                                                  } catch (error) {
+                                                    GlobalScaffold.instance.onToastError(error.toString());
+                                                  }
+                                                },
+                                                child: const Text('  Sim  ',
+                                                    style: TextStyle(
+                                                      color: Color(0xffef7d00),
+                                                    )),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(left: 14.0),
+                                              child: OutlinedButton(
+                                                style: TextButton.styleFrom(
+                                                  minimumSize: const Size(130, 43),
+                                                  maximumSize: const Size(130, 43),
+                                                  textStyle: const TextStyle(
+                                                    color:  Color(0xffFFFFFF),
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                                onPressed: () async {
+                                                  try {
+                                                    Navigator.pop(context);
+                                                  } catch (error) {
+                                                    GlobalScaffold.instance.onToastError(error.toString());
+                                                  }
+                                                },
+                                                child: const Text('  Não  ',
+                                                    style: TextStyle(
+                                                      color: Color(0xFFffffff),
+                                                    )),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ));
+                        },
+                      );
+                    },
+                  ),
+                  const SizedBox(width: 10.0),
+                ],
               ),
-            ]
-
-          ],
+            ),
+            ],
         )),
   );
 }

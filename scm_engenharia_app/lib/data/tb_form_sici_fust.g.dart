@@ -9,8 +9,8 @@ part of 'tb_form_sici_fust.dart';
 class TbFormSiciFust extends _TbFormSiciFust  with RealmEntity, RealmObjectBase, RealmObject {
   TbFormSiciFust(
       ObjectId idFormSiciFustApp,
-      String idRegistro,
-      String result,
+      String? idRegistro,
+      String? result,
       ) {
     RealmObjectBase.set(this, 'idFormSiciFustApp', idFormSiciFustApp);
     RealmObjectBase.set(this, 'idRegistro', idRegistro);
