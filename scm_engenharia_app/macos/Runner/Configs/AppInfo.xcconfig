@@ -8,7 +8,7 @@
 PRODUCT_NAME = scm_engenharia_app
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = br.com.scmEngenhariaApp
+PRODUCT_BUNDLE_IDENTIFIER = br.com.scmengenharia.dici.scmEngenhariaApp
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2020 br.com. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2022 br.com.scmengenharia.dici. All rights reserved.

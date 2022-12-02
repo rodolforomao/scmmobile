@@ -1,0 +1,3 @@
+storePassword=ScmEngenhariaMobile4520
+keyPassword=ScmEngenhariaMobile4520
+keyAlias=ScmEngenhariaMobile

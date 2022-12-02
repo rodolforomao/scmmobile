@@ -1,34 +1,33 @@
 {
   "project_info": {
-    "project_number": "994852940370",
-    "firebase_url": "https://scm-mobile-2c959.firebaseio.com",
-    "project_id": "scm-mobile-2c959",
-    "storage_bucket": "scm-mobile-2c959.appspot.com"
+    "project_number": "903936319018",
+    "project_id": "app-scm",
+    "storage_bucket": "app-scm.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:994852940370:android:f58c0d6d55f10c8b544d8b",
+        "mobilesdk_app_id": "1:903936319018:android:6561a6cc93335c71186d53",
         "android_client_info": {
-          "package_name": "br.com.scmengenharia.scmapp"
+          "package_name": "br.com.scmengenharia.dici"
         }
       },
       "oauth_client": [
         {
-          "client_id": "994852940370-i6ak7m3f29gjliqs8f39jj5vdh1vd3ri.apps.googleusercontent.com",
+          "client_id": "903936319018-5mo9ndlsgcst0eb4uia3vf451tukatb6.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyChftqnbwv0-g6nL7y8v1JyR-HYToMmPLw"
+          "current_key": "AIzaSyCuh0iIHS7FQbk4ynaH6Ia4NEugFqX9uP4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "994852940370-i6ak7m3f29gjliqs8f39jj5vdh1vd3ri.apps.googleusercontent.com",
+              "client_id": "903936319018-5mo9ndlsgcst0eb4uia3vf451tukatb6.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
