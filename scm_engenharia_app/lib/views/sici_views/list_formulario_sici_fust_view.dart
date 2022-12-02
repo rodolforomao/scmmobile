@@ -35,8 +35,8 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
         throw ('Verifique sua conexão com a internet e tente novamente.');
       } else {
-        OnRealizandoOperacao('Web: Buscando lançamentos',context);
-        Operation resultRest = await ServicoMobileService.onRecoversSiciReleases().whenComplete(() => OnRealizandoOperacao('',context));
+        GlobalScaffold.instance.onToastPerformingOperation('Web: Buscando lançamentos ... ');
+        Operation resultRest = await ServicoMobileService.onRecoversSiciReleases().whenComplete(() => GlobalScaffold.instance.onHideCurrentSnackBar());
         if (resultRest.erro) {
           throw (resultRest.message!);
         } else {
@@ -70,6 +70,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
 
   onRestDb() async {
     try {
+      setState(() {statusView = TypeView.viewLoading;});
       Operation respUser = await AppScmEngenhariaMobileBll.instance.onSelectFormSiciFustAll();
       if (respUser.erro) {
         throw respUser.message!;
@@ -403,7 +404,6 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
           ),
           child: RefreshIndicator(
             onRefresh: () async {
-
 
             },
             child: ListView.builder(

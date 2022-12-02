@@ -196,13 +196,19 @@ class SelecionarMunicipioState extends State<SelecionarMunicipioView>  {
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                       text: TextSpan(children: [
-                        TextSpan(
+                          const TextSpan(
                           text: 'Código IBGE : ',
-                          style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
+                          style: TextStyle(
+                            fontSize: 17.0,
+                            color: Color(0xff333333),
+                          ),
                         ),
                         TextSpan(
                           text: listMunicipios[index].codIbge.toString(),
-                          style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 13),
+                          style: const TextStyle(
+                            fontSize: 15.0,
+                            color: Color(0xff333333),
+                          ),
                         ),
                       ])),
                   subtitle:RichText(
@@ -211,13 +217,19 @@ class SelecionarMunicipioState extends State<SelecionarMunicipioView>  {
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                       text: TextSpan(children: [
-                        TextSpan(
+                        const TextSpan(
                           text: 'Descrição : ',
-                          style: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 15),
+                          style: TextStyle(
+                            fontSize: 17.0,
+                            color: Color(0xff333333),
+                          ),
                         ),
                         TextSpan(
                           text: listMunicipios[index].descricao.toString(),
-                          style: Theme.of(context).textTheme.subtitle2?.copyWith(fontSize: 13),
+                          style: const TextStyle(
+                              fontSize: 15.0,
+                              color: Color(0xff333333),
+                            ),
                         ),
                       ])),
                   trailing: const Icon(Icons.keyboard_arrow_right, color: Color(0xFF545454), size: 30.0)),

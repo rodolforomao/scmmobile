@@ -65,7 +65,7 @@ dependencies:
   #Plugin firebase
   firebase_core: ^2.3.0 # ANDROID ,IOS, MACOS, WEB,
   firebase_crashlytics: ^3.0.6 # ANDROID ,IOS, MACOS
-  firebase_messaging: ^14.1.2  # ANDROID,IOS, MACOS, WEB
+  firebase_messaging: ^14.1.3  # ANDROID,IOS, MACOS, WEB
   firebase_analytics: ^10.0.6 # ANDROID,IOS,MACOS,WEB
 
   # realm

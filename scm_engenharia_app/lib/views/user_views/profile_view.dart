@@ -51,7 +51,6 @@ class ProfileState extends State<ProfileView> {
         ufModel = ufList!.where((c) => c.uf == global_user_logged.globalUserLogged!.uf).first;
         statusView = TypeView.viewRenderInformation;
       });
-
     } catch (error) {
       OnAlertError(error.toString());
     }

@@ -12,6 +12,7 @@ import 'notifications_views/alertas_view.dart';
 import 'notifications_views/notificacoes_view.dart';
 import 'others_view/analises_view.dart';
 import 'settings_views/configuracoes_view.dart';
+import 'sici_views/list_formulario_sici_fust_view.dart';
 import 'user_views/usuarios_view.dart';
 
 
@@ -22,13 +23,16 @@ class MenuNavigation extends StatefulWidget {
 
 class MenuNavigationState extends State<MenuNavigation> {
 
-  bool documentosExpanded = false ,lancamentosSiciExpanded = false;
+  bool documentosExpanded = false ,lancamentosSiciExpanded = true;
   double maxHeight = 500;
   @override
   void initState() {
     super.initState();
-    setState(() =>  GlobalScaffold.instance.selectedPageView = routes.analiseRoute);
-    GlobalScaffold.colorSelectedPageView(routes.analiseRoute);
+    setState(() {
+      lancamentosSiciExpanded = true;
+      GlobalScaffold.instance.selectedPageView = routes.lancamentoSiciFustRoute;
+    });
+    GlobalScaffold.colorSelectedPageView(routes.lancamentoSiciFustRoute);
   }
 
   @override
@@ -36,13 +40,12 @@ class MenuNavigationState extends State<MenuNavigation> {
     super.dispose();
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
+
 
   onSelectedPage() {
     switch (GlobalScaffold.instance.selectedPageView) {
+      case routes.lancamentoSiciFustRoute:
+        return const ListFormularioSiciFustView();
       case routes.analiseRoute:
         return const AnalisesView();
       case routes.alertasRoute:
@@ -135,7 +138,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                           child: ExpansionTile(
                               key: GlobalKey(),
                               // collapsedIconColor: Color(0xff6C757D),
-                              iconColor: Color(0xffd56921),
+                              iconColor: const Color(0xffd56921),
                               initiallyExpanded:lancamentosSiciExpanded,
                               onExpansionChanged: (val) {
                                 setState(() {
@@ -159,13 +162,6 @@ class MenuNavigationState extends State<MenuNavigation> {
                                       setState(() {
                                         GlobalScaffold.instance.selectedPageView = routes.lancamentoSiciFustRoute;
                                         lancamentosSiciExpanded = true;
-                                      });
-                                      Navigator.of(context).pushNamed(
-                                        routes.lancamentoSiciFustRoute,
-                                      ).then((value) {
-                                        setState(() =>  GlobalScaffold.instance.selectedPageView = routes.analiseRoute);
-                                        GlobalScaffold.colorSelectedPageView(routes.analiseRoute);
-                                        lancamentosSiciExpanded = false;
                                       });
                                       GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
                                     }, // Handle your callback
@@ -216,9 +212,9 @@ class MenuNavigationState extends State<MenuNavigation> {
                                       Navigator.of(context).pushNamed(
                                         routes.formularioSiciFustRoute,
                                       ).then((value) {
-                                        setState(() =>  GlobalScaffold.instance.selectedPageView = routes.analiseRoute);
-                                        GlobalScaffold.colorSelectedPageView(routes.analiseRoute);
-                                        lancamentosSiciExpanded = false;
+                                        setState(() =>  GlobalScaffold.instance.selectedPageView = routes.lancamentoSiciFustRoute);
+                                        GlobalScaffold.colorSelectedPageView(routes.lancamentoSiciFustRoute);
+                                        lancamentosSiciExpanded = true;
                                       });
                                       GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
                                     }, // Handle your callback
@@ -269,9 +265,9 @@ class MenuNavigationState extends State<MenuNavigation> {
                                       Navigator.of(context).pushNamed(
                                         routes.formularioSiciFustRoute,
                                       ).then((value) {
-                                        setState(() =>  GlobalScaffold.instance.selectedPageView = routes.analiseRoute);
-                                        GlobalScaffold.colorSelectedPageView(routes.analiseRoute);
-                                        lancamentosSiciExpanded = false;
+                                        setState(() =>  GlobalScaffold.instance.selectedPageView = routes.lancamentoSiciFustRoute);
+                                        GlobalScaffold.colorSelectedPageView(routes.lancamentoSiciFustRoute);
+                                        lancamentosSiciExpanded = true;
                                       });
                                       GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
                                     }, // Handle your callback
