@@ -97,8 +97,8 @@ class LoginState extends State<LoginView> {
 
     super.initState();
     // NotificationHandler().subscribeToTopic("scmengenhariaUserNLogado");
-    //txtControllerEmail.text = "rodolforomao@gmail.com";
-    //txtControllerPassword.text = "1234567";
+     txtControllerEmail.text = "rodolforomao@gmail.com";
+     txtControllerPassword.text = "1234567";
 
   }
 

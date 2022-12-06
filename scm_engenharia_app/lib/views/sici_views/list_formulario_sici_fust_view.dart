@@ -99,8 +99,25 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
     }
   }
 
-  selectPopupMenuButton() =>
-      PopupMenuButton(
+  onUpload(InputSiciFileModel siciFileModel) async {
+    try {
+      if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+        throw ('Verifique sua conexão com a internet e tente novamente.');
+      } else {
+        GlobalScaffold.instance.onToastPerformingOperation('Sincronizando ... ');
+        Operation resultRest = await ServicoMobileService.onMakeReleasesSici(siciFileModel).whenComplete(() => GlobalScaffold.instance.onHideCurrentSnackBar());
+        if (resultRest.erro) {
+          throw (resultRest.message!);
+        } else {
+
+        }
+      }
+    } catch (error) {
+      OnAlertError(error.toString());
+    }
+  }
+
+  selectPopupMenuButton() => PopupMenuButton(
         icon: const Icon(Icons.filter_list, color: Color(0xFFFFFFFF), size: 25),
         onSelected: (value) async {
           try {
@@ -232,7 +249,6 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
       );
 
   onToview(InputSiciFileModel? prop) {
-    //  OnRealizandoOperacao("Web: Buscando lançamentos", true);
     try {
       Navigator.push(
           context,
@@ -495,36 +511,36 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
-                        Container(
-                          color: const Color(0xffFFFFFF),
-                          //width: MediaQuery.of(context).size.width / 3,
-                          child: InkWell(
-                            onTap: () async {
-                              onToview(siciFileModelAllList[index]);
-                            },
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: const <Widget>[
-                                Icon(Icons.file_download_outlined,
-                                    size: 25, color: Color(0xFF4caf50)),
-                                SizedBox(height: 10.0),
-                                Text(
-                                  'Download',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 15.0,
-                                      color: Color(0xFF4caf50),
-                                      fontFamily: "Poppins-Regular"),
-                                ),
-                              ],
+                        if( siciFileModelAllList[index].idFichaSiciApp!.isNotEmpty)...[
+                          Container(
+                            color: const Color(0xffFFFFFF),
+                            //width: MediaQuery.of(context).size.width / 3,
+                            child: InkWell(
+                              onTap: () async {
+                                onUpload(siciFileModelAllList[index]);
+                              },
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const <Widget>[
+                                  Icon(Icons.file_upload_outlined,
+                                      size: 25, color: Color(0xFF27584f)),
+                                  SizedBox(height: 10.0),
+                                  Text(
+                                    'Upload',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 15.0,
+                                        color: Color(0xFF27584f),
+                                        fontFamily: "Poppins-Regular"),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        const VerticalDivider(
-                          color: Color(0xFF000000),
-                        ),
-                        if( siciFileModelAllList[index].idFichaSiciApp!.isNotEmpty)...[
+                          const VerticalDivider(
+                            color: Color(0xFF000000),
+                          ),
                           Container(
                             color: const Color(0xffFFFFFF),
                             //width: MediaQuery.of(context).size.width / 3,
@@ -662,6 +678,37 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                                         fontSize: 15.0,
                                         color: Color(0xfff44336),
                                         fontFamily: 'Poppins-Regular'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const VerticalDivider(
+                            color: Color(0xFF000000),
+                          ),
+                        ]
+                        else ...[
+                          Container(
+                            color: const Color(0xffFFFFFF),
+                            //width: MediaQuery.of(context).size.width / 3,
+                            child: InkWell(
+                              onTap: () async {
+                                onToview(siciFileModelAllList[index]);
+                              },
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const <Widget>[
+                                  Icon(Icons.file_download_outlined,
+                                      size: 25, color: Color(0xFF4caf50)),
+                                  SizedBox(height: 10.0),
+                                  Text(
+                                    'Download',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 15.0,
+                                        color: Color(0xFF4caf50),
+                                        fontFamily: "Poppins-Regular"),
                                   ),
                                 ],
                               ),
