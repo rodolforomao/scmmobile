@@ -102,11 +102,11 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
       inputSiciFustForm.periodoReferencia = txtControllerReferencePeriod.text;
       inputSiciFustForm.cnpj = txtControllerCnpj.text;
       if (txtControllerSocialReason.text.isEmpty) {
-        throw ("O campo Razão Social é obrigatório");
+        throw ('O campo Razão Social é obrigatório');
       }
       inputSiciFustForm.razaoSocial = txtControllerSocialReason.text;
       if (txtControllerTelefoneMovel.text.isEmpty && txtControllerLandline.text.isEmpty) {
-        throw ("Pelo menos um campo 'Telefone' é obrigatório");
+        throw ("Pelo menos um campo Telefone é obrigatório");
       }
       inputSiciFustForm.telefoneMovel = txtControllerTelefoneMovel.text;
       inputSiciFustForm.telefoneFixo = txtControllerLandline.text;
@@ -138,12 +138,85 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
           } else if (respFormSiciFust.result == null) {
             throw respFormSiciFust.message!;
           } else {
-            GlobalScaffold.instance.onToastSuccess(respFormSiciFust.message!);
-            GlobalScaffold.instance.navigatorKey.currentState?.pushNamedAndRemoveUntil(routes.menuNavigationRoute, (Route<dynamic> route) => false);
+            showDialog(
+              context: GlobalScaffold.instance.navigatorKey.currentContext!,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return Dialog(
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                    child: Container(
+                      constraints: const BoxConstraints(
+                        minWidth: 70,
+                        maxWidth: 600,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const SizedBox(height: 15.0),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                'Informação',
+                                style: Theme.of(GlobalScaffold.instance.navigatorKey.currentContext!).textTheme.headline4?.copyWith(fontSize: 20, color: const Color(0xff737373),fontWeight: FontWeight.w200,),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              const Divider(
+                                color: Colors.black12,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                                child: Text(
+                                  respFormSiciFust.message!,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 10,
+                                  softWrap: false,
+                                  style: Theme.of(GlobalScaffold.instance.navigatorKey.currentContext!).textTheme.headline4?.copyWith(fontSize: 15, color: const Color(0xff737373),fontWeight: FontWeight.w100,),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const Divider(
+                            color: Colors.black12,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
+                            child:Center(child:  OutlinedButton(
+                              style: OutlinedButton.styleFrom(
+                                backgroundColor:  const Color(0xff2ecd8f),
+                                side: const BorderSide(
+                                  color: Color(0xff2ecd8f), //Color of the border
+                                  style: BorderStyle.solid, //Style of the border
+                                  width: 1.0, //width of the border
+                                ),
+                              ),
+                              child:  const Text('OK' ,style: TextStyle(
+                                fontWeight: FontWeight.w300,
+                                fontSize: 18.0,
+                                color: Colors.white,
+                              ),),
+                              //`Text` to display
+                              onPressed: () {
+                                Navigator.pop(context);
+                                //GlobalScaffold.instance.navigatorKey.currentState?.pop(true);
+                              },
+                            ),),
+                          ),
+                        ],
+                      ),
+                    ));
+              },
+            );
           }
         }
     } catch (error) {
-      GlobalScaffold.instance.onHideCurrentSnackBar();
       OnAlertError(error.toString());
     }
   }

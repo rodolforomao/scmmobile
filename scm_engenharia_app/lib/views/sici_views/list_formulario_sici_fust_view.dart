@@ -27,6 +27,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
   List<InputSiciFileModel> siciFileModelAllList = [];
   List<InputSiciFileModel> siciFileModelUpdateList = [];
 
+
   TypeView statusView = TypeView.viewLoading;
   final txtSocialReason = TextEditingController();
 
@@ -42,16 +43,15 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
         } else {
           List<OutputSiciFustFormModel> respSiciFustFormList  = resultRest.resultList.map<OutputSiciFustFormModel>((json) => OutputSiciFustFormModel.fromJson(json)).toList();
           List<OutputSiciFustFormModel> respNewSiciFustFormList = [];
-          respNewSiciFustFormList = respSiciFustFormList;
           if (respSiciFustFormList.isNotEmpty) {
             for (var prop in respSiciFustFormList) {
               if (siciFileModelAllList.where((f) => f.id!.startsWith(prop.id!)).isNotEmpty)
               {
-                //respNewSiciFustFormList.removeWhere((item) => item.id == prop.id!);
+                // A ficha  ja esta salva no dispositivo
               }
               else
               {
-                // A ficha  ja esta salva no dispositivo
+                respNewSiciFustFormList.add(prop);
               }
             }
             List<InputSiciFileModel>  siciFileModelAllResp = await  ParseRespJsonToView.parseSiciFustFormModelToSiciFileList(respNewSiciFustFormList);
@@ -102,14 +102,23 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
   onUpload(InputSiciFileModel siciFileModel) async {
     try {
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
-        throw ('Verifique sua conexão com a internet e tente novamente.');
+        GlobalScaffold.instance.onToastInternetConnection();
       } else {
         GlobalScaffold.instance.onToastPerformingOperation('Sincronizando ... ');
         Operation resultRest = await ServicoMobileService.onMakeReleasesSici(siciFileModel).whenComplete(() => GlobalScaffold.instance.onHideCurrentSnackBar());
         if (resultRest.erro) {
           throw (resultRest.message!);
         } else {
-
+          Operation respUser = await AppScmEngenhariaMobileBll().onDeleteFormSiciFustId(siciFileModel.idFichaSiciApp.toString());
+          if (respUser.erro || respUser.result == null) {
+            throw respUser.message!;
+          } else {
+            setState(() {
+              siciFileModelAllList.remove(siciFileModel);
+            });
+            GlobalScaffold.instance.onToastSuccess(resultRest.message!);
+            onRestWeb();
+          }
         }
       }
     } catch (error) {

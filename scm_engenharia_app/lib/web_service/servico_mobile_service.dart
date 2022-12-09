@@ -153,8 +153,13 @@ class ServicoMobileService {
       http.MultipartRequest response;
       response = http.MultipartRequest('POST', Uri.parse("$Url/analise/lancamento_ws"));
       response.headers.addAll(headers);
-      response.fields['controllerPeriodoReferencia'] = (siciFileModel.periodoReferencia == null ? "" : siciFileModel.periodoReferencia)!;
-      response.fields['controllerRazaoSocial'] = (siciFileModel.razaoSocial == null ? "" : siciFileModel.razaoSocial)!;
+      if(siciFileModel.id!.isNotEmpty)
+      {
+        response.fields['controllerId'] = (siciFileModel.id ?? "");
+      }
+      response.fields['controllerPeriodoReferencia'] = (siciFileModel.periodoReferencia ?? "");
+      response.fields['controllerPeriodoReferencia'] = (siciFileModel.periodoReferencia ?? "");
+      response.fields['controllerRazaoSocial'] = (siciFileModel.razaoSocial ?? "");
       response.fields['controllerTelefoneFixo'] = siciFileModel.telefoneFixo == null ? "" : siciFileModel.telefoneFixo!;
       response.fields['controllerCNPJ'] = siciFileModel.cnpj == null ? "" : siciFileModel.cnpj!;
       response.fields['controllerTelefoneCelular'] = siciFileModel.telefoneMovel == null ? "" : siciFileModel.telefoneMovel!;
@@ -171,6 +176,10 @@ class ServicoMobileService {
       response.fields['controllerObservacoes'] = siciFileModel.observacoes ?? '';
       int index = 1;
       for (var item in siciFileModel.dadosEmServicos!.toList()) {
+        if(item.idLancamento!.isNotEmpty)
+        {
+          response.fields['id_lancamento$index'] = item.idLancamento ?? '';
+        }
         response.fields['cod_ibge_$index'] = item.codIbge ?? '';
         response.fields['uf_$index'] = item.uf ?? '';
         response.fields['tipo_cliente_$index'] = item.tipoCliente ?? '';
@@ -184,8 +193,9 @@ class ServicoMobileService {
       }
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
+      operacao.statusCode = streamedResponse.statusCode;
       if (streamedResponse.statusCode == 200) {
-        if (streamedResponse.stream.isEmpty == true) {
+        if (respStr.isEmpty) {
           throw (ApiRestInformation.problemOfComunication);
         }
         else
@@ -196,11 +206,11 @@ class ServicoMobileService {
           operacao.message = resp.message;
           operacao.result = resp.result;
         }
-        if (operacao.message == null) {
+        if (operacao.message == null && operacao.result == null) {
           throw ('Não foi identificado resposta');
         }
       } else {
-        operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(streamedResponse.statusCode, streamedResponse.stream.toString());
+        operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(streamedResponse.statusCode, response.method);
       }
     } catch (e) {
       operacao.erro = true;
