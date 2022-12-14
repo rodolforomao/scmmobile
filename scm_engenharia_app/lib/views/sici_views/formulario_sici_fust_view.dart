@@ -998,181 +998,167 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Padding(padding: const EdgeInsets.fromLTRB(0.0,10.0,0.0,5.0),child: Flexible(
-              child: RichText(
-                  textAlign: TextAlign.start,
-                  softWrap: false,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  text: TextSpan(children: [
-                    const TextSpan(
-                      text: 'UF' + "\n ",
-                      style: TextStyle(
-                        fontWeight: FontWeight.normal,
-                        color: Colors.black,
-                        fontSize: 16.0,
-                      ),
+            Padding(padding: const EdgeInsets.fromLTRB(0.0,10.0,0.0,5.0),child: RichText(
+                textAlign: TextAlign.start,
+                softWrap: false,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                text: TextSpan(children: [
+                  const TextSpan(
+                    text: 'UF' + "\n ",
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black,
+                      fontSize: 16.0,
                     ),
-                    TextSpan(
-                      text: inputSiciFustForm.dadosEmServicos![index].uf,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.normal,
-                        color: Colors.black54,
-                        fontSize: 15.0,
-                      ),
+                  ),
+                  TextSpan(
+                    text: inputSiciFustForm.dadosEmServicos![index].uf,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black54,
+                      fontSize: 15.0,
                     ),
-                  ])),
-            ),),
-            Padding(padding: const EdgeInsets.fromLTRB(0.0,5.0,0.0,5.0),child: Flexible(
-              child: RichText(
-                  textAlign: TextAlign.start,
-                  softWrap: false,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  text: TextSpan(children: [
-                    const TextSpan(
-                      text: 'Tipo cliente' + "\n ",
-                      style: TextStyle(
-                        fontWeight: FontWeight.normal,
-                        color: Colors.black,
-                        fontSize: 16.0,
-                      ),
+                  ),
+                ])),),
+            Padding(padding: const EdgeInsets.fromLTRB(0.0,5.0,0.0,5.0),child: RichText(
+                textAlign: TextAlign.start,
+                softWrap: false,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                text: TextSpan(children: [
+                  const TextSpan(
+                    text: 'Tipo cliente' + "\n ",
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black,
+                      fontSize: 16.0,
                     ),
-                    TextSpan(
-                      text: inputSiciFustForm.dadosEmServicos![index].tipoCliente,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.normal,
-                        color: Colors.black54,
-                        fontSize: 15.0,
-                      ),
+                  ),
+                  TextSpan(
+                    text: inputSiciFustForm.dadosEmServicos![index].tipoCliente,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black54,
+                      fontSize: 15.0,
                     ),
-                  ])),
-            ),),
-            Padding(padding: const EdgeInsets.fromLTRB(0.0,5.0,0.0,5.0),child:  Flexible(
-              child: RichText(
-                  textAlign: TextAlign.start,
-                  softWrap: false,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  text: TextSpan(children: [
-                    const TextSpan(
-                      text: 'Tipo de Atendimento' + "\n ",
-                      style: TextStyle(
-                        fontWeight: FontWeight.normal,
-                        color: Colors.black,
-                        fontSize: 16.0,
-                      ),
+                  ),
+                ])),),
+            Padding(padding: const EdgeInsets.fromLTRB(0.0,5.0,0.0,5.0),child: RichText(
+                textAlign: TextAlign.start,
+                softWrap: false,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                text: TextSpan(children: [
+                  const TextSpan(
+                    text: 'Tipo de Atendimento' + "\n ",
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black,
+                      fontSize: 16.0,
                     ),
-                    TextSpan(
-                      text: inputSiciFustForm.dadosEmServicos![index].tipoAtendimento,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.normal,
-                        color: Colors.black54,
-                        fontSize: 15.0,
-                      ),
+                  ),
+                  TextSpan(
+                    text: inputSiciFustForm.dadosEmServicos![index].tipoAtendimento,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black54,
+                      fontSize: 15.0,
                     ),
-                  ])),
-            ),),
-            Padding(padding: const EdgeInsets.fromLTRB(0.0,5.0,0.0,5.0),child: Flexible(
-              child: RichText(
-                  textAlign: TextAlign.start,
-                  softWrap: false,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  text: TextSpan(children: [
-                    const TextSpan(
-                      text: 'Tipo acesso' "\n ",
-                      style: TextStyle(
-                        fontWeight: FontWeight.normal,
-                        color: Colors.black,
-                        fontSize: 15.0,
-                      ),
+                  ),
+                ])),),
+            Padding(padding: const EdgeInsets.fromLTRB(0.0,5.0,0.0,5.0),child:RichText(
+                textAlign: TextAlign.start,
+                softWrap: false,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                text: TextSpan(children: [
+                  const TextSpan(
+                    text: 'Tipo acesso' "\n ",
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black,
+                      fontSize: 15.0,
                     ),
-                    TextSpan(
-                      text: inputSiciFustForm.dadosEmServicos![index].tipoAcesso,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.normal,
-                        color: Colors.black54,
-                        fontSize: 16.0,
-                      ),
+                  ),
+                  TextSpan(
+                    text: inputSiciFustForm.dadosEmServicos![index].tipoAcesso,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black54,
+                      fontSize: 16.0,
                     ),
-                  ])),
-            ),),
-            Padding(padding: const EdgeInsets.fromLTRB(0.0,5.0,0.0,5.0),child: Flexible(
-              child: RichText(
-                  textAlign: TextAlign.start,
-                  softWrap: false,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  text: TextSpan(children: [
-                    const TextSpan(
-                      text: 'Tecnologia' + "\n ",
-                      style: TextStyle(
-                        fontWeight: FontWeight.normal,
-                        color: Colors.black,
-                        fontSize: 16.0,
-                      ),
+                  ),
+                ])),),
+            Padding(padding: const EdgeInsets.fromLTRB(0.0,5.0,0.0,5.0),child: RichText(
+                textAlign: TextAlign.start,
+                softWrap: false,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                text: TextSpan(children: [
+                  const TextSpan(
+                    text: 'Tecnologia' + "\n ",
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black,
+                      fontSize: 16.0,
                     ),
-                    TextSpan(
-                      text: inputSiciFustForm.dadosEmServicos![index].tecnologia,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.normal,
-                        color: Colors.black54,
-                        fontSize: 15.0,
-                      ),
+                  ),
+                  TextSpan(
+                    text: inputSiciFustForm.dadosEmServicos![index].tecnologia,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black54,
+                      fontSize: 15.0,
                     ),
-                  ])),
-            ),),
-            Padding(padding: const EdgeInsets.fromLTRB(0.0,5.0,0.0,5.0),child: Flexible(
-              child: RichText(
-                  textAlign: TextAlign.start,
-                  softWrap: false,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  text: TextSpan(children: [
-                    const TextSpan(
-                      text: 'Tipo produto' + "\n ",
-                      style: TextStyle(
-                        fontWeight: FontWeight.normal,
-                        color: Colors.black,
-                        fontSize: 16.0,
-                      ),
+                  ),
+                ])),),
+            Padding(padding: const EdgeInsets.fromLTRB(0.0,5.0,0.0,5.0),child: RichText(
+                textAlign: TextAlign.start,
+                softWrap: false,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                text: TextSpan(children: [
+                  const TextSpan(
+                    text: 'Tipo produto' + "\n ",
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black,
+                      fontSize: 16.0,
                     ),
-                    TextSpan(
-                      text: inputSiciFustForm.dadosEmServicos![index].tipoProduto,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.normal,
-                        color: Colors.black54,
-                        fontSize: 15.0,
-                      ),
+                  ),
+                  TextSpan(
+                    text: inputSiciFustForm.dadosEmServicos![index].tipoProduto,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black54,
+                      fontSize: 15.0,
                     ),
-                  ])),
-            ),),
-            Padding(padding: const EdgeInsets.fromLTRB(0.0,5.0,0.0,5.0),child: Flexible(
-              child: RichText(
-                  textAlign: TextAlign.start,
-                  softWrap: false,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  text: TextSpan(children: [
-                    const TextSpan(
-                      text: 'Velocidade' "\n ",
-                      style: TextStyle(
-                        fontWeight: FontWeight.normal,
-                        color: Colors.black,
-                        fontSize: 16.0,
-                      ),
+                  ),
+                ])),),
+            Padding(padding: const EdgeInsets.fromLTRB(0.0,5.0,0.0,5.0),child:RichText(
+                textAlign: TextAlign.start,
+                softWrap: false,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                text: TextSpan(children: [
+                  const TextSpan(
+                    text: 'Velocidade' "\n ",
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black,
+                      fontSize: 16.0,
                     ),
-                    TextSpan(
-                      text: inputSiciFustForm.dadosEmServicos![index].velocidade,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.normal,
-                        color: Colors.black54,
-                        fontSize: 15.0,
-                      ),
+                  ),
+                  TextSpan(
+                    text: inputSiciFustForm.dadosEmServicos![index].velocidade,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black54,
+                      fontSize: 15.0,
                     ),
-                  ])),
-            ),),
+                  ),
+                ])),),
             const Divider(),
             const SizedBox(height: 10.0),
             SizedBox(

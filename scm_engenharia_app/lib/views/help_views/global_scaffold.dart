@@ -389,7 +389,7 @@ class GlobalScaffold {
 
   onRedirectUriApp(Uri url) async {
     try {
-      if (!await launchUrl(url).whenComplete(() {
+      if (!await launchUrl(url ,mode: LaunchMode.inAppWebView).whenComplete(() {
 
 
       })) throw 'Não foi possível iniciar $url';

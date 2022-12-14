@@ -87,13 +87,12 @@ class MenuNavigationState extends State<MenuNavigation> {
 
         });
       },
-      drawer: Drawer(child:
-      SingleChildScrollView(
+      drawer: Drawer(child: SingleChildScrollView(
         child: Container(
           constraints: BoxConstraints(
             minHeight: maxHeight,
           ),
-          child: Expanded(child: Column(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -474,7 +473,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                                 style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.documentosRoute)),
                               ),
                               children: [
-    /*   SizedBox(
+                                /*   SizedBox(
                                   height: 40,
                                   child: InkWell(
                                     onTap: () {
@@ -820,7 +819,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                 ),
               ),
             ],
-          ),),),
+          ),),
       ),),
       bottomNavigationBar: BottomAppBar(
         elevation: 0,
