@@ -19,33 +19,45 @@ class ServicoMobileService {
     Operation operacao = Operation();
     try {
       String? token = await Components.JWTToken(usuario, password);
-      final response = await http
-          .post(Uri.parse("$Url/login_ws"),
-              headers: {
-                //"Content-type": "multipart/form-data",
-                'token': token!,
-              },
-              encoding: Encoding.getByName('utf-8'))
-          .timeout(const Duration(seconds: 10));
+      final response = await http.post(Uri.parse("$Url/login_ws"),
+          headers: {
+            //"Content-type": "multipart/form-data",
+            'token': token!,
+          },
+          encoding: Encoding.getByName('utf-8'))
+          .timeout(const Duration(seconds: 50));
       operacao.statusCode = response.statusCode;
       if (response.statusCode == 200) {
         if (!response.body.isNotEmpty) {
           throw (ApiRestInformation.problemOfComunication);
         }
-        else
-          {
-            Map<String, dynamic> map = jsonDecode(Components.removeAllHtmlTags(response.body));
-            OperationJson resp = OperationJson.fromJson(map);
-            operacao.erro = !resp.status!;
-            operacao.message = resp.message;
-            operacao.result = resp.result;
-          }
+        else {
+          Map<String, dynamic> map = jsonDecode(
+              Components.removeAllHtmlTags(response.body));
+          OperationJson resp = OperationJson.fromJson(map);
+          operacao.erro = !resp.status!;
+          operacao.message = resp.message;
+          operacao.result = resp.result;
+        }
         if (operacao.message == null && operacao.result == null) {
           throw ('Não foi identificado resposta');
         }
       } else {
-        operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(response.statusCode, response.body);
+        operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(
+            response.statusCode, response.body);
       }
+    } on TimeoutException  {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.timeoutHttp;
+    } on SocketException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.internetSocketException;
+    } on HttpException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.httpException;
+    } on FormatException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.formatException;
     } catch (e) {
       operacao.erro = true;
       operacao.message = e.toString();
@@ -86,6 +98,70 @@ class ServicoMobileService {
       } else {
         operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(streamedResponse.statusCode, response.method);
       }
+    } on TimeoutException  {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.timeoutHttp;
+    } on SocketException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.internetSocketException;
+    } on HttpException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.httpException;
+    } on FormatException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.formatException;
+    } catch (e) {
+      operacao.erro = true;
+      operacao.message = e.toString();
+    }
+    return operacao;
+  }
+
+  static Future<Operation> onForgotYourPassword(String senha) async {
+    Operation operacao = Operation();
+    try {
+      String? token = await ComponentsJWTToken.JWTTokenPadrao();
+      Map<String, String> headers = {
+        'Content-Type': 'application/json; charset=utf-8',
+        'token': token!,
+      };
+      http.MultipartRequest response;
+      response = http.MultipartRequest('POST', Uri.parse("$Url/usuario/alterar_senha_ws"));
+      response.headers.addAll(ApiRestInformation.onHeadersToken(token!));
+      response.fields['nova_senha'] = senha;
+      var streamedResponse = await response.send();
+      final respStr = await streamedResponse.stream.bytesToString();
+      operacao.statusCode = streamedResponse.statusCode;
+      if (streamedResponse.statusCode == 200) {
+        if (respStr.isEmpty) {
+          throw (ApiRestInformation.problemOfComunication);
+        }
+        else
+        {
+          Map<String, dynamic> map = jsonDecode(Components.removeAllHtmlTags(respStr));
+          OperationJson resp = OperationJson.fromJson(map);
+          operacao.erro = !resp.status!;
+          operacao.message = resp.message;
+          operacao.result = resp.result;
+        }
+        if (operacao.message == null && operacao.result == null) {
+          throw ('Não foi identificado resposta');
+        }
+      } else {
+        operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(streamedResponse.statusCode, response.method);
+      }
+    } on TimeoutException  {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.timeoutHttp;
+    } on SocketException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.internetSocketException;
+    } on HttpException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.httpException;
+    } on FormatException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.formatException;
     } catch (e) {
       operacao.erro = true;
       operacao.message = e.toString();
@@ -100,10 +176,7 @@ class ServicoMobileService {
       final response = await http
           .post(Uri.parse("$Url/analise/Analise/recuperarVariaveisAmbiente_ws"),
               body: null,
-              headers: {
-                //"Content-type": "multipart/form-data",
-                "token": token!,
-              },
+               headers: ApiRestInformation.onHeadersToken(token!),
               encoding: Encoding.getByName("utf-8"))
           .timeout(const Duration(seconds: 10));
 
@@ -212,6 +285,18 @@ class ServicoMobileService {
       } else {
         operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(streamedResponse.statusCode, response.method);
       }
+    } on TimeoutException  {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.timeoutHttp;
+    } on SocketException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.internetSocketException;
+    } on HttpException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.httpException;
+    } on FormatException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.formatException;
     } catch (e) {
       operacao.erro = true;
       operacao.message = e.toString();
@@ -224,10 +309,8 @@ class ServicoMobileService {
     try {
       String? token = await ComponentsJWTToken.JWTTokenPadrao();
       final response = await http.post(Uri.parse("$Url/analise/recuperar_ws"),
+              headers: ApiRestInformation.onHeadersToken(token!),
               body: null,
-              headers: {
-                'token': token!,
-              },
               encoding: Encoding.getByName('utf-8'))
           .timeout(const Duration(seconds: 10));
       operacao.erro = false;
@@ -253,6 +336,18 @@ class ServicoMobileService {
       } else {
         operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(response.statusCode, response.body);
       }
+    } on TimeoutException  {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.timeoutHttp;
+    } on SocketException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.internetSocketException;
+    } on HttpException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.httpException;
+    } on FormatException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.formatException;
     } catch (e) {
       operacao.erro = true;
       operacao.message = e.toString();
@@ -298,6 +393,18 @@ class ServicoMobileService {
       } else {
         operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(streamedResponse.statusCode, streamedResponse.stream.toString());
       }
+    } on TimeoutException  {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.timeoutHttp;
+    } on SocketException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.internetSocketException;
+    } on HttpException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.httpException;
+    } on FormatException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.formatException;
     } catch (e) {
       operacao.erro = true;
       operacao.message = e.toString();
@@ -336,6 +443,18 @@ class ServicoMobileService {
       } else {
         operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(streamedResponse.statusCode, streamedResponse.stream.toString());
       }
+    } on TimeoutException  {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.timeoutHttp;
+    } on SocketException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.internetSocketException;
+    } on HttpException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.httpException;
+    } on FormatException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.formatException;
     } catch (e) {
       operacao.erro = true;
       operacao.message = e.toString();
@@ -375,6 +494,18 @@ class ServicoMobileService {
       } else {
         operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(streamedResponse.statusCode, streamedResponse.stream.toString());
       }
+    } on TimeoutException  {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.timeoutHttp;
+    } on SocketException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.internetSocketException;
+    } on HttpException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.httpException;
+    } on FormatException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.formatException;
     } catch (e) {
       operacao.erro = true;
       operacao.message = e.toString();
@@ -414,6 +545,18 @@ class ServicoMobileService {
       } else {
         operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(streamedResponse.statusCode, streamedResponse.stream.toString());
       }
+    } on TimeoutException  {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.timeoutHttp;
+    } on SocketException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.internetSocketException;
+    } on HttpException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.httpException;
+    } on FormatException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.formatException;
     } catch (e) {
       operacao.erro = true;
       operacao.message = e.toString();
@@ -453,6 +596,18 @@ class ServicoMobileService {
       } else {
         operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(streamedResponse.statusCode, streamedResponse.stream.toString());
       }
+    } on TimeoutException  {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.timeoutHttp;
+    } on SocketException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.internetSocketException;
+    } on HttpException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.httpException;
+    } on FormatException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.formatException;
     } catch (e) {
       operacao.erro = true;
       operacao.message = e.toString();
@@ -494,6 +649,18 @@ class ServicoMobileService {
       } else {
         operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(streamedResponse.statusCode, streamedResponse.stream.toString());
       }
+    } on TimeoutException  {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.timeoutHttp;
+    } on SocketException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.internetSocketException;
+    } on HttpException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.httpException;
+    } on FormatException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.formatException;
     } catch (e) {
       operacao.erro = true;
       operacao.message = e.toString();
@@ -534,6 +701,18 @@ class ServicoMobileService {
       } else {
         operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(streamedResponse.statusCode, streamedResponse.stream.toString());
       }
+    } on TimeoutException  {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.timeoutHttp;
+    } on SocketException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.internetSocketException;
+    } on HttpException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.httpException;
+    } on FormatException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.formatException;
     } catch (e) {
       operacao.erro = true;
       operacao.message = e.toString();
@@ -573,6 +752,18 @@ class ServicoMobileService {
       } else {
         operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(streamedResponse.statusCode, streamedResponse.stream.toString());
       }
+    } on TimeoutException  {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.timeoutHttp;
+    } on SocketException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.internetSocketException;
+    } on HttpException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.httpException;
+    } on FormatException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.formatException;
     } catch (e) {
       operacao.erro = true;
       operacao.message = e.toString();
@@ -586,10 +777,10 @@ class ApiRestInformation {
   static String internetSocketException = 'Verifique sua conexão com a internet e tente novamente';
   static String httpException = 'Não foi possível encontrar a postagem';
   static String formatException = 'Formato de resposta ruim 👎';
-
+  static String timeoutHttp = ' O tempo limite esgotou antes da conclusão da operação ou o servidor não está respondendo';
   static Map<String, String> onHeaders() {
     Map<String, String> headers = {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json; charset=utf-8',
       'Accept': 'application/json',
       'Access-Control-Allow-Methods': '*',
       'Access-Control-Allow-Origin': 'http://localhost:59817',
@@ -600,12 +791,11 @@ class ApiRestInformation {
 
   static Map<String, String> onHeadersToken(String token) {
     Map<String, String> headers = {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json; charset=utf-8',
       'Accept': 'application/json',
       'Access-Control-Allow-Methods': '*',
-      'Access-Control-Allow-Origin': 'http://localhost:59817',
       'Access-Control-Allow-Headers': '*',
-      'Authorization': 'Bearer $token',
+      'token': token!,
     };
     return headers;
   }

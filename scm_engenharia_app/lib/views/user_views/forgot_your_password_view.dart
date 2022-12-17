@@ -2,6 +2,9 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
+import '../../models/operation.dart';
+import '../../web_service/servico_mobile_service.dart';
+import '../help_views/global_scaffold.dart';
 
 class ForgotYourPasswordView extends StatefulWidget {
   const ForgotYourPasswordView({Key? key}) : super(key: key);
@@ -10,11 +13,33 @@ class ForgotYourPasswordView extends StatefulWidget {
 }
 
 class ForgotYourPasswordState extends State<ForgotYourPasswordView> {
-
-
   final txtControllerEmail = TextEditingController();
 
-
+  OnSaveAccount() async {
+    try {
+      if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+        OnAlertError('Verifique sua conexão com a internet e tente novamente.');
+      }  else {
+        if (txtControllerEmail.text.isEmpty) {
+          throw ("Email é obrigatório");
+        }
+        else
+        {
+          Operation restWeb = await ServicoMobileService.onForgotYourPassword(txtControllerEmail.text).whenComplete(() =>
+              OnRealizandoOperacao('',context)
+          );
+          if (restWeb.erro || restWeb.result == null) {
+            throw (restWeb.message!);
+          }
+          else {
+            OnAlertSuccess(restWeb.message!);
+          }
+        }
+      }
+    } catch (error) {
+      OnAlertError(error.toString());
+    }
+  }
 
   @override
   void initState() {

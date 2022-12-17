@@ -307,7 +307,10 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
           elevation: 0.0,
           title: const Text('Sici/Fust Enviados - Período'),
           actions: [
-            selectPopupMenuButton()
+            if(siciFileModelAllList.isNotEmpty)
+              ...[
+                selectPopupMenuButton()
+              ]
           ],
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(0.0),
