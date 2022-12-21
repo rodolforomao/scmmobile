@@ -15,11 +15,10 @@ import '../../views/settings_views/variaveis_de_ambiente_view.dart';
 import '../../views/sici_views/formulario_sici_fust_view.dart';
 import '../../views/sici_views/list_formulario_sici_fust_view.dart';
 import '../../views/splash_screen_view.dart';
+import '../../views/user_views/cancelar_acesso_view.dart';
 import '/help/navigation_service/route_paths.dart' as routes;
 import '../../views/error_information_view.dart';
 import '../../views/menu_navigation.dart';
-import '../../views/settings_view.dart';
-
 import '../../views/user_views/criar_nova_conta_view.dart';
 import '../../views/user_views/forgot_your_password_view.dart';
 import '../../views/user_views/login_view.dart';
@@ -47,6 +46,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       {
         return MaterialPageRoute(builder: (context) =>  MenuNavigation());
       }
+    case routes.cancelarAcessoRoute:
+      return MaterialPageRoute(builder: (context) => const CancelarAcessoView());
     case routes.splashScreenRoute:
       return MaterialPageRoute(builder: (context) => const SplashScreenView());
     case routes.inicioRoute:
@@ -115,7 +116,6 @@ class RoutesPage {
     Map<String, WidgetBuilder>? pages = {
       routes.errorInformationRoute : (context) => ErroInformacaoView(map: {}),
       routes.menuNavigationRoute : (context) => MenuNavigation(),
-      routes.settingsRoute : (context) => const SettingsView(),
       routes.splashScreenRoute : (context) => const SplashScreenView(),
 
       // Visualizações sici ----------------------------------------------------------------------------------------------------

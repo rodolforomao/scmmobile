@@ -298,7 +298,7 @@ class GlobalScaffold {
   }
 
   onHideCurrentSnackBar() {
-    messangerKey.currentState!.hideCurrentSnackBar();
+    messangerKey.currentState!.removeCurrentSnackBar();
   }
 
   onToastPerformingOperation(String mensagem) {

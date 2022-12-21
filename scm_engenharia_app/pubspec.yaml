@@ -1,6 +1,6 @@
 name: scm_engenharia_app
 description: Aplicativo mobile da empresa SCM Engenharia
-version: 1.0.0
+version: 2.0.0
 build: 2000
 homepage: https://www.scmengenharia.com.br
 repository: https://www.scmengenharia.com.br
@@ -38,6 +38,7 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

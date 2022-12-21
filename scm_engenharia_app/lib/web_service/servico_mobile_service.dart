@@ -211,6 +211,59 @@ class ServicoMobileService {
     return operacao;
   }
 
+  static Future<Operation> onCancelAccess(String id) async {
+    Operation operacao = Operation();
+    try {
+      String? token = await ComponentsJWTToken.JWTTokenPadrao();
+      Map<String, String> headers = {
+        'Content-Type': 'application/json; charset=utf-8',
+        'token': token!,
+      };
+      http.MultipartRequest response;
+      response = http.MultipartRequest('POST', Uri.parse("$Url/administracao/bloquear_usuario_ws"));
+      response.headers.addAll(headers);
+      response.fields['id'] = id;
+      response.fields['acao'] = 'true';
+      var streamedResponse = await response.send();
+      final respStr = await streamedResponse.stream.bytesToString();
+      operacao.statusCode = streamedResponse.statusCode;
+      if (streamedResponse.statusCode == 200) {
+        if (respStr.isEmpty) {
+          throw (ApiRestInformation.problemOfComunication);
+        }
+        else
+        {
+          Map<String, dynamic> map = jsonDecode(Components.removeAllHtmlTags(respStr));
+          OperationJson resp = OperationJson.fromJson(map);
+          operacao.erro = !resp.status!;
+          operacao.message = resp.message;
+          operacao.result = resp.result;
+        }
+        if (operacao.message == null && operacao.result == null) {
+          throw ('Não foi identificado resposta');
+        }
+      } else {
+        operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(streamedResponse.statusCode, response.method);
+      }
+    } on TimeoutException  {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.timeoutHttp;
+    } on SocketException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.internetSocketException;
+    } on HttpException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.httpException;
+    } on FormatException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.formatException;
+    } catch (e) {
+      operacao.erro = true;
+      operacao.message = e.toString();
+    }
+    return operacao;
+  }
+
   static Future<Operation> onMakeReleasesSici(InputSiciFileModel siciFileModel) async {
     Operation operacao = Operation();
     try {
