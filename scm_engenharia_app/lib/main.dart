@@ -24,12 +24,10 @@ class MyHttpOverrides extends HttpOverrides{
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   HttpOverrides.global = MyHttpOverrides();
   if(!Platform.isWindows && !Platform.isLinux)
   {
     await Firebase.initializeApp(
-      name: 'App SCM',
       options: DefaultFirebaseConfig.currentPlatform,
     );
     // Defina o gerenciador de mensagens em segundo plano desde o início, como uma função de nível superior nomeada
