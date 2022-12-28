@@ -452,7 +452,7 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                   maxLength: 20,
                 ),
                 TextField(
-                  keyboardType: TextInputType.datetime,
+                  keyboardType: TextInputType.text,
                   controller: txtControllerSocialReason,
                   focusNode: focusNodeSocialReason,
                   textInputAction: TextInputAction.next,
@@ -861,7 +861,7 @@ class FormularioSiciFustState extends State<FormularioSiciFustView> implements I
                   textAlign: TextAlign.start,
                   focusNode: focusNodeGeneralObservations,
                   textInputAction: TextInputAction.next,
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.text,
                   style: const TextStyle(
                       fontSize: 16,
                       fontFamily: 'Poppins-Regular',
