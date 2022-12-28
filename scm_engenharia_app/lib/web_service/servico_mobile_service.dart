@@ -302,7 +302,7 @@ class ServicoMobileService {
       response.fields['controllerObservacoes'] = siciFileModel.observacoes ?? '';
       int index = 1;
       for (var item in siciFileModel.dadosEmServicos!.toList()) {
-        if(item.idLancamento!.isNotEmpty)
+        if(item.idLancamento != null && item.idLancamento!.isNotEmpty)
         {
           response.fields['id_lancamento$index'] = item.idLancamento ?? '';
         }
