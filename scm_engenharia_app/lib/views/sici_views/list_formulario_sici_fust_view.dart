@@ -434,7 +434,9 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
             onRefresh: () async {
 
             },
-            child: ListView.builder(
+            child:Card(
+
+              child:  ListView.builder(
               padding: const EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 15.0),
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
@@ -444,39 +446,12 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
                   Container(
-                    height: 111.0,
-                    padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
+                    height: 70.0,
+                    padding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 0.0),
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.max,
                         children: <Widget>[
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: RichText(
-                                textAlign: TextAlign.start,
-                                softWrap: false,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                text: TextSpan(children: [
-                                  const TextSpan(
-                                    text: 'Período referencia :  ',
-                                    style: TextStyle(
-                                      fontSize: 18.0,
-                                      color: Color(0xff333333),
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: siciFileModelAllList[index].periodoReferencia,
-                                    style: const TextStyle(
-                                      fontSize: 20.0,
-                                      color: Color(0xff333333),
-                                    ),
-                                  ),
-                                ])),
-                          ),
-                          const SizedBox(
-                            height: 10.0,
-                          ),
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
@@ -496,18 +471,25 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                           ),
                           Align(
                             alignment: Alignment.centerLeft,
-                            child:Text(
-                              siciFileModelAllList[index].observacoes.toString(),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                              softWrap: false,
-                              textAlign: TextAlign.start,
-                              style: const TextStyle(
-                                fontSize: 14.0,
-                                color: Color(0xff333333),
-                              ),
-                            ),
+                            child: RichText(
+                                textAlign: TextAlign.start,
+                                softWrap: false,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                text: TextSpan(children: [
+                                  TextSpan(
+                                    text: siciFileModelAllList[index].periodoReferencia,
+                                    style: const TextStyle(
+                                      fontSize: 15.0,
+                                      color: Color(0xff333333),
+                                    ),
+                                  ),
+                                ])),
                           ),
+                          const SizedBox(
+                            height: 10.0,
+                          ),
+
                         ]),
                   ),
                   const SizedBox(
@@ -521,7 +503,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                     padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
                         if( siciFileModelAllList[index].idFichaSiciApp!.isNotEmpty)...[
                           Container(
@@ -535,14 +517,13 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: const <Widget>[
-                                  Icon(Icons.file_upload_outlined,
-                                      size: 25, color: Color(0xFF27584f)),
+                                  Icon(Icons.file_upload_outlined, size: 25, color: Color(0xFF27584f)),
                                   SizedBox(height: 10.0),
                                   Text(
                                     'Upload',
                                     style: TextStyle(
                                         fontWeight: FontWeight.w500,
-                                        fontSize: 15.0,
+                                        fontSize: 10.0,
                                         color: Color(0xFF27584f),
                                         fontFamily: "Poppins-Regular"),
                                   ),
@@ -550,9 +531,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                               ),
                             ),
                           ),
-                          const VerticalDivider(
-                            color: Color(0xFF000000),
-                          ),
+                          const  SizedBox(width: 25.0),
                           Container(
                             color: const Color(0xffFFFFFF),
                             //width: MediaQuery.of(context).size.width / 3,
@@ -681,13 +660,13 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: const <Widget>[
                                   Icon(Icons.delete_outlined,
-                                      size: 25, color: Color(0xfff44336)),
+                                      size: 20, color: Color(0xfff44336)),
                                   SizedBox(height: 10.0),
                                   Text(
                                     'Remover',
                                     style: TextStyle(
                                         fontWeight: FontWeight.w500,
-                                        fontSize: 15.0,
+                                        fontSize: 10.0,
                                         color: Color(0xfff44336),
                                         fontFamily: 'Poppins-Regular'),
                                   ),
@@ -695,9 +674,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                               ),
                             ),
                           ),
-                          const VerticalDivider(
-                            color: Color(0xFF000000),
-                          ),
+                          const  SizedBox(width: 25.0),
                         ]
                         else ...[
                           Container(
@@ -712,13 +689,13 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: const <Widget>[
                                   Icon(Icons.file_download_outlined,
-                                      size: 25, color: Color(0xFF4caf50)),
+                                      size: 20, color: Color(0xFF4caf50)),
                                   SizedBox(height: 10.0),
                                   Text(
                                     'Download',
                                     style: TextStyle(
                                         fontWeight: FontWeight.w500,
-                                        fontSize: 15.0,
+                                        fontSize: 10.0,
                                         color: Color(0xFF4caf50),
                                         fontFamily: "Poppins-Regular"),
                                   ),
@@ -726,9 +703,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                               ),
                             ),
                           ),
-                          const VerticalDivider(
-                            color: Color(0xFF000000),
-                          ),
+                          const SizedBox(width: 25.0),
                         ],
                         Container(
                           color: const Color(0xffFFFFFF),
@@ -741,14 +716,13 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: const <Widget>[
-                                Icon(Icons.visibility_outlined,
-                                    size: 25, color: Color(0xFFffc107)),
+                                Icon(Icons.visibility_outlined, size: 20, color: Color(0xFFffc107)),
                                 SizedBox(height: 10.0),
                                 Text(
                                   'Visualizar',
                                   style: TextStyle(
                                       fontWeight: FontWeight.w500,
-                                      fontSize: 15.0,
+                                      fontSize: 10.0,
                                       color: Color(0xFFffc107),
                                       fontFamily: "Poppins-Regular"),
                                 ),
@@ -764,7 +738,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                   ),
                 ],
               ),
-            ),
+            ),),
           ),),);
     }
   }
