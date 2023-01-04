@@ -42,7 +42,7 @@ Reinicia o computador
 
 Adicionar  key.properties  Em [project]/android 
 
-Que está  em Ex: D:\GitHub\scmmobile\build_android
+Que está em Ex: D:\GitHub\scmmobile\build_android
 
 Abra o key.properties 
 Mapear storeFile -  Ex: D:\GitHub\scmmobile\build_android\ScmEngenharia.jks
@@ -64,7 +64,7 @@ Submeter a google play   (app.aab)
 ##
 
 ## Building IOS
-pod install --repo-update
+**pod install --repo-update**
 
 flutter clean
 flutter build ios --obfuscate --split-debug-info=/obfuscate

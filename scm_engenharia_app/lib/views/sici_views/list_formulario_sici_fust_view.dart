@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import '../../data/app_scm_engenharia_mobile_bll.dart';
 import '../../data/tb_form_sici_fust.dart';
+import '../../help/components.dart';
 import '../../models/operation.dart';
 import '../../models/input/input_sici_fust_form_model.dart';
 import '../../models/output/output_sici_fust_model.dart';
@@ -30,6 +31,8 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
 
   TypeView statusView = TypeView.viewLoading;
   final txtSocialReason = TextEditingController();
+  late bool isSearching = false;
+
 
   onRestWeb() async {
     try {
@@ -297,121 +300,101 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(140.0),
-        child:  AppBar(
+        preferredSize: const Size.fromHeight(55.0),
+        child: AppBar(
           automaticallyImplyLeading: true,
           centerTitle: true,
           flexibleSpace: Container(
             decoration: StylesThemas.boxDecorationAppBar,
           ),
           elevation: 0.0,
-          title: const Text('Sici/Fust Enviados - Período'),
-          actions: [
-            if(siciFileModelAllList.isNotEmpty)
-              ...[
-                selectPopupMenuButton()
-              ]
-          ],
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(0.0),
-            child: Container(
-              width: double.infinity,
-              constraints:  const BoxConstraints(
-                maxWidth: 900,
+        title: !isSearching
+            ? const Text('Sici/Fust Enviados - Período')
+            : Container(
+          constraints:  const BoxConstraints(
+              maxWidth: 1000
+          ),child: TextField(
+          autofocus: false,
+          keyboardType: TextInputType.text,
+          textInputAction: TextInputAction.done,
+          onChanged: (String value) async {
+            if (value.isNotEmpty) {
+              setState(() {
+                siciFileModelAllList = siciFileModelUpdateList.where((element) => element.razaoSocial!.toLowerCase().contains(value.toLowerCase())).toList();
+                if(siciFileModelAllList.isEmpty)
+                {
+                  statusView = TypeView.viewErrorInformation;
+                  GlobalScaffold.erroInformacao = 'Não a registro para esta solicitação';
+                }
+                else {
+                  statusView = TypeView.viewRenderInformation;
+                }
+              });
+            } else if (value.isEmpty) {
+              FocusScope.of(context).requestFocus(FocusNode());
+              setState(() {
+                //listaProcarsatStateModelo = listaSearching.toList();
+              });
+            }
+          },
+          style: const TextStyle(
+              fontSize: 16,
+              fontFamily: 'Poppins-Regular',
+              fontWeight: FontWeight.w100,
+              color: Color(0xFF323232)),
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: const Color(0xff70ffffff),
+            hintStyle: const TextStyle(fontSize: 14.0, color: Color(0xff80ffffff)),
+            hintText: 'Razão social',
+            contentPadding: const EdgeInsets.fromLTRB(10.0, 9.0, 10.0, 11.0),
+            focusedBorder: OutlineInputBorder(
+              borderSide:
+              const BorderSide(color: Colors.white, width: 0.5),
+              borderRadius: BorderRadius.circular(25.7),
+            ),
+            enabledBorder: UnderlineInputBorder(
+              borderSide: const BorderSide(
+                  color: Colors.transparent, width: 0.9),
+              borderRadius: BorderRadius.circular(25.7),
+            ),
+            icon: const Icon(
+              Icons.search,
+              size: 23,
+              color: Colors.white,
+            ),
+            suffixIcon: IconButton(
+              color: Colors.white,
+              icon: const Icon(
+                Icons.cancel,
+                size: 23.0,
               ),
-              padding: const EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 15.0),
-              child:  Row(
-                children: [
-                  Flexible(
-                    flex: 6,
-                    fit: FlexFit.tight,
-                    child: Theme(
-                      data: Theme.of(context).copyWith(splashColor: Colors.transparent),
-                      child: TextField(
-                        enableInteractiveSelection: true,
-                        keyboardType: TextInputType.text,
-                        controller: txtSocialReason,
-                        textInputAction: TextInputAction.go,
-                        maxLines: 1,
-                        style: const TextStyle(
-                            fontSize: 16,
-                            fontFamily: 'Poppins-Regular',
-                            fontWeight: FontWeight.w100,
-                            color: Color(0xFFffffff)),
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: const Color(0xff70ffffff),
-                          hintStyle: const TextStyle(fontSize: 14.0, color: Color(0xff80ffffff)),
-                          hintText: 'Razão social',
-                          contentPadding: const EdgeInsets.fromLTRB(10.0, 9.0, 10.0, 11.0),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                            const BorderSide(color: Colors.white, width: 0.5),
-                            borderRadius: BorderRadius.circular(25.7),
-                          ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: Colors.transparent, width: 0.9),
-                            borderRadius: BorderRadius.circular(25.7),
-                          ),
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            siciFileModelAllList = siciFileModelUpdateList.where((element) => element.razaoSocial!.toLowerCase().contains(txtSocialReason.text.toLowerCase())).toList();
-                            if(siciFileModelAllList.isEmpty)
-                            {
-                              setState(() {
-                                statusView = TypeView.viewErrorInformation;
-                                GlobalScaffold.erroInformacao = 'Não a registro para esta solicitação';
-                              });
-                            }
-                            else  {
-                              setState(() {statusView = TypeView.viewRenderInformation;});
-                            }
-                          });
-                        },
-                        onSubmitted: (value) {
-                          FocusScope.of(context).requestFocus(FocusNode());
-
-                        },
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 5.0,
-                  ),
-                  Flexible(
-                    flex: 1,
-                    fit: FlexFit.tight,
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.search_outlined,
-                        color: Colors.white,
-                      ),
-                      iconSize: 30,
-                      onPressed: () {
-                        FocusScope.of(context).requestFocus(FocusNode());
-                        setState(() {
-                          siciFileModelAllList = siciFileModelUpdateList.where((element) => element.razaoSocial!.toLowerCase().contains(txtSocialReason.text.toLowerCase())).toList();
-                          if(siciFileModelAllList.isEmpty)
-                          {
-                            setState(() {
-                              statusView = TypeView.viewErrorInformation;
-                              GlobalScaffold.erroInformacao = 'Não a registro para esta solicitação';
-                            });
-                          }
-                          else  {
-                            setState(() {statusView = TypeView.viewRenderInformation;});
-                          }
-                        });
-                      },
-                    ),
-                  ),
-                ],
-              ),
+              onPressed: () {
+                setState(() {
+                  isSearching = false;
+                  FocusScope.of(context).requestFocus(FocusNode());
+                });
+              },
             ),
           ),
-        ),
+        ),),
+        actions: <Widget>[
+          if(!isSearching)...
+           [
+             IconButton(
+               icon: const Icon(
+                 Icons.search,
+                 size: 23,
+               ),
+               onPressed: () {
+                 setState(() {
+                   isSearching = true;
+                 });
+               },
+             )
+           ]
+        ],
+      ),
       ),
       body: viewType(MediaQuery.of(context).size.height),
     );
@@ -434,8 +417,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
             onRefresh: () async {
 
             },
-            child:Card(
-
+            child: Card(
               child:  ListView.builder(
               padding: const EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 15.0),
               scrollDirection: Axis.vertical,
@@ -446,7 +428,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
                   Container(
-                    height: 70.0,
+                    height: 60.0,
                     padding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 0.0),
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -461,7 +443,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                               softWrap: false,
                               textAlign: TextAlign.start,
                               style: const TextStyle(
-                                fontSize: 17.0,
+                                fontSize: 16.0,
                                 color: Color(0xff333333),
                               ),
                             ),
@@ -480,7 +462,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                                   TextSpan(
                                     text: siciFileModelAllList[index].periodoReferencia,
                                     style: const TextStyle(
-                                      fontSize: 15.0,
+                                      fontSize: 12.0,
                                       color: Color(0xff333333),
                                     ),
                                   ),
@@ -492,15 +474,11 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
 
                         ]),
                   ),
-                  const SizedBox(
-                    height: 9.0,
-                  ),
                   Container(
                     alignment: Alignment.bottomCenter,
-                    height: 80,
-                    color: const Color(0xffFFFFFF),
+                    height: 50,
                     width: MediaQuery.of(context).size.width,
-                    padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
+                    padding: const EdgeInsets.fromLTRB(0.0, 5.0, 10.0, 5.0),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -517,16 +495,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: const <Widget>[
-                                  Icon(Icons.file_upload_outlined, size: 25, color: Color(0xFF27584f)),
-                                  SizedBox(height: 10.0),
-                                  Text(
-                                    'Upload',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 10.0,
-                                        color: Color(0xFF27584f),
-                                        fontFamily: "Poppins-Regular"),
-                                  ),
+                                  Icon(Icons.file_upload_outlined, size: 25, color: Color(0xFF000000)),
                                 ],
                               ),
                             ),
@@ -660,16 +629,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: const <Widget>[
                                   Icon(Icons.delete_outlined,
-                                      size: 20, color: Color(0xfff44336)),
-                                  SizedBox(height: 10.0),
-                                  Text(
-                                    'Remover',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 10.0,
-                                        color: Color(0xfff44336),
-                                        fontFamily: 'Poppins-Regular'),
-                                  ),
+                                      size: 20, color: Color(0xFF000000)),
                                 ],
                               ),
                             ),
@@ -689,16 +649,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: const <Widget>[
                                   Icon(Icons.file_download_outlined,
-                                      size: 20, color: Color(0xFF4caf50)),
-                                  SizedBox(height: 10.0),
-                                  Text(
-                                    'Download',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 10.0,
-                                        color: Color(0xFF4caf50),
-                                        fontFamily: "Poppins-Regular"),
-                                  ),
+                                      size: 20, color: Color(0xFF000000)),
                                 ],
                               ),
                             ),
@@ -716,16 +667,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: const <Widget>[
-                                Icon(Icons.visibility_outlined, size: 20, color: Color(0xFFffc107)),
-                                SizedBox(height: 10.0),
-                                Text(
-                                  'Visualizar',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 10.0,
-                                      color: Color(0xFFffc107),
-                                      fontFamily: "Poppins-Regular"),
-                                ),
+                                Icon(Icons.visibility_outlined, size: 20, color: Color(0xFF000000)),
                               ],
                             ),
                           ),

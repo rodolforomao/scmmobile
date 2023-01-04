@@ -38,6 +38,20 @@ class Components {
     return Txt;
   }
 
+  static bool  isNumeric(String input) {
+    try{
+      String source = input.trim();
+      var value = int.parse(source);
+      return true;
+    } on FormatException {
+      return false;
+    }
+    catch (error) {
+      return false;
+    }
+  }
+
+
   static String? dateFormatDDMMYYYY(String date) {
     try {
       if(date.isEmpty)
