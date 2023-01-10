@@ -14,7 +14,7 @@ import '../../thema/app_thema.dart';
 import '../../web_service/servico_mobile_service.dart';
 import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
-import 'formulario_sici_fust_view.dart';
+import 'formulario_dici_fust_view.dart';
 
 
 class ListFormularioSiciFustView extends StatefulWidget {
@@ -266,7 +266,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
           context,
           CupertinoPageRoute(
             builder: (context) =>
-                FormularioSiciFustView(siciFileModel:prop),
+                FormularioDiciFustView(siciFileModel:prop),
           )).then((value) {
         onRestDb();
       });
@@ -309,7 +309,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
           ),
           elevation: 0.0,
         title: !isSearching
-            ? const Text('Sici/Fust Enviados - Período')
+            ? const Text('Dici/Fust Enviados - Período')
             : Container(
           constraints:  const BoxConstraints(
               maxWidth: 1000

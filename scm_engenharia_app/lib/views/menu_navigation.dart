@@ -14,7 +14,7 @@ import 'notifications_views/alertas_view.dart';
 import 'notifications_views/notificacoes_view.dart';
 import 'others_view/analises_view.dart';
 import 'settings_views/configuracoes_view.dart';
-import 'sici_views/list_formulario_sici_fust_view.dart';
+import 'sici_views/list_formulario_dici_fust_view.dart';
 import 'user_views/usuarios_view.dart';
 
 

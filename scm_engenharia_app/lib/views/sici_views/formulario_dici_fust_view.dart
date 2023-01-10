@@ -18,12 +18,12 @@ import '../help_views/global_view.dart';
 import 'dados_em_servicos_view.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
 
-class FormularioSiciFustView extends StatefulWidget {
+class FormularioDiciFustView extends StatefulWidget {
   InputSiciFileModel? siciFileModel;
-  FormularioSiciFustView({ Key? key, required this.siciFileModel}) : super(key: key);
+  FormularioDiciFustView({ Key? key, required this.siciFileModel}) : super(key: key);
 
   @override
-  FormularioSiciFustState createState() => FormularioSiciFustState();
+  FormularioDiciFustState createState() => FormularioDiciFustState();
 }
 
 abstract class IsSilly {
@@ -32,7 +32,7 @@ abstract class IsSilly {
 
 }
 
-class FormularioSiciFustState extends State<FormularioSiciFustView> implements IsSilly {
+class FormularioDiciFustState extends State<FormularioDiciFustView> implements IsSilly {
 
   InputSiciFileModel inputSiciFustForm = InputSiciFileModel();
 

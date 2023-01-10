@@ -11,7 +11,7 @@ import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
 import 'selecionar_municipio_view.dart';
 import '../../thema/app_thema.dart';
-
+import '../../help/navigation_service/route_paths.dart' as routes;
 
 class DadosEmServicosView extends StatefulWidget {
   InputDadosEmServicosModel? sInputDadosEmServicos;
@@ -154,7 +154,15 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
         }
       setState((){statusView = TypeView.viewRenderInformation;});
     } catch (error) {
-      OnAlertError(error.toString());
+      Navigator.of(context).pushNamed(
+        routes.errorInformationRoute,
+        arguments: {
+          'view': routes.splashScreenRoute,
+          'error': error
+        },
+      ).then((value) {
+        Navigator.of(context).pop();
+      });
     }
   }
 
