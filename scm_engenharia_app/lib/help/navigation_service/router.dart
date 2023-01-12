@@ -64,7 +64,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => const RecibosView());
   //Formulario Sici
     case routes.formularioSiciFustRoute:
-      return MaterialPageRoute(builder: (context) => FormularioSiciFustView(siciFileModel: null,));
+      return MaterialPageRoute(builder: (context) => FormularioDiciFustView(siciFileModel: null,));
     case routes.lancamentoSiciFustRoute:
       return MaterialPageRoute(builder: (context) => const ListFormularioSiciFustView());
   //Documentos
