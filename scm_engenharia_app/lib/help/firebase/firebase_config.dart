@@ -20,7 +20,7 @@ class DefaultFirebaseConfig {
       return const FirebaseOptions(
         appId: '1:903936319018:ios:26acf1d4d3e67df3186d53',
         apiKey: 'AIzaSyDUN99Krs9w0Tb9cZ3JqZhuqJL5fwOVhws',
-        projectId: 'br.com.scmengenharia.dici',
+        projectId: 'app-scm',
         messagingSenderId: '903936319018',
         iosBundleId: 'br.com.scmengenharia.dici',
         iosClientId: 'com.googleusercontent.apps.903936319018-a086hdddnoasbpd2bmphp8r7c8p47ha7',

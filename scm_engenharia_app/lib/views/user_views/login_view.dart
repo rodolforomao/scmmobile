@@ -33,7 +33,7 @@ class LoginState extends State<LoginView> {
   late String errorTextControllerSenha, errorTextControllerEmail;
   bool isVisualizarSenha = false;
 
-  onLoggingIn() async {
+  onLogin() async {
     try {
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
         GlobalScaffold.instance.onToastInternetConnection();
@@ -94,12 +94,10 @@ class LoginState extends State<LoginView> {
 
   @override
   void initState() {
-
     super.initState();
     // NotificationHandler().subscribeToTopic("scmengenhariaUserNLogado");
     //txtControllerEmail.text = "rodolforomao@gmail.com";
     //txtControllerPassword.text = "1234567";
-
   }
 
   @override
@@ -186,7 +184,7 @@ class LoginState extends State<LoginView> {
                 textInputAction: TextInputAction.go,
                 onSubmitted: (term) {
                   focusNodeEmail!.unfocus();
-                  onLoggingIn();
+                  onLogin();
                 },
                 style: const TextStyle(
                     fontSize: 20,
@@ -266,7 +264,7 @@ class LoginState extends State<LoginView> {
                   ),
                 ),
                 onPressed: () async {
-                  onLoggingIn();
+                  onLogin();
                 },
               ),
               const SizedBox(height: 25.0),
@@ -301,8 +299,7 @@ class LoginState extends State<LoginView> {
                 ),
                 onPressed: () async {
                   Navigator.of(context).pushNamed(
-                    //routes.forgotYourPasswordRoute,
-                    routes.configuracoesRoute,
+                    routes.forgotYourPasswordRoute,
                   );
                 },
               ),

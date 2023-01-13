@@ -15,8 +15,7 @@ class ComponentsJWTToken {
         return Components.JWTTokenPadrao();
       } else {
         TbUser respUser =  loggedInuser.result as TbUser;
-        String key =
-            "bc47f175a831996b652146d47e159349f75e6c4665570ef35606678a18054d13";
+        String key = "bc47f175a831996b652146d47e159349f75e6c4665570ef35606678a18054d13";
         final claimSet = JwtClaim(otherClaims: <String, Object>{
           "user": respUser.email,
           "pass": respUser.password,

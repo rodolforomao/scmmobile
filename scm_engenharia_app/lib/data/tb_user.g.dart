@@ -6,7 +6,7 @@ part of 'tb_user.dart';
 // RealmObjectGenerator
 // **************************************************************************
 
-class TbUser extends _TbUser with RealmEntity, RealmObjectBase, RealmObject {
+class TbUser extends _TbUser with RealmEntity, RealmObject {
   TbUser(
       ObjectId idUserApp,
       String idUser,
@@ -21,90 +21,90 @@ class TbUser extends _TbUser with RealmEntity, RealmObjectBase, RealmObject {
       String cpf,
       String uf,
       ) {
-    RealmObjectBase.set(this, 'idUserApp', idUserApp);
-    RealmObjectBase.set(this, 'idUser', idUser);
-    RealmObjectBase.set(this, 'idProfile', idProfile);
-    RealmObjectBase.set(this, 'name', name);
-    RealmObjectBase.set(this, 'password', password);
-    RealmObjectBase.set(this, 'email', email);
-    RealmObjectBase.set(this, 'telephone', telephone);
-    RealmObjectBase.set(this, 'dtLastAcess', dtLastAcess);
-    RealmObjectBase.set(this, 'company', company);
-    RealmObjectBase.set(this, 'referencePeriod', referencePeriod);
-    RealmObjectBase.set(this, 'cpf', cpf);
-    RealmObjectBase.set(this, 'uf', uf);
+    RealmObject.set(this, 'idUserApp', idUserApp);
+    RealmObject.set(this, 'idUser', idUser);
+    RealmObject.set(this, 'idProfile', idProfile);
+    RealmObject.set(this, 'name', name);
+    RealmObject.set(this, 'password', password);
+    RealmObject.set(this, 'email', email);
+    RealmObject.set(this, 'telephone', telephone);
+    RealmObject.set(this, 'dtLastAcess', dtLastAcess);
+    RealmObject.set(this, 'company', company);
+    RealmObject.set(this, 'referencePeriod', referencePeriod);
+    RealmObject.set(this, 'cpf', cpf);
+    RealmObject.set(this, 'uf', uf);
   }
 
   TbUser._();
 
   @override
-  ObjectId get idUserApp => RealmObjectBase.get<ObjectId>(this, 'idUserApp') as ObjectId;
+  ObjectId get idUserApp => RealmObject.get<ObjectId>(this, 'idUserApp') as ObjectId;
   @override
   set idUserApp(ObjectId value) => throw RealmUnsupportedSetError();
 
   @override
-  String get idUser => RealmObjectBase.get<String>(this, 'idUser') as String;
+  String get idUser => RealmObject.get<String>(this, 'idUser') as String;
   @override
-  set idUser(String value) => RealmObjectBase.set(this, 'idUser', value);
+  set idUser(String value) => RealmObject.set(this, 'idUser', value);
 
   @override
-  String get idProfile => RealmObjectBase.get<String>(this, 'idProfile') as String;
+  String get idProfile => RealmObject.get<String>(this, 'idProfile') as String;
   @override
-  set idProfile(String value) => RealmObjectBase.set(this, 'idProfile', value);
+  set idProfile(String value) => RealmObject.set(this, 'idProfile', value);
 
   @override
-  String get name => RealmObjectBase.get<String>(this, 'name') as String;
+  String get name => RealmObject.get<String>(this, 'name') as String;
   @override
-  set name(String value) => RealmObjectBase.set(this, 'name', value);
+  set name(String value) => RealmObject.set(this, 'name', value);
 
   @override
-  String get password => RealmObjectBase.get<String>(this, 'password') as String;
+  String get password => RealmObject.get<String>(this, 'password') as String;
   @override
-  set password(String value) => RealmObjectBase.set(this, 'password', value);
+  set password(String value) => RealmObject.set(this, 'password', value);
 
   @override
-  String get email => RealmObjectBase.get<String>(this, 'email') as String;
+  String get email => RealmObject.get<String>(this, 'email') as String;
   @override
-  set email(String value) => RealmObjectBase.set(this, 'email', value);
+  set email(String value) => RealmObject.set(this, 'email', value);
 
   @override
-  String get telephone => RealmObjectBase.get<String>(this, 'telephone') as String;
+  String get telephone => RealmObject.get<String>(this, 'telephone') as String;
   @override
-  set telephone(String value) => RealmObjectBase.set(this, 'telephone', value);
+  set telephone(String value) => RealmObject.set(this, 'telephone', value);
 
   @override
-  String get dtLastAcess => RealmObjectBase.get<String>(this, 'dtLastAcess') as String;
+  String get dtLastAcess => RealmObject.get<String>(this, 'dtLastAcess') as String;
   @override
-  set dtLastAcess(String value) => RealmObjectBase.set(this, 'dtLastAcess', value);
+  set dtLastAcess(String value) => RealmObject.set(this, 'dtLastAcess', value);
 
   @override
-  String get company => RealmObjectBase.get<String>(this, 'company') as String;
+  String get company => RealmObject.get<String>(this, 'company') as String;
   @override
-  set company(String value) => RealmObjectBase.set(this, 'company', value);
+  set company(String value) => RealmObject.set(this, 'company', value);
 
   @override
-  String get referencePeriod => RealmObjectBase.get<String>(this, 'referencePeriod') as String;
+  String get referencePeriod => RealmObject.get<String>(this, 'referencePeriod') as String;
   @override
-  set referencePeriod(String value) => RealmObjectBase.set(this, 'referencePeriod', value);
+  set referencePeriod(String value) => RealmObject.set(this, 'referencePeriod', value);
 
   @override
-  String get cpf => RealmObjectBase.get<String>(this, 'cpf') as String;
+  String get cpf => RealmObject.get<String>(this, 'cpf') as String;
   @override
-  set cpf(String value) => RealmObjectBase.set(this, 'cpf', value);
+  set cpf(String value) => RealmObject.set(this, 'cpf', value);
 
   @override
-  String get uf => RealmObjectBase.get<String>(this, 'uf') as String;
+  String get uf => RealmObject.get<String>(this, 'uf') as String;
   @override
-  set uf(String value) => RealmObjectBase.set(this, 'uf', value);
+  set uf(String value) => RealmObject.set(this, 'uf', value);
 
   @override
-  Stream<RealmObjectChanges<TbUser>> get changes => RealmObjectBase.getChanges<TbUser>(this);
+  Stream<RealmObjectChanges<TbUser>> get changes => RealmObject.getChanges<TbUser>(this);
 
   static SchemaObject get schema => _schema ??= _initSchema();
   static SchemaObject? _schema;
   static SchemaObject _initSchema() {
-    RealmObjectBase.registerFactory(TbUser._);
-    return const SchemaObject(ObjectType.realmObject,TbUser, '_TbUser', [
+    RealmObject.registerFactory(TbUser._);
+    return const SchemaObject(TbUser, '_TbUser', [
       SchemaProperty('idUserApp', RealmPropertyType.objectid, mapTo: 'idUserApp', primaryKey: true),
       SchemaProperty('idUser', RealmPropertyType.string),
       SchemaProperty('idProfile', RealmPropertyType.string),

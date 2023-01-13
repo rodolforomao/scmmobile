@@ -162,6 +162,26 @@ class ConfiguracoesState extends State<Configuracoesview> {
                       fontWeight: FontWeight.w100,
                       color: Color(0xFF323232)),
                 ),),),
+              Padding(padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),child:ListTile(
+                onTap: () {
+                  Navigator.of(context).pushNamed(
+                    routes.cancelarAcessoRoute,
+                  );
+                },
+                contentPadding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+                leading: Container(
+                  padding: const EdgeInsets.only(right: 12.0),
+                  child: const Icon(Icons.person_remove_outlined,
+                      color: Color(0xff9e9e9e), size: 25.0),
+                ),
+                title: const Text(
+                  'Cancelar acesso',
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontFamily: 'Poppins-Regular',
+                      fontWeight: FontWeight.w100,
+                      color: Color(0xFF323232)),
+                ),),),
               Padding(padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),child: ListTile(
                 onTap: () {
                   FocusScope.of(context).requestFocus(FocusNode());

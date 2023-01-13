@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:scm_engenharia_app/views/user_views/cancelar_acesso_view.dart';
+import '../thema/app_thema.dart';
 import 'business_views/empresas_view.dart';
 import 'documents_views/certidoes_view.dart';
 import 'documents_views/contratos_view.dart';
@@ -12,7 +14,7 @@ import 'notifications_views/alertas_view.dart';
 import 'notifications_views/notificacoes_view.dart';
 import 'others_view/analises_view.dart';
 import 'settings_views/configuracoes_view.dart';
-import 'sici_views/list_formulario_sici_fust_view.dart';
+import 'sici_views/list_formulario_dici_fust_view.dart';
 import 'user_views/usuarios_view.dart';
 
 
@@ -40,8 +42,6 @@ class MenuNavigationState extends State<MenuNavigation> {
     super.dispose();
   }
 
-
-
   onSelectedPage() {
     switch (GlobalScaffold.instance.selectedPageView) {
       case routes.lancamentoSiciFustRoute:
@@ -54,8 +54,7 @@ class MenuNavigationState extends State<MenuNavigation> {
         return const EmpresasView();
       case routes.recibosRoute:
         return const RecibosView();
-        //----------------------------
-    //----------------------------
+     //----------------------------
       case routes.certidoesRoute:
         return const CertidoesView();
       case routes.contratosRoute:
@@ -69,8 +68,55 @@ class MenuNavigationState extends State<MenuNavigation> {
         return const NotificationsView();
       case routes.configuracoesRoute:
         return const Configuracoesview();
+
       default:
-        return const Text('Error');
+        return Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            title: const Text('Informação'),
+            toolbarHeight: 55,
+            flexibleSpace: Container(
+              decoration: StylesThemas.boxDecorationAppBar,
+            ),
+            backgroundColor: Colors.transparent,
+          ),
+          body: Container(
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+            ),
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height,
+            ),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  const SizedBox(
+                    height: 40.0,
+                  ),
+                  Image.asset(
+                    'assets/img/img_informacao.png',
+                    width: 150.0,
+                    height: 150.0,
+                    fit: BoxFit.fill,
+                  ),
+                  const SizedBox(
+                    height: 40.0,
+                  ),
+                  Text(
+                    'Página não encontrada',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 16,color:  const Color(0xff575757), fontWeight: FontWeight.w600,),
+                  ),
+                  const SizedBox(height: 40.0),
+                ],
+              ),
+            ),
+          ),
+        );
     }
   }
 
@@ -87,13 +133,12 @@ class MenuNavigationState extends State<MenuNavigation> {
 
         });
       },
-      drawer: Drawer(child:
-      SingleChildScrollView(
+      drawer: Drawer(child: SingleChildScrollView(
         child: Container(
           constraints: BoxConstraints(
             minHeight: maxHeight,
           ),
-          child: Expanded(child: Column(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -295,7 +340,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                                               overflow: TextOverflow.visible,
                                               maxLines: 2,
                                               softWrap: false,
-                                              style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 15, color:Color(0xff6C757D)),
+                                              style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 15, color:const Color(0xff6C757D)),
                                             ),
                                           ),
                                         ],
@@ -455,8 +500,8 @@ class MenuNavigationState extends State<MenuNavigation> {
                           data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
                           child: ExpansionTile(
                               key: GlobalKey(),
-                              collapsedIconColor: Color(0xff6C757D),
-                              iconColor: Color(0xffd56921),
+                              collapsedIconColor: const Color(0xff6C757D),
+                              iconColor: const Color(0xffd56921),
                               initiallyExpanded:documentosExpanded,
                               onExpansionChanged: (val) {
                                 setState(() {
@@ -474,7 +519,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                                 style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.documentosRoute)),
                               ),
                               children: [
-    /*   SizedBox(
+                                /*   SizedBox(
                                   height: 40,
                                   child: InkWell(
                                     onTap: () {
@@ -820,7 +865,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                 ),
               ),
             ],
-          ),),),
+          ),),
       ),),
       bottomNavigationBar: BottomAppBar(
         elevation: 0,
@@ -840,7 +885,6 @@ class MenuNavigationState extends State<MenuNavigation> {
             tooltip: 'Menu',
             onPressed: () {
               GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openDrawer();
-
             },
           ),
         ),

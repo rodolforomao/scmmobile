@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Scm Engenharia</string>
+	<string>Scm Engenharia</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -52,6 +52,8 @@
         <string>fetch</string>
     	<string>remote-notification</string>
     </array>
+    <key>FirebaseAppDelegateProxyEnabled</key>
+    <string>0</string>
 	<key>NSPhotoLibraryUsageDescription</key>
     <string>O app solicita dados de acesso ao armazenamento para que você possa enviar anexos para a Scm Engenharia.</string>
     <key>NSCameraUsageDescription</key>

@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart' show TargetPlatform, defaultTargetPlatf
 import 'package:flutter/scheduler.dart';
 import '../data/app_scm_engenharia_mobile_bll.dart';
 import '../data/tb_user.dart';
-import '../help/components.dart';
 import '../help/navigation_service/route_paths.dart' as routes;
 import '../help/responsive.dart';
 import '../models/operation.dart';
@@ -102,7 +101,7 @@ class SplashScreenState extends State<SplashScreenView> {
       Future.delayed(Duration.zero, () async {
         PaintingBinding.instance.imageCache.clear();
         Responsive().setMinHeightView(context);
-        GlobalScaffold.position = await Components.onDeterminarPosicao();
+        //GlobalScaffold.position = await Components.onDeterminarPosicao();
       });
     } catch (error) {
       GlobalScaffold.instance.onToastError(error.toString());

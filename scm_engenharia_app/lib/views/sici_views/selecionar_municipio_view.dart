@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import '../../help/components.dart';
 import '../../models/output/output_environment_variables_model.dart';
 import '../../thema/app_thema.dart';
 import '../help_views/global_scaffold.dart';
@@ -20,6 +21,7 @@ class SelecionarMunicipioState extends State<SelecionarMunicipioView>  {
   TypeView statusView = TypeView.viewLoading;
   final txtMunicipalityName  = TextEditingController();
   List<CodIbge> listMunicipios = [];
+  late bool isSearching = false;
 
   onInc() async {
     try {
@@ -108,7 +110,14 @@ class SelecionarMunicipioState extends State<SelecionarMunicipioView>  {
                         ),
                         onChanged: (value) {
                           setState(() {
-                            listMunicipios = widget.sMunicipios.where((element) => element.descricao!.toLowerCase().contains(txtMunicipalityName.text.toLowerCase())).toList();
+                            if(Components.isNumeric(value))
+                            {
+                              listMunicipios = widget.sMunicipios.where((element) => element.codIbge!.toLowerCase().contains(value.toLowerCase())).toList();
+                            }
+                            else
+                            {
+                              listMunicipios = widget.sMunicipios.where((element) => element.descricao!.toLowerCase().contains(value.toLowerCase())).toList();
+                            }
                             if(listMunicipios.isEmpty)
                               {
                                 setState(() {
@@ -139,7 +148,14 @@ class SelecionarMunicipioState extends State<SelecionarMunicipioView>  {
                       onPressed: () {
                         FocusScope.of(context).requestFocus(FocusNode());
                         setState(() {
-                          listMunicipios = widget.sMunicipios.where((element) => element.descricao!.toLowerCase().contains(txtMunicipalityName.text.toLowerCase())).toList();
+                          if(Components.isNumeric(txtMunicipalityName.text))
+                          {
+                            listMunicipios = widget.sMunicipios.where((element) => element.codIbge!.toLowerCase().contains(txtMunicipalityName.text.toLowerCase())).toList();
+                          }
+                          else
+                          {
+                            listMunicipios = widget.sMunicipios.where((element) => element.descricao!.toLowerCase().contains(txtMunicipalityName.text.toLowerCase())).toList();
+                          }
                           if(listMunicipios.isEmpty)
                           {
                             setState(() {
@@ -147,10 +163,9 @@ class SelecionarMunicipioState extends State<SelecionarMunicipioView>  {
                               GlobalScaffold.erroInformacao = 'Não a registro para esta solicitação';
                             });
                           }
-                          else
-                            {
-                              setState(() {statusView = TypeView.viewRenderInformation;});
-                            }
+                          else  {
+                            setState(() {statusView = TypeView.viewRenderInformation;});
+                          }
                         });
                       },
                     ),
@@ -172,70 +187,72 @@ class SelecionarMunicipioState extends State<SelecionarMunicipioView>  {
       case TypeView.viewErrorInformation:
         return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
       case TypeView.viewRenderInformation:
-        return Container(
-          width: MediaQuery.of(context).size.width,
-          constraints: BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
+        return Align( alignment: Alignment.topCenter,child: Container(
+          alignment: Alignment.topCenter,
+          constraints:  const BoxConstraints(
+              minHeight: 500,
+              maxWidth: 1000
           ),
           child: RefreshIndicator(
             onRefresh: () async {
-              // OnGetCampanhas(context);
+
             },
-            child: ListView.builder(
-              physics: const AlwaysScrollableScrollPhysics(),
-              scrollDirection: Axis.vertical,
-              itemCount: listMunicipios.length,
-              itemBuilder: (BuildContext context, int index) => ListTile(
-                  onTap: () {
-                    Navigator.of(context).pop(widget.sMunicipios[index]);
-                  },
-                  contentPadding: const EdgeInsets.fromLTRB(15.0, 7.0, 15.0, 7.0),
-                  title: RichText(
-                      textAlign: TextAlign.left,
-                      softWrap: false,
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                      text: TextSpan(children: [
+            child: Card(
+              child: ListView.builder(
+                physics: const AlwaysScrollableScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                itemCount: listMunicipios.length,
+                itemBuilder: (BuildContext context, int index) => ListTile(
+                    onTap: () {
+                      Navigator.of(context).pop(widget.sMunicipios[index]);
+                    },
+                    contentPadding: const EdgeInsets.fromLTRB(15.0, 7.0, 15.0, 7.0),
+                    title: RichText(
+                        textAlign: TextAlign.left,
+                        softWrap: false,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        text: TextSpan(children: [
                           const TextSpan(
-                          text: 'Código IBGE : ',
-                          style: TextStyle(
-                            fontSize: 17.0,
-                            color: Color(0xff333333),
+                            text: 'Código IBGE : ',
+                            style: TextStyle(
+                              fontSize: 17.0,
+                              color: Color(0xff333333),
+                            ),
                           ),
-                        ),
-                        TextSpan(
-                          text: listMunicipios[index].codIbge.toString(),
-                          style: const TextStyle(
-                            fontSize: 15.0,
-                            color: Color(0xff333333),
-                          ),
-                        ),
-                      ])),
-                  subtitle:RichText(
-                      textAlign: TextAlign.left,
-                      softWrap: false,
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                      text: TextSpan(children: [
-                        const TextSpan(
-                          text: 'Descrição : ',
-                          style: TextStyle(
-                            fontSize: 17.0,
-                            color: Color(0xff333333),
-                          ),
-                        ),
-                        TextSpan(
-                          text: listMunicipios[index].descricao.toString(),
-                          style: const TextStyle(
+                          TextSpan(
+                            text: listMunicipios[index].codIbge.toString(),
+                            style: const TextStyle(
                               fontSize: 15.0,
                               color: Color(0xff333333),
                             ),
-                        ),
-                      ])),
-                  trailing: const Icon(Icons.keyboard_arrow_right, color: Color(0xFF545454), size: 30.0)),
-            ),
-          ),
-        );
+                          ),
+                        ])),
+                    subtitle:RichText(
+                        textAlign: TextAlign.left,
+                        softWrap: false,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        text: TextSpan(children: [
+                          const TextSpan(
+                            text: 'Descrição : ',
+                            style: TextStyle(
+                              fontSize: 17.0,
+                              color: Color(0xff333333),
+                            ),
+                          ),
+                          TextSpan(
+                            text: listMunicipios[index].descricao.toString(),
+                            style: const TextStyle(
+                              fontSize: 15.0,
+                              color: Color(0xff333333),
+                            ),
+                          ),
+                        ])),
+                    trailing: const Icon(Icons.keyboard_arrow_right, color: Color(0xFF545454), size: 30.0)),
+              ),),
+          ),),);
+
     }
   }
 }

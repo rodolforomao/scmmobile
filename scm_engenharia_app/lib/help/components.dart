@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:file/local.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -36,6 +37,20 @@ class Components {
     }
     return Txt;
   }
+
+  static bool  isNumeric(String input) {
+    try{
+      String source = input.trim();
+      var value = int.parse(source);
+      return true;
+    } on FormatException {
+      return false;
+    }
+    catch (error) {
+      return false;
+    }
+  }
+
 
   static String? dateFormatDDMMYYYY(String date) {
     try {
@@ -307,16 +322,24 @@ class Components {
           }
           else
           {
-            String dir = (await getApplicationDocumentsDirectory()).path;
-            //if (Platform.isAndroid) {
-            //  dir = "/storage/emulated/0/Download";
-           // }
+            String dir = ""; // (await getApplicationDocumentsDirectory()).path;
+             if (Platform.isAndroid) {
+               dir = "/storage/emulated/0/Download";
+            }
             await Directory(dir).create(recursive: true);
             File files = File("$dir/$arquivoNome$tipoArquivo");
             await files.parent.create(recursive: true);
+
             files.writeAsBytes(bytes, mode: FileMode.write, flush: true).then((File file) async {
-              GlobalScaffold.instance.onToastRedirectUriApp('Download concluído com sucesso.\r\n$dir',files.uri);
-            });
+              print("https://"+file.path);
+              print(file.uri);
+
+
+              var fs = const LocalFileSystem();
+               var sdsd = fs.file(file.uri).readAsBytes().toString();
+              GlobalScaffold.instance.onToastRedirectUriApp('Download concluído com sucesso.\r\n$dir',Uri.parse("https://"+file.path));
+            }).whenComplete(() => null);
+
           }
         }
         break;
