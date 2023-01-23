@@ -376,6 +376,7 @@ class ServicoMobileService {
         }
         else
         {
+          print(response.body);
           Map<String, dynamic> map = jsonDecode(response.body);
           OperationJson resp = OperationJson.fromJson(map);
           operacao.erro = !resp.status!;

@@ -119,12 +119,12 @@ class SelecionarMunicipioState extends State<SelecionarMunicipioView>  {
                               listMunicipios = widget.sMunicipios.where((element) => element.descricao!.toLowerCase().contains(value.toLowerCase())).toList();
                             }
                             if(listMunicipios.isEmpty)
-                              {
-                                setState(() {
-                                  statusView = TypeView.viewErrorInformation;
-                                  GlobalScaffold.erroInformacao = 'Não a registro para esta solicitação';
-                                });
-                              }
+                            {
+                              setState(() {
+                                statusView = TypeView.viewErrorInformation;
+                                GlobalScaffold.erroInformacao = 'Não a registro para esta solicitação';
+                              });
+                            }
                             else  {
                               setState(() {statusView = TypeView.viewRenderInformation;});
                             }

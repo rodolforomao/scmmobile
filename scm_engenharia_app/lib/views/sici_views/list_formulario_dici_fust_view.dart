@@ -1,11 +1,9 @@
-import 'dart:convert';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import '../../data/app_scm_engenharia_mobile_bll.dart';
 import '../../data/tb_form_sici_fust.dart';
-import '../../help/components.dart';
 import '../../models/operation.dart';
 import '../../models/input/input_sici_fust_form_model.dart';
 import '../../models/output/output_sici_fust_model.dart';

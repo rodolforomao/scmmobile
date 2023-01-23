@@ -134,33 +134,18 @@ class AppScmEngenhariaMobileBll {
     operation.message = 'Operação realizada com sucesso';
     operation.erro = false;
     try {
-      TbFormSiciFust authorizationSso = realm.write<TbFormSiciFust>(() {
-        return  realm.add<TbFormSiciFust>(formSiciFust);
-      });
-      operation.result = authorizationSso;
-    } catch (ex) {
-      operation.erro = true;
-      operation.message = 'Erro $ex';
-    }
-    return operation;
-  }
 
-  Future<Operation> onUpdateFormSiciFust(String idFormSiciFust , TbFormSiciFust formSiciFust) async {
-    Operation operation = Operation();
-    operation.result = null;
-    operation.message = 'Operação realizada com sucesso';
-    operation.erro = false;
-    try {
-      TbFormSiciFust? updateFormSiciFust = realm.find<TbFormSiciFust>(ObjectId.fromHexString(idFormSiciFust));
-      if(updateFormSiciFust!.result.isEmpty)
+      if(realm.all<TbFormSiciFust>().where((element) => element.idRegistro == formSiciFust.idRegistro).isEmpty)
       {
-        throw ('Não foi possível identificar as informações no seu dispositivo');
+        throw ('O registro já está salvo no dispositivo');
       }
-      realm.write(() {
-        updateFormSiciFust.idRegistro = formSiciFust.idRegistro;
-        updateFormSiciFust.result = formSiciFust.result;
-      });
-      operation.result = updateFormSiciFust;
+      else
+      {
+        TbFormSiciFust authorizationSso = realm.write<TbFormSiciFust>(() {
+          return realm.add<TbFormSiciFust>(formSiciFust);
+        });
+        operation.result = authorizationSso;
+      }
     } catch (ex) {
       operation.erro = true;
       operation.message = 'Erro $ex';
@@ -175,28 +160,28 @@ class AppScmEngenhariaMobileBll {
     operation.erro = false;
     try {
       if(idFormSiciFust.isEmpty)
-        {
-          TbFormSiciFust resp = realm.write<TbFormSiciFust>(() {
-            return  realm.add<TbFormSiciFust>(formSiciFust);
-          });
-          operation.result = resp;
-        }
+      {
+        TbFormSiciFust resp = realm.write<TbFormSiciFust>(() {
+          return  realm.add<TbFormSiciFust>(formSiciFust);
+        });
+        operation.result = resp;
+      }
       else
+      {
+        TbFormSiciFust? updateFormSiciFust = realm.find<TbFormSiciFust>(ObjectId.fromHexString(idFormSiciFust));
+        if(updateFormSiciFust!.result.isEmpty)
         {
-          TbFormSiciFust? updateFormSiciFust = realm.find<TbFormSiciFust>(ObjectId.fromHexString(idFormSiciFust));
-          if(updateFormSiciFust!.result.isEmpty)
-          {
-            throw ('Não foi possível identificar as informações no seu dispositivo');
-          }
-          realm.write(() {
-            updateFormSiciFust.idRegistro = formSiciFust.idRegistro;
-            updateFormSiciFust.result = formSiciFust.result;
-          });
-          operation.result = updateFormSiciFust;
+          throw ('Não foi possível identificar as informações no seu dispositivo');
         }
+        realm.write(() {
+          updateFormSiciFust.idRegistro = formSiciFust.idRegistro;
+          updateFormSiciFust.result = formSiciFust.result;
+        });
+        operation.result = updateFormSiciFust;
+      }
     } catch (ex) {
       operation.erro = true;
-      operation.message = 'Erro $ex';
+      operation.message = ex.toString();
     }
     return operation;
   }
