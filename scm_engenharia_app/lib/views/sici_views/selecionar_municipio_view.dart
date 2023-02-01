@@ -24,12 +24,16 @@ class SelecionarMunicipioState extends State<SelecionarMunicipioView>  {
   late bool isSearching = false;
 
   onInc() async {
+
+  }
+
+  @override
+  void initState() {
+    super.initState();
     try {
-      setState((){statusView = TypeView.viewLoading;});
-      String response = await rootBundle.loadString('assets/variavel_de_ambiente.json');
-      setState(()  {
-        OutputEnvironmentVariablesModel resul = OutputEnvironmentVariablesModel.fromJson(jsonDecode(response) as Map<String, dynamic>);
+      setState(() {
         statusView = TypeView.viewRenderInformation;
+        listMunicipios = widget.sMunicipios;
       });
     } catch (error) {
       setState(() {
@@ -37,15 +41,7 @@ class SelecionarMunicipioState extends State<SelecionarMunicipioView>  {
         GlobalScaffold.erroInformacao = error.toString();
       });
     }
-  }
 
-  @override
-  void initState() {
-    super.initState();
-    setState(() {
-      listMunicipios = widget.sMunicipios;
-    });
-    onInc();
   }
 
   @override
