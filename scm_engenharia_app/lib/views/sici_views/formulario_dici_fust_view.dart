@@ -16,7 +16,7 @@ import '../../thema/app_thema.dart';
 import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
 import 'dados_em_servicos_view.dart';
-import '../../help/navigation_service/route_paths.dart' as routes;
+
 
 class FormularioDiciFustView extends StatefulWidget {
   InputSiciFileModel? siciFileModel;
@@ -138,6 +138,8 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> implements I
           } else if (respFormSiciFust.result == null) {
             throw respFormSiciFust.message!;
           } else {
+            TbFormSiciFust res =  respFormSiciFust.result as  TbFormSiciFust;
+            inputSiciFustForm.idFichaSiciApp = res.idFichaSiciApp.toString();
             showDialog(
               context: GlobalScaffold.instance.navigatorKey.currentContext!,
               barrierDismissible: false,
@@ -1200,8 +1202,6 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> implements I
                             setState(() {
                               inputSiciFustForm.dadosEmServicos!.insert(index, value);
                             });
-                            //int index =  inputSiciFustForm.dadosEmServicos!.indexWhere((i) => i.idSiciFile == value.idSiciFile);
-                            //inputSiciFustForm.dadosEmServicos!.removeAt(index);
                           }
                         });
                       },
@@ -1290,6 +1290,7 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> implements I
                                                   try {
                                                     setState(() {
                                                       inputSiciFustForm.dadosEmServicos!.removeAt(index);
+                                                      Navigator.pop(context);
                                                     });
                                                   } catch (error) {
                                                     GlobalScaffold.instance.onToastError(error.toString());

@@ -136,7 +136,7 @@ class ContratosState extends State<ContratosView> {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
+              children: const <Widget>[
                 Text(
                   "Pagina em construção",
                   textAlign: TextAlign.center,

@@ -29,6 +29,14 @@
             {
               "client_id": "903936319018-5mo9ndlsgcst0eb4uia3vf451tukatb6.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "903936319018-a086hdddnoasbpd2bmphp8r7c8p47ha7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "br.com.scmengenharia.dici",
+                "app_store_id": "1545926904"
+              }
             }
           ]
         }

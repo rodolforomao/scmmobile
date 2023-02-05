@@ -5,7 +5,7 @@ const String siciFustFormRoute = 'sici-fust-form';
 
 
 //Visualizações de configurações------------------------------------------------------------------------------------------
-const String environmentVariableRoute = 'variável-de-ambiente';
+
 const String selectCityRoute = 'selecione-a-cidade';
 
 //Visualizações do usuário -----------------------------------------------------------------------------------------------

@@ -2,9 +2,12 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../data/app_scm_engenharia_mobile_bll.dart';
+import '../../data/tb_environment_variable.dart';
 import '../../help/components.dart';
 import '../../help/formatter/cnpj_input_formatter.dart';
 import '../../models/input/input_sici_fust_form_model.dart';
+import '../../models/operation.dart';
 import '../../models/output/output_environment_variables_model.dart';
 import '../../models/util_model/util_dropdown_list.dart';
 import '../help_views/global_scaffold.dart';
@@ -47,6 +50,7 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
   CodIbge valueCodIbge = CodIbge();
   final txtNumberYear = TextEditingController();
   final txtCounty = TextEditingController();
+   String hintTextCounty = 'O código IBGE..';
 
   final txtControllerVelocity = TextEditingController();
   final txtControllerAccesses = TextEditingController();
@@ -94,52 +98,58 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
   onInc() async {
     try {
       setState((){statusView = TypeView.viewLoading;});
-      String response = await rootBundle.loadString('assets/variavel_de_ambiente.json');
-      setState(() {
-        resulEnvironmentVariables = OutputEnvironmentVariablesModel.fromJson(jsonDecode(response) as Map<String, dynamic>);
-        ufDropdownList = resulEnvironmentVariables.uf;
-        ufValue.id = '0';
-        ufValue.uf = 'SELECIONE...';
-        ufDropdownList!.add(ufValue);
-        ufValue = ufDropdownList!.last;
-       //-------------------------------------------------------------------------------------------------------------------
-        customerTypeDropdownList = resulEnvironmentVariables.tipoCliente;
-        customerTypeValue.id ='0';
-        customerTypeValue.descricao = 'SELECIONE...';
-        customerTypeDropdownList!.add(customerTypeValue);
-        customerTypeValue = customerTypeDropdownList!.last;
-      //-------------------------------------------------------------------------------------------------------------------
-        serviceTypeDropdownList = resulEnvironmentVariables.tipoAtendimento;
-        serviceTypeValue.id ='0';
-        serviceTypeValue.descricao = 'SELECIONE...';
-        serviceTypeDropdownList!.add(serviceTypeValue);
-        serviceTypeValue  = serviceTypeDropdownList!.last;
-       //-------------------------------------------------------------------------------------------------------------------
-        mediumAccessTypeDropdownList = resulEnvironmentVariables.tipoMeioAcesso;
-        mediumAccessTypeValue.id ='0';
-        mediumAccessTypeValue.descricao = 'SELECIONE...';
-        mediumAccessTypeDropdownList!.add(mediumAccessTypeValue);
-        mediumAccessTypeValue  = mediumAccessTypeDropdownList!.last;
-       //-------------------------------------------------------------------------------------------------------------------
-        technologyTypeDropdownList = resulEnvironmentVariables.tipoTecnologia;
-        technologyTypeValue.id  ='0';
-        technologyTypeValue.descricao = 'SELECIONE...';
-        technologyTypeValue.idTipoMeioAcesso  ='0';
-        technologyTypeValue.idTipoProduto  ='0';
-        technologyTypeDropdownList!.add(technologyTypeValue);
-        technologyTypeValue   = technologyTypeDropdownList!.last;
-       //-------------------------------------------------------------------------------------------------------------------
-        productTypeDropdownList = resulEnvironmentVariables.tipoProduto;
-        productTypeValue.id ='0';
-        productTypeValue.descricao = 'SELECIONE...';
-        productTypeDropdownList!.add(productTypeValue);
-        productTypeValue = productTypeDropdownList!.last;
-      });
-      if(widget.sInputDadosEmServicos == null)
-        {
-
-        }
-      else
+      Operation respEnvironmentVariable = await AppScmEngenhariaMobileBll.instance.onSelectEnvironmentVariableAll();
+      if (respEnvironmentVariable.erro) {
+        throw respEnvironmentVariable.message!;
+      } else if (respEnvironmentVariable.result == null) {
+        Navigator.of(context).pushNamed(
+          routes.variaveisDeAmbienteRoute,
+        ).then((value) {
+          onInc();
+        });
+      } else {
+        setState(() {
+          TbEnvironmntVariable inputEnvironmntVariable = respEnvironmentVariable.result as TbEnvironmntVariable;
+          resulEnvironmentVariables = OutputEnvironmentVariablesModel.fromJson(jsonDecode(inputEnvironmntVariable.result) as Map<String, dynamic>);
+          ufDropdownList = resulEnvironmentVariables.uf;
+          ufValue.id = '0';
+          ufValue.uf = 'SELECIONE...';
+          ufDropdownList!.add(ufValue);
+          ufValue = ufDropdownList!.last;
+          //-------------------------------------------------------------------------------------------------------------------
+          customerTypeDropdownList = resulEnvironmentVariables.tipoCliente;
+          customerTypeValue.id ='0';
+          customerTypeValue.descricao = 'SELECIONE...';
+          customerTypeDropdownList!.add(customerTypeValue);
+          customerTypeValue = customerTypeDropdownList!.last;
+          //-------------------------------------------------------------------------------------------------------------------
+          serviceTypeDropdownList = resulEnvironmentVariables.tipoAtendimento;
+          serviceTypeValue.id ='0';
+          serviceTypeValue.descricao = 'SELECIONE...';
+          serviceTypeDropdownList!.add(serviceTypeValue);
+          serviceTypeValue  = serviceTypeDropdownList!.last;
+          //-------------------------------------------------------------------------------------------------------------------
+          mediumAccessTypeDropdownList = resulEnvironmentVariables.tipoMeioAcesso;
+          mediumAccessTypeValue.id ='0';
+          mediumAccessTypeValue.descricao = 'SELECIONE...';
+          mediumAccessTypeDropdownList!.add(mediumAccessTypeValue);
+          mediumAccessTypeValue  = mediumAccessTypeDropdownList!.last;
+          //-------------------------------------------------------------------------------------------------------------------
+          technologyTypeDropdownList = resulEnvironmentVariables.tipoTecnologia;
+          technologyTypeValue.id  ='0';
+          technologyTypeValue.descricao = 'SELECIONE...';
+          technologyTypeValue.idTipoMeioAcesso  ='0';
+          technologyTypeValue.idTipoProduto  ='0';
+          technologyTypeDropdownList!.add(technologyTypeValue);
+          technologyTypeValue   = technologyTypeDropdownList!.last;
+          //-------------------------------------------------------------------------------------------------------------------
+          productTypeDropdownList = resulEnvironmentVariables.tipoProduto;
+          productTypeValue.id ='0';
+          productTypeValue.descricao = 'SELECIONE...';
+          productTypeDropdownList!.add(productTypeValue);
+          productTypeValue = productTypeDropdownList!.last;
+        });
+        if(widget.sInputDadosEmServicos != null)
         {
           ufValue = ufDropdownList!.where((i) => i.uf!.toUpperCase() == widget.sInputDadosEmServicos!.uf!.toUpperCase()).first;
           valueCodIbge = resulEnvironmentVariables.codIbge!.where((i) => i.codIbge == widget.sInputDadosEmServicos!.codIbge).first;
@@ -148,11 +158,13 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
           mediumAccessTypeValue = resulEnvironmentVariables.tipoMeioAcesso!.where((i) => i.descricao == widget.sInputDadosEmServicos!.tipoAcesso).first;
           technologyTypeValue = resulEnvironmentVariables.tipoTecnologia!.where((i) => i.descricao == widget.sInputDadosEmServicos!.tecnologia).first;
           productTypeValue = resulEnvironmentVariables.tipoProduto!.where((i) => i.descricao == widget.sInputDadosEmServicos!.tipoProduto).first;
-          txtCounty.text = valueCodIbge.descricao!;
+          txtCounty.text = valueCodIbge.codIbge!;
+          hintTextCounty  = valueCodIbge.descricao!;
           txtControllerVelocity.text = widget.sInputDadosEmServicos!.velocidade!;
           txtControllerAccesses.text = widget.sInputDadosEmServicos!.quantidadeAcesso!;
         }
-      setState((){statusView = TypeView.viewRenderInformation;});
+        setState((){statusView = TypeView.viewRenderInformation;});
+      }
     } catch (error) {
       Navigator.of(context).pushNamed(
         routes.errorInformationRoute,
@@ -284,7 +296,10 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
                 onChanged: (newValue) {
                   setState(() {
                     ufValue = newValue!;
+                    valueCodIbge = CodIbge();
+                    hintTextCounty = 'O código IBGE..';
                   });
+                  txtCounty.text = "";
                 },
               ),),
               Padding(padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 15.0),child:  Row(
@@ -372,6 +387,10 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
                     {
                       final codIbges = resulEnvironmentVariables.codIbge!.where((i) => i.idUf == ufValue.id).toList();
                       valueCodIbge = CodIbge();
+                       txtCounty.text = '';
+                      setState((){
+                        hintTextCounty = 'O código IBGE..';
+                      });
                       Navigator.of(context, rootNavigator: false).push(
                         CupertinoPageRoute<CodIbge>(
                           maintainState: false,
@@ -382,14 +401,28 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
                       ).then((value) {
                         if(value != null)
                         {
-                          setState((){valueCodIbge = value;});
+                          setState((){
+                            valueCodIbge = value;
+                            hintTextCounty = value.descricao!;
+                          });
                           txtCounty.text = value.codIbge!;
                         }
+                        else
+                          {
+                            setState((){
+                              valueCodIbge = CodIbge();
+                              hintTextCounty = 'O código IBGE..';
+                            });
+                            txtCounty.text = "";
+                          }
                       });
                     }
                   } catch (error) {
                     OnAlertError(error.toString());
                   }},
+                 onChanged: (value) {
+                   FocusScope.of(context).requestFocus(FocusNode());
+                 },
                 controller: txtCounty,
                 autofocus: false,
                 keyboardType: TextInputType.text,
@@ -400,8 +433,8 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
                       fontFamily: 'Poppins-Regular',
                       fontWeight: FontWeight.w100,
                       color: Color(0xFF323232)),
-                decoration: const InputDecoration(
-                  labelText: 'O código IBGE..',
+                decoration:  InputDecoration(
+                  labelText: hintTextCounty,
                   hintText: 'O código IBGE..',
                 ),
               ),),
