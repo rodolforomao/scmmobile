@@ -6,34 +6,37 @@ Aplicativo mobile da empresa SCM Engenharia
 
 Este projeto é um ponto de partida para um aplicativo Flutter.
 
-Alguns recursos para você começar se este for seu primeiro projeto Flutter::
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-
-  -- Windows
+  **-- Windows**
      Baixar o sdk flutter
   - [Baixar o sdk  flutter](https://github.com/flutter/flutter) 
 
  Colocar em uma (PATH)  no C: Ex: C:\flutter\bin
 
  Add a SDK  Flutter variáveis do sistema (PATH)   Ex: C:\flutter\bin
-        1- Meu Computado  Propriedade  
-        2- Configuração avançada do sistema
-        3- Variáveis de Ambiente
-        4- variável de ambiente %username%
-        5- Selecione a variavel Patch 
-        6- Editar
-        7- Novo
-        8- Add Ex: C:\flutter\bin
+        
+1- Meu Computado  Propriedade  
+        
+2- Configuração avançada do sistema
+        
+3- Variáveis de Ambiente
+        
+4- variável de ambiente %username%
+        
+5- Selecione a variavel Patch 
+        
+6- Editar
+        
+7- Novo
+       
+8- Add Ex: C:\flutter\bin
 
-Reinicia o computador
+_Reinicia o computador_
 
+**-- MAC**
+Baixar o sdk flutter
+- [Baixar o sdk  flutter](https://github.com/flutter/flutter)
 
-  --  MacOS
-      Baixar o sdk flutter
-  -- [Baixar o sdk  flutter](https://github.com/flutter/flutter)
 
 ##
 
