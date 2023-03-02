@@ -236,7 +236,7 @@ class FormularioDiciFustState extends State<FormularioDiciFustView>
                               //`Text` to display
                               onPressed: () {
                                 Navigator.pop(context);
-                                //GlobalScaffold.instance.navigatorKey.currentState?.pop(true);
+                                GlobalScaffold.instance.navigatorKey.currentState?.pop(true);
                               },
                             ),
                           ),
