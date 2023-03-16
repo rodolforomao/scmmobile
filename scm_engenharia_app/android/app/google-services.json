@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:903936319018:android:6561a6cc93335c71186d53",
         "android_client_info": {
-          "package_name": "br.com.scmengenharia.dici"
+          "package_name": "br.com.scmengenharia.dicii"
         }
       },
       "oauth_client": [
@@ -34,7 +34,7 @@
               "client_id": "903936319018-a086hdddnoasbpd2bmphp8r7c8p47ha7.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "br.com.scmengenharia.dici",
+                "bundle_id": "br.com.scmengenharia.dicii",
                 "app_store_id": "1545926904"
               }
             }

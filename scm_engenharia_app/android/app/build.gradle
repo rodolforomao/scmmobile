@@ -29,11 +29,11 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
     defaultConfig {
-        applicationId "br.com.scmengenharia.dici"
+        applicationId "br.com.scmengenharia.dicii"
         minSdkVersion 22
         targetSdkVersion 33
-        versionCode 8
-        versionName "8.0.0"
+        versionCode 1
+        versionName "1.0.0"
         multiDexEnabled true
     }
     signingConfigs {
