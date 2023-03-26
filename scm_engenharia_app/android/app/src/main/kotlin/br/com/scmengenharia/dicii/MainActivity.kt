@@ -1,4 +1,4 @@
-package br.com.scmengenharia.dici
+package br.com.scmengenharia.dicii
 
 import android.Manifest
 import android.annotation.TargetApi
