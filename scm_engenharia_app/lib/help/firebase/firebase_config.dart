@@ -28,11 +28,11 @@ class DefaultFirebaseConfig {
     } else {
       // Android
       return const FirebaseOptions(
-        appId: '1:903936319018:android:6561a6cc93335c71186d53',
-        apiKey: 'AIzaSyCuh0iIHS7FQbk4ynaH6Ia4NEugFqX9uP4',
-        projectId: 'app-scm',
-        messagingSenderId: '903936319018',
-        androidClientId: '903936319018-5mo9ndlsgcst0eb4uia3vf451tukatb6.apps.googleusercontent.com',
+        appId: '1:230203964252:android:c4cff8df693f2f08031f99',
+        apiKey: 'AIzaSyBiXNDpWipS9AR9oUPICMTH9ud_hGQUa1Y',
+        projectId: 'scm-engenharia',
+        messagingSenderId: '230203964252',
+        androidClientId: '230203964252-n59oam2ne48pqhg2ufgtp22oqj4jskl0.apps.googleusercontent.com',
       );
     }
   }
