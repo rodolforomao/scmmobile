@@ -13,7 +13,8 @@ class AppScmEngenhariaMobileBll {
 
   late Realm realm;
   AppScmEngenhariaMobileBll() {
-    final config = Configuration.local([TbUser.schema ,TbFormSiciFust.schema,TbEnvironmntVariable.schema],schemaVersion: 4);
+    final config = Configuration.local([TbUser.schema ,TbFormSiciFust.schema,TbEnvironmntVariable.schema],schemaVersion: 1);
+    Realm.deleteRealm(config.path);
     realm = Realm(config);
   }
 

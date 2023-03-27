@@ -7,6 +7,7 @@ import 'dart:ui' as ui;
 import 'dart:io';
 import 'dart:async';
 import '../../help/formatter/cpf_input_formatter.dart';
+import '../../help/formatter/telefone_input_formatter.dart';
 import '../../models/operation.dart';
 import '../../models/output/output_environment_variables_model.dart';
 import '../../web_service/servico_mobile_service.dart';
@@ -61,7 +62,7 @@ class CreateNewAccountState extends State<CriarNovaContaView> {
     }
   }
 
-    OnSaveAccount() async {
+    onSaveAccount() async {
     try {
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
         OnAlertError('Verifique sua conexão com a internet e tente novamente.');
@@ -83,6 +84,7 @@ class CreateNewAccountState extends State<CriarNovaContaView> {
         }
         else
           {
+            OnRealizandoOperacao('Realizando operação',context);
             Operation restWeb = await ServicoMobileService.onRegisterUser(txtControlleNomeCompleto.text,txtControllerCPF.text,txtControllerEmail.text,txtControllerTelefoneFixo.text,txtControllerWhatsapp.text,txtControllerNomeDaEmpresa.text,ufModel.id!).whenComplete(() =>
                 OnRealizandoOperacao('',context)
             );
@@ -274,6 +276,11 @@ class CreateNewAccountState extends State<CriarNovaContaView> {
                     txtFocusNodeTelefoneFixo!.unfocus();
                     FocusScope.of(context).requestFocus(txtFocusNodeWhatsapp);
                   },
+                  inputFormatters: [
+                    // obrigatório
+                    FilteringTextInputFormatter.digitsOnly,
+                    TelefoneInputFormatter(),
+                  ],
                   decoration: const InputDecoration(
                       labelText: 'telefone fixo',
                       hintText: 'Digite telefone fixo',
@@ -293,6 +300,11 @@ class CreateNewAccountState extends State<CriarNovaContaView> {
                     txtFocusNodeWhatsapp!.unfocus();
                     FocusScope.of(context).requestFocus(txtFocusNodeNomeDaEmpresa);
                   },
+                  inputFormatters: [
+                    // obrigatório
+                    FilteringTextInputFormatter.digitsOnly,
+                    TelefoneInputFormatter(),
+                  ],
                   decoration: const InputDecoration(
                     labelText: 'whatsapp',
                     hintText: 'Digite Whatsapp',
@@ -392,7 +404,7 @@ class CreateNewAccountState extends State<CriarNovaContaView> {
                 ),
                 onPressed: () async {
                   FocusScope.of(context).requestFocus(FocusNode());
-                  OnSaveAccount();
+                  onSaveAccount();
                 },
               ),),),
             ],

@@ -1,18 +1,16 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
 import '../data/JWTTokenDbLocal.dart';
 import '../help/components.dart';
 import '../models/operation.dart';
 import '../models/input/input_sici_fust_form_model.dart';
 
 class ServicoMobileService {
-  //static var Url = "http://dici.scmengenharia.com.br";
+  static var Url = "http://dici.scmengenharia.com.br";
   //static const Url = "http://10.0.2.2:8083";
-  static final Url = "http://10.200.4.77:8083";
+  //static final Url = "http://10.200.4.77:8083";
   //static final Url = "http://wsscm.ddns.net";
 
   static Future<Operation> onLogin(String usuario, String password) async {
@@ -446,11 +444,10 @@ class ServicoMobileService {
       String? token = await ComponentsJWTToken.JWTTokenPadrao();
       Map<String, String> headers = {
         'Content-Type': 'application/json; charset=utf-8',
-        "token": token!,
+        'token': token!,
       };
       http.MultipartRequest response;
-      response = http.MultipartRequest(
-          'POST', Uri.parse("$Url/usuario/inserir_usuario_ws"));
+      response = http.MultipartRequest('POST', Uri.parse("$Url/usuario/inserir_usuario_ws"));
       response.headers.addAll(headers);
       response.fields['controllerNome'] = nome;
       response.fields['controllerCPF'] = cpf;
@@ -462,11 +459,10 @@ class ServicoMobileService {
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
       if (streamedResponse.statusCode == 200) {
-        if (streamedResponse.stream.isEmpty == true) {
+        if (respStr.isEmpty) {
           throw (ApiRestInformation.problemOfComunication);
         } else {
-          Map<String, dynamic> map =
-              jsonDecode(Components.removeAllHtmlTags(respStr));
+          Map<String, dynamic> map = jsonDecode(Components.removeAllHtmlTags(respStr));
           OperationJson resp = OperationJson.fromJson(map);
           operacao.erro = !resp.status!;
           operacao.message = resp.message;
@@ -476,8 +472,7 @@ class ServicoMobileService {
           throw ('Não foi identificado resposta');
         }
       } else {
-        operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(
-            streamedResponse.statusCode, streamedResponse.stream.toString());
+        operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(streamedResponse.statusCode, streamedResponse.stream.toString());
       }
     } on TimeoutException {
       operacao.erro = true;
@@ -507,15 +502,12 @@ class ServicoMobileService {
         'token': token!,
       };
       http.MultipartRequest response;
-      response = http.MultipartRequest(
-          'POST',
-          Uri.parse(
-              "$Url/notificacoes/Notificacoes_ws/recuperarNotificacao_ws"));
+      response = http.MultipartRequest('POST', Uri.parse("$Url/notificacoes/Notificacoes_ws/recuperarNotificacao_ws"));
       response.headers.addAll(headers);
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
       if (streamedResponse.statusCode == 200) {
-        if (streamedResponse.stream.isEmpty == true) {
+        if (respStr.isEmpty) {
           throw (ApiRestInformation.problemOfComunication);
         } else {
           Map<String, dynamic> map =
@@ -569,7 +561,7 @@ class ServicoMobileService {
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
       if (streamedResponse.statusCode == 200) {
-        if (streamedResponse.stream.isEmpty == true) {
+        if (respStr.isEmpty) {
           throw (ApiRestInformation.problemOfComunication);
         } else {
           Map<String, dynamic> map =
@@ -624,7 +616,7 @@ class ServicoMobileService {
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
       if (streamedResponse.statusCode == 200) {
-        if (streamedResponse.stream.isEmpty == true) {
+        if (respStr.isEmpty) {
           throw (ApiRestInformation.problemOfComunication);
         } else {
           Map<String, dynamic> map =
@@ -678,7 +670,7 @@ class ServicoMobileService {
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
       if (streamedResponse.statusCode == 200) {
-        if (streamedResponse.stream.isEmpty == true) {
+        if (respStr.isEmpty) {
           throw (ApiRestInformation.problemOfComunication);
         } else {
           Map<String, dynamic> map =
