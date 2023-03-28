@@ -125,8 +125,7 @@ class ServicoMobileService {
         'token': token!,
       };
       http.MultipartRequest response;
-      response = http.MultipartRequest(
-          'POST', Uri.parse("$Url/usuario/alterar_senha_ws"));
+      response = http.MultipartRequest('POST', Uri.parse("$Url/usuario/alterar_senha_ws"));
       response.headers.addAll(ApiRestInformation.onHeadersToken(token!));
       response.fields['nova_senha'] = senha;
       var streamedResponse = await response.send();

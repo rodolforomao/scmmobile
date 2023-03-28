@@ -15,7 +15,7 @@ class ForgotYourPasswordView extends StatefulWidget {
 class ForgotYourPasswordState extends State<ForgotYourPasswordView> {
   final txtControllerEmail = TextEditingController();
 
-  OnSaveAccount() async {
+  onSaveAccount() async {
     try {
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
         OnAlertError('Verifique sua conexão com a internet e tente novamente.');
@@ -25,6 +25,7 @@ class ForgotYourPasswordState extends State<ForgotYourPasswordView> {
         }
         else
         {
+          OnRealizandoOperacao('Realizando operação',context);
           Operation restWeb = await ServicoMobileService.onForgotYourPassword(txtControllerEmail.text).whenComplete(() =>
               OnRealizandoOperacao('',context)
           );
@@ -183,7 +184,7 @@ class ForgotYourPasswordState extends State<ForgotYourPasswordView> {
                   ),
                 ),
                 onPressed: () async {
-
+                  onSaveAccount();
                 },
               ),
               const SizedBox(height: 25.0),
