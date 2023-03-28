@@ -10,17 +10,18 @@ import '../models/operation.dart';
 import '../models/input/input_sici_fust_form_model.dart';
 
 class ServicoMobileService {
-  //static var Url = "http://dici.scmengenharia.com.br";
+  static var Url = "http://dici.scmengenharia.com.br";
   //static const Url = "http://10.0.2.2:8083";
-  static final Url = "http://10.200.4.77:8083";
+  static final UrlDebug = "http://10.200.4.77:8083";
   //static final Url = "http://wsscm.ddns.net";
 
   static Future<Operation> onLogin(String usuario, String password) async {
     Operation operacao = Operation();
     try {
       String? token = await Components.JWTToken(usuario, password);
+
       final response = await http
-          .post(Uri.parse("$Url/login_ws"),
+          .post(Uri.parse((kDebugMode ? Url : UrlDebug) + "/login_ws"),
               headers: {
                 //"Content-type": "multipart/form-data",
                 'token': token!,
@@ -75,7 +76,9 @@ class ServicoMobileService {
       };
       http.MultipartRequest response;
       response = http.MultipartRequest(
-          'POST', Uri.parse("$Url/usuario/alterar_senha_ws"));
+          'POST',
+          Uri.parse(
+              (kDebugMode ? Url : UrlDebug) + "/usuario/alterar_senha_ws"));
       response.headers.addAll(headers);
       response.fields['nova_senha'] = senha;
       var streamedResponse = await response.send();
@@ -128,7 +131,9 @@ class ServicoMobileService {
       };
       http.MultipartRequest response;
       response = http.MultipartRequest(
-          'POST', Uri.parse("$Url/usuario/alterar_senha_ws"));
+          'POST',
+          Uri.parse(
+              (kDebugMode ? Url : UrlDebug) + "/usuario/alterar_senha_ws"));
       response.headers.addAll(ApiRestInformation.onHeadersToken(token!));
       response.fields['nova_senha'] = senha;
       var streamedResponse = await response.send();
@@ -176,7 +181,9 @@ class ServicoMobileService {
     try {
       String? token = await ComponentsJWTToken.JWTTokenPadrao();
       final response = await http
-          .post(Uri.parse("$Url/analise/Analise/recuperarVariaveisAmbiente_ws"),
+          .post(
+              Uri.parse((kDebugMode ? Url : UrlDebug) +
+                  "/analise/Analise/recuperarVariaveisAmbiente_ws"),
               body: null,
               headers: ApiRestInformation.onHeadersToken(token!),
               encoding: Encoding.getByName("utf-8"))
@@ -223,7 +230,9 @@ class ServicoMobileService {
       };
       http.MultipartRequest response;
       response = http.MultipartRequest(
-          'POST', Uri.parse("$Url/administracao/bloquear_usuario_ws"));
+          'POST',
+          Uri.parse((kDebugMode ? Url : UrlDebug) +
+              "/administracao/bloquear_usuario_ws"));
       response.headers.addAll(headers);
       response.fields['id'] = id;
       response.fields['acao'] = 'true';
@@ -280,8 +289,8 @@ class ServicoMobileService {
         "token": token!,
       };
       http.MultipartRequest response;
-      response = http.MultipartRequest(
-          'POST', Uri.parse("$Url/analise/lancamento_ws"));
+      response = http.MultipartRequest('POST',
+          Uri.parse((kDebugMode ? Url : UrlDebug) + "/analise/lancamento_ws"));
       response.headers.addAll(headers);
       if (siciFileModel.id!.isNotEmpty) {
         response.fields['controllerId'] = (siciFileModel.id ?? "");
@@ -386,7 +395,9 @@ class ServicoMobileService {
     try {
       String? token = await ComponentsJWTToken.JWTTokenPadrao();
       final response = await http
-          .post(Uri.parse("$Url/analise/recuperar_ws"),
+          .post(
+              Uri.parse(
+                  (kDebugMode ? Url : UrlDebug) + "/analise/recuperar_ws"),
               headers: ApiRestInformation.onHeadersToken(token!),
               body: null,
               encoding: Encoding.getByName('utf-8'))
@@ -450,7 +461,9 @@ class ServicoMobileService {
       };
       http.MultipartRequest response;
       response = http.MultipartRequest(
-          'POST', Uri.parse("$Url/usuario/inserir_usuario_ws"));
+          'POST',
+          Uri.parse(
+              (kDebugMode ? Url : UrlDebug) + "/usuario/inserir_usuario_ws"));
       response.headers.addAll(headers);
       response.fields['controllerNome'] = nome;
       response.fields['controllerCPF'] = cpf;
@@ -509,8 +522,8 @@ class ServicoMobileService {
       http.MultipartRequest response;
       response = http.MultipartRequest(
           'POST',
-          Uri.parse(
-              "$Url/notificacoes/Notificacoes_ws/recuperarNotificacao_ws"));
+          Uri.parse((kDebugMode ? Url : UrlDebug) +
+              "/notificacoes/Notificacoes_ws/recuperarNotificacao_ws"));
       response.headers.addAll(headers);
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
@@ -562,8 +575,8 @@ class ServicoMobileService {
       http.MultipartRequest response;
       response = http.MultipartRequest(
           'POST',
-          Uri.parse(
-              "$Url/notificacoes/Notificacoes_ws/recuperarNotificacao_ws"));
+          Uri.parse((kDebugMode ? Url : UrlDebug) +
+              "/notificacoes/Notificacoes_ws/recuperarNotificacao_ws"));
       response.headers.addAll(headers);
       response.fields['id'] = idUser;
       var streamedResponse = await response.send();
@@ -617,8 +630,8 @@ class ServicoMobileService {
       http.MultipartRequest response;
       response = http.MultipartRequest(
           'POST',
-          Uri.parse(
-              "$Url/notificacoes/Notificacoes_ws/recuperarNotificacao_ws"));
+          Uri.parse((kDebugMode ? Url : UrlDebug) +
+              "/notificacoes/Notificacoes_ws/recuperarNotificacao_ws"));
       response.headers.addAll(headers);
       response.fields['id'] = IdNotificacao;
       var streamedResponse = await response.send();
@@ -671,8 +684,8 @@ class ServicoMobileService {
       http.MultipartRequest response;
       response = http.MultipartRequest(
           'POST',
-          Uri.parse(
-              "$Url/notificacoes/Notificacoes_ws/recuperarNotificacao_ws"));
+          Uri.parse((kDebugMode ? Url : UrlDebug) +
+              "/notificacoes/Notificacoes_ws/recuperarNotificacao_ws"));
       response.headers.addAll(headers);
       response.fields['id'] = idNotificacao;
       var streamedResponse = await response.send();
@@ -723,8 +736,10 @@ class ServicoMobileService {
         "token": token!,
       };
       http.MultipartRequest response;
-      response = http.MultipartRequest('POST',
-          Uri.parse("$Url/notificacoes/recuperarTodasNotificacaoByCpf_ws"));
+      response = http.MultipartRequest(
+          'POST',
+          Uri.parse((kDebugMode ? Url : UrlDebug) +
+              "/notificacoes/recuperarTodasNotificacaoByCpf_ws"));
       response.headers.addAll(headers);
       response.fields['cpf'] = cpf;
       var streamedResponse = await response.send();
@@ -778,7 +793,9 @@ class ServicoMobileService {
       };
       http.MultipartRequest response;
       response = http.MultipartRequest(
-          'POST', Uri.parse("$Url/lancamento/recuperar_lista_documentos_ws"));
+          'POST',
+          Uri.parse((kDebugMode ? Url : UrlDebug) +
+              "/lancamento/recuperar_lista_documentos_ws"));
       response.headers.addAll(headers);
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
@@ -831,7 +848,9 @@ class ServicoMobileService {
       };
       http.MultipartRequest response;
       response = http.MultipartRequest(
-          'POST', Uri.parse("$Url/recibos/download_arquivo_ws"));
+          'POST',
+          Uri.parse(
+              (kDebugMode ? Url : UrlDebug) + "/recibos/download_arquivo_ws"));
       response.headers.addAll(headers);
       response.fields['id'] = idDocumento;
       var streamedResponse = await response.send();
