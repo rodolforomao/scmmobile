@@ -785,6 +785,5 @@ enum TypeView {
   viewLoading,
   viewRenderInformation,
   viewErrorInformation,
-  viewThereIsNoInternet,
 }
 

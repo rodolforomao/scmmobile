@@ -14,6 +14,7 @@ import 'package:intl/intl.dart';
 import 'package:jaguar_jwt/jaguar_jwt.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
 import '../data/app_scm_engenharia_mobile_bll.dart';
 import '../models/info_app.dart';
@@ -322,6 +323,12 @@ class Components {
           }
           else
           {
+            //const downloadsFolderPath = '/storage/emulated/0/Download/';
+          //  Directory dir = Directory(downloadsFolderPath);
+           // File files = File('${dir.path}/$nomeArquivo');
+
+
+
             String dir = ""; // (await getApplicationDocumentsDirectory()).path;
              if (Platform.isAndroid) {
                dir = "/storage/emulated/0/Download";

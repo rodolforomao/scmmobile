@@ -30,11 +30,11 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
   OutputEnvironmentVariablesModel resulEnvironmentVariables = OutputEnvironmentVariablesModel();
 
   //CNPJ:
-  final txtControllerCnpj =  TextEditingController();
-  final  focusNodeCnpj = FocusNode();
+  //final txtControllerCnpj =  TextEditingController();
+ // final  focusNodeCnpj = FocusNode();
 
-  List<UtilDropdownList> listMonths = <UtilDropdownList>[];
-  late UtilDropdownList utilDropdownListMonth;
+  //List<UtilDropdownList> listMonths = <UtilDropdownList>[];
+  //late UtilDropdownList utilDropdownListMonth;
   List<Uf>? ufDropdownList;
   Uf ufValue = Uf();
   List<TipoCliente>? customerTypeDropdownList;
@@ -48,7 +48,7 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
   List<TipoProduto>? productTypeDropdownList;
   TipoProduto productTypeValue = TipoProduto();
   CodIbge valueCodIbge = CodIbge();
-  final txtNumberYear = TextEditingController();
+ // final txtNumberYear = TextEditingController();
   final txtCounty = TextEditingController();
    String hintTextCounty = 'O código IBGE..';
 
@@ -182,10 +182,10 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () async {
-      listMonths = <UtilDropdownList>[];
-      listMonths = await Components.onMonths();
+     // listMonths = <UtilDropdownList>[];
+      //listMonths = await Components.onMonths();
       setState(() {
-        utilDropdownListMonth = listMonths.first;
+        //utilDropdownListMonth = listMonths.first;
       });
     });
     onInc();
@@ -233,31 +233,7 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Padding(padding: const EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 10.0),child: TextField(
-                keyboardType: TextInputType.number,
-                controller: txtControllerCnpj,
-                focusNode: focusNodeCnpj,
-                textInputAction: TextInputAction.next,
-                style: const TextStyle(
-                    fontSize: 16,
-                    fontFamily: 'Poppins-Regular',
-                    fontWeight: FontWeight.w100,
-                    color: Color(0xFF323232)),
-                onSubmitted: (term) {
-                  focusNodeCnpj.unfocus();
-                  // FocusScope.of(context).requestFocus(focusNodeTelefoneMovel);
-                },
-                inputFormatters: [
-                  // obrigatório
-                  FilteringTextInputFormatter.digitsOnly,
-                  CnpjInputFormatter(),
-                ],
-                autofocus: false,
-                decoration: const InputDecoration(
-                  labelText: 'CNPJ:',
-                  hintText: '',
-                ),
-              ),),
+
               Padding(padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 15.0),child:   DropdownButtonFormField<Uf>(
                 elevation: 7,
                 dropdownColor: AppThema.themeNotifierState.value.mode == ThemeMode.dark ? const Color(0xff000000) : const Color(0xffFFFFFF),
@@ -302,81 +278,7 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
                   txtCounty.text = "";
                 },
               ),),
-              Padding(padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 15.0),child:  Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      autofocus: false,
-                      keyboardType: TextInputType.number,
-                      controller: txtNumberYear,
-                      textInputAction: TextInputAction.go,
-                      style: const TextStyle(
-                          fontSize: 16,
-                          fontFamily: 'Poppins-Regular',
-                          fontWeight: FontWeight.w100,
-                          color: Color(0xFF323232)),
-                      inputFormatters: [
-                        // obrigatório
-                        FilteringTextInputFormatter.digitsOnly,
-                        LengthLimitingTextInputFormatter(4),
-                      ],
-                      onSubmitted: (value) {
-                        FocusScope.of(context).requestFocus(FocusNode());
-                      },
-                      decoration: const InputDecoration(
-                        hintText: 'Digite Ano',
-                        labelText: 'Ano',
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 15.0,
-                  ),
-                  Expanded(
-                    child:  DropdownButtonFormField<UtilDropdownList>(
-                      elevation: 7,
-                      dropdownColor: AppThema.themeNotifierState.value.mode == ThemeMode.dark ? const Color(0xff000000) : const Color(0xffFFFFFF),
-                      isExpanded: true,
-                      isDense: true,
-                      icon: const Icon(
-                        Icons.expand_more,
-                        size: 23,
-                        color: Color(0xFFb8b8b8),
-                      ),
-                      decoration:  const InputDecoration(
-                        filled: true,
-                        labelText: 'Mês',
-                        hintText: 'Mês',
-                        //contentPadding: const EdgeInsets.fromLTRB(10.0, 18.0, 18.0, 0.0),
-                        border: InputBorder.none,
-                        //focusColor: Colors.transparent,
-                      ),
-                      value: utilDropdownListMonth,
-                      items: listMonths.map(
-                            (v) => DropdownMenuItem<UtilDropdownList>(
-                            value: v,
-                            child: Text(
-                              v.txt!,
-                              overflow: TextOverflow.ellipsis,
-                              softWrap: true,
-                              maxLines: 1,
-                              style: const TextStyle(
-                      fontSize: 16,
-                      fontFamily: 'Poppins-Regular',
-                      fontWeight: FontWeight.w100,
-                      color: Color(0xFF323232)),
 
-                            )),
-                      ).toList(),
-                      onChanged: (newValue) {
-                        setState(() {
-                          utilDropdownListMonth = newValue!;
-                        });
-                      },
-                    ),
-                  ),
-                ],
-              )),
               Padding( padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),child:TextField(
                 onTap: () {
                   FocusScope.of(context).requestFocus(FocusNode());

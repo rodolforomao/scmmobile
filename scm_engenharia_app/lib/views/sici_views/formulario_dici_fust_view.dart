@@ -9,6 +9,7 @@ import '../../data/tb_form_sici_fust.dart';
 import '../../help/components.dart';
 import '../../help/formatter/cnpj_input_formatter.dart';
 import '../../help/formatter/telefone_input_formatter.dart';
+import '../../help/formatter/util_fields.dart';
 import '../../help/formatter/valor_input_formatter.dart';
 import '../../models/input/input_sici_fust_form_model.dart';
 import '../../models/operation.dart';
@@ -295,9 +296,9 @@ class FormularioDiciFustState extends State<FormularioDiciFustView>
         //Telefone Fixo:
         txtControllerLandline.text = widget.siciFileModel!.telefoneFixo!;
         //CNPJ:
-        txtControllerCnpj.text = widget.siciFileModel!.razaoSocial!;
+        txtControllerCnpj.text = CNPJValidator.format(widget.siciFileModel!.cnpj!);
         //TELEFONE CELULAR:
-        txtControllerTelefoneMovel.text = widget.siciFileModel!.telefoneMovel!;
+        txtControllerTelefoneMovel.text = widget.siciFileModel!.telefoneMovel! ;
         // Receita Bruta
         txtControllerGrossRevenue.text = widget.siciFileModel!.receitaBruta!;
         // Valor Simples
@@ -385,83 +386,98 @@ class FormularioDiciFustState extends State<FormularioDiciFustView>
                 physics: const ClampingScrollPhysics(),
                 controlsBuilder:
                     (BuildContext context, ControlsDetails details) {
-                  return Row(
-                    children: <Widget>[
-                      Visibility(
-                        visible: currentStep > 0 ? true : false,
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            backgroundColor: const Color(0xff888888),
-                            padding:
+                  return Align( alignment: Alignment.bottomRight, child: Container(
+                    alignment: Alignment.bottomRight,
+                    constraints: const BoxConstraints(
+                      maxWidth: 300,
+                      minWidth: 300,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Visibility(
+                          visible: currentStep > 0 ? true : false,
+                          child:Expanded(
+                            flex: 2,
+                            child: TextButton(
+                              style: TextButton.styleFrom(
+                                backgroundColor: const Color(0xff888888),
+                                padding:
                                 const EdgeInsets.fromLTRB(5.0, 2.0, 5.0, 3.0),
-                            minimumSize: const Size(130, 43),
-                            maximumSize: const Size(130, 43),
-                            textStyle: const TextStyle(
-                              color: Color(0xffFFFFFF),
-                              fontSize: 13,
-                            ),
-                          ),
-                          onPressed: () async {
-                            setState(() {
-                              switch (currentStep) {
-                                case 2:
-                                  currentStep = 1;
-                                  break;
-                                case 1:
-                                  currentStep = 0;
-                                  break;
-                              }
-                            });
-                          },
-                          child: const Text(
-                            'Anterior',
-                            style: TextStyle(
-                              color: Color(0xffFFFFFF),
-                              fontSize: 13,
+                                minimumSize: const Size(130, 43),
+                                maximumSize: const Size(130, 43),
+                                textStyle: const TextStyle(
+                                  color: Color(0xffFFFFFF),
+                                  fontSize: 13,
+                                ),
+                              ),
+                              onPressed: () async {
+                                setState(() {
+                                  switch (currentStep) {
+                                    case 2:
+                                      currentStep = 1;
+                                      break;
+                                    case 1:
+                                      currentStep = 0;
+                                      break;
+                                  }
+                                });
+                              },
+                              child: const Text(
+                                'Anterior',
+                                style: TextStyle(
+                                  color: Color(0xffFFFFFF),
+                                  fontSize: 13,
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.all(10),
-                      ),
-                      Visibility(
-                        visible: currentStep == 2 ? false : true,
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            backgroundColor: const Color(0xffef7d00),
-                            padding:
+                        const Padding(
+                          padding: EdgeInsets.all(10),
+                        ),
+                        Visibility(
+                          visible: currentStep == 2 ? false : true,
+                          child: Expanded(
+                            flex: 2,
+                            child:  TextButton(
+                              style: TextButton.styleFrom(
+                                backgroundColor: const Color(0xffef7d00),
+                                padding:
                                 const EdgeInsets.fromLTRB(15.0, 2.0, 15.0, 2.0),
-                            minimumSize: const Size(130, 43),
-                            maximumSize: const Size(130, 43),
-                            textStyle: const TextStyle(
-                              color: Color(0xffFFFFFF),
-                              fontSize: 13,
-                            ),
-                          ),
-                          onPressed: () async {
-                            setState(() {
-                              switch (currentStep) {
-                                case 0:
-                                  currentStep = 1;
-                                  break;
-                                case 1:
-                                  currentStep = 2;
-                                  break;
-                              }
-                            });
-                          },
-                          child: const Text(
-                            'Próximo',
-                            style: TextStyle(
-                              color: Color(0xffFFFFFF),
-                              fontSize: 13,
+                                minimumSize: const Size(130, 43),
+                                maximumSize: const Size(130, 43),
+                                textStyle: const TextStyle(
+                                  color: Color(0xffFFFFFF),
+                                  fontSize: 13,
+                                ),
+                              ),
+                              onPressed: () async {
+                                setState(() {
+                                  switch (currentStep) {
+                                    case 0:
+                                      currentStep = 1;
+                                      break;
+                                    case 1:
+                                      currentStep = 2;
+                                      break;
+                                  }
+                                });
+                              },
+                              child: const Text(
+                                'Próximo',
+                                style: TextStyle(
+                                  color: Color(0xffFFFFFF),
+                                  fontSize: 13,
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  );
+                      ],
+                    ),
+                  ),);
                 },
                 steps: <Step>[
                   Step(
@@ -562,11 +578,11 @@ class FormularioDiciFustState extends State<FormularioDiciFustView>
                             textInputAction: TextInputAction.next,
                             onSubmitted: (term) {
                               focusNodeCnpj.unfocus();
-                              FocusScope.of(context)
-                                  .requestFocus(focusNodeTelefoneMovel);
+                              FocusScope.of(context).requestFocus(focusNodeTelefoneMovel);
                             },
                             inputFormatters: [
                               // obrigatório
+                              CurrencyInputFormatter(),
                               FilteringTextInputFormatter.digitsOnly,
                               CnpjInputFormatter(),
                             ],
@@ -1040,11 +1056,437 @@ class FormularioDiciFustState extends State<FormularioDiciFustView>
                               scrollDirection: Axis.vertical,
                               physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
-                              itemCount: inputSiciFustForm.dadosEmServicos ==
-                                      null
-                                  ? 0
-                                  : inputSiciFustForm.dadosEmServicos!.length,
-                              itemBuilder: dataInServicesCard,
+                              itemCount: inputSiciFustForm.dadosEmServicos == null ? 0 : inputSiciFustForm.dadosEmServicos!.length,
+                              itemBuilder: (context,index)
+                                {
+                                  return Card(
+                                    elevation: 0.9,
+                                    child: Container(
+                                        alignment: Alignment.topLeft,
+                                        height: 475,
+                                        constraints: const BoxConstraints(
+                                          minWidth: 200,
+                                          maxWidth: 600,
+                                        ),
+                                        padding: const EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 20.0),
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xffFFFFFF), //new Color.fromRGBO(255, 0, 0, 0.0),
+                                          borderRadius: BorderRadius.circular(5.0),
+                                        ),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            Padding(
+                                              padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 5.0),
+                                              child: RichText(
+                                                  textAlign: TextAlign.start,
+                                                  softWrap: false,
+                                                  maxLines: 2,
+                                                  overflow: TextOverflow.ellipsis,
+                                                  text: TextSpan(children: [
+                                                    const TextSpan(
+                                                      text: 'UF' + "\n ",
+                                                      style: TextStyle(
+                                                        fontWeight: FontWeight.normal,
+                                                        color: Colors.black,
+                                                        fontSize: 16.0,
+                                                      ),
+                                                    ),
+                                                    TextSpan(
+                                                      text: inputSiciFustForm.dadosEmServicos![index].uf,
+                                                      style: const TextStyle(
+                                                        fontWeight: FontWeight.normal,
+                                                        color: Colors.black54,
+                                                        fontSize: 15.0,
+                                                      ),
+                                                    ),
+                                                  ])),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
+                                              child: RichText(
+                                                  textAlign: TextAlign.start,
+                                                  softWrap: false,
+                                                  maxLines: 2,
+                                                  overflow: TextOverflow.ellipsis,
+                                                  text: TextSpan(children: [
+                                                    const TextSpan(
+                                                      text: 'Tipo cliente' + '\n ',
+                                                      style: TextStyle(
+                                                        fontWeight: FontWeight.normal,
+                                                        color: Colors.black,
+                                                        fontSize: 16.0,
+                                                      ),
+                                                    ),
+                                                    TextSpan(
+                                                      text: inputSiciFustForm
+                                                          .dadosEmServicos![index].tipoCliente,
+                                                      style: const TextStyle(
+                                                        fontWeight: FontWeight.normal,
+                                                        color: Colors.black54,
+                                                        fontSize: 15.0,
+                                                      ),
+                                                    ),
+                                                  ])),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
+                                              child: RichText(
+                                                  textAlign: TextAlign.start,
+                                                  softWrap: false,
+                                                  maxLines: 2,
+                                                  overflow: TextOverflow.ellipsis,
+                                                  text: TextSpan(children: [
+                                                    const TextSpan(
+                                                      text: 'Tipo de Atendimento' + "\n ",
+                                                      style: TextStyle(
+                                                        fontWeight: FontWeight.normal,
+                                                        color: Colors.black,
+                                                        fontSize: 16.0,
+                                                      ),
+                                                    ),
+                                                    TextSpan(
+                                                      text: inputSiciFustForm
+                                                          .dadosEmServicos![index].tipoAtendimento,
+                                                      style: const TextStyle(
+                                                        fontWeight: FontWeight.normal,
+                                                        color: Colors.black54,
+                                                        fontSize: 15.0,
+                                                      ),
+                                                    ),
+                                                  ])),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
+                                              child: RichText(
+                                                  textAlign: TextAlign.start,
+                                                  softWrap: false,
+                                                  maxLines: 2,
+                                                  overflow: TextOverflow.ellipsis,
+                                                  text: TextSpan(children: [
+                                                    const TextSpan(
+                                                      text: 'Tipo acesso' "\n ",
+                                                      style: TextStyle(
+                                                        fontWeight: FontWeight.normal,
+                                                        color: Colors.black,
+                                                        fontSize: 15.0,
+                                                      ),
+                                                    ),
+                                                    TextSpan(
+                                                      text: inputSiciFustForm
+                                                          .dadosEmServicos![index].tipoAcesso,
+                                                      style: const TextStyle(
+                                                        fontWeight: FontWeight.normal,
+                                                        color: Colors.black54,
+                                                        fontSize: 16.0,
+                                                      ),
+                                                    ),
+                                                  ])),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
+                                              child: RichText(
+                                                  textAlign: TextAlign.start,
+                                                  softWrap: false,
+                                                  maxLines: 2,
+                                                  overflow: TextOverflow.ellipsis,
+                                                  text: TextSpan(children: [
+                                                    const TextSpan(
+                                                      text: 'Tecnologia' + "\n ",
+                                                      style: TextStyle(
+                                                        fontWeight: FontWeight.normal,
+                                                        color: Colors.black,
+                                                        fontSize: 16.0,
+                                                      ),
+                                                    ),
+                                                    TextSpan(
+                                                      text: inputSiciFustForm
+                                                          .dadosEmServicos![index].tecnologia,
+                                                      style: const TextStyle(
+                                                        fontWeight: FontWeight.normal,
+                                                        color: Colors.black54,
+                                                        fontSize: 15.0,
+                                                      ),
+                                                    ),
+                                                  ])),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
+                                              child: RichText(
+                                                  textAlign: TextAlign.start,
+                                                  softWrap: false,
+                                                  maxLines: 2,
+                                                  overflow: TextOverflow.ellipsis,
+                                                  text: TextSpan(children: [
+                                                    const TextSpan(
+                                                      text: 'Tipo produto' + "\n ",
+                                                      style: TextStyle(
+                                                        fontWeight: FontWeight.normal,
+                                                        color: Colors.black,
+                                                        fontSize: 16.0,
+                                                      ),
+                                                    ),
+                                                    TextSpan(
+                                                      text: inputSiciFustForm
+                                                          .dadosEmServicos![index].tipoProduto,
+                                                      style: const TextStyle(
+                                                        fontWeight: FontWeight.normal,
+                                                        color: Colors.black54,
+                                                        fontSize: 15.0,
+                                                      ),
+                                                    ),
+                                                  ])),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
+                                              child: RichText(
+                                                  textAlign: TextAlign.start,
+                                                  softWrap: false,
+                                                  maxLines: 2,
+                                                  overflow: TextOverflow.ellipsis,
+                                                  text: TextSpan(children: [
+                                                    const TextSpan(
+                                                      text: 'Velocidade' "\n ",
+                                                      style: TextStyle(
+                                                        fontWeight: FontWeight.normal,
+                                                        color: Colors.black,
+                                                        fontSize: 16.0,
+                                                      ),
+                                                    ),
+                                                    TextSpan(
+                                                      text: inputSiciFustForm
+                                                          .dadosEmServicos![index].velocidade,
+                                                      style: const TextStyle(
+                                                        fontWeight: FontWeight.normal,
+                                                        color: Colors.black54,
+                                                        fontSize: 15.0,
+                                                      ),
+                                                    ),
+                                                  ])),
+                                            ),
+                                            const Divider(),
+                                            const SizedBox(height: 10.0),
+                                            Align( alignment: Alignment.bottomRight, child: Container(
+                                              alignment: Alignment.bottomRight,
+                                              constraints: const BoxConstraints(
+                                                maxWidth: 300,
+                                                minWidth: 300,
+                                              ),
+                                              height: 40,
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                children: <Widget>[
+                                                  Expanded(
+                                                    flex: 2,
+                                                    child:  TextButton.icon(
+                                                      style: TextButton.styleFrom(
+                                                        minimumSize: const Size(150, 40),
+                                                        maximumSize: const Size(150, 40),
+                                                        shape: RoundedRectangleBorder(
+                                                          borderRadius: BorderRadius.circular(5.0),
+                                                        ),
+                                                      ),
+                                                      icon: const Icon(
+                                                        Icons.visibility,
+                                                        color: Colors.white,
+                                                      ),
+                                                      //`Icon` to display
+                                                      label: const Text(
+                                                        'Visualizar',
+                                                        overflow: TextOverflow.ellipsis,
+                                                        maxLines: 1,
+                                                        softWrap: false,
+                                                        style: TextStyle(color: Colors.white),
+                                                      ),
+                                                      //`Text` to display
+                                                      onPressed: () {
+                                                        FocusScope.of(context).requestFocus(FocusNode());
+                                                        Navigator.push(
+                                                            context,
+                                                            CupertinoPageRoute<InputDadosEmServicosModel>(
+                                                                fullscreenDialog: true,
+                                                                builder: (BuildContext context) =>
+                                                                    DadosEmServicosView(sInputDadosEmServicos: inputSiciFustForm.dadosEmServicos![index]))).then((value) {
+                                                          if (value != null) {
+                                                            setState(() {
+                                                              inputSiciFustForm.dadosEmServicos!.insert(index, value);
+                                                            });
+                                                          }
+                                                        });
+                                                      },
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 10.0),
+                                                  Expanded(
+                                                    flex: 2,
+                                                    child: TextButton.icon(
+                                                      style: TextButton.styleFrom(
+                                                        minimumSize: const Size(150, 40),
+                                                        maximumSize: const Size(150, 40),
+                                                        backgroundColor: Colors.red,
+                                                        shape: RoundedRectangleBorder(
+                                                          borderRadius: BorderRadius.circular(5.0),
+                                                        ),
+                                                      ),
+                                                      icon: const Icon(
+                                                        Icons.delete_outline,
+                                                        color: Colors.white,
+                                                      ),
+                                                      //`Icon` to display
+                                                      label: const Text(
+                                                        'Remover',
+                                                        overflow: TextOverflow.ellipsis,
+                                                        maxLines: 1,
+                                                        softWrap: false,
+                                                        style: TextStyle(color: Colors.white),
+                                                      ),
+                                                      //`Text` to display
+                                                      onPressed: () {
+                                                        showDialog(
+                                                          context: context,
+                                                          barrierDismissible: false,
+                                                          builder: (BuildContext context) {
+                                                            return Dialog(
+                                                                child: Container(
+                                                                  padding: const EdgeInsets.all(25.0),
+                                                                  constraints: const BoxConstraints(
+                                                                    minWidth: 70,
+                                                                    maxWidth: 450,
+                                                                  ),
+                                                                  child: Column(
+                                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                                    mainAxisSize: MainAxisSize.min,
+                                                                    children: [
+                                                                      Container(
+                                                                        margin: const EdgeInsets.fromLTRB(
+                                                                            0.0, 10.0, 0.0, 15.0),
+                                                                        height: 50.0,
+                                                                        child: Text(
+                                                                          'Deseja realmente remover ?',
+                                                                          textAlign: TextAlign.start,
+                                                                          softWrap: false,
+                                                                          maxLines: 2,
+                                                                          overflow: TextOverflow.ellipsis,
+                                                                          style: Theme.of(GlobalScaffold.instance
+                                                                              .navigatorKey.currentContext!)
+                                                                              .textTheme
+                                                                              .headline4
+                                                                              ?.copyWith(
+                                                                            fontSize: 15,
+                                                                            color: const Color(0xff737373),
+                                                                            fontWeight: FontWeight.w100,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Container(
+                                                                        constraints: const BoxConstraints(
+                                                                          maxWidth: 400,
+                                                                        ),
+                                                                        margin: const EdgeInsets.fromLTRB(
+                                                                            0.0, 10.0, 0.0, 15.0),
+                                                                        child: Row(
+                                                                          mainAxisAlignment:
+                                                                          MainAxisAlignment.center,
+                                                                          crossAxisAlignment:
+                                                                          CrossAxisAlignment.center,
+                                                                          mainAxisSize: MainAxisSize.max,
+                                                                          children: <Widget>[
+                                                                            Expanded(
+                                                                              child: Padding(
+                                                                                padding: const EdgeInsets.only(
+                                                                                    left: 14.0),
+                                                                                child: OutlinedButton(
+                                                                                  style: TextButton.styleFrom(
+                                                                                    backgroundColor:
+                                                                                    const Color(0xFFffffff),
+                                                                                    side: const BorderSide(
+                                                                                      color: Color(
+                                                                                          0xffef7d00), //Color of the border
+                                                                                    ),
+                                                                                    minimumSize:
+                                                                                    const Size(130, 43),
+                                                                                    maximumSize:
+                                                                                    const Size(130, 43),
+                                                                                    textStyle: const TextStyle(
+                                                                                      color: Color(0xffFFFFFF),
+                                                                                      fontSize: 15,
+                                                                                    ),
+                                                                                  ),
+                                                                                  onPressed: () async {
+                                                                                    try {
+                                                                                      setState(() {
+                                                                                        //var sd =  inputSiciFustForm.dadosEmServicos;
+                                                                                        inputSiciFustForm.dadosEmServicos!.remove(inputSiciFustForm.dadosEmServicos![index]);
+                                                                                        //var sds =  inputSiciFustForm.dadosEmServicos;
+                                                                                        //inputSiciFustForm.dadosEmServicos = inputSiciFustForm.dadosEmServicos;
+                                                                                      });
+                                                                                      Navigator.pop(context);
+                                                                                    } catch (error) {
+                                                                                      GlobalScaffold.instance
+                                                                                          .onToastError(
+                                                                                          error.toString());
+                                                                                    }
+                                                                                  },
+                                                                                  child: const Text('  Sim  ',
+                                                                                      style: TextStyle(
+                                                                                        color: Color(0xffef7d00),
+                                                                                      )),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            Expanded(
+                                                                              child: Padding(
+                                                                                padding: const EdgeInsets.only(
+                                                                                    left: 14.0),
+                                                                                child: OutlinedButton(
+                                                                                  style: TextButton.styleFrom(
+                                                                                    minimumSize:
+                                                                                    const Size(130, 43),
+                                                                                    maximumSize:
+                                                                                    const Size(130, 43),
+                                                                                    textStyle: const TextStyle(
+                                                                                      color: Color(0xffFFFFFF),
+                                                                                      fontSize: 15,
+                                                                                    ),
+                                                                                  ),
+                                                                                  onPressed: () async {
+                                                                                    try {
+                                                                                      Navigator.pop(context);
+                                                                                    } catch (error) {
+                                                                                      GlobalScaffold.instance
+                                                                                          .onToastError(
+                                                                                          error.toString());
+                                                                                    }
+                                                                                  },
+                                                                                  child: const Text('  Não  ',
+                                                                                      style: TextStyle(
+                                                                                        color: Color(0xFFffffff),
+                                                                                      )),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ));
+                                                          },
+                                                        );
+                                                      },
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),)
+                                          ],
+                                        )),
+                                  );
+                                },
                             );
                           },
                         ),
@@ -1086,429 +1528,4 @@ class FormularioDiciFustState extends State<FormularioDiciFustView>
       ),
     );
   }
-
-  Card dataInServicesCard(BuildContext context, int index) => Card(
-        elevation: 0.9,
-        child: Container(
-            alignment: Alignment.topLeft,
-            height: 475,
-            constraints: const BoxConstraints(
-              minWidth: 200,
-              maxWidth: 600,
-            ),
-            padding: const EdgeInsets.fromLTRB(20.0, 20.0, 0.0, 20.0),
-            decoration: BoxDecoration(
-              color:
-                  const Color(0xffFFFFFF), //new Color.fromRGBO(255, 0, 0, 0.0),
-              borderRadius: BorderRadius.circular(5.0),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 5.0),
-                  child: RichText(
-                      textAlign: TextAlign.start,
-                      softWrap: false,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      text: TextSpan(children: [
-                        const TextSpan(
-                          text: 'UF' + "\n ",
-                          style: TextStyle(
-                            fontWeight: FontWeight.normal,
-                            color: Colors.black,
-                            fontSize: 16.0,
-                          ),
-                        ),
-                        TextSpan(
-                          text: inputSiciFustForm.dadosEmServicos![index].uf,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.normal,
-                            color: Colors.black54,
-                            fontSize: 15.0,
-                          ),
-                        ),
-                      ])),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
-                  child: RichText(
-                      textAlign: TextAlign.start,
-                      softWrap: false,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      text: TextSpan(children: [
-                        const TextSpan(
-                          text: 'Tipo cliente' + "\n ",
-                          style: TextStyle(
-                            fontWeight: FontWeight.normal,
-                            color: Colors.black,
-                            fontSize: 16.0,
-                          ),
-                        ),
-                        TextSpan(
-                          text: inputSiciFustForm
-                              .dadosEmServicos![index].tipoCliente,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.normal,
-                            color: Colors.black54,
-                            fontSize: 15.0,
-                          ),
-                        ),
-                      ])),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
-                  child: RichText(
-                      textAlign: TextAlign.start,
-                      softWrap: false,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      text: TextSpan(children: [
-                        const TextSpan(
-                          text: 'Tipo de Atendimento' + "\n ",
-                          style: TextStyle(
-                            fontWeight: FontWeight.normal,
-                            color: Colors.black,
-                            fontSize: 16.0,
-                          ),
-                        ),
-                        TextSpan(
-                          text: inputSiciFustForm
-                              .dadosEmServicos![index].tipoAtendimento,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.normal,
-                            color: Colors.black54,
-                            fontSize: 15.0,
-                          ),
-                        ),
-                      ])),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
-                  child: RichText(
-                      textAlign: TextAlign.start,
-                      softWrap: false,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      text: TextSpan(children: [
-                        const TextSpan(
-                          text: 'Tipo acesso' "\n ",
-                          style: TextStyle(
-                            fontWeight: FontWeight.normal,
-                            color: Colors.black,
-                            fontSize: 15.0,
-                          ),
-                        ),
-                        TextSpan(
-                          text: inputSiciFustForm
-                              .dadosEmServicos![index].tipoAcesso,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.normal,
-                            color: Colors.black54,
-                            fontSize: 16.0,
-                          ),
-                        ),
-                      ])),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
-                  child: RichText(
-                      textAlign: TextAlign.start,
-                      softWrap: false,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      text: TextSpan(children: [
-                        const TextSpan(
-                          text: 'Tecnologia' + "\n ",
-                          style: TextStyle(
-                            fontWeight: FontWeight.normal,
-                            color: Colors.black,
-                            fontSize: 16.0,
-                          ),
-                        ),
-                        TextSpan(
-                          text: inputSiciFustForm
-                              .dadosEmServicos![index].tecnologia,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.normal,
-                            color: Colors.black54,
-                            fontSize: 15.0,
-                          ),
-                        ),
-                      ])),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
-                  child: RichText(
-                      textAlign: TextAlign.start,
-                      softWrap: false,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      text: TextSpan(children: [
-                        const TextSpan(
-                          text: 'Tipo produto' + "\n ",
-                          style: TextStyle(
-                            fontWeight: FontWeight.normal,
-                            color: Colors.black,
-                            fontSize: 16.0,
-                          ),
-                        ),
-                        TextSpan(
-                          text: inputSiciFustForm
-                              .dadosEmServicos![index].tipoProduto,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.normal,
-                            color: Colors.black54,
-                            fontSize: 15.0,
-                          ),
-                        ),
-                      ])),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
-                  child: RichText(
-                      textAlign: TextAlign.start,
-                      softWrap: false,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      text: TextSpan(children: [
-                        const TextSpan(
-                          text: 'Velocidade' "\n ",
-                          style: TextStyle(
-                            fontWeight: FontWeight.normal,
-                            color: Colors.black,
-                            fontSize: 16.0,
-                          ),
-                        ),
-                        TextSpan(
-                          text: inputSiciFustForm
-                              .dadosEmServicos![index].velocidade,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.normal,
-                            color: Colors.black54,
-                            fontSize: 15.0,
-                          ),
-                        ),
-                      ])),
-                ),
-                const Divider(),
-                const SizedBox(height: 10.0),
-                SizedBox(
-                  height: 40,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      if (inputSiciFustForm.idFichaSiciApp!.isNotEmpty) ...[
-                        TextButton.icon(
-                          style: TextButton.styleFrom(
-                            minimumSize: const Size(150, 40),
-                            maximumSize: const Size(150, 40),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                          ),
-                          icon: const Icon(
-                            Icons.visibility,
-                            color: Colors.white,
-                          ),
-                          //`Icon` to display
-                          label: const Text(
-                            'Visualizar',
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            softWrap: false,
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          //`Text` to display
-                          onPressed: () {
-                            FocusScope.of(context).requestFocus(FocusNode());
-                            Navigator.push(
-                                context,
-                                CupertinoPageRoute<InputDadosEmServicosModel>(
-                                    fullscreenDialog: true,
-                                    builder: (BuildContext context) =>
-                                        DadosEmServicosView(
-                                            sInputDadosEmServicos:
-                                                inputSiciFustForm
-                                                        .dadosEmServicos![
-                                                    index]))).then((value) {
-                              if (value != null) {
-                                setState(() {
-                                  inputSiciFustForm.dadosEmServicos!
-                                      .insert(index, value);
-                                });
-                              }
-                            });
-                          },
-                        ),
-                        const SizedBox(width: 10.0),
-                      ],
-                      TextButton.icon(
-                        style: TextButton.styleFrom(
-                          minimumSize: const Size(150, 40),
-                          maximumSize: const Size(150, 40),
-                          backgroundColor: Colors.red,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5.0),
-                          ),
-                        ),
-                        icon: const Icon(
-                          Icons.delete_outline,
-                          color: Colors.white,
-                        ),
-                        //`Icon` to display
-                        label: const Text(
-                          'Remover',
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          softWrap: false,
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        //`Text` to display
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (BuildContext context) {
-                              return Dialog(
-                                  child: Container(
-                                padding: const EdgeInsets.all(25.0),
-                                constraints: const BoxConstraints(
-                                  minWidth: 70,
-                                  maxWidth: 450,
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Container(
-                                      margin: const EdgeInsets.fromLTRB(
-                                          0.0, 10.0, 0.0, 15.0),
-                                      height: 50.0,
-                                      child: Text(
-                                        'Deseja realmente remover ?',
-                                        textAlign: TextAlign.start,
-                                        softWrap: false,
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: Theme.of(GlobalScaffold.instance
-                                                .navigatorKey.currentContext!)
-                                            .textTheme
-                                            .headline4
-                                            ?.copyWith(
-                                              fontSize: 15,
-                                              color: const Color(0xff737373),
-                                              fontWeight: FontWeight.w100,
-                                            ),
-                                      ),
-                                    ),
-                                    Container(
-                                      constraints: const BoxConstraints(
-                                        maxWidth: 400,
-                                      ),
-                                      margin: const EdgeInsets.fromLTRB(
-                                          0.0, 10.0, 0.0, 15.0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: <Widget>[
-                                          Expanded(
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 14.0),
-                                              child: OutlinedButton(
-                                                style: TextButton.styleFrom(
-                                                  backgroundColor:
-                                                      const Color(0xFFffffff),
-                                                  side: const BorderSide(
-                                                    color: Color(
-                                                        0xffef7d00), //Color of the border
-                                                  ),
-                                                  minimumSize:
-                                                      const Size(130, 43),
-                                                  maximumSize:
-                                                      const Size(130, 43),
-                                                  textStyle: const TextStyle(
-                                                    color: Color(0xffFFFFFF),
-                                                    fontSize: 15,
-                                                  ),
-                                                ),
-                                                onPressed: () async {
-                                                  try {
-                                                    setState(() {
-                                                      inputSiciFustForm
-                                                          .dadosEmServicos!
-                                                          .removeAt(index);
-                                                      Navigator.pop(context);
-                                                    });
-                                                  } catch (error) {
-                                                    GlobalScaffold.instance
-                                                        .onToastError(
-                                                            error.toString());
-                                                  }
-                                                },
-                                                child: const Text('  Sim  ',
-                                                    style: TextStyle(
-                                                      color: Color(0xffef7d00),
-                                                    )),
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 14.0),
-                                              child: OutlinedButton(
-                                                style: TextButton.styleFrom(
-                                                  minimumSize:
-                                                      const Size(130, 43),
-                                                  maximumSize:
-                                                      const Size(130, 43),
-                                                  textStyle: const TextStyle(
-                                                    color: Color(0xffFFFFFF),
-                                                    fontSize: 15,
-                                                  ),
-                                                ),
-                                                onPressed: () async {
-                                                  try {
-                                                    Navigator.pop(context);
-                                                  } catch (error) {
-                                                    GlobalScaffold.instance
-                                                        .onToastError(
-                                                            error.toString());
-                                                  }
-                                                },
-                                                child: const Text('  Não  ',
-                                                    style: TextStyle(
-                                                      color: Color(0xFFffffff),
-                                                    )),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ));
-                            },
-                          );
-                        },
-                      ),
-                      const SizedBox(width: 10.0),
-                    ],
-                  ),
-                ),
-              ],
-            )),
-      );
 }

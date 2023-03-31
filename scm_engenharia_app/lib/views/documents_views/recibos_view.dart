@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../help/components.dart';
 import '../../models/operation.dart';
 import '../../models/notification_models/notification_model.dart';
@@ -63,6 +65,9 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> {
         if (resultRest.erro) {
           throw (resultRest.message!);
         } else {
+          final _base64 = resultRest.result.toString();
+          launchUrl(Uri.parse(_base64));
+          //launchUrl(Uri.parse("data:application/octet-stream;base64,$_base64"));
           Components.downloadCompartilharArquivos(resultRest.result.toString(), 'recibo_', 'Recibo', 'Download','.pdf');
         }
       }
