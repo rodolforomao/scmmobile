@@ -47,7 +47,9 @@ class LoginState extends State<LoginView> {
            throw ("Senha é obrigatória");
          }
         OnRealizandoOperacao('Realizando operação',context);
-        Operation restWeb = await ServicoMobileService.onLogin(txtControllerEmail.text, txtControllerPassword.text);
+        Operation restWeb = await ServicoMobileService.onLogin(txtControllerEmail.text, txtControllerPassword.text).whenComplete(() =>
+            OnRealizandoOperacao('',context)
+        );
         if (restWeb.erro) {
           throw (restWeb.message!);
         } else if (restWeb.result == null) {
@@ -76,10 +78,10 @@ class LoginState extends State<LoginView> {
               if (global_user_logged.globalUserLogged!.isValid)
               {
                 if (defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.macOS || defaultTargetPlatform == TargetPlatform.android) {
-                  await FirebaseAnalytics.instance.setUserId(id: userResul.cpf);
-                  await FirebaseMessaging.instance.subscribeToTopic('NroCPF-${userResul.cpf}' ?? 'ScmEngenhariaLogadoAll');
-                  await FirebaseMessaging.instance.subscribeToTopic('ScmEngenhariaLogadoAll');
-                  await FirebaseMessaging.instance.unsubscribeFromTopic('ScmEngenhariaNLogadoAll');
+                 // await FirebaseAnalytics.instance.setUserId(id: userResul.cpf);
+                  //await FirebaseMessaging.instance.subscribeToTopic('NroCPF-${userResul.cpf}' ?? 'ScmEngenhariaLogadoAll');
+                 // await FirebaseMessaging.instance.subscribeToTopic('ScmEngenhariaLogadoAll');
+                  //await FirebaseMessaging.instance.unsubscribeFromTopic('ScmEngenhariaNLogadoAll');
                 }
               }
               GlobalScaffold.instance.navigatorKey.currentState?.pushNamedAndRemoveUntil(routes.menuNavigationRoute, (Route<dynamic> route) => false);
@@ -87,7 +89,6 @@ class LoginState extends State<LoginView> {
         }
       }
     } catch (error) {
-      OnRealizandoOperacao('',context);
       OnAlertError(error.toString());
     }
   }
@@ -96,8 +97,10 @@ class LoginState extends State<LoginView> {
   void initState() {
     super.initState();
     // NotificationHandler().subscribeToTopic("scmengenhariaUserNLogado");
-    txtControllerEmail.text = "rodolforomao@gmail.com";
-    txtControllerPassword.text = "1234567";
+    // txtControllerEmail.text = "scm_app@scmengenharia.com.br";
+    // txtControllerPassword.text = "Az5564747";
+    //txtControllerEmail.text = "rodolforomao@gmail.com";
+    // txtControllerPassword.text = "Ab1234567";
   }
 
   @override

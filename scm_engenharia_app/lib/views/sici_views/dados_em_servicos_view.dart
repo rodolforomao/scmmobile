@@ -594,6 +594,7 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
                       textAlign: TextAlign.start,
                       keyboardType: TextInputType.number,
                       focusNode: txtFocusNodeAccesses,
+                      textInputAction: TextInputAction.none,
                       style: const TextStyle(
                           fontSize: 16,
                           fontFamily: 'Poppins-Regular',
@@ -601,7 +602,6 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
                           color: Color(0xFF323232)),
                       onSubmitted: (term) {
                         txtFocusNodeAccesses!.unfocus();
-                        onAdd();
                       },
                       decoration: const InputDecoration(
                         labelText: 'ACESSOS',

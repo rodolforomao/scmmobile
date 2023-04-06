@@ -14,7 +14,7 @@ class AppScmEngenhariaMobileBll {
   late Realm realm;
   AppScmEngenhariaMobileBll() {
     final config = Configuration.local([TbUser.schema ,TbFormSiciFust.schema,TbEnvironmntVariable.schema],schemaVersion: 1);
-    Realm.deleteRealm(config.path);
+   // Realm.deleteRealm(config.path);
     realm = Realm(config);
   }
 
@@ -85,7 +85,7 @@ class AppScmEngenhariaMobileBll {
     operation.erro = false;
     try {
       realm.write(() {
-        realm.deleteAll<TbUser>();
+        realm.deleteAll();
       });
       operation.result = true;
     } catch (ex) {
@@ -248,7 +248,8 @@ class AppScmEngenhariaMobileBll {
       ObjectId id =   ObjectId.fromHexString(idFormSiciFust);
       operation.message = 'Operação realizada com sucesso';
       operation.erro = false;
-      final formSici  = realm.all<TbFormSiciFust>().firstWhereOrNull((element) => element.idFichaSiciApp == ObjectId.fromHexString(idFormSiciFust));
+      final formSici = realm.find<TbFormSiciFust>(id);
+      //final formSici  = realm.all<TbFormSiciFust>().firstWhereOrNull((element) => element.idFormSiciFustApp == ObjectId.fromHexString(idFormSiciFust));
       if(formSici != null)
       {
         realm.write(() {

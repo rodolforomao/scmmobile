@@ -9,7 +9,7 @@ import '../models/input/input_sici_fust_form_model.dart';
 
 class ServicoMobileService {
   static var Url = "http://dici.scmengenharia.com.br";
-  //static const Url = "http://10.0.2.2:8083";
+   //static const Url = "http://10.0.2.2:8083";
   //static final Url = "http://10.200.4.77:8083";
   //static final Url = "http://wsscm.ddns.net";
 
@@ -768,8 +768,7 @@ class ServicoMobileService {
         "token": token!,
       };
       http.MultipartRequest response;
-      response = http.MultipartRequest(
-          'POST', Uri.parse("$Url/lancamento/recuperar_lista_documentos_ws"));
+      response = http.MultipartRequest('POST', Uri.parse("$Url/lancamento/recuperar_lista_documentos_ws"));
       response.headers.addAll(headers);
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
@@ -778,8 +777,7 @@ class ServicoMobileService {
         if (respStr.isEmpty) {
           throw (ApiRestInformation.problemOfComunication);
         } else {
-          Map<String, dynamic> map = jsonDecode(Components.removeAllHtmlTags(
-              Components.removeAllHtmlTags(respStr)));
+          Map<String, dynamic> map = jsonDecode(Components.removeAllHtmlTags(Components.removeAllHtmlTags(respStr)));
           OperationJson resp = OperationJson.fromJson(map);
           operacao.erro = !resp.status!;
           operacao.message = resp.message;

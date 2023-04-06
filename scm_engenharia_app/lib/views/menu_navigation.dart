@@ -193,7 +193,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                                 });
                               },
                               title: Text(
-                                'Lançamentos - Sici',
+                                'Lançamentos - Dici',
                                 overflow: TextOverflow.visible,
                                 maxLines: 1,
                                 softWrap: false,

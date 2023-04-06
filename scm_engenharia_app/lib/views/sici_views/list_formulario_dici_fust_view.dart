@@ -568,9 +568,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                                                                 throw respUser.message!;
                                                               } else {
                                                                 setState(() {
-                                                                  print(index);
                                                                   siciFileModelAllList.remove(siciFileModelAllList[index]);
-                                                                  //siciFileModelUpdateList.remove(siciFileModelUpdateList[index]);
                                                                 });
                                                                 Navigator.pop(context);
                                                                 GlobalScaffold.instance.onToastSuccess(respUser.message!);

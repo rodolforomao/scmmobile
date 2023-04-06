@@ -330,8 +330,7 @@ class FormularioDiciFustState extends State<FormularioDiciFustView>
   @override
   void initState() {
     super.initState();
-    txtControllerReferencePeriod.text = DateFormat('dd/MM/yyyy')
-        .format(DateTime(DateTime.now().year, DateTime.now().month - 1));
+    txtControllerReferencePeriod.text = DateFormat('dd/MM/yyyy').format(DateTime(DateTime.now().year, DateTime.now().month - 1));
     onInc();
   }
 
@@ -582,7 +581,7 @@ class FormularioDiciFustState extends State<FormularioDiciFustView>
                             },
                             inputFormatters: [
                               // obrigatório
-                              CurrencyInputFormatter(),
+                              //CurrencyInputFormatter(),
                               FilteringTextInputFormatter.digitsOnly,
                               CnpjInputFormatter(),
                             ],
@@ -1022,27 +1021,20 @@ class FormularioDiciFustState extends State<FormularioDiciFustView>
                                 ),
                               ),
                               onPressed: () async {
-                                FocusScope.of(context)
-                                    .requestFocus(FocusNode());
                                 Navigator.push(
                                     context,
-                                    CupertinoPageRoute<
-                                            InputDadosEmServicosModel>(
+                                    CupertinoPageRoute<InputDadosEmServicosModel>(
                                         fullscreenDialog: true,
-                                        builder: (BuildContext context) =>
-                                            DadosEmServicosView(
-                                                sInputDadosEmServicos:
-                                                    null))).then((value) {
+                                        builder: (BuildContext context) => DadosEmServicosView(sInputDadosEmServicos: null))).then((value) {
                                   if (value != null) {
-                                    if (inputSiciFustForm.dadosEmServicos ==
-                                        null) {
-                                      inputSiciFustForm.dadosEmServicos = [];
-                                      inputSiciFustForm.dadosEmServicos!
-                                          .add(value);
-                                    } else {
-                                      inputSiciFustForm.dadosEmServicos!
-                                          .add(value);
-                                    }
+                                    setState(() {
+                                      if (inputSiciFustForm.dadosEmServicos == null) {
+                                        inputSiciFustForm.dadosEmServicos = [];
+                                        inputSiciFustForm.dadosEmServicos!.add(value);
+                                      } else {
+                                        inputSiciFustForm.dadosEmServicos!.add(value);
+                                      }
+                                    });
                                   }
                                 });
                               },

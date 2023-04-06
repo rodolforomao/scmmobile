@@ -71,35 +71,35 @@ class Components {
     }
   }
 
-  static String? JWTToken(String User, String password) {
+  static String? JWTToken(String user, String password) {
     try {
       String key = "bc47f175a831996b652146d47e159349f75e6c4665570ef35606678a18054d13";
-      final claimSet = new JwtClaim(otherClaims: <String, Object>{
-        "user": "" + User + "",
-        "pass": "" + password + "",
+      final claimSet = JwtClaim(otherClaims: <String, Object>{
+        "user": "$user",
+        "pass": "$password",
       });
       // Generate a JWT from the claim set
       final token = issueJwtHS256(claimSet, key);
       return token;
     } catch (error) {
-
+      return null;
     }
-    return null;
   }
 
   static String? JWTTokenPadrao() {
     try {
       String key =
           "bc47f175a831996b652146d47e159349f75e6c4665570ef35606678a18054d13";
-      final claimSet = new JwtClaim(otherClaims: <String, Object>{
-        "user": "" + 'scm_app@scmengenharia.com.br' + "",
-        "pass": "" + '123456' + "",
+      final claimSet = JwtClaim(otherClaims: <String, Object>{
+        "user": "" + "scm_app@scmengenharia.com.br" + "",
+        "pass": "" + 'Az5564747' + "",
       });
       // Generate a JWT from the claim set
       final token = issueJwtHS256(claimSet, key);
       return token;
-    } catch (error) {}
-    return null;
+    } catch (error) {
+      return null;
+    }
   }
 
   static String removeAllHtmlTags(String htmlText) {
@@ -338,13 +338,13 @@ class Components {
             await files.parent.create(recursive: true);
 
             files.writeAsBytes(bytes, mode: FileMode.write, flush: true).then((File file) async {
-              print("https://"+file.path);
+              print("https://${file.path}");
               print(file.uri);
 
 
               var fs = const LocalFileSystem();
                var sdsd = fs.file(file.uri).readAsBytes().toString();
-              GlobalScaffold.instance.onToastRedirectUriApp('Download concluído com sucesso.\r\n$dir',Uri.parse("https://"+file.path));
+              GlobalScaffold.instance.onToastRedirectUriApp('Download concluído com sucesso.\r\n$dir',Uri.parse("https://${file.path}"));
             }).whenComplete(() => null);
 
           }

@@ -33,7 +33,7 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> {
       } else {
         statusTypeView = TypeView.viewLoading;
         Operation resultRest = await ServicoMobileService.onGetDocumentsList();
-        if (resultRest.erro) {
+        if (resultRest.erro || resultRest.resultList.isEmpty) {
           throw (resultRest.message!);
         } else {
           setState(() {
