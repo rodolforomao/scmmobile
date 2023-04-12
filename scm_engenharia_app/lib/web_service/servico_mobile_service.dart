@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import '../data/JWTTokenDbLocal.dart';
 import '../help/components.dart';
 import '../models/operation.dart';
 import '../models/input/input_sici_fust_form_model.dart';
+import 'package:http_parser/http_parser.dart';
 
 class ServicoMobileService {
   static var Url = "http://dici.scmengenharia.com.br";
@@ -74,7 +76,7 @@ class ServicoMobileService {
       http.MultipartRequest response;
       response = http.MultipartRequest(
           'POST', Uri.parse("$Url/usuario/alterar_senha_ws"));
-      response.headers.addAll(headers);
+      response.headers.addAll(ApiRestInformation.onHeadersToken(token));
       response.fields['nova_senha'] = senha;
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
@@ -126,7 +128,7 @@ class ServicoMobileService {
       };
       http.MultipartRequest response;
       response = http.MultipartRequest('POST', Uri.parse("$Url/usuario/alterar_senha_ws"));
-      response.headers.addAll(ApiRestInformation.onHeadersToken(token!));
+      response.headers.addAll(ApiRestInformation.onHeadersToken(token));
       response.fields['nova_senha'] = senha;
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
@@ -172,13 +174,10 @@ class ServicoMobileService {
     Operation operacao = Operation();
     try {
       String? token = await ComponentsJWTToken.JWTTokenPadrao();
-      final response = await http
-          .post(Uri.parse("$Url/analise/Analise/recuperarVariaveisAmbiente_ws"),
+      final response = await http.post(Uri.parse("$Url/analise/Analise/recuperarVariaveisAmbiente_ws"),
               body: null,
               headers: ApiRestInformation.onHeadersToken(token!),
-              encoding: Encoding.getByName("utf-8"))
-          .timeout(const Duration(seconds: 10));
-
+              encoding: Encoding.getByName("utf-8")).timeout(const Duration(seconds: 10));
       operacao.erro = false;
       operacao.message = "Operação realizada com sucesso";
       operacao.result = null;
@@ -186,8 +185,7 @@ class ServicoMobileService {
         if (!response.body.isNotEmpty) {
           throw (ApiRestInformation.problemOfComunication);
         } else {
-          Map<String, dynamic> map =
-              jsonDecode(Components.removeAllHtmlTags(response.body));
+          Map<String, dynamic> map = jsonDecode(Components.removeAllHtmlTags(response.body));
           OperationJson resp = OperationJson.fromJson(map);
           operacao.erro = !resp.status!;
           operacao.message = resp.message;
@@ -221,7 +219,7 @@ class ServicoMobileService {
       http.MultipartRequest response;
       response = http.MultipartRequest(
           'POST', Uri.parse("$Url/administracao/bloquear_usuario_ws"));
-      response.headers.addAll(headers);
+      response.headers.addAll(ApiRestInformation.onHeadersToken(token));
       response.fields['id'] = id;
       response.fields['acao'] = 'true';
       var streamedResponse = await response.send();
@@ -264,8 +262,7 @@ class ServicoMobileService {
     return operacao;
   }
 
-  static Future<Operation> onMakeReleasesSici(
-      InputSiciFileModel siciFileModel) async {
+  static Future<Operation> onMakeReleasesSici(InputSiciFileModel siciFileModel) async {
     Operation operacao = Operation();
     try {
       operacao.erro = false;
@@ -277,9 +274,8 @@ class ServicoMobileService {
         "token": token!,
       };
       http.MultipartRequest response;
-      response = http.MultipartRequest(
-          'POST', Uri.parse("$Url/analise/lancamento_ws"));
-      response.headers.addAll(headers);
+      response = http.MultipartRequest('POST', Uri.parse("$Url/analise/lancamento_ws"));
+      response.headers.addAll(ApiRestInformation.onHeadersToken(token));
       if (siciFileModel.id!.isNotEmpty) {
         response.fields['controllerId'] = (siciFileModel.id ?? "");
       }
@@ -396,7 +392,6 @@ class ServicoMobileService {
         if (!response.body.isNotEmpty) {
           throw (ApiRestInformation.problemOfComunication);
         } else {
-          print(response.body);
           Map<String, dynamic> map = jsonDecode(response.body);
           OperationJson resp = OperationJson.fromJson(map);
           operacao.erro = !resp.status!;
@@ -430,14 +425,7 @@ class ServicoMobileService {
     return operacao;
   }
 
-  static Future<Operation> onRegisterUser(
-      String nome,
-      String cpf,
-      String email,
-      String telefone,
-      String telefoneWhatsapp,
-      String empresa,
-      String uf) async {
+  static Future<Operation> onRegisterUser(String nome, String cpf, String email, String telefone, String telefoneWhatsapp, String empresa, String uf) async {
     Operation operacao = Operation();
     try {
       String? token = await ComponentsJWTToken.JWTTokenPadrao();
@@ -447,7 +435,7 @@ class ServicoMobileService {
       };
       http.MultipartRequest response;
       response = http.MultipartRequest('POST', Uri.parse("$Url/usuario/inserir_usuario_ws"));
-      response.headers.addAll(headers);
+      response.headers.addAll(ApiRestInformation.onHeadersToken(token));
       response.fields['controllerNome'] = nome;
       response.fields['controllerCPF'] = cpf;
       response.fields['controllerEmail'] = email;
@@ -492,25 +480,33 @@ class ServicoMobileService {
     return operacao;
   }
 
-  static Future<Operation> onListUser() async {
+  static Future<Operation> onSiciUpload(String token,String nroContratado ,String nroGsp,String nmeArquivo, Uint8List imageFile) async {
     Operation operacao = Operation();
+    String jsonResponse = '';
     try {
-      String? token = await ComponentsJWTToken.JWTTokenPadrao();
-      Map<String, String> headers = {
-        'Content-Type': 'application/json; charset=utf-8',
-        'token': token!,
-      };
-      http.MultipartRequest response;
-      response = http.MultipartRequest('POST', Uri.parse("$Url/notificacoes/Notificacoes_ws/recuperarNotificacao_ws"));
-      response.headers.addAll(headers);
-      var streamedResponse = await response.send();
+      http.MultipartRequest request;
+      request = http.MultipartRequest(
+          'POST', Uri.parse('ArquivoTiss/DocumentoUploadDaGuia'));
+      request.headers.addAll(ApiRestInformation.onHeadersToken(token));
+      request.fields['nroGsp'] = nroGsp;
+      request.fields['nroContratado'] = nroContratado;
+      request.fields['nmeArquivo'] = nmeArquivo;
+      request.fields['operacao'] = 'I';
+      request.files.add(
+        http.MultipartFile.fromBytes(
+          'file',
+          imageFile,
+          filename: '$nmeArquivo.pdf',
+          contentType: MediaType("application", "pdf"),
+        ),);
+      var streamedResponse = await request.send();
       final respStr = await streamedResponse.stream.bytesToString();
       if (streamedResponse.statusCode == 200) {
         if (respStr.isEmpty) {
           throw (ApiRestInformation.problemOfComunication);
         } else {
-          Map<String, dynamic> map =
-              jsonDecode(Components.removeAllHtmlTags(respStr));
+          Map<String, dynamic> map = jsonDecode(
+              Components.removeAllHtmlTags(respStr));
           OperationJson resp = OperationJson.fromJson(map);
           operacao.erro = !resp.status!;
           operacao.message = resp.message;
@@ -522,6 +518,53 @@ class ServicoMobileService {
       } else {
         operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(
             streamedResponse.statusCode, streamedResponse.stream.toString());
+      }
+    } on TimeoutException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.timeoutHttp;
+    } on SocketException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.internetSocketException;
+    } on HttpException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.httpException;
+    } on FormatException {
+      operacao.erro = true;
+      operacao.message = ApiRestInformation.formatException;
+    } catch (e) {
+      operacao.erro = true;
+      operacao.message = e.toString();
+    }
+    return operacao;
+  }
+  static Future<Operation> onListUser() async {
+    Operation operacao = Operation();
+    try {
+      String? token = await ComponentsJWTToken.JWTTokenPadrao();
+      Map<String, String> headers = {
+        'Content-Type': 'application/json; charset=utf-8',
+        'token': token!,
+      };
+      http.MultipartRequest response;
+      response = http.MultipartRequest('POST', Uri.parse("$Url/notificacoes/Notificacoes_ws/recuperarNotificacao_ws"));
+      response.headers.addAll(ApiRestInformation.onHeadersToken(token));
+      var streamedResponse = await response.send();
+      final respStr = await streamedResponse.stream.bytesToString();
+      if (streamedResponse.statusCode == 200) {
+        if (respStr.isEmpty) {
+          throw (ApiRestInformation.problemOfComunication);
+        } else {
+          Map<String, dynamic> map = jsonDecode(Components.removeAllHtmlTags(respStr));
+          OperationJson resp = OperationJson.fromJson(map);
+          operacao.erro = !resp.status!;
+          operacao.message = resp.message;
+          operacao.result = resp.result;
+        }
+        if (operacao.message == null) {
+          throw ('Não foi identificado resposta');
+        }
+      } else {
+        operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(streamedResponse.statusCode, streamedResponse.stream.toString());
       }
     } on TimeoutException {
       operacao.erro = true;
@@ -555,7 +598,7 @@ class ServicoMobileService {
           'POST',
           Uri.parse(
               "$Url/notificacoes/Notificacoes_ws/recuperarNotificacao_ws"));
-      response.headers.addAll(headers);
+      response.headers.addAll(ApiRestInformation.onHeadersToken(token));
       response.fields['id'] = idUser;
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
@@ -563,8 +606,7 @@ class ServicoMobileService {
         if (respStr.isEmpty) {
           throw (ApiRestInformation.problemOfComunication);
         } else {
-          Map<String, dynamic> map =
-              jsonDecode(Components.removeAllHtmlTags(respStr));
+          Map<String, dynamic> map = jsonDecode(Components.removeAllHtmlTags(respStr));
           OperationJson resp = OperationJson.fromJson(map);
           operacao.erro = !resp.status!;
           operacao.message = resp.message;
@@ -596,8 +638,7 @@ class ServicoMobileService {
     return operacao;
   }
 
-  static Future<Operation> onRecuperaNotificacaoPeloId(
-      String IdNotificacao) async {
+  static Future<Operation> onRecuperaNotificacaoPeloId(String IdNotificacao) async {
     Operation operacao = Operation();
     try {
       String? token = await ComponentsJWTToken.JWTTokenPadrao();
@@ -610,7 +651,7 @@ class ServicoMobileService {
           'POST',
           Uri.parse(
               "$Url/notificacoes/Notificacoes_ws/recuperarNotificacao_ws"));
-      response.headers.addAll(headers);
+      response.headers.addAll(ApiRestInformation.onHeadersToken(token));
       response.fields['id'] = IdNotificacao;
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
@@ -664,7 +705,7 @@ class ServicoMobileService {
           'POST',
           Uri.parse(
               "$Url/notificacoes/Notificacoes_ws/recuperarNotificacao_ws"));
-      response.headers.addAll(headers);
+      response.headers.addAll(ApiRestInformation.onHeadersToken(token));
       response.fields['id'] = idNotificacao;
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
@@ -716,7 +757,7 @@ class ServicoMobileService {
       http.MultipartRequest response;
       response = http.MultipartRequest('POST',
           Uri.parse("$Url/notificacoes/recuperarTodasNotificacaoByCpf_ws"));
-      response.headers.addAll(headers);
+      response.headers.addAll(ApiRestInformation.onHeadersToken(token));
       response.fields['cpf'] = cpf;
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
@@ -769,7 +810,7 @@ class ServicoMobileService {
       };
       http.MultipartRequest response;
       response = http.MultipartRequest('POST', Uri.parse("$Url/lancamento/recuperar_lista_documentos_ws"));
-      response.headers.addAll(headers);
+      response.headers.addAll(ApiRestInformation.onHeadersToken(token));
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
       operacao.statusCode = streamedResponse.statusCode;
@@ -821,7 +862,7 @@ class ServicoMobileService {
       http.MultipartRequest response;
       response = http.MultipartRequest(
           'POST', Uri.parse("$Url/recibos/download_arquivo_ws"));
-      response.headers.addAll(headers);
+      response.headers.addAll(ApiRestInformation.onHeadersToken(token));
       response.fields['id'] = idDocumento;
       var streamedResponse = await response.send();
       var responseData = await streamedResponse.stream.toBytes();
@@ -863,14 +904,11 @@ class ServicoMobileService {
 }
 
 class ApiRestInformation {
-  static String problemOfComunication =
-      'Houve um problema de comunicação com os servidores da scmengenharia';
-  static String internetSocketException =
-      'Verifique sua conexão com a internet e tente novamente';
+  static String problemOfComunication = 'Houve um problema de comunicação com os servidores da scmengenharia';
+  static String internetSocketException = 'Verifique sua conexão com a internet e tente novamente';
   static String httpException = 'Não foi possível encontrar a postagem';
   static String formatException = 'Formato de resposta ruim 👎';
-  static String timeoutHttp =
-      ' O tempo limite esgotou antes da conclusão da operação ou o servidor não está respondendo';
+  static String timeoutHttp = ' O tempo limite esgotou antes da conclusão da operação ou o servidor não está respondendo';
   static Map<String, String> onHeaders() {
     Map<String, String> headers = {
       'Content-Type': 'application/json; charset=utf-8',
@@ -883,12 +921,13 @@ class ApiRestInformation {
   }
 
   static Map<String, String> onHeadersToken(String token) {
+
     Map<String, String> headers = {
       'Content-Type': 'application/json; charset=utf-8',
       'Accept': 'application/json',
       'Access-Control-Allow-Methods': '*',
       'Access-Control-Allow-Headers': '*',
-      'token': token!,
+      'token': token,
     };
     return headers;
   }

@@ -1,6 +1,4 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -99,8 +97,8 @@ class LoginState extends State<LoginView> {
     // NotificationHandler().subscribeToTopic("scmengenhariaUserNLogado");
     // txtControllerEmail.text = "scm_app@scmengenharia.com.br";
     // txtControllerPassword.text = "Az5564747";
-    //txtControllerEmail.text = "rodolforomao@gmail.com";
-    // txtControllerPassword.text = "Ab1234567";
+     txtControllerEmail.text = "rodolforomao@gmail.com";
+     txtControllerPassword.text = "Ab1234567";
   }
 
   @override

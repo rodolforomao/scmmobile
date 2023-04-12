@@ -284,6 +284,47 @@ class StylesThemas {
             fontSize: fontSize,
           );
   }
+
+  static TextStyle textStyleTextTitle() {
+    return AppThema.themeNotifierState.value.mode == ThemeMode.light ? const TextStyle(
+      fontFamily: 'Montserrat-Medium',
+      fontWeight: FontWeight.w300,
+      color: Color(0xff3F4143),
+    )
+        : const TextStyle(
+      fontWeight: FontWeight.w300,
+      fontFamily: 'Montserrat-Medium',
+      color: Color(0xffFFFFFF),
+    );
+  }
+
+  static TextStyle textStyleTextSubtitle() {
+    return AppThema.themeNotifierState.value.mode == ThemeMode.light
+        ? const TextStyle(
+      fontFamily: 'Myriad-Pro-SemiExt',
+      fontWeight: FontWeight.w300,
+      color: Color(0xff404040),
+    )
+        : const TextStyle(
+      fontWeight: FontWeight.w300,
+      fontFamily: 'Myriad-Pro-SemiExt',
+      color: Color(0xffFFFFFF),
+    );
+  }
+
+  static TextStyle textStyleTextField() {
+    return AppThema.themeNotifierState.value.mode == ThemeMode.light
+        ? const TextStyle(
+        fontWeight: FontWeight.w400,
+        fontSize: 17.0,
+        color:  Color(0xff3a3a3a),
+        fontFamily: 'MyriadArabic-Regular_0')
+        : const TextStyle(
+      fontWeight: FontWeight.w500,
+      fontFamily: 'Myriad-Pro-SemiExt',
+      color: Color(0xffFFFFFF),
+    );
+  }
 }
 
 class ThemeModel with ChangeNotifier {

@@ -66,7 +66,7 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> {
           throw (resultRest.message!);
         } else {
           final _base64 = resultRest.result.toString();
-          launchUrl(Uri.parse(_base64));
+          //launchUrl(Uri.parse(_base64));
           //launchUrl(Uri.parse("data:application/octet-stream;base64,$_base64"));
           Components.downloadCompartilharArquivos(resultRest.result.toString(), 'recibo_', 'Recibo', 'Download','.pdf');
         }

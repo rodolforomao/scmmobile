@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:file/local.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:file_selector/file_selector.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -318,35 +320,67 @@ class Components {
     switch (tipo) {
       case 'Download':
         {
+
+         // final Uint8List fileData = Uint8List.fromList(arquivo.codeUnits);
+        //  final path = await getSavePath();
+        //  final file = XFile.fromData(fileData, name: arquivoNome, mimeType: 'application/pdf');
+        //  await file.saveTo(path!);
+
           if (kIsWeb) {
 
           }
           else
           {
-            //const downloadsFolderPath = '/storage/emulated/0/Download/';
-          //  Directory dir = Directory(downloadsFolderPath);
-           // File files = File('${dir.path}/$nomeArquivo');
-
-
-
-            String dir = ""; // (await getApplicationDocumentsDirectory()).path;
+            String dirs = arquivoNome + tipoArquivo;
+            String dir = '';
+            //String dir = (await getDownloadsDirectory())!.path;
              if (Platform.isAndroid) {
+                // dir  = (await getExternalStorageDirectories(type: StorageDirectory.downloads))!.first.path;
                dir = "/storage/emulated/0/Download";
             }
-            await Directory(dir).create(recursive: true);
-            File files = File("$dir/$arquivoNome$tipoArquivo");
-            await files.parent.create(recursive: true);
+             else
+             {
+                 dir = (await getDownloadsDirectory())!.path ;
+             }
+            final files = File('$dir${Platform.pathSeparator}$dirs');
+            if (!files.existsSync())
+              {
+                files.create();
+                await  files.writeAsString(arquivo).then((value) {
+                   print('Future finished successfully i.e. without error');
+                 }).catchError((error) {
+                  GlobalScaffold.instance.onToastError(error.toString());
+                   print('Future finished with error');
+                 }).whenComplete(() async {
+                  GlobalScaffold.instance.onToastSuccess('Download concluído com sucesso.');
+                   if(Platform.isAndroid)
+                   {
+                     var fs = const LocalFileSystem();
+                     var  sd = fs.file(files.path);
 
-            files.writeAsBytes(bytes, mode: FileMode.write, flush: true).then((File file) async {
-              print("https://${file.path}");
-              print(file.uri);
+                     print("https://${files.path}");
+                     print("https://${files.path}");
+                     print(Uri.parse('https://docs.google.com/gview?embedded=true&url=${files.uri}'));
+                     print(Uri.parse('https://docs.google.com/gview?embedded=true&url=${files.path}'));
+                     //launchUrl(Uri.parse('http://drive.google.com/viewerng/viewer?embedded=true&url=${files.uri}'));
+                     // if(await canLaunchUrl(files.uri))
+                      //  {
+                     String pdf = "http://www.pdf995.com/samples/pdf.pdf";
+                    //launchUrl(Uri.parse("http://drive.google.com/viewerng/viewer?embedded=true&url=" + pdf));
+                        launchUrl(Uri.parse("https://drive.google.com/drive/u/0/my-drive=http://${fs.path}"),mode: LaunchMode.externalApplication);
+                       // }
 
-
-              var fs = const LocalFileSystem();
-               var sdsd = fs.file(file.uri).readAsBytes().toString();
-              GlobalScaffold.instance.onToastRedirectUriApp('Download concluído com sucesso.\r\n$dir',Uri.parse("https://${file.path}"));
-            }).whenComplete(() => null);
-
+                   }
+                   else
+                   {
+                     launchUrl(files.uri);
+                   }
+                   print('Either of then or catchError has run at this point');
+                 });
+                Uint8List text = await files.readAsBytes();
+                String base64Image = base64Encode(text);
+                print(base64Image);
+              }
           }
         }
         break;
@@ -357,6 +391,34 @@ class Components {
         break;
     }
   }
+
+  static Future<Map<String, dynamic>> openDiciFile() async {
+    Uint8List? bytes;
+    Map<String, dynamic> map = {};
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['pdf'],
+      );
+      if (result != null) {
+        File file = File(result.files.first.path!);
+        map = {
+          'bytes': file.readAsBytes(),
+          'path': result.files.first.path!,
+          'name':result.files.first.name,
+        };
+
+      } else {
+        return {};
+      }
+      return map;
+    } catch (error) {
+      throw (error.toString());
+    }
+  }
+
+
+
 }
 
 class CurrencyInputFormatter extends TextInputFormatter {

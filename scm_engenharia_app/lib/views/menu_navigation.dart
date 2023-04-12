@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:scm_engenharia_app/views/sici_views/envio_arquivo_view.dart';
 import 'package:scm_engenharia_app/views/user_views/cancelar_acesso_view.dart';
 import '../thema/app_thema.dart';
 import 'business_views/empresas_view.dart';
@@ -48,6 +49,8 @@ class MenuNavigationState extends State<MenuNavigation> {
         return const ListFormularioSiciFustView();
       case routes.analiseRoute:
         return const AnalisesView();
+      case routes.envioArquivoRoute:
+        return const EnvioArquivoView();
       case routes.alertasRoute:
         return const AlertasView();
       case routes.empresasRoute:
@@ -68,7 +71,6 @@ class MenuNavigationState extends State<MenuNavigation> {
         return const NotificationsView();
       case routes.configuracoesRoute:
         return const Configuracoesview();
-
       default:
         return Scaffold(
           appBar: AppBar(
@@ -187,7 +189,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                               initiallyExpanded:lancamentosSiciExpanded,
                               onExpansionChanged: (val) {
                                 setState(() {
-                                  GlobalScaffold.instance.selectedPageView = routes.lancamentosRoute;
+                                  //GlobalScaffold.instance.selectedPageView = routes.lancamentosRoute;
                                   lancamentosSiciExpanded = val;
                                   documentosExpanded = false;
                                 });
@@ -341,6 +343,52 @@ class MenuNavigationState extends State<MenuNavigation> {
                                               maxLines: 2,
                                               softWrap: false,
                                               style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 15, color:const Color(0xff6C757D)),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 40,
+                                  child: InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        GlobalScaffold.instance.selectedPageView = routes.envioArquivoRoute;
+                                        lancamentosSiciExpanded = true;
+                                      });
+                                      GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
+                                    }, // Handle your callback
+                                    child: Container(
+                                      alignment: Alignment.centerLeft,
+                                      height: 50,
+                                      padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                                      margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                                      decoration:  BoxDecoration(
+                                          color: GlobalScaffold.colorSelectedPageView(routes.envioArquivoRoute),
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(10.0),
+                                            topRight: Radius.circular(10.0),
+                                            bottomLeft: Radius.circular(10.0),
+                                            bottomRight: Radius.circular(10.0),
+                                          )),
+                                      child: Row(
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: <Widget>[
+                                          if (GlobalScaffold.instance.selectedPageView == routes.envioArquivoRoute)
+                                            Icon(Icons.file_open_rounded,color:GlobalScaffold.colorTextIconSelectedPageView(routes.envioArquivoRoute), size: 18.0)
+                                          else
+                                            Icon(Icons.file_open_outlined,color: GlobalScaffold.colorTextIconSelectedPageView(routes.envioArquivoRoute), size: 20.0),
+                                          const SizedBox(width: 15.0),
+                                          Flexible(
+                                            child: Text(
+                                              'Envio arquivo Dici',
+                                              overflow: TextOverflow.visible,
+                                              maxLines: 1,
+                                              softWrap: false,
+                                              style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 15, color:GlobalScaffold.colorTextIconSelectedPageView(routes.envioArquivoRoute)),
                                             ),
                                           ),
                                         ],
