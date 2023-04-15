@@ -1,12 +1,8 @@
 import 'dart:io';
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:realm/realm.dart';
-import '../../data/app_scm_engenharia_mobile_bll.dart';
-import '../../data/tb_environment_variable.dart';
 import '../../help/components.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
 import '../../models/operation.dart';
@@ -15,13 +11,13 @@ import '../../web_service/servico_mobile_service.dart';
 import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
 
-class EnvioArquivoView extends StatefulWidget {
-  const EnvioArquivoView({Key? key}) : super(key: key);
+class SelecioneArquivoDiciFustView extends StatefulWidget {
+  const SelecioneArquivoDiciFustView({Key? key}) : super(key: key);
   @override
-  EnvioArquivoState createState() => EnvioArquivoState();
+  SelecioneArquivoDiciFustState createState() => SelecioneArquivoDiciFustState();
 }
 
-class EnvioArquivoState extends State<EnvioArquivoView> {
+class SelecioneArquivoDiciFustState extends State<SelecioneArquivoDiciFustView> {
 
   TypeView statusView = TypeView.viewRenderInformation;
   TextEditingController txtArquivo = TextEditingController();

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:scm_engenharia_app/views/sici_views/envio_arquivo_view.dart';
+import 'package:scm_engenharia_app/views/sici_views/selecione_arquivo_dici_fust_view.dart';
 import 'package:scm_engenharia_app/views/user_views/cancelar_acesso_view.dart';
 import '../thema/app_thema.dart';
 import 'business_views/empresas_view.dart';
@@ -15,6 +15,7 @@ import 'notifications_views/alertas_view.dart';
 import 'notifications_views/notificacoes_view.dart';
 import 'others_view/analises_view.dart';
 import 'settings_views/configuracoes_view.dart';
+import 'sici_views/list_arquivos_dici_fust_view.dart';
 import 'sici_views/list_formulario_dici_fust_view.dart';
 import 'user_views/usuarios_view.dart';
 
@@ -49,8 +50,8 @@ class MenuNavigationState extends State<MenuNavigation> {
         return const ListFormularioSiciFustView();
       case routes.analiseRoute:
         return const AnalisesView();
-      case routes.envioArquivoRoute:
-        return const EnvioArquivoView();
+      case routes.listaArquivosDiciRoute:
+        return const ListArquivosDiciFustView();
       case routes.alertasRoute:
         return const AlertasView();
       case routes.empresasRoute:
@@ -355,7 +356,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                                   child: InkWell(
                                     onTap: () {
                                       setState(() {
-                                        GlobalScaffold.instance.selectedPageView = routes.envioArquivoRoute;
+                                        GlobalScaffold.instance.selectedPageView = routes.listaArquivosDiciRoute;
                                         lancamentosSiciExpanded = true;
                                       });
                                       GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
@@ -366,7 +367,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                                       padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
                                       margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
                                       decoration:  BoxDecoration(
-                                          color: GlobalScaffold.colorSelectedPageView(routes.envioArquivoRoute),
+                                          color: GlobalScaffold.colorSelectedPageView(routes.listaArquivosDiciRoute),
                                           borderRadius: const BorderRadius.only(
                                             topLeft: Radius.circular(10.0),
                                             topRight: Radius.circular(10.0),
@@ -377,18 +378,18 @@ class MenuNavigationState extends State<MenuNavigation> {
                                         crossAxisAlignment: CrossAxisAlignment.center,
                                         mainAxisAlignment: MainAxisAlignment.start,
                                         children: <Widget>[
-                                          if (GlobalScaffold.instance.selectedPageView == routes.envioArquivoRoute)
-                                            Icon(Icons.file_open_rounded,color:GlobalScaffold.colorTextIconSelectedPageView(routes.envioArquivoRoute), size: 18.0)
+                                          if (GlobalScaffold.instance.selectedPageView == routes.listaArquivosDiciRoute)
+                                            Icon(Icons.file_open_rounded,color:GlobalScaffold.colorTextIconSelectedPageView(routes.listaArquivosDiciRoute), size: 18.0)
                                           else
-                                            Icon(Icons.file_open_outlined,color: GlobalScaffold.colorTextIconSelectedPageView(routes.envioArquivoRoute), size: 20.0),
+                                            Icon(Icons.file_open_outlined,color: GlobalScaffold.colorTextIconSelectedPageView(routes.listaArquivosDiciRoute), size: 20.0),
                                           const SizedBox(width: 15.0),
                                           Flexible(
                                             child: Text(
-                                              'Envio arquivo Dici',
+                                              'Arquivos',
                                               overflow: TextOverflow.visible,
                                               maxLines: 1,
                                               softWrap: false,
-                                              style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 15, color:GlobalScaffold.colorTextIconSelectedPageView(routes.envioArquivoRoute)),
+                                              style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 15, color:GlobalScaffold.colorTextIconSelectedPageView(routes.listaArquivosDiciRoute)),
                                             ),
                                           ),
                                         ],
