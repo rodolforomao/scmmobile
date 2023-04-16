@@ -122,23 +122,17 @@ class FormularioDiciFustState extends State<FormularioDiciFustView>
       if (inputSiciFustForm.dadosEmServicos!.isEmpty) {
         throw ('Distribuição do quantitativo de acessos físicos em serviço é obrigatório,favor adicionar.');
       } else {
-        GlobalScaffold.instance
-            .onToastPerformingOperation('Realizando operação');
+        GlobalScaffold.instance.onToastPerformingOperation('Realizando operação');
         var formSiciFust = TbFormSiciFust(
             ObjectId(),
             inputSiciFustForm.id ?? "",
             jsonEncode(inputSiciFustForm.toJson() ?? ""));
         if (inputSiciFustForm.idFichaSiciApp!.isNotEmpty) {
           formSiciFust = TbFormSiciFust(
-              ObjectId.fromHexString(inputSiciFustForm.idFichaSiciApp!),
-              inputSiciFustForm.id ?? "",
+              ObjectId.fromHexString(inputSiciFustForm.idFichaSiciApp!), inputSiciFustForm.id ?? "",
               jsonEncode(inputSiciFustForm.toJson() ?? ""));
         }
-        Operation respFormSiciFust = await AppScmEngenhariaMobileBll.instance
-            .onSaveUpdateFormSiciFust(
-                inputSiciFustForm.idFichaSiciApp!, formSiciFust)
-            .whenComplete(
-                () => GlobalScaffold.instance.onHideCurrentSnackBar());
+        Operation respFormSiciFust = await AppScmEngenhariaMobileBll.instance.onSaveUpdateFormSiciFust(inputSiciFustForm.idFichaSiciApp!, formSiciFust).whenComplete(() => GlobalScaffold.instance.onHideCurrentSnackBar());
         if (respFormSiciFust.erro) {
           throw respFormSiciFust.message!;
         } else if (respFormSiciFust.result == null) {

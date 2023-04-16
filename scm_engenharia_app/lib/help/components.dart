@@ -54,6 +54,30 @@ class Components {
     }
   }
 
+  static String onIsEmpty( txt) {
+    try {
+      if (txt.toString().isEmpty || txt == null) {
+        return '';
+      } else {
+        return txt. toString();
+      }
+    } catch (error) {
+      return '';
+    }
+  }
+
+  static String onFormatarData(txt) {
+    try {
+      if (txt.toString().isEmpty || txt == null) {
+        return '';
+      } else {
+        return  DateFormat('dd-MM-yyyy').format(DateTime.parse(txt));
+      }
+    } catch (error) {
+      return '';
+    }
+  }
+
 
   static String? dateFormatDDMMYYYY(String date) {
     try {
@@ -396,10 +420,7 @@ class Components {
     Uint8List? bytes;
     Map<String, dynamic> map = {};
     try {
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['pdf'],
-      );
+      FilePickerResult? result = await FilePicker.platform.pickFiles();
       if (result != null) {
         File file = File(result.files.first.path!);
         map = {

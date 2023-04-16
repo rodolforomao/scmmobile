@@ -1,8 +1,12 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:realm/realm.dart';
+import '../../data/app_scm_engenharia_mobile_bll.dart';
+import '../../data/tb_arquivo_dici_fust.dart';
 import '../../help/components.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
 import '../../models/operation.dart';
@@ -10,6 +14,7 @@ import '../../thema/app_thema.dart';
 import '../../web_service/servico_mobile_service.dart';
 import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
+
 
 class SelecioneArquivoDiciFustView extends StatefulWidget {
   const SelecioneArquivoDiciFustView({Key? key}) : super(key: key);
@@ -22,6 +27,7 @@ class SelecioneArquivoDiciFustState extends State<SelecioneArquivoDiciFustView> 
   TypeView statusView = TypeView.viewRenderInformation;
   TextEditingController txtArquivo = TextEditingController();
   Uint8List bytesPdf = Uint8List(0);
+  Map<String, dynamic> mapFile = {};
 
   onUpload() async {
     try {
@@ -33,9 +39,47 @@ class SelecioneArquivoDiciFustState extends State<SelecioneArquivoDiciFustView> 
         if (resultRest.erro) {
           throw (resultRest.message!);
         } else {
+          var formSiciFust = TbArquivoDiciFust(
+              ObjectId(),
+               "",
+              jsonEncode(mapFile)
+            );
+
 
         }
       }
+    } catch (error) {
+      OnAlertError(error.toString());
+    }
+  }
+
+  onSaveLocalDbForm() async {
+    try {
+      if(Components.onIsEmpty(mapFile['fileBase64']).isEmpty)
+      {
+        GlobalScaffold.instance.onToastError('Arquivo  não identificado');
+      }
+      else if(Components.onIsEmpty(mapFile['name']).isEmpty)
+      {
+        GlobalScaffold.instance.onToastError('Arquivo  não identificado');
+      }
+      else
+        {
+          ObjectId id = ObjectId();
+          mapFile.addAll({'id':id.toString()});
+          mapFile.addAll({'data':DateTime.now().toString()});
+          GlobalScaffold.instance.onToastPerformingOperation('Realizando operação');
+          Operation respFormSiciFust = await AppScmEngenhariaMobileBll.instance.onSaveArquivoDiciFust(id,jsonEncode(mapFile)).whenComplete(() => GlobalScaffold.instance.onHideCurrentSnackBar());
+          if (respFormSiciFust.erro) {
+            throw respFormSiciFust.message!;
+          } else if (respFormSiciFust.result == null) {
+            throw respFormSiciFust.message!;
+          } else {
+            OnAlertSuccess(respFormSiciFust.message!);
+            mapFile = {};
+            txtArquivo.text = '';
+          }
+        }
     } catch (error) {
       OnAlertError(error.toString());
     }
@@ -69,12 +113,15 @@ class SelecioneArquivoDiciFustState extends State<SelecioneArquivoDiciFustView> 
                   ),
                   onPressed: () async {
                     try {
-                      Map<String, dynamic> mapFilePdf  = await Components.openDiciFile();
+                      Map<String, dynamic> mapFileDiciFile  = await Components.openDiciFile();
                       Navigator.pop(context, '');
-                      if(mapFilePdf.values.isNotEmpty)
+                      if(mapFileDiciFile.values.isNotEmpty)
                       {
-                        txtArquivo.text = mapFilePdf['name'];
-                        bytesPdf = Uint8List.fromList(File(mapFilePdf['path']).readAsBytesSync());
+                        txtArquivo.text = mapFileDiciFile['name'];
+                        bytesPdf = Uint8List.fromList(File(mapFileDiciFile['path']).readAsBytesSync());
+                        mapFile = mapFileDiciFile;
+                        mapFile.addAll({'fileBase64':base64Encode(bytesPdf)});
+                        mapFile.remove('bytes');
                       }
                       else
                       {
@@ -220,6 +267,7 @@ class SelecioneArquivoDiciFustState extends State<SelecioneArquivoDiciFustView> 
                                           txtArquivo.text = '';
                                           bytesPdf =  Uint8List(0);
                                           onEscolherArquivo();
+                                          mapFile = {};
                                         },
                                         style: StylesThemas.textStyleTextField(),
                                         decoration:  InputDecoration(
@@ -230,6 +278,7 @@ class SelecioneArquivoDiciFustState extends State<SelecioneArquivoDiciFustView> 
                                               txtArquivo.text = '';
                                               bytesPdf =  Uint8List(0);
                                               onEscolherArquivo();
+                                              mapFile = {};
                                             },
                                           ),
                                           hintText: 'Escolher arquivo',
@@ -257,7 +306,7 @@ class SelecioneArquivoDiciFustState extends State<SelecioneArquivoDiciFustView> 
                                           padding:
                                           EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5.0),
                                           child: Text(
-                                            'Upload',
+                                            'Salvar',
                                             style:  TextStyle(
                                               fontWeight: FontWeight.w400,
                                               color:  Color(0xffFFFFFF),
@@ -266,7 +315,7 @@ class SelecioneArquivoDiciFustState extends State<SelecioneArquivoDiciFustView> 
                                           ),
                                         ),
                                         onPressed: () async {
-
+                                          onSaveLocalDbForm();
                                         },
                                       ),),),
                                     ],

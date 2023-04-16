@@ -312,6 +312,35 @@ class StylesThemas {
     );
   }
 
+  static TextStyle textStyleTextSpanTitle() {
+    return AppThema.themeNotifierState.value.mode == ThemeMode.light ? const TextStyle(
+      fontFamily: 'Montserrat-Medium',
+      fontWeight: FontWeight.w300,
+      color: Color(0xff3F4143),
+    )
+        : const TextStyle(
+      fontWeight: FontWeight.w300,
+      fontFamily: 'Montserrat-Medium',
+      color: Color(0xffFFFFFF),
+    );
+  }
+
+  static TextStyle textStyleTextSpanSubtitle() {
+    return AppThema.themeNotifierState.value.mode == ThemeMode.light
+        ? const TextStyle(
+      fontFamily: 'Myriad-Pro-SemiExt',
+      height: 1.6, //You can set your custom height here
+      fontWeight: FontWeight.w300,
+      color: Color(0xFF545454),
+    )
+        : const TextStyle(
+      fontWeight: FontWeight.w300,
+      fontFamily: 'Myriad-Pro-SemiExt',
+      color: Color(0xffFFFFFF),
+    );
+  }
+
+
   static TextStyle textStyleTextField() {
     return AppThema.themeNotifierState.value.mode == ThemeMode.light
         ? const TextStyle(

@@ -1,4 +1,5 @@
 import 'package:realm/realm.dart';
+import 'package:scm_engenharia_app/data/tb_arquivo_dici_fust.dart';
 import 'package:scm_engenharia_app/data/tb_environment_variable.dart';
 import 'package:scm_engenharia_app/data/tb_form_sici_fust.dart';
 import '../models/operation.dart';
@@ -13,8 +14,8 @@ class AppScmEngenhariaMobileBll {
 
   late Realm realm;
   AppScmEngenhariaMobileBll() {
-    final config = Configuration.local([TbUser.schema ,TbFormSiciFust.schema,TbEnvironmntVariable.schema],schemaVersion: 1);
-   // Realm.deleteRealm(config.path);
+    final config = Configuration.local([TbUser.schema ,TbFormSiciFust.schema,TbEnvironmntVariable.schema,TbArquivoDiciFust.schema],schemaVersion: 1);
+    Realm.deleteRealm(config.path);
     realm = Realm(config);
   }
 
@@ -268,7 +269,7 @@ class AppScmEngenhariaMobileBll {
     return operation;
   }
 
-// Variável ambiente ----------------------------------------------------------------------------------
+ // Variável ambiente ----------------------------------------------------------------------------------
 
   Future<Operation> onSaveUpdateEnvironmentVariable(TbEnvironmntVariable environmntVariable) async {
     Operation operation = Operation();
@@ -340,6 +341,121 @@ class AppScmEngenhariaMobileBll {
         realm.deleteAll<TbEnvironmntVariable>;
       });
       operation.result = true;
+    } catch (ex) {
+      operation.erro = true;
+      operation.message = 'Erro $ex';
+    }
+    return operation;
+  }
+
+ // Arquivo ----------------------------------------------------------------------------------
+
+  Future<Operation> onSaveArquivoDiciFust(ObjectId id ,String mapFile) async {
+    Operation operation = Operation();
+    operation.result = null;
+    operation.message = 'Operação realizada com sucesso';
+    operation.erro = false;
+    try {
+      final formSici = realm.all<TbArquivoDiciFust>().toList();
+      if(realm.all<TbArquivoDiciFust>().where((element) => element.idRegistro == id.toString()).isNotEmpty)
+      {
+        throw ('O registro já está salvo no dispositivo');
+      }
+      else
+        {
+          TbArquivoDiciFust arquivoDiciFust = TbArquivoDiciFust(
+              id,
+              id.toString(),
+              mapFile
+          );
+          TbArquivoDiciFust resp = realm.write<TbArquivoDiciFust>(() {
+            return  realm.add<TbArquivoDiciFust>(arquivoDiciFust);
+          });
+          operation.result = resp;
+        }
+    } catch (ex) {
+      operation.erro = true;
+      operation.message = ex.toString();
+    }
+    return operation;
+  }
+
+  Future<Operation> onSelectArquivoDiciFustAll() async {
+    Operation operation = Operation();
+    try {
+      operation.result = true;
+      operation.message = 'Operação realizada com sucesso';
+      operation.erro = false;
+      final formDici = realm.all<TbArquivoDiciFust>().toList();
+      if(formDici.isEmpty)
+      {
+        operation.result = null;
+        operation.message = 'Não existe variável de ambiente neste dispositivo';
+      }
+      else if(formDici.length > 1)
+      {
+        realm.write(() {
+          realm.deleteAll<TbArquivoDiciFust>();
+        });
+        operation.result = null;
+        operation.message = 'Não existe variável de ambiente neste dispositivo';
+      }
+      else
+      {
+        operation.message = 'Vamos atualizar as variáveis de ambiente para que o aplicativo funcione corretamente.';
+        operation.result = formDici.first;
+      }
+    } catch (ex) {
+      operation.erro = true;
+      operation.message = 'Erro $ex';
+    }
+    return operation;
+  }
+
+  Future<Operation> onDeleteDiciFustId(String idArquivoDiciFustApp) async {
+    Operation operation = Operation();
+    try {
+      if (idArquivoDiciFustApp.isEmpty || idArquivoDiciFustApp == null) {
+        throw ('Não foi possivel identificar o formulário');
+      }
+      operation.message = 'Operação realizada com sucesso';
+      operation.erro = false;
+      ObjectId id =   ObjectId.fromHexString(idArquivoDiciFustApp);
+      final formSici = realm.find<TbArquivoDiciFust>(id);
+      if(formSici != null)
+      {
+        realm.write(() {
+          realm.delete(formSici);
+        });
+        operation.result = true;
+      }
+      else
+      {
+        throw ('Não foi possivel identificar o formulário');
+      }
+    } catch (ex) {
+      operation.erro = true;
+      operation.message = 'Erro $ex';
+    }
+    return operation;
+  }
+
+  Future<Operation> onArquivoDiciFustAll() async {
+    Operation operation = Operation();
+    try {
+      operation.result = true;
+      operation.message = 'Operação realizada com sucesso';
+      operation.erro = false;
+      final formSici = realm.all<TbArquivoDiciFust>().toList();
+      if(formSici.isEmpty)
+      {
+        operation.result = null;
+        operation.message = 'Não existe documentos salvos';
+      }
+      else
+      {
+        operation.result = formSici;
+      }
     } catch (ex) {
       operation.erro = true;
       operation.message = 'Erro $ex';
