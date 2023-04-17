@@ -15,7 +15,7 @@ class AppScmEngenhariaMobileBll {
   late Realm realm;
   AppScmEngenhariaMobileBll() {
     final config = Configuration.local([TbUser.schema ,TbFormSiciFust.schema,TbEnvironmntVariable.schema,TbArquivoDiciFust.schema],schemaVersion: 1);
-    Realm.deleteRealm(config.path);
+    //Realm.deleteRealm(config.path);
     realm = Realm(config);
   }
 
@@ -412,14 +412,16 @@ class AppScmEngenhariaMobileBll {
     return operation;
   }
 
-  Future<Operation> onDeleteDiciFustId(String idArquivoDiciFustApp) async {
+  Future<Operation> onDeleteDiciFust(String idArquivoDiciFustApp) async {
     Operation operation = Operation();
+    operation.result = null;
+    operation.message = 'Operação realizada com sucesso';
+    operation.erro = false;
     try {
+
       if (idArquivoDiciFustApp.isEmpty || idArquivoDiciFustApp == null) {
         throw ('Não foi possivel identificar o formulário');
       }
-      operation.message = 'Operação realizada com sucesso';
-      operation.erro = false;
       ObjectId id =   ObjectId.fromHexString(idArquivoDiciFustApp);
       final formSici = realm.find<TbArquivoDiciFust>(id);
       if(formSici != null)
@@ -427,6 +429,7 @@ class AppScmEngenhariaMobileBll {
         realm.write(() {
           realm.delete(formSici);
         });
+        realm.refresh();
         operation.result = true;
       }
       else

@@ -58,7 +58,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
             List<InputSiciFileModel>  siciFileModelAllResp = await  ParseRespJsonToView.parseSiciFustFormModelToSiciFileList(respNewSiciFustFormList);
             setState(()  {
               siciFileModelAllList.addAll(siciFileModelAllResp);
-              siciFileModelUpdateList.addAll(siciFileModelAllResp);
+              //siciFileModelUpdateList.addAll(siciFileModelAllResp);
               statusView = TypeView.viewRenderInformation;
             });
           }
