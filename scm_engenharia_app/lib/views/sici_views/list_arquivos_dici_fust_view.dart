@@ -56,33 +56,6 @@ class ListArquivosDiciFustState extends State<ListArquivosDiciFustView> {
     }
   }
 
-  onRemover() async {
-    try {
-      setState(() {statusView = TypeView.viewLoading;});
-      Operation respBll = await AppScmEngenhariaMobileBll.instance.onArquivoDiciFustAll();
-      if (respBll.erro || respBll.result == null) {
-        throw respBll.message!;
-      } else {
-        setState(() {
-          List<TbArquivoDiciFust> res =  respBll.result as  List<TbArquivoDiciFust>;
-          for (var v in res) {
-            Map<String, dynamic> user = jsonDecode(v.result);
-            mapFileModelAllList.add(user);
-          }
-          if(mapFileModelAllList.isNotEmpty)
-          {
-            statusView = TypeView.viewRenderInformation;
-          }
-        });
-      }
-    } catch (error) {
-      setState(() {
-        statusView = TypeView.viewErrorInformation;
-        GlobalScaffold.erroInformacao = error.toString();
-      });
-    }
-  }
-
   onUpload(dynamic  siciFileModel) async {
     try {
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
