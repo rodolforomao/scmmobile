@@ -1,6 +1,5 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:scm_engenharia_app/views/sici_views/selecione_arquivo_dici_fust_view.dart';
-import 'package:scm_engenharia_app/views/user_views/cancelar_acesso_view.dart';
 import '../thema/app_thema.dart';
 import 'business_views/empresas_view.dart';
 import 'documents_views/certidoes_view.dart';
@@ -26,7 +25,7 @@ class MenuNavigation extends StatefulWidget {
 }
 
 class MenuNavigationState extends State<MenuNavigation> {
-
+  int _selectedIndex = 0;
   bool documentosExpanded = false ,lancamentosSiciExpanded = true;
   double maxHeight = 500;
   @override
@@ -307,11 +306,14 @@ class MenuNavigationState extends State<MenuNavigation> {
                                   child: InkWell(
                                     onTap: () {
                                       setState(() {
-                                        GlobalScaffold.instance.selectedPageView = routes.formularioSiciFustRoute;
+                                       GlobalScaffold.instance.selectedPageView = routes.formularioSiciFustRoute;
                                         lancamentosSiciExpanded = true;
                                       });
                                       Navigator.of(context).pushNamed(
                                         routes.formularioSiciFustRoute,
+                                        arguments: {
+                                          'isLancamentosComBaseMesAnterior': true,
+                                        },
                                       ).then((value) {
                                         setState(() =>  GlobalScaffold.instance.selectedPageView = routes.lancamentoSiciFustRoute);
                                         GlobalScaffold.colorSelectedPageView(routes.lancamentoSiciFustRoute);
@@ -940,4 +942,28 @@ class MenuNavigationState extends State<MenuNavigation> {
       ),
     );
   }
+
+  Color colorSelectedPageView(int value) {
+    if(_selectedIndex == value)
+    {
+      return Color(0xff36373a);
+    }
+    else
+    {
+      return Colors.transparent;
+    }
+  }
+
+  Color colorSelectedIconPageView(int value) {
+    if(_selectedIndex == value)
+    {
+      return Color(0xffFFFFFF);
+    }
+    else
+    {
+      return Color(0xff9c9ca1);
+    }
+  }
 }
+
+

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -9,89 +10,29 @@ import '../../data/tb_form_sici_fust.dart';
 import '../../help/components.dart';
 import '../../help/formatter/cnpj_input_formatter.dart';
 import '../../help/formatter/telefone_input_formatter.dart';
-import '../../help/formatter/util_fields.dart';
 import '../../help/formatter/valor_input_formatter.dart';
 import '../../models/input/input_sici_fust_form_model.dart';
 import '../../models/operation.dart';
+import '../../models/output/output_sici_fust_model.dart';
+import '../../models/parse_resp_json_to_view.dart';
 import '../../thema/app_thema.dart';
+import '../../web_service/servico_mobile_service.dart';
 import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
 import 'dados_em_servicos_view.dart';
 
 class FormularioDiciFustView extends StatefulWidget {
-  InputSiciFileModel? siciFileModel;
-  FormularioDiciFustView({Key? key, required this.siciFileModel})
-      : super(key: key);
+  Map<String, dynamic>  map = {};
+  //InputSiciFileModel? siciFileModel;
+  //bool isLancamentosComBaseMesAnterior;
+  FormularioDiciFustView({Key? key,required this.map}) : super(key: key);
 
   @override
   FormularioDiciFustState createState() => FormularioDiciFustState();
 }
 
-abstract class IsSilly {}
+class FormularioDiciFustState extends State<FormularioDiciFustView> with FormularioDiciFustViewModel {
 
-class FormularioDiciFustState extends State<FormularioDiciFustView>
-    implements IsSilly {
-  InputSiciFileModel inputSiciFustForm = InputSiciFileModel();
-
-  List<String> Uf = [];
-  late String UfTxt;
-
-  DateTime selectedDate =
-      DateTime(DateTime.now().year, DateTime.now().month - 1, 1);
-
-  //Período referência
-  final txtControllerReferencePeriod = TextEditingController();
-  final focusNodeReferencePeriod = FocusNode();
-
-  // Razão social LTDA - ME.
-  final txtControllerSocialReason = TextEditingController();
-  final focusNodeSocialReason = FocusNode();
-
-  //Telefone Fixo:
-  final txtControllerLandline = TextEditingController();
-  final focusNodeLandline = FocusNode();
-
-  //CNPJ:
-  final txtControllerCnpj = TextEditingController();
-  final focusNodeCnpj = FocusNode();
-
-  //TELEFONE CELULAR:
-  final txtControllerTelefoneMovel = TextEditingController();
-  final focusNodeTelefoneMovel = FocusNode();
-
-  // Receita Bruta
-  final txtControllerGrossRevenue = TextEditingController();
-  final focusNodeGrossRevenue = FocusNode();
-  // Valor Simples
-  final txtControllerSimpleValue = TextEditingController();
-  final focusNodeSimpleValue = FocusNode();
-  // Aliquota Simples %
-  final txtControllerSimpleAliquot = TextEditingController();
-  final focusNodeSimpleAliquot = FocusNode();
-  // Valor ICMS
-  final txtControllerICMSvalue = TextEditingController();
-  final focusNodeICMSvalue = FocusNode();
-  //ICMS (%)
-  final txtControllerIcmsPorc = TextEditingController();
-  final focusNodeIcmsPorc = FocusNode();
-  // Valor PIS
-  final txtControllerPis = TextEditingController();
-  final focusNodePis = FocusNode();
-  //PIS (%)
-  final txtControllerPisPorc = TextEditingController();
-  final focusNodePisPorc = FocusNode();
-  //Valor COFINS
-  final txtControllerCofins = TextEditingController();
-  final focusNodeCofins = FocusNode();
-  //Valor COFINS (%)
-  final txtControllerCofinsPorc = TextEditingController();
-  final focusNodeCofinsPorc = FocusNode();
-  // Receita Liquida
-  final txtControllerNetRevenue = TextEditingController();
-  final focusNodeNetRevenue = FocusNode();
-  // Observações Gerais
-  final txtControllerGeneralObservations = TextEditingController();
-  final focusNodeGeneralObservations = FocusNode();
 
   onSaveLocalDbForm() async {
     try {
@@ -102,8 +43,7 @@ class FormularioDiciFustState extends State<FormularioDiciFustView>
         throw ('O campo Razão Social é obrigatório');
       }
       inputSiciFustForm.razaoSocial = txtControllerSocialReason.text;
-      if (txtControllerTelefoneMovel.text.isEmpty &&
-          txtControllerLandline.text.isEmpty) {
+      if (txtControllerTelefoneMovel.text.isEmpty && txtControllerLandline.text.isEmpty) {
         throw ("Pelo menos um campo Telefone é obrigatório");
       }
       inputSiciFustForm.telefoneMovel = txtControllerTelefoneMovel.text;
@@ -265,67 +205,111 @@ class FormularioDiciFustState extends State<FormularioDiciFustView>
     if (picked != null) {
       setState(() {
         selectedDate = DateTime(picked.year, picked.month, 1);
-        txtControllerReferencePeriod.text = DateFormat('dd/MM/yyyy')
-            .format(DateTime(picked.year, picked.month, 1));
+        txtControllerReferencePeriod.text = DateFormat('dd/MM/yyyy').format(DateTime(picked.year, picked.month, 1));
       });
+    }
+  }
+
+  onIncFormulario(InputSiciFileModel? siciFileModel) async {
+    try {
+      if (siciFileModel != null) {
+        inputSiciFustForm = siciFileModel;
+        if (siciFileModel.periodoReferencia!.isNotEmpty) {
+          selectedDate = DateFormat("dd/MM/yyyy").parse(siciFileModel.periodoReferencia!);
+          txtControllerReferencePeriod.text = DateFormat('dd/MM/yyyy').format(selectedDate);
+        }
+        // Razão social LTDA - ME.
+        txtControllerSocialReason.text = siciFileModel.razaoSocial!;
+        //Telefone Fixo:
+        txtControllerLandline.text = siciFileModel.telefoneFixo!;
+        //CNPJ:
+        txtControllerCnpj.text = CNPJValidator.format(siciFileModel.cnpj!);
+        //TELEFONE CELULAR:
+        txtControllerTelefoneMovel.text = siciFileModel.telefoneMovel! ;
+        // Receita Bruta
+        txtControllerGrossRevenue.text = siciFileModel.receitaBruta!;
+        // Valor Simples
+        txtControllerSimpleValue.text = siciFileModel.simples!;
+        // Aliquota Simples %
+        txtControllerSimpleAliquot.text = siciFileModel.simplesPorc!;
+        // Valor ICMS
+        txtControllerICMSvalue.text = siciFileModel.icms!;
+        //ICMS (%)
+        txtControllerIcmsPorc.text = siciFileModel.icmsPorc!;
+        // Valor PIS
+        txtControllerPis.text = siciFileModel.pis!;
+        //PIS (%)
+        txtControllerPisPorc.text = siciFileModel.pisPorc!;
+        //Valor COFINS
+        txtControllerCofins.text = siciFileModel.cofins!;
+        // Receita Liquida
+        txtControllerNetRevenue.text = siciFileModel.receitaLiquida!;
+        // Observações Gerais
+        txtControllerGeneralObservations.text = siciFileModel.observacoes!;
+      } else {
+
+      }
+    } catch (error) {
+      OnAlertError(error.toString());
     }
   }
 
   onInc() async {
     try {
-      Uf = await Components.OnlistaEstados() as List<String>;
-      setState(() {
-        UfTxt = Uf.first;
-      });
-      if (widget.siciFileModel != null) {
-        inputSiciFustForm = widget.siciFileModel!;
-        if (widget.siciFileModel!.periodoReferencia!.isNotEmpty) {
-          selectedDate = DateFormat("dd/MM/yyyy")
-              .parse(widget.siciFileModel!.periodoReferencia!);
-          txtControllerReferencePeriod.text =
-              DateFormat('dd/MM/yyyy').format(selectedDate);
+      if(widget.map['formulario'] != null)
+        {
+          InputSiciFileModel? siciFileModel = widget.map['formulario'];
+          onIncFormulario(siciFileModel);
         }
-        // Razão social LTDA - ME.
-        txtControllerSocialReason.text = widget.siciFileModel!.razaoSocial!;
-        //Telefone Fixo:
-        txtControllerLandline.text = widget.siciFileModel!.telefoneFixo!;
-        //CNPJ:
-        txtControllerCnpj.text = CNPJValidator.format(widget.siciFileModel!.cnpj!);
-        //TELEFONE CELULAR:
-        txtControllerTelefoneMovel.text = widget.siciFileModel!.telefoneMovel! ;
-        // Receita Bruta
-        txtControllerGrossRevenue.text = widget.siciFileModel!.receitaBruta!;
-        // Valor Simples
-        txtControllerSimpleValue.text = widget.siciFileModel!.simples!;
-        // Aliquota Simples %
-        txtControllerSimpleAliquot.text = widget.siciFileModel!.simplesPorc!;
-        // Valor ICMS
-        txtControllerICMSvalue.text = widget.siciFileModel!.icms!;
-        //ICMS (%)
-        txtControllerIcmsPorc.text = widget.siciFileModel!.icmsPorc!;
-        // Valor PIS
-        txtControllerPis.text = widget.siciFileModel!.pis!;
-        //PIS (%)
-        txtControllerPisPorc.text = widget.siciFileModel!.pisPorc!;
-        //Valor COFINS
-        txtControllerCofins.text = widget.siciFileModel!.cofins!;
-        // Receita Liquida
-        txtControllerNetRevenue.text = widget.siciFileModel!.receitaLiquida!;
-        // Observações Gerais
-        txtControllerGeneralObservations.text =
-            widget.siciFileModel!.observacoes!;
-      } else {}
+      else if(widget.map['isLancamentosComBaseMesAnterior'] != null)
+        {
+          onLancamentosComBaseMesAnterior();
+        }
+      else
+        {
+
+        }
     } catch (error) {
       OnAlertError(error.toString());
-      //Navigator.of(context, rootNavigator: true).pop();
+    }
+  }
+
+  onLancamentosComBaseMesAnterior() async {
+    try {
+      if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+        throw ('Verifique sua conexão com a internet e tente novamente.');
+      } else {
+        GlobalScaffold.instance.onToastPerformingOperation('Web: Buscando lançamentos com\r\nbase no mês anterior... ');
+        Operation resultRest = await ServicoMobileService.onRecoversSiciReleases().whenComplete(() => GlobalScaffold.instance.onHideCurrentSnackBar());
+        if (resultRest.erro) {
+          throw (resultRest.message!);
+        } else {
+          List<OutputSiciFustFormModel> respSiciFustFormList  = resultRest.resultList.map<OutputSiciFustFormModel>((json) => OutputSiciFustFormModel.fromJson(json)).toList();
+          if (respSiciFustFormList.isNotEmpty) {
+            List<InputSiciFileModel>  siciFileModelAllResp = await  ParseRespJsonToView.parseSiciFustFormModelToSiciFileList(respSiciFustFormList);
+            await onIncFormulario(siciFileModelAllResp.first);
+            var sd =  DateFormat('dd/MM/yyyy').format(DateTime( DateTime.now().year, DateTime.now().month - 1,));
+            txtControllerReferencePeriod.text = DateFormat('dd/MM/yyyy').format(DateTime( DateTime.now().year, DateTime.now().month - 1,));
+
+          }
+        }
+      }
+    } catch (error) {
+      OnAlertError(error.toString());
     }
   }
 
   @override
   void initState() {
     super.initState();
-    txtControllerReferencePeriod.text = DateFormat('dd/MM/yyyy').format(DateTime(DateTime.now().year, DateTime.now().month - 1));
-    onInc();
+    Future.delayed(Duration.zero, () async {
+      Uf = await Components.OnlistaEstados() as List<String>;
+      setState(() {
+        UfTxt = Uf.first;
+      });
+      txtControllerReferencePeriod.text = DateFormat('dd/MM/yyyy').format(DateTime( DateTime.now().year, DateTime.now().month - 1,));
+      onInc();
+    });
   }
 
   int currentStep = 0;
@@ -1514,4 +1498,70 @@ class FormularioDiciFustState extends State<FormularioDiciFustView>
       ),
     );
   }
+}
+
+
+class FormularioDiciFustViewModel {
+
+  InputSiciFileModel inputSiciFustForm = InputSiciFileModel();
+
+  List<String> Uf = [];
+  late String UfTxt;
+
+  DateTime selectedDate = DateTime(DateTime.now().year, DateTime.now().month - 1, 1);
+
+  //Período referência
+  final txtControllerReferencePeriod = TextEditingController();
+  final focusNodeReferencePeriod = FocusNode();
+
+  // Razão social LTDA - ME.
+  final txtControllerSocialReason = TextEditingController();
+  final focusNodeSocialReason = FocusNode();
+
+  //Telefone Fixo:
+  final txtControllerLandline = TextEditingController();
+  final focusNodeLandline = FocusNode();
+
+  //CNPJ:
+  final txtControllerCnpj = TextEditingController();
+  final focusNodeCnpj = FocusNode();
+
+  //TELEFONE CELULAR:
+  final txtControllerTelefoneMovel = TextEditingController();
+  final focusNodeTelefoneMovel = FocusNode();
+
+  // Receita Bruta
+  final txtControllerGrossRevenue = TextEditingController();
+  final focusNodeGrossRevenue = FocusNode();
+  // Valor Simples
+  final txtControllerSimpleValue = TextEditingController();
+  final focusNodeSimpleValue = FocusNode();
+  // Aliquota Simples %
+  final txtControllerSimpleAliquot = TextEditingController();
+  final focusNodeSimpleAliquot = FocusNode();
+  // Valor ICMS
+  final txtControllerICMSvalue = TextEditingController();
+  final focusNodeICMSvalue = FocusNode();
+  //ICMS (%)
+  final txtControllerIcmsPorc = TextEditingController();
+  final focusNodeIcmsPorc = FocusNode();
+  // Valor PIS
+  final txtControllerPis = TextEditingController();
+  final focusNodePis = FocusNode();
+  //PIS (%)
+  final txtControllerPisPorc = TextEditingController();
+  final focusNodePisPorc = FocusNode();
+  //Valor COFINS
+  final txtControllerCofins = TextEditingController();
+  final focusNodeCofins = FocusNode();
+  //Valor COFINS (%)
+  final txtControllerCofinsPorc = TextEditingController();
+  final focusNodeCofinsPorc = FocusNode();
+  // Receita Liquida
+  final txtControllerNetRevenue = TextEditingController();
+  final focusNodeNetRevenue = FocusNode();
+  // Observações Gerais
+  final txtControllerGeneralObservations = TextEditingController();
+  final focusNodeGeneralObservations = FocusNode();
+
 }

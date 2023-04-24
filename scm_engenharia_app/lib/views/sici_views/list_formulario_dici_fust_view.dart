@@ -260,11 +260,15 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
 
   onToview(InputSiciFileModel? prop) {
     try {
+      Map<String, dynamic>  map = {
+        'formulario':prop,
+        'isLancamentosComBaseMesAnterior':false,
+      };
       Navigator.push(
           context,
           CupertinoPageRoute(
             builder: (context) =>
-                FormularioDiciFustView(siciFileModel:prop),
+                FormularioDiciFustView(map:map),
           )).then((value) {
         onRestDb();
       });

@@ -28,7 +28,6 @@ import '../../views/user_views/profile_view.dart';
 
 
 Route<dynamic> generateRoute(RouteSettings settings) {
-
   String? routesName = settings.name;
   Map<String, dynamic>  map = {};
   if(settings.arguments != null)
@@ -66,7 +65,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => const RecibosView());
   //Formulario Sici
     case routes.formularioSiciFustRoute:
-      return MaterialPageRoute(builder: (context) => FormularioDiciFustView(siciFileModel: null,));
+      return MaterialPageRoute(builder: (context) => FormularioDiciFustView(map: map));
     case routes.lancamentoSiciFustRoute:
       return MaterialPageRoute(builder: (context) => const ListFormularioSiciFustView());
     case routes.listaArquivosDiciRoute:

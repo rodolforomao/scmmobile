@@ -31,7 +31,10 @@ class ListArquivosDiciFustState extends State<ListArquivosDiciFustView> {
 
   onRestDb() async {
     try {
-      setState(() {statusView = TypeView.viewLoading;});
+      setState(() {
+        mapFileModelAllList = [];
+        statusView = TypeView.viewLoading;
+      });
       Operation respBll = await AppScmEngenhariaMobileBll.instance.onArquivoDiciFustAll();
       if (respBll.erro || respBll.result == null) {
         throw respBll.message!;
@@ -120,6 +123,7 @@ class ListArquivosDiciFustState extends State<ListArquivosDiciFustView> {
               },
             ),
           ).then((value) {
+
             onRestDb();
           });
         },
