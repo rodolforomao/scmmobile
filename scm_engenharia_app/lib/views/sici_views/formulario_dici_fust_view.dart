@@ -32,7 +32,7 @@ class FormularioDiciFustView extends StatefulWidget {
 }
 
 class FormularioDiciFustState extends State<FormularioDiciFustView> with FormularioDiciFustViewModel {
-
+  TypeView statusView = TypeView.viewLoading;
 
   onSaveLocalDbForm() async {
     try {
@@ -246,6 +246,7 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> with Formula
         txtControllerNetRevenue.text = siciFileModel.receitaLiquida!;
         // Observações Gerais
         txtControllerGeneralObservations.text = siciFileModel.observacoes!;
+        setState(() {statusView = TypeView.viewRenderInformation;});
       } else {
 
       }
@@ -267,10 +268,13 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> with Formula
         }
       else
         {
-
+          setState(() {statusView = TypeView.viewRenderInformation;});
         }
     } catch (error) {
-      OnAlertError(error.toString());
+      setState(() {
+        statusView = TypeView.viewErrorInformation;
+        GlobalScaffold.erroInformacao = error.toString();
+      });
     }
   }
 
@@ -288,14 +292,15 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> with Formula
           if (respSiciFustFormList.isNotEmpty) {
             List<InputSiciFileModel>  siciFileModelAllResp = await  ParseRespJsonToView.parseSiciFustFormModelToSiciFileList(respSiciFustFormList);
             await onIncFormulario(siciFileModelAllResp.first);
-            var sd =  DateFormat('dd/MM/yyyy').format(DateTime( DateTime.now().year, DateTime.now().month - 1,));
             txtControllerReferencePeriod.text = DateFormat('dd/MM/yyyy').format(DateTime( DateTime.now().year, DateTime.now().month - 1,));
-
           }
         }
       }
     } catch (error) {
-      OnAlertError(error.toString());
+      setState(() {
+        statusView = TypeView.viewErrorInformation;
+        GlobalScaffold.erroInformacao = error.toString();
+      });
     }
   }
 
@@ -330,6 +335,7 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> with Formula
             'Formulário Dici - Fust',
           ),
           actions: <Widget>[
+          if (statusView == TypeView.viewRenderInformation) ...[
             InkWell(
                 onTap: () {
                   onSaveLocalDbForm();
@@ -345,689 +351,702 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> with Formula
                     ),
                   ),
                 )),
+          ]
           ],
           toolbarHeight: 50,
           backgroundColor: Colors.transparent,
         ),
       ),
-      body: Align(
-        alignment: Alignment.topCenter,
-        child: Container(
+      body: viewType(MediaQuery.of(context).size.height),
+    );
+  }
+
+
+  viewType(double maxHeight) {
+    switch (statusView) {
+      case TypeView.viewLoading:
+        return GlobalView.viewPerformingSearch(maxHeight,context);
+      case TypeView.viewErrorInformation:
+        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
+      case TypeView.viewRenderInformation:
+        return  Align(
           alignment: Alignment.topCenter,
-          constraints: const BoxConstraints(
-            maxWidth: 1000,
-          ),
-          child: GlobalView.viewRenderSingleChildScrollView(
-              maxHeight,
-              Stepper(
-                physics: const ClampingScrollPhysics(),
-                controlsBuilder:
-                    (BuildContext context, ControlsDetails details) {
-                  return Align( alignment: Alignment.bottomRight, child: Container(
-                    alignment: Alignment.bottomRight,
-                    constraints: const BoxConstraints(
-                      maxWidth: 300,
-                      minWidth: 300,
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        Visibility(
-                          visible: currentStep > 0 ? true : false,
-                          child:Expanded(
-                            flex: 2,
-                            child: TextButton(
-                              style: TextButton.styleFrom(
-                                backgroundColor: const Color(0xff888888),
-                                padding:
-                                const EdgeInsets.fromLTRB(5.0, 2.0, 5.0, 3.0),
-                                minimumSize: const Size(130, 43),
-                                maximumSize: const Size(130, 43),
-                                textStyle: const TextStyle(
-                                  color: Color(0xffFFFFFF),
-                                  fontSize: 13,
-                                ),
-                              ),
-                              onPressed: () async {
-                                setState(() {
-                                  switch (currentStep) {
-                                    case 2:
-                                      currentStep = 1;
-                                      break;
-                                    case 1:
-                                      currentStep = 0;
-                                      break;
-                                  }
-                                });
-                              },
-                              child: const Text(
-                                'Anterior',
-                                style: TextStyle(
-                                  color: Color(0xffFFFFFF),
-                                  fontSize: 13,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.all(10),
-                        ),
-                        Visibility(
-                          visible: currentStep == 2 ? false : true,
-                          child: Expanded(
-                            flex: 2,
-                            child:  TextButton(
-                              style: TextButton.styleFrom(
-                                backgroundColor: const Color(0xffef7d00),
-                                padding:
-                                const EdgeInsets.fromLTRB(15.0, 2.0, 15.0, 2.0),
-                                minimumSize: const Size(130, 43),
-                                maximumSize: const Size(130, 43),
-                                textStyle: const TextStyle(
-                                  color: Color(0xffFFFFFF),
-                                  fontSize: 13,
-                                ),
-                              ),
-                              onPressed: () async {
-                                setState(() {
-                                  switch (currentStep) {
-                                    case 0:
-                                      currentStep = 1;
-                                      break;
-                                    case 1:
-                                      currentStep = 2;
-                                      break;
-                                  }
-                                });
-                              },
-                              child: const Text(
-                                'Próximo',
-                                style: TextStyle(
-                                  color: Color(0xffFFFFFF),
-                                  fontSize: 13,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),);
-                },
-                steps: <Step>[
-                  Step(
-                    title: SizedBox(
-                      width: MediaQuery.of(context).size.width - 90,
-                      child: Text(
-                        'informações da empresa',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        softWrap: false,
-                        style: Theme.of(context)
-                            .textTheme
-                            .subtitle1
-                            ?.copyWith(fontSize: 17),
+          child: Container(
+            alignment: Alignment.topCenter,
+            constraints: const BoxConstraints(
+              maxWidth: 1000,
+            ),
+            child: GlobalView.viewRenderSingleChildScrollView(
+                maxHeight,
+                Stepper(
+                  physics: const ClampingScrollPhysics(),
+                  controlsBuilder:
+                      (BuildContext context, ControlsDetails details) {
+                    return Align( alignment: Alignment.bottomRight, child: Container(
+                      alignment: Alignment.bottomRight,
+                      constraints: const BoxConstraints(
+                        maxWidth: 300,
+                        minWidth: 300,
                       ),
-                    ),
-                    content: GlobalView.viewResponsiveGridTextField(
-                        context,
-                        5,
-                        600,
-                        [
-                          TextField(
-                            onTap: () {
-                              FocusScope.of(context).requestFocus(FocusNode());
-                              onSelectedDate(context);
-                            },
-                            keyboardType: TextInputType.datetime,
-                            controller: txtControllerReferencePeriod,
-                            focusNode: focusNodeReferencePeriod,
-                            textInputAction: TextInputAction.next,
-                            style: const TextStyle(
-                                fontSize: 16,
-                                fontFamily: 'Poppins-Regular',
-                                fontWeight: FontWeight.w100,
-                                color: Color(0xFF323232)),
-                            onSubmitted: (term) {
-                              focusNodeReferencePeriod.unfocus();
-                              FocusScope.of(context)
-                                  .requestFocus(focusNodeSocialReason);
-                            },
-                            decoration: const InputDecoration(
-                              labelText: 'Período referência:',
-                              hintText: '',
-                            ),
-                            maxLength: 20,
-                          ),
-                          TextField(
-                            keyboardType: TextInputType.text,
-                            controller: txtControllerSocialReason,
-                            focusNode: focusNodeSocialReason,
-                            textInputAction: TextInputAction.next,
-                            onSubmitted: (term) {
-                              focusNodeSocialReason.unfocus();
-                              FocusScope.of(context)
-                                  .requestFocus(focusNodeLandline);
-                            },
-                            maxLength: 100,
-                            style: const TextStyle(
-                                fontSize: 16,
-                                fontFamily: 'Poppins-Regular',
-                                fontWeight: FontWeight.w100,
-                                color: Color(0xFF323232)),
-                            decoration: const InputDecoration(
-                              labelText: 'Razão social:',
-                              hintText: 'Razão social LTDA - ME.',
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          Visibility(
+                            visible: currentStep > 0 ? true : false,
+                            child:Expanded(
+                              flex: 2,
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  backgroundColor: const Color(0xff888888),
+                                  padding:
+                                  const EdgeInsets.fromLTRB(5.0, 2.0, 5.0, 3.0),
+                                  minimumSize: const Size(130, 43),
+                                  maximumSize: const Size(130, 43),
+                                  textStyle: const TextStyle(
+                                    color: Color(0xffFFFFFF),
+                                    fontSize: 13,
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  setState(() {
+                                    switch (currentStep) {
+                                      case 2:
+                                        currentStep = 1;
+                                        break;
+                                      case 1:
+                                        currentStep = 0;
+                                        break;
+                                    }
+                                  });
+                                },
+                                child: const Text(
+                                  'Anterior',
+                                  style: TextStyle(
+                                    color: Color(0xffFFFFFF),
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
-                          TextField(
-                            keyboardType: TextInputType.phone,
-                            controller: txtControllerLandline,
-                            focusNode: focusNodeLandline,
-                            textInputAction: TextInputAction.next,
-                            onSubmitted: (term) {
-                              focusNodeLandline.unfocus();
-                              FocusScope.of(context)
-                                  .requestFocus(focusNodeCnpj);
-                            },
-                            inputFormatters: [
-                              // obrigatório
-                              FilteringTextInputFormatter.digitsOnly,
-                              TelefoneInputFormatter(),
-                            ],
-                            maxLength: 100,
-                            style: const TextStyle(
-                                fontSize: 16,
-                                fontFamily: 'Poppins-Regular',
-                                fontWeight: FontWeight.w100,
-                                color: Color(0xFF323232)),
-                            decoration: const InputDecoration(
-                              labelText: 'Telefone Fixo:',
-                              hintText: '',
+                          const Padding(
+                            padding: EdgeInsets.all(10),
+                          ),
+                          Visibility(
+                            visible: currentStep == 2 ? false : true,
+                            child: Expanded(
+                              flex: 2,
+                              child:  TextButton(
+                                style: TextButton.styleFrom(
+                                  backgroundColor: const Color(0xffef7d00),
+                                  padding:
+                                  const EdgeInsets.fromLTRB(15.0, 2.0, 15.0, 2.0),
+                                  minimumSize: const Size(130, 43),
+                                  maximumSize: const Size(130, 43),
+                                  textStyle: const TextStyle(
+                                    color: Color(0xffFFFFFF),
+                                    fontSize: 13,
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  setState(() {
+                                    switch (currentStep) {
+                                      case 0:
+                                        currentStep = 1;
+                                        break;
+                                      case 1:
+                                        currentStep = 2;
+                                        break;
+                                    }
+                                  });
+                                },
+                                child: const Text(
+                                  'Próximo',
+                                  style: TextStyle(
+                                    color: Color(0xffFFFFFF),
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
-                          TextField(
-                            keyboardType: TextInputType.number,
-                            controller: txtControllerCnpj,
-                            focusNode: focusNodeCnpj,
-                            textInputAction: TextInputAction.next,
-                            onSubmitted: (term) {
-                              focusNodeCnpj.unfocus();
-                              FocusScope.of(context).requestFocus(focusNodeTelefoneMovel);
-                            },
-                            inputFormatters: [
-                              // obrigatório
-                              //CurrencyInputFormatter(),
-                              FilteringTextInputFormatter.digitsOnly,
-                              CnpjInputFormatter(),
-                            ],
-                            autofocus: false,
-                            style: const TextStyle(
-                                fontSize: 16,
-                                fontFamily: 'Poppins-Regular',
-                                fontWeight: FontWeight.w100,
-                                color: Color(0xFF323232)),
-                            decoration: const InputDecoration(
-                              labelText: 'CNPJ:',
-                              hintText: '',
-                            ),
-                          ),
-                          TextField(
-                            keyboardType: TextInputType.number,
-                            controller: txtControllerTelefoneMovel,
-                            focusNode: focusNodeTelefoneMovel,
-                            textInputAction: TextInputAction.next,
-                            onSubmitted: (term) {
-                              focusNodeTelefoneMovel.unfocus();
-                              FocusScope.of(context)
-                                  .requestFocus(focusNodeGrossRevenue);
-                            },
-                            inputFormatters: [
-                              // obrigatório
-                              FilteringTextInputFormatter.digitsOnly,
-                              TelefoneInputFormatter(),
-                            ],
-                            autofocus: false,
-                            style: const TextStyle(
-                                fontSize: 16,
-                                fontFamily: 'Poppins-Regular',
-                                fontWeight: FontWeight.w100,
-                                color: Color(0xFF323232)),
-                            decoration: const InputDecoration(
-                              labelText: 'TELEFONE CELULAR:',
-                              hintText: '',
-                            ),
-                            maxLength: 20,
-                          ),
-                        ].toList()),
-                    state: currentStep > 0
-                        ? StepState.complete
-                        : StepState.disabled,
-                    isActive: true,
-                  ),
-                  Step(
-                    title: SizedBox(
-                      width: MediaQuery.of(context).size.width - 90,
-                      child: Text(
-                        'informações financeiras',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        softWrap: false,
-                        style: Theme.of(context)
-                            .textTheme
-                            .subtitle1
-                            ?.copyWith(fontSize: 15),
+                        ],
                       ),
-                    ),
-                    content: GlobalView.viewResponsiveGridTextField(
-                        context,
-                        7,
-                        600,
-                        [
-                          TextField(
-                            keyboardType: TextInputType.number,
-                            controller: txtControllerGrossRevenue,
-                            focusNode: focusNodeGrossRevenue,
-                            textInputAction: TextInputAction.next,
-                            style: const TextStyle(
-                                fontSize: 16,
-                                fontFamily: 'Poppins-Regular',
-                                fontWeight: FontWeight.w100,
-                                color: Color(0xFF323232)),
-                            onSubmitted: (term) {
-                              focusNodeGrossRevenue.unfocus();
-                              FocusScope.of(context)
-                                  .requestFocus(focusNodeSimpleValue);
-                            },
-                            textAlign: TextAlign.start,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly,
-                              CurrencyPtBrInputFormatter()
-                            ],
-                            decoration: const InputDecoration(
-                              labelText: 'Receita Bruta',
-                              hintText: '',
-                            ),
-                            maxLength: 20,
-                          ),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Expanded(
-                                child: TextField(
-                                  keyboardType: TextInputType.number,
-                                  controller: txtControllerSimpleValue,
-                                  focusNode: focusNodeSimpleValue,
-                                  textInputAction: TextInputAction.next,
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      fontFamily: 'Poppins-Regular',
-                                      fontWeight: FontWeight.w100,
-                                      color: Color(0xFF323232)),
-                                  onSubmitted: (term) {
-                                    focusNodeSimpleValue.unfocus();
-                                    FocusScope.of(context)
-                                        .requestFocus(focusNodeSimpleAliquot);
-                                  },
-                                  textAlign: TextAlign.start,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                    CurrencyPtBrInputFormatter()
-                                  ],
-                                  autofocus: false,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Valor Simples',
-                                    hintText: '',
-                                  ),
-                                  maxLength: 20,
-                                ),
-                              ),
-                              SizedBox(width: 15),
-                              Expanded(
-                                child: TextField(
-                                  keyboardType: TextInputType.number,
-                                  controller: txtControllerSimpleAliquot,
-                                  focusNode: focusNodeSimpleAliquot,
-                                  textInputAction: TextInputAction.next,
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      fontFamily: 'Poppins-Regular',
-                                      fontWeight: FontWeight.w100,
-                                      color: Color(0xFF323232)),
-                                  onSubmitted: (term) {
-                                    focusNodeSimpleAliquot.unfocus();
-                                    FocusScope.of(context)
-                                        .requestFocus(focusNodeICMSvalue);
-                                  },
-                                  textAlign: TextAlign.start,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                    CurrencyPercentInputFormatter()
-                                  ],
-                                  autofocus: false,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Aliquota Simples %',
-                                    hintText: '',
-                                  ),
-                                  maxLength: 7,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Expanded(
-                                child: TextField(
-                                  controller: txtControllerICMSvalue,
-                                  focusNode: focusNodeICMSvalue,
-                                  textInputAction: TextInputAction.next,
-                                  keyboardType: TextInputType.number,
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      fontFamily: 'Poppins-Regular',
-                                      fontWeight: FontWeight.w100,
-                                      color: Color(0xFF323232)),
-                                  onSubmitted: (term) {
-                                    focusNodeICMSvalue.unfocus();
-                                    FocusScope.of(context)
-                                        .requestFocus(focusNodeIcmsPorc);
-                                  },
-                                  textAlign: TextAlign.start,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                    CurrencyPtBrInputFormatter()
-                                  ],
-                                  autofocus: false,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Valor ICMS',
-                                    hintText: '',
-                                  ),
-                                  maxLength: 20,
-                                ),
-                              ),
-                              SizedBox(width: 15),
-                              Expanded(
-                                child: TextField(
-                                  controller: txtControllerIcmsPorc,
-                                  keyboardType: TextInputType.number,
-                                  focusNode: focusNodeIcmsPorc,
-                                  textInputAction: TextInputAction.next,
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      fontFamily: 'Poppins-Regular',
-                                      fontWeight: FontWeight.w100,
-                                      color: Color(0xFF323232)),
-                                  onSubmitted: (term) {
-                                    focusNodeIcmsPorc.unfocus();
-                                    FocusScope.of(context)
-                                        .requestFocus(focusNodePis);
-                                  },
-                                  textAlign: TextAlign.start,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                    CurrencyPercentInputFormatter()
-                                  ],
-                                  decoration: const InputDecoration(
-                                    labelText: 'ICMS (%)',
-                                    hintText: '',
-                                  ),
-                                  maxLength: 12,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Expanded(
-                                child: TextField(
-                                  controller: txtControllerPis,
-                                  focusNode: focusNodePis,
-                                  textInputAction: TextInputAction.next,
-                                  keyboardType: TextInputType.number,
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      fontFamily: 'Poppins-Regular',
-                                      fontWeight: FontWeight.w100,
-                                      color: Color(0xFF323232)),
-                                  onSubmitted: (term) {
-                                    focusNodePis.unfocus();
-                                    FocusScope.of(context)
-                                        .requestFocus(focusNodePisPorc);
-                                  },
-                                  textAlign: TextAlign.start,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                    CurrencyPtBrInputFormatter()
-                                  ],
-                                  decoration: const InputDecoration(
-                                    labelText: 'Valor PIS',
-                                    hintText: '',
-                                  ),
-                                  maxLength: 20,
-                                ),
-                              ),
-                              SizedBox(width: 15),
-                              Expanded(
-                                child: TextField(
-                                  controller: txtControllerPisPorc,
-                                  focusNode: focusNodePisPorc,
-                                  textInputAction: TextInputAction.next,
-                                  keyboardType: TextInputType.number,
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      fontFamily: 'Poppins-Regular',
-                                      fontWeight: FontWeight.w100,
-                                      color: Color(0xFF323232)),
-                                  onSubmitted: (term) {
-                                    focusNodePisPorc.unfocus();
-                                    FocusScope.of(context)
-                                        .requestFocus(focusNodeCofins);
-                                  },
-                                  textAlign: TextAlign.start,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                    CurrencyPercentInputFormatter()
-                                  ],
-                                  decoration: const InputDecoration(
-                                    labelText: 'PIS (%)',
-                                    hintText: '',
-                                  ),
-                                  maxLength: 12,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Expanded(
-                                child: TextField(
-                                  controller: txtControllerCofins,
-                                  textAlign: TextAlign.start,
-                                  focusNode: focusNodeCofins,
-                                  textInputAction: TextInputAction.next,
-                                  keyboardType: TextInputType.number,
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      fontFamily: 'Poppins-Regular',
-                                      fontWeight: FontWeight.w100,
-                                      color: Color(0xFF323232)),
-                                  onSubmitted: (term) {
-                                    focusNodeCofins.unfocus();
-                                    FocusScope.of(context)
-                                        .requestFocus(focusNodeCofinsPorc);
-                                  },
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                    CurrencyPtBrInputFormatter()
-                                  ],
-                                  decoration: const InputDecoration(
-                                    labelText: 'Valor COFINS',
-                                    hintText: '',
-                                  ),
-                                  maxLength: 20,
-                                ),
-                              ),
-                              SizedBox(width: 15),
-                              Expanded(
-                                child: TextField(
-                                  controller: txtControllerCofinsPorc,
-                                  textAlign: TextAlign.start,
-                                  focusNode: focusNodeCofinsPorc,
-                                  textInputAction: TextInputAction.next,
-                                  keyboardType: TextInputType.number,
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      fontFamily: 'Poppins-Regular',
-                                      fontWeight: FontWeight.w100,
-                                      color: Color(0xFF323232)),
-                                  onSubmitted: (term) {
-                                    focusNodeCofinsPorc.unfocus();
-                                    FocusScope.of(context)
-                                        .requestFocus(focusNodeNetRevenue);
-                                  },
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                    CurrencyPercentInputFormatter()
-                                  ],
-                                  decoration: const InputDecoration(
-                                    labelText: 'COFINS (%)',
-                                    hintText: '',
-                                  ),
-                                  maxLength: 12,
-                                ),
-                              ),
-                            ],
-                          ),
-                          TextField(
-                            controller: txtControllerNetRevenue,
-                            textAlign: TextAlign.start,
-                            focusNode: focusNodeNetRevenue,
-                            textInputAction: TextInputAction.next,
-                            keyboardType: TextInputType.number,
-                            style: const TextStyle(
-                                fontSize: 16,
-                                fontFamily: 'Poppins-Regular',
-                                fontWeight: FontWeight.w100,
-                                color: Color(0xFF323232)),
-                            onSubmitted: (term) {
-                              focusNodeNetRevenue.unfocus();
-                              FocusScope.of(context)
-                                  .requestFocus(focusNodeGeneralObservations);
-                            },
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly,
-                              CurrencyPtBrInputFormatter()
-                            ],
-                            decoration: const InputDecoration(
-                              labelText: 'Receita Liquida',
-                              hintText: '',
-                            ),
-                            maxLength: 20,
-                          ),
-                          TextField(
-                            controller: txtControllerGeneralObservations,
-                            textAlign: TextAlign.start,
-                            focusNode: focusNodeGeneralObservations,
-                            textInputAction: TextInputAction.next,
-                            keyboardType: TextInputType.text,
-                            style: const TextStyle(
-                                fontSize: 16,
-                                fontFamily: 'Poppins-Regular',
-                                fontWeight: FontWeight.w100,
-                                color: Color(0xFF323232)),
-                            onSubmitted: (term) {
-                              focusNodeGeneralObservations.unfocus();
-                              FocusScope.of(context)
-                                  .requestFocus(focusNodeIcmsPorc);
-                            },
-                            decoration: const InputDecoration(
-                              labelText: 'Observações Gerais',
-                              hintText: '',
-                            ),
-                            maxLength: 1500,
-                          ),
-                        ].toList()),
-                    state: currentStep > 1
-                        ? StepState.complete
-                        : StepState.disabled,
-                    isActive: true,
-                  ),
-                  Step(
-                    title: SizedBox(
-                      width: MediaQuery.of(context).size.width - 90,
-                      child: Text(
-                        'dados em serviços',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        softWrap: false,
-                        style: Theme.of(context)
-                            .textTheme
-                            .subtitle1
-                            ?.copyWith(fontSize: 15),
-                      ),
-                    ),
-                    content: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const SizedBox(height: 30.0),
-                        Center(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(
-                                20.0, 15.0, 20.0, 15.0),
-                            child: TextButton(
-                              style: TextButton.styleFrom(
-                                padding: const EdgeInsets.fromLTRB(
-                                    15.0, 2.0, 15.0, 2.0),
-                                minimumSize: const Size(200, 45),
-                                maximumSize: const Size(200, 45),
-                                textStyle: const TextStyle(
-                                  color: Color(0xffef7d00),
-                                  fontSize: 15,
-                                ),
-                              ),
-                              child: const Text(
-                                ' Adicionar ',
-                                style: TextStyle(
-                                  color: Color(0xffFFFFFF),
-                                  fontSize: 13,
-                                ),
-                              ),
-                              onPressed: () async {
-                                Navigator.push(
-                                    context,
-                                    CupertinoPageRoute<InputDadosEmServicosModel>(
-                                        fullscreenDialog: true,
-                                        builder: (BuildContext context) => DadosEmServicosView(sInputDadosEmServicos: null))).then((value) {
-                                  if (value != null) {
-                                    setState(() {
-                                      if (inputSiciFustForm.dadosEmServicos == null) {
-                                        inputSiciFustForm.dadosEmServicos = [];
-                                        inputSiciFustForm.dadosEmServicos!.add(value);
-                                      } else {
-                                        inputSiciFustForm.dadosEmServicos!.add(value);
-                                      }
-                                    });
-                                  }
-                                });
-                              },
-                            ),
-                          ),
+                    ),);
+                  },
+                  steps: <Step>[
+                    Step(
+                      title: SizedBox(
+                        width: MediaQuery.of(context).size.width - 90,
+                        child: Text(
+                          'informações da empresa',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: false,
+                          style: Theme.of(context)
+                              .textTheme
+                              .subtitle1
+                              ?.copyWith(fontSize: 17),
                         ),
-                        const SizedBox(height: 30.0),
-                        Builder(
-                          builder: (BuildContext context) {
-                            return ListView.builder(
-                              scrollDirection: Axis.vertical,
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: inputSiciFustForm.dadosEmServicos == null ? 0 : inputSiciFustForm.dadosEmServicos!.length,
-                              itemBuilder: (context,index)
+                      ),
+                      content: GlobalView.viewResponsiveGridTextField(
+                          context,
+                          5,
+                          600,
+                          [
+                            TextField(
+                              onTap: () {
+                                FocusScope.of(context).requestFocus(FocusNode());
+                                onSelectedDate(context);
+                              },
+                              keyboardType: TextInputType.datetime,
+                              controller: txtControllerReferencePeriod,
+                              focusNode: focusNodeReferencePeriod,
+                              textInputAction: TextInputAction.next,
+                              style: const TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: 'Poppins-Regular',
+                                  fontWeight: FontWeight.w100,
+                                  color: Color(0xFF323232)),
+                              onSubmitted: (term) {
+                                focusNodeReferencePeriod.unfocus();
+                                FocusScope.of(context)
+                                    .requestFocus(focusNodeSocialReason);
+                              },
+                              decoration: const InputDecoration(
+                                labelText: 'Período referência:',
+                                hintText: '',
+                              ),
+                              maxLength: 20,
+                            ),
+                            TextField(
+                              keyboardType: TextInputType.text,
+                              controller: txtControllerSocialReason,
+                              focusNode: focusNodeSocialReason,
+                              textInputAction: TextInputAction.next,
+                              onSubmitted: (term) {
+                                focusNodeSocialReason.unfocus();
+                                FocusScope.of(context)
+                                    .requestFocus(focusNodeLandline);
+                              },
+                              maxLength: 100,
+                              style: const TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: 'Poppins-Regular',
+                                  fontWeight: FontWeight.w100,
+                                  color: Color(0xFF323232)),
+                              decoration: const InputDecoration(
+                                labelText: 'Razão social:',
+                                hintText: 'Razão social LTDA - ME.',
+                              ),
+                            ),
+                            TextField(
+                              keyboardType: TextInputType.phone,
+                              controller: txtControllerLandline,
+                              focusNode: focusNodeLandline,
+                              textInputAction: TextInputAction.next,
+                              onSubmitted: (term) {
+                                focusNodeLandline.unfocus();
+                                FocusScope.of(context)
+                                    .requestFocus(focusNodeCnpj);
+                              },
+                              inputFormatters: [
+                                // obrigatório
+                                FilteringTextInputFormatter.digitsOnly,
+                                TelefoneInputFormatter(),
+                              ],
+                              maxLength: 100,
+                              style: const TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: 'Poppins-Regular',
+                                  fontWeight: FontWeight.w100,
+                                  color: Color(0xFF323232)),
+                              decoration: const InputDecoration(
+                                labelText: 'Telefone Fixo:',
+                                hintText: '',
+                              ),
+                            ),
+                            TextField(
+                              keyboardType: TextInputType.number,
+                              controller: txtControllerCnpj,
+                              focusNode: focusNodeCnpj,
+                              textInputAction: TextInputAction.next,
+                              onSubmitted: (term) {
+                                focusNodeCnpj.unfocus();
+                                FocusScope.of(context).requestFocus(focusNodeTelefoneMovel);
+                              },
+                              inputFormatters: [
+                                // obrigatório
+                                //CurrencyInputFormatter(),
+                                FilteringTextInputFormatter.digitsOnly,
+                                CnpjInputFormatter(),
+                              ],
+                              autofocus: false,
+                              style: const TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: 'Poppins-Regular',
+                                  fontWeight: FontWeight.w100,
+                                  color: Color(0xFF323232)),
+                              decoration: const InputDecoration(
+                                labelText: 'CNPJ:',
+                                hintText: '',
+                              ),
+                            ),
+                            TextField(
+                              keyboardType: TextInputType.number,
+                              controller: txtControllerTelefoneMovel,
+                              focusNode: focusNodeTelefoneMovel,
+                              textInputAction: TextInputAction.next,
+                              onSubmitted: (term) {
+                                focusNodeTelefoneMovel.unfocus();
+                                FocusScope.of(context)
+                                    .requestFocus(focusNodeGrossRevenue);
+                              },
+                              inputFormatters: [
+                                // obrigatório
+                                FilteringTextInputFormatter.digitsOnly,
+                                TelefoneInputFormatter(),
+                              ],
+                              autofocus: false,
+                              style: const TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: 'Poppins-Regular',
+                                  fontWeight: FontWeight.w100,
+                                  color: Color(0xFF323232)),
+                              decoration: const InputDecoration(
+                                labelText: 'TELEFONE CELULAR:',
+                                hintText: '',
+                              ),
+                              maxLength: 20,
+                            ),
+                          ].toList()),
+                      state: currentStep > 0
+                          ? StepState.complete
+                          : StepState.disabled,
+                      isActive: true,
+                    ),
+                    Step(
+                      title: SizedBox(
+                        width: MediaQuery.of(context).size.width - 90,
+                        child: Text(
+                          'informações financeiras',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: false,
+                          style: Theme.of(context)
+                              .textTheme
+                              .subtitle1
+                              ?.copyWith(fontSize: 15),
+                        ),
+                      ),
+                      content: GlobalView.viewResponsiveGridTextField(
+                          context,
+                          7,
+                          600,
+                          [
+                            TextField(
+                              keyboardType: TextInputType.number,
+                              controller: txtControllerGrossRevenue,
+                              focusNode: focusNodeGrossRevenue,
+                              textInputAction: TextInputAction.next,
+                              style: const TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: 'Poppins-Regular',
+                                  fontWeight: FontWeight.w100,
+                                  color: Color(0xFF323232)),
+                              onSubmitted: (term) {
+                                focusNodeGrossRevenue.unfocus();
+                                FocusScope.of(context)
+                                    .requestFocus(focusNodeSimpleValue);
+                              },
+                              textAlign: TextAlign.start,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                                CurrencyPtBrInputFormatter()
+                              ],
+                              decoration: const InputDecoration(
+                                labelText: 'Receita Bruta',
+                                hintText: '',
+                              ),
+                              maxLength: 20,
+                            ),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Expanded(
+                                  child: TextField(
+                                    keyboardType: TextInputType.number,
+                                    controller: txtControllerSimpleValue,
+                                    focusNode: focusNodeSimpleValue,
+                                    textInputAction: TextInputAction.next,
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontFamily: 'Poppins-Regular',
+                                        fontWeight: FontWeight.w100,
+                                        color: Color(0xFF323232)),
+                                    onSubmitted: (term) {
+                                      focusNodeSimpleValue.unfocus();
+                                      FocusScope.of(context)
+                                          .requestFocus(focusNodeSimpleAliquot);
+                                    },
+                                    textAlign: TextAlign.start,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly,
+                                      CurrencyPtBrInputFormatter()
+                                    ],
+                                    autofocus: false,
+                                    decoration: const InputDecoration(
+                                      labelText: 'Valor Simples',
+                                      hintText: '',
+                                    ),
+                                    maxLength: 20,
+                                  ),
+                                ),
+                                SizedBox(width: 15),
+                                Expanded(
+                                  child: TextField(
+                                    keyboardType: TextInputType.number,
+                                    controller: txtControllerSimpleAliquot,
+                                    focusNode: focusNodeSimpleAliquot,
+                                    textInputAction: TextInputAction.next,
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontFamily: 'Poppins-Regular',
+                                        fontWeight: FontWeight.w100,
+                                        color: Color(0xFF323232)),
+                                    onSubmitted: (term) {
+                                      focusNodeSimpleAliquot.unfocus();
+                                      FocusScope.of(context)
+                                          .requestFocus(focusNodeICMSvalue);
+                                    },
+                                    textAlign: TextAlign.start,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly,
+                                      CurrencyPercentInputFormatter()
+                                    ],
+                                    autofocus: false,
+                                    decoration: const InputDecoration(
+                                      labelText: 'Aliquota Simples %',
+                                      hintText: '',
+                                    ),
+                                    maxLength: 7,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Expanded(
+                                  child: TextField(
+                                    controller: txtControllerICMSvalue,
+                                    focusNode: focusNodeICMSvalue,
+                                    textInputAction: TextInputAction.next,
+                                    keyboardType: TextInputType.number,
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontFamily: 'Poppins-Regular',
+                                        fontWeight: FontWeight.w100,
+                                        color: Color(0xFF323232)),
+                                    onSubmitted: (term) {
+                                      focusNodeICMSvalue.unfocus();
+                                      FocusScope.of(context)
+                                          .requestFocus(focusNodeIcmsPorc);
+                                    },
+                                    textAlign: TextAlign.start,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly,
+                                      CurrencyPtBrInputFormatter()
+                                    ],
+                                    autofocus: false,
+                                    decoration: const InputDecoration(
+                                      labelText: 'Valor ICMS',
+                                      hintText: '',
+                                    ),
+                                    maxLength: 20,
+                                  ),
+                                ),
+                                SizedBox(width: 15),
+                                Expanded(
+                                  child: TextField(
+                                    controller: txtControllerIcmsPorc,
+                                    keyboardType: TextInputType.number,
+                                    focusNode: focusNodeIcmsPorc,
+                                    textInputAction: TextInputAction.next,
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontFamily: 'Poppins-Regular',
+                                        fontWeight: FontWeight.w100,
+                                        color: Color(0xFF323232)),
+                                    onSubmitted: (term) {
+                                      focusNodeIcmsPorc.unfocus();
+                                      FocusScope.of(context)
+                                          .requestFocus(focusNodePis);
+                                    },
+                                    textAlign: TextAlign.start,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly,
+                                      CurrencyPercentInputFormatter()
+                                    ],
+                                    decoration: const InputDecoration(
+                                      labelText: 'ICMS (%)',
+                                      hintText: '',
+                                    ),
+                                    maxLength: 12,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Expanded(
+                                  child: TextField(
+                                    controller: txtControllerPis,
+                                    focusNode: focusNodePis,
+                                    textInputAction: TextInputAction.next,
+                                    keyboardType: TextInputType.number,
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontFamily: 'Poppins-Regular',
+                                        fontWeight: FontWeight.w100,
+                                        color: Color(0xFF323232)),
+                                    onSubmitted: (term) {
+                                      focusNodePis.unfocus();
+                                      FocusScope.of(context)
+                                          .requestFocus(focusNodePisPorc);
+                                    },
+                                    textAlign: TextAlign.start,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly,
+                                      CurrencyPtBrInputFormatter()
+                                    ],
+                                    decoration: const InputDecoration(
+                                      labelText: 'Valor PIS',
+                                      hintText: '',
+                                    ),
+                                    maxLength: 20,
+                                  ),
+                                ),
+                                SizedBox(width: 15),
+                                Expanded(
+                                  child: TextField(
+                                    controller: txtControllerPisPorc,
+                                    focusNode: focusNodePisPorc,
+                                    textInputAction: TextInputAction.next,
+                                    keyboardType: TextInputType.number,
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontFamily: 'Poppins-Regular',
+                                        fontWeight: FontWeight.w100,
+                                        color: Color(0xFF323232)),
+                                    onSubmitted: (term) {
+                                      focusNodePisPorc.unfocus();
+                                      FocusScope.of(context)
+                                          .requestFocus(focusNodeCofins);
+                                    },
+                                    textAlign: TextAlign.start,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly,
+                                      CurrencyPercentInputFormatter()
+                                    ],
+                                    decoration: const InputDecoration(
+                                      labelText: 'PIS (%)',
+                                      hintText: '',
+                                    ),
+                                    maxLength: 12,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Expanded(
+                                  child: TextField(
+                                    controller: txtControllerCofins,
+                                    textAlign: TextAlign.start,
+                                    focusNode: focusNodeCofins,
+                                    textInputAction: TextInputAction.next,
+                                    keyboardType: TextInputType.number,
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontFamily: 'Poppins-Regular',
+                                        fontWeight: FontWeight.w100,
+                                        color: Color(0xFF323232)),
+                                    onSubmitted: (term) {
+                                      focusNodeCofins.unfocus();
+                                      FocusScope.of(context)
+                                          .requestFocus(focusNodeCofinsPorc);
+                                    },
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly,
+                                      CurrencyPtBrInputFormatter()
+                                    ],
+                                    decoration: const InputDecoration(
+                                      labelText: 'Valor COFINS',
+                                      hintText: '',
+                                    ),
+                                    maxLength: 20,
+                                  ),
+                                ),
+                                SizedBox(width: 15),
+                                Expanded(
+                                  child: TextField(
+                                    controller: txtControllerCofinsPorc,
+                                    textAlign: TextAlign.start,
+                                    focusNode: focusNodeCofinsPorc,
+                                    textInputAction: TextInputAction.next,
+                                    keyboardType: TextInputType.number,
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontFamily: 'Poppins-Regular',
+                                        fontWeight: FontWeight.w100,
+                                        color: Color(0xFF323232)),
+                                    onSubmitted: (term) {
+                                      focusNodeCofinsPorc.unfocus();
+                                      FocusScope.of(context)
+                                          .requestFocus(focusNodeNetRevenue);
+                                    },
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly,
+                                      CurrencyPercentInputFormatter()
+                                    ],
+                                    decoration: const InputDecoration(
+                                      labelText: 'COFINS (%)',
+                                      hintText: '',
+                                    ),
+                                    maxLength: 12,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            TextField(
+                              controller: txtControllerNetRevenue,
+                              textAlign: TextAlign.start,
+                              focusNode: focusNodeNetRevenue,
+                              textInputAction: TextInputAction.next,
+                              keyboardType: TextInputType.number,
+                              style: const TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: 'Poppins-Regular',
+                                  fontWeight: FontWeight.w100,
+                                  color: Color(0xFF323232)),
+                              onSubmitted: (term) {
+                                focusNodeNetRevenue.unfocus();
+                                FocusScope.of(context)
+                                    .requestFocus(focusNodeGeneralObservations);
+                              },
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                                CurrencyPtBrInputFormatter()
+                              ],
+                              decoration: const InputDecoration(
+                                labelText: 'Receita Liquida',
+                                hintText: '',
+                              ),
+                              maxLength: 20,
+                            ),
+                            TextField(
+                              controller: txtControllerGeneralObservations,
+                              textAlign: TextAlign.start,
+                              focusNode: focusNodeGeneralObservations,
+                              textInputAction: TextInputAction.next,
+                              keyboardType: TextInputType.text,
+                              style: const TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: 'Poppins-Regular',
+                                  fontWeight: FontWeight.w100,
+                                  color: Color(0xFF323232)),
+                              onSubmitted: (term) {
+                                focusNodeGeneralObservations.unfocus();
+                                FocusScope.of(context)
+                                    .requestFocus(focusNodeIcmsPorc);
+                              },
+                              decoration: const InputDecoration(
+                                labelText: 'Observações Gerais',
+                                hintText: '',
+                              ),
+                              maxLength: 1500,
+                            ),
+                          ].toList()),
+                      state: currentStep > 1
+                          ? StepState.complete
+                          : StepState.disabled,
+                      isActive: true,
+                    ),
+                    Step(
+                      title: SizedBox(
+                        width: MediaQuery.of(context).size.width - 90,
+                        child: Text(
+                          'dados em serviços',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: false,
+                          style: Theme.of(context)
+                              .textTheme
+                              .subtitle1
+                              ?.copyWith(fontSize: 15),
+                        ),
+                      ),
+                      content: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: 30.0),
+                          Center(
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(
+                                  20.0, 15.0, 20.0, 15.0),
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  padding: const EdgeInsets.fromLTRB(
+                                      15.0, 2.0, 15.0, 2.0),
+                                  minimumSize: const Size(200, 45),
+                                  maximumSize: const Size(200, 45),
+                                  textStyle: const TextStyle(
+                                    color: Color(0xffef7d00),
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                child: const Text(
+                                  ' Adicionar ',
+                                  style: TextStyle(
+                                    color: Color(0xffFFFFFF),
+                                    fontSize: 13,
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  Navigator.push(
+                                      context,
+                                      CupertinoPageRoute<InputDadosEmServicosModel>(
+                                          fullscreenDialog: true,
+                                          builder: (BuildContext context) => DadosEmServicosView(sInputDadosEmServicos: null))).then((value) {
+                                    if (value != null) {
+                                      setState(() {
+                                        if (inputSiciFustForm.dadosEmServicos == null) {
+                                          inputSiciFustForm.dadosEmServicos = [];
+                                          inputSiciFustForm.dadosEmServicos!.add(value);
+                                        } else {
+                                          inputSiciFustForm.dadosEmServicos!.add(value);
+                                        }
+                                      });
+                                    }
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 30.0),
+                          Builder(
+                            builder: (BuildContext context) {
+                              return ListView.builder(
+                                scrollDirection: Axis.vertical,
+                                physics: const NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: inputSiciFustForm.dadosEmServicos == null ? 0 : inputSiciFustForm.dadosEmServicos!.length,
+                                itemBuilder: (context,index)
                                 {
                                   return Card(
                                     elevation: 0.9,
@@ -1457,46 +1476,46 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> with Formula
                                         )),
                                   );
                                 },
-                            );
-                          },
-                        ),
-                        const SizedBox(height: 20.0),
-                      ],
+                              );
+                            },
+                          ),
+                          const SizedBox(height: 20.0),
+                        ],
+                      ),
+                      isActive: true,
                     ),
-                    isActive: true,
-                  ),
-                ],
-                type: StepperType.vertical,
-                currentStep: currentStep,
-                onStepTapped: (step) {
-                  setState(() {
-                    currentStep = step;
-                  });
-                },
-                elevation: 8,
-                onStepContinue: () {
-                  setState(() {
-                    if (currentStep < spr.length - 1) {
-                      currentStep = currentStep + 1;
-                    } else {
-                      currentStep = 0;
-                    }
-                  });
-                },
-                onStepCancel: () {
-                  setState(() {
-                    if (currentStep > 0) {
-                      currentStep = currentStep - 1;
-                    } else {
-                      currentStep = 0;
-                    }
-                  });
-                },
-              ),
-              context),
-        ),
-      ),
-    );
+                  ],
+                  type: StepperType.vertical,
+                  currentStep: currentStep,
+                  onStepTapped: (step) {
+                    setState(() {
+                      currentStep = step;
+                    });
+                  },
+                  elevation: 8,
+                  onStepContinue: () {
+                    setState(() {
+                      if (currentStep < spr.length - 1) {
+                        currentStep = currentStep + 1;
+                      } else {
+                        currentStep = 0;
+                      }
+                    });
+                  },
+                  onStepCancel: () {
+                    setState(() {
+                      if (currentStep > 0) {
+                        currentStep = currentStep - 1;
+                      } else {
+                        currentStep = 0;
+                      }
+                    });
+                  },
+                ),
+                context),
+          ),
+        );
+    }
   }
 }
 
