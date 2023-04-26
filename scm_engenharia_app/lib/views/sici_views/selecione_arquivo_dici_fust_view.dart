@@ -34,19 +34,25 @@ class SelecioneArquivoDiciFustState extends State<SelecioneArquivoDiciFustView> 
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
         GlobalScaffold.instance.onToastInternetConnection();
       } else {
-        GlobalScaffold.instance.onToastPerformingOperation('Sincronizando ... ');
-        Operation resultRest = await ServicoMobileService.onCancelAccess('898').whenComplete(() => GlobalScaffold.instance.onHideCurrentSnackBar());
-        if (resultRest.erro) {
-          throw (resultRest.message!);
-        } else {
-          var formSiciFust = TbArquivoDiciFust(
-              ObjectId(),
-               "",
-              jsonEncode(mapFile)
-            );
-
-
+        if(Components.onIsEmpty(mapFile['fileBase64']).isEmpty)
+        {
+          GlobalScaffold.instance.onToastError('Arquivo  não identificado');
         }
+        else if(Components.onIsEmpty(mapFile['name']).isEmpty)
+        {
+          GlobalScaffold.instance.onToastError('Arquivo  não identificado');
+        }
+        else
+          {
+            GlobalScaffold.instance.onToastPerformingOperation('Sincronizando ... ');
+            Operation resultRest = await ServicoMobileService.onSiciArquivoUpload(mapFile['name'],base64Decode(mapFile['fileBase64'])).whenComplete(() => GlobalScaffold.instance.onHideCurrentSnackBar());
+            if (resultRest.erro) {
+              throw (resultRest.message!);
+            } else {
+              Navigator.pop(context, '');
+              GlobalScaffold.instance.onToastSuccess(resultRest.message!);
+            }
+          }
       }
     } catch (error) {
       OnAlertError(error.toString());
@@ -136,8 +142,7 @@ class SelecioneArquivoDiciFustState extends State<SelecioneArquivoDiciFustView> 
               cancelButton: CupertinoActionSheetAction(
                   isDefaultAction: true,
                   onPressed: () {
-                    Navigator.pop(
-                        context, 'Cancelar');
+                    Navigator.pop(context, 'Cancelar');
                   },
                   child:  Text('Cancelar',
                     textAlign: TextAlign.start,
@@ -315,7 +320,14 @@ class SelecioneArquivoDiciFustState extends State<SelecioneArquivoDiciFustView> 
                                           ),
                                         ),
                                         onPressed: () async {
-                                          onSaveLocalDbForm();
+                                               if (await Connectivity().checkConnectivity() == ConnectivityResult.none)
+                                               {
+                                                 onSaveLocalDbForm();
+                                               }
+                                               else
+                                               {
+                                                 onUpload();
+                                               }
                                         },
                                       ),),),
                                     ],

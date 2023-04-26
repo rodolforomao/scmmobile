@@ -395,7 +395,7 @@ class ServicoMobileService {
           Map<String, dynamic> map = jsonDecode(response.body);
           OperationJson resp = OperationJson.fromJson(map);
           operacao.erro = !resp.status!;
-          operacao.message = resp.message;
+          operacao.message = resp.message ?? 'Transação realizada com sucesso';
           operacao.result = resp.result;
           operacao.resultList = resp.result as List;
         }
@@ -480,44 +480,39 @@ class ServicoMobileService {
     return operacao;
   }
 
-  static Future<Operation> onSiciUpload(String token,String nroContratado ,String nroGsp,String nmeArquivo, Uint8List imageFile) async {
+  static Future<Operation> onSiciArquivoUpload(String nmeArquivo, Uint8List imageFile) async {
     Operation operacao = Operation();
-    String jsonResponse = '';
+
     try {
-      http.MultipartRequest request;
-      request = http.MultipartRequest(
-          'POST', Uri.parse('ArquivoTiss/DocumentoUploadDaGuia'));
-      request.headers.addAll(ApiRestInformation.onHeadersToken(token));
-      request.fields['nroGsp'] = nroGsp;
-      request.fields['nroContratado'] = nroContratado;
-      request.fields['nmeArquivo'] = nmeArquivo;
-      request.fields['operacao'] = 'I';
-      request.files.add(
+      String? token = await ComponentsJWTToken.JWTTokenPadrao();
+      http.MultipartRequest response;
+      response = http.MultipartRequest('POST', Uri.parse("$Url/analise/adicionarArquivo_ws"));
+      response.headers.addAll(ApiRestInformation.onHeadersToken(token!));
+      response.fields['ambiente'] = 'dici';
+      response.files.add(
         http.MultipartFile.fromBytes(
-          'file',
+          'arquivo',
           imageFile,
-          filename: '$nmeArquivo.pdf',
-          contentType: MediaType("application", "pdf"),
+          filename: nmeArquivo,
+          contentType: MediaType("application", "xlsx"),
         ),);
-      var streamedResponse = await request.send();
+      var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
       if (streamedResponse.statusCode == 200) {
         if (respStr.isEmpty) {
           throw (ApiRestInformation.problemOfComunication);
         } else {
-          Map<String, dynamic> map = jsonDecode(
-              Components.removeAllHtmlTags(respStr));
+          Map<String, dynamic> map = jsonDecode(Components.removeAllHtmlTags(respStr));
           OperationJson resp = OperationJson.fromJson(map);
           operacao.erro = !resp.status!;
-          operacao.message = resp.message;
+          operacao.message = resp.message ?? 'Transação realizada com sucesso';
           operacao.result = resp.result;
         }
         if (operacao.message == null) {
           throw ('Não foi identificado resposta');
         }
       } else {
-        operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(
-            streamedResponse.statusCode, streamedResponse.stream.toString());
+        operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(streamedResponse.statusCode, streamedResponse.stream.toString());
       }
     } on TimeoutException {
       operacao.erro = true;
@@ -537,6 +532,7 @@ class ServicoMobileService {
     }
     return operacao;
   }
+
   static Future<Operation> onListUser() async {
     Operation operacao = Operation();
     try {
