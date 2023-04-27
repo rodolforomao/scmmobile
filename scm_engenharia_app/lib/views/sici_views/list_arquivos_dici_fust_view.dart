@@ -59,21 +59,42 @@ class ListArquivosDiciFustState extends State<ListArquivosDiciFustView> {
     }
   }
 
-  onUpload(dynamic  siciFileModel) async {
+
+  onUpload(Map<String, dynamic> parameters , int index) async {
     try {
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
         GlobalScaffold.instance.onToastInternetConnection();
       } else {
-        GlobalScaffold.instance.onToastPerformingOperation('Sincronizando ... ');
-        Operation resultRest = await ServicoMobileService.onMakeReleasesSici(siciFileModel).whenComplete(() => GlobalScaffold.instance.onHideCurrentSnackBar());
-        if (resultRest.erro) {
-          throw (resultRest.message!);
-        } else {
-          Operation respUser = await AppScmEngenhariaMobileBll().onDeleteFormSiciFustId(siciFileModel.idFichaSiciApp.toString());
-          if (respUser.erro || respUser.result == null) {
-            throw respUser.message!;
+        if(Components.onIsEmpty(parameters['fileBase64']).isEmpty)
+        {
+          GlobalScaffold.instance.onToastError('Arquivo  não identificado');
+        }
+        else if(Components.onIsEmpty(parameters['name']).isEmpty)
+        {
+          GlobalScaffold.instance.onToastError('Arquivo  não identificado');
+        }
+        else
+        {
+          GlobalScaffold.instance.onToastPerformingOperation('Sincronizando ... ');
+          Operation resultRest = await ServicoMobileService.onSiciArquivoUpload(parameters['name'],base64Decode(parameters['fileBase64'])).whenComplete(() => GlobalScaffold.instance.onHideCurrentSnackBar());
+          if (resultRest.erro) {
+            throw (resultRest.message!);
           } else {
-
+            String idArquivoDiciFustApp = Components.onIsEmpty(parameters['id']);
+            Operation respUser = await AppScmEngenhariaMobileBll().onDeleteDiciFust(idArquivoDiciFustApp);
+            if (respUser.erro || respUser.result == null) {
+              throw respUser.message!;
+            } else {
+              setState(() {
+                mapFileModelAllList.removeAt(index);
+                //mapFileModelAllList = mapFileModelAllList;
+                if(mapFileModelAllList.isEmpty)
+                {
+                  statusView = TypeView.viewErrorInformation;
+                }
+              });
+              GlobalScaffold.instance.onToastSuccess(respUser.message!);
+            }
           }
         }
       }
@@ -81,7 +102,6 @@ class ListArquivosDiciFustState extends State<ListArquivosDiciFustView> {
       OnAlertError(error.toString());
     }
   }
-
 
   @override
   void initState() {
@@ -348,7 +368,7 @@ class ListArquivosDiciFustState extends State<ListArquivosDiciFustView> {
                         //width: MediaQuery.of(context).size.width / 3,
                         child: InkWell(
                           onTap: () async {
-                            //onUpload(siciFileModelAllList[index]);
+                           onUpload(mapFileModelAllList[index],index);
                           },
                           child: Column(
                             mainAxisSize: MainAxisSize.max,

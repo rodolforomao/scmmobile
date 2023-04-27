@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../help/components.dart';
 import '../../models/operation.dart';
@@ -12,6 +15,10 @@ import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
 import 'package:scm_engenharia_app/models/global_user_logged.dart' as global_user_logged;
+import 'package:path/path.dart' as p;
+
+
+
 
 class RecibosDocumentosView extends StatefulWidget {
   const RecibosDocumentosView({Key? key}) : super(key: key);
@@ -65,10 +72,36 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> {
         if (resultRest.erro) {
           throw (resultRest.message!);
         } else {
-          final _base64 = resultRest.result.toString();
-          //launchUrl(Uri.parse(_base64));
-          //launchUrl(Uri.parse("data:application/octet-stream;base64,$_base64"));
-          Components.downloadCompartilharArquivos(resultRest.result.toString(), 'recibo_', 'Recibo', 'Download','.pdf');
+          String dirs = 'recibo_${DateTime.now().millisecondsSinceEpoch}' + '.pdf';
+          String dir = '';
+          if (Platform.isAndroid) {
+            dir = "/storage/emulated/0/Download";
+          }
+          else
+          {
+            dir = (await getDownloadsDirectory())!.path ;
+          }
+          final files = File('$dir${Platform.pathSeparator}$dirs');
+          if (!files.existsSync())
+          {
+            files.create();
+            final bytes = utf8.encode(resultRest.result.toString());
+            await  files.writeAsString(resultRest.result.toString()).then((value) {
+              print('Future finished successfully i.e. without error');
+            }).catchError((error) {
+              GlobalScaffold.instance.onToastError(error.toString());
+            }).whenComplete(() async {
+              if(Platform.isWindows ||Platform.isMacOS || Platform.isLinux)
+                {
+                  await canLaunchUrl(files.uri);
+                }
+              else
+                {
+                  Share.shareXFiles([XFile(files.path,mimeType:'application/pdf')], text: 'Abrir com');
+                }
+              GlobalScaffold.instance.onToastSuccess('Download concluído com sucesso..');
+            });
+          }
         }
       }
     } catch (error) {
