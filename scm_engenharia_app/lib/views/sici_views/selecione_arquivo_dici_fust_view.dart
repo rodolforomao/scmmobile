@@ -248,7 +248,7 @@ class SelecioneArquivoDiciFustState extends State<SelecioneArquivoDiciFustView> 
                               fontSize: 15.0,
                               color: Colors.black54,
                             ),),),
-                          Center(child: Padding(padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),child: Card(
+                          Center(child: Padding(padding: const EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 15.0),child: Card(
                             elevation: 5,
                             child: Theme(
                               data: Theme.of(context).copyWith(

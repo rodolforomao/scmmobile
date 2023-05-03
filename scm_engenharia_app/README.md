@@ -56,7 +56,7 @@ Arquivo: [project]/android/app/build.gradle
          versionName 3.50.0 ( Substituir o valor por sua versão )
 
 flutter clean
-flutter build apk --obfuscate --split-debug-info=/obfuscate
+flutter build apk 
 
 cd [project]
 flutter build appbundle
