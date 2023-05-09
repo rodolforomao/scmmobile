@@ -21,15 +21,9 @@ class ListFormularioSiciFustView extends StatefulWidget {
   ListFormularioSiciFustState createState() => ListFormularioSiciFustState();
 }
 
-class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
-
-  List<InputSiciFileModel> siciFileModelAllList = [];
-  List<InputSiciFileModel> siciFileModelUpdateList = [];
+class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> with ListFormularioSiciFustViewModel {
 
 
-  TypeView statusView = TypeView.viewLoading;
-  final txtSocialReason = TextEditingController();
-  late bool isSearching = false;
 
 
   onRestWeb() async {
@@ -672,4 +666,16 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
           ),),);
     }
   }
+}
+
+class ListFormularioSiciFustViewModel {
+
+  List<InputSiciFileModel> siciFileModelAllList = [];
+  List<InputSiciFileModel> siciFileModelUpdateList = [];
+
+
+  TypeView statusView = TypeView.viewLoading;
+  final txtSocialReason = TextEditingController();
+  late bool isSearching = false;
+
 }

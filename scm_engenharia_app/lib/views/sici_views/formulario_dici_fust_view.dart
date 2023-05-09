@@ -1052,7 +1052,7 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> with Formula
                                     elevation: 0.9,
                                     child: Container(
                                         alignment: Alignment.topLeft,
-                                        height: 475,
+                                        height: 530,
                                         constraints: const BoxConstraints(
                                           minWidth: 200,
                                           maxWidth: 600,
@@ -1245,8 +1245,33 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> with Formula
                                                       ),
                                                     ),
                                                     TextSpan(
-                                                      text: inputSiciFustForm
-                                                          .dadosEmServicos![index].velocidade,
+                                                      text: inputSiciFustForm.dadosEmServicos![index].velocidade,
+                                                      style: const TextStyle(
+                                                        fontWeight: FontWeight.normal,
+                                                        color: Colors.black54,
+                                                        fontSize: 15.0,
+                                                      ),
+                                                    ),
+                                                  ])),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
+                                              child: RichText(
+                                                  textAlign: TextAlign.start,
+                                                  softWrap: false,
+                                                  maxLines: 2,
+                                                  overflow: TextOverflow.ellipsis,
+                                                  text: TextSpan(children: [
+                                                    const TextSpan(
+                                                      text: 'Acessos' "\n ",
+                                                      style: TextStyle(
+                                                        fontWeight: FontWeight.normal,
+                                                        color: Colors.black,
+                                                        fontSize: 16.0,
+                                                      ),
+                                                    ),
+                                                    TextSpan(
+                                                      text: inputSiciFustForm.dadosEmServicos![index].quantidadeAcesso,
                                                       style: const TextStyle(
                                                         fontWeight: FontWeight.normal,
                                                         color: Colors.black54,

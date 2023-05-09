@@ -383,7 +383,7 @@ class ServicoMobileService {
               headers: ApiRestInformation.onHeadersToken(token!),
               body: null,
               encoding: Encoding.getByName('utf-8'))
-          .timeout(const Duration(seconds: 10));
+          .timeout(const Duration(seconds: 30));
       operacao.erro = false;
       operacao.message = 'Operação realizada com sucesso';
       operacao.result = null;

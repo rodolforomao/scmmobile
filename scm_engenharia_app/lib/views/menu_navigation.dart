@@ -405,7 +405,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                     ),
                   ),
                   const Padding(padding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 10.0),child: Divider(color:Colors.black54),),
-                  Padding( padding: const EdgeInsets.only(top: 10.0),child:InkWell(
+                  /*Padding( padding: const EdgeInsets.only(top: 10.0),child:InkWell(
                     onTap: () {
                       setState(() =>  GlobalScaffold.instance.selectedPageView = routes.analiseRoute);
                       GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
@@ -446,7 +446,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                       ),
                     ),
                   )),
-                  /*   Padding( padding: const EdgeInsets.only(top: 10.0),child:InkWell(
+                    Padding( padding: const EdgeInsets.only(top: 10.0),child:InkWell(
                     onTap: () {
                       setState(() =>  GlobalScaffold.instance.selectedPageView = routes.alertasRoute);
                       GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();

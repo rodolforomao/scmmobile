@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:scm_engenharia_app/models/global_user_logged.dart' as global_user_logged;
@@ -19,7 +18,6 @@ class NotificationsView extends StatefulWidget {
 class NotificationsState extends State<NotificationsView> {
 
   List<NotificationScmEngineering> listNotificationScmEngineering = [];
-  late StreamSubscription<ConnectivityResult> subscription;
   TypeView statusView = TypeView.viewLoading;
 
 
@@ -92,7 +90,6 @@ class NotificationsState extends State<NotificationsView> {
   @override
   void dispose() {
     super.dispose();
-    subscription.cancel();
   }
 
   Widget build(BuildContext context) {
