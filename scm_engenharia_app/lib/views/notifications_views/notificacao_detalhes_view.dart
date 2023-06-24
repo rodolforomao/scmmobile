@@ -133,6 +133,7 @@ class NotificationState extends State<NotificacaoDetalhesView> {
         return GlobalView.viewPerformingSearch(maxHeight,context);
       case TypeView.viewErrorInformation:
         return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
+      default:
     }
   }
 

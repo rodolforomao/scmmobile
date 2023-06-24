@@ -1545,7 +1545,7 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> with Formula
 }
 
 
-class FormularioDiciFustViewModel {
+mixin class FormularioDiciFustViewModel {
 
   InputSiciFileModel inputSiciFustForm = InputSiciFileModel();
 

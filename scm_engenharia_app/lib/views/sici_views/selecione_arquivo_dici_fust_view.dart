@@ -6,14 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:realm/realm.dart';
 import '../../data/app_scm_engenharia_mobile_bll.dart';
-import '../../data/tb_arquivo_dici_fust.dart';
 import '../../help/components.dart';
-import '../../help/navigation_service/route_paths.dart' as routes;
 import '../../models/operation.dart';
 import '../../thema/app_thema.dart';
 import '../../web_service/servico_mobile_service.dart';
 import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
+import 'formulario_dici_fust_view.dart';
 
 
 class SelecioneArquivoDiciFustView extends StatefulWidget {
@@ -49,8 +48,20 @@ class SelecioneArquivoDiciFustState extends State<SelecioneArquivoDiciFustView> 
             if (resultRest.erro) {
               throw (resultRest.message!);
             } else {
-              Navigator.pop(context, '');
-              GlobalScaffold.instance.onToastSuccess(resultRest.message!);
+              Map<String, dynamic>  mapp = resultRest.result as Map<String, dynamic>;
+              Map<String, dynamic>  map = {
+                'formulario':{
+                  'razaoSocial': mapp
+                },
+                'isLancamentosComBaseMesAnterior':false,
+              };
+              Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (context) =>
+                        FormularioDiciFustView(map:map),
+                  )).then((value) {
+              });
             }
           }
       }

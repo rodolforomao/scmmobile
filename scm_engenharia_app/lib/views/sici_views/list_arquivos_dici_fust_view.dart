@@ -59,7 +59,6 @@ class ListArquivosDiciFustState extends State<ListArquivosDiciFustView> {
     }
   }
 
-
   onUpload(Map<String, dynamic> parameters , int index) async {
     try {
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
@@ -124,7 +123,7 @@ class ListArquivosDiciFustState extends State<ListArquivosDiciFustView> {
             decoration: StylesThemas.boxDecorationAppBar,
           ),
           elevation: 0.0,
-          title: Text('Arquivos/Dici'),
+          title: const Text('Arquivos/Dici'),
         ),
       ),
       body: viewType(MediaQuery.of(context).size.height),
@@ -147,7 +146,7 @@ class ListArquivosDiciFustState extends State<ListArquivosDiciFustView> {
             onRestDb();
           });
         },
-        backgroundColor: Color(0xffef7d00),
+        backgroundColor: const Color(0xffef7d00),
         child: const Icon(Icons.attach_file ,color: Colors.white,size: 30,),
       ),
     );
@@ -370,10 +369,10 @@ class ListArquivosDiciFustState extends State<ListArquivosDiciFustView> {
                           onTap: () async {
                            onUpload(mapFileModelAllList[index],index);
                           },
-                          child: Column(
+                          child: const Column(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: const <Widget>[
+                            children: <Widget>[
                               Icon(Icons.file_upload_outlined, size: 25, color: Color(0xFF000000)),
                             ],
                           ),

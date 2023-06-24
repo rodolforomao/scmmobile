@@ -502,11 +502,12 @@ class ServicoMobileService {
         if (respStr.isEmpty) {
           throw (ApiRestInformation.problemOfComunication);
         } else {
+
           Map<String, dynamic> map = jsonDecode(Components.removeAllHtmlTags(respStr));
           OperationJson resp = OperationJson.fromJson(map);
           operacao.erro = !resp.status!;
           operacao.message = resp.message ?? 'Transação realizada com sucesso';
-          operacao.result = resp.result;
+          operacao.result = map;
         }
         if (operacao.message == null) {
           throw ('Não foi identificado resposta');

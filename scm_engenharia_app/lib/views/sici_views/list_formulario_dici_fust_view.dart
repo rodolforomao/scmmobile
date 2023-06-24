@@ -24,8 +24,6 @@ class ListFormularioSiciFustView extends StatefulWidget {
 class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> with ListFormularioSiciFustViewModel {
 
 
-
-
   onRestWeb() async {
     try {
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
@@ -475,10 +473,10 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> with
                               onTap: () async {
                                 onUpload(siciFileModelAllList[index]);
                               },
-                              child: Column(
+                              child: const Column(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: const <Widget>[
+                                children: <Widget>[
                                   Icon(Icons.file_upload_outlined, size: 25, color: Color(0xFF000000)),
                                 ],
                               ),
@@ -626,10 +624,10 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> with
                               onTap: () async {
                                 onToview(siciFileModelAllList[index]);
                               },
-                              child: Column(
+                              child: const Column(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: const <Widget>[
+                                children: <Widget>[
                                   Icon(Icons.file_download_outlined,
                                       size: 20, color: Color(0xFF000000)),
                                 ],
@@ -668,7 +666,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> with
   }
 }
 
-class ListFormularioSiciFustViewModel {
+mixin class ListFormularioSiciFustViewModel {
 
   List<InputSiciFileModel> siciFileModelAllList = [];
   List<InputSiciFileModel> siciFileModelUpdateList = [];
