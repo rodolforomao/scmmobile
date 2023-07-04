@@ -50,41 +50,43 @@ class SelecioneArquivoDiciFustState extends State<SelecioneArquivoDiciFustView> 
               throw (resultRest.message!);
             } else {
               Map<String, dynamic>  mapResult = resultRest.result as Map<String, dynamic>;
-              List<InputDadosEmServicosModel>? dadosEmServicos = <InputDadosEmServicosModel>[];
-              for (var item in mapResult['data']['Dici']) {
-                dadosEmServicos.add( InputDadosEmServicosModel.fromJson({
-                  'idLancamento': '',
-                  'idSiciFile': '',
-                  'codIbge': Components.onIsEmpty(item['cod_ibge']),
-                  'uf': Components.onIsEmpty(item['estado']),
-                  'tipoCliente': Components.onIsEmpty(item['tipo_cliente']),
-                  'tipoAtendimento': Components.onIsEmpty(item['tipo_atendimento']),
-                  'tipoAcesso': Components.onIsEmpty(item['tipo_meio_acesso']),
-                  'tecnologia': Components.onIsEmpty(item['tecnologia']),
-                  'tipoProduto': Components.onIsEmpty(item['tipo_produto']),
-                  'velocidade': Components.onIsEmpty(item['velocidade']),
-                  'quantidadeAcesso': Components.onIsEmpty(item['quantidade_acesso']),
-                }));
-              };
-              InputSiciFileModel? prop = InputSiciFileModel.fromJson({
-                'razaoSocial': Components.onIsEmpty(mapResult['data']['Empresa']['responsavel']),
-                'telefoneFixo': Components.onIsEmpty(mapResult['data']['Empresa']['telefone_fixo']),
-                'telefoneMovel': Components.onIsEmpty(mapResult['data']['Empresa']['telefone_celular']),
-                'cnpj': Components.onIsEmpty(mapResult['data']['Empresa']['cnpj']),
-                'receitaBruta': Components.onIsEmpty(mapResult['data']['Financeiro']['bruta']),
-                'simples': Components.onIsEmpty(mapResult['data']['Financeiro']['simples']),
-                'icms': Components.onIsEmpty(mapResult['data']['Financeiro']['icms']),
-                'pis': Components.onIsEmpty(mapResult['data']['Financeiro']['pis']),
-                'cofins': Components.onIsEmpty(mapResult['data']['Financeiro']['cofins']),
-                'receitaLiquida': Components.onIsEmpty(mapResult['data']['Financeiro']['líquida']),
-                //'dadosEmServicos':dadosEmServicos,
-              });
+              List mapdadosEmServicos = [];
+              if(Components.onIsEmpty(mapResult['data']['Dici']) != '')
+                {
+                  for (var item in mapResult['data']['Dici']) {
+                    mapdadosEmServicos.add({
+                      'idLancamento': '',
+                      'idSiciFile': '',
+                      'codIbge': Components.onIsEmpty(item['cod_ibge']),
+                      'uf': Components.onIsEmpty(item['estado']),
+                      'tipoCliente': Components.onIsEmpty(item['tipo_cliente']),
+                      'tipoAtendimento': Components.onIsEmpty(item['tipo_atendimento']),
+                      'tipoAcesso': Components.onIsEmpty(item['tipo_meio_acesso']),
+                      'tecnologia': Components.onIsEmpty(item['tecnologia']),
+                      'tipoProduto': Components.onIsEmpty(item['tipo_produto']),
+                      'velocidade': Components.onIsEmpty(item['velocidade']),
+                      'quantidadeAcesso': Components.onIsEmpty(item['quantidade_acesso']),
+                    });
+                  }
+                }
               Navigator.push(
                   context,
                   CupertinoPageRoute(
                     builder: (context) =>
                         FormularioDiciFustView(map:{
-                          'formulario':prop,
+                          'formulario':InputSiciFileModel.fromJson({
+                            'razaoSocial': Components.onIsEmpty(mapResult['data']['Empresa']['responsavel']),
+                            'telefoneFixo': Components.onIsEmpty(mapResult['data']['Empresa']['telefone_fixo']),
+                            'telefoneMovel': Components.onIsEmpty(mapResult['data']['Empresa']['telefone_celular']),
+                            'cnpj': Components.onIsEmpty(mapResult['data']['Empresa']['cnpj']),
+                            'receitaBruta': Components.onIsEmpty(mapResult['data']['Financeiro']['bruta']),
+                            'simples': Components.onIsEmpty(mapResult['data']['Financeiro']['simples']),
+                            'icms': Components.onIsEmpty(mapResult['data']['Financeiro']['icms']),
+                            'pis': Components.onIsEmpty(mapResult['data']['Financeiro']['pis']),
+                            'cofins': Components.onIsEmpty(mapResult['data']['Financeiro']['cofins']),
+                            'receitaLiquida': Components.onIsEmpty(mapResult['data']['Financeiro']['líquida']),
+                            'dadosEmServicos':mapdadosEmServicos,
+                          }),
                           'isLancamentosComBaseMesAnterior':false,
                         }),
                   )).then((value) {

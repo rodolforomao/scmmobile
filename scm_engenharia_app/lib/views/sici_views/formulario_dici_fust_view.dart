@@ -259,6 +259,7 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> with Formula
     try {
       if(widget.map['formulario'] != null)
         {
+          print(jsonEncode(widget.map['formulario']));
           InputSiciFileModel? siciFileModel = widget.map['formulario'];
           onIncFormulario(siciFileModel);
         }
