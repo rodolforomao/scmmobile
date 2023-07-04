@@ -225,7 +225,7 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> with Formula
         //CNPJ:
         txtControllerCnpj.text = CNPJValidator.format(siciFileModel.cnpj!);
         //TELEFONE CELULAR:
-        txtControllerTelefoneMovel.text = siciFileModel.telefoneMovel! ;
+        txtControllerTelefoneMovel.text = siciFileModel.telefoneMovel!;
         // Receita Bruta
         txtControllerGrossRevenue.text = siciFileModel.receitaBruta!;
         // Valor Simples

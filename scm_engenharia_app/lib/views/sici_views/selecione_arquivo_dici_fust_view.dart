@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:realm/realm.dart';
 import '../../data/app_scm_engenharia_mobile_bll.dart';
 import '../../help/components.dart';
+import '../../models/input/input_sici_fust_form_model.dart';
 import '../../models/operation.dart';
 import '../../thema/app_thema.dart';
 import '../../web_service/servico_mobile_service.dart';
@@ -48,18 +49,44 @@ class SelecioneArquivoDiciFustState extends State<SelecioneArquivoDiciFustView> 
             if (resultRest.erro) {
               throw (resultRest.message!);
             } else {
-              Map<String, dynamic>  mapp = resultRest.result as Map<String, dynamic>;
-              Map<String, dynamic>  map = {
-                'formulario':{
-                  'razaoSocial': mapp
-                },
-                'isLancamentosComBaseMesAnterior':false,
+              Map<String, dynamic>  mapResult = resultRest.result as Map<String, dynamic>;
+              List<InputDadosEmServicosModel>? dadosEmServicos = <InputDadosEmServicosModel>[];
+              for (var item in mapResult['data']['Dici']) {
+                dadosEmServicos.add( InputDadosEmServicosModel.fromJson({
+                  'idLancamento': '',
+                  'idSiciFile': '',
+                  'codIbge': Components.onIsEmpty(item['cod_ibge']),
+                  'uf': Components.onIsEmpty(item['estado']),
+                  'tipoCliente': Components.onIsEmpty(item['tipo_cliente']),
+                  'tipoAtendimento': Components.onIsEmpty(item['tipo_atendimento']),
+                  'tipoAcesso': Components.onIsEmpty(item['tipo_meio_acesso']),
+                  'tecnologia': Components.onIsEmpty(item['tecnologia']),
+                  'tipoProduto': Components.onIsEmpty(item['tipo_produto']),
+                  'velocidade': Components.onIsEmpty(item['velocidade']),
+                  'quantidadeAcesso': Components.onIsEmpty(item['quantidade_acesso']),
+                }));
               };
+              InputSiciFileModel? prop = InputSiciFileModel.fromJson({
+                'razaoSocial': Components.onIsEmpty(mapResult['data']['Empresa']['responsavel']),
+                'telefoneFixo': Components.onIsEmpty(mapResult['data']['Empresa']['telefone_fixo']),
+                'telefoneMovel': Components.onIsEmpty(mapResult['data']['Empresa']['telefone_celular']),
+                'cnpj': Components.onIsEmpty(mapResult['data']['Empresa']['cnpj']),
+                'receitaBruta': Components.onIsEmpty(mapResult['data']['Financeiro']['bruta']),
+                'simples': Components.onIsEmpty(mapResult['data']['Financeiro']['simples']),
+                'icms': Components.onIsEmpty(mapResult['data']['Financeiro']['icms']),
+                'pis': Components.onIsEmpty(mapResult['data']['Financeiro']['pis']),
+                'cofins': Components.onIsEmpty(mapResult['data']['Financeiro']['cofins']),
+                'receitaLiquida': Components.onIsEmpty(mapResult['data']['Financeiro']['líquida']),
+                //'dadosEmServicos':dadosEmServicos,
+              });
               Navigator.push(
                   context,
                   CupertinoPageRoute(
                     builder: (context) =>
-                        FormularioDiciFustView(map:map),
+                        FormularioDiciFustView(map:{
+                          'formulario':prop,
+                          'isLancamentosComBaseMesAnterior':false,
+                        }),
                   )).then((value) {
               });
             }

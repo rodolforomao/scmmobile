@@ -1,4 +1,6 @@
 
+import '../../help/components.dart';
+
 class InputSiciFileModel {
   String? idFichaSiciApp;
   String? idRegistro;
@@ -52,29 +54,29 @@ class InputSiciFileModel {
   });
 
   InputSiciFileModel.fromJson(Map<String, dynamic> json) {
-    idFichaSiciApp = json['idFichaSiciApp'].toString();
-    idRegistro = json['idRegistro'].toString();
-    idEmpresa = json['idEmpresa'].toString();
-    id = json['id'].toString();
-    idUsuarioCliente = json['id_usuario_cliente'].toString();
-    idUsuarioConsultor = json['id_usuario_consultor'].toString();
-    periodoReferencia = json['periodoReferencia'].toString();
-    razaoSocial = json['razaoSocial'].toString();
-    telefoneFixo = json['telefoneFixo'].toString();
-    cnpj = json['cnpj'].toString();
-    telefoneMovel = json['telefoneMovel'].toString();
-    receitaBruta = json['receitaBruta'].toString();
-    idFinanceiro = json['idFinanceiro'].toString();
-    simples = json['simples'].toString();
-    simplesPorc = json['simplesPorc'].toString();
-    icms = json['icms'].toString();
-    icmsPorc = json['icmsPorc'].toString();
-    pis = json['pis'].toString();
-    pisPorc = json['pisPorc'].toString();
-    cofins = json['cofins'].toString();
-    cofinsPorc = json['cofinsPorc'].toString();
-    receitaLiquida = json['receitaLiquida'].toString();
-    observacoes = json['observacoes'].toString();
+    idFichaSiciApp = Components.onIsEmpty(json['idFichaSiciApp']);
+    idRegistro = Components.onIsEmpty(json['idRegistro']);
+    idEmpresa = Components.onIsEmpty(json['idEmpresa']);
+    id =  Components.onIsEmpty(json['id']);
+    idUsuarioCliente = Components.onIsEmpty(json['id_usuario_cliente']);
+    idUsuarioConsultor = Components.onIsEmpty(json['id_usuario_consultor']);
+    periodoReferencia = Components.onIsEmpty(json['periodoReferencia']);
+    razaoSocial = Components.onIsEmpty(json['razaoSocial']);
+    telefoneFixo = Components.onIsEmpty(json['telefoneFixo']);
+    cnpj = Components.onIsEmpty(json['cnpj']);
+    telefoneMovel = Components.onIsEmpty(json['telefoneMovel']);
+    receitaBruta = Components.onIsEmpty(json['receitaBruta']);
+    idFinanceiro = Components.onIsEmpty(json['idFinanceiro']);
+    simples = Components.onIsEmpty(json['simples']);
+    simplesPorc = Components.onIsEmpty(json['simplesPorc']);
+    icms = Components.onIsEmpty(json['icms']);
+    icmsPorc = Components.onIsEmpty(json['icmsPorc']);
+    pis = Components.onIsEmpty(json['pis']);
+    pisPorc = Components.onIsEmpty(json['pisPorc']);
+    cofins = Components.onIsEmpty(json['cofins']);
+    cofinsPorc = Components.onIsEmpty(json['cofinsPorc']);
+    receitaLiquida = Components.onIsEmpty(json['receitaLiquida']);
+    observacoes = Components.onIsEmpty(json['observacoes']);
     if (json['dadosEmServicos'] != null) {
       dadosEmServicos = <InputDadosEmServicosModel>[];
       json['dadosEmServicos'].forEach((v) {
