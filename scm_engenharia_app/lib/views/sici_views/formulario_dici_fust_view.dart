@@ -170,8 +170,8 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> with Formula
                               ),
                               //`Text` to display
                               onPressed: () {
-                                Navigator.pop(context);
-                                GlobalScaffold.instance.navigatorKey.currentState?.pop(true);
+                                //Navigator.pop(context);
+                                GlobalScaffold.instance.navigatorKey.currentState?.popUntil((route) => route.isFirst);
                               },
                             ),
                           ),
@@ -323,7 +323,6 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> with Formula
 
   @override
   Widget build(BuildContext context) {
-    double maxHeight = GlobalView.maxHeightAppBar(context, 55);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(55.0),
@@ -512,8 +511,7 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> with Formula
                                   color: Color(0xFF323232)),
                               onSubmitted: (term) {
                                 focusNodeReferencePeriod.unfocus();
-                                FocusScope.of(context)
-                                    .requestFocus(focusNodeSocialReason);
+                                FocusScope.of(context).requestFocus(focusNodeSocialReason);
                               },
                               decoration: const InputDecoration(
                                 labelText: 'Período referência:',
