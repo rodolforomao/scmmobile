@@ -147,6 +147,8 @@ class CertidoesState extends State<CertidoesView> {
             ),
           ),
         );
+      case TypeView.viewThereIsNoInternet:
+        // TODO: Handle this case.
     }
   }
 }

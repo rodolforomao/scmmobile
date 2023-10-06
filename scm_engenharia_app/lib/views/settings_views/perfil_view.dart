@@ -357,6 +357,8 @@ class PerfilState extends State<PerfilView> {
         );
       case TypeView.viewErrorInformation:
         return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
+      case TypeView.viewThereIsNoInternet:
+        // TODO: Handle this case.
     }
   }
 }

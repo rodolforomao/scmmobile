@@ -265,6 +265,8 @@ class SobreState extends State<SobreView> {
                       ),
                     ],
                   ),)),));
+      case TypeView.viewThereIsNoInternet:
+        // TODO: Handle this case.
     }
   }
 }

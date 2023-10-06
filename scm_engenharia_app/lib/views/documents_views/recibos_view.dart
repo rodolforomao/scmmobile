@@ -320,6 +320,8 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> {
                 },
               ) ,)
               ],),),),),);
+      case TypeView.viewThereIsNoInternet:
+        // TODO: Handle this case.
     }
   }
 }

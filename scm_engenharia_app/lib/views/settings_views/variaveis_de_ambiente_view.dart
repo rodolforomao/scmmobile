@@ -287,6 +287,8 @@ class VariaveisDeAmbienteState extends State<VariaveisDeAmbienteView> {
                     ),),
                   ],
                 ),)),));
+      case TypeView.viewThereIsNoInternet:
+        // TODO: Handle this case.
     }
   }
 }

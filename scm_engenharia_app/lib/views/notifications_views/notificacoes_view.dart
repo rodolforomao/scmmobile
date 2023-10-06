@@ -160,6 +160,8 @@ class NotificationsState extends State<NotificationsView> {
             ),
           ),
         );
+      case TypeView.viewThereIsNoInternet:
+        // TODO: Handle this case.
     }
   }
 }

@@ -680,6 +680,8 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
               ),
             ),),
           ),),);
+      case TypeView.viewThereIsNoInternet:
+        // TODO: Handle this case.
     }
   }
 }

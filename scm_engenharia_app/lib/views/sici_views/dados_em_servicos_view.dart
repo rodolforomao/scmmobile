@@ -729,6 +729,8 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
               ),),),
             ],
           ),),context);
+      case TypeView.viewThereIsNoInternet:
+        // TODO: Handle this case.
     }
   }
 }

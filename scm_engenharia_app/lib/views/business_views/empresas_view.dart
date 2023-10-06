@@ -137,6 +137,8 @@ class EmpresasState extends State<EmpresasView> {
             ),
           ),
         );
+      case TypeView.viewThereIsNoInternet:
+        // TODO: Handle this case.
     }
   }
 }

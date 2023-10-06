@@ -148,6 +148,8 @@ class AnalisesState extends State<AnalisesView> {
             ),
           ),
         );
+      case TypeView.viewThereIsNoInternet:
+        // TODO: Handle this case.
     }
   }
 }

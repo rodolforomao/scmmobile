@@ -149,6 +149,8 @@ class ContratosState extends State<ContratosView> {
             ),
           ),
         );
+      case TypeView.viewThereIsNoInternet:
+        // TODO: Handle this case.
     }
   }
 }

@@ -147,6 +147,8 @@ class RecibosState extends State<AlertasView> {
             ),
           ),
         );
+      case TypeView.viewThereIsNoInternet:
+        // TODO: Handle this case.
     }
   }
 }

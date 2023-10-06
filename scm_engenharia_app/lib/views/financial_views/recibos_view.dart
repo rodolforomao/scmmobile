@@ -137,6 +137,8 @@ class RecibosState extends State<RecibosView> {
             ),
           ),
         );
+      case TypeView.viewThereIsNoInternet:
+        // TODO: Handle this case.
     }
   }
 }
