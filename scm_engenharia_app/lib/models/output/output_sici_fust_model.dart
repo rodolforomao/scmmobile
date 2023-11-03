@@ -219,9 +219,9 @@ class OutputSiciFustFormModel {
     data['nome_consultor'] = this.nomeConsultor;
     data['envio_lancamento'] = this.envioLancamento;
     data['estado'] = this.estado;
-    if (this.dadosEmServicosFormModel != null) {
+    if (dadosEmServicosFormModel != null) {
       data['dadosEmServicos'] =
-          this.dadosEmServicosFormModel!.map((v) => v.toJson()).toList();
+          dadosEmServicosFormModel!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -265,17 +265,17 @@ class OutputDadosEmServicosFormModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id_lancamento'] = this.idLancamento;
-    data['cod_ibge'] = this.codIbge;
-    data['uf'] = this.uf;
-    data['tipo_cliente'] = this.tipoCliente;
-    data['tipo_atendimento'] = this.tipoAtendimento;
-    data['tipo_acesso'] = this.tipoAcesso;
-    data['tecnologia'] = this.tecnologia;
-    data['tipo_produto'] = this.tipoProduto;
-    data['velocidade'] = this.velocidade;
-    data['quantidade_acesso'] = this.quantidadeAcesso;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id_lancamento'] = idLancamento;
+    data['cod_ibge'] = codIbge;
+    data['uf'] = uf;
+    data['tipo_cliente'] = tipoCliente;
+    data['tipo_atendimento'] = tipoAtendimento;
+    data['tipo_acesso'] = tipoAcesso;
+    data['tecnologia'] = tecnologia;
+    data['tipo_produto'] = tipoProduto;
+    data['velocidade'] = velocidade;
+    data['quantidade_acesso'] = quantidadeAcesso;
     return data;
   }
 }

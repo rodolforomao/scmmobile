@@ -46,15 +46,15 @@ dependencies:
   animations: ^2.0.8              # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
   image_picker: ^1.0.4            # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
   path_provider: ^2.1.1           # ANDROID, IOS, LINUX, MACOS, WINDOWS
-  shared_preferences: ^2.2.1      # ANDROID, IOS, LINUX, MACOS, WEB
+  shared_preferences: ^2.2.2      # ANDROID, IOS, LINUX, MACOS, WEB
   webview_flutter: ^4.4.1         # ANDROID, IOS
-  url_launcher: ^6.1.14           # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  url_launcher: ^6.2.1            # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
   file_selector: ^1.0.1           # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
 
   #Plugin Flutter Community
-  connectivity_plus: ^4.0.2       # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
-  device_info_plus: ^9.0.3        # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
-  package_info_plus: ^4.1.0       # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  connectivity_plus: ^5.0.1       # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  device_info_plus: ^9.1.0        # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  package_info_plus: ^4.2.0       # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
   share_plus: ^7.1.0              # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
 
   #Plugin dart.dev
@@ -64,10 +64,10 @@ dependencies:
   html: ^0.15.4                   # ANDROID, IOS, LINUX,MACOS, WEB, WINDOWS
 
   #Plugin firebase
-  firebase_core: ^2.17.0           # ANDROID ,IOS, MACOS, WEB,
-  firebase_crashlytics: ^3.3.7     # ANDROID ,IOS, MACOS
-  firebase_messaging: ^14.6.9      # ANDROID,IOS, MACOS, WEB
-  firebase_analytics: ^10.5.1      # ANDROID,IOS,MACOS,WEB
+  firebase_core: ^2.20.0           # ANDROID ,IOS, MACOS, WEB,
+  firebase_crashlytics: ^3.4.2     # ANDROID ,IOS, MACOS
+  firebase_messaging: ^14.7.2      # ANDROID,IOS, MACOS, WEB
+  firebase_analytics: ^10.6.2      # ANDROID,IOS,MACOS,WEB
 
   # realm
   realm: ^1.5.0                   # ANDROID, IOS, LINUX, MACOS, WINDOWS
