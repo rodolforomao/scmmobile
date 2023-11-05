@@ -63,7 +63,7 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> {
         if (resultRest.erro) {
           throw (resultRest.message!);
         } else {
-          Components.downloadCompartilharArquivos(resultRest.result.toString(), 'recibo_', 'Recibo', 'Download','.pdf');
+          Components.downloadCompartilharArquivos(resultRest.result.toString(), 'recibo_', 'Recibo', 'Download','.pdf',context);
         }
       }
     } catch (error) {
@@ -115,6 +115,7 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> {
     super.dispose();
   }
 
+  @override
   Widget build(BuildContext context) {
     return  Scaffold(
       appBar: PreferredSize(

@@ -1,6 +1,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
 import '../../data/app_scm_engenharia_mobile_bll.dart';
 import '../../data/tb_form_sici_fust.dart';
 import '../../models/operation.dart';
@@ -13,13 +14,14 @@ import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
 import 'formulario_dici_fust_view.dart';
 
+
 class ListFormularioSiciFustView extends StatefulWidget {
   const ListFormularioSiciFustView({Key? key}) : super(key: key);
   @override
   ListFormularioSiciFustState createState() => ListFormularioSiciFustState();
 }
 
-class ListFormularioSiciFustState extends State<ListFormularioSiciFustView>  with ListFormularioSiciFustViewModel{
+class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> with ListFormularioSiciFustViewModel {
 
 
   onRestWeb() async {
@@ -36,16 +38,19 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView>  wit
           List<OutputSiciFustFormModel> respNewSiciFustFormList = [];
           if (respSiciFustFormList.isNotEmpty) {
             for (var prop in respSiciFustFormList) {
-              if (siciFileModelAllList.where((f) => f.id!.startsWith(prop.id!)).isEmpty)
+              if (siciFileModelAllList.where((f) => f.id!.startsWith(prop.id!)).isNotEmpty)
+              {
+                // A ficha  ja esta salva no dispositivo
+              }
+              else
               {
                 respNewSiciFustFormList.add(prop);
-                // A ficha  ja esta salva no dispositivo
               }
             }
             List<InputSiciFileModel>  siciFileModelAllResp = await  ParseRespJsonToView.parseSiciFustFormModelToSiciFileList(respNewSiciFustFormList);
             setState(()  {
               siciFileModelAllList.addAll(siciFileModelAllResp);
-              siciFileModelUpdateList.addAll(siciFileModelAllResp);
+              //siciFileModelUpdateList.addAll(siciFileModelAllResp);
               statusView = TypeView.viewRenderInformation;
             });
           }
@@ -65,25 +70,26 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView>  wit
       } else if (respUser.result != null) {
         List<TbFormSiciFust> res =  respUser.result as  List<TbFormSiciFust>;
         siciFileModelAllList = await  ParseRespJsonToView.parseDbLOcalSiciFustFormModelToSiciFileList(res);
+        siciFileModelUpdateList = siciFileModelAllList;
         if(siciFileModelAllList.isEmpty)
         {
           throw ('Não é possível converter as informações');
         }
         setState(() {statusView = TypeView.viewRenderInformation;});
+        onRestWeb();
       } else {
         setState(() {
           statusView = TypeView.viewErrorInformation;
-          erroInformacao = 'Não há registros salvos no celular';
+          GlobalScaffold.erroInformacao = 'Não há registros salvos no celular';
         });
-
+        onRestWeb();
       }
-    } catch (error) {
+    } catch (error, s) {
       setState(() {
         statusView = TypeView.viewErrorInformation;
-        erroInformacao = error.toString();
+        GlobalScaffold.erroInformacao = error.toString();
       });
     }
-    onRestWeb();
   }
 
   onUpload(InputSiciFileModel siciFileModel) async {
@@ -100,7 +106,9 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView>  wit
           if (respUser.erro || respUser.result == null) {
             throw respUser.message!;
           } else {
-            setState(() =>   siciFileModelAllList.remove(siciFileModel));
+            setState(() {
+              siciFileModelAllList.remove(siciFileModel);
+            });
             GlobalScaffold.instance.onToastSuccess(resultRest.message!);
             onRestWeb();
           }
@@ -111,13 +119,148 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView>  wit
     }
   }
 
+  selectPopupMenuButton() => PopupMenuButton(
+        icon: const Icon(Icons.filter_list, color: Color(0xFFFFFFFF), size: 25),
+        onSelected: (value) async {
+          try {
+            setState(() {
+              if(value == 1)
+              {
+                siciFileModelAllList = siciFileModelUpdateList.where((element) => element.idFichaSiciApp!.isNotEmpty).toList();
+                if(siciFileModelAllList.isEmpty)
+                {
+                  statusView = TypeView.viewErrorInformation;
+                  GlobalScaffold.erroInformacao = 'Não a registro para esta solicitação';
+                }
+                else  {
+                  statusView = TypeView.viewRenderInformation;
+                }
+              }
+              else if(value == 2)
+              {
+                siciFileModelAllList = siciFileModelUpdateList.where((element) => element.idFichaSiciApp!.isEmpty).toList();
+                if(siciFileModelAllList.isEmpty)
+                {
+                  statusView = TypeView.viewErrorInformation;
+                  GlobalScaffold.erroInformacao = 'Não a registro para esta solicitação';
+                }
+                else  {
+                  statusView = TypeView.viewRenderInformation;
+                }
+              }
+              else
+              {
+                siciFileModelAllList = siciFileModelUpdateList.toList();
+                if(siciFileModelAllList.isEmpty)
+                {
+                  statusView = TypeView.viewErrorInformation;
+                  GlobalScaffold.erroInformacao = 'Não a registro para esta solicitação';
+                }
+                else  {
+                  statusView = TypeView.viewRenderInformation;
+                }
+              }
+            });
+          } catch (error) {
+            GlobalScaffold.instance.onToastError(error.toString());
+          }
+        },
+        itemBuilder: (cxt) =>
+        [
+          PopupMenuItem(
+            value: 1,
+            child: Container(
+              width: 180,
+              alignment: Alignment.center,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: const <Widget>[
+                  Icon(Icons.file_upload_outlined,
+                      size: 23, color: Color(0xFF424242)),
+                  SizedBox(width: 10.0),
+                  Expanded(
+                    child: Text(
+                      'Upload',
+                      style: TextStyle(
+                          fontSize: 16.0,
+                          color: Color(0xFF424242),
+                          fontFamily: "Poppins-Medium"),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          PopupMenuItem(
+            value: 2,
+            child: Container(
+              alignment: Alignment.center,
+              width: 180,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: const <Widget>[
+                  Icon(Icons.file_download_outlined,
+                      size: 23, color: Color(0xFF424242)),
+                  SizedBox(width: 10.0),
+                  Expanded(
+                    child: Text(
+                      'Download',
+                      textAlign: TextAlign.start,
+                      softWrap: false,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          fontSize: 16.0,
+                          color: Color(0xFF424242),
+                          fontFamily: "Poppins-Medium"),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          PopupMenuItem(
+            value: 2,
+            child: Container(
+              alignment: Alignment.center,
+              width: 180,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: const <Widget>[
+                  Icon(Icons.file_open_outlined,
+                      size: 23, color: Color(0xFF424242)),
+                  SizedBox(width: 10.0),
+                  Expanded(
+                    child: Text(
+                      'Todos',
+                      textAlign: TextAlign.start,
+                      softWrap: false,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      );
+
   onToview(InputSiciFileModel? prop) {
     try {
+      Map<String, dynamic>  map = {
+        'formulario':prop,
+        'isLancamentosComBaseMesAnterior':false,
+      };
       Navigator.push(
           context,
           CupertinoPageRoute(
             builder: (context) =>
-                FormularioDiciFustView(siciFileModel:prop),
+                FormularioDiciFustView(map:map),
           )).then((value) {
         onRestDb();
       });
@@ -130,20 +273,10 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView>  wit
   void initState() {
     super.initState();
     onRestDb();
+    Future.delayed(Duration.zero, () {
+
+    });
   }
-
-  @override
-  void dispose() {
-    try {
-
-    } catch (exception) {
-      print("exception.toString()");
-      print(exception.toString());
-    } finally {
-      super.dispose();
-    }
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -157,26 +290,23 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView>  wit
             decoration: StylesThemas.boxDecorationAppBar,
           ),
           elevation: 0.0,
-          title: !isSearching
+        title: !isSearching
             ? const Text('Dici/Fust Enviados - Período')
             : Container(
-          constraints:  const BoxConstraints(maxWidth: 1000
+          constraints:  const BoxConstraints(
+              maxWidth: 1000
           ),child: TextField(
           autofocus: false,
           keyboardType: TextInputType.text,
           textInputAction: TextInputAction.done,
-          textAlignVertical: TextAlignVertical.center,
           onChanged: (String value) async {
             if (value.isNotEmpty) {
               setState(() {
-                //siciFileModelAllList.retainWhere((countryone){
-               //   return countryone.razaoSocial!.toLowerCase().contains(value.toLowerCase());
-               // });
                 siciFileModelAllList = siciFileModelUpdateList.where((element) => element.razaoSocial!.toLowerCase().contains(value.toLowerCase())).toList();
                 if(siciFileModelAllList.isEmpty)
                 {
                   statusView = TypeView.viewErrorInformation;
-                  erroInformacao = 'Não foi encontrado nenhum registro para o(s) filtro(s) informado(s)!';
+                  GlobalScaffold.erroInformacao = 'Não a registro para esta solicitação';
                 }
                 else {
                   statusView = TypeView.viewRenderInformation;
@@ -184,7 +314,9 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView>  wit
               });
             } else if (value.isEmpty) {
               FocusScope.of(context).requestFocus(FocusNode());
-              setState(() =>  siciFileModelAllList = siciFileModelUpdateList);
+              setState(() {
+                //listaProcarsatStateModelo = listaSearching.toList();
+              });
             }
           },
           style: const TextStyle(
@@ -197,7 +329,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView>  wit
             fillColor: const Color(0xff70ffffff),
             hintStyle: const TextStyle(fontSize: 14.0, color: Color(0xff80ffffff)),
             hintText: 'Razão social',
-            contentPadding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 14.0),
+            contentPadding: const EdgeInsets.fromLTRB(10.0, 9.0, 10.0, 11.0),
             focusedBorder: OutlineInputBorder(
               borderSide:
               const BorderSide(color: Colors.white, width: 0.5),
@@ -228,10 +360,10 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView>  wit
             ),
           ),
         ),),
-            actions: <Widget>[
-                if(!isSearching)...
-                [
-                   IconButton(
+        actions: <Widget>[
+          if(!isSearching)...
+           [
+             IconButton(
                icon: const Icon(
                  Icons.search,
                  size: 23,
@@ -242,7 +374,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView>  wit
                  });
                },
              )
-                ]
+           ]
         ],
       ),
       ),
@@ -255,7 +387,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView>  wit
       case TypeView.viewLoading:
         return GlobalView.viewPerformingSearch(maxHeight,context);
       case TypeView.viewErrorInformation:
-        return GlobalView.viewErrorInformation(maxHeight,erroInformacao,context);
+        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
       case TypeView.viewRenderInformation:
         return  Align( alignment: Alignment.topCenter,child: Container(
           alignment: Alignment.topCenter,
@@ -341,10 +473,10 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView>  wit
                               onTap: () async {
                                 onUpload(siciFileModelAllList[index]);
                               },
-                              child: Column(
+                              child: const Column(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: const <Widget>[
+                                children: <Widget>[
                                   Icon(Icons.file_upload_outlined, size: 25, color: Color(0xFF000000)),
                                 ],
                               ),
@@ -420,9 +552,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView>  wit
                                                                 throw respUser.message!;
                                                               } else {
                                                                 setState(() {
-                                                                  print(index);
                                                                   siciFileModelAllList.remove(siciFileModelAllList[index]);
-                                                                  //siciFileModelUpdateList.remove(siciFileModelUpdateList[index]);
                                                                 });
                                                                 Navigator.pop(context);
                                                                 GlobalScaffold.instance.onToastSuccess(respUser.message!);
@@ -494,10 +624,10 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView>  wit
                               onTap: () async {
                                 onToview(siciFileModelAllList[index]);
                               },
-                              child: Column(
+                              child: const Column(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: const <Widget>[
+                                children: <Widget>[
                                   Icon(Icons.file_download_outlined,
                                       size: 20, color: Color(0xFF000000)),
                                 ],
@@ -513,10 +643,10 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView>  wit
                             onTap: () {
                               onToview(siciFileModelAllList[index]);
                             },
-                            child: const Column(
+                            child: Column(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
+                              children: const <Widget>[
                                 Icon(Icons.visibility_outlined, size: 20, color: Color(0xFF000000)),
                               ],
                             ),
@@ -537,9 +667,9 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView>  wit
     }
   }
 }
+
 mixin class ListFormularioSiciFustViewModel {
 
-  String erroInformacao = 'Ops! Algo de errado aconteceu? Não se preocupe, vou te ajudar a resolver!';
   List<InputSiciFileModel> siciFileModelAllList = [];
   List<InputSiciFileModel> siciFileModelUpdateList = [];
 
@@ -547,4 +677,5 @@ mixin class ListFormularioSiciFustViewModel {
   TypeView statusView = TypeView.viewLoading;
   final txtSocialReason = TextEditingController();
   late bool isSearching = false;
+
 }

@@ -98,6 +98,7 @@ class ContratosState extends State<ContratosView> {
     subscription.cancel();
   }
 
+  @override
   Widget build(BuildContext context) {
     return  Scaffold(
       appBar: PreferredSize(
@@ -132,11 +133,11 @@ class ContratosState extends State<ContratosView> {
             constraints: BoxConstraints(
               minHeight: MediaQuery.of(context).size.height,
             ),
-            child: Column(
+            child: const Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: const <Widget>[
+              children: <Widget>[
                 Text(
                   "Pagina em construção",
                   textAlign: TextAlign.center,

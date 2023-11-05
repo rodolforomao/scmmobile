@@ -54,13 +54,13 @@ class AppThema {
             color: Color(0xff000000),
             fontFamily: 'Poppins-Medium'),
         bodyText1: TextStyle(
-         fontFamily: 'Poppins-Light',
-         fontSize: 13.0,
-       ),
+          fontFamily: 'Poppins-Light',
+          fontSize: 13.0,
+        ),
       ),
       listTileTheme: const ListTileThemeData(
         selectedColor:Color(0xffef7d00),
-          contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+        contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
       ),
       inputDecorationTheme: const InputDecorationTheme(
         contentPadding:  EdgeInsets.fromLTRB(10, 10, 10, 4),
@@ -146,7 +146,7 @@ class AppThema {
             border: Border.all(color: Color(0xff303e7ec1), width: 1.0)),
         dividerThickness: 1,
         headingRowColor:
-            MaterialStateColor.resolveWith((states) => Color(0xff303e7ec1)),
+        MaterialStateColor.resolveWith((states) => Color(0xff303e7ec1)),
         horizontalMargin: 30,
         dataRowHeight: 50,
         columnSpacing: 20.0,
@@ -272,17 +272,87 @@ class StylesThemas {
   static TextStyle textStyleMenu(double fontSize) {
     return AppThema.themeNotifierState.value.mode == ThemeMode.light
         ? TextStyle(
-            fontFamily: 'Myriad-Pro-Light',
-            fontWeight: FontWeight.bold,
-            fontSize: fontSize,
-            color: const Color(0xff404040),
-          )
+      fontFamily: 'Myriad-Pro-Light',
+      fontWeight: FontWeight.bold,
+      fontSize: fontSize,
+      color: const Color(0xff404040),
+    )
         : TextStyle(
-            fontWeight: FontWeight.w500,
-            fontFamily: 'Myriad-Pro-Light',
-            color: const Color(0xffFFFFFF),
-            fontSize: fontSize,
-          );
+      fontWeight: FontWeight.w500,
+      fontFamily: 'Myriad-Pro-Light',
+      color: const Color(0xffFFFFFF),
+      fontSize: fontSize,
+    );
+  }
+
+  static TextStyle textStyleTextTitle() {
+    return AppThema.themeNotifierState.value.mode == ThemeMode.light ? const TextStyle(
+      fontFamily: 'Montserrat-Medium',
+      fontWeight: FontWeight.w300,
+      color: Color(0xff3F4143),
+    )
+        : const TextStyle(
+      fontWeight: FontWeight.w300,
+      fontFamily: 'Montserrat-Medium',
+      color: Color(0xffFFFFFF),
+    );
+  }
+
+  static TextStyle textStyleTextSubtitle() {
+    return AppThema.themeNotifierState.value.mode == ThemeMode.light
+        ? const TextStyle(
+      fontFamily: 'Myriad-Pro-SemiExt',
+      fontWeight: FontWeight.w300,
+      color: Color(0xff404040),
+    )
+        : const TextStyle(
+      fontWeight: FontWeight.w300,
+      fontFamily: 'Myriad-Pro-SemiExt',
+      color: Color(0xffFFFFFF),
+    );
+  }
+
+  static TextStyle textStyleTextSpanTitle() {
+    return AppThema.themeNotifierState.value.mode == ThemeMode.light ? const TextStyle(
+      fontFamily: 'Montserrat-Medium',
+      fontWeight: FontWeight.w300,
+      color: Color(0xff3F4143),
+    )
+        : const TextStyle(
+      fontWeight: FontWeight.w300,
+      fontFamily: 'Montserrat-Medium',
+      color: Color(0xffFFFFFF),
+    );
+  }
+
+  static TextStyle textStyleTextSpanSubtitle() {
+    return AppThema.themeNotifierState.value.mode == ThemeMode.light
+        ? const TextStyle(
+      fontFamily: 'Myriad-Pro-SemiExt',
+      height: 1.6, //You can set your custom height here
+      fontWeight: FontWeight.w300,
+      color: Color(0xFF545454),
+    )
+        : const TextStyle(
+      fontWeight: FontWeight.w300,
+      fontFamily: 'Myriad-Pro-SemiExt',
+      color: Color(0xffFFFFFF),
+    );
+  }
+
+
+  static TextStyle textStyleTextField() {
+    return AppThema.themeNotifierState.value.mode == ThemeMode.light
+        ? const TextStyle(
+        fontWeight: FontWeight.w400,
+        fontSize: 17.0,
+        color:  Color(0xff3a3a3a),
+        fontFamily: 'MyriadArabic-Regular_0')
+        : const TextStyle(
+      fontWeight: FontWeight.w500,
+      fontFamily: 'Myriad-Pro-SemiExt',
+      color: Color(0xffFFFFFF),
+    );
   }
 }
 

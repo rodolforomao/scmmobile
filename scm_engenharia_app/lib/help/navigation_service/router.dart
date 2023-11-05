@@ -12,6 +12,8 @@ import '../../views/settings_views/configuracoes_view.dart';
 import '../../views/settings_views/perfil_view.dart';
 import '../../views/settings_views/sobre_view.dart';
 import '../../views/settings_views/variaveis_de_ambiente_view.dart';
+import '../../views/sici_views/list_arquivos_dici_fust_view.dart';
+import '../../views/sici_views/selecione_arquivo_dici_fust_view.dart';
 import '../../views/sici_views/formulario_dici_fust_view.dart';
 import '../../views/sici_views/list_formulario_dici_fust_view.dart';
 import '../../views/splash_screen_view.dart';
@@ -26,7 +28,6 @@ import '../../views/user_views/profile_view.dart';
 
 
 Route<dynamic> generateRoute(RouteSettings settings) {
-
   String? routesName = settings.name;
   Map<String, dynamic>  map = {};
   if(settings.arguments != null)
@@ -64,9 +65,13 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => const RecibosView());
   //Formulario Sici
     case routes.formularioSiciFustRoute:
-      return MaterialPageRoute(builder: (context) => FormularioDiciFustView(siciFileModel: null,));
+      return MaterialPageRoute(builder: (context) => FormularioDiciFustView(map: map));
     case routes.lancamentoSiciFustRoute:
       return MaterialPageRoute(builder: (context) => const ListFormularioSiciFustView());
+    case routes.listaArquivosDiciRoute:
+      return MaterialPageRoute(builder: (context) => const ListArquivosDiciFustView());
+    case routes.selecioneArquivosDiciRoute:
+      return MaterialPageRoute(builder: (context) => const SelecioneArquivoDiciFustView());
   //Documentos
     case routes.certidoesRoute:
       return MaterialPageRoute(builder: (context) => const CertidoesView());

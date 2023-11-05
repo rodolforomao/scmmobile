@@ -47,7 +47,7 @@ dependencies:
   image_picker: ^1.0.4            # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
   path_provider: ^2.1.1           # ANDROID, IOS, LINUX, MACOS, WINDOWS
   shared_preferences: ^2.2.2      # ANDROID, IOS, LINUX, MACOS, WEB
-  webview_flutter: ^4.4.1         # ANDROID, IOS
+  webview_flutter: ^4.4.2         # ANDROID, IOS
   url_launcher: ^6.2.1            # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
   file_selector: ^1.0.1           # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
 
@@ -64,10 +64,10 @@ dependencies:
   html: ^0.15.4                   # ANDROID, IOS, LINUX,MACOS, WEB, WINDOWS
 
   #Plugin firebase
-  firebase_core: ^2.20.0           # ANDROID ,IOS, MACOS, WEB,
-  firebase_crashlytics: ^3.4.2     # ANDROID ,IOS, MACOS
-  firebase_messaging: ^14.7.2      # ANDROID,IOS, MACOS, WEB
-  firebase_analytics: ^10.6.2      # ANDROID,IOS,MACOS,WEB
+  firebase_core: ^2.21.0           # ANDROID ,IOS, MACOS, WEB,
+  firebase_crashlytics: ^3.4.3     # ANDROID ,IOS, MACOS
+  firebase_messaging: ^14.7.3      # ANDROID,IOS, MACOS, WEB
+  firebase_analytics: ^10.6.3      # ANDROID,IOS,MACOS,WEB
 
   # realm
   realm: ^1.5.0                   # ANDROID, IOS, LINUX, MACOS, WINDOWS
@@ -78,7 +78,7 @@ dependencies:
   #Plugin outros
   geolocator: ^10.1.0               # ANDROID,IOS,MACOS,WEB,WINDOWS
   jaguar_jwt: ^3.0.0
-
+  file_picker: ^6.1.1
 
 dev_dependencies:
   flutter_test:

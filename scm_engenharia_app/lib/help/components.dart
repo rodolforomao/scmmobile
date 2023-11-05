@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:file/local.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:file_selector/file_selector.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -14,6 +16,7 @@ import 'package:intl/intl.dart';
 import 'package:jaguar_jwt/jaguar_jwt.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
 import '../data/app_scm_engenharia_mobile_bll.dart';
 import '../models/info_app.dart';
@@ -51,6 +54,50 @@ class Components {
     }
   }
 
+  static onApenasNumeros(String txt) {
+    try {
+      if (txt.toString().isEmpty || txt == null || txt == "null") {
+        late String resultado;
+        for (int i = 0; i < txt.length; i++) {
+          if (txt[i].toString() == "." || txt[i].toString() == ",") {
+            resultado += txt[i].toString();
+          }
+          //  if (char.IsNumber(Txt, i))
+          // {
+          //   resultado += Txt.substring(i, 1);
+          // }
+        }
+      } else {
+        return txt.toString();
+      }
+    } catch (ex) {
+      return '';
+    }
+  }
+
+  static String onIsEmpty( txt) {
+    try {
+      if (txt.toString().isEmpty || txt == null || txt == 'null') {
+        return '';
+      } else {
+        return txt. toString();
+      }
+    } catch (error) {
+      return '';
+    }
+  }
+
+  static String onFormatarData(txt) {
+    try {
+      if (txt.toString().isEmpty || txt == null) {
+        return '';
+      } else {
+        return  DateFormat('dd-MM-yyyy').format(DateTime.parse(txt));
+      }
+    } catch (error) {
+      return '';
+    }
+  }
 
   static String? dateFormatDDMMYYYY(String date) {
     try {
@@ -311,7 +358,7 @@ class Components {
     }
   }
 
-  static downloadCompartilharArquivos(String? arquivo,String nomeArquivo,String titulo,String tipo,String tipoArquivo) async {
+  static downloadCompartilharArquivos(String? arquivo,String nomeArquivo,String titulo,String tipo,String tipoArquivo , context) async {
     final bytes = utf8.encode(arquivo!);
     String arquivoNome = nomeArquivo + DateTime.now().millisecondsSinceEpoch.toString();
     switch (tipo) {
@@ -322,22 +369,31 @@ class Components {
           }
           else
           {
-            String dir = ""; // (await getApplicationDocumentsDirectory()).path;
+            final Directory? downloadsDir = await getDownloadsDirectory();
+            String downloadsPath = downloadsDir!.path;
              if (Platform.isAndroid) {
-               dir = "/storage/emulated/0/Download";
+               downloadsPath = "/storage/emulated/0/Download";
             }
-            await Directory(dir).create(recursive: true);
-            File files = File("$dir/$arquivoNome$tipoArquivo");
+            await Directory(downloadsPath).create(recursive: true);
+            File files = File("$downloadsPath/$arquivoNome$tipoArquivo");
             await files.parent.create(recursive: true);
-
             files.writeAsBytes(bytes, mode: FileMode.write, flush: true).then((File file) async {
-              print("https://"+file.path);
-              print(file.uri);
-
-
-              var fs = const LocalFileSystem();
-               var sdsd = fs.file(file.uri).readAsBytes().toString();
-              GlobalScaffold.instance.onToastRedirectUriApp('Download concluído com sucesso.\r\n$dir',Uri.parse("https://"+file.path));
+          if(Platform.isAndroid || Platform.isIOS)
+           {
+             await Share.shareXFiles(
+               [XFile(file.path)],
+               text: titulo,
+               subject: 'Screenshot + Share',
+               sharePositionOrigin: Rect.fromCircle(
+                 radius: MediaQuery.of(context).size.width * 0.25,
+                 center: const Offset(0, 0),
+               ),
+             );
+           }
+          else
+            {
+              //GlobalScaffold.instance.onToastRedirectUriApp('Download concluído com sucesso.\r\n$downloadsPath',Uri.parse(file.path));
+            }
             }).whenComplete(() => null);
 
           }
@@ -348,6 +404,28 @@ class Components {
 
         }
         break;
+    }
+  }
+
+  static Future<Map<String, dynamic>> openDiciFile() async {
+    Uint8List? bytes;
+    Map<String, dynamic> map = {};
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles();
+      if (result != null) {
+        File file = File(result.files.first.path!);
+        map = {
+          'bytes': file.readAsBytes(),
+          'path': result.files.first.path!,
+          'name':result.files.first.name,
+        };
+
+      } else {
+        return {};
+      }
+      return map;
+    } catch (error) {
+      throw (error.toString());
     }
   }
 }

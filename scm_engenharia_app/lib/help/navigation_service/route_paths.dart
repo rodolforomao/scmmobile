@@ -29,6 +29,8 @@ const String recibosDocumentosRoute = 'recibos-documentos';
 const String formularioSiciFustRoute = 'formulario-sici-fust';
 const String lancamentoSiciFustRoute = 'lancamento-sici-fust';
 const String lancamentosRoute = 'lancamentos';
+const String listaArquivosDiciRoute = 'lista-arquivos-dici';
+const String selecioneArquivosDiciRoute = 'selecione-arquivos-dici';
 //Notificações ------------------------------------------------------------------------------------------------------------
 const String notificacoesRoute = 'notificações';
 const String notificacaoRoute = 'notificação';
