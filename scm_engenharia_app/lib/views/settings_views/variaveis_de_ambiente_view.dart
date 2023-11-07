@@ -5,6 +5,7 @@ import 'package:realm/realm.dart';
 import '../../data/app_scm_engenharia_mobile_bll.dart';
 import '../../data/tb_environment_variable.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
+import '../../help/parameter_result_view.dart';
 import '../../models/operation.dart';
 import '../../thema/app_thema.dart';
 import '../../web_service/servico_mobile_service.dart';
@@ -17,7 +18,7 @@ class VariaveisDeAmbienteView extends StatefulWidget {
   VariaveisDeAmbienteState createState() => VariaveisDeAmbienteState();
 }
 
-class VariaveisDeAmbienteState extends State<VariaveisDeAmbienteView> {
+class VariaveisDeAmbienteState extends State<VariaveisDeAmbienteView> with ParameterResultViewEvent {
 
   TypeView statusView = TypeView.viewLoading;
   TbEnvironmntVariable? inputEnvironmntVariable;
@@ -50,7 +51,7 @@ class VariaveisDeAmbienteState extends State<VariaveisDeAmbienteView> {
             setState(() {
               inputEnvironmntVariable = respFormSiciFust.result as TbEnvironmntVariable;
               statusView = TypeView.viewRenderInformation;
-              GlobalScaffold.erroInformacao = 'Vamos atualizar as variáveis de ambiente para que o aplicativo funcione corretamente.';
+              erroInformation = 'Vamos atualizar as variáveis de ambiente para que o aplicativo funcione corretamente.';
             });
             showDialog(
               context: GlobalScaffold.instance.navigatorKey.currentContext!,
@@ -146,19 +147,19 @@ class VariaveisDeAmbienteState extends State<VariaveisDeAmbienteView> {
       } else if (respEnvironmentVariable.result == null) {
         setState(() {
           statusView = TypeView.viewRenderInformation;
-          GlobalScaffold.erroInformacao = respEnvironmentVariable.message!;
+          erroInformation = respEnvironmentVariable.message!;
         });
       } else {
         setState(() {
           inputEnvironmntVariable = respEnvironmentVariable.result as TbEnvironmntVariable;
           statusView = TypeView.viewRenderInformation;
-          GlobalScaffold.erroInformacao = respEnvironmentVariable.message!;
+          erroInformation = respEnvironmentVariable.message!;
         });
       }
     } catch (error) {
       setState(() {
         statusView = TypeView.viewErrorInformation;
-        GlobalScaffold.erroInformacao = error.toString();
+        erroInformation = error.toString();
       });
     }
   }
@@ -167,7 +168,7 @@ class VariaveisDeAmbienteState extends State<VariaveisDeAmbienteView> {
   void initState() {
     super.initState();
     setState(() {
-      GlobalScaffold.erroInformacao = 'Vamos atualizar as variáveis de ambiente para que o aplicativo funcione corretamente.';
+      erroInformation = 'Vamos atualizar as variáveis de ambiente para que o aplicativo funcione corretamente.';
     });
 
     onInc();
@@ -205,7 +206,7 @@ class VariaveisDeAmbienteState extends State<VariaveisDeAmbienteView> {
       case TypeView.viewLoading:
         return GlobalView.viewPerformingSearch(maxHeight,context);
       case TypeView.viewErrorInformation:
-        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
+        return GlobalView.viewErrorInformation(maxHeight,erroInformation,context);
       case TypeView.viewRenderInformation:
         return SingleChildScrollView(
           padding: const EdgeInsets.only(top: 10.0, right: 10.0, left: 10.0, bottom: 10.0),
@@ -254,7 +255,7 @@ class VariaveisDeAmbienteState extends State<VariaveisDeAmbienteView> {
                             color: Colors.black,
                           ),
                         ),),
-                         Padding(padding: const EdgeInsets.fromLTRB(20.0, 25.0, 20.0, 10.0),child:Text(GlobalScaffold.erroInformacao,
+                         Padding(padding: const EdgeInsets.fromLTRB(20.0, 25.0, 20.0, 10.0),child:Text(erroInformation,
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             decoration: TextDecoration.none,

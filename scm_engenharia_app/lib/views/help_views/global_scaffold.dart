@@ -37,7 +37,7 @@ class GlobalScaffold {
 
   static  Map<String, dynamic> map = {};
   int selectedPageBottomNavigationIndex = 0;
-  static String erroInformacao = 'Ops! Algo de errado aconteceu? Não se preocupe, vou te ajudar a resolver!';
+
   static Position? position;
 
   onToastRedirectUriApp(String mensagem ,Uri url) {

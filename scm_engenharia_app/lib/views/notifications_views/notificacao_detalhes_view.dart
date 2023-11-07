@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
+import '../../help/parameter_result_view.dart';
 import '../../models/operation.dart';
 import '../../models/notification_models/notification_model.dart';
 import '../../thema/app_thema.dart';
@@ -18,7 +19,7 @@ class NotificacaoDetalhesView extends StatefulWidget {
   NotificationState createState() => NotificationState();
 }
 
-class NotificationState extends State<NotificacaoDetalhesView> {
+class NotificationState extends State<NotificacaoDetalhesView> with ParameterResultViewEvent {
 
   NotificationScmEngineering notificationScmEngineering = NotificationScmEngineering();
   late StreamSubscription<ConnectivityResult> subscription;
@@ -55,7 +56,7 @@ class NotificationState extends State<NotificacaoDetalhesView> {
           OnAlertError(error.toString());
         } else {
           statusView = TypeView.viewErrorInformation;
-          GlobalScaffold.erroInformacao = error.toString();
+          erroInformation = error.toString();
         }
       });
     }
@@ -132,7 +133,7 @@ class NotificationState extends State<NotificacaoDetalhesView> {
       case TypeView.viewLoading:
         return GlobalView.viewPerformingSearch(maxHeight,context);
       case TypeView.viewErrorInformation:
-        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
+        return GlobalView.viewErrorInformation(maxHeight,erroInformation,context);
       case TypeView.viewRenderInformation:
         // TODO: Handle this case.
       case TypeView.viewThereIsNoInternet:

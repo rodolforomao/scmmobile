@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../help/components.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
+import '../../help/parameter_result_view.dart';
 import '../../models/info_app.dart';
 import '../../thema/app_thema.dart';
 import '../help_views/global_scaffold.dart';
@@ -14,7 +15,7 @@ class SobreView extends StatefulWidget {
   SobreState createState() => SobreState();
 }
 
-class SobreState extends State<SobreView> {
+class SobreState extends State<SobreView> with ParameterResultViewEvent {
 
   TypeView statusView = TypeView.viewLoading;
   InfoApp infoApp = InfoApp();
@@ -90,7 +91,7 @@ class SobreState extends State<SobreView> {
       case TypeView.viewLoading:
         return GlobalView.viewPerformingSearch(maxHeight,context);
       case TypeView.viewErrorInformation:
-        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
+        return GlobalView.viewErrorInformation(maxHeight,erroInformation,context);
       case TypeView.viewRenderInformation:
         return SingleChildScrollView(
             padding: const EdgeInsets.only(top: 10.0, right: 10.0, left: 10.0, bottom: 10.0),

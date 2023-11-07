@@ -2,6 +2,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../help/formatter/cpf_input_formatter.dart';
+import '../../help/parameter_result_view.dart';
 import '../../help/responsive.dart';
 import '../../models/operation.dart';
 import '../../thema/app_thema.dart';
@@ -18,7 +19,7 @@ class CancelarAcessoView extends StatefulWidget {
   CancelarAcessoState createState() => CancelarAcessoState();
 }
 
-class CancelarAcessoState extends State<CancelarAcessoView> {
+class CancelarAcessoState extends State<CancelarAcessoView> with ParameterResultViewEvent {
 
 
   TextEditingController txtControllerUsuario = TextEditingController();
@@ -51,7 +52,7 @@ class CancelarAcessoState extends State<CancelarAcessoView> {
 
   onInc() async {
     try {
-      GlobalScaffold.erroInformacao = '';
+      erroInformation = '';
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none)
       {
         GlobalScaffold.instance.navigatorKey.currentState?.pushNamed(

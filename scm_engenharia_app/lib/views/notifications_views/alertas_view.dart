@@ -5,6 +5,7 @@ import '../../../models/notification_models/notification_model.dart';
 import '../../../web_service/servico_mobile_service.dart';
 import '../../../help/navigation_service/route_paths.dart' as routes;
 import 'package:scm_engenharia_app/models/global_user_logged.dart' as global_user_logged;
+import '../../help/parameter_result_view.dart';
 import '../../thema/app_thema.dart';
 import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
@@ -15,7 +16,7 @@ class AlertasView extends StatefulWidget {
   RecibosState createState() => RecibosState();
 }
 
-class RecibosState extends State<AlertasView> {
+class RecibosState extends State<AlertasView> with ParameterResultViewEvent {
 
   List<NotificationScmEngineering> listNotificationScmEngineering = [];
   TypeView statusView = TypeView.viewLoading;
@@ -43,7 +44,7 @@ class RecibosState extends State<AlertasView> {
           OnAlertSuccess(error.toString());
         } else {
           statusView = TypeView.viewErrorInformation;
-          GlobalScaffold.erroInformacao = error.toString();
+          erroInformation = error.toString();
         }
       });
     }
@@ -121,7 +122,7 @@ class RecibosState extends State<AlertasView> {
       case TypeView.viewLoading:
         return GlobalView.viewPerformingSearch(maxHeight,context);
       case TypeView.viewErrorInformation:
-        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
+        return GlobalView.viewErrorInformation(maxHeight,erroInformation,context);
       case TypeView.viewRenderInformation:
         return  SingleChildScrollView(
           child: Container(

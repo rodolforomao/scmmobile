@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import '../../help/components.dart';
+import '../../help/parameter_result_view.dart';
 import '../../models/operation.dart';
 import '../../models/notification_models/notification_model.dart';
 import '../../thema/app_thema.dart';
@@ -17,7 +18,7 @@ class RecibosDocumentosView extends StatefulWidget {
   RecibosDocumentosState createState() => RecibosDocumentosState();
 }
 
-class RecibosDocumentosState extends State<RecibosDocumentosView> {
+class RecibosDocumentosState extends State<RecibosDocumentosView> with ParameterResultViewEvent {
 
   List<NotificationScmEngineering> listNotificationScmEngineering = [];
   TypeView statusTypeView = TypeView.viewLoading;
@@ -47,7 +48,7 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> {
           OnAlertError(error.toString());
         } else {
           statusTypeView = TypeView.viewErrorInformation;
-          GlobalScaffold.erroInformacao = error.toString();
+          erroInformation = error.toString();
         }
       });
     }
@@ -218,7 +219,7 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> {
       case TypeView.viewLoading:
         return GlobalView.viewPerformingSearch(maxHeight,context);
       case TypeView.viewErrorInformation:
-        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
+        return GlobalView.viewErrorInformation(maxHeight,erroInformation,context);
       case TypeView.viewRenderInformation:
         return Align(
           alignment: Alignment.topCenter,

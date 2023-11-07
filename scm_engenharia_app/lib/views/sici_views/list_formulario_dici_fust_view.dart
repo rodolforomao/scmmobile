@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import '../../data/app_scm_engenharia_mobile_bll.dart';
 import '../../data/tb_form_sici_fust.dart';
+import '../../help/parameter_result_view.dart';
 import '../../models/operation.dart';
 import '../../models/input/input_sici_fust_form_model.dart';
 import '../../models/output/output_sici_fust_model.dart';
@@ -21,7 +22,7 @@ class ListFormularioSiciFustView extends StatefulWidget {
   ListFormularioSiciFustState createState() => ListFormularioSiciFustState();
 }
 
-class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> with ListFormularioSiciFustViewModel {
+class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> with ParameterResultViewEvent , ListFormularioSiciFustViewModel {
 
 
   onRestWeb() async {
@@ -80,14 +81,14 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> with
       } else {
         setState(() {
           statusView = TypeView.viewErrorInformation;
-          GlobalScaffold.erroInformacao = 'Não há registros salvos no celular';
+          erroInformation = 'Não há registros salvos no celular';
         });
         onRestWeb();
       }
     } catch (error, s) {
       setState(() {
         statusView = TypeView.viewErrorInformation;
-        GlobalScaffold.erroInformacao = error.toString();
+        erroInformation = error.toString();
       });
     }
   }
@@ -130,7 +131,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> with
                 if(siciFileModelAllList.isEmpty)
                 {
                   statusView = TypeView.viewErrorInformation;
-                  GlobalScaffold.erroInformacao = 'Não a registro para esta solicitação';
+                  erroInformation = 'Não a registro para esta solicitação';
                 }
                 else  {
                   statusView = TypeView.viewRenderInformation;
@@ -142,7 +143,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> with
                 if(siciFileModelAllList.isEmpty)
                 {
                   statusView = TypeView.viewErrorInformation;
-                  GlobalScaffold.erroInformacao = 'Não a registro para esta solicitação';
+                  erroInformation = 'Não a registro para esta solicitação';
                 }
                 else  {
                   statusView = TypeView.viewRenderInformation;
@@ -154,7 +155,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> with
                 if(siciFileModelAllList.isEmpty)
                 {
                   statusView = TypeView.viewErrorInformation;
-                  GlobalScaffold.erroInformacao = 'Não a registro para esta solicitação';
+                  erroInformation = 'Não a registro para esta solicitação';
                 }
                 else  {
                   statusView = TypeView.viewRenderInformation;
@@ -273,9 +274,6 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> with
   void initState() {
     super.initState();
     onRestDb();
-    Future.delayed(Duration.zero, () {
-
-    });
   }
 
   @override
@@ -306,7 +304,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> with
                 if(siciFileModelAllList.isEmpty)
                 {
                   statusView = TypeView.viewErrorInformation;
-                  GlobalScaffold.erroInformacao = 'Não a registro para esta solicitação';
+                  erroInformation = 'Não a registro para esta solicitação';
                 }
                 else {
                   statusView = TypeView.viewRenderInformation;
@@ -387,7 +385,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> with
       case TypeView.viewLoading:
         return GlobalView.viewPerformingSearch(maxHeight,context);
       case TypeView.viewErrorInformation:
-        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
+        return GlobalView.viewErrorInformation(maxHeight,erroInformation,context);
       case TypeView.viewRenderInformation:
         return  Align( alignment: Alignment.topCenter,child: Container(
           alignment: Alignment.topCenter,

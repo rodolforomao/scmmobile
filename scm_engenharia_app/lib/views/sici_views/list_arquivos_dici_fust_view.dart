@@ -7,6 +7,7 @@ import 'dart:async';
 import '../../data/app_scm_engenharia_mobile_bll.dart';
 import '../../data/tb_arquivo_dici_fust.dart';
 import '../../help/components.dart';
+import '../../help/parameter_result_view.dart';
 import '../../models/operation.dart';
 import '../../thema/app_thema.dart';
 import '../../web_service/servico_mobile_service.dart';
@@ -20,7 +21,7 @@ class ListArquivosDiciFustView extends StatefulWidget {
   ListArquivosDiciFustState createState() => ListArquivosDiciFustState();
 }
 
-class ListArquivosDiciFustState extends State<ListArquivosDiciFustView> {
+class ListArquivosDiciFustState extends State<ListArquivosDiciFustView> with ParameterResultViewEvent {
 
   List mapFileModelAllList = [];
 
@@ -54,7 +55,7 @@ class ListArquivosDiciFustState extends State<ListArquivosDiciFustView> {
     } catch (error) {
       setState(() {
         statusView = TypeView.viewErrorInformation;
-        GlobalScaffold.erroInformacao = error.toString();
+        erroInformation = error.toString();
       });
     }
   }
@@ -157,7 +158,7 @@ class ListArquivosDiciFustState extends State<ListArquivosDiciFustView> {
       case TypeView.viewLoading:
         return GlobalView.viewPerformingSearch(maxHeight,context);
       case TypeView.viewErrorInformation:
-        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
+        return GlobalView.viewErrorInformation(maxHeight,erroInformation,context);
       case TypeView.viewRenderInformation:
         return  Align( alignment: Alignment.topCenter,child: Container(
           alignment: Alignment.topCenter,

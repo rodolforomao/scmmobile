@@ -1,5 +1,6 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import '../../help/parameter_result_view.dart';
 import '../../models/operation.dart';
 import '../../models/notification_models/notification_model.dart';
 import '../../thema/app_thema.dart';
@@ -15,7 +16,7 @@ class RecibosView extends StatefulWidget {
   RecibosState createState() => RecibosState();
 }
 
-class RecibosState extends State<RecibosView> {
+class RecibosState extends State<RecibosView> with ParameterResultViewEvent {
 
   List<NotificationScmEngineering> listNotificationScmEngineering = [];
   TypeView statusView = TypeView.viewErrorInformation;
@@ -43,7 +44,7 @@ class RecibosState extends State<RecibosView> {
           OnAlertError(error.toString());
         } else {
           statusView = TypeView.viewErrorInformation;
-          GlobalScaffold.erroInformacao = error.toString();
+          erroInformation = error.toString();
         }
       });
     }
@@ -75,7 +76,7 @@ class RecibosState extends State<RecibosView> {
     super.initState();
     setState(() {
       statusView = TypeView.viewRenderInformation;
-      GlobalScaffold.erroInformacao = "Recibos";
+      erroInformation = "Recibos";
     });
     //onInc();
   }
@@ -111,7 +112,7 @@ class RecibosState extends State<RecibosView> {
       case TypeView.viewLoading:
         return GlobalView.viewPerformingSearch(maxHeight,context);
       case TypeView.viewErrorInformation:
-        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
+        return GlobalView.viewErrorInformation(maxHeight,erroInformation,context);
       case TypeView.viewRenderInformation:
         return  SingleChildScrollView(
           child: Container(

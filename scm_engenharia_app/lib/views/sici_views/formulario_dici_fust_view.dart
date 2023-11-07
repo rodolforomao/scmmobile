@@ -11,6 +11,7 @@ import '../../help/components.dart';
 import '../../help/formatter/cnpj_input_formatter.dart';
 import '../../help/formatter/telefone_input_formatter.dart';
 import '../../help/formatter/valor_input_formatter.dart';
+import '../../help/parameter_result_view.dart';
 import '../../models/input/input_sici_fust_form_model.dart';
 import '../../models/operation.dart';
 import '../../models/output/output_sici_fust_model.dart';
@@ -31,7 +32,7 @@ class FormularioDiciFustView extends StatefulWidget {
   FormularioDiciFustState createState() => FormularioDiciFustState();
 }
 
-class FormularioDiciFustState extends State<FormularioDiciFustView> with FormularioDiciFustViewModel {
+class FormularioDiciFustState extends State<FormularioDiciFustView> with ParameterResultViewEvent , FormularioDiciFustViewModel {
   TypeView statusView = TypeView.viewLoading;
 
   onSaveLocalDbForm() async {
@@ -253,7 +254,7 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> with Formula
     } catch (error) {
       setState(() {
         statusView = TypeView.viewErrorInformation;
-        GlobalScaffold.erroInformacao = error.toString();
+        erroInformation = error.toString();
       });
     }
   }
@@ -276,7 +277,7 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> with Formula
     } catch (error) {
       setState(() {
         statusView = TypeView.viewErrorInformation;
-        GlobalScaffold.erroInformacao = error.toString();
+        erroInformation = error.toString();
       });
     }
   }
@@ -302,7 +303,7 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> with Formula
     } catch (error) {
       setState(() {
         statusView = TypeView.viewErrorInformation;
-        GlobalScaffold.erroInformacao = error.toString();
+        erroInformation = error.toString();
       });
     }
   }
@@ -369,7 +370,7 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> with Formula
       case TypeView.viewLoading:
         return GlobalView.viewPerformingSearch(maxHeight,context);
       case TypeView.viewErrorInformation:
-        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
+        return GlobalView.viewErrorInformation(maxHeight,erroInformation,context);
       case TypeView.viewRenderInformation:
         return  Align(
           alignment: Alignment.topCenter,

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../help/formatter/cpf_input_formatter.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
+import '../../help/parameter_result_view.dart';
 import '../../models/operation.dart';
 import '../../models/output/output_environment_variables_model.dart';
 import '../../thema/app_thema.dart';
@@ -20,7 +21,7 @@ class PerfilView extends StatefulWidget {
   PerfilState createState() => PerfilState();
 }
 
-class PerfilState extends State<PerfilView> {
+class PerfilState extends State<PerfilView> with ParameterResultViewEvent {
 
   TypeView statusView = TypeView.viewLoading;
   final txtControlleNomeCompleto = TextEditingController();
@@ -356,7 +357,7 @@ class PerfilState extends State<PerfilView> {
             ),),),),
         );
       case TypeView.viewErrorInformation:
-        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
+        return GlobalView.viewErrorInformation(maxHeight,erroInformation,context);
       case TypeView.viewThereIsNoInternet:
         // TODO: Handle this case.
     }

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import '../../help/parameter_result_view.dart';
 import '../../models/operation.dart';
 import '../../models/notification_models/notification_model.dart';
 import '../../thema/app_thema.dart';
@@ -16,7 +17,7 @@ class AnalisesView extends StatefulWidget {
   AnalisesState createState() => AnalisesState();
 }
 
-class AnalisesState extends State<AnalisesView> {
+class AnalisesState extends State<AnalisesView> with ParameterResultViewEvent {
 
   List<NotificationScmEngineering> listNotificationScmEngineering = [];
   TypeView statusView = TypeView.viewLoading;
@@ -44,7 +45,7 @@ class AnalisesState extends State<AnalisesView> {
           OnAlertError(error.toString());
         } else {
           statusView = TypeView.viewErrorInformation;
-          GlobalScaffold.erroInformacao = error.toString();
+          erroInformation = error.toString();
         }
       });
     }
@@ -88,7 +89,7 @@ class AnalisesState extends State<AnalisesView> {
     super.initState();
     setState(() {
       statusView = TypeView.viewErrorInformation;
-      GlobalScaffold.erroInformacao = 'No momento não a informação';
+      erroInformation = 'No momento não a informação';
     });
   }
 
@@ -122,7 +123,7 @@ class AnalisesState extends State<AnalisesView> {
       case TypeView.viewLoading:
         return GlobalView.viewPerformingSearch(maxHeight,context);
       case TypeView.viewErrorInformation:
-        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
+        return GlobalView.viewErrorInformation(maxHeight,erroInformation,context);
       case TypeView.viewRenderInformation:
         return  SingleChildScrollView(
           child: Container(

@@ -6,6 +6,7 @@ import 'dart:ui' as ui;
 
 import 'dart:convert';
 import '../../help/formatter/cpf_input_formatter.dart';
+import '../../help/parameter_result_view.dart';
 import '../../models/operation.dart';
 import '../../models/output/output_environment_variables_model.dart';
 import '../../web_service/servico_mobile_service.dart';
@@ -21,7 +22,7 @@ class ProfileView extends StatefulWidget {
   ProfileState createState() => ProfileState();
 }
 
-class ProfileState extends State<ProfileView> {
+class ProfileState extends State<ProfileView> with ParameterResultViewEvent {
   TypeView statusView = TypeView.viewLoading;
   final txtControlleNomeCompleto = TextEditingController();
   final txtControllerCPF = TextEditingController();
@@ -297,7 +298,7 @@ class ProfileState extends State<ProfileView> {
           ),
         );
       case TypeView.viewErrorInformation:
-        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
+        return GlobalView.viewErrorInformation(maxHeight,erroInformation,context);
       case TypeView.viewThereIsNoInternet:
         // TODO: Handle this case.
     }

@@ -7,6 +7,7 @@ import 'dart:ui' as ui;
 import 'dart:io';
 import 'dart:async';
 import '../../help/formatter/cpf_input_formatter.dart';
+import '../../help/parameter_result_view.dart';
 import '../../models/operation.dart';
 import '../../models/output/output_environment_variables_model.dart';
 import '../../web_service/servico_mobile_service.dart';
@@ -21,7 +22,7 @@ class CriarNovaContaView extends StatefulWidget {
   CreateNewAccountState createState() => CreateNewAccountState();
 }
 
-class CreateNewAccountState extends State<CriarNovaContaView> {
+class CreateNewAccountState extends State<CriarNovaContaView> with ParameterResultViewEvent {
 
   static List<String> friendsList = [];
 
@@ -399,7 +400,7 @@ class CreateNewAccountState extends State<CriarNovaContaView> {
           ),
         );
       case TypeView.viewErrorInformation:
-        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
+        return GlobalView.viewErrorInformation(maxHeight,erroInformation,context);
       case TypeView.viewThereIsNoInternet:
         // TODO: Handle this case.
     }

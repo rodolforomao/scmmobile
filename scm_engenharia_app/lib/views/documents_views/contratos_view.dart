@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import '../../help/parameter_result_view.dart';
 import '../../models/operation.dart';
 import '../../models/notification_models/notification_model.dart';
 import '../../thema/app_thema.dart';
@@ -16,7 +17,7 @@ class ContratosView extends StatefulWidget {
   ContratosState createState() => ContratosState();
 }
 
-class ContratosState extends State<ContratosView> {
+class ContratosState extends State<ContratosView> with ParameterResultViewEvent {
 
   List<NotificationScmEngineering> listNotificationScmEngineering = [];
   late StreamSubscription<ConnectivityResult> subscription;
@@ -45,7 +46,7 @@ class ContratosState extends State<ContratosView> {
           OnAlertError(error.toString());
         } else {
           statusView = TypeView.viewErrorInformation;
-          GlobalScaffold.erroInformacao = error.toString();
+          erroInformation = error.toString();
         }
       });
     }
@@ -124,7 +125,7 @@ class ContratosState extends State<ContratosView> {
       case TypeView.viewLoading:
         return GlobalView.viewPerformingSearch(maxHeight,context);
       case TypeView.viewErrorInformation:
-        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
+        return GlobalView.viewErrorInformation(maxHeight,erroInformation,context);
       case TypeView.viewRenderInformation:
         return  SingleChildScrollView(
           child: Container(

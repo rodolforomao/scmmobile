@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import '../../help/parameter_result_view.dart';
 import '../../models/operation.dart';
 import '../../models/notification_models/notification_model.dart';
 import '../../thema/app_thema.dart';
@@ -16,7 +17,7 @@ class UsuariosView extends StatefulWidget {
   UsuariosState createState() => UsuariosState();
 }
 
-class UsuariosState extends State<UsuariosView> {
+class UsuariosState extends State<UsuariosView> with ParameterResultViewEvent {
 
   List<NotificationScmEngineering> listNotificationScmEngineering = [];
   late StreamSubscription<ConnectivityResult> subscription;
@@ -45,7 +46,7 @@ class UsuariosState extends State<UsuariosView> {
           OnAlertError(error.toString());
         } else {
           statusView = TypeView.viewErrorInformation;
-          GlobalScaffold.erroInformacao = error.toString();
+          erroInformation= error.toString();
         }
       });
     }
@@ -111,7 +112,7 @@ class UsuariosState extends State<UsuariosView> {
       case TypeView.viewLoading:
         return GlobalView.viewPerformingSearch(maxHeight,context);
       case TypeView.viewErrorInformation:
-        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
+        return GlobalView.viewErrorInformation(maxHeight,erroInformation,context);
       case TypeView.viewRenderInformation:
         return  SingleChildScrollView(
           child: Container(

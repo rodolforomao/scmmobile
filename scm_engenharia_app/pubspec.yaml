@@ -55,7 +55,7 @@ dependencies:
   connectivity_plus: ^5.0.1       # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
   device_info_plus: ^9.1.0        # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
   package_info_plus: ^4.2.0       # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
-  share_plus: ^7.1.0              # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  share_plus: ^7.1.1              # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
 
   #Plugin dart.dev
   http: ^1.1.0                    # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS

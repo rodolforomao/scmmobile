@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:realm/realm.dart';
 import '../../data/app_scm_engenharia_mobile_bll.dart';
 import '../../help/components.dart';
+import '../../help/parameter_result_view.dart';
 import '../../models/input/input_sici_fust_form_model.dart';
 import '../../models/operation.dart';
 import '../../thema/app_thema.dart';
@@ -22,7 +23,7 @@ class SelecioneArquivoDiciFustView extends StatefulWidget {
   SelecioneArquivoDiciFustState createState() => SelecioneArquivoDiciFustState();
 }
 
-class SelecioneArquivoDiciFustState extends State<SelecioneArquivoDiciFustView> {
+class SelecioneArquivoDiciFustState extends State<SelecioneArquivoDiciFustView> with ParameterResultViewEvent {
 
   TypeView statusView = TypeView.viewRenderInformation;
   TextEditingController txtArquivo = TextEditingController();
@@ -206,7 +207,7 @@ class SelecioneArquivoDiciFustState extends State<SelecioneArquivoDiciFustView> 
     } catch (error) {
       setState(() {
         statusView = TypeView.viewErrorInformation;
-        GlobalScaffold.erroInformacao = error.toString();
+        erroInformation = error.toString();
       });
     }
   }
@@ -215,7 +216,7 @@ class SelecioneArquivoDiciFustState extends State<SelecioneArquivoDiciFustView> 
   void initState() {
     super.initState();
     setState(() {
-      GlobalScaffold.erroInformacao = 'Vamos atualizar as variáveis de ambiente para que o aplicativo funcione corretamente.';
+      erroInformation = 'Vamos atualizar as variáveis de ambiente para que o aplicativo funcione corretamente.';
     });
 
     onInc();
@@ -253,7 +254,7 @@ class SelecioneArquivoDiciFustState extends State<SelecioneArquivoDiciFustView> 
       case TypeView.viewLoading:
         return GlobalView.viewPerformingSearch(maxHeight,context);
       case TypeView.viewErrorInformation:
-        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
+        return GlobalView.viewErrorInformation(maxHeight,erroInformation,context);
       case TypeView.viewRenderInformation:
         return SingleChildScrollView(
             padding: const EdgeInsets.only(top: 10.0, right: 10.0, left: 10.0, bottom: 10.0),

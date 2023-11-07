@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import '../../help/components.dart';
+import '../../help/parameter_result_view.dart';
 import '../../models/output/output_environment_variables_model.dart';
 import '../../thema/app_thema.dart';
 import '../help_views/global_scaffold.dart';
@@ -18,7 +19,7 @@ class SelecionarMunicipioView extends StatefulWidget {
   SelecionarMunicipioState createState() => SelecionarMunicipioState();
 }
 
-class SelecionarMunicipioState extends State<SelecionarMunicipioView> {
+class SelecionarMunicipioState extends State<SelecionarMunicipioView> with ParameterResultViewEvent {
   TypeView statusView = TypeView.viewLoading;
   final txtMunicipalityName = TextEditingController();
   List<CodIbge> listMunicipios = [];
@@ -37,7 +38,7 @@ class SelecionarMunicipioState extends State<SelecionarMunicipioView> {
     } catch (error) {
       setState(() {
         statusView = TypeView.viewErrorInformation;
-        GlobalScaffold.erroInformacao = error.toString();
+        erroInformation = error.toString();
       });
     }
   }
@@ -125,7 +126,7 @@ class SelecionarMunicipioState extends State<SelecionarMunicipioView> {
                             if (listMunicipios.isEmpty) {
                               setState(() {
                                 statusView = TypeView.viewErrorInformation;
-                                GlobalScaffold.erroInformacao =
+                                erroInformation =
                                     'Não a registro para esta solicitação';
                               });
                             } else {
@@ -171,7 +172,7 @@ class SelecionarMunicipioState extends State<SelecionarMunicipioView> {
                           if (listMunicipios.isEmpty) {
                             setState(() {
                               statusView = TypeView.viewErrorInformation;
-                              GlobalScaffold.erroInformacao =
+                              erroInformation =
                                   'Não a registro para esta solicitação';
                             });
                           } else {
@@ -199,7 +200,7 @@ class SelecionarMunicipioState extends State<SelecionarMunicipioView> {
         return GlobalView.viewPerformingSearch(maxHeight, context);
       case TypeView.viewErrorInformation:
         return GlobalView.viewErrorInformation(
-            maxHeight, GlobalScaffold.erroInformacao, context);
+            maxHeight, erroInformation, context);
       case TypeView.viewRenderInformation:
         return Align(
           alignment: Alignment.topCenter,

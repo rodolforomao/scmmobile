@@ -6,6 +6,7 @@ import '../../data/app_scm_engenharia_mobile_bll.dart';
 import '../../data/tb_environment_variable.dart';
 import '../../help/components.dart';
 import '../../help/formatter/cnpj_input_formatter.dart';
+import '../../help/parameter_result_view.dart';
 import '../../models/input/input_sici_fust_form_model.dart';
 import '../../models/operation.dart';
 import '../../models/output/output_environment_variables_model.dart';
@@ -24,7 +25,7 @@ class DadosEmServicosView extends StatefulWidget {
   DadosEmServicosState createState() => DadosEmServicosState();
 }
 
-class DadosEmServicosState extends State<DadosEmServicosView> {
+class DadosEmServicosState extends State<DadosEmServicosView> with ParameterResultViewEvent {
 
   TypeView statusView = TypeView.viewLoading;
   OutputEnvironmentVariablesModel resulEnvironmentVariables = OutputEnvironmentVariablesModel();
@@ -223,7 +224,7 @@ class DadosEmServicosState extends State<DadosEmServicosView> {
       case TypeView.viewLoading:
         return GlobalView.viewPerformingSearch(maxHeight,context);
       case TypeView.viewErrorInformation:
-        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
+        return GlobalView.viewErrorInformation(maxHeight,erroInformation,context);
       case TypeView.viewRenderInformation:
         return GlobalView.viewRenderSingleChildScrollView(maxHeight,Container( padding: const EdgeInsets.fromLTRB(15.0, 30.0, 15.0, 0.0),
             constraints: const BoxConstraints(
