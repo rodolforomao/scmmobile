@@ -17,10 +17,8 @@ class ContratosView extends StatefulWidget {
   ContratosState createState() => ContratosState();
 }
 
-class ContratosState extends State<ContratosView> with ParameterResultViewEvent {
-
+class ContratosState extends State<ContratosView> with ParameterResultViewEvent , ParameterResultFunctions {
   List<NotificationScmEngineering> listNotificationScmEngineering = [];
-  late StreamSubscription<ConnectivityResult> subscription;
   TypeView statusView = TypeView.viewLoading;
 
   onGetListUsuarios() async {
@@ -54,49 +52,29 @@ class ContratosState extends State<ContratosView> with ParameterResultViewEvent 
 
   onInc() async {
     try {
-      if (await Connectivity().checkConnectivity() == ConnectivityResult.none)
-      {
-        GlobalScaffold.instance.navigatorKey.currentState?.pushNamed(
-          routes.erroInternetRoute,
-        ).then((value) async {
-          if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
-            GlobalScaffold.instance.navigatorKey.currentState?.pushNamedAndRemoveUntil(routes.splashScreenRoute, (Route<dynamic> route) => false);
-          }
-          else
-          {
-            onInc();
-          }
-        });
-      }
-      else {
+      if (await onIncConnectivity()) {
         onGetListUsuarios();
+      } else {
+        GlobalScaffold.instance.navigatorKey.currentState?.popUntil((route) => route.isFirst);
+        GlobalScaffold.instance.onToastInternetConnection();
       }
     } catch (error) {
-      GlobalScaffold.map = {
-        'view': routes.contratosRoute,
-        'error': error
-      };
-      Navigator.of(context).pushNamed(
-        routes.errorInformationRoute,
-        arguments: GlobalScaffold.map,
-      ).then((value) {
-        GlobalScaffold.instance.navigatorKey.currentState?.pushNamedAndRemoveUntil(routes.splashScreenRoute, (Route<dynamic> route) => false);
-      });
+      onError(error.toString());
     }
   }
+
+
 
   @override
   void initState() {
     super.initState();
-    setState(() {
-      statusView = TypeView.viewRenderInformation;
-    });
+    setState(() =>  statusView = TypeView.viewLoading);
+    onInc();
   }
 
   @override
   void dispose() {
     super.dispose();
-    subscription.cancel();
   }
 
   @override

@@ -18,7 +18,7 @@ class RecibosDocumentosView extends StatefulWidget {
   RecibosDocumentosState createState() => RecibosDocumentosState();
 }
 
-class RecibosDocumentosState extends State<RecibosDocumentosView> with ParameterResultViewEvent {
+class RecibosDocumentosState extends State<RecibosDocumentosView> with ParameterResultViewEvent , ParameterResultFunctions {
 
   List<NotificationScmEngineering> listNotificationScmEngineering = [];
   TypeView statusTypeView = TypeView.viewLoading;
@@ -30,15 +30,22 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> with Parameter
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
         GlobalScaffold.instance.onToastInternetConnection();
       } else {
-        statusTypeView = TypeView.viewLoading;
+        setState(() =>  statusTypeView = TypeView.viewLoading);
         Operation resultRest = await ServicoMobileService.onGetDocumentsList();
         if (resultRest.erro) {
           throw (resultRest.message!);
         } else {
-          setState(() {
-            mapDocumentos =  resultRest.resultList;
-            statusTypeView = TypeView.viewRenderInformation;
-          });
+          if(resultRest.resultList.length == 0)
+            {
+              throw ("Nenhum registro encontrado para esta solicitação");
+            }
+          else
+            {
+              setState(() {
+                mapDocumentos =  resultRest.resultList;
+                statusTypeView = TypeView.viewRenderInformation;
+              });
+            }
         }
       }
     } catch (error) {
@@ -74,40 +81,21 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> with Parameter
 
   onInc() async {
     try {
-      if (await Connectivity().checkConnectivity() == ConnectivityResult.none)
-      {
-        GlobalScaffold.instance.navigatorKey.currentState?.pushNamed(
-          routes.erroInternetRoute,
-        ).then((value) async {
-          if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
-            GlobalScaffold.instance.navigatorKey.currentState?.pushNamedAndRemoveUntil(routes.splashScreenRoute, (Route<dynamic> route) => false);
-          }
-          else
-          {
-            onInc();
-          }
-        });
-      }
-      else {
+      if (await onIncConnectivity()) {
         onGetDocumentsList();
+      } else {
+        GlobalScaffold.instance.navigatorKey.currentState?.popUntil((route) => route.isFirst);
+        GlobalScaffold.instance.onToastInternetConnection();
       }
     } catch (error) {
-      GlobalScaffold.map = {
-        'view': routes.recibosRoute,
-        'error': error
-      };
-      Navigator.of(context).pushNamed(
-        routes.errorInformationRoute,
-        arguments: GlobalScaffold.map,
-      ).then((value) {
-        GlobalScaffold.instance.navigatorKey.currentState?.pushNamedAndRemoveUntil(routes.splashScreenRoute, (Route<dynamic> route) => false);
-      });
+      onError(error.toString());
     }
   }
 
   @override
   void initState() {
     super.initState();
+    setState(() =>  statusTypeView = TypeView.viewLoading);
     onInc();
   }
 

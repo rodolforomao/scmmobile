@@ -1,7 +1,7 @@
 name: scm_engenharia_app
 description: Aplicativo mobile da empresa SCM Engenharia
-version: 2.0.0
-build: 2000
+version: 10.0.0
+build: 10.0.0
 homepage: https://www.scmengenharia.com.br
 repository: https://www.scmengenharia.com.br
 
@@ -25,7 +25,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 
 environment:
-  sdk: '>=3.1.3 <4.0.0'
+  sdk: '>=3.1.5 <4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -52,22 +52,22 @@ dependencies:
   file_selector: ^1.0.1           # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
 
   #Plugin Flutter Community
-  connectivity_plus: ^5.0.1       # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
-  device_info_plus: ^9.1.0        # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
-  package_info_plus: ^4.2.0       # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
-  share_plus: ^7.1.1              # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  connectivity_plus: ^5.0.2       # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  device_info_plus: ^9.1.1        # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  package_info_plus: ^5.0.1       # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  share_plus: ^7.2.1              # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
 
   #Plugin dart.dev
-  http: ^1.1.0                    # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
-  mockito: ^5.4.2                 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  http: ^1.1.2                    # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  mockito: ^5.4.3                 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
   intl: ^0.18.1                   # ANDROID, IOS, LINUX,MACOS, WEB, WINDOWS
   html: ^0.15.4                   # ANDROID, IOS, LINUX,MACOS, WEB, WINDOWS
 
   #Plugin firebase
-  firebase_core: ^2.21.0           # ANDROID ,IOS, MACOS, WEB,
-  firebase_crashlytics: ^3.4.3     # ANDROID ,IOS, MACOS
-  firebase_messaging: ^14.7.3      # ANDROID,IOS, MACOS, WEB
-  firebase_analytics: ^10.6.3      # ANDROID,IOS,MACOS,WEB
+  firebase_core: ^2.24.0           # ANDROID ,IOS, MACOS, WEB,
+  firebase_crashlytics: ^3.4.6     # ANDROID ,IOS, MACOS
+  firebase_messaging: ^14.7.6      # ANDROID,IOS, MACOS, WEB
+  firebase_analytics: ^10.7.2      # ANDROID,IOS,MACOS,WEB
 
   # realm
   realm: ^1.5.0                   # ANDROID, IOS, LINUX, MACOS, WINDOWS
@@ -89,7 +89,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.3
+  flutter_lints: ^3.0.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

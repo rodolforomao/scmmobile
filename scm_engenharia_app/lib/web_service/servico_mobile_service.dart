@@ -25,8 +25,8 @@ class ServicoMobileService {
             //"Content-type": "multipart/form-data",
             'token': token!,
           },
-          encoding: Encoding.getByName('utf-8'))
-          .timeout(const Duration(seconds: 50));
+          encoding: Encoding.getByName('utf-8'));
+          //.timeout(const Duration(seconds: 50));
       operacao.statusCode = response.statusCode;
       if (response.statusCode == 200) {
         if (!response.body.isNotEmpty) {
@@ -177,7 +177,7 @@ class ServicoMobileService {
       final response = await http.post(Uri.parse("$Url/analise/Analise/recuperarVariaveisAmbiente_ws"),
           body: null,
           headers: ApiRestInformation.onHeadersToken(token!),
-          encoding: Encoding.getByName("utf-8")).timeout(const Duration(seconds: 10));
+          encoding: Encoding.getByName("utf-8"));//.timeout(const Duration(seconds: 10));
       operacao.erro = false;
       operacao.message = "Operação realizada com sucesso";
       operacao.result = null;
@@ -382,8 +382,8 @@ class ServicoMobileService {
           .post(Uri.parse("$Url/analise/recuperar_ws"),
           headers: ApiRestInformation.onHeadersToken(token!),
           body: null,
-          encoding: Encoding.getByName('utf-8'))
-          .timeout(const Duration(seconds: 30));
+          encoding: Encoding.getByName('utf-8'));
+          //.timeout(const Duration(seconds: 30));
       operacao.erro = false;
       operacao.message = 'Operação realizada com sucesso';
       operacao.result = null;
