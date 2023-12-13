@@ -30,4 +30,34 @@ class ComponentsJWTToken {
     }
   }
 
+  static Future<Map<String, String>> onHeadersToken() async {
+    try {
+      Operation loggedInuser = await AppScmEngenhariaMobileBll.instance.onSelectUser();
+      if (loggedInuser.erro) {
+        throw loggedInuser.message!;
+      } else if (loggedInuser.result == null) {
+        return {
+          'Content-Type': 'application/json; charset=utf-8',
+          'token': Components.JWTTokenPadrao()!,
+        };
+      } else {
+        TbUser respUser =  loggedInuser.result as TbUser;
+        String key = "bc47f175a831996b652146d47e159349f75e6c4665570ef35606678a18054d13";
+        final claimSet = JwtClaim(otherClaims: <String, Object>{
+          "user": respUser.email,
+          "pass": respUser.password,
+        });
+        // Generate a JWT from the claim set
+        final token = issueJwtHS256(claimSet, key);
+        return {
+          'Content-Type': 'application/json; charset=utf-8',
+          'token': token,
+        };
+
+      }
+
+    } catch (error) {
+      throw (error.toString());
+    }
+  }
 }

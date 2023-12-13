@@ -1,4 +1,4 @@
-import 'dart:async';
+import 'dart:typed_data';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import '../../help/components.dart';
@@ -9,8 +9,7 @@ import '../../thema/app_thema.dart';
 import '../../web_service/servico_mobile_service.dart';
 import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
-import '../../help/navigation_service/route_paths.dart' as routes;
-import 'package:scm_engenharia_app/models/global_user_logged.dart' as global_user_logged;
+
 
 class RecibosDocumentosView extends StatefulWidget {
   const RecibosDocumentosView({Key? key}) : super(key: key);
@@ -35,7 +34,7 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> with Parameter
         if (resultRest.erro) {
           throw (resultRest.message!);
         } else {
-          if(resultRest.resultList.length == 0)
+          if(resultRest.resultList.isEmpty)
             {
               throw ("Nenhum registro encontrado para esta solicitação");
             }
@@ -68,10 +67,16 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> with Parameter
       } else {
         OnRealizandoOperacao('Realizando operação',context);
         Operation resultRest = await ServicoMobileService.onDocumentsById(idDocumento).whenComplete(() => OnRealizandoOperacao('',context));
-        if (resultRest.erro) {
+        if (resultRest.erro  == true || resultRest.result == null) {
           throw (resultRest.message!);
         } else {
-          Components.downloadCompartilharArquivos(resultRest.result.toString(), 'recibo_', 'Recibo', 'Download','.pdf',context);
+          Uint8List? bytes= resultRest.result as Uint8List?;
+          Operation respSaveLocation = await Components.onSaveLocation('application/pdf', "recibo.pdf",bytes!);
+          if (respSaveLocation.erro || respSaveLocation.result == null) {
+            throw respSaveLocation.message!;
+          } else {
+            GlobalScaffold.instance.onToastSuccess(respSaveLocation.message!);
+          }
         }
       }
     } catch (error) {

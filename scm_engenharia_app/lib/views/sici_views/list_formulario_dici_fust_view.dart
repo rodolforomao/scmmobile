@@ -1,7 +1,6 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
 import '../../data/app_scm_engenharia_mobile_bll.dart';
 import '../../data/tb_form_sici_fust.dart';
 import '../../help/parameter_result_view.dart';
@@ -42,6 +41,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> with
               if (siciFileModelAllList.where((f) => f.id!.startsWith(prop.id!)).isNotEmpty)
               {
                 // A ficha  ja esta salva no dispositivo
+                print(prop.id!);
               }
               else
               {
@@ -49,11 +49,14 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> with
               }
             }
             List<InputSiciFileModel>  siciFileModelAllResp = await  ParseRespJsonToView.parseSiciFustFormModelToSiciFileList(respNewSiciFustFormList);
-            setState(()  {
-              siciFileModelAllList.addAll(siciFileModelAllResp);
-              //siciFileModelUpdateList.addAll(siciFileModelAllResp);
-              statusView = TypeView.viewRenderInformation;
-            });
+            if (mounted) {
+              setState(()  {
+                siciFileModelAllList.addAll(siciFileModelAllResp);
+                //siciFileModelUpdateList.addAll(siciFileModelAllResp);
+                statusView = TypeView.viewRenderInformation;
+              });
+            }
+
           }
         }
       }
@@ -64,7 +67,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> with
 
   onRestDb() async {
     try {
-      setState(() {statusView = TypeView.viewLoading;});
+      setState(() =>  statusView = TypeView.viewLoading);
       Operation respUser = await AppScmEngenhariaMobileBll.instance.onSelectFormSiciFustAll();
       if (respUser.erro) {
         throw respUser.message!;
@@ -76,7 +79,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> with
         {
           throw ('Não é possível converter as informações');
         }
-        setState(() {statusView = TypeView.viewRenderInformation;});
+        setState(() =>  statusView = TypeView.viewRenderInformation);
         onRestWeb();
       } else {
         setState(() {
@@ -85,7 +88,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> with
         });
         onRestWeb();
       }
-    } catch (error, s) {
+    } catch (error) {
       setState(() {
         statusView = TypeView.viewErrorInformation;
         erroInformation = error.toString();
@@ -107,9 +110,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> with
           if (respUser.erro || respUser.result == null) {
             throw respUser.message!;
           } else {
-            setState(() {
-              siciFileModelAllList.remove(siciFileModel);
-            });
+            setState(() =>  siciFileModelAllList.remove(siciFileModel));
             GlobalScaffold.instance.onToastSuccess(resultRest.message!);
             onRestWeb();
           }
@@ -277,11 +278,18 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> with
   }
 
   @override
+  void dispose() {
+    super.dispose();
+
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(55.0),
+        preferredSize: const Size.fromHeight(50.0),
         child: AppBar(
+          toolbarHeight: 50,
           automaticallyImplyLeading: true,
           centerTitle: true,
           flexibleSpace: Container(

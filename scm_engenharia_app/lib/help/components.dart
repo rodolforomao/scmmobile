@@ -11,6 +11,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_file_dialog/flutter_file_dialog.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:jaguar_jwt/jaguar_jwt.dart';
@@ -405,6 +406,54 @@ class Components {
         }
         break;
     }
+  }
+
+  static Future<Operation> onSaveLocation(String mimeType, String fileName , Uint8List fileData) async {
+    Operation operacao = Operation();
+    operacao.result = null;
+    operacao.message = 'Operação realizada com sucesso';
+    operacao.erro = false;
+    try {
+      if(Platform.isAndroid || Platform.isIOS)
+      {
+        if (!await FlutterFileDialog.isPickDirectorySupported()) {
+          operacao.message = 'Seleção de diretório não suportada';
+          operacao.erro = true;
+        }
+        final pickedDirectory = await FlutterFileDialog.pickDirectory();
+        if (pickedDirectory != null) {
+          await FlutterFileDialog.saveFileToDirectory(
+            directory: pickedDirectory,
+            data: fileData,
+            mimeType: mimeType,
+            fileName: fileName,
+            replace: false,
+          );
+        }
+        else
+        {
+          operacao.message = 'A operação foi cancelada pelo usuário';
+          operacao.erro = true;
+        }
+      }
+      else
+      {
+        final Directory appDocumentsDir = await getApplicationDocumentsDirectory();
+        final FileSaveLocation? result = await getSaveLocation(initialDirectory: appDocumentsDir.path, suggestedName: fileName ,confirmButtonText:'Salvar');
+        if (result == null) {
+          operacao.message = 'A operação foi cancelada pelo usuário';
+          operacao.erro = true;
+        }
+        final XFile xFile = XFile.fromData(fileData, mimeType: mimeType, name: fileName);
+        await xFile.saveTo(result!.path);
+      }
+      operacao.result = true;
+      operacao.message = 'Operação realizada com sucesso';
+      operacao.erro = false;
+    } catch (error) {
+      throw (error.toString());
+    }
+    return operacao;
   }
 
   static Future<Map<String, dynamic>> openDiciFile() async {

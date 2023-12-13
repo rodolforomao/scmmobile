@@ -4,7 +4,9 @@ import '../thema/app_thema.dart';
 import 'help_views/global_scaffold.dart';
 import 'dart:async';
 import 'help_views/global_view.dart';
+import 'package:meta/meta.dart';
 
+@immutable
 class ErroInformacaoView extends StatefulWidget {
   Map<String, dynamic> map;
   ErroInformacaoView({Key? key, required this.map, }) : super(key: key);

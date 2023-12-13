@@ -69,14 +69,10 @@ class ServicoMobileService {
     Operation operacao = Operation();
     try {
       String? token = await ComponentsJWTToken.JWTTokenPadrao();
-      Map<String, String> headers = {
-        'Content-Type': 'application/json; charset=utf-8',
-        'token': token!,
-      };
       http.MultipartRequest response;
       response = http.MultipartRequest(
           'POST', Uri.parse("$Url/usuario/alterar_senha_ws"));
-      response.headers.addAll(ApiRestInformation.onHeadersToken(token));
+      response.headers.addAll(ApiRestInformation.onHeadersToken(token!));
       response.fields['nova_senha'] = senha;
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
@@ -122,13 +118,9 @@ class ServicoMobileService {
     Operation operacao = Operation();
     try {
       String? token = await ComponentsJWTToken.JWTTokenPadrao();
-      Map<String, String> headers = {
-        'Content-Type': 'application/json; charset=utf-8',
-        'token': token!,
-      };
       http.MultipartRequest response;
       response = http.MultipartRequest('POST', Uri.parse("$Url/usuario/alterar_senha_ws"));
-      response.headers.addAll(ApiRestInformation.onHeadersToken(token));
+      response.headers.addAll(ApiRestInformation.onHeadersToken(token!));
       response.fields['nova_senha'] = senha;
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
@@ -212,14 +204,10 @@ class ServicoMobileService {
     Operation operacao = Operation();
     try {
       String? token = await ComponentsJWTToken.JWTTokenPadrao();
-      Map<String, String> headers = {
-        'Content-Type': 'application/json; charset=utf-8',
-        'token': token!,
-      };
       http.MultipartRequest response;
       response = http.MultipartRequest(
           'POST', Uri.parse("$Url/administracao/bloquear_usuario_ws"));
-      response.headers.addAll(ApiRestInformation.onHeadersToken(token));
+      response.headers.addAll(ApiRestInformation.onHeadersToken(token!));
       response.fields['id'] = id;
       response.fields['acao'] = 'true';
       var streamedResponse = await response.send();
@@ -269,13 +257,9 @@ class ServicoMobileService {
       operacao.message = 'Operação realizada com sucesso';
       operacao.result = null;
       String? token = await ComponentsJWTToken.JWTTokenPadrao();
-      Map<String, String> headers = {
-        'Content-Type': 'application/json; charset=utf-8',
-        "token": token!,
-      };
       http.MultipartRequest response;
       response = http.MultipartRequest('POST', Uri.parse("$Url/analise/lancamento_ws"));
-      response.headers.addAll(ApiRestInformation.onHeadersToken(token));
+      response.headers.addAll(ApiRestInformation.onHeadersToken(token!));
       if (siciFileModel.id!.isNotEmpty) {
         response.fields['controllerId'] = (siciFileModel.id ?? "");
       }
@@ -377,6 +361,7 @@ class ServicoMobileService {
   static Future<Operation> onRecoversSiciReleases() async {
     Operation operacao = Operation();
     try {
+
       String? token = await ComponentsJWTToken.JWTTokenPadrao();
       final response = await http
           .post(Uri.parse("$Url/analise/recuperar_ws"),
@@ -429,13 +414,9 @@ class ServicoMobileService {
     Operation operacao = Operation();
     try {
       String? token = await ComponentsJWTToken.JWTTokenPadrao();
-      Map<String, String> headers = {
-        'Content-Type': 'application/json; charset=utf-8',
-        'token': token!,
-      };
       http.MultipartRequest response;
       response = http.MultipartRequest('POST', Uri.parse("$Url/usuario/inserir_usuario_ws"));
-      response.headers.addAll(ApiRestInformation.onHeadersToken(token));
+      response.headers.addAll(ApiRestInformation.onHeadersToken(token!));
       response.fields['controllerNome'] = nome;
       response.fields['controllerCPF'] = cpf;
       response.fields['controllerEmail'] = email;
@@ -501,7 +482,6 @@ class ServicoMobileService {
         if (respStr.isEmpty) {
           throw (ApiRestInformation.problemOfComunication);
         } else {
-          print(respStr);
           Map<String, dynamic> map = jsonDecode(Components.removeAllHtmlTags(respStr));
           OperationJson resp = OperationJson.fromJson(map);
           operacao.erro = !resp.status!;
@@ -537,13 +517,9 @@ class ServicoMobileService {
     Operation operacao = Operation();
     try {
       String? token = await ComponentsJWTToken.JWTTokenPadrao();
-      Map<String, String> headers = {
-        'Content-Type': 'application/json; charset=utf-8',
-        'token': token!,
-      };
       http.MultipartRequest response;
       response = http.MultipartRequest('POST', Uri.parse("$Url/notificacoes/Notificacoes_ws/recuperarNotificacao_ws"));
-      response.headers.addAll(ApiRestInformation.onHeadersToken(token));
+      response.headers.addAll(ApiRestInformation.onHeadersToken(token!));
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
       if (streamedResponse.statusCode == 200) {
@@ -585,16 +561,12 @@ class ServicoMobileService {
     Operation operacao = Operation();
     try {
       String? token = await ComponentsJWTToken.JWTTokenPadrao();
-      Map<String, String> headers = {
-        'Content-Type': 'application/json; charset=utf-8',
-        'token': token!,
-      };
       http.MultipartRequest response;
       response = http.MultipartRequest(
           'POST',
           Uri.parse(
               "$Url/notificacoes/Notificacoes_ws/recuperarNotificacao_ws"));
-      response.headers.addAll(ApiRestInformation.onHeadersToken(token));
+      response.headers.addAll(ApiRestInformation.onHeadersToken(token!));
       response.fields['id'] = idUser;
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
@@ -638,16 +610,12 @@ class ServicoMobileService {
     Operation operacao = Operation();
     try {
       String? token = await ComponentsJWTToken.JWTTokenPadrao();
-      Map<String, String> headers = {
-        'Content-Type': 'application/json; charset=utf-8',
-        'token': token!,
-      };
       http.MultipartRequest response;
       response = http.MultipartRequest(
           'POST',
           Uri.parse(
               "$Url/notificacoes/Notificacoes_ws/recuperarNotificacao_ws"));
-      response.headers.addAll(ApiRestInformation.onHeadersToken(token));
+      response.headers.addAll(ApiRestInformation.onHeadersToken(token!));
       response.fields['id'] = IdNotificacao;
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
@@ -692,16 +660,12 @@ class ServicoMobileService {
     Operation operacao = Operation();
     try {
       String? token = await ComponentsJWTToken.JWTTokenPadrao();
-      Map<String, String> headers = {
-        'Content-Type': 'application/json; charset=utf-8',
-        "token": token!,
-      };
       http.MultipartRequest response;
       response = http.MultipartRequest(
           'POST',
           Uri.parse(
               "$Url/notificacoes/Notificacoes_ws/recuperarNotificacao_ws"));
-      response.headers.addAll(ApiRestInformation.onHeadersToken(token));
+      response.headers.addAll(ApiRestInformation.onHeadersToken(token!));
       response.fields['id'] = idNotificacao;
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
@@ -746,14 +710,11 @@ class ServicoMobileService {
     Operation operacao = Operation();
     try {
       String? token = await ComponentsJWTToken.JWTTokenPadrao();
-      Map<String, String> headers = {
-        'Content-Type': 'application/json; charset=utf-8',
-        "token": token!,
-      };
+
       http.MultipartRequest response;
       response = http.MultipartRequest('POST',
           Uri.parse("$Url/notificacoes/recuperarTodasNotificacaoByCpf_ws"));
-      response.headers.addAll(ApiRestInformation.onHeadersToken(token));
+      response.headers.addAll(ApiRestInformation.onHeadersToken(token!));
       response.fields['cpf'] = cpf;
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
@@ -800,13 +761,9 @@ class ServicoMobileService {
     Operation operacao = Operation();
     try {
       String? token = await ComponentsJWTToken.JWTTokenPadrao();
-      Map<String, String> headers = {
-        'Content-Type': 'application/json; charset=utf-8',
-        "token": token!,
-      };
       http.MultipartRequest response;
       response = http.MultipartRequest('POST', Uri.parse("$Url/lancamento/recuperar_lista_documentos_ws"));
-      response.headers.addAll(ApiRestInformation.onHeadersToken(token));
+      response.headers.addAll(ApiRestInformation.onHeadersToken(token!));
       var streamedResponse = await response.send();
       final respStr = await streamedResponse.stream.bytesToString();
       operacao.statusCode = streamedResponse.statusCode;
@@ -850,15 +807,12 @@ class ServicoMobileService {
   static Future<Operation> onDocumentsById(String idDocumento) async {
     Operation operacao = Operation();
     try {
+      print("$Url/recibos/download_arquivo_ws");
       String? token = await ComponentsJWTToken.JWTTokenPadrao();
-      Map<String, String> headers = {
-        'Content-Type': 'application/json; charset=utf-8',
-        "token": token!,
-      };
       http.MultipartRequest response;
       response = http.MultipartRequest(
           'POST', Uri.parse("$Url/recibos/download_arquivo_ws"));
-      response.headers.addAll(ApiRestInformation.onHeadersToken(token));
+      response.headers.addAll(ApiRestInformation.onHeadersToken(token!));
       response.fields['id'] = idDocumento;
       var streamedResponse = await response.send();
       var responseData = await streamedResponse.stream.toBytes();
@@ -870,7 +824,7 @@ class ServicoMobileService {
         } else {
           operacao.erro = false;
           operacao.message = "Operação realizada com sucesso";
-          operacao.result = responseToString;
+          operacao.result = responseData;
         }
         if (operacao.message == null && operacao.result == null) {
           throw ('Não foi identificado resposta');
