@@ -122,6 +122,12 @@ class AppThema {
         showUnselectedLabels: true,
         type: BottomNavigationBarType.fixed,
       ),
+      dialogTheme: const DialogTheme(
+          backgroundColor: Colors.white,
+          shadowColor: Colors.white,
+          surfaceTintColor: Colors.white,
+          elevation: 5
+      ),
       navigationRailTheme: const NavigationRailThemeData(
         backgroundColor: Colors.white,
         elevation: 8,
@@ -287,13 +293,13 @@ class StylesThemas {
 
   static TextStyle textStyleTextTitle() {
     return AppThema.themeNotifierState.value.mode == ThemeMode.light ? const TextStyle(
-      fontFamily: 'Montserrat-Medium',
+      fontFamily: 'Poppins-Regular',
       fontWeight: FontWeight.w300,
       color: Color(0xff3F4143),
     )
         : const TextStyle(
       fontWeight: FontWeight.w300,
-      fontFamily: 'Montserrat-Medium',
+      fontFamily: 'Poppins-Regular',
       color: Color(0xffFFFFFF),
     );
   }
@@ -340,7 +346,6 @@ class StylesThemas {
     );
   }
 
-
   static TextStyle textStyleTextField() {
     return AppThema.themeNotifierState.value.mode == ThemeMode.light
         ? const TextStyle(
@@ -351,6 +356,20 @@ class StylesThemas {
         : const TextStyle(
       fontWeight: FontWeight.w500,
       fontFamily: 'Myriad-Pro-SemiExt',
+      color: Color(0xffFFFFFF),
+    );
+  }
+
+
+  static TextStyle textStyleTextButton() {
+    return AppThema.themeNotifierState.value.mode == ThemeMode.light ? const TextStyle(
+      fontFamily: 'roboto-regular',
+      fontWeight: FontWeight.w100,
+      color: Colors.white,
+      fontSize: 17,)
+        : const TextStyle(
+      //fontWeight: FontWeight.w200,
+      fontFamily: 'roboto-regular',
       color: Color(0xffFFFFFF),
     );
   }

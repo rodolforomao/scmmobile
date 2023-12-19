@@ -134,7 +134,7 @@ class VariaveisDeAmbienteState extends State<VariaveisDeAmbienteView> with Param
       }
     } catch (error) {
       GlobalScaffold.instance.onHideCurrentSnackBar();
-      OnAlertError(error.toString());
+      OnAlert.onAlertError(context,error.toString());
     }
   }
 

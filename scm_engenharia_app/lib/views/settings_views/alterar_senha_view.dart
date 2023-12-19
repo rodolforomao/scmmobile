@@ -85,7 +85,7 @@ class AlterarSenhaState extends State<AlterarSenhaView> {
       }
     } catch (error) {
       OnRealizandoOperacao('',context);
-      OnAlertError(error.toString());
+      OnAlert.onAlertError(context,error.toString());
     }
   }
 

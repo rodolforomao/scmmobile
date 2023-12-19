@@ -27,7 +27,8 @@ class CancelarAcessoState extends State<CancelarAcessoView> with ParameterResult
   onCancelarAcesso() async {
     try {
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
-        OnAlertError('Parece que você está sem internet ! Por favor, verifique a sua conexão e tente novamente.');
+        OnAlert.onAlertError(context, "Parece que você está sem internet ! Por favor, verifique a sua conexão e tente novamente.");
+
       } else {
         if (txtControllerUsuario.text.isEmpty) {
           throw ('Credencial e obrigatório\n');
@@ -46,7 +47,7 @@ class CancelarAcessoState extends State<CancelarAcessoView> with ParameterResult
         }
       }
     } catch (error) {
-      OnAlertError(error.toString().split('\r\n').first);
+      OnAlert.onAlertError(context, error.toString().split('\r\n').first);
     }
   }
 

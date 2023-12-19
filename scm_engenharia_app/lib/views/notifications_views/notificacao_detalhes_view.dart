@@ -53,7 +53,7 @@ class NotificationState extends State<NotificacaoDetalhesView> with ParameterRes
       setState(() {
         if (notificationScmEngineering.titulo!.isEmpty) {
           statusView = TypeView.viewRenderInformation;
-          OnAlertError(error.toString());
+          OnAlert.onAlertError(context, error.toString());
         } else {
           statusView = TypeView.viewErrorInformation;
           erroInformation = error.toString();

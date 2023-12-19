@@ -13,7 +13,7 @@ import '../../models/output/output_environment_variables_model.dart';
 import '../../web_service/servico_mobile_service.dart';
 import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
-import '../../help/navigation_service/route_paths.dart' as routes;
+
 
 
 class CriarNovaContaView extends StatefulWidget {
@@ -58,14 +58,14 @@ class CreateNewAccountState extends State<CriarNovaContaView> with ParameterResu
       });
 
     } catch (error) {
-      OnAlertError(error.toString());
+      OnAlert.onAlertError(context,error.toString());
     }
   }
 
     OnSaveAccount() async {
     try {
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
-        OnAlertError('Verifique sua conexão com a internet e tente novamente.');
+        OnAlert.onAlertError(context,'Verifique sua conexão com a internet e tente novamente.');
       }  else {
         if (txtControlleNomeCompleto.text.isEmpty) {
           throw ("Nome é obrigatório");
@@ -96,7 +96,7 @@ class CreateNewAccountState extends State<CriarNovaContaView> with ParameterResu
           }
       }
     } catch (error) {
-      OnAlertError(error.toString());
+      OnAlert.onAlertError(context,error.toString());
     }
   }
 

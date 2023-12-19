@@ -61,7 +61,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> with
         }
       }
     } catch (error) {
-      OnAlertError(error.toString());
+      OnAlert.onAlertError(context, error.toString());
     }
   }
 
@@ -117,7 +117,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> with
         }
       }
     } catch (error) {
-      OnAlertError(error.toString());
+      OnAlert.onAlertError(context, error.toString());
     }
   }
 
@@ -267,7 +267,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> with
         onRestDb();
       });
     } catch (error) {
-      OnAlertError(error.toString());
+      OnAlert.onAlertError(context, error.toString());
     }
   }
 

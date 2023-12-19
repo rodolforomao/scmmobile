@@ -185,7 +185,7 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> with Paramet
         }
       }
     } catch (error) {
-      OnAlertError(error.toString());
+      OnAlert.onAlertError(context, error.toString());
     }
   }
 

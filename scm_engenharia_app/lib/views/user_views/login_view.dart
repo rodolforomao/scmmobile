@@ -88,7 +88,7 @@ class LoginState extends State<LoginView> {
       }
     } catch (error) {
       OnRealizandoOperacao('',context);
-      OnAlertError(error.toString());
+      OnAlert.onAlertError(context,error.toString());
     }
   }
 

@@ -42,7 +42,7 @@ class AnalisesState extends State<AnalisesView> with ParameterResultViewEvent {
       setState(() {
         if (listNotificationScmEngineering.isNotEmpty) {
           statusView = TypeView.viewRenderInformation;
-          OnAlertError(error.toString());
+          OnAlert.onAlertError(context,error.toString());
         } else {
           statusView = TypeView.viewErrorInformation;
           erroInformation = error.toString();

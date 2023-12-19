@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
+import '../../thema/app_thema.dart';
 
 
 class GlobalScaffold {
@@ -401,6 +402,384 @@ class GlobalScaffold {
 
 //--------------------------------------------------------------------------------------------------------
 
+
+class OnAlert {
+
+  static void onAlertInternet(BuildContext context) {
+    if(ModalRoute.of(context)?.isCurrent != true)
+    {
+      Navigator.pop(context);
+    }
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8.0))),
+            child: Container(
+              constraints: const BoxConstraints(
+                minWidth: 70,
+                maxWidth: 600,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 15.0),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                    child: Text(
+                        'Parece que você está sem internet !\nPor favor, verifique a sua conexão e tente novamente.,',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 4,
+                        softWrap: false,
+                        style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 17)
+                    ),
+                  ),
+                  const Divider(
+                    color: Colors.black12,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
+                    child:Center(child:  OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor:  const Color(0xfff8ab3a),
+                        side: const BorderSide(
+                          color: Color(0xfff8ab3a), //Color of the border
+                          style: BorderStyle.solid, //Style of the border
+                          width: 1.0, //width of the border
+                        ),
+                      ),
+                      child:   Text('             OK           ', style: StylesThemas.textStyleTextButton(),),
+                      //`Text` to display
+                      onPressed: () {
+                        Navigator.pop(context);
+                        FocusManager.instance.primaryFocus!.unfocus();
+                      },
+                    ),),
+                  ),
+                ],
+              ),
+            ));
+      },
+    );
+  }
+
+  static void onAlertError(BuildContext context,message) {
+    if(ModalRoute.of(context)?.isCurrent != true)
+    {
+      Navigator.pop(context);
+    }
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8.0))),
+            child: Container(
+              constraints: const BoxConstraints(
+                minWidth: 70,
+                maxWidth: 600,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 15.0),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                          'Informação',
+                          style: StylesThemas.textStyleTextTitle().copyWith(fontWeight: FontWeight.bold,
+                              fontSize: 20.0,
+                              color: const Color(0xff023c6a))),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const Divider(
+                        color: Colors.black12,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                        child: Text(
+                            message!,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 10,
+                            softWrap: false,
+                            style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 17 ,fontWeight: FontWeight.w200)
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Divider(
+                    color: Colors.black12,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
+                    child:Center(child:  OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor:  const Color(0xfff56558),
+                        side: const BorderSide(
+                          color: Color(0xfff56558), //Color of the border
+                          style: BorderStyle.solid, //Style of the border
+                          width: 1.0, //width of the border
+                        ),
+                      ),
+                      child:   Text('             OK           ' , style: StylesThemas.textStyleTextButton(),),
+                      //`Text` to display
+                      onPressed: () {
+                        Navigator.pop(context);
+                        FocusManager.instance.primaryFocus!.unfocus();
+                      },
+                    ),),
+                  ),
+                ],
+              ),
+            ));
+      },
+    );
+  }
+
+  static void  onAlertConfirmDelete(BuildContext context,String subtitle,VoidCallback onPressedExit,VoidCallback onPressedConfirm) {
+    if(ModalRoute.of(context)?.isCurrent != true)
+    {
+      Navigator.pop(context);
+    }
+    showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: Text('Atenção!', style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 20),),
+          content: Text(subtitle.toString(),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 4,
+            softWrap: false,
+            style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 15),),
+          actions: <Widget>[
+            const SizedBox(height: 15.0),
+            Container(
+              height: 55,
+              padding: const EdgeInsets.fromLTRB(10.0, 2.0, 10.0, 10.0),
+              constraints: const BoxConstraints(
+                minWidth: 50,
+                maxWidth: 500,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Expanded(
+                    flex: 1 /*or any integer value above 0 (optional)*/,
+                    child: TextButton.icon(onPressed: () {
+                      Navigator.pop(context);
+                    },
+                        style: TextButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          minimumSize: const Size(180, 45),
+                          maximumSize: const Size(180, 45),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                        ),
+                        icon: const Icon(
+                          Icons.close_outlined,size: 25,
+                          color: Colors.white,),
+                        label:  Text('Cancelar', style: StylesThemas.textStyleTextButton()
+                        )),
+                  ),
+                  const SizedBox(width: 20.0),
+                  Expanded(
+                    flex: 1 /*or any integer value above 0 (optional)*/,
+                    child: TextButton.icon(
+                      style: TextButton.styleFrom(
+                        minimumSize: const Size(180, 45),
+                        maximumSize: const Size(180, 45),
+                        backgroundColor: const Color(0xff5cb85c),
+                      ),
+                      icon: const Icon(
+                        Icons.add_outlined, size: 25,
+                        color: Colors.white,),
+                      //`Icon` to display
+                      label:  Text('Confirmar', style: StylesThemas.textStyleTextButton()
+                      ),
+                      //`Text` to display
+                      onPressed: onPressedConfirm,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ));
+  }
+
+  static void onAlertSuccess(BuildContext context,message,VoidCallback onPressed) {
+    if(ModalRoute.of(context)?.isCurrent != true)
+    {
+      Navigator.pop(context);
+    }
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8.0))),
+            child: Container(
+              constraints: const BoxConstraints(
+                minWidth: 70,
+                maxWidth: 600,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 15.0),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                          'Informação',
+                          style: StylesThemas.textStyleTextTitle().copyWith(fontWeight: FontWeight.bold,
+                              fontSize: 20.0,
+                              color: const Color(0xff023c6a))),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const Divider(
+                        color: Colors.black12,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                        child: Text(
+                            message!,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 10,
+                            softWrap: false,
+                            style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 15)
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Divider(
+                    color: Colors.black12,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
+                    child:Center(child:  OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor:  const Color(0xff2ecd8f),
+                        side: const BorderSide(
+                          color: Color(0xff2ecd8f), //Color of the border
+                          style: BorderStyle.solid, //Style of the border
+                          width: 1.0, //width of the border
+                        ),
+                      ),
+                      //`Text` to display
+                      onPressed: onPressed,
+                      child:   Text('             OK           ' , style: StylesThemas.textStyleTextButton(),),
+                    ),),
+                  ),
+                ],
+              ),
+            ));
+      },
+    );
+  }
+
+  static void onAlertInformation(BuildContext context,String message) {
+    if(ModalRoute.of(context)?.isCurrent != true)
+    {
+      Navigator.pop(context);
+    }
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return Dialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8.0))),
+            child: Container(
+              constraints: const BoxConstraints(
+                minWidth: 70,
+                maxWidth: 600,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 15.0),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                          'Informação',
+                          style: StylesThemas.textStyleTextTitle().copyWith(
+                              fontSize: 20.0,
+                              color: const Color(0xff023c6a))),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const Divider(
+                        color: Colors.black12,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                        child: Text(
+                            message,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 4,
+                            softWrap: false,
+                            style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 17)
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Divider(
+                    color: Colors.black12,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
+                    child:Center(child:  OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor:  const Color(0xfff8ab3a),
+                        side: const BorderSide(
+                          color: Color(0xfff8ab3a), //Color of the border
+                          style: BorderStyle.solid, //Style of the border
+                          width: 1.0, //width of the border
+                        ),
+                      ),
+                      child:   Text('             OK           ', style: StylesThemas.textStyleTextButton(), ),
+                      //`Text` to display
+                      onPressed: () {
+                        Navigator.pop(context);
+                        FocusManager.instance.primaryFocus!.unfocus();
+                      },
+                    ),),
+                  ),
+                ],
+              ),
+            ));
+      },
+    );
+  }
+
+
+}
+
+
 class OnAlertInformation {
   final String message;
   OnAlertInformation(this.message) {
@@ -565,87 +944,7 @@ class OnAlertSuccess  {
   }
 }
 
-class OnAlertError  {
-  final String? message;
-  OnAlertError(this.message) {
-    showDialog(
-      context: GlobalScaffold.instance.navigatorKey.currentContext!,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Dialog(
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8.0))),
-            child: Container(
-              constraints: const BoxConstraints(
-                minWidth: 70,
-                maxWidth: 600,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const SizedBox(height: 15.0),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Informação',
-                        style: Theme.of(GlobalScaffold.instance.navigatorKey.currentContext!).textTheme.headline4?.copyWith(fontSize: 20, color: const Color(0xff737373),fontWeight: FontWeight.w200,),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      const Divider(
-                        color: Colors.black12,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-                        child: Text(
-                          message!,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 10,
-                          softWrap: false,
-                          style: Theme.of(GlobalScaffold.instance.navigatorKey.currentContext!).textTheme.headline4?.copyWith(fontSize: 15, color: const Color(0xff737373),fontWeight: FontWeight.w100,),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const Divider(
-                    color: Colors.black12,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
-                    child:Center(child:  OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                        backgroundColor:  const Color(0xfff56558),
-                        side: const BorderSide(
-                          color: Color(0xfff56558), //Color of the border
-                          style: BorderStyle.solid, //Style of the border
-                          width: 1.0, //width of the border
-                        ),
-                      ),
-                      child:  const Text('OK ', style: TextStyle(
-                        fontWeight: FontWeight.w300,
-                        fontSize: 18.0,
-                        color: Colors.white,
-                      ),),
-                      //`Text` to display
-                      onPressed: () {
-                        Navigator.pop(context);
-                        FocusManager.instance.primaryFocus!.unfocus();
-                      },
-                    ),),
-                  ),
-                ],
-              ),
-            ));
-      },
-    );
-  }
-}
+
 
 class OnAlertInternet {
   OnAlertInternet() {

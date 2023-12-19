@@ -102,7 +102,7 @@ class SelecioneArquivoDiciFustState extends State<SelecioneArquivoDiciFustView> 
           }
       }
     } catch (error) {
-      OnAlertError(error.toString());
+      OnAlert.onAlertError(context, error.toString());
     }
   }
 
@@ -134,7 +134,7 @@ class SelecioneArquivoDiciFustState extends State<SelecioneArquivoDiciFustView> 
           }
         }
     } catch (error) {
-      OnAlertError(error.toString());
+      OnAlert.onAlertError(context, error.toString());
     }
   }
 

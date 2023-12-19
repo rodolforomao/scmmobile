@@ -4,7 +4,7 @@ import 'package:scm_engenharia_app/data/tb_environment_variable.dart';
 import 'package:scm_engenharia_app/data/tb_form_sici_fust.dart';
 import '../models/operation.dart';
 import 'tb_user.dart';
-import 'package:collection/collection.dart';
+
 
 class AppScmEngenhariaMobileBll {
 

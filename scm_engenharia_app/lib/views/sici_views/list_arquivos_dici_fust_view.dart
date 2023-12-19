@@ -99,7 +99,7 @@ class ListArquivosDiciFustState extends State<ListArquivosDiciFustView> with Par
         }
       }
     } catch (error) {
-      OnAlertError(error.toString());
+      OnAlert.onAlertError(context, error.toString());
     }
   }
 

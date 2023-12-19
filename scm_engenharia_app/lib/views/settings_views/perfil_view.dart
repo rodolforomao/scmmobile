@@ -57,7 +57,7 @@ class PerfilState extends State<PerfilView> with ParameterResultViewEvent {
       });
 
     } catch (error) {
-      OnAlertError(error.toString());
+      OnAlert.onAlertError(context,error.toString());
     }
   }
 
@@ -93,7 +93,7 @@ class PerfilState extends State<PerfilView> with ParameterResultViewEvent {
         }
       }
     } catch (error) {
-      OnAlertError(error.toString());
+      OnAlert.onAlertError(context,error.toString());
     }
   }
 

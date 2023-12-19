@@ -11,7 +11,6 @@ import '../../models/operation.dart';
 import '../../models/output/output_environment_variables_model.dart';
 import '../../web_service/servico_mobile_service.dart';
 import '../help_views/global_scaffold.dart';
-import '../../help/navigation_service/route_paths.dart' as routes;
 import 'package:scm_engenharia_app/models/global_user_logged.dart' as global_user_logged;
 import '../help_views/global_view.dart';
 
@@ -53,7 +52,7 @@ class ProfileState extends State<ProfileView> with ParameterResultViewEvent {
         statusView = TypeView.viewRenderInformation;
       });
     } catch (error) {
-      OnAlertError(error.toString());
+      OnAlert.onAlertError(context,error.toString());
     }
   }
 
@@ -89,7 +88,7 @@ class ProfileState extends State<ProfileView> with ParameterResultViewEvent {
         }
       }
     } catch (error) {
-      OnAlertError(error.toString());
+      OnAlert.onAlertError(context,error.toString());
     }
   }
 

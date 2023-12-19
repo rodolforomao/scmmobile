@@ -59,7 +59,7 @@ dependencies:
 
   #Plugin dart.dev
   http: ^1.1.2                    # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
-  mockito: ^5.4.3                 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  mockito: ^5.4.4                 # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
   intl: ^0.18.1                   # ANDROID, IOS, LINUX,MACOS, WEB, WINDOWS
   html: ^0.15.4                   # ANDROID, IOS, LINUX,MACOS, WEB, WINDOWS
 

@@ -1,10 +1,10 @@
+import 'dart:convert';
 import 'dart:typed_data';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import '../../help/components.dart';
 import '../../help/parameter_result_view.dart';
 import '../../models/operation.dart';
-import '../../models/notification_models/notification_model.dart';
 import '../../thema/app_thema.dart';
 import '../../web_service/servico_mobile_service.dart';
 import '../help_views/global_scaffold.dart';
@@ -19,8 +19,7 @@ class RecibosDocumentosView extends StatefulWidget {
 
 class RecibosDocumentosState extends State<RecibosDocumentosView> with ParameterResultViewEvent , ParameterResultFunctions {
 
-  List<NotificationScmEngineering> listNotificationScmEngineering = [];
-  TypeView statusTypeView = TypeView.viewLoading;
+
   late List mapDocumentos = [];
   late bool isSearching = false;
 
@@ -31,7 +30,7 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> with Parameter
       } else {
         setState(() =>  statusTypeView = TypeView.viewLoading);
         Operation resultRest = await ServicoMobileService.onGetDocumentsList();
-        if (resultRest.erro) {
+        if (resultRest.erro || resultRest.result == null) {
           throw (resultRest.message!);
         } else {
           if(resultRest.resultList.isEmpty)
@@ -41,17 +40,17 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> with Parameter
           else
             {
               setState(() {
-                mapDocumentos =  resultRest.resultList;
-                statusTypeView = TypeView.viewRenderInformation;
+                 mapDocumentos =  resultRest.resultList;
+                 statusTypeView = TypeView.viewRenderInformation;
               });
             }
         }
       }
     } catch (error) {
       setState(() {
-        if (listNotificationScmEngineering.isNotEmpty) {
+        if (mapDocumentos.isNotEmpty) {
           statusTypeView = TypeView.viewRenderInformation;
-          OnAlertError(error.toString());
+          OnAlert.onAlertError(context, error.toString());
         } else {
           statusTypeView = TypeView.viewErrorInformation;
           erroInformation = error.toString();
@@ -70,8 +69,8 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> with Parameter
         if (resultRest.erro  == true || resultRest.result == null) {
           throw (resultRest.message!);
         } else {
-          Uint8List? bytes= resultRest.result as Uint8List?;
-          Operation respSaveLocation = await Components.onSaveLocation('application/pdf', "recibo.pdf",bytes!);
+          Uint8List bytes= base64.decode(resultRest.result.toString());
+          Operation respSaveLocation = await Components.onSaveLocation('application/pdf', "recibo.pdf",bytes);
           if (respSaveLocation.erro || respSaveLocation.result == null) {
             throw respSaveLocation.message!;
           } else {
@@ -80,7 +79,7 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> with Parameter
         }
       }
     } catch (error) {
-      OnAlertError(error.toString());
+      OnAlert.onAlertError(context, error.toString());
     }
   }
 

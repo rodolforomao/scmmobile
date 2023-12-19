@@ -92,7 +92,7 @@ class DadosEmServicosState extends State<DadosEmServicosView> with ParameterResu
       sInput.quantidadeAcesso = txtControllerAccesses.text;
       Navigator.pop(context, sInput);
     } catch (error) {
-      OnAlertError(error.toString());
+      OnAlert.onAlertError(context, error.toString());
     }
   }
 
@@ -321,7 +321,7 @@ class DadosEmServicosState extends State<DadosEmServicosView> with ParameterResu
                       });
                     }
                   } catch (error) {
-                    OnAlertError(error.toString());
+                    OnAlert.onAlertError(context, error.toString());
                   }},
                  onChanged: (value) {
                    FocusScope.of(context).requestFocus(FocusNode());

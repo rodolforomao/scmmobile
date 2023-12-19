@@ -807,13 +807,13 @@ class ServicoMobileService {
   static Future<Operation> onDocumentsById(String idDocumento) async {
     Operation operacao = Operation();
     try {
-      print("$Url/recibos/download_arquivo_ws");
       String? token = await ComponentsJWTToken.JWTTokenPadrao();
       http.MultipartRequest response;
       response = http.MultipartRequest(
           'POST', Uri.parse("$Url/recibos/download_arquivo_ws"));
       response.headers.addAll(ApiRestInformation.onHeadersToken(token!));
       response.fields['id'] = idDocumento;
+      response.fields['base64'] = "true";
       var streamedResponse = await response.send();
       var responseData = await streamedResponse.stream.toBytes();
       var responseToString = String.fromCharCodes(responseData);
@@ -824,14 +824,13 @@ class ServicoMobileService {
         } else {
           operacao.erro = false;
           operacao.message = "Operação realizada com sucesso";
-          operacao.result = responseData;
+          operacao.result = responseToString;
         }
         if (operacao.message == null && operacao.result == null) {
           throw ('Não foi identificado resposta');
         }
       } else {
-        operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(
-            streamedResponse.statusCode, streamedResponse.stream.toString());
+        operacao = await ApiRestStatusAnswerHTTP.AnswersHTTP(streamedResponse.statusCode, streamedResponse.stream.toString());
       }
     } on TimeoutException {
       operacao.erro = true;
