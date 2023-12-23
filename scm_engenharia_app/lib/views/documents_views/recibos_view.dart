@@ -40,6 +40,7 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> with Parameter
           else
             {
               setState(() {
+                mapDocumentos = [];
                  mapDocumentos =  resultRest.resultList;
                  statusTypeView = TypeView.viewRenderInformation;
               });

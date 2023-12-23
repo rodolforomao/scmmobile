@@ -772,6 +772,7 @@ class ServicoMobileService {
           throw (ApiRestInformation.problemOfComunication);
         } else {
           Map<String, dynamic> map = jsonDecode(Components.removeAllHtmlTags(Components.removeAllHtmlTags(respStr)));
+          print(map);
           OperationJson resp = OperationJson.fromJson(map);
           operacao.erro = !resp.status!;
           operacao.message = resp.message;
