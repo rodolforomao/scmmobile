@@ -12,16 +12,12 @@ import '../help_views/global_view.dart';
 
 
 class RecibosDocumentosView extends StatefulWidget {
-  const RecibosDocumentosView({Key? key}) : super(key: key);
+  const RecibosDocumentosView({super.key});
   @override
   RecibosDocumentosState createState() => RecibosDocumentosState();
 }
 
-class RecibosDocumentosState extends State<RecibosDocumentosView> with ParameterResultViewEvent , ParameterResultFunctions {
-
-
-  late List mapDocumentos = [];
-  late bool isSearching = false;
+class RecibosDocumentosState extends State<RecibosDocumentosView> with ParameterView, ParameterResultViewEvent , ParameterResultFunctions {
 
   onGetDocumentsList() async {
     try {
@@ -60,7 +56,7 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> with Parameter
     }
   }
 
-  onDownloadDocuments(String idDocumento) async {
+  onDownloadDocuments(String idDocumento ,String nomeArquivo) async {
     try {
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
         GlobalScaffold.instance.onToastInternetConnection();
@@ -71,7 +67,7 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> with Parameter
           throw (resultRest.message!);
         } else {
           Uint8List bytes= base64.decode(resultRest.result.toString());
-          Operation respSaveLocation = await Components.onSaveLocation('application/pdf', "recibo.pdf",bytes);
+          Operation respSaveLocation = await Components.onSaveLocation('application/${nomeArquivo.split('.').last}',nomeArquivo,bytes);
           if (respSaveLocation.erro || respSaveLocation.result == null) {
             throw respSaveLocation.message!;
           } else {
@@ -303,7 +299,14 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> with Parameter
                         icon: const Icon(Icons.download_outlined , size: 25,),
                         iconSize: 25.0,
                         color: Color(0xff606060), onPressed: () {
-                        onDownloadDocuments(mapDocumentos[index]['id'] ?? '');
+                          if(Components.onIsEmpty(mapDocumentos[index]['id']) == '' || Components.onIsEmpty(mapDocumentos[index]['arquivo']) == '')
+                            {
+                              GlobalScaffold.instance.onToastSuccess('Não foi Possível Realizar o Download');
+                            }
+                          else
+                            {
+                              onDownloadDocuments(mapDocumentos[index]['id'], mapDocumentos[index]['arquivo']);
+                            }
                       },
                       ),),),
                       const Padding(
@@ -319,4 +322,11 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> with Parameter
         // TODO: Handle this case.
     }
   }
+}
+
+mixin class ParameterView  {
+
+  late List mapDocumentos = [];
+  late bool isSearching = false;
+
 }
