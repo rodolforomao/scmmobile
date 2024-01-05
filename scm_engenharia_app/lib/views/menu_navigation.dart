@@ -919,13 +919,15 @@ class MenuNavigationState extends State<MenuNavigation> {
           ),),
       ),),
       bottomNavigationBar: BottomAppBar(
+         height: 55,
+        padding: const EdgeInsets.all(0),
+        color: Colors.deepOrange,
         elevation: 0,
         child:Container(
           alignment: Alignment.bottomLeft,
           decoration: const BoxDecoration(
               image: DecorationImage(
                   image: AssetImage('assets/img/fundo_tela_configuracoes_bottom.png'), fit: BoxFit.cover)),
-          height: 50,
           padding: const EdgeInsets.fromLTRB(10.0, 2.0, 10.0, 5.0),
           constraints: const BoxConstraints(
             minWidth: 50,

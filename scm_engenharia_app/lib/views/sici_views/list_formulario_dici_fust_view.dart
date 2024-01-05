@@ -307,6 +307,15 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> with
           textInputAction: TextInputAction.done,
           onChanged: (String value) async {
             if (value.isNotEmpty) {
+
+              // Age from small to large
+              siciFileModelAllList. sort((a, b) => a.razaoSocial.toString().compareTo(b.razaoSocial.toString()));
+              print('Age ascending order:  ${siciFileModelAllList[0].razaoSocial}');
+
+              // Age from large to small
+              siciFileModelAllList.sort((a, b) => b.razaoSocial.toString().compareTo(a.razaoSocial.toString()));
+              print('Age descending order: ${siciFileModelAllList[0].razaoSocial}');
+
               setState(() {
                 siciFileModelAllList = siciFileModelUpdateList.where((element) => element.razaoSocial!.toLowerCase().contains(value.toLowerCase())).toList();
                 if(siciFileModelAllList.isEmpty)

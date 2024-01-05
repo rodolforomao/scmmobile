@@ -241,7 +241,12 @@ class AppThema {
           thumbColor: MaterialStateProperty.all(Colors.black12),
           radius: const Radius.circular(10),
           minThumbLength: 100),
-      cardTheme: const CardTheme(color: Color(0xffFFFFFF),elevation: 2),
+      cardTheme:  CardTheme(color: const Color(0xffFFFFFF),surfaceTintColor:const Color(0xffFFFFFF) , shadowColor: const Color(0xffFFFFFF), elevation: 3,shape: RoundedRectangleBorder(
+        side: const BorderSide(
+          color: Color(0xffFFFFFF),
+        ),
+        borderRadius: BorderRadius.circular(8.0),
+      ), ),
       buttonTheme:ButtonThemeData(buttonColor: Color(0xff093d6c),disabledColor: Colors.deepPurple,focusColor: Colors.amber,hoverColor:Colors.green, splashColor:Colors.brown),
       drawerTheme: const DrawerThemeData(backgroundColor: Color(0xffFFFFFF),scrimColor: Colors.transparent,elevation: 2,width: 310,shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -293,7 +298,8 @@ class StylesThemas {
 
   static TextStyle textStyleTextTitle() {
     return AppThema.themeNotifierState.value.mode == ThemeMode.light ? const TextStyle(
-      fontFamily: 'Poppins-Regular',
+      fontFamily: 'Poppins-Light',
+      fontSize: 13.0,
       fontWeight: FontWeight.w300,
       color: Color(0xff3F4143),
     )
@@ -320,13 +326,14 @@ class StylesThemas {
 
   static TextStyle textStyleTextSpanTitle() {
     return AppThema.themeNotifierState.value.mode == ThemeMode.light ? const TextStyle(
-      fontFamily: 'Montserrat-Medium',
+      fontFamily: 'Poppins-Regular',
       fontWeight: FontWeight.w300,
+      fontSize: 17,
       color: Color(0xff3F4143),
     )
         : const TextStyle(
       fontWeight: FontWeight.w300,
-      fontFamily: 'Montserrat-Medium',
+      fontFamily: 'Poppins-Regular',
       color: Color(0xffFFFFFF),
     );
   }
@@ -334,10 +341,10 @@ class StylesThemas {
   static TextStyle textStyleTextSpanSubtitle() {
     return AppThema.themeNotifierState.value.mode == ThemeMode.light
         ? const TextStyle(
-      fontFamily: 'Myriad-Pro-SemiExt',
-      height: 1.6, //You can set your custom height here
-      fontWeight: FontWeight.w300,
-      color: Color(0xFF545454),
+        fontWeight: FontWeight.w500,
+        fontSize: 15.0,
+        color: Color(0xff979797),
+        fontFamily: "Poppins-Regular",
     )
         : const TextStyle(
       fontWeight: FontWeight.w300,

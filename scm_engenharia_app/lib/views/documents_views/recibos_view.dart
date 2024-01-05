@@ -230,7 +230,7 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> with Parameter
               children: [
               Padding(padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 5.0),child: Text(
                 'contratos',
-                style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 20,color:  Colors.black, fontWeight: FontWeight.w600,),
+                style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 20,color:  Colors.black, fontWeight: FontWeight.w600,),
               ),),
               const Padding(padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 5.0),child: Divider(color:Colors.black54),),
                 Expanded(
@@ -254,11 +254,11 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> with Parameter
                               text: TextSpan(children: [
                                 TextSpan(
                                   text: 'Razão social : ',
-                                  style: Theme.of(context).textTheme.headline1?.copyWith(fontSize: 17),
+                                  style: StylesThemas.textStyleTextSpanTitle(),
                                 ),
                                 TextSpan(
                                   text: mapDocumentos[index]['razao_social'] ?? '',
-                                  style: Theme.of(context).textTheme.headline2?.copyWith(fontSize: 16),
+                                    style: StylesThemas.textStyleTextSpanSubtitle()
                                 ),
                               ]))),
                       Padding(
@@ -271,11 +271,11 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> with Parameter
                             text: TextSpan(children: [
                               TextSpan(
                                 text: 'Cnpj : ',
-                                style: Theme.of(context).textTheme.headline1?.copyWith(fontSize: 17),
+                                style: StylesThemas.textStyleTextSpanTitle(),
                               ),
                               TextSpan(
                                 text: mapDocumentos[index]['cnpj'] ?? '',
-                                style: Theme.of(context).textTheme.headline2?.copyWith(fontSize: 15),
+                                  style: StylesThemas.textStyleTextSpanSubtitle()
                               ),
                             ])),),
                       Padding(
@@ -288,11 +288,11 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> with Parameter
                             text: TextSpan(children: [
                               TextSpan(
                                 text: 'Período referência: ',
-                                style: Theme.of(context).textTheme.headline1?.copyWith(fontSize: 17),
+                                style: StylesThemas.textStyleTextSpanTitle(),
                               ),
                               TextSpan(
                                 text: Components.dateFormatDDMMYYYY(mapDocumentos[index]['periodo_referencia'])  ?? '',
-                                style: Theme.of(context).textTheme.headline2?.copyWith(fontSize: 15),
+                                  style: StylesThemas.textStyleTextSpanSubtitle()
                               ),
                             ])),),
                       Align(alignment: Alignment.bottomRight,child: Padding( padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0), child: IconButton(

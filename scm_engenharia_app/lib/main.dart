@@ -76,7 +76,6 @@ class MyApp extends StatelessWidget {
           ],
           supportedLocales: const [Locale('pt', 'BR')],
           theme: AppThema.lightTheme.copyWith(
-            useMaterial3:false,
             pageTransitionsTheme:  const PageTransitionsTheme(
               builders: {
                 TargetPlatform.android: SharedAxisPageTransitionsBuilder(
