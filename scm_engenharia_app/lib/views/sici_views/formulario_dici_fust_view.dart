@@ -60,7 +60,7 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> with Paramet
       inputSiciFustForm.cofins = txtControllerCofins.text;
       inputSiciFustForm.cofinsPorc = txtControllerCofinsPorc.text;
       inputSiciFustForm.observacoes = txtControllerGeneralObservations.text;
-      if (inputSiciFustForm.dadosEmServicos!.isEmpty) {
+      if (inputSiciFustForm.dadosEmServicos == null) {
         throw ('Distribuição do quantitativo de acessos físicos em serviço é obrigatório,favor adicionar.');
       } else {
         GlobalScaffold.instance.onToastPerformingOperation('Realizando operação');

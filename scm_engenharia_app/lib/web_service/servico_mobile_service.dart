@@ -10,7 +10,7 @@ import '../models/input/input_sici_fust_form_model.dart';
 import 'package:http_parser/http_parser.dart';
 
 class ServicoMobileService {
-  static var Url = "http://dici.scmengenharia.com.br";
+  static var Url = "https://dici.scmengenharia.com.br";
   //static const Url = "http://10.0.2.2:8083";
   //static final Url = "http://10.200.4.77:8083";
   //static final Url = "http://wsscm.ddns.net";
