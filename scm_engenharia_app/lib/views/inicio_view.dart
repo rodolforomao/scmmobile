@@ -247,6 +247,7 @@ class InicioState extends State<InicioView>  {
                 style:  TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 20,
+                  color: Colors.white
                 ),
               ),
             ),

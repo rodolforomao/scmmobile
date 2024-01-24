@@ -90,8 +90,13 @@ class AppScmEngenhariaMobileBll {
     operation.message = 'Operação realizada com sucesso';
     operation.erro = false;
     try {
+
+
       realm.write(() {
-        realm.deleteAll();
+        realm.deleteAll<TbUser>();
+        realm.deleteAll<TbFormSiciFust>();
+        realm.deleteAll<TbEnvironmntVariable>();
+        realm.deleteAll<TbArquivoDiciFust>();
       });
       operation.result = true;
     } catch (ex) {

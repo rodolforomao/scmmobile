@@ -18,7 +18,7 @@ class ServicoMobileService {
   static Future<Operation> onLogin(String usuario, String password) async {
     Operation operacao = Operation();
     try {
-      String? token = await Components.JWTToken(usuario, password);
+      String? token = Components.JWTToken(usuario, password);
       final response = await http
           .post(Uri.parse("$Url/login_ws"),
           headers: {
