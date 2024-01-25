@@ -54,7 +54,10 @@ class SelecioneArquivoDiciFustState extends State<SelecioneArquivoDiciFustView> 
               List mapdadosEmServicos = [];
               if(Components.onIsEmpty(mapResult['data']['Dici']) != '')
                 {
-                  for (var item in mapResult['data']['Dici']) {
+
+
+                 print(mapResult['data']);
+                  for (var item in mapResult['data']['Dici'] as List) {
                     mapdadosEmServicos.add({
                       'idLancamento': '',
                       'idSiciFile': '',
@@ -71,6 +74,38 @@ class SelecioneArquivoDiciFustState extends State<SelecioneArquivoDiciFustView> 
                   }
                 }
 
+              if(Components.onIsEmpty(mapResult['data']) != '')
+                {
+
+                  if(Components.onIsEmpty(mapResult['data']['Empresa']) != '')
+                  {
+
+                  }
+
+                  var dsf = InputSiciFileModel.fromJson({
+
+
+
+                    'razaoSocial': Components.onIsEmpty(mapResult['data']['Empresa'] ['razao_social']),
+                    'telefoneFixo': Components.onIsEmpty(mapResult['data']['Empresa']['telefone_fixo']),
+                    'telefoneMovel': Components.onIsEmpty(mapResult['data']['Empresa']['telefone_celular']),
+                    'cnpj': Components.onIsEmpty(mapResult['data']['Empresa']['cnpj']),
+                    'receitaBruta': Components.onIsEmpty(mapResult['data']['Financeiro']['bruta']),
+
+                    'simplesPorc ': Components.onIsEmpty(mapResult['data1']['Financeiro']['simples']) == '' ? '' : Components.onIsEmpty(mapResult['data']['Financeiro']['simples'][0]),
+
+                    'simplesPorc ': Components.onIsEmpty(mapResult['data']['Financeiro']['simples'][0]),
+                    'simples': Components.onIsEmpty(mapResult['data']['Financeiro']['simples'][1]),
+                    'icmsPorc ': Components.onIsEmpty(mapResult['data']['Financeiro']['icms'][0]),
+                    'icms': Components.onIsEmpty(mapResult['data']['Financeiro']['icms'][1]),
+                    'pis': Components.onIsEmpty(mapResult['data']['Financeiro']['pis']),
+                    'cofins': Components.onIsEmpty(mapResult['data']['Financeiro']['cofins']),
+                    'receitaLiquida': Components.onIsEmpty(mapResult['data']['Financeiro']['líquida']),
+                    'dadosEmServicos':mapdadosEmServicos,
+                  });
+                }
+
+
               Navigator.push(
                   context,
                   CupertinoPageRoute(
@@ -82,19 +117,16 @@ class SelecioneArquivoDiciFustState extends State<SelecioneArquivoDiciFustView> 
                             'telefoneMovel': Components.onIsEmpty(mapResult['data']['Empresa']['telefone_celular']),
                             'cnpj': Components.onIsEmpty(mapResult['data']['Empresa']['cnpj']),
                             'receitaBruta': Components.onIsEmpty(mapResult['data']['Financeiro']['bruta']),
-
                               'simplesPorc ': Components.onIsEmpty(mapResult['data']['Financeiro']['simples'][0]),
                               'simples': Components.onIsEmpty(mapResult['data']['Financeiro']['simples'][1]),
                             'icmsPorc ': Components.onIsEmpty(mapResult['data']['Financeiro']['icms'][0]),
                               'icms': Components.onIsEmpty(mapResult['data']['Financeiro']['icms'][1]),
-
-
                             'pis': Components.onIsEmpty(mapResult['data']['Financeiro']['pis']),
                             'cofins': Components.onIsEmpty(mapResult['data']['Financeiro']['cofins']),
                             'receitaLiquida': Components.onIsEmpty(mapResult['data']['Financeiro']['líquida']),
                             'dadosEmServicos':mapdadosEmServicos,
                           }),
-                          'isLancamentosComBaseMesAnterior':false,
+                            'isLancamentosComBaseMesAnterior':false,
                         }),
                   )).then((value) {
               });
