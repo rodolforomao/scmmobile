@@ -21,6 +21,7 @@ import '../../web_service/servico_mobile_service.dart';
 import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
 import 'dados_em_servicos_view.dart';
+import '../../help/navigation_service/route_paths.dart' as routes;
 
 class FormularioDiciFustView extends StatefulWidget {
   Map<String, dynamic>  map = {};
@@ -64,16 +65,11 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> with Paramet
         throw ('Distribuição do quantitativo de acessos físicos em serviço é obrigatório,favor adicionar.');
       } else {
         GlobalScaffold.instance.onToastPerformingOperation('Realizando operação');
-        var formSiciFust = TbFormSiciFust(
-            ObjectId(),
-            inputSiciFustForm.id ?? "",
-            jsonEncode(inputSiciFustForm.toJson() ?? ""));
-        if (inputSiciFustForm.idFichaSiciApp!.isNotEmpty) {
-          formSiciFust = TbFormSiciFust(
-              ObjectId.fromHexString(inputSiciFustForm.idFichaSiciApp!), inputSiciFustForm.id ?? "",
-              jsonEncode(inputSiciFustForm.toJson() ?? ""));
+        var formSiciFust = TbFormSiciFust(ObjectId(), inputSiciFustForm.id ?? "", jsonEncode(inputSiciFustForm.toJson() ?? ""));
+        if (Components.onIsEmpty(inputSiciFustForm.idFichaSiciApp) != '') {
+          formSiciFust = TbFormSiciFust(ObjectId.fromHexString(inputSiciFustForm.idFichaSiciApp!), inputSiciFustForm.id ?? "", jsonEncode(inputSiciFustForm.toJson() ?? ""));
         }
-        Operation respFormSiciFust = await AppScmEngenhariaMobileBll.instance.onSaveUpdateFormSiciFust(inputSiciFustForm.idFichaSiciApp!, formSiciFust).whenComplete(() => GlobalScaffold.instance.onHideCurrentSnackBar());
+        Operation respFormSiciFust = await AppScmEngenhariaMobileBll.instance.onSaveUpdateFormSiciFust(Components.onIsEmpty(inputSiciFustForm.idFichaSiciApp), formSiciFust).whenComplete(() => GlobalScaffold.instance.onHideCurrentSnackBar());
         if (respFormSiciFust.erro) {
           throw respFormSiciFust.message!;
         } else if (respFormSiciFust.result == null) {
@@ -172,6 +168,7 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> with Paramet
                               //`Text` to display
                               onPressed: () {
                                 //Navigator.pop(context);
+                                GlobalScaffold.instance.navigatorKey.currentState?.pushNamedAndRemoveUntil(routes.menuNavigationRoute, (Route<dynamic> route) => false);
                                 GlobalScaffold.instance.navigatorKey.currentState?.popUntil((route) => route.isFirst);
                               },
                             ),

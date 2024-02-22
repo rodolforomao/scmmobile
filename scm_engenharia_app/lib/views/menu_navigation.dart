@@ -305,21 +305,27 @@ class MenuNavigationState extends State<MenuNavigation> {
                                   height: 60,
                                   child: InkWell(
                                     onTap: () {
-                                      setState(() {
-                                        GlobalScaffold.instance.selectedPageView = routes.formularioSiciFustRoute;
-                                        lancamentosSiciExpanded = true;
-                                      });
-                                      Navigator.of(context).pushNamed(
-                                        routes.formularioSiciFustRoute,
-                                        arguments: {
-                                          'isLancamentosComBaseMesAnterior': true,
-                                        },
-                                      ).then((value) {
-                                        setState(() =>  GlobalScaffold.instance.selectedPageView = routes.lancamentoSiciFustRoute);
-                                        GlobalScaffold.colorSelectedPageView(routes.lancamentoSiciFustRoute);
-                                        lancamentosSiciExpanded = true;
-                                      });
+
+                                      setState(() =>  GlobalScaffold.instance.selectedPageView = routes.lancamentoSiciFustRoute);
+                                      GlobalScaffold.colorSelectedPageView(routes.lancamentoSiciFustRoute);
+                                      lancamentosSiciExpanded = true;
                                       GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
+
+                                      //setState(() {
+                                      //  GlobalScaffold.instance.selectedPageView = routes.formularioSiciFustRoute;
+                                       // lancamentosSiciExpanded = true;
+                                     // });
+                                      //Navigator.of(context).pushNamed(
+                                     //   routes.formularioSiciFustRoute,
+                                     //   arguments: {
+                                     //     'isLancamentosComBaseMesAnterior': true,
+                                     //   },
+                                      //).then((value) {
+                                     //   setState(() =>  GlobalScaffold.instance.selectedPageView = routes.lancamentoSiciFustRoute);
+                                     //   GlobalScaffold.colorSelectedPageView(routes.lancamentoSiciFustRoute);
+                                      //  lancamentosSiciExpanded = true;
+                                     // });
+
                                     }, // Handle your callback
                                     child: Container(
                                       alignment: Alignment.centerLeft,
@@ -341,7 +347,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                                           const SizedBox(width: 15.0),
                                           Flexible(
                                             child: Text(
-                                              'lancamentos com\r\nbase no mês anterior',
+                                              'lançamentos com\r\nbase no mês anterior',
                                               overflow: TextOverflow.visible,
                                               maxLines: 2,
                                               softWrap: false,
@@ -959,7 +965,7 @@ class MenuNavigationState extends State<MenuNavigation> {
   Color colorSelectedIconPageView(int value) {
     if(_selectedIndex == value)
     {
-      return Color(0xffFFFFFF);
+      return const Color(0xffFFFFFF);
     }
     else
     {

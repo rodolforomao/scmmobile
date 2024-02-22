@@ -52,7 +52,7 @@ class InputSiciFileModel {
   });
 
   InputSiciFileModel.fromJson(Map<String, dynamic> json) {
-    idFichaSiciApp = json['idFichaSiciApp'].toString();
+    idFichaSiciApp = json['idFichaSiciApp'];
     idRegistro = json['idRegistro'].toString();
     idEmpresa = json['idEmpresa'].toString();
     id = json['id'].toString();

@@ -51,6 +51,7 @@ class SelecioneArquivoDiciFustState extends State<SelecioneArquivoDiciFustView> 
               throw (resultRest.message!);
             } else {
               Map<String, dynamic>  mapResult = resultRest.result as Map<String, dynamic>;
+              print(mapResult);
               List mapdadosEmServicos = [];
               if(Components.onIsEmpty(mapResult['data']?['Dici']) != '')
                 {
@@ -78,7 +79,7 @@ class SelecioneArquivoDiciFustState extends State<SelecioneArquivoDiciFustView> 
                       CupertinoPageRoute(
                         builder: (context) =>
                             FormularioDiciFustView(map:{
-                               'formulario':InputSiciFileModel.fromJson({
+                                'formulario':InputSiciFileModel.fromJson({
                                 'razaoSocial': Components.onIsEmpty(mapResult['data']?['Empresa']?['razao_social']),
                                 'telefoneFixo': Components.onIsEmpty(mapResult['data']?['Empresa']?['telefone_fixo']),
                                 'telefoneMovel': Components.onIsEmpty(mapResult['data']?['Empresa']?['telefone_celular']),
