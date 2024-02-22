@@ -25,7 +25,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 
 environment:
-  sdk: '>=3.2.3 <4.0.0'
+  sdk: '>=3.3.0 <4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -43,19 +43,19 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6         # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
-  animations: ^2.0.10              # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
-  image_picker: ^1.0.5            # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
-  path_provider: ^2.1.1           # ANDROID, IOS, LINUX, MACOS, WINDOWS
+  animations: ^2.0.11              # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  image_picker: ^1.0.7            # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  path_provider: ^2.1.2           # ANDROID, IOS, LINUX, MACOS, WINDOWS
   shared_preferences: ^2.2.2      # ANDROID, IOS, LINUX, MACOS, WEB
-  webview_flutter: ^4.4.3         # ANDROID, IOS
-  url_launcher: ^6.2.2            # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
-  file_selector: ^1.0.1           # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  webview_flutter: ^4.7.0         # ANDROID, IOS
+  url_launcher: ^6.2.5            # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  file_selector: ^1.0.3           # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
 
   #Plugin Flutter Community
   connectivity_plus: ^5.0.2       # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
-  device_info_plus: ^9.1.1        # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  device_info_plus: ^9.1.2        # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
   package_info_plus: ^5.0.1       # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
-  share_plus: ^7.2.1              # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
+  share_plus: ^7.2.2              # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
 
   #Plugin dart.dev
   http: ^1.1.2                    # ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS
@@ -64,10 +64,10 @@ dependencies:
   html: ^0.15.4                   # ANDROID, IOS, LINUX,MACOS, WEB, WINDOWS
 
   #Plugin firebase
-  firebase_core: ^2.24.2           # ANDROID ,IOS, MACOS, WEB,
-  firebase_crashlytics: ^3.4.9     # ANDROID ,IOS, MACOS
-  firebase_messaging: ^14.7.10     # ANDROID,IOS, MACOS, WEB
-  firebase_analytics: ^10.8.0      # ANDROID,IOS,MACOS,WEB
+  firebase_core: ^2.25.4           # ANDROID ,IOS, MACOS, WEB,
+  firebase_crashlytics: ^3.4.15    # ANDROID ,IOS, MACOS
+  firebase_messaging: ^14.7.16     # ANDROID,IOS, MACOS, WEB
+  firebase_analytics: ^10.8.6      # ANDROID,IOS,MACOS,WEB
 
   # realm
   realm: ^1.6.1                   # ANDROID, IOS, LINUX, MACOS, WINDOWS
@@ -76,7 +76,7 @@ dependencies:
   #file: ^7.0.0                     # ANDROID, IOS, LINUX, MACOS, WINDOWS
 
   #Plugin outros
-  geolocator: ^10.1.0               # ANDROID,IOS,MACOS,WEB,WINDOWS
+  geolocator: ^11.0.0               # ANDROID,IOS,MACOS,WEB,WINDOWS
   jaguar_jwt: ^3.0.0
   file_picker: ^6.1.1
   flutter_file_dialog : ^3.0.2                                                # ANDROID, IOS
