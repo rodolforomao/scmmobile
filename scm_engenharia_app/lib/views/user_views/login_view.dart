@@ -10,6 +10,7 @@ import '../../data/tb_user.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
 import '../../models/operation.dart';
 import '../../models/user_response_model.dart';
+import '../../thema/app_thema.dart';
 import '../../web_service/servico_mobile_service.dart';
 import '../help_views/global_scaffold.dart';
 import 'package:scm_engenharia_app/models/global_user_logged.dart' as global_user_logged;
@@ -154,11 +155,11 @@ class LoginState extends State<LoginView> {
                   text: TextSpan(children: [
                     TextSpan(
                       text: 'Olá, \r\n',
-                      style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 22,color:  Colors.black54,),
+                      style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 22,color:  Colors.black54,),
                     ),
                     TextSpan(
                       text: 'digite seu e-mail e senha',
-                      style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 22,color:  Colors.black54,),
+                      style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 22,color:  Colors.black54,),
                     ),
                   ])),),
               Padding(padding: const EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0),child:TextField(

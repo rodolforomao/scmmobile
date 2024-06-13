@@ -3,6 +3,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
 import '../../models/operation.dart';
+import '../../thema/app_thema.dart';
 import '../../web_service/servico_mobile_service.dart';
 import '../help_views/global_scaffold.dart';
 
@@ -110,11 +111,11 @@ class ForgotYourPasswordState extends State<ForgotYourPasswordView> {
                   text: TextSpan(children: [
                     TextSpan(
                       text: 'Esqueceu sua senha , \r\n',
-                      style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 22,color:  Colors.black54,),
+                      style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 22,color:  Colors.black54,),
                     ),
                     TextSpan(
                       text: 'insira seu email e clique em “recuperar senha”',
-                      style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 22,color:  Colors.black54,),
+                      style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 22,color:  Colors.black54,),
                     ),
                   ])),),
               Padding(padding: const EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0),child:TextField(

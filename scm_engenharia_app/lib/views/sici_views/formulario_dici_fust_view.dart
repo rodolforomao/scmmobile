@@ -102,11 +102,8 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> with Paramet
                           children: [
                             Text(
                               'Informação',
-                              style: Theme.of(GlobalScaffold
-                                      .instance.navigatorKey.currentContext!)
-                                  .textTheme
-                                  .headline4
-                                  ?.copyWith(
+                              style: StylesThemas.textStyleTextTitle()
+                                  .copyWith(
                                     fontSize: 20,
                                     color: const Color(0xff737373),
                                     fontWeight: FontWeight.w200,
@@ -126,11 +123,7 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> with Paramet
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 10,
                                 softWrap: false,
-                                style: Theme.of(GlobalScaffold
-                                        .instance.navigatorKey.currentContext!)
-                                    .textTheme
-                                    .headline4
-                                    ?.copyWith(
+                                style:StylesThemas.textStyleTextTitle().copyWith(
                                       fontSize: 15,
                                       color: const Color(0xff737373),
                                       fontWeight: FontWeight.w100,
@@ -484,10 +477,7 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> with Paramet
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           softWrap: false,
-                          style: Theme.of(context)
-                              .textTheme
-                              .subtitle1
-                              ?.copyWith(fontSize: 17),
+                          style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 17),
                         ),
                       ),
                       content: GlobalView.viewResponsiveGridTextField(
@@ -633,10 +623,7 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> with Paramet
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           softWrap: false,
-                          style: Theme.of(context)
-                              .textTheme
-                              .subtitle1
-                              ?.copyWith(fontSize: 15),
+                          style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 15),
                         ),
                       ),
                       content: GlobalView.viewResponsiveGridTextField(
@@ -982,10 +969,7 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> with Paramet
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           softWrap: false,
-                          style: Theme.of(context)
-                              .textTheme
-                              .subtitle1
-                              ?.copyWith(fontSize: 15),
+                          style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 15),
                         ),
                       ),
                       content: Column(
@@ -1383,11 +1367,7 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> with Paramet
                                                                           softWrap: false,
                                                                           maxLines: 2,
                                                                           overflow: TextOverflow.ellipsis,
-                                                                          style: Theme.of(GlobalScaffold.instance
-                                                                              .navigatorKey.currentContext!)
-                                                                              .textTheme
-                                                                              .headline4
-                                                                              ?.copyWith(
+                                                                          style:StylesThemas.textStyleTextTitle().copyWith(
                                                                             fontSize: 15,
                                                                             color: const Color(0xff737373),
                                                                             fontWeight: FontWeight.w100,

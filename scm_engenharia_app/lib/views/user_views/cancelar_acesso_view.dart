@@ -135,7 +135,7 @@ class CancelarAcessoState extends State<CancelarAcessoView> with ParameterResult
                       TextSpan(
                         text:
                         'Prezado cliente,\r\n',
-                        style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 20,color:  Colors.black, fontWeight: FontWeight.w600,),
+                        style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 20,color:  Colors.black, fontWeight: FontWeight.w600,),
                       ),
                       const TextSpan(
                         text: 'O cancelamento do serviço de participação implica no não-recebimento de relatórios pela Internet e revoga seu acesso. Para confirmar o cancelamento, informe sua credencial  e clique no botão "CONFIRMAR"',

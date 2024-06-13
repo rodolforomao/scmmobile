@@ -104,7 +104,7 @@ class TbUser extends _TbUser with RealmEntity, RealmObjectBase, RealmObject {
   static SchemaObject? _schema;
   static SchemaObject _initSchema() {
     RealmObjectBase.registerFactory(TbUser._);
-    return const SchemaObject(ObjectType.realmObject,TbUser, 'TbUser', [
+    return  SchemaObject(ObjectType.realmObject,TbUser, 'TbUser', [
       SchemaProperty('idUserApp', RealmPropertyType.objectid, mapTo: 'idUserApp', primaryKey: true),
       SchemaProperty('idUser', RealmPropertyType.string),
       SchemaProperty('idProfile', RealmPropertyType.string),

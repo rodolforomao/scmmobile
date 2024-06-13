@@ -28,11 +28,7 @@ class ErroInternetState extends State<ErroInternetView> {
   @override
   void initState() {
     super.initState();
-    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      if (result != ConnectivityResult.none) {
-        Navigator.of(context).pop();
-      }
-    });
+
     onInc();
   }
 
@@ -76,12 +72,12 @@ class ErroInternetState extends State<ErroInternetView> {
                    Padding( padding: const EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 10.0),child:Text(
                     'Não há conexão com a internet.',
                     textAlign: TextAlign.center,
-                     style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17),
+                     style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 17),
                   ),),
                    Padding( padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 20.0),child:Text(
                     'Verifique sua conexão com a internet e tente novamente.',
                     textAlign: TextAlign.center,
-                     style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 20),
+                     style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 20),
                   ),),
                    Padding( padding: const EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 0.0),child: TextButton(
                      style: TextButton.styleFrom(

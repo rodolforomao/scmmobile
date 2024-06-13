@@ -128,7 +128,7 @@ class ErrorInformationState extends State<ErroInformacaoView> {
               Text(
                 widget.map['error'].toString() ?? '--',
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 16,color:  Color(0xff575757), fontWeight: FontWeight.w600,),
+                style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 16,color:  Color(0xff575757), fontWeight: FontWeight.w600,),
               ),
               const SizedBox(height: 40.0),
 

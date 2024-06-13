@@ -43,7 +43,7 @@ class TbFormSiciFust extends _TbFormSiciFust  with RealmEntity, RealmObjectBase,
   static SchemaObject? _schema;
   static SchemaObject _initSchema() {
     RealmObjectBase.registerFactory(TbFormSiciFust._);
-    return const SchemaObject(ObjectType.realmObject, TbFormSiciFust, 'TbFormSiciFust', [
+    return  SchemaObject(ObjectType.realmObject, TbFormSiciFust, 'TbFormSiciFust', [
       SchemaProperty('idFormSiciFustApp', RealmPropertyType.objectid, mapTo: 'idFormSiciFustApp', primaryKey: true),
       SchemaProperty('idRegistro', RealmPropertyType.string),
       SchemaProperty('result', RealmPropertyType.string),

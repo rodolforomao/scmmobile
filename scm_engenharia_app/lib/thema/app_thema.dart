@@ -5,7 +5,6 @@ class AppThema {
 
   static ThemeData lightTheme = ThemeData(
       scaffoldBackgroundColor: const Color(0xffFFFFFF),
-      backgroundColor: const Color(0xffFFFFFF),
       primarySwatch: Colors.red,
       canvasColor: const Color(0xffFFFFFF),
       primaryColor:const Color(0xFFF65100),
@@ -13,51 +12,7 @@ class AppThema {
       primaryColorLight: const Color(0xffFFFFFF),
       splashColor: const Color(0xFFF65100),
       iconTheme: const IconThemeData(color: Color(0xFF545454)),
-      textTheme:  const TextTheme(
-        headline1: TextStyle(
-            fontWeight: FontWeight.w500,
-            fontSize: 20.0,
-            color: Color(0xff606060),
-            fontFamily: "Poppins-Regular"),
-        headline2: TextStyle(
-            fontWeight: FontWeight.w500,
-            fontSize: 15.0,
-            color: Color(0xff979797),
-            fontFamily: "Poppins-Regular"),
-        headline3: TextStyle(
-            fontSize: 13.0,
-            color: Color(0xff15335A),
-            fontFamily:
-            "Poppins-Regular"),
-        //Título-------------------------------------------------------
-        headline4: TextStyle(
-          color: Color(0xff979797),
-          fontWeight: FontWeight.w500,
-          fontSize: 17.0,
-          fontFamily: 'Poppins-Medium',),
-        //ShowDialog---------------------------------------------------
-        headline5: TextStyle(
-            fontSize: 25.0,
-            fontWeight: FontWeight.w500,
-            color: Colors.black87,
-            fontFamily: 'Myriad-Pro-SemiExt'),
-        headline6:TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 13.0,
-            color: Color(0xff737373),
-            fontFamily:
-            "Myriad-Pro-Light"),
-        //--------------------------------------------------------------
-        subtitle1: TextStyle(
-            fontSize: 15.0,
-            fontWeight: FontWeight.w100,
-            color: Color(0xff000000),
-            fontFamily: 'Poppins-Medium'),
-        bodyText1: TextStyle(
-          fontFamily: 'Poppins-Light',
-          fontSize: 13.0,
-        ),
-      ),
+
       listTileTheme: const ListTileThemeData(
         selectedColor:Color(0xffef7d00),
         contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
@@ -298,7 +253,7 @@ class StylesThemas {
 
   static TextStyle textStyleTextTitle() {
     return AppThema.themeNotifierState.value.mode == ThemeMode.light ? const TextStyle(
-      fontFamily: 'Poppins-Light',
+      fontFamily: 'Poppins-Regular',
       fontSize: 13.0,
       fontWeight: FontWeight.w300,
       color: Color(0xff3F4143),

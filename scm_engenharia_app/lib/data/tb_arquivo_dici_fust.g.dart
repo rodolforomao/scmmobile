@@ -43,7 +43,7 @@ class TbArquivoDiciFust extends _TbArquivoDiciFust  with RealmEntity, RealmObjec
   static SchemaObject? _schema;
   static SchemaObject _initSchema() {
     RealmObjectBase.registerFactory(TbArquivoDiciFust._);
-    return const SchemaObject(ObjectType.realmObject, TbArquivoDiciFust, 'TbArquivoDiciFust', [
+    return SchemaObject(ObjectType.realmObject, TbArquivoDiciFust, 'TbArquivoDiciFust', [
       SchemaProperty('idArquivoDiciFustApp', RealmPropertyType.objectid, mapTo: 'idArquivoDiciFustApp', primaryKey: true),
       SchemaProperty('idRegistro', RealmPropertyType.string),
       SchemaProperty('result', RealmPropertyType.string),

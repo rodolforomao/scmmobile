@@ -111,7 +111,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                   Text(
                     'Página não encontrada',
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 16,color:  const Color(0xff575757), fontWeight: FontWeight.w600,),
+                    style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 16,color:  const Color(0xff575757), fontWeight: FontWeight.w600,),
                   ),
                   const SizedBox(height: 40.0),
                 ],
@@ -158,7 +158,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                       children:  <Widget>[
                         Padding(padding: const EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 10.0),child: Text(
                           global_user_logged.globalUserLogged!.name,
-                          style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 20,color:  Colors.black, fontWeight: FontWeight.w600,),
+                          style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 20,color:  Colors.black, fontWeight: FontWeight.w600,),
                         ),),
                       ],
                     ),
@@ -199,7 +199,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                                 overflow: TextOverflow.visible,
                                 maxLines: 1,
                                 softWrap: false,
-                                style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.lancamentosRoute)),
+                                style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.lancamentosRoute)),
                               ),
                               children: [
                                 SizedBox(
@@ -240,7 +240,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                                               overflow: TextOverflow.visible,
                                               maxLines: 1,
                                               softWrap: false,
-                                              style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 15, color:GlobalScaffold.colorTextIconSelectedPageView(routes.lancamentoSiciFustRoute)),
+                                              style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 15, color:GlobalScaffold.colorTextIconSelectedPageView(routes.lancamentoSiciFustRoute)),
                                             ),
                                           ),
                                         ],
@@ -293,7 +293,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                                               overflow: TextOverflow.visible,
                                               maxLines: 1,
                                               softWrap: false,
-                                              style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 15, color:GlobalScaffold.colorTextIconSelectedPageView(routes.formularioSiciFustRoute)),
+                                              style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 15, color:GlobalScaffold.colorTextIconSelectedPageView(routes.formularioSiciFustRoute)),
                                             ),
                                           ),
                                         ],
@@ -351,7 +351,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                                               overflow: TextOverflow.visible,
                                               maxLines: 2,
                                               softWrap: false,
-                                              style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 15, color:const Color(0xff6C757D)),
+                                              style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 15, color:const Color(0xff6C757D)),
                                             ),
                                           ),
                                         ],
@@ -397,7 +397,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                                               overflow: TextOverflow.visible,
                                               maxLines: 1,
                                               softWrap: false,
-                                              style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 15, color:GlobalScaffold.colorTextIconSelectedPageView(routes.listaArquivosDiciRoute)),
+                                              style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 15, color:GlobalScaffold.colorTextIconSelectedPageView(routes.listaArquivosDiciRoute)),
                                             ),
                                           ),
                                         ],
@@ -573,7 +573,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                                 overflow: TextOverflow.visible,
                                 maxLines: 1,
                                 softWrap: false,
-                                style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.documentosRoute)),
+                                style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.documentosRoute)),
                               ),
                               children: [
                                 /*   SizedBox(
@@ -708,7 +708,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                                               overflow: TextOverflow.visible,
                                               maxLines: 1,
                                               softWrap: false,
-                                              style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 15, color:GlobalScaffold.colorTextIconSelectedPageView(routes.recibosDocumentosRoute)),
+                                              style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 15, color:GlobalScaffold.colorTextIconSelectedPageView(routes.recibosDocumentosRoute)),
                                             ),
                                           ),
                                         ],
@@ -837,7 +837,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                               overflow: TextOverflow.visible,
                               maxLines: 1,
                               softWrap: false,
-                              style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.notificacoesRoute)),
+                              style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.notificacoesRoute)),
                             ),
                           )
                         ],
@@ -878,7 +878,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                               overflow: TextOverflow.visible,
                               maxLines: 1,
                               softWrap: false,
-                              style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.configuracoesRoute)),
+                              style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.configuracoesRoute)),
                             ),
                           )
                         ],
@@ -911,7 +911,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                             overflow: TextOverflow.visible,
                             maxLines: 1,
                             softWrap: false,
-                            style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:Color(0xff6C757D)),
+                            style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 17, color:Color(0xff6C757D)),
                           ),
                         ),
                         const SizedBox(width: 15.0),

@@ -116,7 +116,7 @@ class SobreState extends State<SobreView> with ParameterResultViewEvent {
                     children: <Widget>[
                       Padding(padding: const EdgeInsets.fromLTRB(20.0, 25.0, 20.0, 10.0),child: Text(
                         'Sobre',
-                        style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 20,color:  Colors.black, fontWeight: FontWeight.w600,),
+                        style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 20,color:  Colors.black, fontWeight: FontWeight.w600,),
                       ),),
                       const Padding(padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 20.0),child: Divider(color:Colors.black54),),
                       Column(
@@ -132,11 +132,11 @@ class SobreState extends State<SobreView> with ParameterResultViewEvent {
                               text: TextSpan(children: [
                                 TextSpan(
                                     text: 'Nome Aplicativo :',
-                                    style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 18)
+                                    style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 18)
                                 ),
                                 TextSpan(
                                     text: '  ${infoApp.appName!}  ',
-                                    style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 20,color: Color(0xff262626))
+                                    style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 20,color: Color(0xff262626))
                                 ),
                               ])),),
                           Padding( padding: const EdgeInsets.only(top: 10.0, bottom: 10.0) ,child: RichText(
@@ -147,11 +147,11 @@ class SobreState extends State<SobreView> with ParameterResultViewEvent {
                               text: TextSpan(children: [
                                 TextSpan(
                                     text: 'Build : ',
-                                    style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 18)
+                                    style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 18)
                                 ),
                                 TextSpan(
                                     text: '  ${infoApp.buildNumber!}  ',
-                                    style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 20,color: Color(0xff262626))
+                                    style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 20,color: Color(0xff262626))
                                 ),
                               ])),),
                           Padding( padding: const EdgeInsets.only(top: 10.0, bottom: 10.0) ,child: InkWell(
@@ -163,11 +163,11 @@ class SobreState extends State<SobreView> with ParameterResultViewEvent {
                                 text: TextSpan(children: [
                                   TextSpan(
                                       text: 'Versão :  ',
-                                      style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 18)
+                                      style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 18)
                                   ),
                                   TextSpan(
                                       text: '  ${infoApp.version!}  ',
-                                      style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 20,color: Color(0xff262626))
+                                      style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 20,color: Color(0xff262626))
                                   ),
                                 ])),
                             onTap: () async {
@@ -182,11 +182,11 @@ class SobreState extends State<SobreView> with ParameterResultViewEvent {
                               text: TextSpan(children: [
                                 TextSpan(
                                     text: 'Dispositivo : ',
-                                    style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 18)
+                                    style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 18)
                                 ),
                                 TextSpan(
                                     text: '  ${infoApp.deviceVersion!}  ',
-                                    style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 20,color: Color(0xff262626))
+                                    style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 20,color: Color(0xff262626))
                                 ),
                               ])),),
                           Padding( padding: const EdgeInsets.only(top: 10.0, bottom: 10.0) ,child:  RichText(
@@ -197,11 +197,11 @@ class SobreState extends State<SobreView> with ParameterResultViewEvent {
                               text: TextSpan(children: [
                                 TextSpan(
                                     text: 'ID do Dispositivo : ',
-                                    style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 18)
+                                    style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 18)
                                 ),
                                 TextSpan(
                                     text: '  ${infoApp.idDevice!}  ',
-                                    style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 20,color: Color(0xff262626))
+                                    style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 20,color: Color(0xff262626))
                                 ),
                               ])),),
                           Center(child: Container(
@@ -222,11 +222,11 @@ class SobreState extends State<SobreView> with ParameterResultViewEvent {
                                           TextSpan(
                                             text:
                                             'Este canal é exclusivo para dúvidas, sugestões e reclamações sobre o ',
-                                            style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 18),
+                                            style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 18),
                                           ),
                                           TextSpan(
                                             text: 'APLICATIVO',
-                                            style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 18),
+                                            style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 18),
                                           ),
                                         ])),
                                   ),
