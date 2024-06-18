@@ -19,10 +19,10 @@ class OperationJson {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['mensagem'] = this.message;
-    data['resultado'] = this.result;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
+    data['mensagem'] = message;
+    data['resultado'] = result;
     return data;
   }
 }

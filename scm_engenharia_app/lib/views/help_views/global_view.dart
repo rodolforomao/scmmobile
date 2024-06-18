@@ -1,6 +1,7 @@
 import '../../help/components.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
 import 'package:flutter/material.dart';
+import '../../thema/app_thema.dart';
 import 'global_scaffold.dart';
 
 class GlobalView  {
@@ -92,7 +93,7 @@ class GlobalView  {
               child: Text(
                 errorInformation,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17),
+                style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 17),
               ),
             ),
             const SizedBox(height: 25.0),
@@ -144,7 +145,7 @@ class OnExitApp {
               children: [
                 Padding(padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 6.0),child: Text(
                   'Configurações',
-                  style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 12,color:  Colors.black, fontWeight: FontWeight.w600,),
+                  style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 12,color:  Colors.black, fontWeight: FontWeight.w600,),
                 ),),
                 const Padding(padding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 10.0),child: Divider(color:Colors.black54),),
                 Column(

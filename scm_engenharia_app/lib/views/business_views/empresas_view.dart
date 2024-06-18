@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import '../../help/parameter_result_view.dart';
 import '../../models/operation.dart';
 import '../../models/notification_models/notification_model.dart';
 import '../../thema/app_thema.dart';
@@ -16,7 +17,7 @@ class EmpresasView extends StatefulWidget {
   EmpresasState createState() => EmpresasState();
 }
 
-class EmpresasState extends State<EmpresasView> {
+class EmpresasState extends State<EmpresasView> with ParameterResultViewEvent {
 
   List<NotificationScmEngineering> listNotificationScmEngineering = [];
   late StreamSubscription<ConnectivityResult> subscription;
@@ -42,10 +43,10 @@ class EmpresasState extends State<EmpresasView> {
       setState(() {
         if (listNotificationScmEngineering.isNotEmpty) {
           statusView = TypeView.viewRenderInformation;
-          OnAlertError(error.toString());
+          OnAlert.onAlertError(context, error.toString());
         } else {
           statusView = TypeView.viewErrorInformation;
-          GlobalScaffold.erroInformacao = error.toString();
+          erroInformation = error.toString();
         }
       });
     }
@@ -111,7 +112,7 @@ class EmpresasState extends State<EmpresasView> {
       case TypeView.viewLoading:
         return GlobalView.viewPerformingSearch(maxHeight,context);
       case TypeView.viewErrorInformation:
-        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
+        return GlobalView.viewErrorInformation(maxHeight,erroInformation,context);
       case TypeView.viewRenderInformation:
         return  SingleChildScrollView(
           child: Container(
@@ -137,6 +138,8 @@ class EmpresasState extends State<EmpresasView> {
             ),
           ),
         );
+      case TypeView.viewThereIsNoInternet:
+        // TODO: Handle this case.
     }
   }
 }

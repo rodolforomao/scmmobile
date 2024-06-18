@@ -1,28 +1,28 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'tb_form_sici_fust.dart';
+part of 'tb_arquivo_dici_fust.dart';
 
 // **************************************************************************
 // RealmObjectGenerator
 // **************************************************************************
 
-class TbFormSiciFust extends _TbFormSiciFust  with RealmEntity, RealmObjectBase, RealmObject {
-  TbFormSiciFust(
-      ObjectId idFormSiciFustApp,
+class TbArquivoDiciFust extends _TbArquivoDiciFust  with RealmEntity, RealmObjectBase, RealmObject {
+  TbArquivoDiciFust(
+      ObjectId idArquivoDiciFustApp,
       String? idRegistro,
       String? result,
       ) {
-    RealmObjectBase.set(this, 'idFormSiciFustApp', idFormSiciFustApp);
+    RealmObjectBase.set(this, 'idArquivoDiciFustApp', idArquivoDiciFustApp);
     RealmObjectBase.set(this, 'idRegistro', idRegistro);
     RealmObjectBase.set(this, 'result', result);
   }
 
-  TbFormSiciFust._();
+  TbArquivoDiciFust._();
 
   @override
-  ObjectId get idFichaSiciApp => RealmObjectBase.get<ObjectId>(this, 'idFormSiciFustApp') as ObjectId;
+  ObjectId get idArquivoDiciFustApp => RealmObjectBase.get<ObjectId>(this, 'idArquivoDiciFustApp') as ObjectId;
   @override
-  set idFichaSiciApp(ObjectId value) => throw RealmUnsupportedSetError();
+  set idArquivoDiciFustApp(ObjectId value) => throw RealmUnsupportedSetError();
 
   @override
   String get idRegistro => RealmObjectBase.get<String>(this, 'idRegistro') as String;
@@ -37,14 +37,14 @@ class TbFormSiciFust extends _TbFormSiciFust  with RealmEntity, RealmObjectBase,
 
 
   @override
-  Stream<RealmObjectChanges<TbFormSiciFust>> get changes => RealmObjectBase.getChanges<TbFormSiciFust>(this);
+  Stream<RealmObjectChanges<TbArquivoDiciFust>> get changes => RealmObjectBase.getChanges<TbArquivoDiciFust>(this);
 
   static SchemaObject get schema => _schema ??= _initSchema();
   static SchemaObject? _schema;
   static SchemaObject _initSchema() {
-    RealmObjectBase.registerFactory(TbFormSiciFust._);
-    return  SchemaObject(ObjectType.realmObject, TbFormSiciFust, 'TbFormSiciFust', [
-      SchemaProperty('idFormSiciFustApp', RealmPropertyType.objectid, mapTo: 'idFormSiciFustApp', primaryKey: true),
+    RealmObjectBase.registerFactory(TbArquivoDiciFust._);
+    return SchemaObject(ObjectType.realmObject, TbArquivoDiciFust, 'TbArquivoDiciFust', [
+      SchemaProperty('idArquivoDiciFustApp', RealmPropertyType.objectid, mapTo: 'idArquivoDiciFustApp', primaryKey: true),
       SchemaProperty('idRegistro', RealmPropertyType.string),
       SchemaProperty('result', RealmPropertyType.string),
     ]);

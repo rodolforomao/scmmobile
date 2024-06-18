@@ -1,9 +1,9 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
 import '../../data/app_scm_engenharia_mobile_bll.dart';
 import '../../data/tb_form_sici_fust.dart';
+import '../../help/parameter_result_view.dart';
 import '../../models/operation.dart';
 import '../../models/input/input_sici_fust_form_model.dart';
 import '../../models/output/output_sici_fust_model.dart';
@@ -21,15 +21,7 @@ class ListFormularioSiciFustView extends StatefulWidget {
   ListFormularioSiciFustState createState() => ListFormularioSiciFustState();
 }
 
-class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
-
-  List<InputSiciFileModel> siciFileModelAllList = [];
-  List<InputSiciFileModel> siciFileModelUpdateList = [];
-
-
-  TypeView statusView = TypeView.viewLoading;
-  final txtSocialReason = TextEditingController();
-  late bool isSearching = false;
+class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> with ParameterResultViewEvent , ListFormularioSiciFustViewModel {
 
 
   onRestWeb() async {
@@ -49,6 +41,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
               if (siciFileModelAllList.where((f) => f.id!.startsWith(prop.id!)).isNotEmpty)
               {
                 // A ficha  ja esta salva no dispositivo
+                print(prop.id!);
               }
               else
               {
@@ -56,22 +49,25 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
               }
             }
             List<InputSiciFileModel>  siciFileModelAllResp = await  ParseRespJsonToView.parseSiciFustFormModelToSiciFileList(respNewSiciFustFormList);
-            setState(()  {
-              siciFileModelAllList.addAll(siciFileModelAllResp);
-              siciFileModelUpdateList.addAll(siciFileModelAllResp);
-              statusView = TypeView.viewRenderInformation;
-            });
+            if (mounted) {
+              setState(()  {
+                siciFileModelAllList.addAll(siciFileModelAllResp);
+                //siciFileModelUpdateList.addAll(siciFileModelAllResp);
+                statusView = TypeView.viewRenderInformation;
+              });
+            }
+
           }
         }
       }
     } catch (error) {
-      OnAlertError(error.toString());
+      OnAlert.onAlertError(context, error.toString());
     }
   }
 
   onRestDb() async {
     try {
-      setState(() {statusView = TypeView.viewLoading;});
+      setState(() =>  statusView = TypeView.viewLoading);
       Operation respUser = await AppScmEngenhariaMobileBll.instance.onSelectFormSiciFustAll();
       if (respUser.erro) {
         throw respUser.message!;
@@ -83,19 +79,19 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
         {
           throw ('Não é possível converter as informações');
         }
-        setState(() {statusView = TypeView.viewRenderInformation;});
+        setState(() =>  statusView = TypeView.viewRenderInformation);
         onRestWeb();
       } else {
         setState(() {
           statusView = TypeView.viewErrorInformation;
-          GlobalScaffold.erroInformacao = 'Não há registros salvos no celular';
+          erroInformation = 'Não há registros salvos no celular';
         });
         onRestWeb();
       }
-    } catch (error, s) {
+    } catch (error) {
       setState(() {
         statusView = TypeView.viewErrorInformation;
-        GlobalScaffold.erroInformacao = error.toString();
+        erroInformation = error.toString();
       });
     }
   }
@@ -114,16 +110,14 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
           if (respUser.erro || respUser.result == null) {
             throw respUser.message!;
           } else {
-            setState(() {
-              siciFileModelAllList.remove(siciFileModel);
-            });
+            setState(() =>  siciFileModelAllList.remove(siciFileModel));
             GlobalScaffold.instance.onToastSuccess(resultRest.message!);
             onRestWeb();
           }
         }
       }
     } catch (error) {
-      OnAlertError(error.toString());
+      OnAlert.onAlertError(context, error.toString());
     }
   }
 
@@ -138,7 +132,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                 if(siciFileModelAllList.isEmpty)
                 {
                   statusView = TypeView.viewErrorInformation;
-                  GlobalScaffold.erroInformacao = 'Não a registro para esta solicitação';
+                  erroInformation = 'Não a registro para esta solicitação';
                 }
                 else  {
                   statusView = TypeView.viewRenderInformation;
@@ -150,7 +144,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                 if(siciFileModelAllList.isEmpty)
                 {
                   statusView = TypeView.viewErrorInformation;
-                  GlobalScaffold.erroInformacao = 'Não a registro para esta solicitação';
+                  erroInformation = 'Não a registro para esta solicitação';
                 }
                 else  {
                   statusView = TypeView.viewRenderInformation;
@@ -162,7 +156,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                 if(siciFileModelAllList.isEmpty)
                 {
                   statusView = TypeView.viewErrorInformation;
-                  GlobalScaffold.erroInformacao = 'Não a registro para esta solicitação';
+                  erroInformation = 'Não a registro para esta solicitação';
                 }
                 else  {
                   statusView = TypeView.viewRenderInformation;
@@ -260,16 +254,20 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
 
   onToview(InputSiciFileModel? prop) {
     try {
+      Map<String, dynamic>  map = {
+        'formulario':prop,
+        'isLancamentosComBaseMesAnterior':false,
+      };
       Navigator.push(
           context,
           CupertinoPageRoute(
             builder: (context) =>
-                FormularioDiciFustView(siciFileModel:prop),
+                FormularioDiciFustView(map:map),
           )).then((value) {
         onRestDb();
       });
     } catch (error) {
-      OnAlertError(error.toString());
+      OnAlert.onAlertError(context, error.toString());
     }
   }
 
@@ -277,29 +275,21 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
   void initState() {
     super.initState();
     onRestDb();
-    Future.delayed(Duration.zero, () {
-
-    });
   }
 
   @override
   void dispose() {
-    try {
+    super.dispose();
 
-    } catch (exception, stackTrace) {
-      print("exception.toString()");
-      print(exception.toString());
-    } finally {
-      super.dispose();
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(55.0),
+        preferredSize: const Size.fromHeight(50.0),
         child: AppBar(
+          toolbarHeight: 50,
           automaticallyImplyLeading: true,
           centerTitle: true,
           flexibleSpace: Container(
@@ -317,12 +307,21 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
           textInputAction: TextInputAction.done,
           onChanged: (String value) async {
             if (value.isNotEmpty) {
+
+              // Age from small to large
+              // siciFileModelAllList. sort((a, b) => a.razaoSocial.toString().compareTo(b.razaoSocial.toString()));
+              //print('Age ascending order:  ${siciFileModelAllList[0].razaoSocial}');
+
+              // Age from large to small
+             //siciFileModelAllList.sort((a, b) => b.razaoSocial.toString().compareTo(a.razaoSocial.toString()));
+              //print('Age descending order: ${siciFileModelAllList[0].razaoSocial}');
+
               setState(() {
                 siciFileModelAllList = siciFileModelUpdateList.where((element) => element.razaoSocial!.toLowerCase().contains(value.toLowerCase())).toList();
                 if(siciFileModelAllList.isEmpty)
                 {
                   statusView = TypeView.viewErrorInformation;
-                  GlobalScaffold.erroInformacao = 'Não a registro para esta solicitação';
+                  erroInformation = 'Não a registro para esta solicitação';
                 }
                 else {
                   statusView = TypeView.viewRenderInformation;
@@ -403,7 +402,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
       case TypeView.viewLoading:
         return GlobalView.viewPerformingSearch(maxHeight,context);
       case TypeView.viewErrorInformation:
-        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
+        return GlobalView.viewErrorInformation(maxHeight,erroInformation,context);
       case TypeView.viewRenderInformation:
         return  Align( alignment: Alignment.topCenter,child: Container(
           alignment: Alignment.topCenter,
@@ -489,10 +488,10 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                               onTap: () async {
                                 onUpload(siciFileModelAllList[index]);
                               },
-                              child: Column(
+                              child: const Column(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: const <Widget>[
+                                children: <Widget>[
                                   Icon(Icons.file_upload_outlined, size: 25, color: Color(0xFF000000)),
                                 ],
                               ),
@@ -568,9 +567,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                                                                 throw respUser.message!;
                                                               } else {
                                                                 setState(() {
-                                                                  print(index);
                                                                   siciFileModelAllList.remove(siciFileModelAllList[index]);
-                                                                  //siciFileModelUpdateList.remove(siciFileModelUpdateList[index]);
                                                                 });
                                                                 Navigator.pop(context);
                                                                 GlobalScaffold.instance.onToastSuccess(respUser.message!);
@@ -642,10 +639,10 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
                               onTap: () async {
                                 onToview(siciFileModelAllList[index]);
                               },
-                              child: Column(
+                              child: const Column(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: const <Widget>[
+                                children: <Widget>[
                                   Icon(Icons.file_download_outlined,
                                       size: 20, color: Color(0xFF000000)),
                                 ],
@@ -680,6 +677,20 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> {
               ),
             ),),
           ),),);
+      case TypeView.viewThereIsNoInternet:
+        // TODO: Handle this case.
     }
   }
+}
+
+mixin class ListFormularioSiciFustViewModel {
+
+  List<InputSiciFileModel> siciFileModelAllList = [];
+  List<InputSiciFileModel> siciFileModelUpdateList = [];
+
+
+  TypeView statusView = TypeView.viewLoading;
+  final txtSocialReason = TextEditingController();
+  late bool isSearching = false;
+
 }

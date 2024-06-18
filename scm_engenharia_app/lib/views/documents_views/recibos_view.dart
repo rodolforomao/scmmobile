@@ -1,112 +1,102 @@
-import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import '../../help/components.dart';
+import '../../help/parameter_result_view.dart';
 import '../../models/operation.dart';
-import '../../models/notification_models/notification_model.dart';
 import '../../thema/app_thema.dart';
 import '../../web_service/servico_mobile_service.dart';
 import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
-import '../../help/navigation_service/route_paths.dart' as routes;
-import 'package:scm_engenharia_app/models/global_user_logged.dart' as global_user_logged;
+
 
 class RecibosDocumentosView extends StatefulWidget {
-  const RecibosDocumentosView({Key? key}) : super(key: key);
+  const RecibosDocumentosView({super.key});
   @override
   RecibosDocumentosState createState() => RecibosDocumentosState();
 }
 
-class RecibosDocumentosState extends State<RecibosDocumentosView> {
-
-  List<NotificationScmEngineering> listNotificationScmEngineering = [];
-  TypeView statusTypeView = TypeView.viewLoading;
-  late List mapDocumentos = [];
-  late bool isSearching = false;
+class RecibosDocumentosState extends State<RecibosDocumentosView> with ParameterView, ParameterResultViewEvent , ParameterResultFunctions {
 
   onGetDocumentsList() async {
     try {
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
         GlobalScaffold.instance.onToastInternetConnection();
       } else {
-        statusTypeView = TypeView.viewLoading;
+        setState(() =>  statusTypeView = TypeView.viewLoading);
         Operation resultRest = await ServicoMobileService.onGetDocumentsList();
-        if (resultRest.erro) {
+        if (resultRest.erro || resultRest.result == null) {
           throw (resultRest.message!);
         } else {
-          setState(() {
-            mapDocumentos =  resultRest.resultList;
-            statusTypeView = TypeView.viewRenderInformation;
-          });
+          if(resultRest.resultList.isEmpty)
+            {
+              throw ("Nenhum registro encontrado para esta solicitação");
+            }
+          else
+            {
+              setState(() {
+                mapDocumentos = [];
+                 mapDocumentos =  resultRest.resultList;
+                 statusTypeView = TypeView.viewRenderInformation;
+              });
+            }
         }
       }
     } catch (error) {
       setState(() {
-        if (listNotificationScmEngineering.isNotEmpty) {
+        if (mapDocumentos.isNotEmpty) {
           statusTypeView = TypeView.viewRenderInformation;
-          OnAlertError(error.toString());
+          OnAlert.onAlertError(context, error.toString());
         } else {
           statusTypeView = TypeView.viewErrorInformation;
-          GlobalScaffold.erroInformacao = error.toString();
+          erroInformation = error.toString();
         }
       });
     }
   }
 
-  onDownloadDocuments(String idDocumento) async {
+  onDownloadDocuments(String idDocumento ,String nomeArquivo) async {
     try {
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
         GlobalScaffold.instance.onToastInternetConnection();
       } else {
         OnRealizandoOperacao('Realizando operação',context);
         Operation resultRest = await ServicoMobileService.onDocumentsById(idDocumento).whenComplete(() => OnRealizandoOperacao('',context));
-        if (resultRest.erro) {
+        if (resultRest.erro  == true || resultRest.result == null) {
           throw (resultRest.message!);
         } else {
-          Components.downloadCompartilharArquivos(resultRest.result.toString(), 'recibo_', 'Recibo', 'Download','.pdf');
+          Uint8List bytes= base64.decode(resultRest.result.toString());
+          Operation respSaveLocation = await Components.onSaveLocation('application/${nomeArquivo.split('.').last}',nomeArquivo,bytes);
+          if (respSaveLocation.erro || respSaveLocation.result == null) {
+            throw respSaveLocation.message!;
+          } else {
+            GlobalScaffold.instance.onToastSuccess(respSaveLocation.message!);
+          }
         }
       }
     } catch (error) {
-      OnAlertError(error.toString());
+      OnAlert.onAlertError(context, error.toString());
     }
   }
 
   onInc() async {
     try {
-      if (await Connectivity().checkConnectivity() == ConnectivityResult.none)
-      {
-        GlobalScaffold.instance.navigatorKey.currentState?.pushNamed(
-          routes.erroInternetRoute,
-        ).then((value) async {
-          if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
-            GlobalScaffold.instance.navigatorKey.currentState?.pushNamedAndRemoveUntil(routes.splashScreenRoute, (Route<dynamic> route) => false);
-          }
-          else
-          {
-            onInc();
-          }
-        });
-      }
-      else {
+      if (await onIncConnectivity()) {
         onGetDocumentsList();
+      } else {
+        GlobalScaffold.instance.navigatorKey.currentState?.popUntil((route) => route.isFirst);
+        GlobalScaffold.instance.onToastInternetConnection();
       }
     } catch (error) {
-      GlobalScaffold.map = {
-        'view': routes.recibosRoute,
-        'error': error
-      };
-      Navigator.of(context).pushNamed(
-        routes.errorInformationRoute,
-        arguments: GlobalScaffold.map,
-      ).then((value) {
-        GlobalScaffold.instance.navigatorKey.currentState?.pushNamedAndRemoveUntil(routes.splashScreenRoute, (Route<dynamic> route) => false);
-      });
+      onError(error.toString());
     }
   }
 
   @override
   void initState() {
     super.initState();
+    setState(() =>  statusTypeView = TypeView.viewLoading);
     onInc();
   }
 
@@ -115,6 +105,7 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> {
     super.dispose();
   }
 
+  @override
   Widget build(BuildContext context) {
     return  Scaffold(
       appBar: PreferredSize(
@@ -217,7 +208,7 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> {
       case TypeView.viewLoading:
         return GlobalView.viewPerformingSearch(maxHeight,context);
       case TypeView.viewErrorInformation:
-        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
+        return GlobalView.viewErrorInformation(maxHeight,erroInformation,context);
       case TypeView.viewRenderInformation:
         return Align(
           alignment: Alignment.topCenter,
@@ -239,7 +230,7 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> {
               children: [
               Padding(padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 5.0),child: Text(
                 'contratos',
-                style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 20,color:  Colors.black, fontWeight: FontWeight.w600,),
+                style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 20,color:  Colors.black, fontWeight: FontWeight.w600,),
               ),),
               const Padding(padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 5.0),child: Divider(color:Colors.black54),),
                 Expanded(
@@ -263,11 +254,11 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> {
                               text: TextSpan(children: [
                                 TextSpan(
                                   text: 'Razão social : ',
-                                  style: Theme.of(context).textTheme.headline1?.copyWith(fontSize: 17),
+                                  style: StylesThemas.textStyleTextSpanTitle(),
                                 ),
                                 TextSpan(
                                   text: mapDocumentos[index]['razao_social'] ?? '',
-                                  style: Theme.of(context).textTheme.headline2?.copyWith(fontSize: 16),
+                                    style: StylesThemas.textStyleTextSpanSubtitle()
                                 ),
                               ]))),
                       Padding(
@@ -280,11 +271,11 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> {
                             text: TextSpan(children: [
                               TextSpan(
                                 text: 'Cnpj : ',
-                                style: Theme.of(context).textTheme.headline1?.copyWith(fontSize: 17),
+                                style: StylesThemas.textStyleTextSpanTitle(),
                               ),
                               TextSpan(
                                 text: mapDocumentos[index]['cnpj'] ?? '',
-                                style: Theme.of(context).textTheme.headline2?.copyWith(fontSize: 15),
+                                  style: StylesThemas.textStyleTextSpanSubtitle()
                               ),
                             ])),),
                       Padding(
@@ -297,18 +288,25 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> {
                             text: TextSpan(children: [
                               TextSpan(
                                 text: 'Período referência: ',
-                                style: Theme.of(context).textTheme.headline1?.copyWith(fontSize: 17),
+                                style: StylesThemas.textStyleTextSpanTitle(),
                               ),
                               TextSpan(
                                 text: Components.dateFormatDDMMYYYY(mapDocumentos[index]['periodo_referencia'])  ?? '',
-                                style: Theme.of(context).textTheme.headline2?.copyWith(fontSize: 15),
+                                  style: StylesThemas.textStyleTextSpanSubtitle()
                               ),
                             ])),),
                       Align(alignment: Alignment.bottomRight,child: Padding( padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0), child: IconButton(
                         icon: const Icon(Icons.download_outlined , size: 25,),
                         iconSize: 25.0,
                         color: Color(0xff606060), onPressed: () {
-                        onDownloadDocuments(mapDocumentos[index]['id'] ?? '');
+                          if(Components.onIsEmpty(mapDocumentos[index]['id']) == '' || Components.onIsEmpty(mapDocumentos[index]['arquivo']) == '')
+                            {
+                              GlobalScaffold.instance.onToastSuccess('Não foi Possível Realizar o Download');
+                            }
+                          else
+                            {
+                              onDownloadDocuments(mapDocumentos[index]['id'], mapDocumentos[index]['arquivo']);
+                            }
                       },
                       ),),),
                       const Padding(
@@ -320,6 +318,15 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> {
                 },
               ) ,)
               ],),),),),);
+      case TypeView.viewThereIsNoInternet:
+        // TODO: Handle this case.
     }
   }
+}
+
+mixin class ParameterView  {
+
+  late List mapDocumentos = [];
+  late bool isSearching = false;
+
 }

@@ -4,7 +4,9 @@ import '../thema/app_thema.dart';
 import 'help_views/global_scaffold.dart';
 import 'dart:async';
 import 'help_views/global_view.dart';
+import 'package:meta/meta.dart';
 
+@immutable
 class ErroInformacaoView extends StatefulWidget {
   Map<String, dynamic> map;
   ErroInformacaoView({Key? key, required this.map, }) : super(key: key);
@@ -126,7 +128,7 @@ class ErrorInformationState extends State<ErroInformacaoView> {
               Text(
                 widget.map['error'].toString() ?? '--',
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 16,color:  Color(0xff575757), fontWeight: FontWeight.w600,),
+                style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 16,color:  Color(0xff575757), fontWeight: FontWeight.w600,),
               ),
               const SizedBox(height: 40.0),
 

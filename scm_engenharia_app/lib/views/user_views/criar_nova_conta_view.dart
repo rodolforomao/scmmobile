@@ -7,12 +7,13 @@ import 'dart:ui' as ui;
 import 'dart:io';
 import 'dart:async';
 import '../../help/formatter/cpf_input_formatter.dart';
+import '../../help/parameter_result_view.dart';
 import '../../models/operation.dart';
 import '../../models/output/output_environment_variables_model.dart';
 import '../../web_service/servico_mobile_service.dart';
 import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
-import '../../help/navigation_service/route_paths.dart' as routes;
+
 
 
 class CriarNovaContaView extends StatefulWidget {
@@ -21,7 +22,7 @@ class CriarNovaContaView extends StatefulWidget {
   CreateNewAccountState createState() => CreateNewAccountState();
 }
 
-class CreateNewAccountState extends State<CriarNovaContaView> {
+class CreateNewAccountState extends State<CriarNovaContaView> with ParameterResultViewEvent {
 
   static List<String> friendsList = [];
 
@@ -57,14 +58,14 @@ class CreateNewAccountState extends State<CriarNovaContaView> {
       });
 
     } catch (error) {
-      OnAlertError(error.toString());
+      OnAlert.onAlertError(context,error.toString());
     }
   }
 
     OnSaveAccount() async {
     try {
       if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
-        OnAlertError('Verifique sua conexão com a internet e tente novamente.');
+        OnAlert.onAlertError(context,'Verifique sua conexão com a internet e tente novamente.');
       }  else {
         if (txtControlleNomeCompleto.text.isEmpty) {
           throw ("Nome é obrigatório");
@@ -95,7 +96,7 @@ class CreateNewAccountState extends State<CriarNovaContaView> {
           }
       }
     } catch (error) {
-      OnAlertError(error.toString());
+      OnAlert.onAlertError(context,error.toString());
     }
   }
 
@@ -399,7 +400,9 @@ class CreateNewAccountState extends State<CriarNovaContaView> {
           ),
         );
       case TypeView.viewErrorInformation:
-        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
+        return GlobalView.viewErrorInformation(maxHeight,erroInformation,context);
+      case TypeView.viewThereIsNoInternet:
+        // TODO: Handle this case.
     }
   }
 

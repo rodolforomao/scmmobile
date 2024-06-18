@@ -35,7 +35,7 @@ class TbEnvironmntVariable extends _TbEnvironmntVariable  with RealmEntity, Real
   static SchemaObject? _schema;
   static SchemaObject _initSchema() {
     RealmObjectBase.registerFactory(TbEnvironmntVariable._);
-    return const SchemaObject(ObjectType.realmObject, TbEnvironmntVariable, 'TbEnvironmntVariable', [
+    return  SchemaObject(ObjectType.realmObject, TbEnvironmntVariable, 'TbEnvironmntVariable', [
       SchemaProperty('idEnvironmntVariableApp', RealmPropertyType.objectid, mapTo: 'idEnvironmntVariableApp', primaryKey: true),
       SchemaProperty('result', RealmPropertyType.string),
     ]);

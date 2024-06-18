@@ -8,8 +8,8 @@ class DataInputFormatter extends TextInputFormatter {
   DateTime dataFinal;
 
   DataInputFormatter({required dataInicio, required dataFinal})
-      : this.dataInicio = dataInicio ?? DateTime(1800,01,01),
-        this.dataFinal = dataFinal ?? DateTime(3000,01,01);
+      : dataInicio = dataInicio ?? DateTime(1800,01,01),
+        dataFinal = dataFinal ?? DateTime(3000,01,01);
 
   bool isValidDate(String date) {
 

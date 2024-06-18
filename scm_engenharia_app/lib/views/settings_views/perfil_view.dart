@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../help/formatter/cpf_input_formatter.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
+import '../../help/parameter_result_view.dart';
 import '../../models/operation.dart';
 import '../../models/output/output_environment_variables_model.dart';
 import '../../thema/app_thema.dart';
@@ -20,7 +21,7 @@ class PerfilView extends StatefulWidget {
   PerfilState createState() => PerfilState();
 }
 
-class PerfilState extends State<PerfilView> {
+class PerfilState extends State<PerfilView> with ParameterResultViewEvent {
 
   TypeView statusView = TypeView.viewLoading;
   final txtControlleNomeCompleto = TextEditingController();
@@ -56,7 +57,7 @@ class PerfilState extends State<PerfilView> {
       });
 
     } catch (error) {
-      OnAlertError(error.toString());
+      OnAlert.onAlertError(context,error.toString());
     }
   }
 
@@ -92,7 +93,7 @@ class PerfilState extends State<PerfilView> {
         }
       }
     } catch (error) {
-      OnAlertError(error.toString());
+      OnAlert.onAlertError(context,error.toString());
     }
   }
 
@@ -162,7 +163,7 @@ class PerfilState extends State<PerfilView> {
               children: <Widget>[
                 Padding(padding: const EdgeInsets.fromLTRB(20.0, 25.0, 20.0, 10.0),child: Text(
                   'Meu Perfil',
-                  style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 20,color:  Colors.black, fontWeight: FontWeight.w600,),
+                  style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 20,color:  Colors.black, fontWeight: FontWeight.w600,),
                 ),),
                 const Padding(padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 20.0),child: Divider(color:Colors.black54),),
 
@@ -356,7 +357,9 @@ class PerfilState extends State<PerfilView> {
             ),),),),
         );
       case TypeView.viewErrorInformation:
-        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
+        return GlobalView.viewErrorInformation(maxHeight,erroInformation,context);
+      case TypeView.viewThereIsNoInternet:
+        // TODO: Handle this case.
     }
   }
 }

@@ -5,7 +5,6 @@ class AppThema {
 
   static ThemeData lightTheme = ThemeData(
       scaffoldBackgroundColor: const Color(0xffFFFFFF),
-      backgroundColor: const Color(0xffFFFFFF),
       primarySwatch: Colors.red,
       canvasColor: const Color(0xffFFFFFF),
       primaryColor:const Color(0xFFF65100),
@@ -13,54 +12,10 @@ class AppThema {
       primaryColorLight: const Color(0xffFFFFFF),
       splashColor: const Color(0xFFF65100),
       iconTheme: const IconThemeData(color: Color(0xFF545454)),
-      textTheme:  const TextTheme(
-        headline1: TextStyle(
-            fontWeight: FontWeight.w500,
-            fontSize: 20.0,
-            color: Color(0xff606060),
-            fontFamily: "Poppins-Regular"),
-        headline2: TextStyle(
-            fontWeight: FontWeight.w500,
-            fontSize: 15.0,
-            color: Color(0xff979797),
-            fontFamily: "Poppins-Regular"),
-        headline3: TextStyle(
-            fontSize: 13.0,
-            color: Color(0xff15335A),
-            fontFamily:
-            "Poppins-Regular"),
-        //Título-------------------------------------------------------
-        headline4: TextStyle(
-          color: Color(0xff979797),
-          fontWeight: FontWeight.w500,
-          fontSize: 17.0,
-          fontFamily: 'Poppins-Medium',),
-        //ShowDialog---------------------------------------------------
-        headline5: TextStyle(
-            fontSize: 25.0,
-            fontWeight: FontWeight.w500,
-            color: Colors.black87,
-            fontFamily: 'Myriad-Pro-SemiExt'),
-        headline6:TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 13.0,
-            color: Color(0xff737373),
-            fontFamily:
-            "Myriad-Pro-Light"),
-        //--------------------------------------------------------------
-        subtitle1: TextStyle(
-            fontSize: 15.0,
-            fontWeight: FontWeight.w100,
-            color: Color(0xff000000),
-            fontFamily: 'Poppins-Medium'),
-        bodyText1: TextStyle(
-         fontFamily: 'Poppins-Light',
-         fontSize: 13.0,
-       ),
-      ),
+
       listTileTheme: const ListTileThemeData(
         selectedColor:Color(0xffef7d00),
-          contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+        contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
       ),
       inputDecorationTheme: const InputDecorationTheme(
         contentPadding:  EdgeInsets.fromLTRB(10, 10, 10, 4),
@@ -122,6 +77,12 @@ class AppThema {
         showUnselectedLabels: true,
         type: BottomNavigationBarType.fixed,
       ),
+      dialogTheme: const DialogTheme(
+          backgroundColor: Colors.white,
+          shadowColor: Colors.white,
+          surfaceTintColor: Colors.white,
+          elevation: 5
+      ),
       navigationRailTheme: const NavigationRailThemeData(
         backgroundColor: Colors.white,
         elevation: 8,
@@ -146,7 +107,7 @@ class AppThema {
             border: Border.all(color: Color(0xff303e7ec1), width: 1.0)),
         dividerThickness: 1,
         headingRowColor:
-            MaterialStateColor.resolveWith((states) => Color(0xff303e7ec1)),
+        MaterialStateColor.resolveWith((states) => Color(0xff303e7ec1)),
         horizontalMargin: 30,
         dataRowHeight: 50,
         columnSpacing: 20.0,
@@ -235,7 +196,12 @@ class AppThema {
           thumbColor: MaterialStateProperty.all(Colors.black12),
           radius: const Radius.circular(10),
           minThumbLength: 100),
-      cardTheme: const CardTheme(color: Color(0xffFFFFFF),elevation: 2),
+      cardTheme:  CardTheme(color: const Color(0xffFFFFFF),surfaceTintColor:const Color(0xffFFFFFF) , shadowColor: const Color(0xffFFFFFF), elevation: 3,shape: RoundedRectangleBorder(
+        side: const BorderSide(
+          color: Color(0xffFFFFFF),
+        ),
+        borderRadius: BorderRadius.circular(8.0),
+      ), ),
       buttonTheme:ButtonThemeData(buttonColor: Color(0xff093d6c),disabledColor: Colors.deepPurple,focusColor: Colors.amber,hoverColor:Colors.green, splashColor:Colors.brown),
       drawerTheme: const DrawerThemeData(backgroundColor: Color(0xffFFFFFF),scrimColor: Colors.transparent,elevation: 2,width: 310,shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -272,17 +238,102 @@ class StylesThemas {
   static TextStyle textStyleMenu(double fontSize) {
     return AppThema.themeNotifierState.value.mode == ThemeMode.light
         ? TextStyle(
-            fontFamily: 'Myriad-Pro-Light',
-            fontWeight: FontWeight.bold,
-            fontSize: fontSize,
-            color: const Color(0xff404040),
-          )
+      fontFamily: 'Myriad-Pro-Light',
+      fontWeight: FontWeight.bold,
+      fontSize: fontSize,
+      color: const Color(0xff404040),
+    )
         : TextStyle(
-            fontWeight: FontWeight.w500,
-            fontFamily: 'Myriad-Pro-Light',
-            color: const Color(0xffFFFFFF),
-            fontSize: fontSize,
-          );
+      fontWeight: FontWeight.w500,
+      fontFamily: 'Myriad-Pro-Light',
+      color: const Color(0xffFFFFFF),
+      fontSize: fontSize,
+    );
+  }
+
+  static TextStyle textStyleTextTitle() {
+    return AppThema.themeNotifierState.value.mode == ThemeMode.light ? const TextStyle(
+      fontFamily: 'Poppins-Regular',
+      fontSize: 13.0,
+      fontWeight: FontWeight.w300,
+      color: Color(0xff3F4143),
+    )
+        : const TextStyle(
+      fontWeight: FontWeight.w300,
+      fontFamily: 'Poppins-Regular',
+      color: Color(0xffFFFFFF),
+    );
+  }
+
+  static TextStyle textStyleTextSubtitle() {
+    return AppThema.themeNotifierState.value.mode == ThemeMode.light
+        ? const TextStyle(
+      fontFamily: 'Myriad-Pro-SemiExt',
+      fontWeight: FontWeight.w300,
+      color: Color(0xff404040),
+    )
+        : const TextStyle(
+      fontWeight: FontWeight.w300,
+      fontFamily: 'Myriad-Pro-SemiExt',
+      color: Color(0xffFFFFFF),
+    );
+  }
+
+  static TextStyle textStyleTextSpanTitle() {
+    return AppThema.themeNotifierState.value.mode == ThemeMode.light ? const TextStyle(
+      fontFamily: 'Poppins-Regular',
+      fontWeight: FontWeight.w300,
+      fontSize: 17,
+      color: Color(0xff3F4143),
+    )
+        : const TextStyle(
+      fontWeight: FontWeight.w300,
+      fontFamily: 'Poppins-Regular',
+      color: Color(0xffFFFFFF),
+    );
+  }
+
+  static TextStyle textStyleTextSpanSubtitle() {
+    return AppThema.themeNotifierState.value.mode == ThemeMode.light
+        ? const TextStyle(
+        fontWeight: FontWeight.w500,
+        fontSize: 15.0,
+        color: Color(0xff979797),
+        fontFamily: "Poppins-Regular",
+    )
+        : const TextStyle(
+      fontWeight: FontWeight.w300,
+      fontFamily: 'Myriad-Pro-SemiExt',
+      color: Color(0xffFFFFFF),
+    );
+  }
+
+  static TextStyle textStyleTextField() {
+    return AppThema.themeNotifierState.value.mode == ThemeMode.light
+        ? const TextStyle(
+        fontWeight: FontWeight.w400,
+        fontSize: 17.0,
+        color:  Color(0xff3a3a3a),
+        fontFamily: 'MyriadArabic-Regular_0')
+        : const TextStyle(
+      fontWeight: FontWeight.w500,
+      fontFamily: 'Myriad-Pro-SemiExt',
+      color: Color(0xffFFFFFF),
+    );
+  }
+
+
+  static TextStyle textStyleTextButton() {
+    return AppThema.themeNotifierState.value.mode == ThemeMode.light ? const TextStyle(
+      fontFamily: 'roboto-regular',
+      fontWeight: FontWeight.w100,
+      color: Colors.white,
+      fontSize: 17,)
+        : const TextStyle(
+      //fontWeight: FontWeight.w200,
+      fontFamily: 'roboto-regular',
+      color: Color(0xffFFFFFF),
+    );
   }
 }
 

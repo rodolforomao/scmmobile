@@ -6,11 +6,11 @@ import 'dart:ui' as ui;
 
 import 'dart:convert';
 import '../../help/formatter/cpf_input_formatter.dart';
+import '../../help/parameter_result_view.dart';
 import '../../models/operation.dart';
 import '../../models/output/output_environment_variables_model.dart';
 import '../../web_service/servico_mobile_service.dart';
 import '../help_views/global_scaffold.dart';
-import '../../help/navigation_service/route_paths.dart' as routes;
 import 'package:scm_engenharia_app/models/global_user_logged.dart' as global_user_logged;
 import '../help_views/global_view.dart';
 
@@ -21,7 +21,7 @@ class ProfileView extends StatefulWidget {
   ProfileState createState() => ProfileState();
 }
 
-class ProfileState extends State<ProfileView> {
+class ProfileState extends State<ProfileView> with ParameterResultViewEvent {
   TypeView statusView = TypeView.viewLoading;
   final txtControlleNomeCompleto = TextEditingController();
   final txtControllerCPF = TextEditingController();
@@ -52,7 +52,7 @@ class ProfileState extends State<ProfileView> {
         statusView = TypeView.viewRenderInformation;
       });
     } catch (error) {
-      OnAlertError(error.toString());
+      OnAlert.onAlertError(context,error.toString());
     }
   }
 
@@ -88,7 +88,7 @@ class ProfileState extends State<ProfileView> {
         }
       }
     } catch (error) {
-      OnAlertError(error.toString());
+      OnAlert.onAlertError(context,error.toString());
     }
   }
 
@@ -297,7 +297,9 @@ class ProfileState extends State<ProfileView> {
           ),
         );
       case TypeView.viewErrorInformation:
-        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
+        return GlobalView.viewErrorInformation(maxHeight,erroInformation,context);
+      case TypeView.viewThereIsNoInternet:
+        // TODO: Handle this case.
     }
   }
 }

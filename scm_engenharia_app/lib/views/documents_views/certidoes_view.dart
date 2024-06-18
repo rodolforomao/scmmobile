@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import '../../help/parameter_result_view.dart';
 import '../../models/operation.dart';
 import '../../models/notification_models/notification_model.dart';
 import '../../thema/app_thema.dart';
@@ -16,7 +17,7 @@ class CertidoesView extends StatefulWidget {
   CertidoesState createState() => CertidoesState();
 }
 
-class CertidoesState extends State<CertidoesView> {
+class CertidoesState extends State<CertidoesView> with ParameterResultViewEvent {
 
   List<NotificationScmEngineering> listNotificationScmEngineering = [];
   late StreamSubscription<ConnectivityResult> subscription;
@@ -42,10 +43,10 @@ class CertidoesState extends State<CertidoesView> {
       setState(() {
         if (listNotificationScmEngineering.isNotEmpty) {
           statusView = TypeView.viewRenderInformation;
-          OnAlertError(error.toString());
+          OnAlert.onAlertError(context, error.toString());
         } else {
           statusView = TypeView.viewErrorInformation;
-          GlobalScaffold.erroInformacao = error.toString();
+          erroInformation = error.toString();
         }
       });
     }
@@ -121,7 +122,7 @@ class CertidoesState extends State<CertidoesView> {
       case TypeView.viewLoading:
         return GlobalView.viewPerformingSearch(maxHeight,context);
       case TypeView.viewErrorInformation:
-        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
+        return GlobalView.viewErrorInformation(maxHeight,erroInformation,context);
       case TypeView.viewRenderInformation:
         return  SingleChildScrollView(
           child: Container(
@@ -147,6 +148,8 @@ class CertidoesState extends State<CertidoesView> {
             ),
           ),
         );
+      case TypeView.viewThereIsNoInternet:
+        // TODO: Handle this case.
     }
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import '../../help/parameter_result_view.dart';
 import '../../models/operation.dart';
 import '../../models/notification_models/notification_model.dart';
 import '../../thema/app_thema.dart';
@@ -16,10 +17,8 @@ class ContratosView extends StatefulWidget {
   ContratosState createState() => ContratosState();
 }
 
-class ContratosState extends State<ContratosView> {
-
+class ContratosState extends State<ContratosView> with ParameterResultViewEvent , ParameterResultFunctions {
   List<NotificationScmEngineering> listNotificationScmEngineering = [];
-  late StreamSubscription<ConnectivityResult> subscription;
   TypeView statusView = TypeView.viewLoading;
 
   onGetListUsuarios() async {
@@ -42,10 +41,10 @@ class ContratosState extends State<ContratosView> {
       setState(() {
         if (listNotificationScmEngineering.isNotEmpty) {
           statusView = TypeView.viewRenderInformation;
-          OnAlertError(error.toString());
+          OnAlert.onAlertError(context, error.toString());
         } else {
           statusView = TypeView.viewErrorInformation;
-          GlobalScaffold.erroInformacao = error.toString();
+          erroInformation = error.toString();
         }
       });
     }
@@ -53,51 +52,32 @@ class ContratosState extends State<ContratosView> {
 
   onInc() async {
     try {
-      if (await Connectivity().checkConnectivity() == ConnectivityResult.none)
-      {
-        GlobalScaffold.instance.navigatorKey.currentState?.pushNamed(
-          routes.erroInternetRoute,
-        ).then((value) async {
-          if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
-            GlobalScaffold.instance.navigatorKey.currentState?.pushNamedAndRemoveUntil(routes.splashScreenRoute, (Route<dynamic> route) => false);
-          }
-          else
-          {
-            onInc();
-          }
-        });
-      }
-      else {
+      if (await onIncConnectivity()) {
         onGetListUsuarios();
+      } else {
+        GlobalScaffold.instance.navigatorKey.currentState?.popUntil((route) => route.isFirst);
+        GlobalScaffold.instance.onToastInternetConnection();
       }
     } catch (error) {
-      GlobalScaffold.map = {
-        'view': routes.contratosRoute,
-        'error': error
-      };
-      Navigator.of(context).pushNamed(
-        routes.errorInformationRoute,
-        arguments: GlobalScaffold.map,
-      ).then((value) {
-        GlobalScaffold.instance.navigatorKey.currentState?.pushNamedAndRemoveUntil(routes.splashScreenRoute, (Route<dynamic> route) => false);
-      });
+      onError(error.toString());
     }
   }
+
+
 
   @override
   void initState() {
     super.initState();
-    setState(() {
-      statusView = TypeView.viewRenderInformation;
-    });
+    setState(() =>  statusView = TypeView.viewLoading);
+    onInc();
   }
 
   @override
   void dispose() {
     super.dispose();
-    subscription.cancel();
   }
 
+  @override
   Widget build(BuildContext context) {
     return  Scaffold(
       appBar: PreferredSize(
@@ -123,7 +103,7 @@ class ContratosState extends State<ContratosView> {
       case TypeView.viewLoading:
         return GlobalView.viewPerformingSearch(maxHeight,context);
       case TypeView.viewErrorInformation:
-        return GlobalView.viewErrorInformation(maxHeight,GlobalScaffold.erroInformacao,context);
+        return GlobalView.viewErrorInformation(maxHeight,erroInformation,context);
       case TypeView.viewRenderInformation:
         return  SingleChildScrollView(
           child: Container(
@@ -132,11 +112,11 @@ class ContratosState extends State<ContratosView> {
             constraints: BoxConstraints(
               minHeight: MediaQuery.of(context).size.height,
             ),
-            child: Column(
+            child: const Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: const <Widget>[
+              children: <Widget>[
                 Text(
                   "Pagina em construção",
                   textAlign: TextAlign.center,
@@ -149,6 +129,8 @@ class ContratosState extends State<ContratosView> {
             ),
           ),
         );
+      case TypeView.viewThereIsNoInternet:
+        // TODO: Handle this case.
     }
   }
 }

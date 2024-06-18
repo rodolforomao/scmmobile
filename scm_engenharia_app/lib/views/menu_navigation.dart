@@ -1,5 +1,5 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:scm_engenharia_app/views/user_views/cancelar_acesso_view.dart';
 import '../thema/app_thema.dart';
 import 'business_views/empresas_view.dart';
 import 'documents_views/certidoes_view.dart';
@@ -14,6 +14,7 @@ import 'notifications_views/alertas_view.dart';
 import 'notifications_views/notificacoes_view.dart';
 import 'others_view/analises_view.dart';
 import 'settings_views/configuracoes_view.dart';
+import 'sici_views/list_arquivos_dici_fust_view.dart';
 import 'sici_views/list_formulario_dici_fust_view.dart';
 import 'user_views/usuarios_view.dart';
 
@@ -24,7 +25,7 @@ class MenuNavigation extends StatefulWidget {
 }
 
 class MenuNavigationState extends State<MenuNavigation> {
-
+  int _selectedIndex = 0;
   bool documentosExpanded = false ,lancamentosSiciExpanded = true;
   double maxHeight = 500;
   @override
@@ -48,27 +49,28 @@ class MenuNavigationState extends State<MenuNavigation> {
         return const ListFormularioSiciFustView();
       case routes.analiseRoute:
         return const AnalisesView();
+      case routes.listaArquivosDiciRoute:
+        return const ListArquivosDiciFustView();
       case routes.alertasRoute:
         return const AlertasView();
       case routes.empresasRoute:
         return const EmpresasView();
       case routes.recibosRoute:
         return const RecibosView();
-     //----------------------------
+    //----------------------------
       case routes.certidoesRoute:
         return const CertidoesView();
       case routes.contratosRoute:
         return const ContratosView();
       case routes.recibosDocumentosRoute:
         return const RecibosDocumentosView();
-       //----------------------------
+    //----------------------------
       case routes.usuarioRoute:
         return const UsuariosView();
       case routes.notificacoesRoute:
         return const NotificationsView();
       case routes.configuracoesRoute:
         return const Configuracoesview();
-
       default:
         return Scaffold(
           appBar: AppBar(
@@ -109,7 +111,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                   Text(
                     'Página não encontrada',
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 16,color:  const Color(0xff575757), fontWeight: FontWeight.w600,),
+                    style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 16,color:  const Color(0xff575757), fontWeight: FontWeight.w600,),
                   ),
                   const SizedBox(height: 40.0),
                 ],
@@ -156,7 +158,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                       children:  <Widget>[
                         Padding(padding: const EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 10.0),child: Text(
                           global_user_logged.globalUserLogged!.name,
-                          style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 20,color:  Colors.black, fontWeight: FontWeight.w600,),
+                          style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 20,color:  Colors.black, fontWeight: FontWeight.w600,),
                         ),),
                       ],
                     ),
@@ -187,17 +189,17 @@ class MenuNavigationState extends State<MenuNavigation> {
                               initiallyExpanded:lancamentosSiciExpanded,
                               onExpansionChanged: (val) {
                                 setState(() {
-                                  GlobalScaffold.instance.selectedPageView = routes.lancamentosRoute;
+                                  //GlobalScaffold.instance.selectedPageView = routes.lancamentosRoute;
                                   lancamentosSiciExpanded = val;
                                   documentosExpanded = false;
                                 });
                               },
                               title: Text(
-                                'Lançamentos - Sici',
+                                'Lançamentos - Dici',
                                 overflow: TextOverflow.visible,
                                 maxLines: 1,
                                 softWrap: false,
-                                style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.lancamentosRoute)),
+                                style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.lancamentosRoute)),
                               ),
                               children: [
                                 SizedBox(
@@ -238,7 +240,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                                               overflow: TextOverflow.visible,
                                               maxLines: 1,
                                               softWrap: false,
-                                              style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 15, color:GlobalScaffold.colorTextIconSelectedPageView(routes.lancamentoSiciFustRoute)),
+                                              style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 15, color:GlobalScaffold.colorTextIconSelectedPageView(routes.lancamentoSiciFustRoute)),
                                             ),
                                           ),
                                         ],
@@ -291,7 +293,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                                               overflow: TextOverflow.visible,
                                               maxLines: 1,
                                               softWrap: false,
-                                              style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 15, color:GlobalScaffold.colorTextIconSelectedPageView(routes.formularioSiciFustRoute)),
+                                              style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 15, color:GlobalScaffold.colorTextIconSelectedPageView(routes.formularioSiciFustRoute)),
                                             ),
                                           ),
                                         ],
@@ -303,18 +305,27 @@ class MenuNavigationState extends State<MenuNavigation> {
                                   height: 60,
                                   child: InkWell(
                                     onTap: () {
-                                      setState(() {
-                                        GlobalScaffold.instance.selectedPageView = routes.formularioSiciFustRoute;
-                                        lancamentosSiciExpanded = true;
-                                      });
-                                      Navigator.of(context).pushNamed(
-                                        routes.formularioSiciFustRoute,
-                                      ).then((value) {
-                                        setState(() =>  GlobalScaffold.instance.selectedPageView = routes.lancamentoSiciFustRoute);
-                                        GlobalScaffold.colorSelectedPageView(routes.lancamentoSiciFustRoute);
-                                        lancamentosSiciExpanded = true;
-                                      });
+
+                                      setState(() =>  GlobalScaffold.instance.selectedPageView = routes.lancamentoSiciFustRoute);
+                                      GlobalScaffold.colorSelectedPageView(routes.lancamentoSiciFustRoute);
+                                      lancamentosSiciExpanded = true;
                                       GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
+
+                                      //setState(() {
+                                      //  GlobalScaffold.instance.selectedPageView = routes.formularioSiciFustRoute;
+                                       // lancamentosSiciExpanded = true;
+                                     // });
+                                      //Navigator.of(context).pushNamed(
+                                     //   routes.formularioSiciFustRoute,
+                                     //   arguments: {
+                                     //     'isLancamentosComBaseMesAnterior': true,
+                                     //   },
+                                      //).then((value) {
+                                     //   setState(() =>  GlobalScaffold.instance.selectedPageView = routes.lancamentoSiciFustRoute);
+                                     //   GlobalScaffold.colorSelectedPageView(routes.lancamentoSiciFustRoute);
+                                      //  lancamentosSiciExpanded = true;
+                                     // });
+
                                     }, // Handle your callback
                                     child: Container(
                                       alignment: Alignment.centerLeft,
@@ -336,11 +347,57 @@ class MenuNavigationState extends State<MenuNavigation> {
                                           const SizedBox(width: 15.0),
                                           Flexible(
                                             child: Text(
-                                              'lancamentos com\r\nbase no mês anterior',
+                                              'lançamentos com\r\nbase no mês anterior',
                                               overflow: TextOverflow.visible,
                                               maxLines: 2,
                                               softWrap: false,
-                                              style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 15, color:const Color(0xff6C757D)),
+                                              style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 15, color:const Color(0xff6C757D)),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 40,
+                                  child: InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        GlobalScaffold.instance.selectedPageView = routes.listaArquivosDiciRoute;
+                                        lancamentosSiciExpanded = true;
+                                      });
+                                      GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
+                                    }, // Handle your callback
+                                    child: Container(
+                                      alignment: Alignment.centerLeft,
+                                      height: 50,
+                                      padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                                      margin: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                                      decoration:  BoxDecoration(
+                                          color: GlobalScaffold.colorSelectedPageView(routes.listaArquivosDiciRoute),
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(10.0),
+                                            topRight: Radius.circular(10.0),
+                                            bottomLeft: Radius.circular(10.0),
+                                            bottomRight: Radius.circular(10.0),
+                                          )),
+                                      child: Row(
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: <Widget>[
+                                          if (GlobalScaffold.instance.selectedPageView == routes.listaArquivosDiciRoute)
+                                            Icon(Icons.file_open_rounded,color:GlobalScaffold.colorTextIconSelectedPageView(routes.listaArquivosDiciRoute), size: 18.0)
+                                          else
+                                            Icon(Icons.file_open_outlined,color: GlobalScaffold.colorTextIconSelectedPageView(routes.listaArquivosDiciRoute), size: 20.0),
+                                          const SizedBox(width: 15.0),
+                                          Flexible(
+                                            child: Text(
+                                              'Arquivos',
+                                              overflow: TextOverflow.visible,
+                                              maxLines: 1,
+                                              softWrap: false,
+                                              style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 15, color:GlobalScaffold.colorTextIconSelectedPageView(routes.listaArquivosDiciRoute)),
                                             ),
                                           ),
                                         ],
@@ -354,7 +411,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                     ),
                   ),
                   const Padding(padding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 10.0),child: Divider(color:Colors.black54),),
-                  Padding( padding: const EdgeInsets.only(top: 10.0),child:InkWell(
+                  /*Padding( padding: const EdgeInsets.only(top: 10.0),child:InkWell(
                     onTap: () {
                       setState(() =>  GlobalScaffold.instance.selectedPageView = routes.analiseRoute);
                       GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
@@ -395,7 +452,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                       ),
                     ),
                   )),
-                  /*   Padding( padding: const EdgeInsets.only(top: 10.0),child:InkWell(
+                    Padding( padding: const EdgeInsets.only(top: 10.0),child:InkWell(
                     onTap: () {
                       setState(() =>  GlobalScaffold.instance.selectedPageView = routes.alertasRoute);
                       GlobalScaffold.instance.scaffoldKeyMenuDrawer.currentState!.openEndDrawer();
@@ -516,7 +573,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                                 overflow: TextOverflow.visible,
                                 maxLines: 1,
                                 softWrap: false,
-                                style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.documentosRoute)),
+                                style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.documentosRoute)),
                               ),
                               children: [
                                 /*   SizedBox(
@@ -651,7 +708,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                                               overflow: TextOverflow.visible,
                                               maxLines: 1,
                                               softWrap: false,
-                                              style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 15, color:GlobalScaffold.colorTextIconSelectedPageView(routes.recibosDocumentosRoute)),
+                                              style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 15, color:GlobalScaffold.colorTextIconSelectedPageView(routes.recibosDocumentosRoute)),
                                             ),
                                           ),
                                         ],
@@ -780,7 +837,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                               overflow: TextOverflow.visible,
                               maxLines: 1,
                               softWrap: false,
-                              style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.notificacoesRoute)),
+                              style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.notificacoesRoute)),
                             ),
                           )
                         ],
@@ -821,7 +878,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                               overflow: TextOverflow.visible,
                               maxLines: 1,
                               softWrap: false,
-                              style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.configuracoesRoute)),
+                              style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 17, color:GlobalScaffold.colorTextIconSelectedPageView(routes.configuracoesRoute)),
                             ),
                           )
                         ],
@@ -854,7 +911,7 @@ class MenuNavigationState extends State<MenuNavigation> {
                             overflow: TextOverflow.visible,
                             maxLines: 1,
                             softWrap: false,
-                            style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 17, color:Color(0xff6C757D)),
+                            style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 17, color:Color(0xff6C757D)),
                           ),
                         ),
                         const SizedBox(width: 15.0),
@@ -868,13 +925,15 @@ class MenuNavigationState extends State<MenuNavigation> {
           ),),
       ),),
       bottomNavigationBar: BottomAppBar(
+         height: 55,
+        padding: const EdgeInsets.all(0),
+        color: Colors.deepOrange,
         elevation: 0,
         child:Container(
           alignment: Alignment.bottomLeft,
           decoration: const BoxDecoration(
               image: DecorationImage(
                   image: AssetImage('assets/img/fundo_tela_configuracoes_bottom.png'), fit: BoxFit.cover)),
-          height: 50,
           padding: const EdgeInsets.fromLTRB(10.0, 2.0, 10.0, 5.0),
           constraints: const BoxConstraints(
             minWidth: 50,
@@ -891,4 +950,28 @@ class MenuNavigationState extends State<MenuNavigation> {
       ),
     );
   }
+
+  Color colorSelectedPageView(int value) {
+    if(_selectedIndex == value)
+    {
+      return Color(0xff36373a);
+    }
+    else
+    {
+      return Colors.transparent;
+    }
+  }
+
+  Color colorSelectedIconPageView(int value) {
+    if(_selectedIndex == value)
+    {
+      return const Color(0xffFFFFFF);
+    }
+    else
+    {
+      return Color(0xff9c9ca1);
+    }
+  }
 }
+
+
