@@ -16,7 +16,7 @@ import 'package:scm_engenharia_app/models/global_user_logged.dart' as global_use
 import '../help_views/global_view.dart';
 
 class PerfilView extends StatefulWidget {
-  const PerfilView({Key? key}) : super(key: key);
+  const PerfilView({super.key});
   @override
   PerfilState createState() => PerfilState();
 }

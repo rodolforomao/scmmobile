@@ -11,7 +11,7 @@ import 'help_views/global_view.dart';
 
 
 class AboutAppView extends StatefulWidget {
-  const AboutAppView({Key? key}) : super(key: key);
+  const AboutAppView({super.key});
   @override
   AboutAppState createState() => AboutAppState();
 }

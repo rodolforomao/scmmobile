@@ -11,7 +11,7 @@ import '../help_views/global_scaffold.dart';
 import 'package:scm_engenharia_app/models/global_user_logged.dart' as global_user_logged;
 
 class AlterarSenhaView extends StatefulWidget {
-  const AlterarSenhaView({Key? key}) : super(key: key);
+  const AlterarSenhaView({super.key});
   @override
   AlterarSenhaState createState() => AlterarSenhaState();
 }

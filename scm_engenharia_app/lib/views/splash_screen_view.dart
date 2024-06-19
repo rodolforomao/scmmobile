@@ -14,7 +14,7 @@ import '../web_service/servico_mobile_service.dart';
 import 'help_views/global_scaffold.dart';
 
 class SplashScreenView extends StatefulWidget {
-  const SplashScreenView({Key? key}) : super(key: key);
+  const SplashScreenView({super.key});
   @override
   SplashScreenState createState() => SplashScreenState();
 }

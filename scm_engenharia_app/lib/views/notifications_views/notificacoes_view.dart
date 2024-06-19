@@ -12,7 +12,7 @@ import '../help_views/global_view.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
 
 class NotificationsView extends StatefulWidget {
-  const NotificationsView({Key? key}) : super(key: key);
+  const NotificationsView({super.key});
   @override
   NotificationsState createState() => NotificationsState();
 }

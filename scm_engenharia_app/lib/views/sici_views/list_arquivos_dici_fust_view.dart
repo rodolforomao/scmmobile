@@ -16,18 +16,14 @@ import '../help_views/global_view.dart';
 
 
 class ListArquivosDiciFustView extends StatefulWidget {
-  const ListArquivosDiciFustView({Key? key}) : super(key: key);
+  const ListArquivosDiciFustView({super.key});
   @override
   ListArquivosDiciFustState createState() => ListArquivosDiciFustState();
 }
 
-class ListArquivosDiciFustState extends State<ListArquivosDiciFustView> with ParameterResultViewEvent {
+class ListArquivosDiciFustState extends State<ListArquivosDiciFustView> with ParameterResultViewEvent ,ParameterView{
 
-  List mapFileModelAllList = [];
 
-  TypeView statusView = TypeView.viewLoading;
-  final txtSocialReason = TextEditingController();
-  late bool isSearching = false;
 
 
   onRestDb() async {
@@ -393,4 +389,11 @@ class ListArquivosDiciFustState extends State<ListArquivosDiciFustView> with Par
         // TODO: Handle this case.
     }
   }
+}
+mixin class ParameterView  {
+  List mapFileModelAllList = [];
+
+  TypeView statusView = TypeView.viewLoading;
+  final txtSocialReason = TextEditingController();
+  late bool isSearching = false;
 }

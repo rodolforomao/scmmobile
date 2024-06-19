@@ -11,19 +11,14 @@ import 'package:flutter/services.dart';
 class SelecionarMunicipioView extends StatefulWidget {
   List<CodIbge> sMunicipios;
   Uf? sUf;
-  SelecionarMunicipioView(
-      {Key? key, required this.sUf, required this.sMunicipios})
-      : super(key: key);
+  SelecionarMunicipioView({super.key, required this.sUf, required this.sMunicipios});
 
   @override
   SelecionarMunicipioState createState() => SelecionarMunicipioState();
 }
 
-class SelecionarMunicipioState extends State<SelecionarMunicipioView> with ParameterResultViewEvent {
-  TypeView statusView = TypeView.viewLoading;
-  final txtMunicipalityName = TextEditingController();
-  List<CodIbge> listMunicipios = [];
-  late bool isSearching = false;
+class SelecionarMunicipioState extends State<SelecionarMunicipioView> with ParameterView, ParameterResultViewEvent {
+
 
   onInc() async {}
 
@@ -274,4 +269,12 @@ class SelecionarMunicipioState extends State<SelecionarMunicipioView> with Param
         // TODO: Handle this case.
     }
   }
+}
+
+
+mixin class ParameterView  {
+  TypeView statusView = TypeView.viewLoading;
+  final txtMunicipalityName = TextEditingController();
+  List<CodIbge> listMunicipios = [];
+  late bool isSearching = false;
 }

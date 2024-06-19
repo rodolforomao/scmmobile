@@ -16,7 +16,7 @@ import 'help_views/global_scaffold.dart';
 
 
 class InicioView extends StatefulWidget {
-  const InicioView({Key? key}) : super(key: key);
+  const InicioView({super.key});
 
   @override
   InicioState createState() => InicioState();

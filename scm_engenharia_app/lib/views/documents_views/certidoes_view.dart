@@ -12,7 +12,7 @@ import '../../help/navigation_service/route_paths.dart' as routes;
 import 'package:scm_engenharia_app/models/global_user_logged.dart' as global_user_logged;
 
 class CertidoesView extends StatefulWidget {
-  const CertidoesView({Key? key}) : super(key: key);
+  const CertidoesView({super.key});
   @override
   CertidoesState createState() => CertidoesState();
 }

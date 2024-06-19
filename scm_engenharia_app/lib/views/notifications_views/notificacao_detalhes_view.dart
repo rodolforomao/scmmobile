@@ -14,7 +14,7 @@ import '../help_views/global_view.dart';
 
 class NotificacaoDetalhesView extends StatefulWidget {
   String idNotificacao;
-  NotificacaoDetalhesView({Key? key, required this.idNotificacao}) : super(key: key);
+  NotificacaoDetalhesView({super.key, required this.idNotificacao});
   @override
   NotificationState createState() => NotificationState();
 }

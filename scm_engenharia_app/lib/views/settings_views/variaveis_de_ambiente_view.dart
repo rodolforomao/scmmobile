@@ -13,7 +13,7 @@ import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
 
 class VariaveisDeAmbienteView extends StatefulWidget {
-  const VariaveisDeAmbienteView({Key? key}) : super(key: key);
+  const VariaveisDeAmbienteView({super.key});
   @override
   VariaveisDeAmbienteState createState() => VariaveisDeAmbienteState();
 }

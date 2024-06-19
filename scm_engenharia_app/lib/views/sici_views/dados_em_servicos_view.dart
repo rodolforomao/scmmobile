@@ -4,13 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../data/app_scm_engenharia_mobile_bll.dart';
 import '../../data/tb_environment_variable.dart';
-import '../../help/components.dart';
-import '../../help/formatter/cnpj_input_formatter.dart';
 import '../../help/parameter_result_view.dart';
 import '../../models/input/input_sici_fust_form_model.dart';
 import '../../models/operation.dart';
 import '../../models/output/output_environment_variables_model.dart';
-import '../../models/util_model/util_dropdown_list.dart';
 import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
 import 'selecionar_municipio_view.dart';
@@ -19,46 +16,15 @@ import '../../help/navigation_service/route_paths.dart' as routes;
 
 class DadosEmServicosView extends StatefulWidget {
   InputDadosEmServicosModel? sInputDadosEmServicos;
-  DadosEmServicosView({Key? key, required this.sInputDadosEmServicos}) : super(key: key);
+  DadosEmServicosView({super.key, required this.sInputDadosEmServicos});
 
   @override
   DadosEmServicosState createState() => DadosEmServicosState();
 }
 
-class DadosEmServicosState extends State<DadosEmServicosView> with ParameterResultViewEvent {
+class DadosEmServicosState extends State<DadosEmServicosView> with  ParameterView , ParameterResultViewEvent {
 
-  TypeView statusView = TypeView.viewLoading;
-  OutputEnvironmentVariablesModel resulEnvironmentVariables = OutputEnvironmentVariablesModel();
 
-  //CNPJ:
-  //final txtControllerCnpj =  TextEditingController();
- // final  focusNodeCnpj = FocusNode();
-
-  //List<UtilDropdownList> listMonths = <UtilDropdownList>[];
-  //late UtilDropdownList utilDropdownListMonth;
-  List<Uf>? ufDropdownList;
-  Uf ufValue = Uf();
-  List<TipoCliente>? customerTypeDropdownList;
-  TipoCliente customerTypeValue = TipoCliente();
-  List<TipoAtendimento>? serviceTypeDropdownList;
-  TipoAtendimento serviceTypeValue = TipoAtendimento();
-  List<TipoMeioAcesso>? mediumAccessTypeDropdownList;
-  TipoMeioAcesso mediumAccessTypeValue = TipoMeioAcesso();
-  List<TipoTecnologia>? technologyTypeDropdownList;
-  TipoTecnologia technologyTypeValue = TipoTecnologia();
-  List<TipoProduto>? productTypeDropdownList;
-  TipoProduto productTypeValue = TipoProduto();
-  CodIbge valueCodIbge = CodIbge();
- // final txtNumberYear = TextEditingController();
-  final txtCounty = TextEditingController();
-   String hintTextCounty = 'O código IBGE..';
-
-  final txtControllerVelocity = TextEditingController();
-  final txtControllerAccesses = TextEditingController();
-  final txtMunicipalityName  = TextEditingController();
-
-  FocusNode? txtFocusNodeVelocity;
-  FocusNode? txtFocusNodeAccesses;
 
   onAdd() async {
     try {
@@ -77,6 +43,11 @@ class DadosEmServicosState extends State<DadosEmServicosView> with ParameterResu
         sInput.tipoCliente = customerTypeValue.descricao;
       }
       if(serviceTypeValue.descricao != 'SELECIONE...') {
+
+        throw 'Selecione Tipo de Atendimento';
+      }
+      else
+      {
         sInput.tipoAtendimento = serviceTypeValue.descricao;
       }
       if(mediumAccessTypeValue.descricao != 'SELECIONE...') {
@@ -407,8 +378,7 @@ class DadosEmServicosState extends State<DadosEmServicosView> with ParameterResu
                         //focusColor: Colors.transparent,
                       ),
                       value: serviceTypeValue,
-                      items: serviceTypeDropdownList!.map(
-                            (v) => DropdownMenuItem<TipoAtendimento>(
+                      items: serviceTypeDropdownList!.map((v) => DropdownMenuItem<TipoAtendimento>(
                             value: v,
                             child: Text(
                               v.descricao!,
@@ -636,4 +606,41 @@ class DadosEmServicosState extends State<DadosEmServicosView> with ParameterResu
         // TODO: Handle this case.
     }
   }
+}
+
+mixin class ParameterView  {
+
+  TypeView statusView = TypeView.viewLoading;
+  OutputEnvironmentVariablesModel resulEnvironmentVariables = OutputEnvironmentVariablesModel();
+
+  //CNPJ:
+  //final txtControllerCnpj =  TextEditingController();
+  // final  focusNodeCnpj = FocusNode();
+
+  //List<UtilDropdownList> listMonths = <UtilDropdownList>[];
+  //late UtilDropdownList utilDropdownListMonth;
+  List<Uf>? ufDropdownList;
+  Uf ufValue = Uf();
+  List<TipoCliente>? customerTypeDropdownList;
+  TipoCliente customerTypeValue = TipoCliente();
+  List<TipoAtendimento>? serviceTypeDropdownList;
+  TipoAtendimento serviceTypeValue = TipoAtendimento();
+  List<TipoMeioAcesso>? mediumAccessTypeDropdownList;
+  TipoMeioAcesso mediumAccessTypeValue = TipoMeioAcesso();
+  List<TipoTecnologia>? technologyTypeDropdownList;
+  TipoTecnologia technologyTypeValue = TipoTecnologia();
+  List<TipoProduto>? productTypeDropdownList;
+  TipoProduto productTypeValue = TipoProduto();
+  CodIbge valueCodIbge = CodIbge();
+  // final txtNumberYear = TextEditingController();
+  final txtCounty = TextEditingController();
+  String hintTextCounty = 'O código IBGE..';
+
+  final txtControllerVelocity = TextEditingController();
+  final txtControllerAccesses = TextEditingController();
+  final txtMunicipalityName  = TextEditingController();
+
+  FocusNode? txtFocusNodeVelocity;
+  FocusNode? txtFocusNodeAccesses;
+
 }

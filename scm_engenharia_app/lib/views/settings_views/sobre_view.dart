@@ -10,7 +10,7 @@ import 'package:scm_engenharia_app/models/global_user_logged.dart' as global_use
 
 import '../help_views/global_view.dart';
 class SobreView extends StatefulWidget {
-  const SobreView({Key? key}) : super(key: key);
+  const SobreView({super.key});
   @override
   SobreState createState() => SobreState();
 }

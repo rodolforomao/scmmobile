@@ -8,7 +8,7 @@ import '../../web_service/servico_mobile_service.dart';
 import '../help_views/global_scaffold.dart';
 
 class ForgotYourPasswordView extends StatefulWidget {
-  const ForgotYourPasswordView({Key? key}) : super(key: key);
+  const ForgotYourPasswordView({super.key});
   @override
   ForgotYourPasswordState createState() => ForgotYourPasswordState();
 }

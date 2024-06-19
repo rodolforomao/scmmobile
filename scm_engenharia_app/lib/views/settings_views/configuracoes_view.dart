@@ -8,7 +8,7 @@ import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
 import 'package:scm_engenharia_app/models/global_user_logged.dart' as global_user_logged;
 class Configuracoesview extends StatefulWidget {
-  const Configuracoesview({Key? key}) : super(key: key);
+  const Configuracoesview({super.key});
   @override
   ConfiguracoesState createState() => ConfiguracoesState();
 }

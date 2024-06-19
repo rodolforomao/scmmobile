@@ -11,7 +11,7 @@ import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
 
 class AlertasView extends StatefulWidget {
-  const AlertasView({Key? key}) : super(key: key);
+  const AlertasView({super.key});
   @override
   RecibosState createState() => RecibosState();
 }

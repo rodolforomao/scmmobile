@@ -18,17 +18,14 @@ import 'formulario_dici_fust_view.dart';
 
 
 class SelecioneArquivoDiciFustView extends StatefulWidget {
-  const SelecioneArquivoDiciFustView({Key? key}) : super(key: key);
+  const SelecioneArquivoDiciFustView({super.key});
   @override
   SelecioneArquivoDiciFustState createState() => SelecioneArquivoDiciFustState();
 }
 
-class SelecioneArquivoDiciFustState extends State<SelecioneArquivoDiciFustView> with ParameterResultViewEvent {
+class SelecioneArquivoDiciFustState extends State<SelecioneArquivoDiciFustView> with ParameterView, ParameterResultViewEvent {
 
-  TypeView statusView = TypeView.viewRenderInformation;
-  TextEditingController txtArquivo = TextEditingController();
-  Uint8List bytesPdf = Uint8List(0);
-  Map<String, dynamic> mapFile = {};
+
 
   onUpload() async {
     try {
@@ -393,4 +390,13 @@ class SelecioneArquivoDiciFustState extends State<SelecioneArquivoDiciFustView> 
         // TODO: Handle this case.
     }
   }
+}
+
+
+mixin class ParameterView  {
+
+  TypeView statusView = TypeView.viewRenderInformation;
+  TextEditingController txtArquivo = TextEditingController();
+  Uint8List bytesPdf = Uint8List(0);
+  Map<String, dynamic> mapFile = {};
 }

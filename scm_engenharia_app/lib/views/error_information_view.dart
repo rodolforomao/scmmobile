@@ -9,7 +9,7 @@ import 'package:meta/meta.dart';
 @immutable
 class ErroInformacaoView extends StatefulWidget {
   Map<String, dynamic> map;
-  ErroInformacaoView({Key? key, required this.map, }) : super(key: key);
+  ErroInformacaoView({super.key, required this.map, });
   @override
   ErrorInformationState createState() => ErrorInformationState();
 }

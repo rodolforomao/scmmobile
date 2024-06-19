@@ -17,7 +17,7 @@ import '../help_views/global_view.dart';
 
 
 class CriarNovaContaView extends StatefulWidget {
-  const CriarNovaContaView({Key? key}) : super(key: key);
+  const CriarNovaContaView({super.key});
   @override
   CreateNewAccountState createState() => CreateNewAccountState();
 }

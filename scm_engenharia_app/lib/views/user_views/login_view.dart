@@ -17,7 +17,7 @@ import 'package:scm_engenharia_app/models/global_user_logged.dart' as global_use
 
 
 class LoginView extends StatefulWidget {
-  const LoginView({Key? key}) : super(key: key);
+  const LoginView({super.key});
   @override
   LoginState createState() => LoginState();
 }

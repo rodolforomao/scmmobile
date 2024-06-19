@@ -12,7 +12,7 @@ import '../../help/navigation_service/route_paths.dart' as routes;
 import 'package:scm_engenharia_app/models/global_user_logged.dart' as global_user_logged;
 
 class EmpresasView extends StatefulWidget {
-  const EmpresasView({Key? key}) : super(key: key);
+  const EmpresasView({super.key});
   @override
   EmpresasState createState() => EmpresasState();
 }

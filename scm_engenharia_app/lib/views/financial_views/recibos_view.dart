@@ -11,7 +11,7 @@ import '../../help/navigation_service/route_paths.dart' as routes;
 import 'package:scm_engenharia_app/models/global_user_logged.dart' as global_user_logged;
 
 class RecibosView extends StatefulWidget {
-  const RecibosView({Key? key}) : super(key: key);
+  const RecibosView({super.key});
   @override
   RecibosState createState() => RecibosState();
 }
