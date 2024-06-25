@@ -13,7 +13,7 @@ class ErroInternetView extends StatefulWidget {
 }
 
 class ErroInternetState extends State<ErroInternetView> {
-  StreamSubscription<ConnectivityResult>? subscription;
+
 
   onInc() async {
     try {
@@ -35,7 +35,6 @@ class ErroInternetState extends State<ErroInternetView> {
   @override
   void dispose() {
     super.dispose();
-    subscription?.cancel();
   }
 
   @override

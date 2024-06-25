@@ -19,14 +19,14 @@ class CancelarAcessoView extends StatefulWidget {
   CancelarAcessoState createState() => CancelarAcessoState();
 }
 
-class CancelarAcessoState extends State<CancelarAcessoView> with ParameterResultViewEvent {
+class CancelarAcessoState extends State<CancelarAcessoView> with ParameterResultViewEvent , ParameterResultFunctions {
 
 
   TextEditingController txtControllerUsuario = TextEditingController();
 
   onCancelarAcesso() async {
     try {
-      if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+      if (await (Connectivity().checkConnectivity().asStream()).contains(ConnectivityResult.none)) {
         OnAlert.onAlertError(context, "Parece que você está sem internet ! Por favor, verifique a sua conexão e tente novamente.");
 
       } else {
@@ -53,29 +53,14 @@ class CancelarAcessoState extends State<CancelarAcessoView> with ParameterResult
 
   onInc() async {
     try {
-      erroInformation = '';
-      if (await Connectivity().checkConnectivity() == ConnectivityResult.none)
-      {
-        GlobalScaffold.instance.navigatorKey.currentState?.pushNamed(
-          routes.erroInternetRoute,
-        ).then((value) async {
-          onInc();
-        });
-      }
-      else
-      {
+      if (await onIncConnectivity()) {
 
+      } else {
+        GlobalScaffold.instance.navigatorKey.currentState?.popUntil((route) => route.isFirst);
+        GlobalScaffold.instance.onToastInternetConnection();
       }
     } catch (error) {
-      GlobalScaffold.instance.navigatorKey.currentState?.pushNamed(
-        routes.cancelarAcessoRoute,
-        arguments:  {
-          'view': routes.cancelarAcessoRoute,
-          'error': error
-        },
-      ).then((value) {
-        onInc();
-      });
+      onError(error.toString());
     }
   }
 

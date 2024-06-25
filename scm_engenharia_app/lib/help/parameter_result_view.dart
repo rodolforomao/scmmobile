@@ -26,12 +26,12 @@ mixin class ParameterResultFunctions {
   }
 
   Future<bool> onIncConnectivity() async {
-    if (await Connectivity().checkConnectivity() == ConnectivityResult.none)
+    if (await (Connectivity().checkConnectivity().asStream()).contains(ConnectivityResult.none))
     {
       await  GlobalScaffold.instance.navigatorKey.currentState?.pushNamed(
         routes.errorInformationRoute,
       ).then((value) async {
-        if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+        if (await (Connectivity().checkConnectivity().asStream()).contains(ConnectivityResult.none))  {
           return false;
         }
         else

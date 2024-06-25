@@ -274,7 +274,7 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> with Paramet
 
   onLancamentosComBaseMesAnterior() async {
     try {
-      if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+      if (await (Connectivity().checkConnectivity().asStream()).contains(ConnectivityResult.none)) {
         throw ('Verifique sua conexão com a internet e tente novamente.');
       } else {
         GlobalScaffold.instance.onToastPerformingOperation('Web: Buscando lançamentos com\r\nbase no mês anterior... ');

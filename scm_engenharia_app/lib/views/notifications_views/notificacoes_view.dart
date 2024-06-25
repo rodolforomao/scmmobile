@@ -17,10 +17,9 @@ class NotificationsView extends StatefulWidget {
   NotificationsState createState() => NotificationsState();
 }
 
-class NotificationsState extends State<NotificationsView> with ParameterResultViewEvent {
+class NotificationsState extends State<NotificationsView> with ParameterResultViewEvent , ParameterResultFunctions {
 
   List<NotificationScmEngineering> listNotificationScmEngineering = [];
-  late StreamSubscription<ConnectivityResult> subscription;
   TypeView statusView = TypeView.viewLoading;
 
 
@@ -55,47 +54,31 @@ class NotificationsState extends State<NotificationsView> with ParameterResultVi
 
   onInc() async {
     try {
-      if (await Connectivity().checkConnectivity() == ConnectivityResult.none)
-      {
-        GlobalScaffold.instance.navigatorKey.currentState?.pushNamed(routes.erroInternetRoute,).then((value) async {
-          if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
-            GlobalScaffold.instance.navigatorKey.currentState?.pushNamedAndRemoveUntil(routes.splashScreenRoute, (Route<dynamic> route) => false);
-          }
-          else
-          {
-            onInc();
-          }
-        });
-      }
-      else {
+      if (await onIncConnectivity()) {
         onGetListNotificationByCpf();
+      } else {
+        GlobalScaffold.instance.navigatorKey.currentState?.popUntil((route) => route.isFirst);
+        GlobalScaffold.instance.onToastInternetConnection();
       }
     } catch (error) {
-      GlobalScaffold.map = {
-        'view': routes.notificacoesRoute,
-        'error': error
-      };
-      Navigator.of(context).pushNamed(
-        routes.errorInformationRoute,
-        arguments: GlobalScaffold.map,
-      ).then((value) {
-        GlobalScaffold.instance.navigatorKey.currentState?.pushNamedAndRemoveUntil(routes.splashScreenRoute, (Route<dynamic> route) => false);
-      });
+      onError(error.toString());
     }
   }
+
+
 
   @override
   void initState() {
     super.initState();
+    setState(() =>  statusView = TypeView.viewLoading);
     onInc();
   }
-
   @override
   void dispose() {
     super.dispose();
-    subscription.cancel();
   }
 
+  @override
   Widget build(BuildContext context) {
     return  Scaffold(
       appBar: PreferredSize(

@@ -16,7 +16,7 @@ class AlertasView extends StatefulWidget {
   RecibosState createState() => RecibosState();
 }
 
-class RecibosState extends State<AlertasView> with ParameterResultViewEvent {
+class RecibosState extends State<AlertasView> with ParameterResultViewEvent , ParameterResultFunctions {
 
   List<NotificationScmEngineering> listNotificationScmEngineering = [];
   TypeView statusView = TypeView.viewLoading;
@@ -52,43 +52,24 @@ class RecibosState extends State<AlertasView> with ParameterResultViewEvent {
 
   onInc() async {
     try {
-      if (await Connectivity().checkConnectivity() == ConnectivityResult.none)
-      {
-        GlobalScaffold.instance.navigatorKey.currentState?.pushNamed(routes.erroInternetRoute,).then((value) async {
-          if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
-            GlobalScaffold.instance.navigatorKey.currentState?.pushNamedAndRemoveUntil(routes.splashScreenRoute, (Route<dynamic> route) => false);
-          }
-          else
-          {
-            onInc();
-          }
-        });
-      }
-      else {
-        //onGetListUsuarios();
+      if (await onIncConnectivity()) {
+        onGetListUsuarios();
+      } else {
+        GlobalScaffold.instance.navigatorKey.currentState?.popUntil((route) => route.isFirst);
+        GlobalScaffold.instance.onToastInternetConnection();
       }
     } catch (error) {
-      GlobalScaffold.map = {
-        'view': routes.alertasRoute,
-        'error': error
-      };
-      Navigator.of(context).pushNamed(
-        routes.errorInformationRoute,
-        arguments: GlobalScaffold.map,
-      ).then((value) {
-        GlobalScaffold.instance.navigatorKey.currentState?.pushNamedAndRemoveUntil(routes.splashScreenRoute, (Route<dynamic> route) => false);
-      });
+      onError(error.toString());
     }
   }
+
+
 
   @override
   void initState() {
     super.initState();
-    setState(() {
-      statusView = TypeView.viewRenderInformation;
-    });
-
-    //onInc();
+    setState(() =>  statusView = TypeView.viewLoading);
+    onInc();
   }
 
   @override
@@ -97,6 +78,7 @@ class RecibosState extends State<AlertasView> with ParameterResultViewEvent {
 
   }
 
+  @override
   Widget build(BuildContext context) {
     return  Scaffold(
       appBar: PreferredSize(

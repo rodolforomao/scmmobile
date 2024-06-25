@@ -18,7 +18,7 @@ class ForgotYourPasswordState extends State<ForgotYourPasswordView> {
 
   OnSaveAccount() async {
     try {
-      if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+      if (await (Connectivity().checkConnectivity().asStream()).contains(ConnectivityResult.none)) {
         OnAlert.onAlertError(context,'Verifique sua conexão com a internet e tente novamente.');
       }  else {
         if (txtControllerEmail.text.isEmpty) {
@@ -45,19 +45,6 @@ class ForgotYourPasswordState extends State<ForgotYourPasswordView> {
   @override
   void initState() {
     super.initState();
-
-    Future.delayed(Duration.zero, () async {
-      var connectivityResult = await (Connectivity().checkConnectivity());
-      if (connectivityResult == ConnectivityResult.none) {
-        setState(() {
-
-        });
-      } else {
-        setState(() {
-
-        });
-      }
-    });
   }
 
   @override

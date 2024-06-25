@@ -21,7 +21,7 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> with Parameter
 
   onGetDocumentsList() async {
     try {
-      if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+      if (await (Connectivity().checkConnectivity().asStream()).contains(ConnectivityResult.none)) {
         GlobalScaffold.instance.onToastInternetConnection();
       } else {
         setState(() =>  statusTypeView = TypeView.viewLoading);
@@ -58,7 +58,7 @@ class RecibosDocumentosState extends State<RecibosDocumentosView> with Parameter
 
   onDownloadDocuments(String idDocumento ,String nomeArquivo) async {
     try {
-      if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+      if (await (Connectivity().checkConnectivity().asStream()).contains(ConnectivityResult.none)) {
         GlobalScaffold.instance.onToastInternetConnection();
       } else {
         OnRealizandoOperacao('Realizando operação',context);

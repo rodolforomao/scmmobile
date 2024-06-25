@@ -58,7 +58,7 @@ class ListArquivosDiciFustState extends State<ListArquivosDiciFustView> with Par
 
   onUpload(Map<String, dynamic> parameters , int index) async {
     try {
-      if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+      if (await (Connectivity().checkConnectivity().asStream()).contains(ConnectivityResult.none)) {
         GlobalScaffold.instance.onToastInternetConnection();
       } else {
         if(Components.onIsEmpty(parameters['fileBase64']).isEmpty)

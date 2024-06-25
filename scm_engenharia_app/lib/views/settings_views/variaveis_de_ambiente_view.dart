@@ -25,7 +25,7 @@ class VariaveisDeAmbienteState extends State<VariaveisDeAmbienteView> with Param
 
   onEnvironmentVariables() async {
     try {
-      if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+      if (await (Connectivity().checkConnectivity().asStream()).contains(ConnectivityResult.none)) {
         GlobalScaffold.instance.onToastInternetConnection();
       } else {
         OnRealizandoOperacao('Realizando operação',context);

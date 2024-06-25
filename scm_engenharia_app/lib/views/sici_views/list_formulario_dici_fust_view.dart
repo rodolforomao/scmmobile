@@ -26,7 +26,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> with
 
   onRestWeb() async {
     try {
-      if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+      if (await (Connectivity().checkConnectivity().asStream()).contains(ConnectivityResult.none)) {
         throw ('Verifique sua conexão com a internet e tente novamente.');
       } else {
         GlobalScaffold.instance.onToastPerformingOperation('Web: Buscando lançamentos ... ');
@@ -98,7 +98,7 @@ class ListFormularioSiciFustState extends State<ListFormularioSiciFustView> with
 
   onUpload(InputSiciFileModel siciFileModel) async {
     try {
-      if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+      if (await (Connectivity().checkConnectivity().asStream()).contains(ConnectivityResult.none)) {
         GlobalScaffold.instance.onToastInternetConnection();
       } else {
         GlobalScaffold.instance.onToastPerformingOperation('Sincronizando ... ');

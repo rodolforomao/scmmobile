@@ -19,15 +19,15 @@ class NotificacaoDetalhesView extends StatefulWidget {
   NotificationState createState() => NotificationState();
 }
 
-class NotificationState extends State<NotificacaoDetalhesView> with ParameterResultViewEvent {
+class NotificationState extends State<NotificacaoDetalhesView> with ParameterResultViewEvent , ParameterResultFunctions {
 
   NotificationScmEngineering notificationScmEngineering = NotificationScmEngineering();
-  late StreamSubscription<ConnectivityResult> subscription;
+
   TypeView statusView = TypeView.viewLoading;
 
   onGetNotificationById() async {
     try {
-      if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+      if (await (Connectivity().checkConnectivity().asStream()).contains(ConnectivityResult.none)) {
         GlobalScaffold.instance.onToastInternetConnection();
       } else {
         setState(() {
@@ -64,50 +64,35 @@ class NotificationState extends State<NotificacaoDetalhesView> with ParameterRes
 
   onInc() async {
     try {
-      if (await Connectivity().checkConnectivity() == ConnectivityResult.none)
-      {
-        GlobalScaffold.instance.navigatorKey.currentState?.pushNamed(routes.erroInternetRoute,).then((value) async {
-          if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
-            GlobalScaffold.instance.navigatorKey.currentState?.pushNamedAndRemoveUntil(routes.splashScreenRoute, (Route<dynamic> route) => false);
-          }
-          else
-          {
-            onInc();
-          }
-        });
-      }
-      else {
+      if (await onIncConnectivity()) {
         onGetNotificationById();
+      } else {
+        GlobalScaffold.instance.navigatorKey.currentState?.popUntil((route) => route.isFirst);
+        GlobalScaffold.instance.onToastInternetConnection();
       }
     } catch (error) {
-      GlobalScaffold.map = {
-        'view': routes.notificacaoRoute,
-        'error': error
-      };
-      Navigator.of(context).pushNamed(
-        routes.errorInformationRoute,
-        arguments: GlobalScaffold.map,
-      ).then((value) {
-        GlobalScaffold.instance.navigatorKey.currentState?.pushNamedAndRemoveUntil(routes.splashScreenRoute, (Route<dynamic> route) => false);
-      });
+      onError(error.toString());
     }
   }
+
+
 
   @override
   void initState() {
     super.initState();
+    setState(() =>  statusView = TypeView.viewLoading);
     notificationScmEngineering.titulo = '';
     notificationScmEngineering.mensagem = '';
     onInc();
   }
 
+
   @override
   void dispose() {
     super.dispose();
-    subscription.cancel();
   }
 
-
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(

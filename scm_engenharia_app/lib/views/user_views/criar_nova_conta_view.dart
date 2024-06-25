@@ -64,7 +64,7 @@ class CreateNewAccountState extends State<CriarNovaContaView> with ParameterResu
 
     OnSaveAccount() async {
     try {
-      if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+      if (await (Connectivity().checkConnectivity().asStream()).contains(ConnectivityResult.none)) {
         OnAlert.onAlertError(context,'Verifique sua conexão com a internet e tente novamente.');
       }  else {
         if (txtControlleNomeCompleto.text.isEmpty) {

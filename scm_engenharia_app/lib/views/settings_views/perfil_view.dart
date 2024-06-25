@@ -63,7 +63,7 @@ class PerfilState extends State<PerfilView> with ParameterResultViewEvent {
 
   onUpdate() async {
     try {
-      if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+      if (await (Connectivity().checkConnectivity().asStream()).contains(ConnectivityResult.none)) {
         GlobalScaffold.instance.onToastInternetConnection();
       }  else {
         if (txtControlleNomeCompleto.text.isEmpty) {

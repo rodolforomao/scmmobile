@@ -17,15 +17,14 @@ class EmpresasView extends StatefulWidget {
   EmpresasState createState() => EmpresasState();
 }
 
-class EmpresasState extends State<EmpresasView> with ParameterResultViewEvent {
+class EmpresasState extends State<EmpresasView> with ParameterResultViewEvent , ParameterResultFunctions {
 
   List<NotificationScmEngineering> listNotificationScmEngineering = [];
-  late StreamSubscription<ConnectivityResult> subscription;
   TypeView statusView = TypeView.viewLoading;
 
   onGetListUsuarios() async {
     try {
-      if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+      if (await (Connectivity().checkConnectivity().asStream()).contains(ConnectivityResult.none)) {
         GlobalScaffold.instance.onToastInternetConnection();
       } else {
         statusView = TypeView.viewLoading;
@@ -54,39 +53,31 @@ class EmpresasState extends State<EmpresasView> with ParameterResultViewEvent {
 
   onInc() async {
     try {
-      if (await Connectivity().checkConnectivity() == ConnectivityResult.none)
-      {
-        throw ('Verifique sua conexão com a internet e tente novamente.');
-      }
-      else {
+      if (await onIncConnectivity()) {
         onGetListUsuarios();
+      } else {
+        GlobalScaffold.instance.navigatorKey.currentState?.popUntil((route) => route.isFirst);
+        GlobalScaffold.instance.onToastInternetConnection();
       }
     } catch (error) {
-      GlobalScaffold.map['view'] = 'UsuariosView';
-      GlobalScaffold.map['error'] = error.toString();
-      Navigator.of(context).pushNamed(
-        routes.errorInformationRoute,
-        arguments: GlobalScaffold.map,
-      ).then((value) {
-        onInc();
-      });
+      onError(error.toString());
     }
   }
 
   @override
   void initState() {
     super.initState();
-    setState(() {
-      statusView = TypeView.viewRenderInformation;
-    });
+    setState(() =>  statusView = TypeView.viewLoading);
+    onInc();
   }
+
 
   @override
   void dispose() {
     super.dispose();
-    subscription.cancel();
   }
 
+  @override
   Widget build(BuildContext context) {
     return  Scaffold(
       appBar: PreferredSize(

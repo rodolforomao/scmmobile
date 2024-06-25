@@ -36,7 +36,7 @@ class LoginState extends State<LoginView> {
 
   onLogin() async {
     try {
-      if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+      if (await (Connectivity().checkConnectivity().asStream()).contains(ConnectivityResult.none)) {
         GlobalScaffold.instance.onToastInternetConnection();
       } else {
         if (txtControllerEmail.text.isEmpty)
@@ -97,11 +97,11 @@ class LoginState extends State<LoginView> {
   void initState() {
     super.initState();
     // NotificationHandler().subscribeToTopic("scmengenhariaUserNLogado");
-    //txtControllerEmail.text = "rodolforomao@gmail.com";
-    //txtControllerPassword.text = "1234567";
+     //txtControllerEmail.text = "rodolforomao@gmail.com";
+    // txtControllerPassword.text = "1234567";
 
-     //txtControllerEmail.text = "fernando.oliveira@scmengenharia.com.br";
-     //txtControllerPassword.text = "trabalho@4030";
+    // txtControllerEmail.text = "fernando.oliveira@scmengenharia.com.br";
+    // txtControllerPassword.text = "trabalho@4030";
   }
 
   @override
@@ -264,6 +264,7 @@ class LoginState extends State<LoginView> {
                     style:  TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 20,
+                      color:  Colors.white,
                     ),
                   ),
                 ),

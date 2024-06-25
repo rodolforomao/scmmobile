@@ -16,14 +16,14 @@ class RecibosView extends StatefulWidget {
   RecibosState createState() => RecibosState();
 }
 
-class RecibosState extends State<RecibosView> with ParameterResultViewEvent {
+class RecibosState extends State<RecibosView> with ParameterResultViewEvent , ParameterResultFunctions {
 
   List<NotificationScmEngineering> listNotificationScmEngineering = [];
   TypeView statusView = TypeView.viewErrorInformation;
 
   onGetListUsuarios() async {
     try {
-      if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+      if (await (Connectivity().checkConnectivity().asStream()).contains(ConnectivityResult.none)) {
         GlobalScaffold.instance.onToastInternetConnection();
       } else {
         statusView = TypeView.viewLoading;
@@ -52,34 +52,26 @@ class RecibosState extends State<RecibosView> with ParameterResultViewEvent {
 
   onInc() async {
     try {
-      if (await Connectivity().checkConnectivity() == ConnectivityResult.none)
-      {
-        throw ('Verifique sua conexão com a internet e tente novamente.');
-      }
-      else {
+      if (await onIncConnectivity()) {
         onGetListUsuarios();
+      } else {
+        GlobalScaffold.instance.navigatorKey.currentState?.popUntil((route) => route.isFirst);
+        GlobalScaffold.instance.onToastInternetConnection();
       }
     } catch (error) {
-      GlobalScaffold.map['view'] = 'UsuariosView';
-      GlobalScaffold.map['error'] = error.toString();
-      Navigator.of(context).pushNamed(
-        routes.errorInformationRoute,
-        arguments: GlobalScaffold.map,
-      ).then((value) {
-        onInc();
-      });
+      onError(error.toString());
     }
   }
+
+
 
   @override
   void initState() {
     super.initState();
-    setState(() {
-      statusView = TypeView.viewRenderInformation;
-      erroInformation = "Recibos";
-    });
-    //onInc();
+    setState(() =>  statusView = TypeView.viewLoading);
+    onInc();
   }
+
 
   @override
   void dispose() {
@@ -87,6 +79,7 @@ class RecibosState extends State<RecibosView> with ParameterResultViewEvent {
 
   }
 
+  @override
   Widget build(BuildContext context) {
     return  Scaffold(
       appBar: PreferredSize(

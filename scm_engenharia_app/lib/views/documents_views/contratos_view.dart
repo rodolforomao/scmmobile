@@ -23,7 +23,7 @@ class ContratosState extends State<ContratosView> with ParameterResultViewEvent 
 
   onGetListUsuarios() async {
     try {
-      if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+      if (await (Connectivity().checkConnectivity().asStream()).contains(ConnectivityResult.none)) {
         GlobalScaffold.instance.onToastInternetConnection();
       } else {
         statusView = TypeView.viewLoading;
