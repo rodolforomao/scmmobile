@@ -102,3 +102,7 @@ Após clicar em Archive clicar no botão Distribute App e clicar sempre em next
 ## Building Windows
 flutter build macos
 ##
+
+
+
+

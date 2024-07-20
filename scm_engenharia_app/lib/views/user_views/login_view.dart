@@ -26,7 +26,8 @@ class LoginState extends State<LoginView> {
 
   final txtControllerEmail = TextEditingController();
   final txtControllerPassword= TextEditingController();
-  bool switchValueDarkMode=false;
+
+  bool switchValueLembreMe=false;
   FocusNode? focusNodeEmail;
   FocusNode? focusNodePassword;
 
@@ -100,8 +101,8 @@ class LoginState extends State<LoginView> {
      //txtControllerEmail.text = "rodolforomao@gmail.com";
     // txtControllerPassword.text = "1234567";
 
-    // txtControllerEmail.text = "fernando.oliveira@scmengenharia.com.br";
-    // txtControllerPassword.text = "trabalho@4030";
+    //txtControllerEmail.text = "fernando.oliveira@scmengenharia.com.br";
+    //txtControllerPassword.text = "trabalho@4030";
   }
 
   @override
@@ -226,10 +227,10 @@ class LoginState extends State<LoginView> {
                         child: Center(child:CupertinoSwitch(
                           trackColor: const Color(0xff303e7ec1),
                           activeColor: const Color(0xff3F7EC1),
-                          value: switchValueDarkMode,
+                          value: switchValueLembreMe,
                           onChanged: (value) {
                             setState(() {
-                              switchValueDarkMode = value;
+                              switchValueLembreMe = value;
                             });
                           },
                         ),),

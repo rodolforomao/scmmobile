@@ -157,6 +157,7 @@ class ErrorInformationState extends State<ErroInformacaoView> {
                       style:  TextStyle(
                         fontWeight: FontWeight.w400,
                         fontSize: 20,
+                        color:  Color(0xffFFFFFF),
                       ),
                     ),
                   ),

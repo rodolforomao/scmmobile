@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:realm/realm.dart';
 import 'package:scm_engenharia_app/data/tb_arquivo_dici_fust.dart';
 import 'package:scm_engenharia_app/data/tb_environment_variable.dart';
 import 'package:scm_engenharia_app/data/tb_form_sici_fust.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../help/components.dart';
 import '../models/operation.dart';
 import 'tb_user.dart';
 
@@ -474,6 +478,63 @@ class AppScmEngenhariaMobileBll {
       operation.message = 'Erro $ex';
     }
     return operation;
+  }
+
+
+  Future<Operation> onSaveLembreMe(Map<String, dynamic> lembreMe) async {
+    Operation operacao = Operation();
+    operacao.result = null;
+    operacao.message = 'Operação realizada com sucesso';
+    operacao.erro = true;
+    try {
+      var token = jsonEncode(lembreMe);
+      SharedPreferences.getInstance().then((prefs) {
+        prefs.setString('LembreMe',jsonEncode(lembreMe));
+      });
+      operacao.result = lembreMe;
+    } catch (ex) {
+      operacao.erro = false;
+      operacao.message = 'Erro $ex';
+    }
+    return operacao;
+  }
+
+  Future<Operation> onSelectLembreMe() async {
+    Operation operacao = Operation();
+    try {
+      operacao.result = null;
+      operacao.message = 'Operação realizada com sucesso';
+      operacao.erro = true;
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? accessToken =  prefs.getString('LembreMe');
+      if(Components.onIsEmpty(accessToken) != '')
+      {
+        Map<String, dynamic> map = jsonDecode(accessToken!);
+        operacao.result = map;
+      }
+    } catch (ex) {
+      operacao.erro = false;
+      operacao.message = ex.toString();
+    }
+    return operacao;
+  }
+
+  Future<Operation> onLembreMe() async {
+    Operation operacao = Operation();
+    operacao.result = null;
+    operacao.message = 'Operação realizada com sucesso';
+    operacao.erro = true;
+    try {
+      SharedPreferences.getInstance().then((prefs) async {
+        await prefs.remove('LembreMe');
+        operacao.result = true;
+      });
+      operacao.result = true;
+    } catch (ex) {
+      operacao.erro = false;
+      operacao.message = 'Erro $ex';
+    }
+    return operacao;
   }
 
 }

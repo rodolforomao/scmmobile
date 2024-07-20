@@ -1092,8 +1092,7 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> with Paramet
                                                       ),
                                                     ),
                                                     TextSpan(
-                                                      text: inputSiciFustForm
-                                                          .dadosEmServicos![index].tipoCliente,
+                                                      text: inputSiciFustForm.dadosEmServicos![index].tipoCliente,
                                                       style: const TextStyle(
                                                         fontWeight: FontWeight.normal,
                                                         color: Colors.black54,

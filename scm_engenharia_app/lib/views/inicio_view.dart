@@ -1,7 +1,3 @@
-
-// ignore: avoid_web_libraries_in_flutter
-//import 'dart:html';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +5,6 @@ import '../help/navigation_service/route_paths.dart' as routes;
 import 'dart:async';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-
 import '../thema/app_thema.dart';
 import 'help_views/global_scaffold.dart';
 
@@ -176,52 +171,32 @@ class InicioState extends State<InicioView>  {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              GestureDetector(
-                onTap: () {
-                  GlobalScaffold.instance.onToastInformation("Click event on Container ");
-                },
-                child: Column(
-                  children:  <Widget>[
-                    const Icon(Icons.search_outlined, color: Color(0xffef7d00),),
-                    Padding( padding: const EdgeInsets.only(top: 10.0),child: Text('Análise',  style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 12,color:  Colors.black87, fontWeight: FontWeight.w500,))),
-                  ],
-                ),
+              Column(
+                children:  <Widget>[
+                  const Icon(Icons.search_outlined, color: Color(0xffef7d00),),
+                  Padding( padding: const EdgeInsets.only(top: 10.0),child: Text('Análise',  style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 12,color:  Colors.black87, fontWeight: FontWeight.w500,))),
+                ],
               ),
-              GestureDetector(
-                onTap: () {
-                  GlobalScaffold.instance.onToastInternetConnection();
-                },
-                child: Column(
-                  children: <Widget>[
-                    const Icon(Icons.warning, color: Color(0xffef7d00),),
-                    Padding( padding: const EdgeInsets.only(top: 10.0),child: Text('Alertas',  style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 12,color:  Colors.black87, fontWeight: FontWeight.w500,))),
+              Column(
+                children: <Widget>[
+                  const Icon(Icons.warning, color: Color(0xffef7d00),),
+                  Padding( padding: const EdgeInsets.only(top: 10.0),child: Text('Alertas',  style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 12,color:  Colors.black87, fontWeight: FontWeight.w500,))),
 
-                  ],
-                ),
+                ],
               ),
-              GestureDetector(
-                onTap: () {
-                  print("Click event on Container");
-                },
-                child: Column(
-                  children: <Widget>[
-                    Icon(Icons.description, color: Color(0xffef7d00),),
-                    Padding( padding: EdgeInsets.only(top: 10.0),child: Text('Recibos',   style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 12,color:  Colors.black87, fontWeight: FontWeight.w500,))),
+              Column(
+                children: <Widget>[
+                  const Icon(Icons.description, color: Color(0xffef7d00),),
+                  Padding( padding: const EdgeInsets.only(top: 10.0),child: Text('Recibos',   style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 12,color:  Colors.black87, fontWeight: FontWeight.w500,))),
 
-                  ],
-                ),
+                ],
               ),
-              GestureDetector(
-                onTap: () {
-                  print("Click event on Container");
-                },
-                child: Column(
-                  children:  <Widget>[
-                    const Icon(Icons.inventory, size: 25, color: Color(0xffef7d00),),
-                    Padding( padding: const EdgeInsets.only(top: 10.0),child: Text('Documentos',  style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 12,color:  Colors.black87, fontWeight: FontWeight.w500,))),
+              Column(
+                children:  <Widget>[
+                  const Icon(Icons.inventory, size: 25, color: Color(0xffef7d00),),
+                  Padding( padding: const EdgeInsets.only(top: 10.0),child: Text('Documentos',  style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 12,color:  Colors.black87, fontWeight: FontWeight.w500,))),
 
-                  ],
-                ),
+                ],
               ),
             ],),),
         ),
@@ -268,7 +243,6 @@ class InicioState extends State<InicioView>  {
               elevation: 8,
               minimumSize: const Size(350, 50),
               maximumSize: const Size(350, 50),
-
             ),
             child: const Padding(
               padding:

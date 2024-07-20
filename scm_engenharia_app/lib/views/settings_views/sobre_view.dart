@@ -7,8 +7,9 @@ import '../../models/info_app.dart';
 import '../../thema/app_thema.dart';
 import '../help_views/global_scaffold.dart';
 import 'package:scm_engenharia_app/models/global_user_logged.dart' as global_user_logged;
-
 import '../help_views/global_view.dart';
+
+
 class SobreView extends StatefulWidget {
   const SobreView({super.key});
   @override
@@ -17,7 +18,7 @@ class SobreView extends StatefulWidget {
 
 class SobreState extends State<SobreView> with ParameterResultViewEvent {
 
-  TypeView statusView = TypeView.viewLoading;
+
   InfoApp infoApp = InfoApp();
 
   onSendEmail() async {
@@ -36,17 +37,16 @@ class SobreState extends State<SobreView> with ParameterResultViewEvent {
 
   onInc() async {
     try {
-      setState(() {statusView = TypeView.viewLoading;});
+      setState(() {statusTypeView = TypeView.viewLoading;});
       InfoApp repInfoApp = await Components.onInfo();
       setState(() {
         infoApp = repInfoApp;
-        statusView = TypeView.viewRenderInformation;
+        statusTypeView = TypeView.viewRenderInformation;
       });
     } catch (error) {
-      Map<String, dynamic> map = {'view' : routes.sobreRoute, 'error' : error};
       Navigator.of(context).pushNamed(
         routes.errorInformationRoute,
-        arguments: map,
+        arguments: {'view' : routes.sobreRoute, 'error' : error},
       ).then((value) {
         onInc();
       });
@@ -87,7 +87,7 @@ class SobreState extends State<SobreView> with ParameterResultViewEvent {
   }
 
   viewType(double maxHeight) {
-    switch (statusView) {
+    switch (statusTypeView) {
       case TypeView.viewLoading:
         return GlobalView.viewPerformingSearch(maxHeight,context);
       case TypeView.viewErrorInformation:

@@ -20,7 +20,6 @@ class VariaveisDeAmbienteView extends StatefulWidget {
 
 class VariaveisDeAmbienteState extends State<VariaveisDeAmbienteView> with ParameterResultViewEvent {
 
-  TypeView statusView = TypeView.viewLoading;
   TbEnvironmntVariable? inputEnvironmntVariable;
 
   onEnvironmentVariables() async {
@@ -50,7 +49,7 @@ class VariaveisDeAmbienteState extends State<VariaveisDeAmbienteView> with Param
           } else {
             setState(() {
               inputEnvironmntVariable = respFormSiciFust.result as TbEnvironmntVariable;
-              statusView = TypeView.viewRenderInformation;
+              statusTypeView = TypeView.viewRenderInformation;
               erroInformation = 'Vamos atualizar as variáveis de ambiente para que o aplicativo funcione corretamente.';
             });
             showDialog(
@@ -120,7 +119,7 @@ class VariaveisDeAmbienteState extends State<VariaveisDeAmbienteView> with Param
                               //`Text` to display
                               onPressed: () {
                                 Navigator.pop(context);
-                                //GlobalScaffold.instance.navigatorKey.currentState?.pop(true);
+                                Navigator.pop(context);
                               },
                             ),),
                           ),
@@ -140,25 +139,25 @@ class VariaveisDeAmbienteState extends State<VariaveisDeAmbienteView> with Param
 
   onInc() async {
     try {
-      setState((){statusView = TypeView.viewLoading;});
+      setState((){statusTypeView = TypeView.viewLoading;});
       Operation respEnvironmentVariable = await AppScmEngenhariaMobileBll.instance.onSelectEnvironmentVariableAll();
       if (respEnvironmentVariable.erro) {
         throw respEnvironmentVariable.message!;
       } else if (respEnvironmentVariable.result == null) {
         setState(() {
-          statusView = TypeView.viewRenderInformation;
+          statusTypeView = TypeView.viewRenderInformation;
           erroInformation = respEnvironmentVariable.message!;
         });
       } else {
         setState(() {
           inputEnvironmntVariable = respEnvironmentVariable.result as TbEnvironmntVariable;
-          statusView = TypeView.viewRenderInformation;
+          statusTypeView = TypeView.viewRenderInformation;
           erroInformation = respEnvironmentVariable.message!;
         });
       }
     } catch (error) {
       setState(() {
-        statusView = TypeView.viewErrorInformation;
+        statusTypeView = TypeView.viewErrorInformation;
         erroInformation = error.toString();
       });
     }
@@ -168,9 +167,9 @@ class VariaveisDeAmbienteState extends State<VariaveisDeAmbienteView> with Param
   void initState() {
     super.initState();
     setState(() {
+      statusTypeView = TypeView.viewLoading;
       erroInformation = 'Vamos atualizar as variáveis de ambiente para que o aplicativo funcione corretamente.';
     });
-
     onInc();
   }
 
@@ -182,7 +181,6 @@ class VariaveisDeAmbienteState extends State<VariaveisDeAmbienteView> with Param
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(55.0),
         child: AppBar(
@@ -202,7 +200,7 @@ class VariaveisDeAmbienteState extends State<VariaveisDeAmbienteView> with Param
   }
 
   viewType(double maxHeight) {
-    switch (statusView) {
+    switch (statusTypeView) {
       case TypeView.viewLoading:
         return GlobalView.viewPerformingSearch(maxHeight,context);
       case TypeView.viewErrorInformation:

@@ -144,30 +144,27 @@ class OnExitApp {
               textDirection: TextDirection.ltr,
               children: [
                 Padding(padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 6.0),child: Text(
-                  'Configurações',
-                  style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 12,color:  Colors.black, fontWeight: FontWeight.w600,),
+                  'Atenção!',
+                  style: StylesThemas.textStyleTextTitle().copyWith(fontSize: 15,color:  Colors.black, fontWeight: FontWeight.w600,),
                 ),),
                 const Padding(padding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 10.0),child: Divider(color:Colors.black54),),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 15.0),
-                      height: 40.0,
-                      child: const Text(
-                        'Deseja realmente sair?',
-                        textAlign: TextAlign.start,
-                        softWrap: false,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          color: Color(0xFF000000),
-                            fontFamily: 'Poppins-Medium'
-                        ),
-                      ),
-                    ),
+                    const Text(
+                  'Ao sair, todos os seus dados salvos localmente neste aplicativo serão removidos permanentemente. Tem certeza de que deseja continuar?',
+                  textAlign: TextAlign.start,
+                  softWrap: false,
+                  maxLines: 6,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w300,
+                      color: Color(0xff6C757D),
+                      fontFamily: 'Poppins-Medium'
+                  ),
+                ),
                     Container(
                       constraints: const BoxConstraints(
                         maxWidth: 400,
@@ -197,7 +194,8 @@ class OnExitApp {
                                 ),
                                 onPressed: () async {
                                   try {
-                                    Components.logoffApp(cpf);
+                                    OnRealizandoOperacao('Realizando operação',context);
+                                     Components.logoffApp(cpf);
                                   } catch (error) {
                                     OnRealizandoOperacao('',context);
                                     GlobalScaffold.instance.onToastError(error.toString());

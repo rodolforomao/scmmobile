@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../data/app_scm_engenharia_mobile_bll.dart';
 import '../../data/tb_environment_variable.dart';
+import '../../help/components.dart';
 import '../../help/parameter_result_view.dart';
 import '../../models/input/input_sici_fust_form_model.dart';
 import '../../models/operation.dart';
@@ -28,23 +29,36 @@ class DadosEmServicosState extends State<DadosEmServicosView> with  ParameterVie
 
   onAdd() async {
     try {
-      InputDadosEmServicosModel sInput =   InputDadosEmServicosModel();
+      InputDadosEmServicosModel sInput = InputDadosEmServicosModel();
       if( widget.sInputDadosEmServicos != null)
         {
           sInput.idLancamento = widget.sInputDadosEmServicos!.idLancamento;
         }
-      if(valueCodIbge.descricao != 'SELECIONE...') {
-        sInput.codIbge = valueCodIbge.descricao;
-      }
+
       if(ufValue.uf != 'SELECIONE...') {
         sInput.uf = ufValue.uf;
       }
+      else
+      {
+        throw 'Por favor preencha o campo Estado';
+      }
+      if(txtCounty.text.isNotEmpty) {
+        sInput.codIbge = valueCodIbge.codIbge;
+      }
+      else
+      {
+        throw 'Campo Código IBGE obrigatório';
+      }
+
       if(customerTypeValue.descricao != 'SELECIONE...') {
         sInput.tipoCliente = customerTypeValue.descricao;
       }
-      if(serviceTypeValue.descricao != 'SELECIONE...') {
-
-        throw 'Selecione Tipo de Atendimento';
+      else
+      {
+        throw 'Campo Tipo de Cliente precisa ser selecionado.';
+      }
+      if(serviceTypeValue.descricao == 'SELECIONE...') {
+        throw 'O campo Tipo de Atendimento precisa ser selecionado.';
       }
       else
       {
@@ -53,14 +67,39 @@ class DadosEmServicosState extends State<DadosEmServicosView> with  ParameterVie
       if(mediumAccessTypeValue.descricao != 'SELECIONE...') {
         sInput.tipoAcesso = mediumAccessTypeValue.descricao;
       }
-      if( technologyTypeValue.descricao != 'SELECIONE...') {
-        sInput.tecnologia = technologyTypeValue.descricao;
+      else
+      {
+        throw 'O campo Tipos meio precisa ser selecionado.';
       }
+
       if(productTypeValue.descricao != 'SELECIONE...') {
         sInput.tipoProduto = productTypeValue.descricao;
       }
-      sInput.velocidade = txtControllerVelocity.text;
-      sInput.quantidadeAcesso = txtControllerAccesses.text;
+      else
+      {
+        throw 'O campo Tipo produto precisa ser preenchido.';
+      }
+      if(technologyTypeValue.descricao != 'SELECIONE...') {
+        sInput.tecnologia = technologyTypeValue.descricao;
+      }
+      else
+      {
+        throw 'O campo Nome tecnologia precisa ser preenchido.';
+      }
+      if(txtControllerVelocity.text.isNotEmpty) {
+        sInput.velocidade = txtControllerVelocity.text;
+      }
+      else
+      {
+        throw 'O campo Velocidade precisa ser preenchido.';
+      }
+      if(txtControllerAccesses.text.isNotEmpty) {
+        sInput.quantidadeAcesso = txtControllerAccesses.text;
+      }
+      else
+      {
+        throw 'O campo Acesso precisa ser preenchido.';
+      }
       Navigator.pop(context, sInput);
     } catch (error) {
       OnAlert.onAlertError(context, error.toString());
@@ -123,15 +162,16 @@ class DadosEmServicosState extends State<DadosEmServicosView> with  ParameterVie
         });
         if(widget.sInputDadosEmServicos != null)
         {
-          ufValue = ufDropdownList!.where((i) => i.uf!.toUpperCase() == widget.sInputDadosEmServicos!.uf!.toUpperCase()).first;
-          valueCodIbge = resulEnvironmentVariables.codIbge!.where((i) => i.codIbge == widget.sInputDadosEmServicos!.codIbge).first;
+          ufValue =  ufDropdownList!.firstWhere((i) => i.uf!.toUpperCase() == widget.sInputDadosEmServicos!.uf!.toUpperCase(), orElse: () => ufDropdownList!.last);
+          valueCodIbge =  resulEnvironmentVariables.codIbge!.firstWhere((i) => i.codIbge!.toUpperCase() == widget.sInputDadosEmServicos!.codIbge!.toUpperCase(), orElse: () => resulEnvironmentVariables.codIbge!.last);
+
           customerTypeValue = resulEnvironmentVariables.tipoCliente!.where((i) => i.descricao == widget.sInputDadosEmServicos!.tipoCliente).first;
           serviceTypeValue = resulEnvironmentVariables.tipoAtendimento!.where((i) => i.descricao == widget.sInputDadosEmServicos!.tipoAtendimento).first;
           mediumAccessTypeValue = resulEnvironmentVariables.tipoMeioAcesso!.where((i) => i.descricao == widget.sInputDadosEmServicos!.tipoAcesso).first;
           technologyTypeValue = resulEnvironmentVariables.tipoTecnologia!.where((i) => i.descricao == widget.sInputDadosEmServicos!.tecnologia).first;
           productTypeValue = resulEnvironmentVariables.tipoProduto!.where((i) => i.descricao == widget.sInputDadosEmServicos!.tipoProduto).first;
-          txtCounty.text = valueCodIbge.codIbge!;
-          hintTextCounty  = valueCodIbge.descricao!;
+          txtCounty.text = Components.onIsEmpty(valueCodIbge.codIbge!) ;
+          hintTextCounty  = Components.onIsEmpty(valueCodIbge.descricao!);
           txtControllerVelocity.text = widget.sInputDadosEmServicos!.velocidade!;
           txtControllerAccesses.text = widget.sInputDadosEmServicos!.quantidadeAcesso!;
         }
