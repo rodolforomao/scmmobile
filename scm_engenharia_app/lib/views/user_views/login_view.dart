@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:realm/realm.dart';
 import '../../data/app_scm_engenharia_mobile_bll.dart';
 import '../../data/tb_user.dart';
+import '../../help/components.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
 import '../../models/operation.dart';
 import '../../models/user_response_model.dart';
@@ -84,6 +85,14 @@ class LoginState extends State<LoginView> {
                   await FirebaseMessaging.instance.unsubscribeFromTopic('ScmEngenhariaNLogadoAll');
                 }
               }
+              if(switchValueLembreMe)
+                {
+                  Operation restLembreMe = await   AppScmEngenhariaMobileBll.instance.onSaveLembreMe({'Email':txtControllerEmail.text, 'Password':txtControllerPassword.text,});
+                }
+               else
+                {
+                  Operation restLembreMe = await   AppScmEngenhariaMobileBll.instance.onRemoveLembreMe();
+                }
               GlobalScaffold.instance.navigatorKey.currentState?.pushNamedAndRemoveUntil(routes.menuNavigationRoute, (Route<dynamic> route) => false);
             }
         }
@@ -94,15 +103,29 @@ class LoginState extends State<LoginView> {
     }
   }
 
+
+  onInc() async {
+    try {
+      Operation restBll = await AppScmEngenhariaMobileBll.instance.onSelectLembreMe();
+      if(restBll.erro) {
+        throw (restBll.message!);
+      } else if (restBll.result != null)
+      {
+        Map<String, dynamic> resp = restBll.result as Map<String, dynamic>;
+        txtControllerEmail.text = Components.onIsEmpty(resp['Email']);
+        txtControllerPassword.text = Components.onIsEmpty(resp['Password']);
+        setState(() => switchValueLembreMe=true);
+      }
+    } catch (error) {
+      OnAlert.onAlertError(context,error.toString());
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    // NotificationHandler().subscribeToTopic("scmengenhariaUserNLogado");
-     //txtControllerEmail.text = "rodolforomao@gmail.com";
-    // txtControllerPassword.text = "1234567";
+    onInc();
 
-    //txtControllerEmail.text = "fernando.oliveira@scmengenharia.com.br";
-    //txtControllerPassword.text = "trabalho@4030";
   }
 
   @override
@@ -229,9 +252,7 @@ class LoginState extends State<LoginView> {
                           activeColor: const Color(0xff3F7EC1),
                           value: switchValueLembreMe,
                           onChanged: (value) {
-                            setState(() {
-                              switchValueLembreMe = value;
-                            });
+                            setState(() => switchValueLembreMe=value);
                           },
                         ),),
                       ),

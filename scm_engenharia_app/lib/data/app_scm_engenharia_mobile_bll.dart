@@ -94,8 +94,6 @@ class AppScmEngenhariaMobileBll {
     operation.message = 'Operação realizada com sucesso';
     operation.erro = false;
     try {
-
-
       realm.write(() {
         realm.deleteAll<TbUser>();
         realm.deleteAll<TbFormSiciFust>();
@@ -485,7 +483,7 @@ class AppScmEngenhariaMobileBll {
     Operation operacao = Operation();
     operacao.result = null;
     operacao.message = 'Operação realizada com sucesso';
-    operacao.erro = true;
+    operacao.erro = false;
     try {
       var token = jsonEncode(lembreMe);
       SharedPreferences.getInstance().then((prefs) {
@@ -493,7 +491,7 @@ class AppScmEngenhariaMobileBll {
       });
       operacao.result = lembreMe;
     } catch (ex) {
-      operacao.erro = false;
+      operacao.erro = true;
       operacao.message = 'Erro $ex';
     }
     return operacao;
@@ -504,7 +502,7 @@ class AppScmEngenhariaMobileBll {
     try {
       operacao.result = null;
       operacao.message = 'Operação realizada com sucesso';
-      operacao.erro = true;
+      operacao.erro = false;
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       String? accessToken =  prefs.getString('LembreMe');
       if(Components.onIsEmpty(accessToken) != '')
@@ -513,17 +511,17 @@ class AppScmEngenhariaMobileBll {
         operacao.result = map;
       }
     } catch (ex) {
-      operacao.erro = false;
+      operacao.erro = true;
       operacao.message = ex.toString();
     }
     return operacao;
   }
 
-  Future<Operation> onLembreMe() async {
+  Future<Operation> onRemoveLembreMe() async {
     Operation operacao = Operation();
     operacao.result = null;
     operacao.message = 'Operação realizada com sucesso';
-    operacao.erro = true;
+    operacao.erro = false;
     try {
       SharedPreferences.getInstance().then((prefs) async {
         await prefs.remove('LembreMe');
