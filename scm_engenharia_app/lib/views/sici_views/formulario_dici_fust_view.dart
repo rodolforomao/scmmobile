@@ -38,15 +38,23 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> with Paramet
 
   onSaveLocalDbForm() async {
     try {
-      if (txtControllerCnpj.text.isEmpty) throw ('O campo cnpj é obrigatório');
+
       inputSiciFustForm.periodoReferencia = txtControllerReferencePeriod.text;
       inputSiciFustForm.cnpj = txtControllerCnpj.text;
       if (txtControllerSocialReason.text.isEmpty) {
-        throw ('O campo Razão Social é obrigatório');
+        throw ('Por favor, observe que é necessário preencher o campo ‘Razão Social’ para prosseguir. Certifique-se de inserir a Razão Social corretamente.');
       }
+      if (txtControllerCnpj.text.isEmpty) {
+        throw ('Por favor, note que o preenchimento do campo CNPJ é obrigatório para prosseguir. Certifique-se de inserir o CNPJ corretamente.');
+      }
+      if (!CNPJValidator.isValid(txtControllerCnpj.text)) {
+        throw ('O CNPJ fornecido não é válido. Por favor, verifique e tente novamente. Certifique-se de que o número do CNPJ está correto e completo.');
+      }
+
+      
       inputSiciFustForm.razaoSocial = txtControllerSocialReason.text;
       if (txtControllerTelefoneMovel.text.isEmpty && txtControllerLandline.text.isEmpty) {
-        throw ("Pelo menos um campo Telefone é obrigatório");
+        throw ("É necessário preencher pelo menos um campo de Telefone para continuar. Por favor, insira um número de telefone válido.");
       }
       inputSiciFustForm.telefoneMovel = txtControllerTelefoneMovel.text;
       inputSiciFustForm.telefoneFixo = txtControllerLandline.text;
@@ -62,7 +70,7 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> with Paramet
       inputSiciFustForm.cofinsPorc = txtControllerCofinsPorc.text;
       inputSiciFustForm.observacoes = txtControllerGeneralObservations.text;
       if (inputSiciFustForm.dadosEmServicos == null) {
-        throw ('Distribuição do quantitativo de acessos físicos em serviço é obrigatório,favor adicionar.');
+        throw ('Por favor, observe que é obrigatório adicionar a distribuição do quantitativo de acessos físicos em serviço. Certifique-se de preencher essa informação para prosseguir.');
       } else {
         GlobalScaffold.instance.onToastPerformingOperation('Realizando operação');
         var formSiciFust = TbFormSiciFust(ObjectId(), inputSiciFustForm.id ?? "", jsonEncode(inputSiciFustForm.toJson() ?? ""));
@@ -179,27 +187,7 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> with Paramet
     }
   }
 
-  onSelectedDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDatePickerMode: DatePickerMode.year,
-      initialEntryMode: DatePickerEntryMode.calendar,
-      initialDate: selectedDate,
-      firstDate: DateTime(2015, 8),
-      lastDate: DateTime(DateTime.now().year, DateTime.now().month - 1),
-      errorFormatText: 'Insira uma data válida',
-      errorInvalidText: 'Insira a data em um intervalo válido',
-      fieldLabelText: 'Período referência ',
-      fieldHintText: 'Dia/Mês/Ano',
-      helpText: 'Selecione o período referência',
-    );
-    if (picked != null) {
-      setState(() {
-        selectedDate = DateTime(picked.year, picked.month, 1);
-        txtControllerReferencePeriod.text = DateFormat('dd/MM/yyyy').format(DateTime(picked.year, picked.month, 1));
-      });
-    }
-  }
+
 
   onIncFormulario(InputSiciFileModel? siciFileModel) async {
     try {
@@ -486,9 +474,15 @@ class FormularioDiciFustState extends State<FormularioDiciFustView> with Paramet
                           600,
                           [
                             TextField(
-                              onTap: () {
+                              onTap: () async {
                                 FocusScope.of(context).requestFocus(FocusNode());
-                                onSelectedDate(context);
+                                DateTime? picked = await GlobalScaffold.onSelecionarDate(context);
+                                if (picked != null) {
+                                  setState(() {
+                                    selectedDate = DateTime(picked.year, picked.month, 1);
+                                    txtControllerReferencePeriod.text = DateFormat('dd/MM/yyyy').format(DateTime(picked.year, picked.month, 1));
+                                  });
+                                }
                               },
                               keyboardType: TextInputType.datetime,
                               controller: txtControllerReferencePeriod,

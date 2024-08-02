@@ -3,8 +3,7 @@ import 'compoundable_formatter.dart';
 import 'dart:math';
 
 /// Formata o valor do campo com a mascara de CNPJ `99.999.999/9999-99`
-class CnpjInputFormatter extends TextInputFormatter
-    implements CompoundableFormatter {
+class CnpjInputFormatter extends TextInputFormatter  implements CompoundableFormatter {
   /// Define o tamanho máximo do campo.
   @override
   int get maxLength => 14;
@@ -50,8 +49,7 @@ class CnpjInputFormatter extends TextInputFormatter
 }
 
 
-class
-CNPJValidator {
+class  CNPJValidator {
   static const List<String> blockList = [
     '00000000000000',
     '11111111111111',

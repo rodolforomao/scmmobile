@@ -398,6 +398,129 @@ class GlobalScaffold {
       GlobalScaffold.instance.onToastError(error.toString());
     }
   }
+
+
+  static Future<DateTime?> onSelecionarDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      builder: (BuildContext context, Widget ?child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            dialogTheme: DialogTheme(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0), // this is the border radius of the picker
+              ),
+            ),
+            datePickerTheme: const DatePickerThemeData(
+              headerBackgroundColor: Color(0xfff5821f),
+              headerForegroundColor: Colors.white,
+              backgroundColor: Color(0xFFE6F3FD),
+            ),
+            dividerTheme: const DividerThemeData(
+              color: Colors.transparent,
+            ),
+            textTheme:  const TextTheme(
+              bodyLarge:TextStyle(
+                color: Color(0xff3a3a3a),
+                fontWeight: FontWeight.w400,
+                fontSize: 15.0,
+                fontFamily: 'Poppins-Regular',
+              ),
+              titleSmall:TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 15.0,
+                  color: Color(0xff3a3a3a),
+                  fontFamily: "Poppins-Regular"),
+              labelLarge :TextStyle(
+                color: Color(0xff3a3a3a),
+                fontWeight: FontWeight.w500,
+                fontSize: 16.0,
+                fontFamily: 'Poppins-Regular',
+              ),
+            ),
+            inputDecorationTheme: const InputDecorationTheme(
+              focusedErrorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                borderSide: BorderSide(color: Color(0xfff56558), width: 0.5),
+              ),
+              errorBorder:OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                borderSide: BorderSide(color: Color(0xfff56558), width: 0.5),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                borderSide: BorderSide(color: Color(0xFFb8b8b8), width: 0.5),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                borderSide: BorderSide(color: Color(0xff093d6c), width: 1.0),
+              ),
+              contentPadding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 20.0),
+              border: OutlineInputBorder(),
+              helperStyle: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 15.0,
+                  color:  Color(0xff093d6c),
+                  fontFamily: 'Poppins-Regular'),
+              hintStyle: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 15.0,
+                  color:  Color(0xFFb8b8b8),
+                  fontFamily: 'Poppins-Regular'),
+              labelStyle: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 17.0,
+                  color: Color(0xFFb8b8b8),
+                  fontFamily: 'Poppins-Regular'),
+              floatingLabelStyle: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 15.0,
+                  color: Color(0xff50093d6c),
+                  fontFamily: 'Poppins-Regular'),
+              fillColor: Colors.white,
+              filled: true,
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                padding: const EdgeInsets.fromLTRB(15.0, 2.0, 15.0, 2.0),
+                minimumSize: const Size(150, 40),
+                maximumSize: const Size(150, 40),
+                foregroundColor: const Color(0xFFffffff),
+                textStyle: const TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontFamily: 'Poppins-Regular',
+                  color:  Color(0xffFFFFFF),
+                  fontSize: 15,
+                  overflow:
+                  TextOverflow.ellipsis,
+                ),
+                backgroundColor: const Color(0xfff5821f),
+                shape: RoundedRectangleBorder(
+                  borderRadius:  BorderRadius.circular(5.0),
+                ),
+              ),
+            ),
+            dialogBackgroundColor: Colors.white,
+          ),
+          child: Padding(padding: const EdgeInsets.all(10.0),child: child,),
+        );
+      },
+      locale: const Locale('pt', 'BR'),
+      initialDatePickerMode: DatePickerMode.day,
+      initialEntryMode: DatePickerEntryMode.calendar,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2011, 8),
+      lastDate: DateTime.now(),
+      errorFormatText: 'Insira uma data válida',
+      errorInvalidText: 'Insira a data em um intervalo válido',
+      fieldLabelText: 'Período referência ',
+      fieldHintText: 'Dia/Mês/Ano',
+      helpText: 'Selecione uma data válida',
+      cancelText: 'Cancelar',
+      confirmText: 'OK',
+    );
+    return picked;
+  }
 }
 
 //--------------------------------------------------------------------------------------------------------

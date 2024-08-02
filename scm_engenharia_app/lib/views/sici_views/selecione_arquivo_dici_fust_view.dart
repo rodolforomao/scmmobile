@@ -23,11 +23,12 @@ class SelecioneArquivoDiciFustView extends StatefulWidget {
   SelecioneArquivoDiciFustState createState() => SelecioneArquivoDiciFustState();
 }
 
-class SelecioneArquivoDiciFustState extends State<SelecioneArquivoDiciFustView> with ParameterView, ParameterResultViewEvent {
+  class SelecioneArquivoDiciFustState extends State<SelecioneArquivoDiciFustView> with ParameterView, ParameterResultViewEvent {
 
 
 
-  onUpload() async {
+    void  onUpload() async {
+
     try {
       if (await (Connectivity().checkConnectivity().asStream()).contains(ConnectivityResult.none)) {
         GlobalScaffold.instance.onToastInternetConnection();
@@ -48,59 +49,76 @@ class SelecioneArquivoDiciFustState extends State<SelecioneArquivoDiciFustView> 
               throw (resultRest.message!);
             } else {
               Map<String, dynamic>  mapResult = resultRest.result as Map<String, dynamic>;
-              print(mapResult);
               List mapdadosEmServicos = [];
               if(Components.onIsEmpty(mapResult['data']?['Dici']) != '')
                 {
                   for (var item in mapResult['data']['Dici'] as List) {
-                    mapdadosEmServicos.add({
-                      'idLancamento': '',
-                      'idSiciFile': '',
-                      'codIbge': Components.onIsEmpty(item['cod_ibge']),
-                      'uf': Components.onIsEmpty(item['estado']),
-                      'tipoCliente': Components.onIsEmpty(item['tipo_cliente']),
-                      'tipoAtendimento': Components.onIsEmpty(item['tipo_atendimento']),
-                      'tipoAcesso': Components.onIsEmpty(item['tipo_meio_acesso']),
-                      'tecnologia': Components.onIsEmpty(item['tecnologia']),
-                      'tipoProduto': Components.onIsEmpty(item['tipo_produto']),
-                      'velocidade': Components.onIsEmpty(item['velocidade']),
-                      'quantidadeAcesso': Components.onIsEmpty(item['quantidade_acesso']),
-                    });
+
+                    if(Components.onIsEmpty(item['cod_ibge']) == ''
+                        || Components.onIsEmpty(item['estado']) == ''
+                        || Components.onIsEmpty(item['tipo_cliente']) == ''
+                        || Components.onIsEmpty(item['tipo_atendimento']) == ''
+                        || Components.onIsEmpty(item['tipo_meio_acesso']) == ''
+                        || Components.onIsEmpty(item['tecnologia']) == ''
+                        || Components.onIsEmpty(item['tipo_produto']) == ''
+                        || Components.onIsEmpty(item['velocidade']) == ''
+                        || Components.onIsEmpty(item['quantidade_acesso']) == '')
+                      {
+                        continue;
+                      }
+                    else
+                      {
+                        mapdadosEmServicos.add({
+                          'idLancamento': '',
+                          'idSiciFile': '',
+                          'codIbge': Components.onIsEmpty(item['cod_ibge']),
+                          'uf': Components.onIsEmpty(item['estado']),
+                          'tipoCliente': Components.onIsEmpty(item['tipo_cliente']),
+                          'tipoAtendimento': Components.onIsEmpty(item['tipo_atendimento']),
+                          'tipoAcesso': Components.onIsEmpty(item['tipo_meio_acesso']),
+                          'tecnologia': Components.onIsEmpty(item['tecnologia']),
+                          'tipoProduto': Components.onIsEmpty(item['tipo_produto']),
+                          'velocidade': Components.onIsEmpty(item['velocidade']),
+                          'quantidadeAcesso': Components.onIsEmpty(item['quantidade_acesso']),
+                        });
+                      }
                   }
                 }
 
               if(Components.onIsEmpty(mapResult['data']) != '')
                 {
-                  Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                        builder: (context) =>
-                            FormularioDiciFustView(map:{
-                                'formulario':InputSiciFileModel.fromJson({
-                                'razaoSocial': Components.onIsEmpty(mapResult['data']?['Empresa']?['razao_social']),
-                                'telefoneFixo': Components.onIsEmpty(mapResult['data']?['Empresa']?['telefone_fixo']),
-                                'telefoneMovel': Components.onIsEmpty(mapResult['data']?['Empresa']?['telefone_celular']),
-                                'cnpj': Components.onIsEmpty(mapResult['data']?['Empresa']?['cnpj']),
-                                'receitaBruta': Components.onIsEmpty(mapResult['data']?['Financeiro']?['bruta']),
-                                'simplesPorc ': Components.onIsEmpty(mapResult['data']?['Financeiro']?['simples']?[0]),
-                                'simples': Components.onIsEmpty(mapResult['data']?['Financeiro']?['simples']?[1]),
-                                'icmsPorc ': Components.onIsEmpty(mapResult['data']?['Financeiro']?['icms']?[0]),
-                                'icms': Components.onIsEmpty(mapResult['data']?['Financeiro']?['icms']?[1]),
-                                'pis': Components.onIsEmpty(mapResult['data']?['Financeiro']?['pis']),
-                                'cofins': Components.onIsEmpty(mapResult['data']?['Financeiro']?['cofins']),
-                                'receitaLiquida': Components.onIsEmpty(mapResult['data']?['Financeiro']?['líquida']),
-                                'dadosEmServicos':mapdadosEmServicos,
-                              }),
-                              'isLancamentosComBaseMesAnterior':false,
-                            }),
-                      )).then((value) {
-                  });
+                  if(Components.onIsEmpty(mapResult['data']?['Empresa']?['razao_social']) != '' || Components.onIsEmpty(mapResult['data']?['Empresa']?['cnpj']) != '')
+                    {
+                      Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (context) =>
+                                FormularioDiciFustView(map:{
+                                  'formulario':InputSiciFileModel.fromJson({
+                                    'razaoSocial': Components.onIsEmpty(mapResult['data']?['Empresa']?['razao_social']),
+                                    'telefoneFixo': Components.onIsEmpty(mapResult['data']?['Empresa']?['telefone_fixo']),
+                                    'telefoneMovel': Components.onIsEmpty(mapResult['data']?['Empresa']?['telefone_celular']),
+                                    'cnpj': Components.onIsEmpty(mapResult['data']?['Empresa']?['cnpj']),
+                                    'receitaBruta': Components.onIsEmpty(mapResult['data']?['Financeiro']?['bruta']),
+                                    'simplesPorc ': Components.onIsEmpty(mapResult['data']?['Financeiro']?['simples']?[0]),
+                                    'simples': Components.onIsEmpty(mapResult['data']?['Financeiro']?['simples']?[1]),
+                                    'icmsPorc ': Components.onIsEmpty(mapResult['data']?['Financeiro']?['icms']?[0]),
+                                    'icms': Components.onIsEmpty(mapResult['data']?['Financeiro']?['icms']?[1]),
+                                    'pis': Components.onIsEmpty(mapResult['data']?['Financeiro']?['pis']),
+                                    'cofins': Components.onIsEmpty(mapResult['data']?['Financeiro']?['cofins']),
+                                    'receitaLiquida': Components.onIsEmpty(mapResult['data']?['Financeiro']?['líquida']),
+                                    'dadosEmServicos':mapdadosEmServicos,
+                                  }),
+                                  'isLancamentosComBaseMesAnterior':false,
+                                }),
+                          )).then((value) {});
+                    }
                 }
             }
           }
       }
     } catch (error) {
-      OnAlert.onAlertError(context, error.toString());
+     OnAlert.onAlertError(context, error.toString());
     }
   }
 

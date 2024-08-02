@@ -40,14 +40,14 @@ class DadosEmServicosState extends State<DadosEmServicosView> with  ParameterVie
       }
       else
       {
-        throw 'Por favor preencha o campo Estado';
+        throw 'Por favor, é necessário preencher o campo UF (Unidade Federativa)';
       }
       if(txtCounty.text.isNotEmpty) {
         sInput.codIbge = valueCodIbge.codIbge;
       }
       else
       {
-        throw 'Campo Código IBGE obrigatório';
+        throw 'Por favor, é necessário preencher o campo ‘Código IBGE’ para prosseguir. Certifique-se de inserir o Código IBGE corretamente.';
       }
 
       if(customerTypeValue.descricao != 'SELECIONE...') {
@@ -55,10 +55,10 @@ class DadosEmServicosState extends State<DadosEmServicosView> with  ParameterVie
       }
       else
       {
-        throw 'Campo Tipo de Cliente precisa ser selecionado.';
+        throw 'Por favor, é necessário selecionar o ‘Tipo de Cliente’ para prosseguir. Certifique-se de escolher a opção apropriada na lista.';
       }
       if(serviceTypeValue.descricao == 'SELECIONE...') {
-        throw 'O campo Tipo de Atendimento precisa ser selecionado.';
+        throw 'Por favor, é necessário selecionar o ‘Tipo de Atendimento’ para prosseguir.';
       }
       else
       {
@@ -69,7 +69,7 @@ class DadosEmServicosState extends State<DadosEmServicosView> with  ParameterVie
       }
       else
       {
-        throw 'O campo Tipos meio precisa ser selecionado.';
+        throw 'Por favor, é necessário selecionar o ‘Tipos meio’ para prosseguir. ';
       }
 
       if(productTypeValue.descricao != 'SELECIONE...') {
@@ -77,28 +77,28 @@ class DadosEmServicosState extends State<DadosEmServicosView> with  ParameterVie
       }
       else
       {
-        throw 'O campo Tipo produto precisa ser preenchido.';
+        throw 'Por favor, é necessário preencher o campo ‘Tipo de Produto’ para prosseguir. ';
       }
       if(technologyTypeValue.descricao != 'SELECIONE...') {
         sInput.tecnologia = technologyTypeValue.descricao;
       }
       else
       {
-        throw 'O campo Nome tecnologia precisa ser preenchido.';
+        throw 'Por favor, é necessário preencher o campo ‘Nome da Tecnologia’ para prosseguir.';
       }
       if(txtControllerVelocity.text.isNotEmpty) {
         sInput.velocidade = txtControllerVelocity.text;
       }
       else
       {
-        throw 'O campo Velocidade precisa ser preenchido.';
+        throw 'Por favor, é necessário preencher o campo ‘Velocidade’ para prosseguir.';
       }
       if(txtControllerAccesses.text.isNotEmpty) {
         sInput.quantidadeAcesso = txtControllerAccesses.text;
       }
       else
       {
-        throw 'O campo Acesso precisa ser preenchido.';
+        throw 'Por favor, é necessário preencher o campo ‘Acesso’ para prosseguir.';
       }
       Navigator.pop(context, sInput);
     } catch (error) {
