@@ -114,7 +114,7 @@ class NotificationScmEngineering {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['id_tb_notificacoes'] = this.idTbNotificacoes;
     data['mensagem'] = this.mensagem;
     data['destinatario'] = this.destinatario;

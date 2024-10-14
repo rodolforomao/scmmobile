@@ -94,7 +94,7 @@ class SelecioneArquivoDiciFustView extends StatefulWidget {
                           CupertinoPageRoute(
                             builder: (context) =>
                                 FormularioDiciFustView(map:{
-                                  'formulario':InputSiciFileModel.fromJson({
+                                   'formulario':InputSiciFileModel.fromJson({
                                     'razaoSocial': Components.onIsEmpty(mapResult['data']?['Empresa']?['razao_social']),
                                     'telefoneFixo': Components.onIsEmpty(mapResult['data']?['Empresa']?['telefone_fixo']),
                                     'telefoneMovel': Components.onIsEmpty(mapResult['data']?['Empresa']?['telefone_celular']),

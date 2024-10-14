@@ -23,11 +23,13 @@ import '../help_views/global_view.dart';
 import 'dados_em_servicos_view.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
 
+
+//ignore: must_be_immutable
 class FormularioDiciFustView extends StatefulWidget {
   Map<String, dynamic>  map = {};
   //InputSiciFileModel? siciFileModel;
   //bool isLancamentosComBaseMesAnterior;
-  FormularioDiciFustView({Key? key,required this.map}) : super(key: key);
+  FormularioDiciFustView({super.key,required this.map});
 
   @override
   FormularioDiciFustState createState() => FormularioDiciFustState();

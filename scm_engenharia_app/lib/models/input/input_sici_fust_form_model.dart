@@ -108,9 +108,8 @@ class InputSiciFileModel {
     data['cofinsPorc'] = cofinsPorc  ?? '';
     data['receitaLiquida'] = receitaLiquida  ?? '';
     data['observacoes'] = observacoes  ?? '';
-    if (this.dadosEmServicos != null) {
-      data['dadosEmServicos'] =
-          this.dadosEmServicos!.map((v) => v.toJson()).toList();
+    if (dadosEmServicos != null) {
+      data['dadosEmServicos'] = dadosEmServicos!.map((v) => v.toJson()).toList();
     }
     return data;
   }

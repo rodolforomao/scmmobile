@@ -8,6 +8,9 @@ import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
 import 'package:flutter/services.dart';
 
+
+
+//ignore: must_be_immutable
 class SelecionarMunicipioView extends StatefulWidget {
   List<CodIbge> sMunicipios;
   Uf? sUf;

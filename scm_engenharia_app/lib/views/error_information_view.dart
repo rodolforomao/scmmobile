@@ -6,7 +6,9 @@ import 'dart:async';
 import 'help_views/global_view.dart';
 import 'package:meta/meta.dart';
 
-@immutable
+
+
+//ignore: must_be_immutable
 class ErroInformacaoView extends StatefulWidget {
   Map<String, dynamic> map;
   ErroInformacaoView({super.key, required this.map, });

@@ -11,7 +11,7 @@ import '../help_views/global_scaffold.dart';
 import '../help_views/global_view.dart';
 
 
-
+//ignore: must_be_immutable
 class NotificacaoDetalhesView extends StatefulWidget {
   String idNotificacao;
   NotificacaoDetalhesView({super.key, required this.idNotificacao});

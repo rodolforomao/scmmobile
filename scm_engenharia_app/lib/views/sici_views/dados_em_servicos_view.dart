@@ -15,6 +15,9 @@ import 'selecionar_municipio_view.dart';
 import '../../thema/app_thema.dart';
 import '../../help/navigation_service/route_paths.dart' as routes;
 
+
+
+//ignore: must_be_immutable
 class DadosEmServicosView extends StatefulWidget {
   InputDadosEmServicosModel? sInputDadosEmServicos;
   DadosEmServicosView({super.key, required this.sInputDadosEmServicos});
@@ -108,7 +111,7 @@ class DadosEmServicosState extends State<DadosEmServicosView> with  ParameterVie
 
   onInc() async {
     try {
-      setState((){statusView = TypeView.viewLoading;});
+      setState(() => statusView = TypeView.viewLoading);
       Operation respEnvironmentVariable = await AppScmEngenhariaMobileBll.instance.onSelectEnvironmentVariableAll();
       if (respEnvironmentVariable.erro) {
         throw respEnvironmentVariable.message!;
@@ -123,41 +126,47 @@ class DadosEmServicosState extends State<DadosEmServicosView> with  ParameterVie
           TbEnvironmntVariable inputEnvironmntVariable = respEnvironmentVariable.result as TbEnvironmntVariable;
           resulEnvironmentVariables = OutputEnvironmentVariablesModel.fromJson(jsonDecode(inputEnvironmntVariable.result) as Map<String, dynamic>);
           ufDropdownList = resulEnvironmentVariables.uf;
-          ufValue.id = '0';
-          ufValue.uf = 'SELECIONE...';
-          ufDropdownList!.add(ufValue);
+          ufDropdownList!.add(Uf(
+            id: '0',
+            uf: 'SELECIONE...',
+          ));
           ufValue = ufDropdownList!.last;
           //-------------------------------------------------------------------------------------------------------------------
           customerTypeDropdownList = resulEnvironmentVariables.tipoCliente;
-          customerTypeValue.id ='0';
-          customerTypeValue.descricao = 'SELECIONE...';
-          customerTypeDropdownList!.add(customerTypeValue);
+          customerTypeDropdownList!.add(TipoCliente(
+            id: '0',
+            descricao: 'SELECIONE...',
+          ));
           customerTypeValue = customerTypeDropdownList!.last;
           //-------------------------------------------------------------------------------------------------------------------
           serviceTypeDropdownList = resulEnvironmentVariables.tipoAtendimento;
-          serviceTypeValue.id ='0';
-          serviceTypeValue.descricao = 'SELECIONE...';
-          serviceTypeDropdownList!.add(serviceTypeValue);
+          serviceTypeDropdownList!.add(TipoAtendimento(
+            id: '0',
+            descricao: 'SELECIONE...',
+          ));
           serviceTypeValue  = serviceTypeDropdownList!.last;
           //-------------------------------------------------------------------------------------------------------------------
           mediumAccessTypeDropdownList = resulEnvironmentVariables.tipoMeioAcesso;
-          mediumAccessTypeValue.id ='0';
-          mediumAccessTypeValue.descricao = 'SELECIONE...';
-          mediumAccessTypeDropdownList!.add(mediumAccessTypeValue);
+          mediumAccessTypeDropdownList!.add(TipoMeioAcesso(
+            id: '0',
+            descricao: 'SELECIONE...',
+          ));
           mediumAccessTypeValue  = mediumAccessTypeDropdownList!.last;
           //-------------------------------------------------------------------------------------------------------------------
           technologyTypeDropdownList = resulEnvironmentVariables.tipoTecnologia;
-          technologyTypeValue.id  ='0';
-          technologyTypeValue.descricao = 'SELECIONE...';
-          technologyTypeValue.idTipoMeioAcesso  ='0';
-          technologyTypeValue.idTipoProduto  ='0';
-          technologyTypeDropdownList!.add(technologyTypeValue);
+          technologyTypeDropdownList!.add(TipoTecnologia(
+            id:'0',
+            descricao:'SELECIONE...',
+            idTipoMeioAcesso:'0',
+            idTipoProduto:'0',
+          ));
           technologyTypeValue   = technologyTypeDropdownList!.last;
           //-------------------------------------------------------------------------------------------------------------------
           productTypeDropdownList = resulEnvironmentVariables.tipoProduto;
-          productTypeValue.id ='0';
-          productTypeValue.descricao = 'SELECIONE...';
-          productTypeDropdownList!.add(productTypeValue);
+          productTypeDropdownList!.add(TipoProduto(
+            id: '0',
+            descricao: 'SELECIONE...',
+          ));
           productTypeValue = productTypeDropdownList!.last;
         });
         if(widget.sInputDadosEmServicos != null)
@@ -165,17 +174,17 @@ class DadosEmServicosState extends State<DadosEmServicosView> with  ParameterVie
           ufValue =  ufDropdownList!.firstWhere((i) => i.uf!.toUpperCase() == widget.sInputDadosEmServicos!.uf!.toUpperCase(), orElse: () => ufDropdownList!.last);
           valueCodIbge =  resulEnvironmentVariables.codIbge!.firstWhere((i) => i.codIbge!.toUpperCase() == widget.sInputDadosEmServicos!.codIbge!.toUpperCase(), orElse: () => resulEnvironmentVariables.codIbge!.last);
 
-          customerTypeValue = resulEnvironmentVariables.tipoCliente!.where((i) => i.descricao == widget.sInputDadosEmServicos!.tipoCliente).first;
-          serviceTypeValue = resulEnvironmentVariables.tipoAtendimento!.where((i) => i.descricao == widget.sInputDadosEmServicos!.tipoAtendimento).first;
-          mediumAccessTypeValue = resulEnvironmentVariables.tipoMeioAcesso!.where((i) => i.descricao == widget.sInputDadosEmServicos!.tipoAcesso).first;
-          technologyTypeValue = resulEnvironmentVariables.tipoTecnologia!.where((i) => i.descricao == widget.sInputDadosEmServicos!.tecnologia).first;
-          productTypeValue = resulEnvironmentVariables.tipoProduto!.where((i) => i.descricao == widget.sInputDadosEmServicos!.tipoProduto).first;
+          customerTypeValue = resulEnvironmentVariables.tipoCliente!.firstWhere((i) => i.descricao?.toUpperCase() == widget.sInputDadosEmServicos!.tipoCliente?.toUpperCase(), orElse: () => resulEnvironmentVariables.tipoCliente!.first);
+          serviceTypeValue = resulEnvironmentVariables.tipoAtendimento!.firstWhere((i) => i.descricao?.toUpperCase() == widget.sInputDadosEmServicos!.tipoAtendimento?.toUpperCase(), orElse: () => resulEnvironmentVariables.tipoAtendimento!.first);
+          mediumAccessTypeValue = resulEnvironmentVariables.tipoMeioAcesso!.firstWhere((i) => i.descricao?.toUpperCase() == widget.sInputDadosEmServicos!.tipoAcesso?.toUpperCase(), orElse: () => resulEnvironmentVariables.tipoMeioAcesso!.first);
+          technologyTypeValue = resulEnvironmentVariables.tipoTecnologia!.firstWhere((i) => i.descricao?.toUpperCase() == widget.sInputDadosEmServicos!.tecnologia?.toUpperCase(), orElse: () => resulEnvironmentVariables.tipoTecnologia!.first);
+          productTypeValue = resulEnvironmentVariables.tipoProduto!.firstWhere((i) => i.descricao?.toUpperCase()== widget.sInputDadosEmServicos!.tipoProduto?.toUpperCase(), orElse: () => resulEnvironmentVariables.tipoProduto!.first);
           txtCounty.text = Components.onIsEmpty(valueCodIbge.codIbge!) ;
           hintTextCounty  = Components.onIsEmpty(valueCodIbge.descricao!);
           txtControllerVelocity.text = widget.sInputDadosEmServicos!.velocidade!;
           txtControllerAccesses.text = widget.sInputDadosEmServicos!.quantidadeAcesso!;
         }
-        setState((){statusView = TypeView.viewRenderInformation;});
+        setState(() => statusView = TypeView.viewRenderInformation);
       }
     } catch (error) {
       Navigator.of(context).pushNamed(
@@ -193,13 +202,6 @@ class DadosEmServicosState extends State<DadosEmServicosView> with  ParameterVie
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () async {
-     // listMonths = <UtilDropdownList>[];
-      //listMonths = await Components.onMonths();
-      setState(() {
-        //utilDropdownListMonth = listMonths.first;
-      });
-    });
     onInc();
   }
 
@@ -654,25 +656,29 @@ mixin class ParameterView  {
   OutputEnvironmentVariablesModel resulEnvironmentVariables = OutputEnvironmentVariablesModel();
 
   //CNPJ:
-  //final txtControllerCnpj =  TextEditingController();
-  // final  focusNodeCnpj = FocusNode();
 
-  //List<UtilDropdownList> listMonths = <UtilDropdownList>[];
-  //late UtilDropdownList utilDropdownListMonth;
   List<Uf>? ufDropdownList;
   Uf ufValue = Uf();
+
   List<TipoCliente>? customerTypeDropdownList;
   TipoCliente customerTypeValue = TipoCliente();
+
+
   List<TipoAtendimento>? serviceTypeDropdownList;
   TipoAtendimento serviceTypeValue = TipoAtendimento();
+
   List<TipoMeioAcesso>? mediumAccessTypeDropdownList;
   TipoMeioAcesso mediumAccessTypeValue = TipoMeioAcesso();
+
   List<TipoTecnologia>? technologyTypeDropdownList;
   TipoTecnologia technologyTypeValue = TipoTecnologia();
+
+
   List<TipoProduto>? productTypeDropdownList;
   TipoProduto productTypeValue = TipoProduto();
+
   CodIbge valueCodIbge = CodIbge();
-  // final txtNumberYear = TextEditingController();
+
   final txtCounty = TextEditingController();
   String hintTextCounty = 'O código IBGE..';
 
